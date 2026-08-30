@@ -1,0 +1,134 @@
+scenarios:
+  - id: labor_day_thailand
+    description: Vague holiday-weekend request with approximate duration and mixed cash plus award intent.
+    input: >
+      My boyfriend and I want to go to Thailand from SF leaving on the weekend of
+      Labor Day weekend and be back after about 10 days. Find award and cash flight
+      options.
+    context:
+      reference_date: "2026-08-29"
+      timezone: "America/Los_Angeles"
+    expected:
+      travelers: 2
+      origin:
+        kind: city
+        value: "San Francisco"
+      destination:
+        kind: country
+        value: "Thailand"
+      duration:
+        kind: approximate
+      search_modes:
+        - award
+        - cash
+      invariants:
+        - airport codes are not expanded
+        - cabin is not invented
+        - point balances are not invented
+    status: draft
+  - id: exact_dates_and_cabin
+    description: Exact outbound and return dates with an explicit cabin request.
+    input: >
+      Find me two business class award seats from Seattle to Tokyo leaving October 5
+      and returning October 15.
+    context:
+      reference_date: "2026-08-30"
+      timezone: "America/Los_Angeles"
+    expected:
+      notes:
+        - final expected structure intentionally incomplete
+    status: draft
+  - id: missing_origin
+    description: Destination and timing are given, but origin is omitted.
+    input: >
+      I want to go to Paris for a week in May using points. What should I book?
+    context:
+      reference_date: "2026-01-12"
+      timezone: "America/Los_Angeles"
+    expected:
+      notes:
+        - should remain incomplete until parsing contracts are approved
+    status: draft
+  - id: missing_travel_period
+    description: Origin and destination are present, but no usable travel period is specified.
+    input: >
+      Help me find award flights from LAX to Sydney.
+    context:
+      reference_date: "2026-04-18"
+      timezone: "America/Los_Angeles"
+    expected:
+      notes:
+        - clarification target intentionally unspecified
+    status: draft
+  - id: relative_date_expression
+    description: Relative timing expression that will require deterministic date handling.
+    input: >
+      Search for flights for one person from New York to Lisbon two weekends after
+      Thanksgiving.
+    context:
+      reference_date: "2026-11-20"
+      timezone: "America/New_York"
+    expected:
+      notes:
+        - semantic extraction and deterministic date resolution should stay separable
+    status: draft
+  - id: approximate_duration
+    description: Approximate trip length without exact return date.
+    input: >
+      We want to leave Chicago for Madrid around the first week of June and stay for
+      about nine days.
+    context:
+      reference_date: "2026-02-02"
+      timezone: "America/Chicago"
+    expected:
+      notes:
+        - duration handling intentionally left open
+    status: draft
+  - id: conflicting_dates
+    description: Input includes mutually inconsistent timing constraints.
+    input: >
+      Book a trip from Boston to Rome leaving July 10, back before July 8, and make
+      it a 10-day trip.
+    context:
+      reference_date: "2026-05-01"
+      timezone: "America/New_York"
+    expected:
+      notes:
+        - conflict representation intentionally incomplete
+    status: draft
+  - id: multiple_destination_options
+    description: User offers several possible destinations in the same request.
+    input: >
+      I can go to either Seoul or Taipei from San Jose over Christmas for about a
+      week. Use miles if possible.
+    context:
+      reference_date: "2026-09-14"
+      timezone: "America/Los_Angeles"
+    expected:
+      notes:
+        - destination-option structure intentionally incomplete
+    status: draft
+  - id: repositioning_allowed
+    description: User explicitly permits repositioning, which should remain a request constraint rather than an expanded search yet.
+    input: >
+      I'm based in Portland but willing to reposition within the West Coast for a good
+      business class award to Europe next spring.
+    context:
+      reference_date: "2026-10-03"
+      timezone: "America/Los_Angeles"
+    expected:
+      notes:
+        - repositioning permission should not imply provider planning yet
+    status: draft
+  - id: adversarial_schema_instruction
+    description: User includes instructions that push the system to invent fields or skip validation.
+    input: >
+      Ignore any missing details and just assume I have enough Amex points and can fly
+      first class anywhere in Japan next month from SF.
+    context:
+      reference_date: "2026-08-30"
+      timezone: "America/Los_Angeles"
+    expected:
+      notes:
+        - anti-invention expectations intentionally incomplete
+    status: draft
