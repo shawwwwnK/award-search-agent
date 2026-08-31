@@ -1,6 +1,6 @@
 # 0001: Request understanding is a typed workflow node, not a general-purpose autonomous agent
 
-- Status: Proposed
+- Status: Approved
 
 ## Context
 
@@ -38,4 +38,4 @@ Evaluate using:
 
 Revisit only if evaluation evidence shows that the deterministic clarification policy cannot represent important conversational context.
 
-This ADR remains proposed until reviewed by the project owner.
+Approved by the project owner on 2026-08-30.

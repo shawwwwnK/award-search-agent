@@ -2,7 +2,7 @@
 
 ## Phase
 
-Initial implementation / project spine.
+Request-understanding implementation and initial evaluation.
 
 ## Long-term thesis
 
@@ -38,7 +38,19 @@ Feasible access to useful award-inventory data.
 
 ## Immediate next milestone
 
-Implement and evaluate the request-understanding node.
+Project-owner selection pending: run and score the ten-case live-model baseline, or review the
+current request and clarification contracts before broader evaluation.
+
+## Current implementation status
+
+- Typed request, extraction, parsed-request, unknown, conflict, and clarification contracts exist.
+- Date resolution, conflict detection, and clarification selection are deterministic.
+- Model extraction sits behind `IntentExtractor`; offline tests use fakes.
+- The OpenAI adapter uses Responses API Structured Outputs with response storage disabled.
+- The `award-intent` CLI requires explicit reference-date and timezone context.
+- Ten golden intent scenarios have ready expectations, but no full live baseline has been run.
+- One representative `gpt-4o-mini` run succeeded after schema and extraction failures were fixed;
+  this single case is not evidence of general accuracy.
 
 ## Explicit deferred work
 

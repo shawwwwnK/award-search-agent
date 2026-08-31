@@ -57,6 +57,24 @@ Run type checks:
 mypy src tests
 ```
 
+## Parse a request
+
+Copy `.env.example` to `.env` and set `OPENAI_API_KEY` and `MODEL_NAME`. The
+offline test suite does not load or require either value.
+
+Run the request-understanding workflow with an explicit temporal context:
+
+```bash
+award-intent \
+  --reference-date 2026-08-29 \
+  --timezone America/Los_Angeles \
+  "My boyfriend and I want to go to Thailand from SF leaving on Labor Day weekend for about 10 days."
+```
+
+The command prints `ParsedRequest` and `ClarificationDecision` as JSON. Model
+responses are requested with storage disabled; the workflow does not persist
+requests locally.
+
 ## Current non-goals
 
 - Search planning

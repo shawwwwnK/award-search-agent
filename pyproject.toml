@@ -9,8 +9,13 @@ description = "Scaffold for an award-travel request-understanding workflow."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "openai>=1.50,<2",
     "pydantic>=2,<3",
+    "python-dotenv>=1,<2",
 ]
+
+[project.scripts]
+award-intent = "award_agent.cli.intent:main"
 
 [project.optional-dependencies]
 dev = [
@@ -19,6 +24,7 @@ dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
     "ruff>=0.6",
+    "types-PyYAML>=6.0",
 ]
 
 [tool.setuptools]

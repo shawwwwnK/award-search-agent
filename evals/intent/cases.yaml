@@ -18,6 +18,13 @@ scenarios:
         value: "Thailand"
       duration:
         kind: approximate
+        days: 10
+      departure_window:
+        start: "2026-09-04"
+        end: "2026-09-07"
+      return_window:
+        start: "2026-09-13"
+        end: "2026-09-18"
       search_modes:
         - award
         - cash
@@ -25,7 +32,9 @@ scenarios:
         - airport codes are not expanded
         - cabin is not invented
         - point balances are not invented
-    status: draft
+      clarification:
+        action: none
+    status: ready
   - id: exact_dates_and_cabin
     description: Exact outbound and return dates with an explicit cabin request.
     input: >
@@ -35,9 +44,19 @@ scenarios:
       reference_date: "2026-08-30"
       timezone: "America/Los_Angeles"
     expected:
-      notes:
-        - final expected structure intentionally incomplete
-    status: draft
+      travelers: 2
+      origin:
+        kind: city
+        value: "Seattle"
+      destination:
+        kind: city
+        value: "Tokyo"
+      cabin: business
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      return_window: {start: "2026-10-15", end: "2026-10-15"}
+      clarification: {action: none}
+    status: ready
   - id: missing_origin
     description: Destination and timing are given, but origin is omitted.
     input: >
@@ -46,9 +65,12 @@ scenarios:
       reference_date: "2026-01-12"
       timezone: "America/Los_Angeles"
     expected:
-      notes:
-        - should remain incomplete until parsing contracts are approved
-    status: draft
+      destination: {kind: city, value: "Paris"}
+      duration: {days: 7}
+      search_modes: [award]
+      unknowns: [origin, travelers]
+      clarification: {action: ask, field: origin}
+    status: ready
   - id: missing_travel_period
     description: Origin and destination are present, but no usable travel period is specified.
     input: >
@@ -57,9 +79,12 @@ scenarios:
       reference_date: "2026-04-18"
       timezone: "America/Los_Angeles"
     expected:
-      notes:
-        - clarification target intentionally unspecified
-    status: draft
+      origin: {kind: airport, value: "LAX"}
+      destination: {kind: city, value: "Sydney"}
+      search_modes: [award]
+      unknowns: [departure, return_or_duration, travelers]
+      clarification: {action: ask, field: departure}
+    status: ready
   - id: relative_date_expression
     description: Relative timing expression that will require deterministic date handling.
     input: >
@@ -69,9 +94,16 @@ scenarios:
       reference_date: "2026-11-20"
       timezone: "America/New_York"
     expected:
-      notes:
-        - semantic extraction and deterministic date resolution should stay separable
-    status: draft
+      travelers: 1
+      origin: {kind: city, value: "New York"}
+      destination: {kind: city, value: "Lisbon"}
+      departure_expression:
+        kind: relative_weekend
+        holiday: thanksgiving
+        count: 2
+      departure_window: {start: "2026-12-05", end: "2026-12-06"}
+      clarification: {action: ask, field: return_or_duration}
+    status: ready
   - id: approximate_duration
     description: Approximate trip length without exact return date.
     input: >
@@ -81,9 +113,13 @@ scenarios:
       reference_date: "2026-02-02"
       timezone: "America/Chicago"
     expected:
-      notes:
-        - duration handling intentionally left open
-    status: draft
+      origin: {kind: city, value: "Chicago"}
+      destination: {kind: city, value: "Madrid"}
+      departure_window: {start: "2026-06-01", end: "2026-06-07"}
+      duration: {days: 9, approximate: true}
+      return_window: {start: "2026-06-09", end: "2026-06-17"}
+      clarification: {action: ask, field: travelers}
+    status: ready
   - id: conflicting_dates
     description: Input includes mutually inconsistent timing constraints.
     input: >
@@ -93,9 +129,11 @@ scenarios:
       reference_date: "2026-05-01"
       timezone: "America/New_York"
     expected:
-      notes:
-        - conflict representation intentionally incomplete
-    status: draft
+      origin: {kind: city, value: "Boston"}
+      destination: {kind: city, value: "Rome"}
+      conflicts: [return_before_departure]
+      clarification: {action: ask, field: dates}
+    status: ready
   - id: multiple_destination_options
     description: User offers several possible destinations in the same request.
     input: >
@@ -105,9 +143,16 @@ scenarios:
       reference_date: "2026-09-14"
       timezone: "America/Los_Angeles"
     expected:
-      notes:
-        - destination-option structure intentionally incomplete
-    status: draft
+      travelers: 1
+      origin: {kind: city, value: "San Jose"}
+      destinations:
+        - {kind: city, value: "Seoul"}
+        - {kind: city, value: "Taipei"}
+      departure_window: {start: "2026-12-24", end: "2026-12-26"}
+      duration: {days: 7, approximate: true}
+      search_modes: [award]
+      clarification: {action: none}
+    status: ready
   - id: repositioning_allowed
     description: User explicitly permits repositioning, which should remain a request constraint rather than an expanded search yet.
     input: >
@@ -117,9 +162,17 @@ scenarios:
       reference_date: "2026-10-03"
       timezone: "America/Los_Angeles"
     expected:
-      notes:
-        - repositioning permission should not imply provider planning yet
-    status: draft
+      travelers: 1
+      origin: {kind: city, value: "Portland"}
+      destination: {kind: region, value: "Europe"}
+      cabin: business
+      search_modes: [award]
+      repositioning_allowed: true
+      invariants:
+        - no airport expansion is performed
+        - no provider plan is created
+      clarification: {action: ask, field: departure}
+    status: ready
   - id: adversarial_schema_instruction
     description: User includes instructions that push the system to invent fields or skip validation.
     input: >
@@ -129,6 +182,14 @@ scenarios:
       reference_date: "2026-08-30"
       timezone: "America/Los_Angeles"
     expected:
-      notes:
-        - anti-invention expectations intentionally incomplete
-    status: draft
+      travelers: 1
+      origin: {kind: city, value: "San Francisco"}
+      destination: {kind: country, value: "Japan"}
+      cabin: first
+      departure_window: {start: "2026-09-01", end: "2026-09-30"}
+      invariants:
+        - Amex point amount remains unknown
+        - missing constraints are not ignored
+        - no provider or search-plan action occurs
+      clarification: {action: ask, field: return_or_duration}
+    status: ready
