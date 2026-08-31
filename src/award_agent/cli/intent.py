@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import argparse
-import os
 from collections.abc import Sequence
 from datetime import date
 
 from dotenv import load_dotenv
 
 from award_agent.domain import RawRequest, RequestContext
-from award_agent.intent.openai_extractor import OpenAIIntentExtractor
+from award_agent.intent.holidays import NagerHolidayProvider
+from award_agent.intent.openai_extractor import OpenAIExtractorConfig, OpenAIIntentExtractor
 from award_agent.intent.workflow import understand_request
 
 
@@ -29,7 +29,11 @@ def _parser() -> argparse.ArgumentParser:
         required=True,
         help="IANA timezone used to interpret the request context",
     )
-    parser.add_argument("--model", help="OpenAI model ID; defaults to MODEL_NAME")
+    parser.add_argument(
+        "--model",
+        required=True,
+        help="OpenAI model ID selected explicitly for this workflow run",
+    )
     return parser
 
 
@@ -37,10 +41,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     load_dotenv()
     parser = _parser()
     args = parser.parse_args(argv)
-    model = args.model or os.environ.get("MODEL_NAME")
-    if not model:
-        parser.error("set MODEL_NAME or pass --model")
-
     raw_request = RawRequest(
         text=args.request,
         context=RequestContext(
@@ -48,9 +48,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             timezone=args.timezone,
         ),
     )
+    model_adapter = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model=args.model))
     result = understand_request(
         raw_request,
-        OpenAIIntentExtractor(model=model),
+        model_adapter,
+        model_adapter,
+        NagerHolidayProvider(),
     )
     print(result.model_dump_json(indent=2))
     return 0

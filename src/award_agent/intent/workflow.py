@@ -1,27 +1,30 @@
-"""Request-understanding workflow orchestration."""
-
-from datetime import date
+"""Two-pass request-understanding workflow orchestration."""
 
 from award_agent.domain import (
-    DateExpressionKind,
-    IntentExtraction,
+    CoarseIntentExtraction,
+    DateResolutionProposal,
     ParsedRequest,
     RawRequest,
     RequestUnderstandingResult,
-    SearchMode,
+    ResolvedTemporalAnchor,
     UnknownField,
     UnknownReason,
 )
 from award_agent.intent.clarification import decide_clarification
 from award_agent.intent.conflicts import detect_conflicts
-from award_agent.intent.dates import derive_return_window, resolve_date_expression
-from award_agent.intent.extractor import IntentExtractor
+from award_agent.intent.extractor import IntentExtractor, TemporalResolver
+from award_agent.intent.holidays import HolidayDateProvider
+from award_agent.intent.temporal import (
+    enrich_temporal_anchors,
+    proposal_window_to_date_window,
+    sanitize_temporal_extraction,
+    validate_date_resolution_proposal,
+)
 
 
 def _collect_unknowns(
-    extraction: IntentExtraction,
-    departure_resolved: bool,
-    return_resolved: bool,
+    extraction: CoarseIntentExtraction,
+    proposal: DateResolutionProposal,
 ) -> list[UnknownField]:
     unknowns: list[UnknownField] = []
 
@@ -36,46 +39,55 @@ def _collect_unknowns(
         missing("origin", "No departure location was stated.")
     if not extraction.destinations:
         missing("destination", "No destination was stated.")
-    if extraction.departure is None:
-        missing("departure", "No departure timing was stated.")
-    elif not departure_resolved:
-        raw_text = extraction.departure.raw_text
-        detail = (
-            extraction.departure.reason or "The departure expression could not be resolved."
-            if extraction.departure.kind is DateExpressionKind.UNRESOLVED
-            else "The departure expression could not be resolved."
-        )
-        unknowns.append(
-            UnknownField(
-                field="departure",
-                reason=UnknownReason.UNRESOLVED,
-                detail=detail,
-                raw_text=raw_text,
+
+    unresolved_departure = next(
+        (
+            item
+            for item in proposal.unresolved
+            if item.field in {"departure", "dates"}
+        ),
+        None,
+    )
+    unresolved_return = next(
+        (
+            item
+            for item in proposal.unresolved
+            if item.field in {"return_or_duration", "dates"}
+        ),
+        None,
+    )
+    if proposal.departure is None:
+        if unresolved_departure is None:
+            missing("departure", "No bounded departure timing was stated.")
+        else:
+            unknowns.append(
+                UnknownField(
+                    field="departure",
+                    reason=UnknownReason.UNRESOLVED,
+                    detail=unresolved_departure.reason,
+                    raw_text=unresolved_departure.raw_text,
+                )
             )
-        )
-    if extraction.return_date is None and extraction.duration is None:
-        missing("return_or_duration", "Neither a return date nor trip duration was stated.")
-    elif extraction.return_date is not None and not return_resolved:
-        raw_text = extraction.return_date.raw_text
-        detail = (
-            extraction.return_date.reason or "The return expression could not be resolved."
-            if extraction.return_date.kind is DateExpressionKind.UNRESOLVED
-            else "The return expression could not be resolved."
-        )
-        unknowns.append(
-            UnknownField(
-                field="return_or_duration",
-                reason=UnknownReason.UNRESOLVED,
-                detail=detail,
-                raw_text=raw_text,
+    if proposal.return_date is None:
+        if unresolved_return is None:
+            missing(
+                "return_or_duration",
+                "Neither a bounded return date nor a resolvable trip duration was stated.",
             )
-        )
+        else:
+            unknowns.append(
+                UnknownField(
+                    field="return_or_duration",
+                    reason=UnknownReason.UNRESOLVED,
+                    detail=unresolved_return.reason,
+                    raw_text=unresolved_return.raw_text,
+                )
+            )
+
     if not extraction.cabins:
         missing("cabin", "No cabin preference was stated.")
     if not extraction.search_modes:
         missing("search_modes", "Neither award nor cash search was explicitly requested.")
-    if SearchMode.AWARD in extraction.search_modes and not extraction.points_balances:
-        missing("points_balances", "No loyalty-program point balances were stated.")
 
     unknowns.extend(
         UnknownField(
@@ -90,59 +102,48 @@ def _collect_unknowns(
 
 
 def understand_request(
-    request: RawRequest, extractor: IntentExtractor
+    request: RawRequest,
+    extractor: IntentExtractor,
+    temporal_resolver: TemporalResolver,
+    holiday_provider: HolidayDateProvider | None = None,
 ) -> RequestUnderstandingResult:
-    extraction = extractor.extract(request)
-    departure_window = resolve_date_expression(extraction.departure, request.context)
-    return_context = (
-        request.context.model_copy(
-            update={
-                "reference_date": date(
-                    departure_window.start.year,
-                    departure_window.start.month,
-                    1,
-                )
-            }
-        )
-        if departure_window is not None
-        else request.context
-    )
-    explicit_return_window = resolve_date_expression(extraction.return_date, return_context)
-    return_window = derive_return_window(
-        departure_window,
-        explicit_return_window,
-        extraction.duration,
-    )
-    conflicts = detect_conflicts(
-        departure_window,
-        explicit_return_window,
-        extraction.duration,
-    )
-    unknowns = _collect_unknowns(
+    extraction = sanitize_temporal_extraction(request, extractor.extract(request))
+    resolved_anchors: list[ResolvedTemporalAnchor] = enrich_temporal_anchors(
+        request,
         extraction,
-        departure_resolved=departure_window is not None,
-        return_resolved=return_window is not None,
+        holiday_provider,
     )
+    proposal = validate_date_resolution_proposal(
+        request,
+        extraction,
+        temporal_resolver.resolve_dates(request, extraction, resolved_anchors),
+        resolved_anchors,
+    )
+
+    departure_window = proposal_window_to_date_window(proposal, "departure")
+    return_window = proposal_window_to_date_window(proposal, "return")
+    conflicts = detect_conflicts(departure_window, return_window, None)
     parsed = ParsedRequest(
         raw_text=request.text,
         context=request.context,
         travelers=extraction.travelers,
         origins=extraction.origins,
         destinations=extraction.destinations,
-        departure_expression=extraction.departure,
-        return_expression=extraction.return_date,
+        departure_expression=None,
+        return_expression=None,
         departure_window=departure_window,
         return_window=return_window,
-        duration=extraction.duration,
+        duration=None,
         cabins=extraction.cabins,
         search_modes=extraction.search_modes,
-        points_balances=extraction.points_balances,
-        cash_budget_usd=extraction.cash_budget_usd,
-        date_flexibility_days=extraction.date_flexibility_days,
+        date_flexibility=[],
         repositioning_allowed=extraction.repositioning_allowed,
         hard_constraints=extraction.hard_constraints,
-        unknowns=unknowns,
+        unknowns=_collect_unknowns(extraction, proposal),
         conflicts=conflicts,
+        temporal_extraction=extraction,
+        resolved_date_anchors=resolved_anchors,
+        date_resolution=proposal,
     )
     return RequestUnderstandingResult(
         parsed_request=parsed,

@@ -2,6 +2,10 @@
 
 - Status: Approved
 
+> Refined by ADR 0003: temporal modifiers are now interpreted in a second model pass that proposes
+> direct ranges; deterministic code retains anchor resolution, grounding, exact duration arithmetic,
+> conflict checks, and acceptance policy.
+
 ## Context
 
 Natural-language interpretation is useful for ambiguous travel requests, but exact date arithmetic, validation, conflict checks, and clarification rules should be reproducible and testable.

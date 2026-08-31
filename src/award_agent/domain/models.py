@@ -41,8 +41,17 @@ class LocationKind(str, Enum):
 
 class LocationRef(ContractModel):
     kind: LocationKind
-    value: str = Field(min_length=1)
-    raw_text: str = Field(min_length=1)
+    value: str = Field(
+        min_length=1,
+        description=(
+            "Model-proposed normalized semantic name. This is a resolver candidate, not an "
+            "authoritative canonical name or stable location identifier."
+        ),
+    )
+    raw_text: str = Field(
+        min_length=1,
+        description="Exact location wording copied from the request.",
+    )
 
 
 class CabinClass(str, Enum):
@@ -58,9 +67,17 @@ class SearchMode(str, Enum):
 
 
 class Holiday(str, Enum):
-    CHRISTMAS = "christmas"
+    NEW_YEARS_DAY = "new_years_day"
+    MARTIN_LUTHER_KING_JR_DAY = "martin_luther_king_jr_day"
+    WASHINGTONS_BIRTHDAY = "washingtons_birthday"
+    MEMORIAL_DAY = "memorial_day"
+    JUNETEENTH = "juneteenth"
+    INDEPENDENCE_DAY = "independence_day"
     LABOR_DAY = "labor_day"
+    COLUMBUS_DAY = "columbus_day"
+    VETERANS_DAY = "veterans_day"
     THANKSGIVING = "thanksgiving"
+    CHRISTMAS = "christmas"
 
 
 class DateExpressionKind(str, Enum):
@@ -70,8 +87,24 @@ class DateExpressionKind(str, Enum):
     RELATIVE_WEEKEND = "relative_weekend"
     MONTH = "month"
     RELATIVE_MONTH = "relative_month"
+    PRECEDING_WEEKDAY = "preceding_weekday"
+    FOLLOWING_WEEKDAY = "following_weekday"
     BOUND = "bound"
     UNRESOLVED = "unresolved"
+
+
+class Weekday(str, Enum):
+    MONDAY = "monday"
+    TUESDAY = "tuesday"
+    WEDNESDAY = "wednesday"
+    THURSDAY = "thursday"
+    FRIDAY = "friday"
+    SATURDAY = "saturday"
+    SUNDAY = "sunday"
+
+
+class DateExpressionAnchor(str, Enum):
+    DEPARTURE = "departure"
 
 
 class DateExpression(ContractModel):
@@ -109,7 +142,11 @@ class DateExpression(ContractModel):
         default=None,
         ge=1,
         le=12,
-        description="Number of weekends after a holiday; relative-weekend only.",
+        description="Number of weekends after the selected anchor; relative-weekend only.",
+    )
+    relative_to: DateExpressionAnchor | None = Field(
+        default=None,
+        description="Departure anchor for a departure-relative weekend; null otherwise.",
     )
     portion: Literal["whole", "first_week"] | None = Field(
         default=None,
@@ -124,6 +161,10 @@ class DateExpression(ContractModel):
         ge=1,
         le=24,
         description="Relative-month kind only; do not calculate a calendar month.",
+    )
+    weekday: Weekday | None = Field(
+        default=None,
+        description="Preceding- and following-weekday kinds only.",
     )
     boundary: Literal["before", "after"] | None = Field(
         default=None,
@@ -151,9 +192,16 @@ class DateExpression(ContractModel):
                 "end_year",
             },
             DateExpressionKind.HOLIDAY_WINDOW: {"holiday", "year"},
-            DateExpressionKind.RELATIVE_WEEKEND: {"holiday", "count", "year"},
+            DateExpressionKind.RELATIVE_WEEKEND: {
+                "holiday",
+                "count",
+                "year",
+                "relative_to",
+            },
             DateExpressionKind.MONTH: {"month", "year", "portion"},
             DateExpressionKind.RELATIVE_MONTH: {"offset_months"},
+            DateExpressionKind.PRECEDING_WEEKDAY: {"weekday"},
+            DateExpressionKind.FOLLOWING_WEEKDAY: {"weekday"},
             DateExpressionKind.BOUND: {"boundary", "month", "day", "year"},
             DateExpressionKind.UNRESOLVED: {"reason"},
         }
@@ -169,8 +217,10 @@ class DateExpression(ContractModel):
             "end_year",
             "holiday",
             "count",
+            "relative_to",
             "portion",
             "offset_months",
+            "weekday",
             "boundary",
             "reason",
         }
@@ -210,9 +260,11 @@ class DateExpression(ContractModel):
                 "end_day",
             ),
             DateExpressionKind.HOLIDAY_WINDOW: ("holiday",),
-            DateExpressionKind.RELATIVE_WEEKEND: ("holiday", "count"),
+            DateExpressionKind.RELATIVE_WEEKEND: ("count",),
             DateExpressionKind.MONTH: ("month",),
             DateExpressionKind.RELATIVE_MONTH: ("offset_months",),
+            DateExpressionKind.PRECEDING_WEEKDAY: ("weekday",),
+            DateExpressionKind.FOLLOWING_WEEKDAY: ("weekday",),
             DateExpressionKind.BOUND: ("boundary", "month", "day"),
             DateExpressionKind.UNRESOLVED: ("reason",),
         }
@@ -223,6 +275,13 @@ class DateExpression(ContractModel):
         ]
         if missing:
             raise ValueError(f"{self.kind.value} expression requires: {', '.join(missing)}")
+        if self.kind is DateExpressionKind.RELATIVE_WEEKEND:
+            anchors = [self.holiday is not None, self.relative_to is not None]
+            if sum(anchors) != 1:
+                raise ValueError(
+                    "relative_weekend expression requires exactly one anchor: "
+                    "holiday or relative_to"
+                )
         return self
 
 
@@ -232,16 +291,153 @@ class DurationConstraint(ContractModel):
     approximate: bool = False
 
 
-class PointBalance(ContractModel):
-    program: str = Field(min_length=1)
-    amount: int | None = Field(default=None, ge=0)
-    raw_text: str = Field(min_length=1)
-
-
 class Ambiguity(ContractModel):
     field: str = Field(min_length=1)
     detail: str = Field(min_length=1)
     raw_text: str | None = None
+
+
+class TemporalTarget(str, Enum):
+    DEPARTURE = "departure"
+    RETURN = "return"
+
+
+class TemporalPhraseTarget(str, Enum):
+    DEPARTURE = "departure"
+    RETURN = "return"
+    DURATION = "duration"
+    UNSPECIFIED = "unspecified"
+
+
+class ExactDateAnchor(ContractModel):
+    kind: Literal["exact_date"]
+    anchor_id: str = Field(min_length=1)
+    applies_to: TemporalTarget
+    raw_text: str = Field(min_length=1)
+    month: int = Field(ge=1, le=12)
+    day: int = Field(ge=1, le=31)
+    year: int | None = None
+
+
+class MonthAnchor(ContractModel):
+    kind: Literal["month"]
+    anchor_id: str = Field(min_length=1)
+    applies_to: TemporalTarget
+    raw_text: str = Field(min_length=1)
+    month: int = Field(ge=1, le=12)
+    year: int | None = None
+
+
+class HolidayAnchor(ContractModel):
+    kind: Literal["holiday"]
+    anchor_id: str = Field(min_length=1)
+    applies_to: TemporalTarget
+    raw_text: str = Field(min_length=1)
+    holiday: Holiday
+    year: int | None = None
+
+
+TemporalAnchor = ExactDateAnchor | MonthAnchor | HolidayAnchor
+
+
+class TemporalPhrase(ContractModel):
+    applies_to: TemporalPhraseTarget
+    raw_text: str = Field(
+        min_length=1,
+        description=(
+            "Verbatim temporal wording that is not an explicit exact-date, month, or holiday "
+            "anchor. Do not normalize offsets, alternatives, approximations, or relations."
+        ),
+    )
+
+
+class CoarseIntentExtraction(ContractModel):
+    """First-pass semantics with temporal anchors separated from verbatim modifiers."""
+
+    travelers: int | None = Field(default=None, ge=1)
+    origins: list[LocationRef] = Field(default_factory=list)
+    destinations: list[LocationRef] = Field(default_factory=list)
+    cabins: list[CabinClass] = Field(default_factory=list)
+    search_modes: list[SearchMode] = Field(default_factory=list)
+    repositioning_allowed: bool | None = None
+    hard_constraints: list[str] = Field(default_factory=list)
+    ambiguities: list[Ambiguity] = Field(default_factory=list)
+    date_anchors: list[TemporalAnchor] = Field(default_factory=list)
+    temporal_phrases: list[TemporalPhrase] = Field(default_factory=list)
+
+
+class ResolvedTemporalAnchor(ContractModel):
+    anchor: TemporalAnchor
+    start: date
+    end: date
+    source: Literal["calendar", "holiday_provider"]
+    source_detail: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_order(self) -> ResolvedTemporalAnchor:
+        if self.end < self.start:
+            raise ValueError("resolved temporal anchor end precedes start")
+        return self
+
+
+class ProposedDateWindow(ContractModel):
+    start: date
+    end: date
+    supporting_text: list[str] = Field(min_length=1)
+    interpretation: str = Field(min_length=1)
+    assumptions: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_order(self) -> ProposedDateWindow:
+        if self.end < self.start:
+            raise ValueError("proposed date window end precedes start")
+        return self
+
+
+class UnresolvedTemporalConstraint(ContractModel):
+    field: Literal["departure", "return_or_duration", "dates"]
+    raw_text: str = Field(min_length=1)
+    reason: str = Field(min_length=1)
+
+
+class InterpretedDuration(ContractModel):
+    raw_text: str = Field(min_length=1)
+    minimum_days: int = Field(ge=1, le=365)
+    maximum_days: int = Field(ge=1, le=365)
+
+    @model_validator(mode="after")
+    def validate_order(self) -> InterpretedDuration:
+        if self.maximum_days < self.minimum_days:
+            raise ValueError("maximum duration precedes minimum duration")
+        return self
+
+
+class DateResolutionProposal(ContractModel):
+    departure: ProposedDateWindow | None = None
+    return_date: ProposedDateWindow | None = None
+    interpreted_duration: InterpretedDuration | None = None
+    unresolved: list[UnresolvedTemporalConstraint] = Field(default_factory=list)
+
+
+class DateFlexibilityTarget(str, Enum):
+    DEPARTURE = "departure"
+    RETURN = "return"
+
+
+class DateFlexibilityMode(str, Enum):
+    INCLUDE = "include"
+
+
+class DateFlexibility(ContractModel):
+    applies_to: DateFlexibilityTarget
+    mode: DateFlexibilityMode
+    expression: DateExpression = Field(
+        description=(
+            "Additional date meaning included relative to the primary date expression. "
+            "preceding_weekday is strictly before the primary window; following_weekday "
+            "is strictly after it."
+        )
+    )
 
 
 class IntentExtraction(ContractModel):
@@ -249,13 +445,17 @@ class IntentExtraction(ContractModel):
     origins: list[LocationRef] = Field(default_factory=list)
     destinations: list[LocationRef] = Field(default_factory=list)
     departure: DateExpression | None = None
-    return_date: DateExpression | None = None
-    duration: DurationConstraint | None = None
+    return_date: DateExpression | None = Field(
+        default=None,
+        description="An explicit return-date phrase only; never derive this from trip duration.",
+    )
+    duration: DurationConstraint | None = Field(
+        default=None,
+        description="Stated trip length; deterministic code derives return dates from this.",
+    )
     cabins: list[CabinClass] = Field(default_factory=list)
     search_modes: list[SearchMode] = Field(default_factory=list)
-    points_balances: list[PointBalance] = Field(default_factory=list)
-    cash_budget_usd: int | None = Field(default=None, ge=0)
-    date_flexibility_days: int | None = Field(default=None, ge=0, le=365)
+    date_flexibility: list[DateFlexibility] = Field(default_factory=list)
     repositioning_allowed: bool | None = None
     hard_constraints: list[str] = Field(default_factory=list)
     ambiguities: list[Ambiguity] = Field(default_factory=list)
@@ -314,13 +514,14 @@ class ParsedRequest(ContractModel):
     duration: DurationConstraint | None
     cabins: list[CabinClass]
     search_modes: list[SearchMode]
-    points_balances: list[PointBalance]
-    cash_budget_usd: int | None
-    date_flexibility_days: int | None
+    date_flexibility: list[DateFlexibility]
     repositioning_allowed: bool | None
     hard_constraints: list[str]
     unknowns: list[UnknownField]
     conflicts: list[Conflict]
+    temporal_extraction: CoarseIntentExtraction | None = None
+    resolved_date_anchors: list[ResolvedTemporalAnchor] = Field(default_factory=list)
+    date_resolution: DateResolutionProposal | None = None
 
 
 class ClarificationAction(str, Enum):

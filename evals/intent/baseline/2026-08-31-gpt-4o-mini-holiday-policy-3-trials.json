@@ -1,0 +1,1630 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-31T08:01:25.208568+00:00",
+  "model": "gpt-4o-mini",
+  "strategy": "two_pass_holiday_policy_focus",
+  "cases_path": "/Users/shawnkang/bots/award-search/evals/intent/cases.yaml",
+  "scenario_count": 4,
+  "trials": 3,
+  "summary": {
+    "runs": 12,
+    "passed": 4,
+    "failed": 7,
+    "errors": 1,
+    "pass_rate": 0.3333333333333333,
+    "latency_seconds": 40.461,
+    "usage": "unavailable: the current two-pass adapter does not retain response usage",
+    "cost": "not calculated because token usage is unavailable"
+  },
+  "results": [
+    {
+      "id": "labor_day_thailand",
+      "layer": "end_to_end",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Francisco"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award",
+            "cash"
+          ],
+          "actual": [
+            "award",
+            "cash"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-03",
+            "end": "2026-09-07"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-09-13",
+            "end": "2026-09-18"
+          },
+          "actual": {
+            "start": "2026-09-12",
+            "end": "2026-09-18"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF leaving on the weekend of Labor Day weekend and be back after about 10 days. Find award and cash flight options.",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-09-03",
+            "end": "2026-09-07",
+            "precision": "window",
+            "raw_text": "the weekend of Labor Day weekend"
+          },
+          "return_window": {
+            "start": "2026-09-12",
+            "end": "2026-09-18",
+            "precision": "window",
+            "raw_text": "after about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award",
+            "cash"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Francisco",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award",
+              "cash"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day weekend",
+                "holiday": "labor_day",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "return",
+                "raw_text": "after about 10 days"
+              }
+            ]
+          },
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day weekend",
+                "holiday": "labor_day",
+                "year": null
+              },
+              "start": "2026-09-07",
+              "end": "2026-09-07",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved labor_day."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-09-03",
+              "end": "2026-09-07",
+              "supporting_text": [
+                "the weekend of Labor Day weekend"
+              ],
+              "interpretation": "Departure on or before Labor Day weekend",
+              "assumptions": [
+                "Labor Day weekend includes Friday through Monday, with the Labor Day holiday on September 7, 2026."
+              ]
+            },
+            "return_date": {
+              "start": "2026-09-12",
+              "end": "2026-09-18",
+              "supporting_text": [
+                "after about 10 days"
+              ],
+              "interpretation": "Return after approximately 10 days from the departure window",
+              "assumptions": [
+                "'About 10 days' is interpreted as 9 to 11 days."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "latency_seconds": 4.691
+    },
+    {
+      "id": "multiple_destination_options",
+      "layer": "end_to_end",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Jose"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ]
+        },
+        {
+          "name": "destinations",
+          "passed": true,
+          "expected": [
+            {
+              "kind": "city",
+              "value": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei"
+            }
+          ],
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-25"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I can go to either Seoul or Taipei from San Jose over Christmas for about a week. Use miles if possible.",
+          "context": {
+            "reference_date": "2026-09-14",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-12-24",
+            "end": "2026-12-25",
+            "precision": "window",
+            "raw_text": "over Christmas"
+          },
+          "return_window": {
+            "start": "2026-12-30",
+            "end": "2027-01-02",
+            "precision": "window",
+            "raw_text": "for about a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Jose",
+                "raw_text": "San Jose"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Seoul",
+                "raw_text": "Seoul"
+              },
+              {
+                "kind": "city",
+                "value": "Taipei",
+                "raw_text": "Taipei"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "holiday": "christmas",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for about a week"
+              }
+            ]
+          },
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "holiday": "christmas",
+                "year": null
+              },
+              "start": "2026-12-25",
+              "end": "2026-12-25",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved christmas."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-12-24",
+              "end": "2026-12-25",
+              "supporting_text": [
+                "over Christmas"
+              ],
+              "interpretation": "Inclusive Christmas weekend window including Christmas Eve and Christmas Day.",
+              "assumptions": [
+                "The term 'over Christmas' includes December 24th and December 25th."
+              ]
+            },
+            "return_date": {
+              "start": "2026-12-30",
+              "end": "2027-01-02",
+              "supporting_text": [
+                "for about a week"
+              ],
+              "interpretation": "Returning about a week after the departure window.",
+              "assumptions": [
+                "'About a week' means a range of 6 to 8 days; departing on December 24 or 25 means the return can be from December 31 to January 1."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "for about a week",
+              "minimum_days": 6,
+              "maximum_days": 8
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "latency_seconds": 6.829
+    },
+    {
+      "id": "p2_christmas_weekend_exact_policy",
+      "layer": "pass_2",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "departure_window",
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-27"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "passed": false
+        },
+        {
+          "name": "return_window",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "name": "interpreted_duration",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        }
+      ],
+      "output": {
+        "departure": {
+          "start": "2026-12-24",
+          "end": "2026-12-26",
+          "supporting_text": [
+            "Christmas weekend would work."
+          ],
+          "interpretation": "The proposed departure window includes Christmas Eve, Christmas Day, and the day after Christmas.",
+          "assumptions": [
+            "The Christmas weekend encompasses the holiday itself and the adjacent weekend days."
+          ]
+        },
+        "return_date": null,
+        "interpreted_duration": null,
+        "unresolved": []
+      },
+      "latency_seconds": 2.105
+    },
+    {
+      "id": "p2_labor_day_weekend_exact_policy",
+      "layer": "pass_2",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "departure_window",
+          "expected": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "passed": true
+        },
+        {
+          "name": "return_window",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "name": "interpreted_duration",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        }
+      ],
+      "output": {
+        "departure": {
+          "start": "2026-09-04",
+          "end": "2026-09-07",
+          "supporting_text": [
+            "Labor Day weekend would work."
+          ],
+          "interpretation": "Labor Day weekend includes the holiday itself, and the prior weekend days.",
+          "assumptions": [
+            "The term 'weekend' is interpreted as Friday through Sunday, including the holiday on Monday."
+          ]
+        },
+        "return_date": null,
+        "interpreted_duration": null,
+        "unresolved": []
+      },
+      "latency_seconds": 1.595
+    },
+    {
+      "id": "labor_day_thailand",
+      "layer": "end_to_end",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "temporal anchor evidence is not present in the request: '10 days after'",
+      "latency_seconds": 2.309
+    },
+    {
+      "id": "multiple_destination_options",
+      "layer": "end_to_end",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Jose"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ]
+        },
+        {
+          "name": "destinations",
+          "passed": true,
+          "expected": [
+            {
+              "kind": "city",
+              "value": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei"
+            }
+          ],
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-25"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I can go to either Seoul or Taipei from San Jose over Christmas for about a week. Use miles if possible.",
+          "context": {
+            "reference_date": "2026-09-14",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-12-24",
+            "end": "2026-12-25",
+            "precision": "window",
+            "raw_text": "over Christmas"
+          },
+          "return_window": {
+            "start": "2026-12-30",
+            "end": "2027-01-02",
+            "precision": "window",
+            "raw_text": "for about a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Jose",
+                "raw_text": "San Jose"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Seoul",
+                "raw_text": "Seoul"
+              },
+              {
+                "kind": "city",
+                "value": "Taipei",
+                "raw_text": "Taipei"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "holiday": "christmas",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "over Christmas"
+              },
+              {
+                "applies_to": "duration",
+                "raw_text": "for about a week"
+              }
+            ]
+          },
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "holiday": "christmas",
+                "year": null
+              },
+              "start": "2026-12-25",
+              "end": "2026-12-25",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved christmas."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-12-24",
+              "end": "2026-12-25",
+              "supporting_text": [
+                "over Christmas"
+              ],
+              "interpretation": "Departure includes Christmas Eve and Christmas Day.",
+              "assumptions": [
+                "Interpretation of 'over Christmas' includes Christmas Eve.",
+                "Stable holiday-window policy applied."
+              ]
+            },
+            "return_date": {
+              "start": "2026-12-30",
+              "end": "2027-01-02",
+              "supporting_text": [
+                "for about a week"
+              ],
+              "interpretation": "Return is approximately one week after departure, considering the 'about a week' duration.",
+              "assumptions": [
+                "'About a week' translates to 6 to 8 days."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "for about a week",
+              "minimum_days": 6,
+              "maximum_days": 8
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "latency_seconds": 7.849
+    },
+    {
+      "id": "p2_christmas_weekend_exact_policy",
+      "layer": "pass_2",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "departure_window",
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-27"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "passed": false
+        },
+        {
+          "name": "return_window",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "name": "interpreted_duration",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        }
+      ],
+      "output": {
+        "departure": {
+          "start": "2026-12-24",
+          "end": "2026-12-26",
+          "supporting_text": [
+            "Christmas weekend would work."
+          ],
+          "interpretation": "The proposal includes Christmas Eve, Christmas Day, and the day after Christmas as the departure window based on 'Christmas weekend'.",
+          "assumptions": [
+            "Christmas weekend includes the day before and the day after Christmas, assuming a Friday through Sunday window."
+          ]
+        },
+        "return_date": null,
+        "interpreted_duration": null,
+        "unresolved": []
+      },
+      "latency_seconds": 2.098
+    },
+    {
+      "id": "p2_labor_day_weekend_exact_policy",
+      "layer": "pass_2",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "departure_window",
+          "expected": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "passed": true
+        },
+        {
+          "name": "return_window",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "name": "interpreted_duration",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        }
+      ],
+      "output": {
+        "departure": {
+          "start": "2026-09-04",
+          "end": "2026-09-07",
+          "supporting_text": [
+            "Labor Day weekend would work."
+          ],
+          "interpretation": "Labor Day weekend includes the Saturday and Sunday before Labor Day, as well as Labor Day itself.",
+          "assumptions": [
+            "The 'weekend' is interpreted as Friday to Monday centered around the Labor Day holiday."
+          ]
+        },
+        "return_date": null,
+        "interpreted_duration": null,
+        "unresolved": [
+          {
+            "field": "return_or_duration",
+            "raw_text": "Labor Day weekend would work.",
+            "reason": "No return date or duration specified in the request."
+          }
+        ]
+      },
+      "latency_seconds": 1.933
+    },
+    {
+      "id": "labor_day_thailand",
+      "layer": "end_to_end",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": false,
+          "expected": {
+            "kind": "city",
+            "value": "San Francisco"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "SF",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award",
+            "cash"
+          ],
+          "actual": [
+            "award",
+            "cash"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-09-13",
+            "end": "2026-09-18"
+          },
+          "actual": {
+            "start": "2026-09-13",
+            "end": "2026-09-18"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF leaving on the weekend of Labor Day weekend and be back after about 10 days. Find award and cash flight options.",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "SF",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-09-04",
+            "end": "2026-09-07",
+            "precision": "window",
+            "raw_text": "the weekend of Labor Day weekend"
+          },
+          "return_window": {
+            "start": "2026-09-13",
+            "end": "2026-09-18",
+            "precision": "window",
+            "raw_text": "after about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award",
+            "cash"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "SF",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award",
+              "cash"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "holiday": "labor_day",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "return",
+                "raw_text": "after about 10 days"
+              },
+              {
+                "applies_to": "departure",
+                "raw_text": "the weekend of Labor Day weekend"
+              }
+            ]
+          },
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "holiday": "labor_day",
+                "year": null
+              },
+              "start": "2026-09-07",
+              "end": "2026-09-07",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved labor_day."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-09-04",
+              "end": "2026-09-07",
+              "supporting_text": [
+                "the weekend of Labor Day weekend"
+              ],
+              "interpretation": "Departure window includes Friday before Labor Day through Labor Day itself.",
+              "assumptions": [
+                "Labor Day weekend is interpreted as Friday through Monday, with Friday being September 4 and Labor Day on September 7."
+              ]
+            },
+            "return_date": {
+              "start": "2026-09-13",
+              "end": "2026-09-18",
+              "supporting_text": [
+                "after about 10 days"
+              ],
+              "interpretation": "Return window is calculated based on a departure between September 4 and September 7.",
+              "assumptions": [
+                "'About 10 days' is interpreted as a range of 9 to 11 days for the return."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "latency_seconds": 3.879
+    },
+    {
+      "id": "multiple_destination_options",
+      "layer": "end_to_end",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Jose"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ]
+        },
+        {
+          "name": "destinations",
+          "passed": true,
+          "expected": [
+            {
+              "kind": "city",
+              "value": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei"
+            }
+          ],
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I can go to either Seoul or Taipei from San Jose over Christmas for about a week. Use miles if possible.",
+          "context": {
+            "reference_date": "2026-09-14",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-12-24",
+            "end": "2026-12-26",
+            "precision": "window",
+            "raw_text": "over Christmas"
+          },
+          "return_window": {
+            "start": "2026-12-30",
+            "end": "2027-01-03",
+            "precision": "window",
+            "raw_text": "for about a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Jose",
+                "raw_text": "San Jose"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Seoul",
+                "raw_text": "Seoul"
+              },
+              {
+                "kind": "city",
+                "value": "Taipei",
+                "raw_text": "Taipei"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "holiday": "christmas",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "over Christmas for about a week"
+              }
+            ]
+          },
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "holiday": "christmas",
+                "year": null
+              },
+              "start": "2026-12-25",
+              "end": "2026-12-25",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved christmas."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-12-24",
+              "end": "2026-12-26",
+              "supporting_text": [
+                "over Christmas"
+              ],
+              "interpretation": "Proposed departure window includes Christmas Eve, Christmas Day, and the day after Christmas.",
+              "assumptions": [
+                "The phrase \"over Christmas\" encompasses Christmas Eve through the day after Christmas.",
+                "The user is flexible with destinations but seeks to travel around the Christmas holiday."
+              ]
+            },
+            "return_date": {
+              "start": "2026-12-30",
+              "end": "2027-01-03",
+              "supporting_text": [
+                "for about a week"
+              ],
+              "interpretation": "Proposed return window is about a week after the departure window ends. The range includes New Year's Eve and New Year's Day.",
+              "assumptions": [
+                "The phrase \"about a week\" generally means approximately 7 days, thus bounding the return to the period that includes New Year's celebrations."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "about a week",
+              "minimum_days": 6,
+              "maximum_days": 8
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "latency_seconds": 4.32
+    },
+    {
+      "id": "p2_christmas_weekend_exact_policy",
+      "layer": "pass_2",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "departure_window",
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-27"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "passed": false
+        },
+        {
+          "name": "return_window",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "name": "interpreted_duration",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        }
+      ],
+      "output": {
+        "departure": {
+          "start": "2026-12-24",
+          "end": "2026-12-26",
+          "supporting_text": [
+            "Christmas weekend would work."
+          ],
+          "interpretation": "Christmas weekend is interpreted as including Christmas Eve and the day after Christmas, along with the Christmas holiday itself.",
+          "assumptions": [
+            "The Christmas holiday on December 25, 2026, falls on a Saturday, hence the weekend includes December 24-26."
+          ]
+        },
+        "return_date": null,
+        "interpreted_duration": null,
+        "unresolved": []
+      },
+      "latency_seconds": 1.595
+    },
+    {
+      "id": "p2_labor_day_weekend_exact_policy",
+      "layer": "pass_2",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "departure_window",
+          "expected": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          },
+          "passed": true
+        },
+        {
+          "name": "return_window",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "name": "interpreted_duration",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        }
+      ],
+      "output": {
+        "departure": {
+          "start": "2026-09-04",
+          "end": "2026-09-07",
+          "supporting_text": [
+            "Labor Day weekend would work."
+          ],
+          "interpretation": "Including Labor Day weekend from Friday to Monday.",
+          "assumptions": [
+            "Labor Day weekend includes the adjacent Saturday and Sunday, and the day prior to Labor Day."
+          ]
+        },
+        "return_date": null,
+        "interpreted_duration": null,
+        "unresolved": []
+      },
+      "latency_seconds": 1.258
+    }
+  ]
+}
