@@ -22,6 +22,12 @@ Choose option 3. `LocationRef.raw_text` remains exact request evidence. `Locatio
 model-proposed normalized semantic-name candidate, not an authoritative canonical name or stable
 identifier. The model must preserve ambiguity rather than silently selecting among multiple places.
 
+Explicit airport codes are the narrow exception. When the user supplies a three-letter code and
+the model classifies that location as an airport, deterministic request-understanding code sets
+`value` to the uppercase code while retaining the exact user spelling in `raw_text`. The code is
+already a stable airport identifier that the next workflow can consume directly. Syntax alone does
+not authorize changing a model-classified city into an airport.
+
 Until deterministic resolution exists, eval goldens may enumerate accepted candidate strings.
 Matching is exact membership in those explicit aliases; unrestricted fuzzy matching is prohibited.
 Wrong kinds, wrong geographic meanings, and omitted locations remain failures.
@@ -34,6 +40,7 @@ policies such as whether San Francisco includes SFO only or the wider Bay Area.
 
 - The model can help expand abbreviations and repair obvious spelling without becoming the source
   of truth for location identity.
+- Explicit airport codes remain directly usable instead of being replaced by airport display names.
 - Current evals do not fail solely because of an explicitly accepted display-string variant.
 - Downstream airport maps will be keyed by stable resolved entities rather than model strings.
 - A deterministic location catalog and ambiguity policy are still required before search planning.
@@ -41,6 +48,7 @@ policies such as whether San Francisco includes SFO only or the wider Bay Area.
 ## Evaluation
 
 - Assert verbatim `raw_text` preservation where it matters.
+- Assert that model-classified explicit airport codes are preserved in uppercase `value` form.
 - Accept only explicit per-golden candidate aliases.
 - Verify that unlisted variants do not match accidentally.
 - Continue failing omitted locations, incorrect kinds, and different geographic entities.
@@ -51,3 +59,5 @@ Revisit when deterministic location resolution is implemented or when search pla
 first city-to-airport mapping.
 
 Approved by the project owner on 2026-08-31.
+
+The explicit-airport-code refinement was approved by the project owner on 2026-08-31.

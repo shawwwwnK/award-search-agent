@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import date
 from enum import Enum
-from typing import Literal
+from typing import Annotated, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -45,7 +45,8 @@ class LocationRef(ContractModel):
         min_length=1,
         description=(
             "Model-proposed normalized semantic name. This is a resolver candidate, not an "
-            "authoritative canonical name or stable location identifier."
+            "authoritative canonical name or stable location identifier. Explicit airport codes "
+            "are preserved as uppercase codes by deterministic workflow policy."
         ),
     )
     raw_text: str = Field(
@@ -230,10 +231,14 @@ class DateExpression(ContractModel):
 
         raw_text = str(cleaned.get("raw_text", ""))
         normalized_raw_text = raw_text.casefold()
-        if kind in {
-            DateExpressionKind.HOLIDAY_WINDOW,
-            DateExpressionKind.RELATIVE_WEEKEND,
-        } and cleaned.get("holiday") is None:
+        if (
+            kind
+            in {
+                DateExpressionKind.HOLIDAY_WINDOW,
+                DateExpressionKind.RELATIVE_WEEKEND,
+            }
+            and cleaned.get("holiday") is None
+        ):
             explicit_holidays = {
                 "christmas": Holiday.CHRISTMAS,
                 "labor day": Holiday.LABOR_DAY,
@@ -309,32 +314,49 @@ class TemporalPhraseTarget(str, Enum):
     UNSPECIFIED = "unspecified"
 
 
+class TemporalEvidenceClaim(str, Enum):
+    """Stable claim identifiers used to link temporal quotes to their meaning."""
+
+    DEPARTURE_ANCHOR = "departure_anchor"
+    RETURN_ANCHOR = "return_anchor"
+    DEPARTURE_PERIOD = "departure_period"
+    RETURN_PERIOD = "return_period"
+    APPROXIMATE_DURATION = "approximate_duration"
+    DURATION = "duration"
+    ALTERNATE_DEPARTURE_DAY = "alternate_departure_day"
+    ALTERNATE_RETURN_DAY = "alternate_return_day"
+    UNSPECIFIED = "temporal_unspecified"
+
+
 class ExactDateAnchor(ContractModel):
     kind: Literal["exact_date"]
     anchor_id: str = Field(min_length=1)
     applies_to: TemporalTarget
-    raw_text: str = Field(min_length=1)
+    raw_text: str = Field(description="Exact anchor wording copied from the request.")
+    occurrence_index: int | None = Field(default=None, ge=0)
     month: int = Field(ge=1, le=12)
     day: int = Field(ge=1, le=31)
-    year: int | None = None
+    year: int | None = Field(default=None, ge=1000, le=9999)
 
 
 class MonthAnchor(ContractModel):
     kind: Literal["month"]
     anchor_id: str = Field(min_length=1)
     applies_to: TemporalTarget
-    raw_text: str = Field(min_length=1)
+    raw_text: str = Field(description="Exact anchor wording copied from the request.")
+    occurrence_index: int | None = Field(default=None, ge=0)
     month: int = Field(ge=1, le=12)
-    year: int | None = None
+    year: int | None = Field(default=None, ge=1000, le=9999)
 
 
 class HolidayAnchor(ContractModel):
     kind: Literal["holiday"]
     anchor_id: str = Field(min_length=1)
     applies_to: TemporalTarget
-    raw_text: str = Field(min_length=1)
+    raw_text: str = Field(description="Exact anchor wording copied from the request.")
+    occurrence_index: int | None = Field(default=None, ge=0)
     holiday: Holiday
-    year: int | None = None
+    year: int | None = Field(default=None, ge=1000, le=9999)
 
 
 TemporalAnchor = ExactDateAnchor | MonthAnchor | HolidayAnchor
@@ -343,12 +365,46 @@ TemporalAnchor = ExactDateAnchor | MonthAnchor | HolidayAnchor
 class TemporalPhrase(ContractModel):
     applies_to: TemporalPhraseTarget
     raw_text: str = Field(
-        min_length=1,
         description=(
             "Verbatim temporal wording that is not an explicit exact-date, month, or holiday "
             "anchor. Do not normalize offsets, alternatives, approximations, or relations."
         ),
     )
+    claim_ids: list[TemporalEvidenceClaim] = Field(
+        default_factory=list,
+        description=(
+            "Claims supported by this quote. Empty is accepted only by the temporary legacy "
+            "adapter and is inferred from applies_to before grounding."
+        ),
+    )
+    occurrence_index: int | None = Field(
+        default=None,
+        ge=0,
+        description="Zero-based occurrence when the quote appears more than once.",
+    )
+
+
+class ValidatedSourceSpan(ContractModel):
+    """Canonical request span using Python start-inclusive/end-exclusive offsets."""
+
+    source_id: Literal["original_request"] = "original_request"
+    start: int = Field(ge=0)
+    end: int = Field(gt=0)
+    text: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_order(self) -> ValidatedSourceSpan:
+        if self.end <= self.start:
+            raise ValueError("source span end must be greater than start")
+        return self
+
+
+class GroundedTemporalEvidence(ContractModel):
+    """One canonical span explicitly linked to one or more temporal claims."""
+
+    evidence_id: str = Field(min_length=1)
+    claim_ids: list[TemporalEvidenceClaim] = Field(min_length=1)
+    span: ValidatedSourceSpan
 
 
 class CoarseIntentExtraction(ContractModel):
@@ -413,10 +469,198 @@ class InterpretedDuration(ContractModel):
 
 
 class DateResolutionProposal(ContractModel):
+    """Deterministically evaluated temporal result retained for trace compatibility."""
+
     departure: ProposedDateWindow | None = None
     return_date: ProposedDateWindow | None = None
     interpreted_duration: InterpretedDuration | None = None
     unresolved: list[UnresolvedTemporalConstraint] = Field(default_factory=list)
+
+
+class TemporalDirection(str, Enum):
+    BEFORE = "before"
+    AFTER = "after"
+
+
+class TemporalEdge(str, Enum):
+    START = "start"
+    END = "end"
+
+
+class TemporalUnit(str, Enum):
+    DAY = "day"
+    WEEK = "week"
+    MONTH = "month"
+
+
+class DurationModifier(str, Enum):
+    """Literal linguistic shape of a stated duration.
+
+    Deterministic normalization applies a one-day tolerance to approximate
+    durations after converting the stated quantity. Thus ``about a week`` is
+    six through eight days. Alternative durations preserve their literal
+    endpoints without adding approximation tolerance.
+    """
+
+    EXACT = "exact"
+    APPROXIMATE = "approximate"
+    ALTERNATIVE = "alternative"
+
+
+class CalendarPeriodSemantics(str, Enum):
+    WHOLE = "whole"
+    PARTIAL = "partial"
+
+
+class AnchorReference(ContractModel):
+    kind: Literal["anchor"]
+    anchor_id: str = Field(min_length=1)
+    edge: TemporalEdge = TemporalEdge.END
+
+
+class RequestFieldReference(ContractModel):
+    kind: Literal["request_field"]
+    field: TemporalTarget
+    edge: TemporalEdge
+
+
+class SymbolicContextReference(ContractModel):
+    """Opaque context reference whose concrete value remains outside model-facing data."""
+
+    kind: Literal["symbolic_context"]
+    key: Literal["context:request_date"]
+
+
+TemporalReference = Annotated[
+    AnchorReference | RequestFieldReference,
+    Field(discriminator="kind"),
+]
+
+
+class AnchorWindowConstraint(ContractModel):
+    kind: Literal["anchor_window"]
+    target: TemporalTarget
+    anchor_id: str = Field(min_length=1)
+    window: Literal["anchor", "holiday_weekend", "christmas_period"]
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class RelativeWeekendConstraint(ContractModel):
+    kind: Literal["relative_weekend"]
+    target: TemporalTarget
+    reference: TemporalReference
+    direction: TemporalDirection
+    ordinal: int = Field(ge=1, le=52)
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class RelativeWeekdayConstraint(ContractModel):
+    kind: Literal["relative_weekday"]
+    target: TemporalTarget
+    reference: TemporalReference
+    direction: TemporalDirection
+    ordinal: int = Field(default=1, ge=1, le=52)
+    weekday: Weekday
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class RelativeOffsetConstraint(ContractModel):
+    kind: Literal["relative_offset"]
+    target: TemporalTarget
+    reference: TemporalReference
+    direction: TemporalDirection
+    amount: int = Field(ge=1, le=365)
+    unit: TemporalUnit
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class RelativeCalendarPeriodConstraint(ContractModel):
+    """A calendar period relative to hidden context, not a point offset."""
+
+    kind: Literal["relative_calendar_period"]
+    target: TemporalTarget
+    reference: SymbolicContextReference
+    direction: TemporalDirection
+    unit: Literal[TemporalUnit.MONTH]
+    ordinal: int = Field(ge=1, le=120)
+    period_semantics: CalendarPeriodSemantics
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class SemanticDurationConstraint(ContractModel):
+    kind: Literal["duration"]
+    target: Literal[TemporalTarget.RETURN] = TemporalTarget.RETURN
+    reference: RequestFieldReference
+    stated_minimum_quantity: int = Field(ge=1, le=365)
+    stated_maximum_quantity: int = Field(ge=1, le=365)
+    unit: TemporalUnit
+    modifier: DurationModifier
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+    @model_validator(mode="after")
+    def validate_order(self) -> SemanticDurationConstraint:
+        if self.stated_maximum_quantity < self.stated_minimum_quantity:
+            raise ValueError("maximum stated duration precedes minimum stated duration")
+        quantities_differ = self.stated_maximum_quantity != self.stated_minimum_quantity
+        if self.modifier is DurationModifier.ALTERNATIVE and not quantities_differ:
+            raise ValueError("alternative duration requires distinct stated quantities")
+        if self.modifier is not DurationModifier.ALTERNATIVE and quantities_differ:
+            raise ValueError("exact and approximate durations require one stated quantity")
+        if self.reference.field is not TemporalTarget.DEPARTURE:
+            raise ValueError("duration reference must be the departure request field")
+        return self
+
+
+class MonthPortionConstraint(ContractModel):
+    kind: Literal["month_portion"]
+    target: TemporalTarget
+    anchor_id: str = Field(min_length=1)
+    portion: Literal["early", "mid", "late", "whole"]
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class UnboundedBoundaryConstraint(ContractModel):
+    kind: Literal["unbounded_boundary"]
+    target: TemporalTarget
+    reference: TemporalReference
+    direction: TemporalDirection
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+
+
+class UnresolvedRelationConstraint(ContractModel):
+    kind: Literal["unresolved"]
+    target: TemporalTarget | None = None
+    raw_text: str = Field(min_length=1)
+    occurrence_index: int | None = Field(default=None, ge=0)
+    reason: str = Field(min_length=1)
+
+
+TemporalConstraint = Annotated[
+    AnchorWindowConstraint
+    | RelativeWeekendConstraint
+    | RelativeWeekdayConstraint
+    | RelativeOffsetConstraint
+    | RelativeCalendarPeriodConstraint
+    | SemanticDurationConstraint
+    | MonthPortionConstraint
+    | UnboundedBoundaryConstraint
+    | UnresolvedRelationConstraint,
+    Field(discriminator="kind"),
+]
+
+
+class TemporalRelationGraph(ContractModel):
+    """Grounded semantic constraints emitted by the second model pass."""
+
+    constraints: list[TemporalConstraint] = Field(default_factory=list)
 
 
 class DateFlexibilityTarget(str, Enum):
@@ -493,12 +737,14 @@ class UnknownField(ContractModel):
     reason: UnknownReason
     detail: str
     raw_text: str | None = None
+    evidence: list[GroundedTemporalEvidence] = Field(default_factory=list)
 
 
 class Conflict(ContractModel):
     code: str
     fields: list[str]
     detail: str
+    evidence_by_alternative: dict[str, list[GroundedTemporalEvidence]] = Field(default_factory=dict)
 
 
 class ParsedRequest(ContractModel):
@@ -520,7 +766,9 @@ class ParsedRequest(ContractModel):
     unknowns: list[UnknownField]
     conflicts: list[Conflict]
     temporal_extraction: CoarseIntentExtraction | None = None
+    temporal_evidence: list[GroundedTemporalEvidence] = Field(default_factory=list)
     resolved_date_anchors: list[ResolvedTemporalAnchor] = Field(default_factory=list)
+    temporal_relations: TemporalRelationGraph | None = None
     date_resolution: DateResolutionProposal | None = None
 
 
@@ -547,6 +795,23 @@ class ClarificationDecision(ContractModel):
         return self
 
 
+class ModelPassRepairTrace(ContractModel):
+    """Observable outcome of the single validation-repair allowance for one model pass."""
+
+    first_attempt_valid: bool
+    repair_ran: bool
+    repair_succeeded: bool
+    final_failure: dict[str, object] | None = None
+
+
+class IntentRepairTrace(ContractModel):
+    """Validation-repair trace retained with a completed request result."""
+
+    pass_one: ModelPassRepairTrace
+    pass_two: ModelPassRepairTrace
+
+
 class RequestUnderstandingResult(ContractModel):
     parsed_request: ParsedRequest
     clarification: ClarificationDecision
+    repair_trace: IntentRepairTrace | None = None

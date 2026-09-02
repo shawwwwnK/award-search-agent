@@ -1,6 +1,11 @@
 # 0003: Use two model passes around grounded temporal anchors
 
-- Status: Approved
+- Status: Superseded in part by ADR 0006
+
+> ADR 0006 preserves the two-pass design but replaces authoritative direct model-proposed ranges
+> with a typed semantic temporal-relation graph and deterministic calendar evaluation.
+> ADR 0007 further preserves the two passes while removing reference context and resolved calendar
+> values from both model inputs and introducing a deterministic catalog checkpoint.
 
 ## Context
 

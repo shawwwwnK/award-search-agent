@@ -18,6 +18,8 @@ scenarios:
         kind: country
         value: "Thailand"
       interpreted_duration: {minimum_days: 9, maximum_days: 11}
+      literal_duration:
+        {stated_minimum_quantity: 10, stated_maximum_quantity: 10, unit: day, modifier: approximate}
       departure_window:
         start: "2026-09-04"
         end: "2026-09-07"
@@ -43,12 +45,36 @@ scenarios:
       timezone: "America/Los_Angeles"
     expected:
       travelers: 2
+      origin:
+        kind: city
+        raw_text: "SF"
+        accepted_values: ["SF", "San Francisco"]
+      destination: {kind: country, value: "Thailand"}
       date_anchor: {kind: holiday, holiday: labor_day}
-      temporal_phrases:
-        - "weekend"
-        - "for about 10 days"
-        - "the Thursday as well"
+      evidence_expectations:
+        departure_anchor:
+          allowed_envelopes: ["leaving on Labor Day weekend"]
+          required_all: ["Labor Day"]
+          preferred_spans: ["Labor Day"]
+        departure_period:
+          allowed_envelopes: ["leaving on Labor Day weekend"]
+          required_all:
+            - {quote: "weekend", occurrence_index: 0}
+          preferred_spans:
+            - {quote: "weekend", occurrence_index: 0}
+        approximate_duration:
+          allowed_envelopes: ["for about 10 days"]
+          required_all: ["about", "10", "days"]
+          preferred_spans: ["for about 10 days"]
+        alternate_departure_day:
+          allowed_envelopes: ["We are flexible to leave on the Thursday as well."]
+          required_all: ["Thursday"]
+          required_any_groups:
+            - ["flexible", "as well"]
+          preferred_spans: ["the Thursday as well"]
       interpreted_duration: {minimum_days: 9, maximum_days: 11}
+      literal_duration:
+        {stated_minimum_quantity: 10, stated_maximum_quantity: 10, unit: day, modifier: approximate}
       departure_window: {start: "2026-09-03", end: "2026-09-07"}
       return_window: {start: "2026-09-12", end: "2026-09-18"}
       invariants:
@@ -67,11 +93,32 @@ scenarios:
     expected:
       travelers: 2
       date_anchor: {kind: holiday, holiday: labor_day}
-      temporal_phrases:
-        - "weekend"
-        - "the weekend afterwards"
+      evidence_expectations:
+        departure_anchor:
+          allowed_envelopes: ["leaving on Labor Day weekend"]
+          required_all: ["Labor Day"]
+          preferred_spans: ["Labor Day"]
+        departure_period:
+          allowed_envelopes: ["leaving on Labor Day weekend"]
+          required_all:
+            - {quote: "weekend", occurrence_index: 0}
+          preferred_spans:
+            - {quote: "weekend", occurrence_index: 0}
+        return_period:
+          allowed_envelopes: ["come back the weekend afterwards"]
+          required_all:
+            - {quote: "weekend", occurrence_index: 1}
+            - "afterwards"
+          preferred_spans: ["the weekend afterwards"]
       departure_window: {start: "2026-09-04", end: "2026-09-07"}
       return_window: {start: "2026-09-12", end: "2026-09-13"}
+      temporal_relations:
+        - {kind: anchor_window, target: departure, window: holiday_weekend}
+        - kind: relative_weekend
+          target: return
+          reference: {kind: request_field, field: departure, edge: end}
+          direction: after
+          ordinal: 1
       invariants:
         - the return weekend is not anchored to Labor Day
         - the second pass grounds the return range in the relative wording
@@ -110,6 +157,8 @@ scenarios:
       travelers: 1
       destination: {kind: city, value: "Paris"}
       interpreted_duration: {minimum_days: 7, maximum_days: 7}
+      literal_duration:
+        {stated_minimum_quantity: 1, stated_maximum_quantity: 1, unit: week, modifier: exact}
       search_modes: [award]
       unknowns: [origin]
       clarification: {action: ask, field: origin}
@@ -141,8 +190,22 @@ scenarios:
       origin: {kind: city, value: "New York"}
       destination: {kind: city, value: "Lisbon"}
       date_anchor: {kind: holiday, holiday: thanksgiving}
-      temporal_phrases: ["two weekends after"]
+      evidence_expectations:
+        departure_anchor:
+          allowed_envelopes: ["two weekends after Thanksgiving"]
+          required_all: ["Thanksgiving"]
+          preferred_spans: ["Thanksgiving"]
+        departure_period:
+          allowed_envelopes: ["two weekends after Thanksgiving"]
+          required_all: ["two", "weekends", "after"]
+          preferred_spans: ["two weekends after"]
       departure_window: {start: "2026-12-05", end: "2026-12-06"}
+      temporal_relations:
+        - kind: relative_weekend
+          target: departure
+          reference: {kind: anchor}
+          direction: after
+          ordinal: 2
       clarification: {action: ask, field: return_or_duration}
     status: ready
   - id: approximate_duration
@@ -156,10 +219,32 @@ scenarios:
     expected:
       origin: {kind: city, value: "Chicago"}
       destination: {kind: city, value: "Madrid"}
-      departure_window: {start: "2026-06-01", end: "2026-06-07"}
+      unsupported_temporal_policy: first_week_of_month
+      evidence_expectations:
+        departure_anchor:
+          allowed_envelopes: ["around the first week of June"]
+          required_all: ["June"]
+          preferred_spans: ["June"]
+        departure_period:
+          allowed_envelopes: ["around the first week of June"]
+          required_all: ["first", "week"]
+          preferred_spans: ["around the first week of June"]
+        approximate_duration:
+          allowed_envelopes: ["stay for about nine days"]
+          required_all: ["about", "nine", "days"]
+          preferred_spans: ["about nine days"]
+      temporal_relations:
+        - {kind: unresolved, target: departure}
+      departure_window: null
       interpreted_duration: {minimum_days: 8, maximum_days: 10}
-      return_window: {start: "2026-06-09", end: "2026-06-17"}
-      clarification: {action: ask, field: travelers}
+      literal_duration:
+        {stated_minimum_quantity: 9, stated_maximum_quantity: 9, unit: day, modifier: approximate}
+      return_window: null
+      unknowns: [departure]
+      invariants:
+        - first week of June remains unresolved until a deterministic policy is approved
+        - duration does not create return dates without a bounded departure
+      clarification: {action: ask, field: departure}
     status: ready
   - id: conflicting_dates
     description: Input includes mutually inconsistent timing constraints.
@@ -172,6 +257,9 @@ scenarios:
     expected:
       origin: {kind: city, value: "Boston"}
       destination: {kind: city, value: "Rome"}
+      interpreted_duration: {minimum_days: 10, maximum_days: 10}
+      literal_duration:
+        {stated_minimum_quantity: 10, stated_maximum_quantity: 10, unit: day, modifier: exact}
       conflicts: [return_before_departure]
       clarification: {action: ask, field: dates}
     status: ready
@@ -191,6 +279,8 @@ scenarios:
         - {kind: city, value: "Taipei"}
       departure_window: {start: "2026-12-24", end: "2026-12-26"}
       interpreted_duration: {minimum_days: 6, maximum_days: 8}
+      literal_duration:
+        {stated_minimum_quantity: 1, stated_maximum_quantity: 1, unit: week, modifier: approximate}
       search_modes: [award]
       clarification: {action: none}
     status: ready
@@ -209,6 +299,15 @@ scenarios:
       cabin: business
       search_modes: [award]
       repositioning_allowed: true
+      evidence_expectations:
+        departure_period:
+          allowed_envelopes: ["next spring"]
+          required_all: ["next", "spring"]
+          preferred_spans: ["next spring"]
+      forbidden_date_anchor_kinds: [exact_date, month, holiday]
+      temporal_relations:
+        - {kind: unresolved, target: departure}
+      unknowns: [departure]
       invariants:
         - no airport expansion is performed
         - no provider plan is created
@@ -230,6 +329,20 @@ scenarios:
         accepted_values: ["SF", "San Francisco"]
       destination: {kind: country, value: "Japan"}
       cabin: first
+      evidence_expectations:
+        departure_period:
+          allowed_envelopes: ["next month"]
+          required_all: ["next", "month"]
+          preferred_spans: ["next month"]
+      forbidden_date_anchor_kinds: [exact_date, month, holiday]
+      temporal_relations:
+        - kind: relative_calendar_period
+          target: departure
+          reference: {kind: symbolic_context, key: "context:request_date"}
+          direction: after
+          unit: month
+          ordinal: 1
+          period_semantics: whole
       departure_window: {start: "2026-09-01", end: "2026-09-30"}
       invariants:
         - point balances and spending budgets are outside the MVP output contract
@@ -251,6 +364,8 @@ scenarios:
       date_anchor: {kind: month, month: 5, explicit_year: null}
       departure_window: {start: "2027-05-01", end: "2027-05-10"}
       interpreted_duration: {minimum_days: 9, maximum_days: 11}
+      literal_duration:
+        {stated_minimum_quantity: 10, stated_maximum_quantity: 10, unit: day, modifier: approximate}
       return_window: {start: "2027-05-10", end: "2027-05-21"}
       invariants:
         - unstated year is not retained from model output
@@ -269,6 +384,8 @@ scenarios:
       destination: {kind: region, value: "Europe"}
       resolved_anchor: {holiday: new_years_day, date: "2027-01-01"}
       interpreted_duration: {minimum_days: 7, maximum_days: 14}
+      literal_duration:
+        {stated_minimum_quantity: 1, stated_maximum_quantity: 2, unit: week, modifier: alternative}
       departure_window: null
       return_window: null
       invariants:
@@ -290,6 +407,8 @@ scenarios:
         accepted_values: ["South East Asia", "Southeast Asia"]
       departure_window: {start: "2026-10-01", end: "2026-10-31"}
       interpreted_duration: {minimum_days: 14, maximum_days: 14}
+      literal_duration:
+        {stated_minimum_quantity: 2, stated_maximum_quantity: 2, unit: week, modifier: exact}
       return_window: {start: "2026-10-15", end: "2026-11-14"}
       clarification: {action: none}
     status: ready
@@ -933,6 +1052,7 @@ scenarios:
 
   - id: enrich_leap_day_next_valid_occurrence
     layer: enrichment
+    contract_status: deferred_pending_yearless_leap_day_policy
     description: Yearless February 29 skips invalid non-leap year
     failure_class: arithmetic
     input: >
@@ -984,6 +1104,7 @@ scenarios:
 
   - id: enrich_invalid_calendar_date
     layer: enrichment
+    contract_status: deferred_pending_invalid_calendar_date_contract
     description: Invalid calendar date produces specific validation error
     failure_class: schema
     input: >
@@ -1089,6 +1210,7 @@ scenarios:
 
   - id: enrich_yearless_month_current_partly_elapsed
     layer: enrichment
+    contract_status: deferred_pending_current_month_clipping_policy
     description: Current month resolves only to remaining dates starting on reference date
     failure_class: arithmetic
     input: >
@@ -2019,6 +2141,7 @@ scenarios:
 
   - id: p2_couple_weeks_past_thanksgiving_loose_offset
     layer: pass_2
+    contract_status: unsupported_pending_loose_offset_vocabulary
     description: Couple weeks past Thanksgiving is loose one-to-three-week departure offset
     failure_class: extraction
     input: >
@@ -2250,6 +2373,7 @@ scenarios:
 
   - id: p2_bounded_after_before_dates_nonexclusive_policy
     layer: pass_2
+    contract_status: unsupported_pending_relation_composition
     description: Combined after and before constraints are bounded without universal exclusivity assumption
     failure_class: extraction
     input: >
@@ -2328,6 +2452,7 @@ scenarios:
 
   - id: p2_noncontiguous_exact_departure_alternatives
     layer: pass_2
+    contract_status: unsupported_pending_relation_composition
     description: Preserve two explicit departure-date alternatives without widening
     failure_class: unsupported_inference
     input: >
@@ -2405,6 +2530,7 @@ scenarios:
 
   - id: p2_multiple_return_date_alternatives
     layer: pass_2
+    contract_status: unsupported_pending_relation_composition
     description: Preserve two explicit return options without widening to continuous range
     failure_class: unsupported_inference
     input: >
@@ -5177,6 +5303,7 @@ scenarios:
 
   - id: live_noncontiguous_departure_alternatives
     layer: live_model
+    contract_status: unsupported_pending_relation_composition
     description: Repeatedly test preservation of two discrete departure dates
     failure_class: nondeterminism
     input: >
@@ -6201,6 +6328,7 @@ scenarios:
 
   - id: stability_discrete_date_alternatives
     layer: stability
+    contract_status: unsupported_pending_relation_composition
     description: Repeated live runs preserve exact alternative dates rather than widening
     failure_class: nondeterminism
     input: >
@@ -6946,6 +7074,7 @@ scenarios:
 
   - id: metamorphic_alternative_dates_order
     layer: metamorphic
+    contract_status: unsupported_pending_relation_composition
     description: Reordering exact alternatives does not change accepted option set
     failure_class: nondeterminism
     input: >

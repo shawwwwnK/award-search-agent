@@ -1,0 +1,1352 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-09-01T07:37:12.075214+00:00",
+  "model": "gpt-4o-mini",
+  "strategy": "two_pass",
+  "cases_path": "/private/tmp/labor-day-evidence-eval.yaml",
+  "scenario_count": 1,
+  "trials": 3,
+  "summary": {
+    "runs": 3,
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "pass_rate": 0.0,
+    "latency_seconds": 35.908,
+    "usage": "unavailable: the current two-pass adapter does not retain response usage",
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "raw_text": "SF",
+            "accepted_values": [
+              "SF",
+              "San Francisco"
+            ]
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-09-03",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-03",
+            "end": "2026-09-07"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-09-12",
+            "end": "2026-09-18"
+          },
+          "actual": {
+            "start": "2026-09-12",
+            "end": "2026-09-18"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "holiday",
+            "holiday": "labor_day"
+          },
+          "actual": [
+            {
+              "kind": "holiday",
+              "anchor_id": "anchor_1",
+              "applies_to": "departure",
+              "raw_text": "Labor Day",
+              "occurrence_index": 0,
+              "holiday": "labor_day",
+              "year": null
+            },
+            {
+              "kind": "month",
+              "anchor_id": "anchor_2",
+              "applies_to": "departure",
+              "raw_text": "about 10 days",
+              "occurrence_index": 0,
+              "month": 9,
+              "year": null
+            }
+          ]
+        },
+        {
+          "name": "grounding_valid",
+          "passed": true,
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "evidence_support_valid",
+          "passed": false,
+          "expected": true,
+          "actual": {
+            "grounding_valid": true,
+            "evidence_support_valid": false,
+            "preferred_boundary_exact_match": false,
+            "missing_expected_claims": [
+              "departure_period",
+              "approximate_duration"
+            ],
+            "unsupported_claims": [
+              "duration"
+            ],
+            "overbroad_spans": [
+              "leaving on Labor Day weekend",
+              "Labor Day",
+              "about 10 days"
+            ],
+            "insufficient_spans": [],
+            "failures": [
+              {
+                "code": "unsupported_semantic_claim",
+                "claim_id": "duration",
+                "quote": null,
+                "detail": "the output linked evidence to a claim absent from this fixture"
+              },
+              {
+                "code": "outside_allowed_envelope",
+                "claim_id": "departure_anchor",
+                "quote": "leaving on Labor Day weekend | Labor Day | about 10 days",
+                "detail": "claim spans do not share one allowed source envelope"
+              },
+              {
+                "code": "evidence_not_linked_to_claim",
+                "claim_id": "departure_period",
+                "quote": null,
+                "detail": "no grounded evidence span is linked to the expected claim"
+              },
+              {
+                "code": "evidence_not_linked_to_claim",
+                "claim_id": "approximate_duration",
+                "quote": null,
+                "detail": "no grounded evidence span is linked to the expected claim"
+              }
+            ]
+          }
+        },
+        {
+          "name": "preferred_boundary_exact_match",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "blocking": false
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": false,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [
+          "departure_period",
+          "approximate_duration"
+        ],
+        "unsupported_claims": [
+          "duration"
+        ],
+        "overbroad_spans": [
+          "leaving on Labor Day weekend",
+          "Labor Day",
+          "about 10 days"
+        ],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF leaving on Labor Day weekend for about 10 days. We are flexible to leave on the Thursday as well.",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-09-03",
+            "end": "2026-09-07",
+            "precision": "window",
+            "raw_text": "leaving on Labor Day weekend; on the Thursday as well"
+          },
+          "return_window": {
+            "start": "2026-09-12",
+            "end": "2026-09-18",
+            "precision": "window",
+            "raw_text": "for about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Francisco",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "occurrence_index": 0,
+                "holiday": "labor_day",
+                "year": null
+              },
+              {
+                "kind": "month",
+                "anchor_id": "anchor_2",
+                "applies_to": "departure",
+                "raw_text": "about 10 days",
+                "occurrence_index": 0,
+                "month": 9,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "leaving on Labor Day weekend",
+                "claim_ids": [
+                  "departure_anchor"
+                ],
+                "occurrence_index": 0
+              },
+              {
+                "applies_to": "departure",
+                "raw_text": "for about 10 days",
+                "claim_ids": [
+                  "duration"
+                ],
+                "occurrence_index": 0
+              },
+              {
+                "applies_to": "departure",
+                "raw_text": "on the Thursday as well",
+                "claim_ids": [
+                  "alternate_departure_day"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:50:78",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 50,
+                "end": 78,
+                "text": "leaving on Labor Day weekend"
+              }
+            },
+            {
+              "evidence_id": "request:61:70",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 61,
+                "end": 70,
+                "text": "Labor Day"
+              }
+            },
+            {
+              "evidence_id": "request:79:96",
+              "claim_ids": [
+                "duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 79,
+                "end": 96,
+                "text": "for about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:83:96",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 83,
+                "end": 96,
+                "text": "about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:123:146",
+              "claim_ids": [
+                "alternate_departure_day"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 123,
+                "end": 146,
+                "text": "on the Thursday as well"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "occurrence_index": 0,
+                "holiday": "labor_day",
+                "year": null
+              },
+              "start": "2026-09-07",
+              "end": "2026-09-07",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved labor_day."
+            },
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_2",
+                "applies_to": "departure",
+                "raw_text": "about 10 days",
+                "occurrence_index": 0,
+                "month": 9,
+                "year": null
+              },
+              "start": "2026-09-01",
+              "end": "2026-09-30",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-09-03",
+              "end": "2026-09-07",
+              "supporting_text": [
+                "leaving on Labor Day weekend",
+                "on the Thursday as well"
+              ],
+              "interpretation": "Deterministic holiday-weekend policy: the holiday, its associated weekend, and the preceding calendar day.",
+              "assumptions": [
+                "'Labor Day weekend' is interpreted as Friday through Monday, 2026-09-04 to 2026-09-07.",
+                "Including Thursday allows for flexibility in departure.",
+                "Deterministic holiday policy resolved the inclusive window as 2026-09-03 through 2026-09-07."
+              ]
+            },
+            "return_date": {
+              "start": "2026-09-12",
+              "end": "2026-09-18",
+              "supporting_text": [
+                "for about 10 days"
+              ],
+              "interpretation": "Proposed return range considers a trip duration of approximately 10 days with the departure starting on September 3.",
+              "assumptions": [
+                "'About 10 days' is interpreted as a range of 9 to 11 days."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 7.585
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "raw_text": "SF",
+            "accepted_values": [
+              "SF",
+              "San Francisco"
+            ]
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-09-03",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-03",
+            "end": "2026-09-07"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-09-12",
+            "end": "2026-09-18"
+          },
+          "actual": {
+            "start": "2026-09-12",
+            "end": "2026-09-18"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "holiday",
+            "holiday": "labor_day"
+          },
+          "actual": [
+            {
+              "kind": "holiday",
+              "anchor_id": "anchor_1",
+              "applies_to": "departure",
+              "raw_text": "Labor Day",
+              "occurrence_index": 0,
+              "holiday": "labor_day",
+              "year": null
+            }
+          ]
+        },
+        {
+          "name": "grounding_valid",
+          "passed": true,
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "evidence_support_valid",
+          "passed": false,
+          "expected": true,
+          "actual": {
+            "grounding_valid": true,
+            "evidence_support_valid": false,
+            "preferred_boundary_exact_match": false,
+            "missing_expected_claims": [
+              "departure_period",
+              "approximate_duration"
+            ],
+            "unsupported_claims": [
+              "duration"
+            ],
+            "overbroad_spans": [],
+            "insufficient_spans": [],
+            "failures": [
+              {
+                "code": "unsupported_semantic_claim",
+                "claim_id": "duration",
+                "quote": null,
+                "detail": "the output linked evidence to a claim absent from this fixture"
+              },
+              {
+                "code": "evidence_not_linked_to_claim",
+                "claim_id": "departure_period",
+                "quote": null,
+                "detail": "no grounded evidence span is linked to the expected claim"
+              },
+              {
+                "code": "evidence_not_linked_to_claim",
+                "claim_id": "approximate_duration",
+                "quote": null,
+                "detail": "no grounded evidence span is linked to the expected claim"
+              }
+            ]
+          }
+        },
+        {
+          "name": "preferred_boundary_exact_match",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "blocking": false
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": false,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [
+          "departure_period",
+          "approximate_duration"
+        ],
+        "unsupported_claims": [
+          "duration"
+        ],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF leaving on Labor Day weekend for about 10 days. We are flexible to leave on the Thursday as well.",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-09-03",
+            "end": "2026-09-07",
+            "precision": "window",
+            "raw_text": "leaving on Labor Day weekend; leave on the Thursday as well"
+          },
+          "return_window": {
+            "start": "2026-09-12",
+            "end": "2026-09-18",
+            "precision": "window",
+            "raw_text": "about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Francisco",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "occurrence_index": 0,
+                "holiday": "labor_day",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "about 10 days",
+                "claim_ids": [
+                  "duration"
+                ],
+                "occurrence_index": 0
+              },
+              {
+                "applies_to": "departure",
+                "raw_text": "leaving on Labor Day weekend",
+                "claim_ids": [
+                  "departure_anchor"
+                ],
+                "occurrence_index": 0
+              },
+              {
+                "applies_to": "departure",
+                "raw_text": "leave on the Thursday as well",
+                "claim_ids": [
+                  "alternate_departure_day"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:50:78",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 50,
+                "end": 78,
+                "text": "leaving on Labor Day weekend"
+              }
+            },
+            {
+              "evidence_id": "request:61:70",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 61,
+                "end": 70,
+                "text": "Labor Day"
+              }
+            },
+            {
+              "evidence_id": "request:83:96",
+              "claim_ids": [
+                "duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 83,
+                "end": 96,
+                "text": "about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:117:146",
+              "claim_ids": [
+                "alternate_departure_day"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 117,
+                "end": 146,
+                "text": "leave on the Thursday as well"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "occurrence_index": 0,
+                "holiday": "labor_day",
+                "year": null
+              },
+              "start": "2026-09-07",
+              "end": "2026-09-07",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved labor_day."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-09-03",
+              "end": "2026-09-07",
+              "supporting_text": [
+                "leaving on Labor Day weekend",
+                "leave on the Thursday as well"
+              ],
+              "interpretation": "Deterministic holiday-weekend policy: the holiday, its associated weekend, and the preceding calendar day.",
+              "assumptions": [
+                "Labor Day weekend includes Friday through Labor Day.",
+                "Departure on the Thursday means including that day in the departure range.",
+                "Deterministic holiday policy resolved the inclusive window as 2026-09-03 through 2026-09-07."
+              ]
+            },
+            "return_date": {
+              "start": "2026-09-12",
+              "end": "2026-09-18",
+              "supporting_text": [
+                "about 10 days"
+              ],
+              "interpretation": "Returning roughly 10 days after departure, using maximum bounds for the stay.",
+              "assumptions": [
+                "About 10 days implies a range of 9 to 11 days.",
+                "Flexible departure extends the return range beyond 10 days."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 22.499
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "raw_text": "SF",
+            "accepted_values": [
+              "SF",
+              "San Francisco"
+            ]
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-09-03",
+            "end": "2026-09-07"
+          },
+          "actual": {
+            "start": "2026-09-04",
+            "end": "2026-09-07"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-09-12",
+            "end": "2026-09-18"
+          },
+          "actual": {
+            "start": "2026-09-13",
+            "end": "2026-09-18"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "holiday",
+            "holiday": "labor_day"
+          },
+          "actual": [
+            {
+              "kind": "holiday",
+              "anchor_id": "anchor_1",
+              "applies_to": "departure",
+              "raw_text": "Labor Day",
+              "occurrence_index": 0,
+              "holiday": "labor_day",
+              "year": null
+            },
+            {
+              "kind": "month",
+              "anchor_id": "anchor_2",
+              "applies_to": "departure",
+              "raw_text": "about 10 days",
+              "occurrence_index": 0,
+              "month": 9,
+              "year": null
+            }
+          ]
+        },
+        {
+          "name": "grounding_valid",
+          "passed": true,
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "evidence_support_valid",
+          "passed": false,
+          "expected": true,
+          "actual": {
+            "grounding_valid": true,
+            "evidence_support_valid": false,
+            "preferred_boundary_exact_match": false,
+            "missing_expected_claims": [
+              "alternate_departure_day"
+            ],
+            "unsupported_claims": [],
+            "overbroad_spans": [
+              "Labor Day",
+              "about 10 days",
+              "Labor Day weekend",
+              "flexible to leave on the Thursday"
+            ],
+            "insufficient_spans": [],
+            "failures": [
+              {
+                "code": "outside_allowed_envelope",
+                "claim_id": "departure_anchor",
+                "quote": "Labor Day | about 10 days",
+                "detail": "claim spans do not share one allowed source envelope"
+              },
+              {
+                "code": "outside_allowed_envelope",
+                "claim_id": "departure_period",
+                "quote": "Labor Day weekend | flexible to leave on the Thursday",
+                "detail": "claim spans do not share one allowed source envelope"
+              },
+              {
+                "code": "evidence_not_linked_to_claim",
+                "claim_id": "alternate_departure_day",
+                "quote": null,
+                "detail": "no grounded evidence span is linked to the expected claim"
+              }
+            ]
+          }
+        },
+        {
+          "name": "preferred_boundary_exact_match",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "blocking": false
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": false,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [
+          "alternate_departure_day"
+        ],
+        "unsupported_claims": [],
+        "overbroad_spans": [
+          "Labor Day",
+          "about 10 days",
+          "Labor Day weekend",
+          "flexible to leave on the Thursday"
+        ],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF leaving on Labor Day weekend for about 10 days. We are flexible to leave on the Thursday as well.",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-09-04",
+            "end": "2026-09-07",
+            "precision": "window",
+            "raw_text": "Labor Day weekend; flexible to leave on the Thursday"
+          },
+          "return_window": {
+            "start": "2026-09-13",
+            "end": "2026-09-18",
+            "precision": "window",
+            "raw_text": "for about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Francisco",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "occurrence_index": 0,
+                "holiday": "labor_day",
+                "year": null
+              },
+              {
+                "kind": "month",
+                "anchor_id": "anchor_2",
+                "applies_to": "departure",
+                "raw_text": "about 10 days",
+                "occurrence_index": 0,
+                "month": 9,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "for about 10 days",
+                "claim_ids": [
+                  "approximate_duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:61:70",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 61,
+                "end": 70,
+                "text": "Labor Day"
+              }
+            },
+            {
+              "evidence_id": "request:61:78",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 61,
+                "end": 78,
+                "text": "Labor Day weekend"
+              }
+            },
+            {
+              "evidence_id": "request:79:96",
+              "claim_ids": [
+                "approximate_duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 79,
+                "end": 96,
+                "text": "for about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:83:96",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 83,
+                "end": 96,
+                "text": "about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:105:138",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 105,
+                "end": 138,
+                "text": "flexible to leave on the Thursday"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Labor Day",
+                "occurrence_index": 0,
+                "holiday": "labor_day",
+                "year": null
+              },
+              "start": "2026-09-07",
+              "end": "2026-09-07",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved labor_day."
+            },
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_2",
+                "applies_to": "departure",
+                "raw_text": "about 10 days",
+                "occurrence_index": 0,
+                "month": 9,
+                "year": null
+              },
+              "start": "2026-09-01",
+              "end": "2026-09-30",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "date_resolution": {
+            "departure": {
+              "start": "2026-09-04",
+              "end": "2026-09-07",
+              "supporting_text": [
+                "Labor Day weekend",
+                "flexible to leave on the Thursday"
+              ],
+              "interpretation": "Deterministic holiday-weekend policy: the holiday, its associated weekend, and the preceding calendar day.",
+              "assumptions": [
+                "Departure can occur on Thursday, September 3, 2026; Labor Day is on Monday, September 7, 2026.",
+                "Deterministic holiday policy resolved the inclusive window as 2026-09-04 through 2026-09-07."
+              ]
+            },
+            "return_date": {
+              "start": "2026-09-13",
+              "end": "2026-09-18",
+              "supporting_text": [
+                "for about 10 days"
+              ],
+              "interpretation": "Return can occur approximately 10 days after departure, correlating to a range from the proposed departure window.",
+              "assumptions": [
+                "'About 10 days' is interpreted as 9 to 11 days, translating to the return window of September 13 through 17, 2026."
+              ]
+            },
+            "interpreted_duration": {
+              "raw_text": "about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 5.824
+    }
+  ]
+}

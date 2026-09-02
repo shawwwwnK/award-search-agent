@@ -35,3 +35,10 @@
 - **What the project owner changed or rejected:** [Project-owner input pending.]
 - **Next cut line:** [Project-owner selection pending after review of remaining failures and the
   `LAX` candidate-policy mismatch.]
+
+## Airport-code follow-up
+
+The project owner subsequently selected deterministic preservation of explicit airport codes. The
+`missing_travel_period` scenario passed all three focused live trials after that change. See
+`2026-08-31-airport-code-preservation.md`; the five other unsolved scenarios remain the next review
+set.

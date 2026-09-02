@@ -155,13 +155,24 @@ workflow. The new artifact is
 | `relative_date_expression` | 0/3 | 0/3 | **Unsolved** | All trials produced the wrong departure weekend, invented return timing, and suppressed the required return clarification. |
 | `conflicting_dates` | 0/3 | 0/3 | **Unsolved** | All trials still lost `return_before_departure`, so clarification asked about travelers or departure instead of the date conflict. |
 | `repositioning_allowed` | 0/3 | 0/3 | **Unsolved** | All trials still omitted Europe and asked for destination; two also failed to count “I.” |
-| `missing_travel_period` | 3/3 | 0/3 | **Automatic-check regression** | All trials normalized `LAX` to `Los Angeles International Airport`, which is not an accepted value in this golden; one trial also invented one traveler. The location portion needs policy classification before calling it a product regression. |
+| `missing_travel_period` | 3/3 | 0/3 | **Resolved in focused follow-up** | The full rerun exposed the `LAX` normalization regression. After deterministic explicit-code preservation was approved, the scenario passed 3/3 focused trials. |
 
 The rerun therefore solved seven previously failing scenarios under the current checks, preserved
-three stable scenarios, left five scenarios unsolved, and introduced one scenario-level automatic
-regression. The five remaining behavior clusters are verbatim flexibility evidence, relative-return
-arithmetic, relative-weekend arithmetic plus unsupported return inference, conflict preservation,
-and destination-region extraction.
+three stable scenarios, left five scenarios unsolved, and exposed one scenario-level automatic
+regression that the focused airport-code follow-up subsequently closed. The five remaining behavior
+clusters are verbatim flexibility evidence, relative-return arithmetic, relative-weekend arithmetic
+plus unsupported return inference, conflict preservation, and destination-region extraction.
+
+### Explicit airport-code follow-up
+
+The project owner selected preservation because an explicitly supplied airport code is directly
+usable by the next workflow. Deterministic code now replaces a model-normalized airport display name
+with the uppercase `raw_text` code only when the model already classified that verbatim
+three-letter token as an airport. It does not infer airports from city abbreviations such as `SF`.
+
+The focused artifact `2026-08-31-gpt-4o-mini-lax-preservation-3-trials.json` recorded 3 passes, no
+failed outputs, and no errors. This closes the `missing_travel_period` automatic regression without
+changing its temporal unknowns or departure clarification.
 
 This summary records observed behavior only. Product-owner interpretation and the next cut line
 remain pending.

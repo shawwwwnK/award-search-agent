@@ -34,9 +34,7 @@ class OnePassIntentExperiment:
         self.model = model
         self._client = client or OpenAI()
 
-    def run(
-        self, request: RawRequest
-    ) -> tuple[RequestUnderstandingResult, dict[str, Any] | None]:
+    def run(self, request: RawRequest) -> tuple[RequestUnderstandingResult, dict[str, Any] | None]:
         payload = json.dumps(request.model_dump(mode="json"), separators=(",", ":"))
         try:
             response = self._client.responses.parse(

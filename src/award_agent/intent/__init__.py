@@ -7,6 +7,7 @@ from award_agent.intent.holidays import (
     HolidayDateResolutionError,
     NagerHolidayProvider,
 )
+from award_agent.intent.model_views import CoarseExtractionInput, TemporalInterpretationInput
 from award_agent.intent.openai_extractor import (
     DateResolutionError,
     OpenAIExtractorConfig,
@@ -16,6 +17,7 @@ from award_agent.intent.temporal import TemporalResolutionValidationError
 from award_agent.intent.workflow import understand_request
 
 __all__ = [
+    "CoarseExtractionInput",
     "DateFlexibilityResolutionError",
     "DateResolutionError",
     "HolidayDateProvider",
@@ -24,6 +26,7 @@ __all__ = [
     "NagerHolidayProvider",
     "OpenAIExtractorConfig",
     "OpenAIIntentExtractor",
+    "TemporalInterpretationInput",
     "TemporalResolutionValidationError",
     "TemporalResolver",
     "understand_request",

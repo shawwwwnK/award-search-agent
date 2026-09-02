@@ -5,6 +5,12 @@
 > Refined by ADR 0003: temporal modifiers are now interpreted in a second model pass that proposes
 > direct ranges; deterministic code retains anchor resolution, grounding, exact duration arithmetic,
 > conflict checks, and acceptance policy.
+>
+> Refined by ADR 0006: the second pass now emits semantic temporal relations rather than
+> authoritative ranges; deterministic code evaluates all calendar windows.
+>
+> Refined by ADR 0007: dedicated model-view contracts structurally hide concrete calendar context;
+> deterministic catalogs form the trust checkpoint between the two model passes.
 
 ## Context
 

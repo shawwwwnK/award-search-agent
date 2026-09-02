@@ -146,7 +146,9 @@ def _resolve_month(expression: DateExpression, context: RequestContext) -> DateW
     if expression.year is None and month_end < context.reference_date:
         year += 1
     start = date(year, expression.month, 1)
-    end_day = 7 if expression.portion == "first_week" else calendar.monthrange(year, expression.month)[1]
+    end_day = (
+        7 if expression.portion == "first_week" else calendar.monthrange(year, expression.month)[1]
+    )
     return DateWindow(
         start=start,
         end=date(year, expression.month, end_day),
@@ -301,10 +303,9 @@ def apply_date_flexibility(
             included = resolve_date_expression(expression, context, holiday_provider)
         if included is None:
             continue
-        is_disjoint = (
-            included.end < resolved_window.start - timedelta(days=1)
-            or included.start > resolved_window.end + timedelta(days=1)
-        )
+        is_disjoint = included.end < resolved_window.start - timedelta(
+            days=1
+        ) or included.start > resolved_window.end + timedelta(days=1)
         if is_disjoint and not is_directional_extension:
             raise DateFlexibilityResolutionError(
                 "non-contiguous date alternatives cannot be represented as one date window"

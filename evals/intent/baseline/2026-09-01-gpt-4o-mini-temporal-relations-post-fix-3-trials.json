@@ -1,0 +1,3862 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-09-01T08:25:25.217990+00:00",
+  "model": "gpt-4o-mini",
+  "strategy": "two_pass",
+  "cases_path": "evals/intent/cases.yaml",
+  "scenario_count": 16,
+  "trials": 3,
+  "summary": {
+    "runs": 48,
+    "passed": 8,
+    "failed": 7,
+    "errors": 33,
+    "pass_rate": 0.16666666666666666,
+    "latency_seconds": 320.547,
+    "usage": "unavailable: the current two-pass adapter does not retain response usage",
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "labor_day_thailand",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 16.548
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 8: 'about 10 days'",
+      "latency_seconds": 2.975
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 9: 'afterwards'",
+      "latency_seconds": 12.31
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 3.609
+    },
+    {
+      "id": "missing_origin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 4.58
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": null,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "travelers",
+              "reason": "missing",
+              "detail": "The number of travelers was not stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "departure",
+              "reason": "missing",
+              "detail": "No bounded departure timing was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": null,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [],
+          "resolved_date_anchors": [],
+          "temporal_relations": {
+            "constraints": []
+          },
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 1.901
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "cyclic temporal request-field dependency detected at departure",
+      "latency_seconds": 10.371
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 5.038
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 5.322
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Jose"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ]
+        },
+        {
+          "name": "destinations",
+          "passed": true,
+          "expected": [
+            {
+              "kind": "city",
+              "value": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei"
+            }
+          ],
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I can go to either Seoul or Taipei from San Jose over Christmas for about a week. Use miles if possible.",
+          "context": {
+            "reference_date": "2026-09-14",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-12-24",
+            "end": "2026-12-26",
+            "precision": "window",
+            "raw_text": "over Christmas"
+          },
+          "return_window": {
+            "start": "2026-12-30",
+            "end": "2027-01-03",
+            "precision": "window",
+            "raw_text": "for about a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Jose",
+                "raw_text": "San Jose"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Seoul",
+                "raw_text": "Seoul"
+              },
+              {
+                "kind": "city",
+                "value": "Taipei",
+                "raw_text": "Taipei"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "occurrence_index": 0,
+                "holiday": "christmas",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for about a week",
+                "claim_ids": [
+                  "approximate_duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:49:63",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 49,
+                "end": 63,
+                "text": "over Christmas"
+              }
+            },
+            {
+              "evidence_id": "request:54:63",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 54,
+                "end": 63,
+                "text": "Christmas"
+              }
+            },
+            {
+              "evidence_id": "request:64:80",
+              "claim_ids": [
+                "approximate_duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 64,
+                "end": 80,
+                "text": "for about a week"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "occurrence_index": 0,
+                "holiday": "christmas",
+                "year": null
+              },
+              "start": "2026-12-25",
+              "end": "2026-12-25",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved christmas."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "window": "christmas_period",
+                "raw_text": "over Christmas",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "end"
+                },
+                "minimum": 6,
+                "maximum": 8,
+                "unit": "day",
+                "raw_text": "for about a week",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-12-24",
+              "end": "2026-12-26",
+              "supporting_text": [
+                "over Christmas"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-12-30",
+              "end": "2027-01-03",
+              "supporting_text": [
+                "for about a week"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for about a week",
+              "minimum_days": 6,
+              "maximum_days": 8
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 4.135
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 3.978
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 9: 'next month'",
+      "latency_seconds": 2.651
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 4.744
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 5.281
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 3.515
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "grounding_valid",
+          "passed": false,
+          "expected": true,
+          "actual": {
+            "code": "invalid_occurrence",
+            "claim_id": "temporal_unspecified",
+            "quote": "Maybe sometime in January",
+            "reason": "occurrence_index 1 is outside the 1 matches",
+            "ambiguous": false
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": false,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": false,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "error_type": "TemporalEvidenceValidationError",
+      "error": "invalid_occurrence: claim='temporal_unspecified' quote='Maybe sometime in January': occurrence_index 1 is outside the 1 matches",
+      "latency_seconds": 1.86
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 2,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 6.865
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "exact-date anchor evidence does not support its month and day: 'Thursday'",
+      "latency_seconds": 2.382
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "holiday anchor evidence does not name labor_day: 'the weekend afterwards'",
+      "latency_seconds": 2.147
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "grounding_valid",
+          "passed": false,
+          "expected": true,
+          "actual": {
+            "code": "invalid_occurrence",
+            "claim_id": "return_anchor",
+            "quote": "October 15",
+            "reason": "occurrence_index 1 is outside the 1 matches",
+            "ambiguous": false
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": false,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": false,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "error_type": "TemporalEvidenceValidationError",
+      "error": "invalid_occurrence: claim='return_anchor' quote='October 15': occurrence_index 1 is outside the 1 matches",
+      "latency_seconds": 2.055
+    },
+    {
+      "id": "missing_origin",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Paris"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Paris",
+              "raw_text": "Paris"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": false,
+          "expected": {
+            "minimum_days": 7,
+            "maximum_days": 7
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          }
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "origin"
+          ],
+          "actual": [
+            "cabin",
+            "origin"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "origin"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "origin",
+            "question": "Where would you like to depart from?",
+            "reason": "origin is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I want to go to Paris for a week in May using points. What should I book?",
+          "context": {
+            "reference_date": "2026-01-12",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Paris",
+              "raw_text": "Paris"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-05-01",
+            "end": "2026-05-31",
+            "precision": "window",
+            "raw_text": "May"
+          },
+          "return_window": {
+            "start": "2026-05-07",
+            "end": "2026-06-08",
+            "precision": "window",
+            "raw_text": "for a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "origin",
+              "reason": "missing",
+              "detail": "No departure location was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Paris",
+                "raw_text": "Paris"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for a week",
+                "claim_ids": [
+                  "duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:22:32",
+              "claim_ids": [
+                "duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 22,
+                "end": 32,
+                "text": "for a week"
+              }
+            },
+            {
+              "evidence_id": "request:36:39",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 36,
+                "end": 39,
+                "text": "May"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              },
+              "start": "2026-05-01",
+              "end": "2026-05-31",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "month_portion",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "portion": "whole",
+                "raw_text": "May",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "end"
+                },
+                "minimum": 6,
+                "maximum": 8,
+                "unit": "day",
+                "raw_text": "for a week",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-05-01",
+              "end": "2026-05-31",
+              "supporting_text": [
+                "May"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-05-07",
+              "end": "2026-06-08",
+              "supporting_text": [
+                "for a week"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for a week",
+              "minimum_days": 6,
+              "maximum_days": 8
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "origin",
+          "question": "Where would you like to depart from?",
+          "reason": "origin is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 4.052
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": null,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "travelers",
+              "reason": "missing",
+              "detail": "The number of travelers was not stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "departure",
+              "reason": "missing",
+              "detail": "No bounded departure timing was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": null,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [],
+          "resolved_date_anchors": [],
+          "temporal_relations": {
+            "constraints": []
+          },
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 7.248
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 11: 'two weekends after'",
+      "latency_seconds": 12.385
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 4.863
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 2,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 15.274
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Jose"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ]
+        },
+        {
+          "name": "destinations",
+          "passed": true,
+          "expected": [
+            {
+              "kind": "city",
+              "value": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei"
+            }
+          ],
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I can go to either Seoul or Taipei from San Jose over Christmas for about a week. Use miles if possible.",
+          "context": {
+            "reference_date": "2026-09-14",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-12-24",
+            "end": "2026-12-26",
+            "precision": "window",
+            "raw_text": "over Christmas"
+          },
+          "return_window": {
+            "start": "2026-12-30",
+            "end": "2027-01-03",
+            "precision": "window",
+            "raw_text": "for about a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Jose",
+                "raw_text": "San Jose"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Seoul",
+                "raw_text": "Seoul"
+              },
+              {
+                "kind": "city",
+                "value": "Taipei",
+                "raw_text": "Taipei"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "occurrence_index": 0,
+                "holiday": "christmas",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for about a week",
+                "claim_ids": [
+                  "approximate_duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:49:63",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 49,
+                "end": 63,
+                "text": "over Christmas"
+              }
+            },
+            {
+              "evidence_id": "request:54:63",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 54,
+                "end": 63,
+                "text": "Christmas"
+              }
+            },
+            {
+              "evidence_id": "request:64:80",
+              "claim_ids": [
+                "approximate_duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 64,
+                "end": 80,
+                "text": "for about a week"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "occurrence_index": 0,
+                "holiday": "christmas",
+                "year": null
+              },
+              "start": "2026-12-25",
+              "end": "2026-12-25",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved christmas."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "window": "christmas_period",
+                "raw_text": "over Christmas",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "end"
+                },
+                "minimum": 6,
+                "maximum": 8,
+                "unit": "day",
+                "raw_text": "for about a week",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-12-24",
+              "end": "2026-12-26",
+              "supporting_text": [
+                "over Christmas"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-12-30",
+              "end": "2027-01-03",
+              "supporting_text": [
+                "for about a week"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for about a week",
+              "minimum_days": 6,
+              "maximum_days": 8
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 3.772
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 3: 'next spring'",
+      "latency_seconds": 2.681
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 9: 'next month'",
+      "latency_seconds": 1.639
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2027-05-01",
+            "end": "2027-05-10"
+          },
+          "actual": {
+            "start": "2027-05-01",
+            "end": "2027-05-31"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": false,
+          "expected": {
+            "start": "2027-05-10",
+            "end": "2027-05-21"
+          },
+          "actual": {
+            "start": "2027-05-10",
+            "end": "2027-06-11"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "month",
+            "month": 5,
+            "explicit_year": null
+          },
+          "actual": [
+            {
+              "kind": "month",
+              "anchor_id": "anchor_1",
+              "applies_to": "departure",
+              "raw_text": "May",
+              "occurrence_index": 0,
+              "month": 5,
+              "year": null
+            }
+          ]
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [
+        "unstated year is not retained from model output",
+        "early May is not widened by trip duration"
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF for about 10 days in early May",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2027-05-01",
+            "end": "2027-05-31",
+            "precision": "window",
+            "raw_text": "May"
+          },
+          "return_window": {
+            "start": "2027-05-10",
+            "end": "2027-06-11",
+            "precision": "window",
+            "raw_text": "about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Francisco",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "about 10 days",
+                "claim_ids": [
+                  "approximate_duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:54:67",
+              "claim_ids": [
+                "approximate_duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 54,
+                "end": 67,
+                "text": "about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:77:80",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 77,
+                "end": 80,
+                "text": "May"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              },
+              "start": "2027-05-01",
+              "end": "2027-05-31",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "month_portion",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "portion": "whole",
+                "raw_text": "May",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "start"
+                },
+                "minimum": 9,
+                "maximum": 11,
+                "unit": "day",
+                "raw_text": "about 10 days",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2027-05-01",
+              "end": "2027-05-31",
+              "supporting_text": [
+                "May"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2027-05-10",
+              "end": "2027-06-11",
+              "supporting_text": [
+                "about 10 days"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 5.864
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 2,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 14.523
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "region",
+            "raw_text": "South East Asia",
+            "accepted_values": [
+              "South East Asia",
+              "Southeast Asia"
+            ]
+          },
+          "actual": [
+            {
+              "kind": "region",
+              "value": "South East Asia",
+              "raw_text": "South East Asia"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-01",
+            "end": "2026-10-31"
+          },
+          "actual": {
+            "start": "2026-10-01",
+            "end": "2026-10-31"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-15",
+            "end": "2026-11-14"
+          },
+          "actual": {
+            "start": "2026-10-15",
+            "end": "2026-11-14"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 14,
+            "maximum_days": 14
+          },
+          "actual": {
+            "minimum_days": 14,
+            "maximum_days": 14
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to South East Asia from New York for 2 weeks in October",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "region",
+              "value": "South East Asia",
+              "raw_text": "South East Asia"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-10-01",
+            "end": "2026-10-31",
+            "precision": "window",
+            "raw_text": "October"
+          },
+          "return_window": {
+            "start": "2026-10-15",
+            "end": "2026-11-14",
+            "precision": "window",
+            "raw_text": "for 2 weeks"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "New York",
+                "raw_text": "New York"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "region",
+                "value": "South East Asia",
+                "raw_text": "South East Asia"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "October",
+                "occurrence_index": 0,
+                "month": 10,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for 2 weeks",
+                "claim_ids": [
+                  "duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:63:74",
+              "claim_ids": [
+                "duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 63,
+                "end": 74,
+                "text": "for 2 weeks"
+              }
+            },
+            {
+              "evidence_id": "request:78:85",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 78,
+                "end": 85,
+                "text": "October"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "October",
+                "occurrence_index": 0,
+                "month": 10,
+                "year": null
+              },
+              "start": "2026-10-01",
+              "end": "2026-10-31",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "month_portion",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "portion": "whole",
+                "raw_text": "October",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "end"
+                },
+                "minimum": 14,
+                "maximum": 14,
+                "unit": "day",
+                "raw_text": "for 2 weeks",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-10-01",
+              "end": "2026-10-31",
+              "supporting_text": [
+                "October"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-10-15",
+              "end": "2026-11-14",
+              "supporting_text": [
+                "for 2 weeks"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for 2 weeks",
+              "minimum_days": 14,
+              "maximum_days": 14
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 3.692
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 2,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 5.001
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "exact-date anchor evidence does not support its month and day: 'about 10 days'",
+      "latency_seconds": 2.394
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "cyclic temporal request-field dependency detected at departure",
+      "latency_seconds": 12.36
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 9: 'the weekend afterwards'",
+      "latency_seconds": 16.548
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "grounding_valid",
+          "passed": false,
+          "expected": true,
+          "actual": {
+            "code": "invalid_occurrence",
+            "claim_id": "return_anchor",
+            "quote": "October 15",
+            "reason": "occurrence_index 1 is outside the 1 matches",
+            "ambiguous": false
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": false,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": false,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "error_type": "TemporalEvidenceValidationError",
+      "error": "invalid_occurrence: claim='return_anchor' quote='October 15': occurrence_index 1 is outside the 1 matches",
+      "latency_seconds": 1.882
+    },
+    {
+      "id": "missing_origin",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Paris"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Paris",
+              "raw_text": "Paris"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 7,
+            "maximum_days": 7
+          },
+          "actual": {
+            "minimum_days": 7,
+            "maximum_days": 7
+          }
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "origin"
+          ],
+          "actual": [
+            "cabin",
+            "origin"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "origin"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "origin",
+            "question": "Where would you like to depart from?",
+            "reason": "origin is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I want to go to Paris for a week in May using points. What should I book?",
+          "context": {
+            "reference_date": "2026-01-12",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Paris",
+              "raw_text": "Paris"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-05-01",
+            "end": "2026-05-31",
+            "precision": "window",
+            "raw_text": "May"
+          },
+          "return_window": {
+            "start": "2026-05-08",
+            "end": "2026-06-07",
+            "precision": "window",
+            "raw_text": "for a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "origin",
+              "reason": "missing",
+              "detail": "No departure location was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Paris",
+                "raw_text": "Paris"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for a week",
+                "claim_ids": [
+                  "duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:22:32",
+              "claim_ids": [
+                "duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 22,
+                "end": 32,
+                "text": "for a week"
+              }
+            },
+            {
+              "evidence_id": "request:36:39",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 36,
+                "end": 39,
+                "text": "May"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              },
+              "start": "2026-05-01",
+              "end": "2026-05-31",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "month_portion",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "portion": "whole",
+                "raw_text": "May",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "start"
+                },
+                "minimum": 7,
+                "maximum": 7,
+                "unit": "day",
+                "raw_text": "for a week",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-05-01",
+              "end": "2026-05-31",
+              "supporting_text": [
+                "May"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-05-08",
+              "end": "2026-06-07",
+              "supporting_text": [
+                "for a week"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for a week",
+              "minimum_days": 7,
+              "maximum_days": 7
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "origin",
+          "question": "Where would you like to depart from?",
+          "reason": "origin is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 24.753
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": null,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "travelers",
+              "reason": "missing",
+              "detail": "The number of travelers was not stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "departure",
+              "reason": "missing",
+              "detail": "No bounded departure timing was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": null,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [],
+          "resolved_date_anchors": [],
+          "temporal_relations": {
+            "constraints": []
+          },
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 1.979
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 11: 'two weekends after'",
+      "latency_seconds": 2.126
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 23.156
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 3,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 6.881
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "San Jose"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ]
+        },
+        {
+          "name": "destinations",
+          "passed": true,
+          "expected": [
+            {
+              "kind": "city",
+              "value": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei"
+            }
+          ],
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          },
+          "actual": {
+            "start": "2026-12-24",
+            "end": "2026-12-26"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": false,
+          "expected": {
+            "minimum_days": 6,
+            "maximum_days": 8
+          },
+          "actual": {
+            "minimum_days": 6,
+            "maximum_days": 6
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "I can go to either Seoul or Taipei from San Jose over Christmas for about a week. Use miles if possible.",
+          "context": {
+            "reference_date": "2026-09-14",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Jose",
+              "raw_text": "San Jose"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Seoul",
+              "raw_text": "Seoul"
+            },
+            {
+              "kind": "city",
+              "value": "Taipei",
+              "raw_text": "Taipei"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-12-24",
+            "end": "2026-12-26",
+            "precision": "window",
+            "raw_text": "Christmas"
+          },
+          "return_window": {
+            "start": "2026-12-30",
+            "end": "2027-01-01",
+            "precision": "window",
+            "raw_text": "about a week"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Jose",
+                "raw_text": "San Jose"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Seoul",
+                "raw_text": "Seoul"
+              },
+              {
+                "kind": "city",
+                "value": "Taipei",
+                "raw_text": "Taipei"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "holiday_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "occurrence_index": 0,
+                "holiday": "christmas",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "about a week",
+                "claim_ids": [
+                  "approximate_duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:54:63",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 54,
+                "end": 63,
+                "text": "Christmas"
+              }
+            },
+            {
+              "evidence_id": "request:68:80",
+              "claim_ids": [
+                "approximate_duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 68,
+                "end": 80,
+                "text": "about a week"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "holiday_1",
+                "applies_to": "departure",
+                "raw_text": "Christmas",
+                "occurrence_index": 0,
+                "holiday": "christmas",
+                "year": null
+              },
+              "start": "2026-12-25",
+              "end": "2026-12-25",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved christmas."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "holiday_1",
+                "window": "christmas_period",
+                "raw_text": "Christmas",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "end"
+                },
+                "minimum": 6,
+                "maximum": 6,
+                "unit": "day",
+                "raw_text": "about a week",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-12-24",
+              "end": "2026-12-26",
+              "supporting_text": [
+                "Christmas"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-12-30",
+              "end": "2027-01-01",
+              "supporting_text": [
+                "about a week"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "about a week",
+              "minimum_days": 6,
+              "maximum_days": 6
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 5.815
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 3,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 2.656
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "month anchor evidence does not name month 9: 'next month'",
+      "latency_seconds": 1.397
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "country",
+            "value": "Thailand"
+          },
+          "actual": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2027-05-01",
+            "end": "2027-05-10"
+          },
+          "actual": {
+            "start": "2027-05-01",
+            "end": "2027-05-10"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2027-05-10",
+            "end": "2027-05-21"
+          },
+          "actual": {
+            "start": "2027-05-10",
+            "end": "2027-05-21"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": true,
+          "expected": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          },
+          "actual": {
+            "minimum_days": 9,
+            "maximum_days": 11
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "month",
+            "month": 5,
+            "explicit_year": null
+          },
+          "actual": [
+            {
+              "kind": "month",
+              "anchor_id": "anchor_1",
+              "applies_to": "departure",
+              "raw_text": "May",
+              "occurrence_index": 0,
+              "month": 5,
+              "year": null
+            }
+          ]
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [
+        "unstated year is not retained from model output",
+        "early May is not widened by trip duration"
+      ],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to Thailand from SF for about 10 days in early May",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "San Francisco",
+              "raw_text": "SF"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "country",
+              "value": "Thailand",
+              "raw_text": "Thailand"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2027-05-01",
+            "end": "2027-05-10",
+            "precision": "window",
+            "raw_text": "in early May"
+          },
+          "return_window": {
+            "start": "2027-05-10",
+            "end": "2027-05-21",
+            "precision": "window",
+            "raw_text": "for about 10 days"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "San Francisco",
+                "raw_text": "SF"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "country",
+                "value": "Thailand",
+                "raw_text": "Thailand"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for about 10 days",
+                "claim_ids": [
+                  "approximate_duration"
+                ],
+                "occurrence_index": 0
+              },
+              {
+                "applies_to": "departure",
+                "raw_text": "in early May",
+                "claim_ids": [
+                  "departure_period"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:50:67",
+              "claim_ids": [
+                "approximate_duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 50,
+                "end": 67,
+                "text": "for about 10 days"
+              }
+            },
+            {
+              "evidence_id": "request:68:80",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 68,
+                "end": 80,
+                "text": "in early May"
+              }
+            },
+            {
+              "evidence_id": "request:77:80",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 77,
+                "end": 80,
+                "text": "May"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "May",
+                "occurrence_index": 0,
+                "month": 5,
+                "year": null
+              },
+              "start": "2027-05-01",
+              "end": "2027-05-31",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "month_portion",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "portion": "early",
+                "raw_text": "in early May",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "start"
+                },
+                "minimum": 9,
+                "maximum": 11,
+                "unit": "day",
+                "raw_text": "for about 10 days",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2027-05-01",
+              "end": "2027-05-10",
+              "supporting_text": [
+                "in early May"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2027-05-10",
+              "end": "2027-05-21",
+              "supporting_text": [
+                "for about 10 days"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for about 10 days",
+              "minimum_days": 9,
+              "maximum_days": 11
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 17.514
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 3,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 6.57
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "region",
+            "raw_text": "South East Asia",
+            "accepted_values": [
+              "South East Asia",
+              "Southeast Asia"
+            ]
+          },
+          "actual": [
+            {
+              "kind": "region",
+              "value": "South East Asia",
+              "raw_text": "South East Asia"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-01",
+            "end": "2026-10-31"
+          },
+          "actual": {
+            "start": "2026-10-01",
+            "end": "2026-10-31"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-10-15",
+            "end": "2026-11-14"
+          },
+          "actual": {
+            "start": "2026-10-14",
+            "end": "2026-11-15"
+          }
+        },
+        {
+          "name": "interpreted_duration",
+          "passed": false,
+          "expected": {
+            "minimum_days": 14,
+            "maximum_days": 14
+          },
+          "actual": {
+            "minimum_days": 13,
+            "maximum_days": 15
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "My boyfriend and I want to go to South East Asia from New York for 2 weeks in October",
+          "context": {
+            "reference_date": "2026-08-29",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "region",
+              "value": "South East Asia",
+              "raw_text": "South East Asia"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-10-01",
+            "end": "2026-10-31",
+            "precision": "window",
+            "raw_text": "October"
+          },
+          "return_window": {
+            "start": "2026-10-14",
+            "end": "2026-11-15",
+            "precision": "window",
+            "raw_text": "for 2 weeks"
+          },
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "New York",
+                "raw_text": "New York"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "region",
+                "value": "South East Asia",
+                "raw_text": "South East Asia"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "October",
+                "occurrence_index": 0,
+                "month": 10,
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "duration",
+                "raw_text": "for 2 weeks",
+                "claim_ids": [
+                  "duration"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:63:74",
+              "claim_ids": [
+                "duration"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 63,
+                "end": 74,
+                "text": "for 2 weeks"
+              }
+            },
+            {
+              "evidence_id": "request:78:85",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 78,
+                "end": 85,
+                "text": "October"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "month",
+                "anchor_id": "anchor_1",
+                "applies_to": "departure",
+                "raw_text": "October",
+                "occurrence_index": 0,
+                "month": 10,
+                "year": null
+              },
+              "start": "2026-10-01",
+              "end": "2026-10-31",
+              "source": "calendar",
+              "source_detail": "Calendar-month boundaries resolved from the explicit month."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "kind": "month_portion",
+                "target": "departure",
+                "anchor_id": "anchor_1",
+                "portion": "whole",
+                "raw_text": "October",
+                "occurrence_index": 0
+              },
+              {
+                "kind": "duration",
+                "target": "return",
+                "reference": {
+                  "kind": "request_field",
+                  "field": "departure",
+                  "edge": "end"
+                },
+                "minimum": 13,
+                "maximum": 15,
+                "unit": "day",
+                "raw_text": "for 2 weeks",
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-10-01",
+              "end": "2026-10-31",
+              "supporting_text": [
+                "October"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-10-14",
+              "end": "2026-11-15",
+              "supporting_text": [
+                "for 2 weeks"
+              ],
+              "interpretation": "Deterministically derived from the semantic duration relation.",
+              "assumptions": []
+            },
+            "interpreted_duration": {
+              "raw_text": "for 2 weeks",
+              "minimum_days": 13,
+              "maximum_days": 15
+            },
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 4.879
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 3,
+      "status": "error",
+      "error_type": "DateResolutionError",
+      "error": "OpenAI returned an invalid temporal reference",
+      "latency_seconds": 6.376
+    }
+  ]
+}

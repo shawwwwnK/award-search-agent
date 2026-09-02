@@ -18,6 +18,7 @@ from award_agent.domain import (
     TemporalTarget,
     UnresolvedTemporalConstraint,
 )
+from award_agent.intent.evidence import EvidenceErrorCode, TemporalEvidenceValidationError
 from award_agent.intent.temporal import (
     TemporalResolutionValidationError,
     enrich_temporal_anchors,
@@ -56,8 +57,12 @@ def test_enrichment_rejects_anchor_evidence_not_found_in_request() -> None:
         ]
     )
 
-    with pytest.raises(TemporalResolutionValidationError, match="not present"):
+    with pytest.raises(TemporalEvidenceValidationError) as captured:
         enrich_temporal_anchors(request(), extraction)
+
+    assert captured.value.code is EvidenceErrorCode.UNGROUNDED_QUOTE
+    assert captured.value.quote == "June"
+    assert captured.value.claim_id == "departure_anchor"
 
 
 def test_enrichment_preserves_verbatim_relative_phrase() -> None:
@@ -70,9 +75,9 @@ def test_enrichment_preserves_verbatim_relative_phrase() -> None:
         ]
     )
 
-    assert enrich_temporal_anchors(
-        request("Travel two weekends after the holiday"), extraction
-    ) == []
+    assert (
+        enrich_temporal_anchors(request("Travel two weekends after the holiday"), extraction) == []
+    )
 
 
 def test_sanitization_discards_a_year_not_explicit_in_anchor_evidence() -> None:
@@ -94,6 +99,24 @@ def test_sanitization_discards_a_year_not_explicit_in_anchor_evidence() -> None:
     assert sanitized.date_anchors[0].year is None
 
 
+def test_sanitization_rejects_fabricated_month_anchor_evidence() -> None:
+    text = "Come back the weekend afterwards"
+    extraction = CoarseIntentExtraction(
+        date_anchors=[
+            MonthAnchor(
+                kind="month",
+                anchor_id="fabricated_september",
+                applies_to=TemporalTarget.RETURN,
+                raw_text="the weekend afterwards",
+                month=9,
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError, match="does not name month"):
+        sanitize_temporal_extraction(request(text), extraction)
+
+
 def test_proposal_rejects_supporting_text_not_found_in_request() -> None:
     extraction = CoarseIntentExtraction(
         temporal_phrases=[
@@ -112,8 +135,12 @@ def test_proposal_rejects_supporting_text_not_found_in_request() -> None:
         )
     )
 
-    with pytest.raises(TemporalResolutionValidationError, match="supporting text"):
+    with pytest.raises(TemporalEvidenceValidationError) as captured:
         validate_date_resolution_proposal(request(), extraction, proposal)
+
+    assert captured.value.code is EvidenceErrorCode.UNGROUNDED_QUOTE
+    assert captured.value.claim_id == "departure_period"
+    assert captured.value.quote == "sometime in June"
 
 
 def test_proposal_rejects_dates_when_request_has_no_temporal_evidence() -> None:
@@ -134,7 +161,7 @@ def test_proposal_rejects_dates_when_request_has_no_temporal_evidence() -> None:
         )
 
 
-def test_proposal_filters_unresolved_annotations_without_request_evidence() -> None:
+def test_proposal_rejects_unresolved_annotations_without_request_evidence() -> None:
     extraction = CoarseIntentExtraction(
         temporal_phrases=[
             TemporalPhrase(
@@ -153,9 +180,12 @@ def test_proposal_filters_unresolved_annotations_without_request_evidence() -> N
         ]
     )
 
-    validated = validate_date_resolution_proposal(request(), extraction, proposal)
+    with pytest.raises(TemporalEvidenceValidationError) as captured:
+        validate_date_resolution_proposal(request(), extraction, proposal)
 
-    assert validated.unresolved == []
+    assert captured.value.code is EvidenceErrorCode.UNGROUNDED_QUOTE
+    assert captured.value.claim_id == "departure_period"
+    assert captured.value.quote == "invented phrase"
 
 
 def test_duration_interpretation_has_deterministic_return_arithmetic() -> None:

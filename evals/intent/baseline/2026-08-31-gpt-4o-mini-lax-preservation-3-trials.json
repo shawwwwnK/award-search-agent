@@ -1,0 +1,582 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-01T06:41:13.584844+00:00",
+  "model": "gpt-4o-mini",
+  "strategy": "two_pass",
+  "cases_path": "/private/tmp/lax_intent_eval.yaml",
+  "scenario_count": 1,
+  "trials": 3,
+  "summary": {
+    "runs": 3,
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "pass_rate": 1.0,
+    "latency_seconds": 10.247,
+    "usage": "unavailable: the current two-pass adapter does not retain response usage",
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "missing_travel_period",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": null,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "travelers",
+              "reason": "missing",
+              "detail": "The number of travelers was not stated.",
+              "raw_text": null
+            },
+            {
+              "field": "departure",
+              "reason": "unresolved",
+              "detail": "No specific dates or duration provided for the trip.",
+              "raw_text": "Help me find award flights from LAX to Sydney."
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "unresolved",
+              "detail": "No specific dates or duration provided for the trip.",
+              "raw_text": "Help me find award flights from LAX to Sydney."
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": null,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "resolved_date_anchors": [],
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": [
+              {
+                "field": "dates",
+                "raw_text": "Help me find award flights from LAX to Sydney.",
+                "reason": "No specific dates or duration provided for the trip."
+              }
+            ]
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 4.37
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": null,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "travelers",
+              "reason": "missing",
+              "detail": "The number of travelers was not stated.",
+              "raw_text": null
+            },
+            {
+              "field": "departure",
+              "reason": "unresolved",
+              "detail": "No specific dates or temporal phrases provided.",
+              "raw_text": "Help me find award flights from LAX to Sydney."
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "unresolved",
+              "detail": "No specific dates or temporal phrases provided.",
+              "raw_text": "Help me find award flights from LAX to Sydney."
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": null,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "resolved_date_anchors": [],
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": [
+              {
+                "field": "dates",
+                "raw_text": "Help me find award flights from LAX to Sydney.",
+                "reason": "No specific dates or temporal phrases provided."
+              }
+            ]
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 3.059
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": true,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": null,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "travelers",
+              "reason": "missing",
+              "detail": "The number of travelers was not stated.",
+              "raw_text": null
+            },
+            {
+              "field": "departure",
+              "reason": "unresolved",
+              "detail": "No temporal indicators present to define departure or return dates.",
+              "raw_text": "Help me find award flights from LAX to Sydney."
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "unresolved",
+              "detail": "No temporal indicators present to define departure or return dates.",
+              "raw_text": "Help me find award flights from LAX to Sydney."
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": null,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "resolved_date_anchors": [],
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": [
+              {
+                "field": "dates",
+                "raw_text": "Help me find award flights from LAX to Sydney.",
+                "reason": "No temporal indicators present to define departure or return dates."
+              }
+            ]
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        }
+      },
+      "usage": null,
+      "latency_seconds": 2.818
+    }
+  ]
+}
