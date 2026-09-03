@@ -13,6 +13,7 @@ from award_agent.domain import (
     RelativeCalendarPeriodConstraint,
     RelativeWeekendConstraint,
     RequestContext,
+    RequestFieldReference,
     SymbolicContextReference,
     TemporalDirection,
     TemporalEdge,
@@ -25,12 +26,17 @@ from award_agent.domain import (
     UnresolvedRelationConstraint,
 )
 from award_agent.intent.conformance import validate_temporal_conformance
-from award_agent.intent.evidence import TemporalResolutionValidationError
+from award_agent.intent.evidence import (
+    TemporalResolutionValidationError,
+    assign_stable_anchor_ids,
+    ground_temporal_evidence,
+)
 from award_agent.intent.model_views import (
     ExplicitAnchorCatalogEntry,
     SymbolicReferenceCatalogEntry,
     TemporalEvidenceCatalogEntry,
     TemporalInterpretationInput,
+    build_temporal_interpretation_input,
 )
 from award_agent.intent.openai_extractor import (
     RelativeWeekendWire,
@@ -67,7 +73,7 @@ def interpretation_input(
             )
         ],
         allowed_symbolic_references=[
-            SymbolicReferenceCatalogEntry(key="request_field:departure:end")
+            SymbolicReferenceCatalogEntry.from_key("request_field:departure:end")
         ],
     )
 
@@ -143,7 +149,7 @@ def test_relation_evidence_claim_must_match_relation_target() -> None:
 
     details = captured.value.as_dict()
     assert details["stage"] == "pass_two_conformance"
-    assert details["error_code"] == "incompatible_evidence_claim"
+    assert details["error_code"] == "incompatible_evidence_target"
     assert details["collection"] == "relative_weekends"
     assert details["relation_index"] == 0
     assert details["constraint_index"] == 0
@@ -207,7 +213,7 @@ def test_next_spring_cannot_be_coerced_to_bounded_calendar_month() -> None:
     ).model_copy(
         update={
             "allowed_symbolic_references": [
-                SymbolicReferenceCatalogEntry(key="context:request_date")
+                SymbolicReferenceCatalogEntry.from_key("context:request_date")
             ]
         }
     )
@@ -266,6 +272,7 @@ def test_first_week_of_named_month_cannot_be_coerced_to_whole_month() -> None:
                 anchor_id=anchor_id,
                 kind="month",
                 applies_to=TemporalTarget.DEPARTURE,
+                direct_relation_kind="month_portion",
             )
         ],
     )
@@ -277,6 +284,48 @@ def test_first_week_of_named_month_cannot_be_coerced_to_whole_month() -> None:
                 anchor_id=anchor_id,
                 portion="whole",
                 raw_text=phrase,
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        validate_temporal_conformance(model_input, graph)
+
+    assert captured.value.details.error_code == "unsupported_bounded_temporal_language"
+
+
+def test_condensed_transcript_uses_transcript_local_spans_for_first_week_detection() -> None:
+    text = "Ignore this long prefix; travel the first week of June."
+    extraction = CoarseIntentExtraction(
+        date_anchors=[
+            MonthAnchor(
+                kind="month",
+                anchor_id="model-local",
+                applies_to=TemporalTarget.DEPARTURE,
+                raw_text="June",
+                month=6,
+            )
+        ],
+        temporal_phrases=[
+            TemporalPhrase(
+                applies_to=TemporalPhraseTarget.DEPARTURE,
+                raw_text="first week of June",
+                claim_ids=[TemporalEvidenceClaim.DEPARTURE_PERIOD],
+            )
+        ],
+    )
+    raw_request = request(text)
+    evidence = ground_temporal_evidence(raw_request, extraction)
+    extraction = assign_stable_anchor_ids(raw_request, extraction)
+    model_input = build_temporal_interpretation_input(text, extraction, evidence)
+    graph = TemporalRelationGraph(
+        constraints=[
+            MonthPortionConstraint(
+                kind="month_portion",
+                target=TemporalTarget.DEPARTURE,
+                anchor_id=model_input._anchor_ids["a0"],
+                portion="whole",
+                raw_text="first week of June",
             )
         ]
     )
@@ -308,6 +357,47 @@ def test_literal_named_month_remains_a_supported_bounded_relation() -> None:
                 anchor_id=anchor_id,
                 kind="month",
                 applies_to=TemporalTarget.DEPARTURE,
+                direct_relation_kind="month_portion",
+            )
+        ],
+    )
+    graph = TemporalRelationGraph(
+        constraints=[
+            MonthPortionConstraint(
+                kind="month_portion",
+                target=TemporalTarget.DEPARTURE,
+                anchor_id=anchor_id,
+                portion="whole",
+                raw_text="June",
+            )
+        ]
+    )
+
+    validate_temporal_conformance(model_input, graph)
+
+
+def test_shared_conformance_rejects_noncanonical_direct_month_relation() -> None:
+    text = "Travel in June."
+    start = text.index("June")
+    anchor_id = f"anchor:month:departure:{start}:{start + 4}"
+    model_input = TemporalInterpretationInput(
+        temporal_transcript=text,
+        evidence_catalog=[
+            TemporalEvidenceCatalogEntry(
+                evidence_id=f"request:{start}:{start + 4}",
+                text="June",
+                claim_labels=[TemporalEvidenceClaim.DEPARTURE_ANCHOR],
+                source_order=0,
+                source_start=start,
+                source_end=start + 4,
+            )
+        ],
+        explicit_anchor_catalog=[
+            ExplicitAnchorCatalogEntry(
+                anchor_id=anchor_id,
+                kind="month",
+                applies_to=TemporalTarget.DEPARTURE,
+                direct_relation_kind="month_portion",
             )
         ],
     )
@@ -323,7 +413,14 @@ def test_literal_named_month_remains_a_supported_bounded_relation() -> None:
         ]
     )
 
-    validate_temporal_conformance(model_input, graph)
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        validate_temporal_conformance(model_input, graph)
+
+    assert captured.value.details.error_code == "incompatible_relation_fields"
+    assert captured.value.details.contradictory_fields == (
+        "anchor_id",
+        "relation_kind",
+    )
 
 
 @pytest.mark.parametrize("model_year", [1, 20, 26])
@@ -387,7 +484,7 @@ def test_partial_next_evidence_cannot_hide_unresolved_spring_token() -> None:
     ).model_copy(
         update={
             "allowed_symbolic_references": [
-                SymbolicReferenceCatalogEntry(key="context:request_date")
+                SymbolicReferenceCatalogEntry.from_key("context:request_date")
             ]
         }
     )
@@ -447,9 +544,10 @@ def test_first_week_of_month_cannot_be_coerced_to_relative_weekend() -> None:
                 anchor_id=anchor_id,
                 kind="month",
                 applies_to=TemporalTarget.DEPARTURE,
+                direct_relation_kind="month_portion",
             )
         ],
-        allowed_symbolic_references=[SymbolicReferenceCatalogEntry(key=reference_key)],
+        allowed_symbolic_references=[SymbolicReferenceCatalogEntry.from_key(reference_key)],
     )
     graph = TemporalRelationGraph(
         constraints=[
@@ -505,6 +603,7 @@ def test_unresolved_season_can_coexist_with_unrelated_bounded_month() -> None:
                 anchor_id=anchor_id,
                 kind="month",
                 applies_to=TemporalTarget.DEPARTURE,
+                direct_relation_kind="month_portion",
             )
         ],
     )
@@ -516,11 +615,11 @@ def test_unresolved_season_can_coexist_with_unrelated_bounded_month() -> None:
                 raw_text="next spring",
                 reason="No approved deterministic season policy.",
             ),
-            AnchorWindowConstraint(
-                kind="anchor_window",
+            MonthPortionConstraint(
+                kind="month_portion",
                 target=TemporalTarget.DEPARTURE,
                 anchor_id=anchor_id,
-                window="anchor",
+                portion="whole",
                 raw_text="June",
             ),
         ]
@@ -537,7 +636,7 @@ def test_unresolved_season_does_not_authorize_bounded_use_of_same_evidence() -> 
     ).model_copy(
         update={
             "allowed_symbolic_references": [
-                SymbolicReferenceCatalogEntry(key="context:request_date")
+                SymbolicReferenceCatalogEntry.from_key("context:request_date")
             ]
         }
     )
@@ -597,7 +696,9 @@ def test_unresolved_season_does_not_authorize_overlapping_bounded_evidence() -> 
                 source_end=next_end,
             ),
         ],
-        allowed_symbolic_references=[SymbolicReferenceCatalogEntry(key="context:request_date")],
+        allowed_symbolic_references=[
+            SymbolicReferenceCatalogEntry.from_key("context:request_date")
+        ],
     )
     graph = TemporalRelationGraph(
         constraints=[
@@ -628,3 +729,38 @@ def test_unresolved_season_does_not_authorize_overlapping_bounded_evidence() -> 
     assert captured.value.details.error_code == "unsupported_bounded_temporal_language"
     assert captured.value.details.constraint_index == 1
     assert captured.value.details.evidence_id == f"request:{phrase_start}:{next_end}"
+
+
+def test_shared_conformance_rejects_cataloged_self_reference() -> None:
+    text = "Leave the weekend afterwards."
+    quote = "the weekend afterwards"
+    model_input = interpretation_input(
+        text,
+        quote,
+        TemporalEvidenceClaim.DEPARTURE_PERIOD,
+    )
+    graph = TemporalRelationGraph(
+        constraints=[
+            RelativeWeekendConstraint(
+                kind="relative_weekend",
+                target=TemporalTarget.DEPARTURE,
+                reference=RequestFieldReference(
+                    kind="request_field",
+                    field=TemporalTarget.DEPARTURE,
+                    edge=TemporalEdge.END,
+                ),
+                direction=TemporalDirection.AFTER,
+                ordinal=1,
+                raw_text=quote,
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        validate_temporal_conformance(model_input, graph)
+
+    details = captured.value.details
+    assert details.error_code == "incompatible_reference_target"
+    assert details.constraint_index == 0
+    assert details.evidence_id == model_input.evidence_catalog[0].evidence_id
+    assert details.reference_id == "request_field:departure:end"

@@ -16,6 +16,7 @@ from award_agent.domain import (
     DateResolutionProposal,
     DateWindow,
     DateWindowPrecision,
+    DecisionReference,
     DurationModifier,
     ExactDateAnchor,
     Holiday,
@@ -33,6 +34,7 @@ from award_agent.domain import (
     ResolvedTemporalAnchor,
     SemanticDurationConstraint,
     SymbolicContextReference,
+    TemporalComposition,
     TemporalDirection,
     TemporalEdge,
     TemporalPhraseTarget,
@@ -529,7 +531,9 @@ def proposal_window_to_date_window(
     )
 
 
-def _constraint_reference(constraint: object) -> AnchorReference | RequestFieldReference | None:
+def _constraint_reference(
+    constraint: object,
+) -> AnchorReference | RequestFieldReference | DecisionReference | None:
     if isinstance(
         constraint,
         (
@@ -575,6 +579,22 @@ def validate_temporal_relation_graph(
         target: set() for target in TemporalTarget
     }
     strict_dependency_edges: set[tuple[TemporalTarget, TemporalTarget]] = set()
+    constraint_ids = [
+        item.constraint_id for item in graph.constraints if item.constraint_id is not None
+    ]
+    if len(constraint_ids) != len(set(constraint_ids)):
+        raise TemporalResolutionValidationError(
+            "canonical temporal relation IDs must be unique",
+            stage="pass_two_dependency_validation",
+            error_code="cyclic_dependency",
+            contradictory_fields=("constraint_id",),
+        )
+    known_constraint_ids: set[str] = set()
+    constraint_targets_by_id: dict[str, TemporalTarget | None] = {}
+    dependency_uses: dict[
+        tuple[TemporalTarget, TemporalTarget],
+        list[tuple[int, str, str, str]],
+    ] = {}
 
     for constraint_index, constraint in enumerate(graph.constraints):
         target = getattr(constraint, "target", None)
@@ -658,6 +678,46 @@ def validate_temporal_relation_graph(
                 )
 
         reference = _constraint_reference(constraint)
+        if (
+            isinstance(reference, DecisionReference)
+            and reference.constraint_id not in known_constraint_ids
+        ):
+            raise TemporalResolutionValidationError(
+                f"temporal relation references a missing or later decision: {reference.constraint_id}",
+                stage="pass_two_dependency_validation",
+                error_code="unresolved_dependency",
+                constraint_index=constraint_index,
+                relation_kind=constraint.kind,
+                evidence_id=evidence_id,
+                reference_id=reference.constraint_id,
+            )
+        if constraint.combine is not TemporalComposition.BASE and (
+            constraint.combine_with is None or constraint.combine_with not in known_constraint_ids
+        ):
+            raise TemporalResolutionValidationError(
+                "non-base composition requires an earlier named operand",
+                stage="pass_two_dependency_validation",
+                error_code="unresolved_dependency",
+                constraint_index=constraint_index,
+                relation_kind=constraint.kind,
+                contradictory_fields=("combine", "combine_with"),
+                evidence_id=evidence_id,
+                reference_id=constraint.combine_with,
+            )
+        if constraint.combine is not TemporalComposition.BASE:
+            assert constraint.combine_with is not None  # established by the preceding guard
+            operand_target = constraint_targets_by_id[constraint.combine_with]
+            if operand_target is not target:
+                raise TemporalResolutionValidationError(
+                    "composition operands must target the same temporal field",
+                    stage="pass_two_dependency_validation",
+                    error_code="incompatible_relation_fields",
+                    constraint_index=constraint_index,
+                    relation_kind=constraint.kind,
+                    contradictory_fields=("target", "combine_with"),
+                    evidence_id=evidence_id,
+                    reference_id=constraint.combine_with,
+                )
         if isinstance(reference, AnchorReference) and reference.anchor_id not in anchors:
             raise TemporalResolutionValidationError(
                 f"temporal relation references missing anchor: {reference.anchor_id}",
@@ -671,8 +731,19 @@ def validate_temporal_relation_graph(
             )
         if isinstance(reference, RequestFieldReference) and target is not None:
             dependencies[target].add(reference.field)
+            reference_key = (
+                f"request_field:{reference.field.value}:{reference.edge.value}"
+                if reference.edge is not None
+                else f"request_field:{reference.field.value}:whole_interval"
+            )
+            dependency_uses.setdefault((target, reference.field), []).append(
+                (constraint_index, constraint.kind, evidence_id, reference_key)
+            )
             if not isinstance(constraint, SemanticDurationConstraint):
                 strict_dependency_edges.add((target, reference.field))
+        if constraint.constraint_id is not None:
+            known_constraint_ids.add(constraint.constraint_id)
+            constraint_targets_by_id[constraint.constraint_id] = target
 
     for target, referenced_fields in dependencies.items():
         for referenced in referenced_fields:
@@ -680,32 +751,46 @@ def validate_temporal_relation_graph(
                 (target, referenced) in strict_dependency_edges
                 or semantic_producers[referenced] == 0
             ):
+                constraint_index, relation_kind, evidence_id, reference_key = dependency_uses[
+                    (target, referenced)
+                ][0]
                 raise TemporalResolutionValidationError(
                     f"{target.value} depends on unresolved request field: {referenced.value}",
                     stage="pass_two_dependency_validation",
                     error_code="unresolved_dependency",
-                    relation_kind="request_field_reference",
+                    relation_index=constraint_index,
+                    constraint_index=constraint_index,
+                    relation_kind=relation_kind,
+                    collection="constraints",
                     missing_fields=(f"{referenced.value}_producer",),
-                    reference_id=f"request_field:{referenced.value}",
+                    evidence_id=evidence_id,
+                    reference_id=reference_key,
                 )
 
     visiting: set[TemporalTarget] = set()
     visited: set[TemporalTarget] = set()
 
     def visit(target: TemporalTarget) -> None:
-        if target in visiting:
-            raise TemporalResolutionValidationError(
-                f"cyclic temporal request-field dependency detected at {target.value}",
-                stage="pass_two_dependency_validation",
-                error_code="cyclic_dependency",
-                relation_kind="request_field_reference",
-                contradictory_fields=("dependency_graph",),
-                reference_id=f"request_field:{target.value}",
-            )
         if target in visited:
             return
         visiting.add(target)
         for dependency in dependencies[target]:
+            if dependency in visiting:
+                constraint_index, relation_kind, evidence_id, reference_key = dependency_uses[
+                    (target, dependency)
+                ][0]
+                raise TemporalResolutionValidationError(
+                    f"cyclic temporal request-field dependency detected at {dependency.value}",
+                    stage="pass_two_dependency_validation",
+                    error_code="cyclic_dependency",
+                    relation_index=constraint_index,
+                    constraint_index=constraint_index,
+                    relation_kind=relation_kind,
+                    collection="constraints",
+                    contradictory_fields=("dependency_graph", "reference_key"),
+                    evidence_id=evidence_id,
+                    reference_id=reference_key,
+                )
             visit(dependency)
         visiting.remove(target)
         visited.add(target)
@@ -880,26 +965,118 @@ def evaluate_temporal_relation_graph(
         for target in TemporalTarget
     }
     cache: dict[TemporalTarget, tuple[date, date] | None] = {}
+    # A decision reference is intentionally a reference to the completed semantic decision, not
+    # its raw relation candidate.  For example, a weekday which extends a holiday window changes
+    # that decision's visible start for any later "before that" decision.
+    composed_constraint_windows: dict[str, tuple[date, date]] = {}
 
     def resolve_reference(
-        reference: AnchorReference | RequestFieldReference | SymbolicContextReference,
+        reference: AnchorReference
+        | RequestFieldReference
+        | DecisionReference
+        | SymbolicContextReference,
     ) -> date:
         if isinstance(reference, AnchorReference):
             anchor = anchors[reference.anchor_id]
             return _edge((anchor.start, anchor.end), reference.edge)
         if isinstance(reference, SymbolicContextReference):
             return request.context.reference_date
+        if isinstance(reference, DecisionReference):
+            window = composed_constraint_windows.get(reference.constraint_id)
+            if window is None:
+                raise TemporalResolutionValidationError(
+                    f"decision reference has not produced a window: {reference.constraint_id}",
+                    stage="pass_two_dependency_validation",
+                    error_code="unresolved_dependency",
+                    reference_id=reference.constraint_id,
+                )
+            return _edge(window, reference.edge)
         resolved = resolve_field(reference.field)
         if resolved is None:  # validation should make this unreachable
             raise TemporalResolutionValidationError(
                 f"request-field reference could not be evaluated: {reference.field.value}"
             )
+        if reference.edge is None:
+            raise TemporalResolutionValidationError(
+                "a point relation cannot use a whole-interval reference",
+                stage="pass_two_conformance",
+                error_code="incompatible_relation_fields",
+            )
         return _edge(resolved, reference.edge)
+
+    def combine_window(
+        operand: tuple[date, date] | None,
+        candidate: tuple[date, date],
+        constraint: object,
+    ) -> tuple[date, date]:
+        """Apply Contract-v2 composition deterministically, preserving legacy base union behavior."""
+
+        operation = getattr(constraint, "combine", TemporalComposition.BASE)
+        if operand is None:
+            if operation in {
+                TemporalComposition.INTERSECT,
+                TemporalComposition.EXTEND_START,
+                TemporalComposition.EXTEND_END,
+                TemporalComposition.EXCLUDE,
+            }:
+                raise TemporalResolutionValidationError(
+                    f"{operation.value} requires an existing target window",
+                    stage="pass_two_conformance",
+                    error_code="unresolved_dependency",
+                    relation_kind=getattr(constraint, "kind", None),
+                    reference_id=getattr(constraint, "combine_with", None),
+                )
+            return candidate
+        if operation is TemporalComposition.BASE:
+            return candidate
+        if operation in {TemporalComposition.UNION, TemporalComposition.ALTERNATIVE}:
+            # DateWindow has one contiguous inclusive range.  Do not collapse separated unions
+            # or alternatives into an envelope that silently includes dates the user did not ask
+            # for.  Touching or overlapping ranges remain representable.
+            if candidate[0] > operand[1] + timedelta(days=1) or operand[0] > candidate[
+                1
+            ] + timedelta(days=1):
+                raise TemporalResolutionValidationError(
+                    f"{operation.value} composition requires a non-contiguous temporal result",
+                    stage="pass_two_conformance",
+                    error_code="unsupported_bounded_temporal_language",
+                    relation_kind=getattr(constraint, "kind", None),
+                    contradictory_fields=("combine", "combine_with"),
+                )
+            return min(operand[0], candidate[0]), max(operand[1], candidate[1])
+        if operation is TemporalComposition.INTERSECT:
+            start, end = max(operand[0], candidate[0]), min(operand[1], candidate[1])
+            if end < start:
+                raise TemporalResolutionValidationError(
+                    "intersect composition produced an empty temporal window",
+                    stage="pass_two_conformance",
+                    error_code="incompatible_relation_fields",
+                    relation_kind=getattr(constraint, "kind", None),
+                    contradictory_fields=("combine", "combine_with"),
+                )
+            return start, end
+        if operation is TemporalComposition.EXTEND_START:
+            return min(operand[0], candidate[0]), operand[1]
+        if operation is TemporalComposition.EXTEND_END:
+            return operand[0], max(operand[1], candidate[1])
+        # A DateWindow cannot encode an interior hole.  Edge exclusions remain executable; an
+        # interior exclusion stays explicit rather than silently widening the request.
+        if candidate[0] <= operand[0] <= candidate[1]:
+            return candidate[1] + timedelta(days=1), operand[1]
+        if candidate[0] <= operand[1] <= candidate[1]:
+            return operand[0], candidate[0] - timedelta(days=1)
+        raise TemporalResolutionValidationError(
+            "exclude composition would create a non-contiguous date window",
+            stage="pass_two_conformance",
+            error_code="unsupported_bounded_temporal_language",
+            relation_kind=getattr(constraint, "kind", None),
+            contradictory_fields=("combine",),
+        )
 
     def resolve_field(target: TemporalTarget) -> tuple[date, date] | None:
         if target in cache:
             return cache[target]
-        windows: list[tuple[date, date]] = []
+        current: tuple[date, date] | None = None
         for constraint in field_constraints[target]:
             if isinstance(constraint, AnchorWindowConstraint):
                 anchor = anchors[constraint.anchor_id]
@@ -956,12 +1133,25 @@ def evaluate_temporal_relation_graph(
                     constraint.unit,
                 )
                 window = (exact, exact)
-            windows.append(window)
-        cache[target] = (
-            None
-            if not windows
-            else (min(item[0] for item in windows), max(item[1] for item in windows))
-        )
+            if constraint.constraint_id is None:
+                # Historical internally-assembled constraints did not name composition operands.
+                # Preserve their base-union behavior without giving it Contract-v2 semantics.
+                current = (
+                    window
+                    if current is None
+                    else (min(current[0], window[0]), max(current[1], window[1]))
+                )
+                continue
+
+            operand = (
+                None
+                if constraint.combine is TemporalComposition.BASE
+                else composed_constraint_windows.get(constraint.combine_with or "")
+            )
+            composed = combine_window(operand, window, constraint)
+            composed_constraint_windows[constraint.constraint_id] = composed
+            current = composed
+        cache[target] = current
         return cache[target]
 
     departure = resolve_field(TemporalTarget.DEPARTURE)

@@ -1,8 +1,20 @@
+import json
 from collections.abc import Mapping, Sequence
 from datetime import date
+from pathlib import Path
 from typing import Any
 
-from award_agent.cli.intent_eval import _aggregate_results, _score_result, _usage_summary
+import pytest
+
+from award_agent.cli import intent_eval as intent_eval_module
+from award_agent.cli.intent_eval import (
+    DEFAULT_LLM_TRACE_DIR,
+    _aggregate_results,
+    _combine_usage,
+    _parser,
+    _score_result,
+    _usage_summary,
+)
 from award_agent.domain import (
     CalendarPeriodSemantics,
     ClarificationAction,
@@ -17,6 +29,7 @@ from award_agent.domain import (
     LocationRef,
     ParsedRequest,
     ProposedDateWindow,
+    RawRequest,
     RelativeCalendarPeriodConstraint,
     RequestContext,
     RequestUnderstandingResult,
@@ -29,6 +42,7 @@ from award_agent.domain import (
     UnknownField,
     UnknownReason,
 )
+from award_agent.observability.llm_trace import write_eval_llm_trace
 
 
 def _result() -> RequestUnderstandingResult:
@@ -462,3 +476,157 @@ def test_usage_summary_aggregates_captured_calls_and_keeps_missing_usage_explici
         "missing_calls": 1,
     }
     assert _usage_summary([{"usage": None}]) == ("unavailable: SDK responses did not provide usage")
+
+
+def test_combine_usage_adds_split_pass_model_calls() -> None:
+    assert _combine_usage(
+        {
+            "calls": 2,
+            "captured_calls": 2,
+            "missing_calls": 0,
+            "input_tokens": 100,
+            "output_tokens": 10,
+            "total_tokens": 110,
+        },
+        {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 50,
+            "output_tokens": 5,
+            "total_tokens": 55,
+        },
+    ) == {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 150,
+        "output_tokens": 15,
+        "total_tokens": 165,
+    }
+    assert _combine_usage(None, None) is None
+
+
+def test_write_eval_llm_trace_preserves_failure_record_and_call_payload(tmp_path: Path) -> None:
+    path = write_eval_llm_trace(
+        tmp_path,
+        scenario={
+            "id": "trace_case",
+            "input": "Fly from Seattle to Tokyo.",
+            "context": {"reference_date": "2026-08-31", "timezone": "UTC"},
+        },
+        record={
+            "id": "trace_case",
+            "trial": 2,
+            "status": "error",
+            "failure_stage": "pass_two_wire_conversion",
+            "failure_code": "unknown_evidence_id",
+        },
+        calls=[
+            {
+                "sequence": 1,
+                "stage": "pass_two",
+                "request": {"input": '{"evidence":"e0"}'},
+                "response_json": '{"id":"response-1"}',
+                "parsed_output": {"decisions": []},
+                "error": None,
+            }
+        ],
+    )
+
+    payload = json.loads(path.read_text())
+    assert payload["scenario"]["input"] == "Fly from Seattle to Tokyo."
+    assert payload["evaluation_record"]["failure_code"] == "unknown_evidence_id"
+    assert payload["calls"][0]["request"]["input"] == '{"evidence":"e0"}'
+    assert payload["calls"][0]["response_json"] == '{"id":"response-1"}'
+
+
+def test_eval_parser_defaults_to_failure_traces_and_allows_opt_out() -> None:
+    args = _parser().parse_args(["--model", "test-model", "--output", "result.json"])
+
+    assert args.trace_dir == DEFAULT_LLM_TRACE_DIR
+    assert args.no_trace is False
+
+    no_trace_args = _parser().parse_args(
+        ["--model", "test-model", "--output", "result.json", "--no-trace"]
+    )
+    assert no_trace_args.no_trace is True
+
+
+def test_run_eval_links_non_passing_case_to_llm_trace_sidecar(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    class FakeExtractor:
+        def __init__(self, *, capture_llm_io: bool, **_kwargs: Any) -> None:
+            assert capture_llm_io is True
+
+        def reset_capture(self) -> None:
+            return None
+
+        def take_usage(self) -> None:
+            return None
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            return []
+
+    class FakeOnePass:
+        def __init__(self, *, capture_llm_io: bool, **_kwargs: Any) -> None:
+            assert capture_llm_io is True
+
+        def run(
+            self, _request: RawRequest
+        ) -> tuple[RequestUnderstandingResult, dict[str, Any] | None]:
+            return _result(), None
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            return [
+                {
+                    "sequence": 1,
+                    "stage": "one_pass",
+                    "request": {
+                        "model": "test-model",
+                        "instructions": "exact instructions",
+                        "input": '{"text":"Fly"}',
+                        "text_format": {"name": "RequestUnderstandingResult"},
+                        "store": False,
+                    },
+                    "response_json": '{"id":"response-1"}',
+                    "parsed_output": {"travelers": 2},
+                    "error": None,
+                }
+            ]
+
+    monkeypatch.setattr(intent_eval_module, "OpenAIIntentExtractor", FakeExtractor)
+    monkeypatch.setattr(intent_eval_module, "OnePassIntentExperiment", FakeOnePass)
+    cases_path = tmp_path / "cases.yaml"
+    cases_path.write_text(
+        """scenarios:
+  - id: trace_case
+    status: ready
+    input: Fly from Seattle to Tokyo.
+    context:
+      reference_date: "2026-08-31"
+      timezone: UTC
+    expected:
+      travelers: 3
+"""
+    )
+
+    artifact = intent_eval_module.run_eval(
+        "test-model",
+        cases_path,
+        1,
+        strategy="one_pass",
+        trace_dir=tmp_path / "traces",
+    )
+
+    result = artifact["results"][0]
+    assert result["status"] == "failed"
+    trace_reference = result["llm_trace"]
+    assert isinstance(trace_reference, dict)
+    trace_path = Path(str(trace_reference["path"]))
+    assert trace_path.exists()
+    trace_payload = json.loads(trace_path.read_text())
+    assert trace_payload["evaluation_record"]["checks"][0]["actual"] == 2
+    assert trace_payload["calls"][0]["request"]["input"] == '{"text":"Fly"}'
+    assert artifact["llm_trace"]["case_count"] == 1

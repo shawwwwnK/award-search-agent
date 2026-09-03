@@ -8,6 +8,7 @@ from award_agent.domain import (
     CoarseIntentExtraction,
     ModelPassRepairTrace,
     MonthAnchor,
+    MonthPortionConstraint,
     RawRequest,
     RelativeCalendarPeriodConstraint,
     RequestContext,
@@ -204,11 +205,11 @@ def test_pass_two_graph_validation_repair_reruns_complete_validation() -> None:
     )
     repaired_graph = TemporalRelationGraph(
         constraints=[
-            AnchorWindowConstraint(
-                kind="anchor_window",
+            MonthPortionConstraint(
+                kind="month_portion",
                 target=TemporalTarget.DEPARTURE,
                 anchor_id="anchor:month:departure:10:13",
-                window="anchor",
+                portion="whole",
                 raw_text="May",
             )
         ]

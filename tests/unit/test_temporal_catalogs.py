@@ -1,8 +1,5 @@
 from datetime import date
 
-import pytest
-from pydantic import ValidationError
-
 from award_agent.domain import (
     CoarseIntentExtraction,
     MonthAnchor,
@@ -64,7 +61,7 @@ def extraction(anchor_id: str, *, reversed_order: bool = False) -> CoarseIntentE
     )
 
 
-def test_catalog_ids_offsets_claims_and_order_are_canonical() -> None:
+def test_catalog_uses_short_model_handles_and_keeps_canonical_mappings_private() -> None:
     raw = request("Leave in May for about ten days and return in June.")
     coarse = sanitize_temporal_extraction(raw, extraction("model-a", reversed_order=True))
     evidence = ground_temporal_evidence(raw, coarse)
@@ -72,34 +69,12 @@ def test_catalog_ids_offsets_claims_and_order_are_canonical() -> None:
 
     model_input = build_temporal_interpretation_input(raw.text, stable, evidence)
 
-    assert [entry.evidence_id for entry in model_input.evidence_catalog] == [
-        "request:9:12",
-        "request:17:31",
-        "request:46:50",
-    ]
-    assert [entry.source_order for entry in model_input.evidence_catalog] == [0, 1, 2]
-    assert [
-        (entry.source_start, entry.source_end, entry.text) for entry in model_input.evidence_catalog
-    ] == [(9, 12, "May"), (17, 31, "about ten days"), (46, 50, "June")]
-    assert model_input.evidence_catalog[1].claim_labels == [
-        TemporalEvidenceClaim.APPROXIMATE_DURATION,
-        TemporalEvidenceClaim.DURATION,
-    ]
-    assert [entry.anchor_id for entry in model_input.explicit_anchor_catalog] == [
-        "anchor:month:departure:9:12",
-        "anchor:month:return:46:50",
-    ]
-    assert [entry.key for entry in model_input.allowed_symbolic_references] == [
-        "context:request_date",
-        "anchor_ref:anchor:month:departure:9:12:start",
-        "anchor_ref:anchor:month:departure:9:12:end",
-        "anchor_ref:anchor:month:return:46:50:start",
-        "anchor_ref:anchor:month:return:46:50:end",
-        "request_field:departure:start",
-        "request_field:departure:end",
-        "request_field:return:start",
-        "request_field:return:end",
-    ]
+    payload = model_input.model_dump(mode="json")
+    assert [entry["handle"] for entry in payload["evidence_catalog"]] == ["e0", "e1", "e2"]
+    assert [entry["handle"] for entry in payload["explicit_anchor_catalog"]] == ["a0", "a1"]
+    assert payload["allowed_symbolic_references"][0]["handle"] == "r0"
+    assert "request:" not in str(payload)
+    assert "source_start" not in str(payload)
 
 
 def test_stable_anchor_ids_ignore_model_ids_and_model_output_order() -> None:
@@ -118,18 +93,16 @@ def test_stable_anchor_ids_ignore_model_ids_and_model_output_order() -> None:
     ]
 
 
-def test_catalog_rejects_offsets_that_do_not_match_transcript() -> None:
-    with pytest.raises(ValidationError, match="offsets do not match transcript"):
-        TemporalInterpretationInput(
-            temporal_transcript="May",
-            evidence_catalog=[
-                TemporalEvidenceCatalogEntry(
-                    evidence_id="request:0:3",
-                    text="June",
-                    claim_labels=[TemporalEvidenceClaim.DEPARTURE_ANCHOR],
-                    source_order=0,
-                    source_start=0,
-                    source_end=3,
-                )
-            ],
-        )
+def test_catalog_does_not_expose_offsets() -> None:
+    catalog = TemporalInterpretationInput(
+        temporal_transcript="June",
+        evidence_catalog=[
+            TemporalEvidenceCatalogEntry(
+                handle="e0",
+                text="June",
+                allowed_targets=["unspecified"],
+                allowed_relation_kinds=["unresolved"],
+            )
+        ],
+    )
+    assert "source_start" not in str(catalog.model_dump(mode="json"))

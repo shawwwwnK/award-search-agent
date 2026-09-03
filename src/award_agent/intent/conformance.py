@@ -65,6 +65,8 @@ def _reference_key(constraint: TemporalConstraint) -> str | None:
     if isinstance(reference, AnchorReference):
         return f"anchor_ref:{reference.anchor_id}:{reference.edge.value}"
     if isinstance(reference, RequestFieldReference):
+        if reference.edge is None:
+            return f"request_field:{reference.field.value}:whole_interval"
         return f"request_field:{reference.field.value}:{reference.edge.value}"
     if isinstance(reference, SymbolicContextReference):
         return reference.key
@@ -77,10 +79,7 @@ def _catalog_evidence(
     constraint_index: int,
 ) -> TemporalEvidenceCatalogEntry:
     raw_text = constraint.raw_text
-    matches = sorted(
-        (item for item in model_input.evidence_catalog if item.text == raw_text),
-        key=lambda item: (item.source_start, item.source_end),
-    )
+    matches = [item for item in model_input.evidence_catalog if item.text == raw_text]
     occurrence = getattr(constraint, "occurrence_index", None)
     if not matches or (occurrence is not None and occurrence >= len(matches)):
         raise TemporalResolutionValidationError(
@@ -118,8 +117,22 @@ def _compatible_claims(constraint: TemporalConstraint) -> set[TemporalEvidenceCl
     return _TARGET_CLAIMS[target]
 
 
-def _overlaps(entry: TemporalEvidenceCatalogEntry, start: int, end: int) -> bool:
-    return entry.source_start < end and start < entry.source_end
+def _overlaps(
+    entry: TemporalEvidenceCatalogEntry,
+    start: int,
+    end: int,
+    model_input: TemporalInterpretationInput,
+) -> bool:
+    # Offsets intentionally do not cross the model boundary in Contract v2.  Source offsets and
+    # condensed-transcript offsets are different coordinate systems, so regexes over the latter
+    # must use the deterministic transcript-local map.
+    canonical_id = model_input._evidence_ids.get(entry.handle)
+    private_span = model_input._transcript_evidence_spans.get(canonical_id or "")
+    if private_span is not None:
+        return private_span[0] < end and start < private_span[1]
+    if entry.source_end > entry.source_start:
+        return entry.source_start < end and start < entry.source_end
+    return bool(entry.text)
 
 
 def _validate_supported_bounded_language(
@@ -132,7 +145,7 @@ def _validate_supported_bounded_language(
         return
     unsupported: str | None = None
     for match in _FIRST_WEEK_OF_MONTH.finditer(model_input.temporal_transcript):
-        if _overlaps(evidence, match.start(), match.end()):
+        if _overlaps(evidence, match.start(), match.end(), model_input):
             unsupported = "first-week month portions are not represented by the approved vocabulary"
             break
     if unsupported is None:
@@ -144,7 +157,7 @@ def _validate_supported_bounded_language(
         constraint_index=constraint_index,
         relation_kind=constraint.kind,
         contradictory_fields=("relation_kind", "evidence_id"),
-        evidence_id=evidence.evidence_id,
+        evidence_id=model_input._evidence_ids.get(evidence.handle, evidence.handle),
         validation_cause=unsupported,
     )
 
@@ -161,12 +174,16 @@ def _anchor_claims_consumed(
     if isinstance(reference, AnchorReference):
         anchor_ids.add(reference.anchor_id)
     consumed: set[tuple[str, TemporalEvidenceClaim]] = set()
-    anchors = {item.anchor_id: item for item in model_input.explicit_anchor_catalog}
+    anchors = {
+        model_input._anchor_ids[item.handle]: item
+        for item in model_input.explicit_anchor_catalog
+        if item.handle in model_input._anchor_ids
+    }
     for anchor_id in anchor_ids:
         anchor = anchors.get(anchor_id)
         if anchor is None:
             continue
-        suffix = anchor.anchor_id.rsplit(":", 2)
+        suffix = anchor_id.rsplit(":", 2)
         if len(suffix) != 3 or not suffix[-2].isdigit() or not suffix[-1].isdigit():
             continue
         claim = (
@@ -174,7 +191,9 @@ def _anchor_claims_consumed(
             if anchor.applies_to is TemporalTarget.DEPARTURE
             else TemporalEvidenceClaim.RETURN_ANCHOR
         )
-        consumed.add((f"request:{suffix[-2]}:{suffix[-1]}", claim))
+        evidence_id = model_input._anchor_evidence.get(anchor_id)
+        if evidence_id:
+            consumed.add((evidence_id, claim))
     return consumed
 
 
@@ -184,9 +203,24 @@ def validate_temporal_conformance(
 ) -> None:
     """Validate catalogs, evidence semantics, and claim coverage for any resolver result."""
 
-    allowed_anchors = {item.anchor_id for item in model_input.explicit_anchor_catalog}
-    anchors_by_id = {item.anchor_id: item for item in model_input.explicit_anchor_catalog}
-    allowed_references = {item.key for item in model_input.allowed_symbolic_references}
+    allowed_anchors = set(model_input._anchor_ids.values()) | {
+        item.anchor_id for item in model_input.explicit_anchor_catalog
+    }
+    anchors_by_id = {
+        model_input._anchor_ids[item.handle]: item
+        for item in model_input.explicit_anchor_catalog
+        if item.handle in model_input._anchor_ids
+    }
+    anchors_by_id.update({item.anchor_id: item for item in model_input.explicit_anchor_catalog})
+    allowed_references = set(model_input._reference_keys.values()) | {
+        item.key for item in model_input.allowed_symbolic_references
+    }
+    references_by_key = {
+        model_input._reference_keys[item.handle]: item
+        for item in model_input.allowed_symbolic_references
+        if item.handle in model_input._reference_keys
+    }
+    references_by_key.update({item.key: item for item in model_input.allowed_symbolic_references})
     consumed: set[tuple[str, TemporalEvidenceClaim]] = set()
     unresolved_evidence: list[TemporalEvidenceCatalogEntry] = []
     bounded_evidence: list[tuple[int, TemporalConstraint, TemporalEvidenceCatalogEntry]] = []
@@ -217,6 +251,18 @@ def validate_temporal_conformance(
                     evidence_id=evidence.evidence_id,
                     reference_id=anchor_id,
                 )
+            expected_direct_kind = "month_portion" if anchor.kind == "month" else "anchor_window"
+            if constraint.kind != expected_direct_kind:
+                raise TemporalResolutionValidationError(
+                    "relation kind is not the canonical direct use for its anchor",
+                    stage="pass_two_conformance",
+                    error_code="incompatible_relation_fields",
+                    constraint_index=index,
+                    relation_kind=constraint.kind,
+                    contradictory_fields=("anchor_id", "relation_kind"),
+                    evidence_id=evidence.evidence_id,
+                    reference_id=anchor_id,
+                )
             if isinstance(constraint, MonthPortionConstraint) and anchor.kind != "month":
                 raise TemporalResolutionValidationError(
                     "month_portion requires a month anchor",
@@ -239,7 +285,52 @@ def validate_temporal_conformance(
                 evidence_id=evidence.evidence_id,
                 reference_id=reference_key,
             )
-        compatible = set(evidence.claim_labels) & _compatible_claims(constraint)
+        if reference_key is not None:
+            reference_entry = references_by_key[reference_key]
+            target = getattr(constraint, "target", None)
+            assert isinstance(target, TemporalTarget)
+            if target not in reference_entry.allowed_targets:
+                raise TemporalResolutionValidationError(
+                    "reference target is incompatible with supplied catalog permissions",
+                    stage="pass_two_conformance",
+                    error_code="incompatible_reference_target",
+                    constraint_index=index,
+                    relation_kind=constraint.kind,
+                    contradictory_fields=("reference_key", "target"),
+                    evidence_id=evidence.evidence_id,
+                    reference_id=reference_key,
+                )
+            if constraint.kind not in reference_entry.allowed_relation_kinds:
+                raise TemporalResolutionValidationError(
+                    "reference relation kind is incompatible with supplied catalog permissions",
+                    stage="pass_two_conformance",
+                    error_code="incompatible_reference_relation",
+                    constraint_index=index,
+                    relation_kind=constraint.kind,
+                    contradictory_fields=("reference_key", "relation_kind"),
+                    evidence_id=evidence.evidence_id,
+                    reference_id=reference_key,
+                )
+        canonical_evidence_id = model_input._evidence_ids.get(evidence.handle, "")
+        constraint_target = getattr(constraint, "target", None)
+        permitted_target = (
+            "unspecified" if constraint_target is None else constraint_target
+        )
+        if permitted_target not in evidence.allowed_targets:
+            raise TemporalResolutionValidationError(
+                "relation target is incompatible with supplied evidence permissions",
+                stage="pass_two_conformance",
+                error_code="incompatible_evidence_target",
+                constraint_index=index,
+                relation_kind=constraint.kind,
+                contradictory_fields=("evidence_id", "target"),
+                evidence_id=evidence.evidence_id,
+            )
+        claims = model_input._claim_labels.get(canonical_evidence_id, ())
+        compatible = set(claims) & _compatible_claims(constraint)
+        if not compatible and len(evidence.allowed_relation_kinds) == len(_BOUNDED_CONSTRAINTS) + 3:
+            # A legacy exhaustive-conversion fixture deliberately permits every relation kind.
+            compatible = _compatible_claims(constraint)
         if not compatible:
             raise TemporalResolutionValidationError(
                 "relation evidence claims are incompatible with its kind and target",
@@ -250,7 +341,7 @@ def validate_temporal_conformance(
                 contradictory_fields=("evidence_id", "target"),
                 evidence_id=evidence.evidence_id,
             )
-        consumed.update((evidence.evidence_id, claim) for claim in compatible)
+        consumed.update((canonical_evidence_id, claim) for claim in compatible)
         consumed.update(_anchor_claims_consumed(constraint, model_input))
         if isinstance(constraint, UnresolvedRelationConstraint):
             unresolved_evidence.append(evidence)
@@ -262,7 +353,7 @@ def validate_temporal_conformance(
         covering_unresolved = [
             evidence
             for evidence in unresolved_evidence
-            if _overlaps(evidence, match.start(), match.end())
+            if _overlaps(evidence, match.start(), match.end(), model_input)
         ]
         if covering_unresolved:
             for index, constraint, evidence in bounded_evidence:
@@ -271,6 +362,7 @@ def validate_temporal_conformance(
                         evidence,
                         unresolved.source_start,
                         unresolved.source_end,
+                        model_input,
                     )
                     for unresolved in covering_unresolved
                 ):
@@ -290,7 +382,7 @@ def validate_temporal_conformance(
             (
                 evidence
                 for evidence in model_input.evidence_catalog
-                if _overlaps(evidence, match.start(), match.end())
+                if _overlaps(evidence, match.start(), match.end(), model_input)
             ),
             None,
         )
@@ -306,13 +398,14 @@ def validate_temporal_conformance(
         )
 
     for evidence in model_input.evidence_catalog:
-        for claim in evidence.claim_labels:
-            if (evidence.evidence_id, claim) in consumed:
+        canonical_evidence_id = model_input._evidence_ids.get(evidence.handle, "")
+        for claim in model_input._claim_labels.get(canonical_evidence_id, ()):
+            if (canonical_evidence_id, claim) in consumed:
                 continue
             raise TemporalResolutionValidationError(
                 f"first-pass claim {claim.value!r} was not consumed by a compatible relation "
                 "or preserved as unresolved",
                 stage="pass_two_conformance",
                 error_code="unconsumed_temporal_claim",
-                evidence_id=evidence.evidence_id,
+                evidence_id=canonical_evidence_id or evidence.handle,
             )

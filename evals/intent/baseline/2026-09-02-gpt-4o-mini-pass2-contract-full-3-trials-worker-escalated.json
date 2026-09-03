@@ -1,0 +1,4898 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-03T03:54:25.017441+00:00",
+  "model": "gpt-4o-mini",
+  "pass_one_model": "gpt-4o-mini",
+  "pass_two_model": "gpt-4o-mini",
+  "strategy": "two_pass",
+  "cases_path": "evals/intent/cases.yaml",
+  "scenario_count": 16,
+  "trials": 3,
+  "summary": {
+    "runs": 48,
+    "passed": 3,
+    "failed": 6,
+    "errors": 39,
+    "pass_rate": 0.0625,
+    "first_attempt_completion": {
+      "runs": 7,
+      "rate": 0.14583333333333334
+    },
+    "final_completion": {
+      "runs": 9,
+      "rate": 0.1875
+    },
+    "repair_attempts": 27,
+    "repair_successes": 2,
+    "pass_one_failures": 0,
+    "pass_two_wire_failures": 17,
+    "grounding_failures": 0,
+    "semantic_validation_failures": 14,
+    "deterministic_output_failures": 3,
+    "clarification_failures": 0,
+    "latency_seconds": 296.105,
+    "usage": {
+      "captured_runs": 48,
+      "missing_runs": 0,
+      "input_tokens": 276864,
+      "output_tokens": 24931,
+      "total_tokens": 301795,
+      "calls": 126,
+      "captured_calls": 126,
+      "missing_calls": 0
+    },
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "labor_day_thailand",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "decision reference is not in supplied decisions: r1",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "wire_relation_conversion_failed",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "decision reference is not in supplied decisions: r1"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "wire_relation_conversion_failed",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "decision reference is not in supplied decisions: r1"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "wire_relation_conversion_failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6507,
+        "output_tokens": 713,
+        "total_tokens": 7220
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 8.569
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6637,
+        "output_tokens": 925,
+        "total_tokens": 7562
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 8.664
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "relative_calendar_period requires: reference_kind",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "relative_calendar_period requires: reference_kind"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "relative_calendar_period requires: reference_kind"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6326,
+        "output_tokens": 638,
+        "total_tokens": 6964
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 6.177
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Seattle"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seattle",
+              "raw_text": "Seattle"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Tokyo"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Tokyo",
+              "raw_text": "Tokyo"
+            }
+          ]
+        },
+        {
+          "name": "cabin",
+          "passed": true,
+          "expected": "business",
+          "actual": [
+            "business"
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-05",
+            "end": "2026-10-05"
+          },
+          "actual": {
+            "start": "2026-10-05",
+            "end": "2026-10-05"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-15",
+            "end": "2026-10-15"
+          },
+          "actual": {
+            "start": "2026-10-15",
+            "end": "2026-10-15"
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Find me two business class award seats from Seattle to Tokyo leaving October 5 and returning October 15.",
+          "context": {
+            "reference_date": "2026-08-30",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "Seattle",
+              "raw_text": "Seattle"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Tokyo",
+              "raw_text": "Tokyo"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-10-05",
+            "end": "2026-10-05",
+            "precision": "exact",
+            "raw_text": "October 5"
+          },
+          "return_window": {
+            "start": "2026-10-15",
+            "end": "2026-10-15",
+            "precision": "exact",
+            "raw_text": "October 15"
+          },
+          "duration": null,
+          "cabins": [
+            "business"
+          ],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "Seattle",
+                "raw_text": "Seattle"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Tokyo",
+                "raw_text": "Tokyo"
+              }
+            ],
+            "cabins": [
+              "business"
+            ],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "applies_to": "departure",
+                "raw_text": "October 5",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 5,
+                "year": null
+              },
+              {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "applies_to": "return",
+                "raw_text": "October 15",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 15,
+                "year": null
+              }
+            ],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:69:78",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 69,
+                "end": 78,
+                "text": "October 5"
+              }
+            },
+            {
+              "evidence_id": "request:93:103",
+              "claim_ids": [
+                "return_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 93,
+                "end": 103,
+                "text": "October 15"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "applies_to": "departure",
+                "raw_text": "October 5",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 5,
+                "year": null
+              },
+              "start": "2026-10-05",
+              "end": "2026-10-05",
+              "source": "calendar",
+              "source_detail": "Exact date resolved from the explicit month and day."
+            },
+            {
+              "anchor": {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "applies_to": "return",
+                "raw_text": "October 15",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 15,
+                "year": null
+              },
+              "start": "2026-10-15",
+              "end": "2026-10-15",
+              "source": "calendar",
+              "source_detail": "Exact date resolved from the explicit month and day."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "constraint_id": "relation:e0",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "window": "anchor",
+                "raw_text": "October 5",
+                "occurrence_index": null
+              },
+              {
+                "constraint_id": "relation:e1",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "return",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "window": "anchor",
+                "raw_text": "October 15",
+                "occurrence_index": null
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-10-05",
+              "end": "2026-10-05",
+              "supporting_text": [
+                "October 5"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-10-15",
+              "end": "2026-10-15",
+              "supporting_text": [
+                "October 15"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4641,
+        "output_tokens": 336,
+        "total_tokens": 4977
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.476
+    },
+    {
+      "id": "missing_origin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6258,
+        "output_tokens": 608,
+        "total_tokens": 6866
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 6.568
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": false,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "departure",
+              "reason": "missing",
+              "detail": "No bounded departure timing was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [],
+          "resolved_date_anchors": [],
+          "temporal_relations": {
+            "constraints": []
+          },
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4322,
+        "output_tokens": 89,
+        "total_tokens": 4411
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 2.276
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "New York"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Lisbon"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Lisbon",
+              "raw_text": "Lisbon"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-12-05",
+            "end": "2026-12-06"
+          },
+          "actual": {
+            "start": "2026-11-25",
+            "end": "2026-11-29"
+          }
+        },
+        {
+          "name": "temporal_relations",
+          "passed": false,
+          "expected": [
+            {
+              "kind": "relative_weekend",
+              "target": "departure",
+              "reference": {
+                "kind": "anchor"
+              },
+              "direction": "after",
+              "ordinal": 2
+            }
+          ],
+          "actual": [
+            {
+              "constraint_id": "relation:e1",
+              "combine": "base",
+              "combine_with": null,
+              "kind": "anchor_window",
+              "target": "departure",
+              "anchor_id": "anchor:holiday:departure:77:89",
+              "window": "holiday_weekend",
+              "raw_text": "Thanksgiving",
+              "occurrence_index": null
+            },
+            {
+              "constraint_id": "relation:e0",
+              "combine": "extend_start",
+              "combine_with": "relation:e1",
+              "kind": "relative_weekend",
+              "target": "departure",
+              "reference": {
+                "kind": "decision",
+                "constraint_id": "relation:e1",
+                "edge": "start"
+              },
+              "direction": "after",
+              "ordinal": 2,
+              "raw_text": "two weekends after Thanksgiving",
+              "occurrence_index": null
+            }
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "return_or_duration"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "return_or_duration",
+            "question": "When should you return, or how long should the trip be?",
+            "reason": "return_or_duration is required to define a bounded flight search."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "holiday",
+            "holiday": "thanksgiving"
+          },
+          "actual": [
+            {
+              "kind": "holiday",
+              "anchor_id": "anchor:holiday:departure:77:89",
+              "applies_to": "departure",
+              "raw_text": "Thanksgiving",
+              "occurrence_index": 0,
+              "holiday": "thanksgiving",
+              "year": null
+            }
+          ]
+        },
+        {
+          "name": "grounding_valid",
+          "passed": true,
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "evidence_support_valid",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "grounding_valid": true,
+            "evidence_support_valid": true,
+            "preferred_boundary_exact_match": false,
+            "missing_expected_claims": [],
+            "unsupported_claims": [],
+            "overbroad_spans": [],
+            "insufficient_spans": [],
+            "failures": []
+          }
+        },
+        {
+          "name": "preferred_boundary_exact_match",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "blocking": false
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Search for flights for one person from New York to Lisbon two weekends after Thanksgiving.",
+          "context": {
+            "reference_date": "2026-11-20",
+            "timezone": "America/New_York"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Lisbon",
+              "raw_text": "Lisbon"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-11-25",
+            "end": "2026-11-29",
+            "precision": "window",
+            "raw_text": "Thanksgiving; two weekends after Thanksgiving"
+          },
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "New York",
+                "raw_text": "New York"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Lisbon",
+                "raw_text": "Lisbon"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "applies_to": "departure",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": 0,
+                "holiday": "thanksgiving",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "two weekends after Thanksgiving",
+                "claim_ids": [
+                  "departure_period"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:58:89",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 58,
+                "end": 89,
+                "text": "two weekends after Thanksgiving"
+              }
+            },
+            {
+              "evidence_id": "request:77:89",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 77,
+                "end": 89,
+                "text": "Thanksgiving"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "applies_to": "departure",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": 0,
+                "holiday": "thanksgiving",
+                "year": null
+              },
+              "start": "2026-11-26",
+              "end": "2026-11-26",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved thanksgiving."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "constraint_id": "relation:e1",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "window": "holiday_weekend",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": null
+              },
+              {
+                "constraint_id": "relation:e0",
+                "combine": "extend_start",
+                "combine_with": "relation:e1",
+                "kind": "relative_weekend",
+                "target": "departure",
+                "reference": {
+                  "kind": "decision",
+                  "constraint_id": "relation:e1",
+                  "edge": "start"
+                },
+                "direction": "after",
+                "ordinal": 2,
+                "raw_text": "two weekends after Thanksgiving",
+                "occurrence_index": null
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-11-25",
+              "end": "2026-11-29",
+              "supporting_text": [
+                "Thanksgiving",
+                "two weekends after Thanksgiving"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "return_or_duration",
+          "question": "When should you return, or how long should the trip be?",
+          "reason": "return_or_duration is required to define a bounded flight search."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": false,
+            "repair_ran": true,
+            "repair_succeeded": true,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6320,
+        "output_tokens": 647,
+        "total_tokens": 6967
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": false,
+          "repair_ran": true,
+          "repair_succeeded": true,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 1
+      },
+      "failure_categories": [
+        "deterministic_output_failures",
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 6.087
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: anchor",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: anchor"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: anchor"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6090,
+        "output_tokens": 746,
+        "total_tokens": 6836
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 6.889
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "composition operands must target the same temporal field",
+      "structured_error": {
+        "stage": "pass_two_dependency_validation",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 1,
+        "selected_relation_kind": "duration",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "target",
+          "combine_with"
+        ],
+        "evidence_id": "request:83:94",
+        "reference_id": "relation:e0",
+        "validation_cause": "composition operands must target the same temporal field"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_dependency_validation",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 1,
+          "selected_relation_kind": "duration",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "target",
+            "combine_with"
+          ],
+          "evidence_id": "request:83:94",
+          "reference_id": "relation:e0",
+          "validation_cause": "composition operands must target the same temporal field"
+        }
+      },
+      "failure_stage": "pass_two_dependency_validation",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6672,
+        "output_tokens": 901,
+        "total_tokens": 7573
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 8.529
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "composition operands must target the same temporal field",
+      "structured_error": {
+        "stage": "pass_two_dependency_validation",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 1,
+        "selected_relation_kind": "duration",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "target",
+          "combine_with"
+        ],
+        "evidence_id": "request:64:80",
+        "reference_id": "relation:e0",
+        "validation_cause": "composition operands must target the same temporal field"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_dependency_validation",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 1,
+          "selected_relation_kind": "duration",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "target",
+            "combine_with"
+          ],
+          "evidence_id": "request:64:80",
+          "reference_id": "relation:e0",
+          "validation_cause": "composition operands must target the same temporal field"
+        }
+      },
+      "failure_stage": "pass_two_dependency_validation",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6277,
+        "output_tokens": 656,
+        "total_tokens": 6933
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 7.467
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 1,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4392,
+        "output_tokens": 249,
+        "total_tokens": 4641
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.07
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 1,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4395,
+        "output_tokens": 286,
+        "total_tokens": 4681
+      },
+      "failure_categories": [],
+      "latency_seconds": 4.067
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "relation kind is not the canonical direct use for its anchor",
+      "structured_error": {
+        "stage": "pass_two_conformance",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 0,
+        "selected_relation_kind": "anchor_window",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "anchor_id",
+          "relation_kind"
+        ],
+        "evidence_id": "request:77:80",
+        "reference_id": "anchor:month:departure:77:80",
+        "validation_cause": "relation kind is not the canonical direct use for its anchor"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_conformance",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 0,
+          "selected_relation_kind": "anchor_window",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "anchor_id",
+            "relation_kind"
+          ],
+          "evidence_id": "request:77:80",
+          "reference_id": "anchor:month:departure:77:80",
+          "validation_cause": "relation kind is not the canonical direct use for its anchor"
+        }
+      },
+      "failure_stage": "pass_two_conformance",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6261,
+        "output_tokens": 499,
+        "total_tokens": 6760
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 5.922
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 1,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4437,
+        "output_tokens": 314,
+        "total_tokens": 4751
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.526
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "duration requires: stated_minimum_quantity, stated_maximum_quantity, modifier",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "duration requires: stated_minimum_quantity, stated_maximum_quantity, modifier"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "duration requires: stated_minimum_quantity, stated_maximum_quantity, modifier"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6263,
+        "output_tokens": 501,
+        "total_tokens": 6764
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 5.497
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 1,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4401,
+        "output_tokens": 291,
+        "total_tokens": 4692
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.334
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6557,
+        "output_tokens": 711,
+        "total_tokens": 7268
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 6.609
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "composition operands must target the same temporal field",
+      "structured_error": {
+        "stage": "pass_two_dependency_validation",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 1,
+        "selected_relation_kind": "duration",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "target",
+          "combine_with"
+        ],
+        "evidence_id": "request:79:96",
+        "reference_id": "relation:e1",
+        "validation_cause": "composition operands must target the same temporal field"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_dependency_validation",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 1,
+          "selected_relation_kind": "duration",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "target",
+            "combine_with"
+          ],
+          "evidence_id": "request:79:96",
+          "reference_id": "relation:e1",
+          "validation_cause": "composition operands must target the same temporal field"
+        }
+      },
+      "failure_stage": "pass_two_dependency_validation",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6637,
+        "output_tokens": 1006,
+        "total_tokens": 7643
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 8.202
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: anchor",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: anchor"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: anchor"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 4,
+        "captured_calls": 4,
+        "missing_calls": 0,
+        "input_tokens": 9721,
+        "output_tokens": 704,
+        "total_tokens": 10425
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 7.453
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Seattle"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seattle",
+              "raw_text": "Seattle"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Tokyo"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Tokyo",
+              "raw_text": "Tokyo"
+            }
+          ]
+        },
+        {
+          "name": "cabin",
+          "passed": true,
+          "expected": "business",
+          "actual": [
+            "business"
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-05",
+            "end": "2026-10-05"
+          },
+          "actual": {
+            "start": "2026-10-05",
+            "end": "2026-10-05"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-15",
+            "end": "2026-10-15"
+          },
+          "actual": {
+            "start": "2026-10-15",
+            "end": "2026-10-15"
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Find me two business class award seats from Seattle to Tokyo leaving October 5 and returning October 15.",
+          "context": {
+            "reference_date": "2026-08-30",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "Seattle",
+              "raw_text": "Seattle"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Tokyo",
+              "raw_text": "Tokyo"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-10-05",
+            "end": "2026-10-05",
+            "precision": "exact",
+            "raw_text": "October 5"
+          },
+          "return_window": {
+            "start": "2026-10-15",
+            "end": "2026-10-15",
+            "precision": "exact",
+            "raw_text": "October 15"
+          },
+          "duration": null,
+          "cabins": [
+            "business"
+          ],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "Seattle",
+                "raw_text": "Seattle"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Tokyo",
+                "raw_text": "Tokyo"
+              }
+            ],
+            "cabins": [
+              "business"
+            ],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "applies_to": "departure",
+                "raw_text": "October 5",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 5,
+                "year": null
+              },
+              {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "applies_to": "return",
+                "raw_text": "October 15",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 15,
+                "year": null
+              }
+            ],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:69:78",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 69,
+                "end": 78,
+                "text": "October 5"
+              }
+            },
+            {
+              "evidence_id": "request:93:103",
+              "claim_ids": [
+                "return_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 93,
+                "end": 103,
+                "text": "October 15"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "applies_to": "departure",
+                "raw_text": "October 5",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 5,
+                "year": null
+              },
+              "start": "2026-10-05",
+              "end": "2026-10-05",
+              "source": "calendar",
+              "source_detail": "Exact date resolved from the explicit month and day."
+            },
+            {
+              "anchor": {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "applies_to": "return",
+                "raw_text": "October 15",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 15,
+                "year": null
+              },
+              "start": "2026-10-15",
+              "end": "2026-10-15",
+              "source": "calendar",
+              "source_detail": "Exact date resolved from the explicit month and day."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "constraint_id": "relation:e0",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "window": "anchor",
+                "raw_text": "October 5",
+                "occurrence_index": null
+              },
+              {
+                "constraint_id": "relation:e1",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "return",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "window": "anchor",
+                "raw_text": "October 15",
+                "occurrence_index": null
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-10-05",
+              "end": "2026-10-05",
+              "supporting_text": [
+                "October 5"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-10-15",
+              "end": "2026-10-15",
+              "supporting_text": [
+                "October 15"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4641,
+        "output_tokens": 340,
+        "total_tokens": 4981
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.508
+    },
+    {
+      "id": "missing_origin",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6259,
+        "output_tokens": 482,
+        "total_tokens": 6741
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 5.631
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": false,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "departure",
+              "reason": "missing",
+              "detail": "No bounded departure timing was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [],
+          "resolved_date_anchors": [],
+          "temporal_relations": {
+            "constraints": []
+          },
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4322,
+        "output_tokens": 88,
+        "total_tokens": 4410
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 2.634
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "New York"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Lisbon"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Lisbon",
+              "raw_text": "Lisbon"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-12-05",
+            "end": "2026-12-06"
+          },
+          "actual": {
+            "start": "2026-11-25",
+            "end": "2026-11-29"
+          }
+        },
+        {
+          "name": "temporal_relations",
+          "passed": false,
+          "expected": [
+            {
+              "kind": "relative_weekend",
+              "target": "departure",
+              "reference": {
+                "kind": "anchor"
+              },
+              "direction": "after",
+              "ordinal": 2
+            }
+          ],
+          "actual": [
+            {
+              "constraint_id": "relation:e1",
+              "combine": "base",
+              "combine_with": null,
+              "kind": "anchor_window",
+              "target": "departure",
+              "anchor_id": "anchor:holiday:departure:77:89",
+              "window": "holiday_weekend",
+              "raw_text": "Thanksgiving",
+              "occurrence_index": null
+            },
+            {
+              "constraint_id": "relation:e0",
+              "combine": "extend_start",
+              "combine_with": "relation:e1",
+              "kind": "relative_weekend",
+              "target": "departure",
+              "reference": {
+                "kind": "decision",
+                "constraint_id": "relation:e1",
+                "edge": "end"
+              },
+              "direction": "after",
+              "ordinal": 2,
+              "raw_text": "two weekends after Thanksgiving",
+              "occurrence_index": null
+            }
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "return_or_duration"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "return_or_duration",
+            "question": "When should you return, or how long should the trip be?",
+            "reason": "return_or_duration is required to define a bounded flight search."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "holiday",
+            "holiday": "thanksgiving"
+          },
+          "actual": [
+            {
+              "kind": "holiday",
+              "anchor_id": "anchor:holiday:departure:77:89",
+              "applies_to": "departure",
+              "raw_text": "Thanksgiving",
+              "occurrence_index": 0,
+              "holiday": "thanksgiving",
+              "year": null
+            }
+          ]
+        },
+        {
+          "name": "grounding_valid",
+          "passed": true,
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "evidence_support_valid",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "grounding_valid": true,
+            "evidence_support_valid": true,
+            "preferred_boundary_exact_match": false,
+            "missing_expected_claims": [],
+            "unsupported_claims": [],
+            "overbroad_spans": [],
+            "insufficient_spans": [],
+            "failures": []
+          }
+        },
+        {
+          "name": "preferred_boundary_exact_match",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "blocking": false
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Search for flights for one person from New York to Lisbon two weekends after Thanksgiving.",
+          "context": {
+            "reference_date": "2026-11-20",
+            "timezone": "America/New_York"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Lisbon",
+              "raw_text": "Lisbon"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-11-25",
+            "end": "2026-11-29",
+            "precision": "window",
+            "raw_text": "Thanksgiving; two weekends after Thanksgiving"
+          },
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "New York",
+                "raw_text": "New York"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Lisbon",
+                "raw_text": "Lisbon"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "applies_to": "departure",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": 0,
+                "holiday": "thanksgiving",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "two weekends after Thanksgiving",
+                "claim_ids": [
+                  "departure_period"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:58:89",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 58,
+                "end": 89,
+                "text": "two weekends after Thanksgiving"
+              }
+            },
+            {
+              "evidence_id": "request:77:89",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 77,
+                "end": 89,
+                "text": "Thanksgiving"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "applies_to": "departure",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": 0,
+                "holiday": "thanksgiving",
+                "year": null
+              },
+              "start": "2026-11-26",
+              "end": "2026-11-26",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved thanksgiving."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "constraint_id": "relation:e1",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "window": "holiday_weekend",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": null
+              },
+              {
+                "constraint_id": "relation:e0",
+                "combine": "extend_start",
+                "combine_with": "relation:e1",
+                "kind": "relative_weekend",
+                "target": "departure",
+                "reference": {
+                  "kind": "decision",
+                  "constraint_id": "relation:e1",
+                  "edge": "end"
+                },
+                "direction": "after",
+                "ordinal": 2,
+                "raw_text": "two weekends after Thanksgiving",
+                "occurrence_index": null
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-11-25",
+              "end": "2026-11-29",
+              "supporting_text": [
+                "Thanksgiving",
+                "two weekends after Thanksgiving"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "return_or_duration",
+          "question": "When should you return, or how long should the trip be?",
+          "reason": "return_or_duration is required to define a bounded flight search."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": false,
+            "repair_ran": true,
+            "repair_succeeded": true,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6316,
+        "output_tokens": 516,
+        "total_tokens": 6832
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": false,
+          "repair_ran": true,
+          "repair_succeeded": true,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 1
+      },
+      "failure_categories": [
+        "deterministic_output_failures",
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 5.91
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4433,
+        "output_tokens": 311,
+        "total_tokens": 4744
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.412
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "duration requires: modifier",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "duration requires: modifier"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "duration requires: modifier"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6664,
+        "output_tokens": 711,
+        "total_tokens": 7375
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 9.024
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 2,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4523,
+        "output_tokens": 349,
+        "total_tokens": 4872
+      },
+      "failure_categories": [],
+      "latency_seconds": 19.273
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 2,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4392,
+        "output_tokens": 355,
+        "total_tokens": 4747
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.809
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 2,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 7896,
+        "output_tokens": 405,
+        "total_tokens": 8301
+      },
+      "failure_categories": [],
+      "latency_seconds": 5.734
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "relation kind is not the canonical direct use for its anchor",
+      "structured_error": {
+        "stage": "pass_two_conformance",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 1,
+        "selected_relation_kind": "anchor_window",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "anchor_id",
+          "relation_kind"
+        ],
+        "evidence_id": "request:77:80",
+        "reference_id": "anchor:month:departure:77:80",
+        "validation_cause": "relation kind is not the canonical direct use for its anchor"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_conformance",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 1,
+          "selected_relation_kind": "anchor_window",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "anchor_id",
+            "relation_kind"
+          ],
+          "evidence_id": "request:77:80",
+          "reference_id": "anchor:month:departure:77:80",
+          "validation_cause": "relation kind is not the canonical direct use for its anchor"
+        }
+      },
+      "failure_stage": "pass_two_conformance",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6268,
+        "output_tokens": 618,
+        "total_tokens": 6886
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 8.358
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 2,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4437,
+        "output_tokens": 309,
+        "total_tokens": 4746
+      },
+      "failure_categories": [],
+      "latency_seconds": 4.002
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "composition operands must target the same temporal field",
+      "structured_error": {
+        "stage": "pass_two_dependency_validation",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 2,
+        "selected_relation_kind": "unresolved",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "target",
+          "combine_with"
+        ],
+        "evidence_id": "request:78:85",
+        "reference_id": "relation:e0",
+        "validation_cause": "composition operands must target the same temporal field"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_dependency_validation",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 2,
+          "selected_relation_kind": "unresolved",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "target",
+            "combine_with"
+          ],
+          "evidence_id": "request:78:85",
+          "reference_id": "relation:e0",
+          "validation_cause": "composition operands must target the same temporal field"
+        }
+      },
+      "failure_stage": "pass_two_dependency_validation",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6272,
+        "output_tokens": 627,
+        "total_tokens": 6899
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 6.261
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 2,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6469,
+        "output_tokens": 893,
+        "total_tokens": 7362
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 9.84
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "duration requires: stated_minimum_quantity, stated_maximum_quantity",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "duration requires: stated_minimum_quantity, stated_maximum_quantity"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "duration requires: stated_minimum_quantity, stated_maximum_quantity"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6441,
+        "output_tokens": 677,
+        "total_tokens": 7118
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 7.323
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6642,
+        "output_tokens": 744,
+        "total_tokens": 7386
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 21.431
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "decision reference is not in supplied decisions: r0",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "wire_relation_conversion_failed",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "decision reference is not in supplied decisions: r0"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "wire_relation_conversion_failed",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "decision reference is not in supplied decisions: r0"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "wire_relation_conversion_failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 4,
+        "captured_calls": 4,
+        "missing_calls": 0,
+        "input_tokens": 10125,
+        "output_tokens": 937,
+        "total_tokens": 11062
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 9.059
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 2,
+          "actual": 2
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Seattle"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Seattle",
+              "raw_text": "Seattle"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Tokyo"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Tokyo",
+              "raw_text": "Tokyo"
+            }
+          ]
+        },
+        {
+          "name": "cabin",
+          "passed": true,
+          "expected": "business",
+          "actual": [
+            "business"
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-05",
+            "end": "2026-10-05"
+          },
+          "actual": {
+            "start": "2026-10-05",
+            "end": "2026-10-05"
+          }
+        },
+        {
+          "name": "return_window",
+          "passed": true,
+          "expected": {
+            "start": "2026-10-15",
+            "end": "2026-10-15"
+          },
+          "actual": {
+            "start": "2026-10-15",
+            "end": "2026-10-15"
+          }
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "none"
+          },
+          "actual": {
+            "action": "none",
+            "field": null,
+            "question": null,
+            "reason": "The request contains enough hard constraints for later search planning."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": true,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Find me two business class award seats from Seattle to Tokyo leaving October 5 and returning October 15.",
+          "context": {
+            "reference_date": "2026-08-30",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 2,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "Seattle",
+              "raw_text": "Seattle"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Tokyo",
+              "raw_text": "Tokyo"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-10-05",
+            "end": "2026-10-05",
+            "precision": "exact",
+            "raw_text": "October 5"
+          },
+          "return_window": {
+            "start": "2026-10-15",
+            "end": "2026-10-15",
+            "precision": "exact",
+            "raw_text": "October 15"
+          },
+          "duration": null,
+          "cabins": [
+            "business"
+          ],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 2,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "Seattle",
+                "raw_text": "Seattle"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Tokyo",
+                "raw_text": "Tokyo"
+              }
+            ],
+            "cabins": [
+              "business"
+            ],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "applies_to": "departure",
+                "raw_text": "October 5",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 5,
+                "year": null
+              },
+              {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "applies_to": "return",
+                "raw_text": "October 15",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 15,
+                "year": null
+              }
+            ],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:69:78",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 69,
+                "end": 78,
+                "text": "October 5"
+              }
+            },
+            {
+              "evidence_id": "request:93:103",
+              "claim_ids": [
+                "return_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 93,
+                "end": 103,
+                "text": "October 15"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "applies_to": "departure",
+                "raw_text": "October 5",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 5,
+                "year": null
+              },
+              "start": "2026-10-05",
+              "end": "2026-10-05",
+              "source": "calendar",
+              "source_detail": "Exact date resolved from the explicit month and day."
+            },
+            {
+              "anchor": {
+                "kind": "exact_date",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "applies_to": "return",
+                "raw_text": "October 15",
+                "occurrence_index": 0,
+                "month": 10,
+                "day": 15,
+                "year": null
+              },
+              "start": "2026-10-15",
+              "end": "2026-10-15",
+              "source": "calendar",
+              "source_detail": "Exact date resolved from the explicit month and day."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "constraint_id": "relation:e0",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor:exact_date:departure:69:78",
+                "window": "anchor",
+                "raw_text": "October 5",
+                "occurrence_index": null
+              },
+              {
+                "constraint_id": "relation:e1",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "return",
+                "anchor_id": "anchor:exact_date:return:93:103",
+                "window": "anchor",
+                "raw_text": "October 15",
+                "occurrence_index": null
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-10-05",
+              "end": "2026-10-05",
+              "supporting_text": [
+                "October 5"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": {
+              "start": "2026-10-15",
+              "end": "2026-10-15",
+              "supporting_text": [
+                "October 15"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "none",
+          "field": null,
+          "question": null,
+          "reason": "The request contains enough hard constraints for later search planning."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4641,
+        "output_tokens": 337,
+        "total_tokens": 4978
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [],
+      "latency_seconds": 4.114
+    },
+    {
+      "id": "missing_origin",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "relation kind is not the canonical direct use for its anchor",
+      "structured_error": {
+        "stage": "pass_two_conformance",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 0,
+        "selected_relation_kind": "anchor_window",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "anchor_id",
+          "relation_kind"
+        ],
+        "evidence_id": "request:36:39",
+        "reference_id": "anchor:month:departure:36:39",
+        "validation_cause": "relation kind is not the canonical direct use for its anchor"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_conformance",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 0,
+          "selected_relation_kind": "anchor_window",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "anchor_id",
+            "relation_kind"
+          ],
+          "evidence_id": "request:36:39",
+          "reference_id": "anchor:month:departure:36:39",
+          "validation_cause": "relation kind is not the canonical direct use for its anchor"
+        }
+      },
+      "failure_stage": "pass_two_conformance",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6263,
+        "output_tokens": 492,
+        "total_tokens": 6755
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 5.355
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "airport",
+            "value": "LAX"
+          },
+          "actual": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Sydney"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ]
+        },
+        {
+          "name": "search_modes",
+          "passed": true,
+          "expected": [
+            "award"
+          ],
+          "actual": [
+            "award"
+          ]
+        },
+        {
+          "name": "unknowns",
+          "passed": false,
+          "expected": [
+            "departure",
+            "return_or_duration",
+            "travelers"
+          ],
+          "actual": [
+            "cabin",
+            "departure",
+            "return_or_duration"
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "departure"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "departure",
+            "question": "What departure date or date range should I use?",
+            "reason": "departure is required to define a bounded flight search."
+          }
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": true,
+        "preferred_boundary_exact_match": true,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Help me find award flights from LAX to Sydney.",
+          "context": {
+            "reference_date": "2026-04-18",
+            "timezone": "America/Los_Angeles"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "airport",
+              "value": "LAX",
+              "raw_text": "LAX"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Sydney",
+              "raw_text": "Sydney"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": null,
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [
+            "award"
+          ],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "departure",
+              "reason": "missing",
+              "detail": "No bounded departure timing was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "airport",
+                "value": "LAX",
+                "raw_text": "LAX"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Sydney",
+                "raw_text": "Sydney"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [
+              "award"
+            ],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [],
+            "temporal_phrases": []
+          },
+          "temporal_evidence": [],
+          "resolved_date_anchors": [],
+          "temporal_relations": {
+            "constraints": []
+          },
+          "date_resolution": {
+            "departure": null,
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "departure",
+          "question": "What departure date or date range should I use?",
+          "reason": "departure is required to define a bounded flight search."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4322,
+        "output_tokens": 89,
+        "total_tokens": 4411
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 1.752
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "origin",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "New York"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ]
+        },
+        {
+          "name": "destination",
+          "passed": true,
+          "expected": {
+            "kind": "city",
+            "value": "Lisbon"
+          },
+          "actual": [
+            {
+              "kind": "city",
+              "value": "Lisbon",
+              "raw_text": "Lisbon"
+            }
+          ]
+        },
+        {
+          "name": "departure_window",
+          "passed": false,
+          "expected": {
+            "start": "2026-12-05",
+            "end": "2026-12-06"
+          },
+          "actual": {
+            "start": "2026-11-25",
+            "end": "2026-11-29"
+          }
+        },
+        {
+          "name": "temporal_relations",
+          "passed": false,
+          "expected": [
+            {
+              "kind": "relative_weekend",
+              "target": "departure",
+              "reference": {
+                "kind": "anchor"
+              },
+              "direction": "after",
+              "ordinal": 2
+            }
+          ],
+          "actual": [
+            {
+              "constraint_id": "relation:e1",
+              "combine": "base",
+              "combine_with": null,
+              "kind": "anchor_window",
+              "target": "departure",
+              "anchor_id": "anchor:holiday:departure:77:89",
+              "window": "holiday_weekend",
+              "raw_text": "Thanksgiving",
+              "occurrence_index": null
+            },
+            {
+              "constraint_id": "relation:e0",
+              "combine": "extend_start",
+              "combine_with": "relation:e1",
+              "kind": "relative_weekend",
+              "target": "departure",
+              "reference": {
+                "kind": "decision",
+                "constraint_id": "relation:e1",
+                "edge": "end"
+              },
+              "direction": "after",
+              "ordinal": 1,
+              "raw_text": "two weekends after Thanksgiving",
+              "occurrence_index": null
+            }
+          ]
+        },
+        {
+          "name": "clarification",
+          "passed": true,
+          "expected": {
+            "action": "ask",
+            "field": "return_or_duration"
+          },
+          "actual": {
+            "action": "ask",
+            "field": "return_or_duration",
+            "question": "When should you return, or how long should the trip be?",
+            "reason": "return_or_duration is required to define a bounded flight search."
+          }
+        },
+        {
+          "name": "date_anchor",
+          "passed": true,
+          "expected": {
+            "kind": "holiday",
+            "holiday": "thanksgiving"
+          },
+          "actual": [
+            {
+              "kind": "holiday",
+              "anchor_id": "anchor:holiday:departure:77:89",
+              "applies_to": "departure",
+              "raw_text": "Thanksgiving",
+              "occurrence_index": 0,
+              "holiday": "thanksgiving",
+              "year": null
+            }
+          ]
+        },
+        {
+          "name": "grounding_valid",
+          "passed": true,
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "evidence_support_valid",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "grounding_valid": true,
+            "evidence_support_valid": true,
+            "preferred_boundary_exact_match": false,
+            "missing_expected_claims": [],
+            "unsupported_claims": [],
+            "overbroad_spans": [],
+            "insufficient_spans": [],
+            "failures": []
+          }
+        },
+        {
+          "name": "preferred_boundary_exact_match",
+          "passed": false,
+          "expected": true,
+          "actual": false,
+          "blocking": false
+        }
+      ],
+      "evaluation": {
+        "schema_valid": true,
+        "grounding_valid": true,
+        "semantic_fields_valid": false,
+        "evidence_support_valid": true,
+        "deterministic_outputs_valid": false,
+        "preferred_boundary_exact_match": false,
+        "missing_expected_claims": [],
+        "unsupported_claims": [],
+        "overbroad_spans": [],
+        "insufficient_spans": []
+      },
+      "unscored_invariants": [],
+      "output": {
+        "parsed_request": {
+          "raw_text": "Search for flights for one person from New York to Lisbon two weekends after Thanksgiving.",
+          "context": {
+            "reference_date": "2026-11-20",
+            "timezone": "America/New_York"
+          },
+          "travelers": 1,
+          "origins": [
+            {
+              "kind": "city",
+              "value": "New York",
+              "raw_text": "New York"
+            }
+          ],
+          "destinations": [
+            {
+              "kind": "city",
+              "value": "Lisbon",
+              "raw_text": "Lisbon"
+            }
+          ],
+          "departure_expression": null,
+          "return_expression": null,
+          "departure_window": {
+            "start": "2026-11-25",
+            "end": "2026-11-29",
+            "precision": "window",
+            "raw_text": "Thanksgiving; two weekends after Thanksgiving"
+          },
+          "return_window": null,
+          "duration": null,
+          "cabins": [],
+          "search_modes": [],
+          "date_flexibility": [],
+          "repositioning_allowed": null,
+          "hard_constraints": [],
+          "unknowns": [
+            {
+              "field": "return_or_duration",
+              "reason": "missing",
+              "detail": "Neither a bounded return date nor a resolvable trip duration was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "cabin",
+              "reason": "missing",
+              "detail": "No cabin preference was stated.",
+              "raw_text": null,
+              "evidence": []
+            },
+            {
+              "field": "search_modes",
+              "reason": "missing",
+              "detail": "Neither award nor cash search was explicitly requested.",
+              "raw_text": null,
+              "evidence": []
+            }
+          ],
+          "conflicts": [],
+          "temporal_extraction": {
+            "travelers": 1,
+            "origins": [
+              {
+                "kind": "city",
+                "value": "New York",
+                "raw_text": "New York"
+              }
+            ],
+            "destinations": [
+              {
+                "kind": "city",
+                "value": "Lisbon",
+                "raw_text": "Lisbon"
+              }
+            ],
+            "cabins": [],
+            "search_modes": [],
+            "repositioning_allowed": null,
+            "hard_constraints": [],
+            "ambiguities": [],
+            "date_anchors": [
+              {
+                "kind": "holiday",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "applies_to": "departure",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": 0,
+                "holiday": "thanksgiving",
+                "year": null
+              }
+            ],
+            "temporal_phrases": [
+              {
+                "applies_to": "departure",
+                "raw_text": "two weekends after Thanksgiving",
+                "claim_ids": [
+                  "departure_period"
+                ],
+                "occurrence_index": 0
+              }
+            ]
+          },
+          "temporal_evidence": [
+            {
+              "evidence_id": "request:58:89",
+              "claim_ids": [
+                "departure_period"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 58,
+                "end": 89,
+                "text": "two weekends after Thanksgiving"
+              }
+            },
+            {
+              "evidence_id": "request:77:89",
+              "claim_ids": [
+                "departure_anchor"
+              ],
+              "span": {
+                "source_id": "original_request",
+                "start": 77,
+                "end": 89,
+                "text": "Thanksgiving"
+              }
+            }
+          ],
+          "resolved_date_anchors": [
+            {
+              "anchor": {
+                "kind": "holiday",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "applies_to": "departure",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": 0,
+                "holiday": "thanksgiving",
+                "year": null
+              },
+              "start": "2026-11-26",
+              "end": "2026-11-26",
+              "source": "holiday_provider",
+              "source_detail": "Holiday provider resolved thanksgiving."
+            }
+          ],
+          "temporal_relations": {
+            "constraints": [
+              {
+                "constraint_id": "relation:e1",
+                "combine": "base",
+                "combine_with": null,
+                "kind": "anchor_window",
+                "target": "departure",
+                "anchor_id": "anchor:holiday:departure:77:89",
+                "window": "holiday_weekend",
+                "raw_text": "Thanksgiving",
+                "occurrence_index": null
+              },
+              {
+                "constraint_id": "relation:e0",
+                "combine": "extend_start",
+                "combine_with": "relation:e1",
+                "kind": "relative_weekend",
+                "target": "departure",
+                "reference": {
+                  "kind": "decision",
+                  "constraint_id": "relation:e1",
+                  "edge": "end"
+                },
+                "direction": "after",
+                "ordinal": 1,
+                "raw_text": "two weekends after Thanksgiving",
+                "occurrence_index": null
+              }
+            ]
+          },
+          "date_resolution": {
+            "departure": {
+              "start": "2026-11-25",
+              "end": "2026-11-29",
+              "supporting_text": [
+                "Thanksgiving",
+                "two weekends after Thanksgiving"
+              ],
+              "interpretation": "Deterministically evaluated from the semantic temporal-relation graph.",
+              "assumptions": []
+            },
+            "return_date": null,
+            "interpreted_duration": null,
+            "unresolved": []
+          }
+        },
+        "clarification": {
+          "action": "ask",
+          "field": "return_or_duration",
+          "question": "When should you return, or how long should the trip be?",
+          "reason": "return_or_duration is required to define a bounded flight search."
+        },
+        "repair_trace": {
+          "pass_one": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          },
+          "pass_two": {
+            "first_attempt_valid": true,
+            "repair_ran": false,
+            "repair_succeeded": false,
+            "final_failure": null
+          }
+        }
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4542,
+        "output_tokens": 333,
+        "total_tokens": 4875
+      },
+      "repair_trace": {
+        "pass_one": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        },
+        "pass_two": {
+          "first_attempt_valid": true,
+          "repair_ran": false,
+          "repair_succeeded": false,
+          "final_failure": null
+        }
+      },
+      "attempts": {
+        "first_attempt_completed": true,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_categories": [
+        "deterministic_output_failures",
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 3.359
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4583,
+        "output_tokens": 436,
+        "total_tokens": 5019
+      },
+      "failure_categories": [],
+      "latency_seconds": 4.228
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "anchor_window requires: window",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "anchor_window requires: window"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "anchor_window requires: window"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6669,
+        "output_tokens": 912,
+        "total_tokens": 7581
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 7.667
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "composition operands must target the same temporal field",
+      "structured_error": {
+        "stage": "pass_two_dependency_validation",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": 1,
+        "selected_relation_kind": "duration",
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [
+          "target",
+          "combine_with"
+        ],
+        "evidence_id": "request:64:80",
+        "reference_id": "relation:e0",
+        "validation_cause": "composition operands must target the same temporal field"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_dependency_validation",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": 1,
+          "selected_relation_kind": "duration",
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [
+            "target",
+            "combine_with"
+          ],
+          "evidence_id": "request:64:80",
+          "reference_id": "relation:e0",
+          "validation_cause": "composition operands must target the same temporal field"
+        }
+      },
+      "failure_stage": "pass_two_dependency_validation",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6279,
+        "output_tokens": 530,
+        "total_tokens": 6809
+      },
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 5.328
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 3,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4392,
+        "output_tokens": 264,
+        "total_tokens": 4656
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.587
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 3,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4395,
+        "output_tokens": 263,
+        "total_tokens": 4658
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.018
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "duration requires: modifier",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "duration requires: modifier"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "duration requires: modifier"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6467,
+        "output_tokens": 890,
+        "total_tokens": 7357
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 7.219
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 3,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4437,
+        "output_tokens": 312,
+        "total_tokens": 4749
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.675
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "TemporalResolutionValidationError",
+      "error": "duration requires: modifier",
+      "structured_error": {
+        "stage": "pass_two_wire_conversion",
+        "error_code": "incompatible_relation_fields",
+        "relation_index": null,
+        "constraint_index": null,
+        "selected_relation_kind": null,
+        "collection": null,
+        "missing_fields": [],
+        "contradictory_fields": [],
+        "evidence_id": null,
+        "reference_id": null,
+        "validation_cause": "duration requires: modifier"
+      },
+      "repair_trace": {
+        "first_attempt_valid": false,
+        "repair_ran": true,
+        "repair_succeeded": false,
+        "final_failure": {
+          "stage": "pass_two_wire_conversion",
+          "error_code": "incompatible_relation_fields",
+          "relation_index": null,
+          "constraint_index": null,
+          "selected_relation_kind": null,
+          "collection": null,
+          "missing_fields": [],
+          "contradictory_fields": [],
+          "evidence_id": null,
+          "reference_id": null,
+          "validation_cause": "duration requires: modifier"
+        }
+      },
+      "failure_stage": "pass_two_wire_conversion",
+      "failure_code": "incompatible_relation_fields",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 1,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 3,
+        "captured_calls": 3,
+        "missing_calls": 0,
+        "input_tokens": 6259,
+        "output_tokens": 623,
+        "total_tokens": 6882
+      },
+      "failure_categories": [
+        "pass_two_wire_failures"
+      ],
+      "latency_seconds": 5.958
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 3,
+      "status": "error",
+      "error_type": "AssertionError",
+      "error": "",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 4401,
+        "output_tokens": 268,
+        "total_tokens": 4669
+      },
+      "failure_categories": [],
+      "latency_seconds": 3.254
+    }
+  ]
+}

@@ -12,6 +12,8 @@ from award_agent.domain import (
     CalendarPeriodSemantics,
     CoarseIntentExtraction,
     DurationModifier,
+    Holiday,
+    HolidayAnchor,
     MonthPortionConstraint,
     RawRequest,
     RelativeCalendarPeriodConstraint,
@@ -22,13 +24,19 @@ from award_agent.domain import (
     SemanticDurationConstraint,
     TemporalDirection,
     TemporalEvidenceClaim,
+    TemporalPhrase,
+    TemporalPhraseTarget,
     TemporalTarget,
     TemporalUnit,
     UnboundedBoundaryConstraint,
     UnresolvedRelationConstraint,
     Weekday,
 )
-from award_agent.intent.evidence import TemporalResolutionValidationError
+from award_agent.intent.evidence import (
+    TemporalResolutionValidationError,
+    assign_stable_anchor_ids,
+    ground_temporal_evidence,
+)
 from award_agent.intent.model_views import (
     CoarseExtractionInput,
     CoarseExtractionRepairInput,
@@ -38,6 +46,7 @@ from award_agent.intent.model_views import (
     SymbolicReferenceCatalogEntry,
     TemporalEvidenceCatalogEntry,
     TemporalInterpretationInput,
+    build_temporal_interpretation_input,
 )
 from award_agent.intent.openai_extractor import (
     AnchorWindowWire,
@@ -51,6 +60,8 @@ from award_agent.intent.openai_extractor import (
     RelativeOffsetWire,
     RelativeWeekdayWire,
     RelativeWeekendWire,
+    TemporalDecisionSetWire,
+    TemporalDecisionWire,
     TemporalRelationGraphWire,
     UnboundedBoundaryWire,
     UnresolvedWire,
@@ -84,6 +95,28 @@ class FakeClient:
         self.responses = FakeResponses(outputs, usages)
 
 
+class TraceResponse:
+    def __init__(self, output: object | None) -> None:
+        self.output_parsed = output
+        self.usage = None
+
+    def model_dump_json(self) -> str:
+        return '{"id":"response-1","output":[{"type":"output_text"}]}'
+
+
+class TraceResponses:
+    def __init__(self, output: object | None) -> None:
+        self.output = output
+
+    def parse(self, **_kwargs: object) -> TraceResponse:
+        return TraceResponse(self.output)
+
+
+class TraceClient:
+    def __init__(self, output: object | None) -> None:
+        self.responses = TraceResponses(output)
+
+
 class FakeUsage:
     def __init__(self, input_tokens: int, output_tokens: int, total_tokens: int) -> None:
         self.input_tokens = input_tokens
@@ -97,6 +130,82 @@ class FakeUsage:
             "output_tokens": self.output_tokens,
             "total_tokens": self.total_tokens,
         }
+
+
+def test_post_conformance_repair_serializes_only_the_retained_local_decision_wire() -> None:
+    raw_request = RawRequest(
+        text="Travel Labor Day weekend.",
+        context=RequestContext(reference_date=date(2026, 8, 30), timezone="UTC"),
+    )
+    extraction = CoarseIntentExtraction(
+        date_anchors=[
+            HolidayAnchor(
+                kind="holiday",
+                anchor_id="model-local",
+                applies_to=TemporalTarget.DEPARTURE,
+                raw_text="Labor Day",
+                holiday=Holiday.LABOR_DAY,
+            )
+        ],
+        temporal_phrases=[
+            TemporalPhrase(
+                applies_to=TemporalPhraseTarget.DEPARTURE,
+                raw_text="Labor Day weekend",
+                claim_ids=[TemporalEvidenceClaim.DEPARTURE_PERIOD],
+            )
+        ],
+    )
+    evidence = ground_temporal_evidence(raw_request, extraction)
+    extraction = assign_stable_anchor_ids(raw_request, extraction)
+    model_input = build_temporal_interpretation_input(raw_request.text, extraction, evidence)
+    evidence_handle = next(
+        entry.handle for entry in model_input.evidence_catalog if entry.text == "Labor Day weekend"
+    )
+    local_wire = TemporalDecisionSetWire(
+        decisions=[
+            TemporalDecisionWire(
+                evidence=evidence_handle,
+                relation_kind="anchor_window",
+                target="departure",
+                anchor="a0",
+                window="holiday_weekend",
+            )
+        ]
+    )
+    client = FakeClient([local_wire, local_wire])
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="test-model"),
+        client=cast(OpenAI, client),
+    )
+
+    resolved = extractor.resolve_dates(model_input)
+    canonical_evidence = model_input._evidence_ids[evidence_handle]
+    repaired = extractor.repair_dates(
+        model_input,
+        resolved.relations,
+        [
+            StructuredValidationErrorView(
+                stage="pass_two_conformance",
+                error_code="incompatible_relation_fields",
+                evidence_id=canonical_evidence,
+                reference_id=model_input._anchor_ids["a0"],
+                validation_cause="canonical implementation detail must not cross the boundary",
+            )
+        ],
+    )
+
+    assert len(repaired.constraints) == 1
+    repair_payload = str(client.responses.calls[1]["input"])
+    assert '"evidence":"' + evidence_handle + '"' in repair_payload
+    for prohibited in (
+        canonical_evidence,
+        model_input._anchor_ids["a0"],
+        "request:",
+        "anchor:",
+        "relation:",
+        "canonical implementation detail",
+    ):
+        assert prohibited not in repair_payload
 
 
 def request() -> RawRequest:
@@ -128,13 +237,20 @@ def temporal_input() -> TemporalInterpretationInput:
                 anchor_id="month_1",
                 kind="month",
                 applies_to=TemporalTarget.DEPARTURE,
-            )
+                direct_relation_kind="month_portion",
+            ),
+            ExplicitAnchorCatalogEntry(
+                anchor_id="date_1",
+                kind="exact_date",
+                applies_to=TemporalTarget.DEPARTURE,
+                direct_relation_kind="anchor_window",
+            ),
         ],
         allowed_symbolic_references=[
-            SymbolicReferenceCatalogEntry(key="context:request_date"),
-            SymbolicReferenceCatalogEntry(key="anchor_ref:month_1:start"),
-            SymbolicReferenceCatalogEntry(key="anchor_ref:month_1:end"),
-            SymbolicReferenceCatalogEntry(key="request_field:departure:end"),
+            SymbolicReferenceCatalogEntry.from_key("context:request_date"),
+            SymbolicReferenceCatalogEntry.from_key("anchor_ref:month_1:start"),
+            SymbolicReferenceCatalogEntry.from_key("anchor_ref:month_1:end"),
+            SymbolicReferenceCatalogEntry.from_key("request_field:departure:end"),
         ],
     )
 
@@ -152,7 +268,9 @@ def next_month_temporal_input() -> TemporalInterpretationInput:
                 source_end=17,
             )
         ],
-        allowed_symbolic_references=[SymbolicReferenceCatalogEntry(key="context:request_date")],
+        allowed_symbolic_references=[
+            SymbolicReferenceCatalogEntry.from_key("context:request_date")
+        ],
     )
 
 
@@ -265,7 +383,7 @@ def duration_temporal_input() -> TemporalInterpretationInput:
             )
         ],
         allowed_symbolic_references=[
-            SymbolicReferenceCatalogEntry(key="request_field:departure:end")
+            SymbolicReferenceCatalogEntry.from_key("request_field:departure:end")
         ],
     )
 
@@ -294,12 +412,69 @@ def test_openai_extractor_uses_coarse_structured_output_without_storing_response
     assert "occurrence_index is zero-based" in instructions
     assert 'Invalid evidence is "leave on Sunday"' in instructions
     assert "Do not calculate character offsets" in instructions
+    assert "Anchor claims" not in instructions  # prose uses the exact enum labels below
+    assert "departure_anchor / return_anchor" in instructions
+    assert '"next month" and "next spring"' in instructions.casefold()
+    assert "empty date_anchors and temporal_phrases" in instructions
     assert call["text_format"] is CoarseIntentExtraction
     assert call["store"] is False
     payload = json.loads(str(call["input"]))
     assert payload == {"request_text": "Travel in May."}
     assert "reference_date" not in str(call["input"])
     assert "timezone" not in str(call["input"])
+
+
+def test_openai_extractor_captures_exact_model_call_when_enabled() -> None:
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="test-model"),
+        client=cast(OpenAI, TraceClient(CoarseIntentExtraction(travelers=2))),
+        capture_llm_io=True,
+    )
+
+    extractor.extract(coarse_input())
+
+    traces = extractor.take_call_traces()
+    assert len(traces) == 1
+    trace = traces[0]
+    assert trace["stage"] == "pass_one"
+    request_payload = trace["request"]
+    assert isinstance(request_payload, dict)
+    assert request_payload["model"] == "test-model"
+    assert request_payload["input"] == '{"request_text":"Travel in May."}'
+    assert request_payload["store"] is False
+    schema = request_payload["text_format"]
+    assert isinstance(schema, dict)
+    assert schema["name"] == "CoarseIntentExtraction"
+    assert trace["response_json"] == '{"id":"response-1","output":[{"type":"output_text"}]}'
+    parsed_output = trace["parsed_output"]
+    assert isinstance(parsed_output, dict)
+    assert parsed_output["travelers"] == 2
+    assert trace["error"] is None
+    assert extractor.take_call_traces() == []
+
+
+def test_openai_extractor_captures_provider_exception_when_enabled() -> None:
+    class FailingResponses:
+        def parse(self, **_kwargs: object) -> TraceResponse:
+            raise TimeoutError("provider timed out")
+
+    class FailingClient:
+        def __init__(self) -> None:
+            self.responses = FailingResponses()
+
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="test-model"),
+        client=cast(OpenAI, FailingClient()),
+        capture_llm_io=True,
+    )
+
+    with pytest.raises(IntentExtractionError):
+        extractor.extract(coarse_input())
+
+    trace = extractor.take_call_traces()[0]
+    assert trace["response_json"] is None
+    assert trace["parsed_output"] is None
+    assert trace["error"] == {"type": "TimeoutError", "message": "provider timed out"}
 
 
 def test_repair_prompt_allows_only_explicit_source_years() -> None:
@@ -325,17 +500,17 @@ def test_repair_prompt_allows_only_explicit_source_years() -> None:
 
     instructions = str(client.responses.calls[0]["instructions"])
     assert "unstated year" in instructions
-    assert "only when that year is explicitly present" in instructions
-    assert "pass two has no year field" in instructions.casefold()
+    assert "original_input.request_text" in instructions
+    assert "Contract-v2 decision list" not in instructions
 
 
 def test_openai_resolver_receives_only_date_free_temporal_catalogs() -> None:
     wire_relations = TemporalRelationGraphWire(
-        anchor_windows=[
-            AnchorWindowWire(
+        month_portions=[
+            MonthPortionWire(
                 target=TemporalTarget.DEPARTURE,
                 anchor_id="month_1",
-                window="anchor",
+                portion="whole",
                 evidence_id="request:10:13",
             )
         ]
@@ -351,11 +526,17 @@ def test_openai_resolver_receives_only_date_free_temporal_catalogs() -> None:
     payload = json.loads(str(call["input"]))
     assert len(result.relations.constraints) == 1
     assert result.repair_trace.first_attempt_valid is True
-    assert payload["explicit_anchor_catalog"] == [
-        {"anchor_id": "month_1", "kind": "month", "applies_to": "departure"}
-    ]
+    assert [item["handle"] for item in payload["explicit_anchor_catalog"]] == ["a0", "a1"]
+    references = {entry["handle"]: entry for entry in payload["allowed_symbolic_references"]}
+    assert references["r0"]["allowed_relation_kinds"] == ["relative_calendar_period"]
+    assert references["r3"]["allowed_targets"] == ["return"]
+    assert "duration" in references["r3"]["allowed_relation_kinds"]
+    assert "duration" not in payload["evidence_catalog"][0]["allowed_relation_kinds"]
     serialized = str(call["input"])
     for prohibited in (
+        "request:10:13",
+        "month_1",
+        "date_1",
         "reference_date",
         "timezone",
         "resolved_anchors",
@@ -366,7 +547,7 @@ def test_openai_resolver_receives_only_date_free_temporal_catalogs() -> None:
         "destinations",
     ):
         assert prohibited not in serialized
-    assert call["text_format"] is TemporalRelationGraphWire
+    assert getattr(call["text_format"], "__name__", None) == "TemporalDecisionSetWireForInput"
     assert call["store"] is False
 
 
@@ -376,7 +557,7 @@ def test_openai_resolver_instructions_define_semantic_relation_boundary() -> Non
             TemporalRelationGraphWire(
                 unresolved=[
                     UnresolvedWire(
-                        target="unspecified",
+                        target="departure",
                         evidence_id="request:10:13",
                         reason="No supported interpretation.",
                     )
@@ -392,15 +573,11 @@ def test_openai_resolver_instructions_define_semantic_relation_boundary() -> Non
     extractor.resolve_dates(temporal_input())
 
     instructions = str(client.responses.calls[0]["instructions"])
-    assert "semantic constraints only" in instructions
-    assert "Never propose, copy, or calculate final calendar dates" in instructions
-    assert "relative_weekend" in instructions
-    assert "reference_key is request_field:departure:end" in instructions
-    assert "anchor_id exactly equals the matching supplied" in instructions
-    assert "Do not invent a human-readable anchor ID" in instructions
-    assert "anchor_id labor_day" not in instructions
-    assert "unbounded_boundary" in instructions
-    assert "Do not emit 2026 dates" in instructions
+    assert "bounded decisions" in instructions
+    assert "Never propose, copy, or calculate final dates" in instructions
+    assert "decision.evidence" in instructions
+    assert "extend_start" in instructions
+    assert "whole departure interval" in instructions
 
 
 def test_temporal_relation_graph_is_strict_structured_output_compatible() -> None:
@@ -437,6 +614,62 @@ def test_temporal_relation_graph_is_strict_structured_output_compatible() -> Non
     }
     assert "minimum_days" not in serialized
     assert "maximum_days" not in serialized
+
+
+def test_model_facing_schemas_put_semantic_rules_next_to_governing_fields() -> None:
+    coarse = to_strict_json_schema(CoarseIntentExtraction)
+    wire = to_strict_json_schema(TemporalRelationGraphWire)
+
+    claim_description = coarse["$defs"]["TemporalPhrase"]["properties"]["claim_ids"]["description"]
+    anchor_description = coarse["properties"]["date_anchors"]["description"]
+    assert "*_anchor only for a literal date" in claim_description
+    assert "duration for exact trip length" in claim_description
+    assert "next month" in anchor_description
+    assert "season" in anchor_description
+
+    evidence_description = wire["$defs"]["DurationWire"]["properties"]["evidence_id"]["description"]
+    minimum_description = wire["$defs"]["DurationWire"]["properties"]["stated_minimum_quantity"][
+        "description"
+    ]
+    reference_description = wire["$defs"]["RelativeWeekendWire"]["properties"]["reference_key"][
+        "description"
+    ]
+    unresolved_target = wire["$defs"]["UnresolvedWire"]["properties"]["target"]["description"]
+    assert "evidence_id" in evidence_description
+    assert "'a week' means 1, never 7" in minimum_description
+    assert "allowed_targets lists target" in reference_description
+    assert "allowed_relation_kinds lists relative_weekend" in reference_description
+    assert "calendar policy is unsupported" in unresolved_target
+
+
+def test_strict_output_schemas_use_only_supported_union_shapes() -> None:
+    """The live-supported pass-one unions are nullable scalars or the anchor ref union."""
+
+    for contract in (CoarseIntentExtraction, TemporalRelationGraphWire):
+        schema = to_strict_json_schema(contract)
+        serialized = json.dumps(schema)
+        assert "oneOf" not in serialized
+
+        def visit(value: object) -> None:
+            if isinstance(value, dict):
+                if "anyOf" in value:
+                    alternatives = value["anyOf"]
+                    assert isinstance(alternatives, list)
+                    nullable = any(
+                        isinstance(item, dict) and item.get("type") == "null"
+                        for item in alternatives
+                    )
+                    anchor_union = all(
+                        isinstance(item, dict) and "$ref" in item for item in alternatives
+                    )
+                    assert nullable or anchor_union
+                for nested in value.values():
+                    visit(nested)
+            elif isinstance(value, list):
+                for nested in value:
+                    visit(nested)
+
+        visit(schema)
 
 
 @pytest.mark.parametrize(
@@ -489,7 +722,7 @@ def test_fixed_wire_collections_convert_exhaustively_to_typed_graph() -> None:
         anchor_windows=[
             AnchorWindowWire(
                 target=TemporalTarget.DEPARTURE,
-                anchor_id="month_1",
+                anchor_id="date_1",
                 window="anchor",
                 evidence_id="request:10:13",
             )
@@ -572,7 +805,23 @@ def test_fixed_wire_collections_convert_exhaustively_to_typed_graph() -> None:
             "evidence_catalog": [
                 temporal_input()
                 .evidence_catalog[0]
-                .model_copy(update={"claim_labels": list(TemporalEvidenceClaim)})
+                .model_copy(
+                        update={
+                            "claim_labels": list(TemporalEvidenceClaim),
+                            "allowed_targets": ["departure", "return", "unspecified"],
+                            "allowed_relation_kinds": [
+                            "anchor_window",
+                            "month_portion",
+                            "relative_calendar_period",
+                            "relative_weekend",
+                            "relative_weekday",
+                            "relative_offset",
+                            "duration",
+                            "unbounded_boundary",
+                            "unresolved",
+                        ],
+                    }
+                )
             ]
         }
     )
@@ -593,6 +842,7 @@ def test_fixed_wire_collections_convert_exhaustively_to_typed_graph() -> None:
     assert isinstance(duration, SemanticDurationConstraint)
     assert duration.target is TemporalTarget.RETURN
     assert duration.reference.field is TemporalTarget.DEPARTURE
+    assert duration.reference.edge is not None
     assert duration.reference.edge.value == "end"
     assert duration.stated_minimum_quantity == 10
     assert duration.stated_maximum_quantity == 10
@@ -663,10 +913,83 @@ def test_wire_rejects_invented_symbolic_reference_key() -> None:
     assert captured.value.details.reference_id == "request_field:invented:end"
 
 
+def test_wire_rejects_cataloged_self_reference_with_local_coordinates() -> None:
+    wire = TemporalRelationGraphWire(
+        relative_weekends=[
+            RelativeWeekendWire(
+                target=TemporalTarget.DEPARTURE,
+                reference_key="request_field:departure:end",
+                direction=TemporalDirection.AFTER,
+                ordinal=1,
+                evidence_id="request:10:13",
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        wire.to_domain(temporal_input())
+
+    details = captured.value.details
+    assert details.error_code == "incompatible_reference_target"
+    assert details.collection == "relative_weekends"
+    assert details.relation_index == 0
+    assert details.constraint_index == 0
+    assert details.evidence_id == "request:10:13"
+    assert details.reference_id == "request_field:departure:end"
+    assert details.contradictory_fields == ("reference_key", "target")
+
+
+def test_wire_rejects_reference_not_permitted_for_relation_kind() -> None:
+    wire = TemporalRelationGraphWire(
+        relative_weekends=[
+            RelativeWeekendWire(
+                target=TemporalTarget.DEPARTURE,
+                reference_key="context:request_date",
+                direction=TemporalDirection.AFTER,
+                ordinal=1,
+                evidence_id="request:10:13",
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        wire.to_domain(temporal_input())
+
+    assert captured.value.details.error_code == "incompatible_reference_relation"
+    assert captured.value.details.reference_id == "context:request_date"
+    assert captured.value.details.contradictory_fields == (
+        "reference_key",
+        "relation_kind",
+    )
+
+
+def test_wire_rejects_duration_selected_from_non_duration_evidence() -> None:
+    wire = TemporalRelationGraphWire(
+        durations=[
+            DurationWire(
+                stated_minimum_quantity=1,
+                stated_maximum_quantity=1,
+                unit=TemporalUnit.WEEK,
+                modifier=DurationModifier.EXACT,
+                evidence_id="request:10:13",
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        wire.to_domain(temporal_input())
+
+    details = captured.value.details
+    assert details.error_code == "incompatible_evidence_relation"
+    assert details.collection == "durations"
+    assert details.evidence_id == "request:10:13"
+    assert details.contradictory_fields == ("evidence_id", "relation_kind")
+
+
 def test_context_request_date_is_visible_but_private_value_is_absent() -> None:
     payload = temporal_input().model_dump(mode="json")
 
-    assert {entry["key"] for entry in payload["allowed_symbolic_references"]} >= {
+    assert {entry["handle"] for entry in payload["allowed_symbolic_references"]} >= {
         "context:request_date"
     }
     assert "2026-08-30" not in json.dumps(payload)
@@ -685,7 +1008,9 @@ def test_next_month_wire_selects_private_context_reference_and_catalog_evidence(
                 source_end=17,
             )
         ],
-        allowed_symbolic_references=[SymbolicReferenceCatalogEntry(key="context:request_date")],
+        allowed_symbolic_references=[
+            SymbolicReferenceCatalogEntry.from_key("context:request_date")
+        ],
     )
     wire = TemporalRelationGraphWire(
         relative_calendar_periods=[
@@ -723,7 +1048,7 @@ def test_relative_calendar_period_rejects_unsupplied_context_reference() -> None
         wire.to_domain(model_input)
 
 
-def test_wire_rejects_relation_incompatible_anchor_kind() -> None:
+def test_wire_rejects_noncanonical_direct_month_relation() -> None:
     wire = TemporalRelationGraphWire(
         anchor_windows=[
             AnchorWindowWire(
@@ -735,7 +1060,7 @@ def test_wire_rejects_relation_incompatible_anchor_kind() -> None:
         ]
     )
 
-    with pytest.raises(ValueError, match="holiday_weekend requires a holiday anchor"):
+    with pytest.raises(ValueError, match="anchor_window is not the canonical direct use"):
         wire.to_domain(temporal_input())
 
 
@@ -744,7 +1069,7 @@ def test_wire_rejects_relation_incompatible_anchor_target() -> None:
         anchor_windows=[
             AnchorWindowWire(
                 target=TemporalTarget.RETURN,
-                anchor_id="month_1",
+                anchor_id="date_1",
                 window="anchor",
                 evidence_id="request:10:13",
             )
@@ -858,6 +1183,7 @@ def test_openai_resolver_repairs_wire_once_with_date_free_original_context() -> 
     }
     serialized = str(client.responses.calls[1]["input"])
     for prohibited in (
+        "request:5:21",
         "reference_date",
         "timezone",
         "2026-08-30",
@@ -917,7 +1243,8 @@ def test_invalid_duration_wire_gets_one_bounded_successful_repair() -> None:
         "stated_maximum_quantity",
         "modifier",
     ]
-    assert error["evidence_id"] == "request:5:21"
+    assert "evidence_id" not in error
+    assert "validation_cause" not in error
     serialized = str(client.responses.calls[1]["input"])
     for prohibited in (
         "reference_date",

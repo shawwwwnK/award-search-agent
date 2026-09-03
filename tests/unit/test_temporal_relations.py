@@ -428,8 +428,70 @@ def test_missing_request_field_dependency_fails_explicitly() -> None:
         ]
     )
 
-    with pytest.raises(TemporalResolutionValidationError, match="unresolved request field"):
+    with pytest.raises(
+        TemporalResolutionValidationError, match="unresolved request field"
+    ) as captured:
         evaluate_temporal_relation_graph(request(text), extraction(phrases=[raw_text]), graph, [])
+
+    details = captured.value.details
+    assert details.collection == "constraints"
+    assert details.relation_index == 0
+    assert details.constraint_index == 0
+    assert details.selected_relation_kind == "relative_weekday"
+    assert details.evidence_id == "request:7:29"
+    assert details.reference_id == "request_field:departure:end"
+
+
+def test_cycle_error_identifies_the_relation_that_closes_the_cycle() -> None:
+    text = "Leave May 5 and also leave the following Thursday."
+    anchor = ExactDateAnchor(
+        kind="exact_date",
+        anchor_id="may_5",
+        applies_to=TemporalTarget.DEPARTURE,
+        raw_text="May 5",
+        month=5,
+        day=5,
+    )
+    raw_text = "the following Thursday"
+    graph = TemporalRelationGraph(
+        constraints=[
+            AnchorWindowConstraint(
+                kind="anchor_window",
+                target=TemporalTarget.DEPARTURE,
+                anchor_id="may_5",
+                window="anchor",
+                raw_text="May 5",
+            ),
+            RelativeWeekdayConstraint(
+                kind="relative_weekday",
+                target=TemporalTarget.DEPARTURE,
+                reference=RequestFieldReference(
+                    kind="request_field",
+                    field=TemporalTarget.DEPARTURE,
+                    edge=TemporalEdge.END,
+                ),
+                direction=TemporalDirection.AFTER,
+                weekday=Weekday.THURSDAY,
+                raw_text=raw_text,
+            ),
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError, match="cyclic") as captured:
+        evaluate_temporal_relation_graph(
+            request(text),
+            extraction(anchor, phrases=[raw_text]),
+            graph,
+            [resolved(anchor, date(2027, 5, 5))],
+        )
+
+    details = captured.value.details
+    assert details.collection == "constraints"
+    assert details.relation_index == 1
+    assert details.constraint_index == 1
+    assert details.selected_relation_kind == "relative_weekday"
+    assert details.evidence_id == "request:27:49"
+    assert details.reference_id == "request_field:departure:end"
 
 
 def test_relative_day_offset_before_anchor() -> None:

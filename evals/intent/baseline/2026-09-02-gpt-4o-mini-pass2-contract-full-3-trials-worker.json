@@ -1,0 +1,951 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-03T03:46:43.777508+00:00",
+  "model": "gpt-4o-mini",
+  "pass_one_model": "gpt-4o-mini",
+  "pass_two_model": "gpt-4o-mini",
+  "strategy": "two_pass",
+  "cases_path": "evals/intent/cases.yaml",
+  "scenario_count": 16,
+  "trials": 3,
+  "summary": {
+    "runs": 48,
+    "passed": 0,
+    "failed": 0,
+    "errors": 48,
+    "pass_rate": 0.0,
+    "first_attempt_completion": {
+      "runs": 0,
+      "rate": 0.0
+    },
+    "final_completion": {
+      "runs": 0,
+      "rate": 0.0
+    },
+    "repair_attempts": 0,
+    "repair_successes": 0,
+    "pass_one_failures": 48,
+    "pass_two_wire_failures": 0,
+    "grounding_failures": 0,
+    "semantic_validation_failures": 0,
+    "deterministic_output_failures": 0,
+    "clarification_failures": 0,
+    "latency_seconds": 64.571,
+    "usage": "unavailable: SDK responses did not provide usage",
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "labor_day_thailand",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.343
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.284
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.28
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.156
+    },
+    {
+      "id": "missing_origin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.402
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.327
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.481
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.408
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.392
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.434
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.294
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.207
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.285
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.27
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.34
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 1,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.453
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.383
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.463
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.161
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.383
+    },
+    {
+      "id": "missing_origin",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.472
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.385
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.322
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.279
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.249
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.199
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.393
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.317
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.505
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.417
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.369
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 2,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.384
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.242
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.379
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.252
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.284
+    },
+    {
+      "id": "missing_origin",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.273
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.275
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.473
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.329
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.353
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.388
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.36
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.297
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.455
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.38
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.498
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 3,
+      "status": "error",
+      "error_type": "IntentExtractionError",
+      "error": "OpenAI coarse intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "pass_one_model_output",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.296
+    }
+  ]
+}

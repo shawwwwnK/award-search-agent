@@ -308,6 +308,8 @@ class TemporalTarget(str, Enum):
 
 
 class TemporalPhraseTarget(str, Enum):
+    """Coarse role of verbatim temporal evidence, not a calendar relation."""
+
     DEPARTURE = "departure"
     RETURN = "return"
     DURATION = "duration"
@@ -315,7 +317,13 @@ class TemporalPhraseTarget(str, Enum):
 
 
 class TemporalEvidenceClaim(str, Enum):
-    """Stable claim identifiers used to link temporal quotes to their meaning."""
+    """Meaning supported by one verbatim quote.
+
+    Anchor claims identify literally named dates, months, or holidays. Period claims identify
+    windows, modifiers, and relative timing for departure or return. Duration claims describe trip
+    length; they are not point offsets. ``temporal_unspecified`` is only for genuinely unclear
+    targets, not merely unsupported calendar vocabulary.
+    """
 
     DEPARTURE_ANCHOR = "departure_anchor"
     RETURN_ANCHOR = "return_anchor"
@@ -329,41 +337,96 @@ class TemporalEvidenceClaim(str, Enum):
 
 
 class ExactDateAnchor(ContractModel):
+    """A month and day literally present in the request; never inferred from context."""
+
     kind: Literal["exact_date"]
-    anchor_id: str = Field(min_length=1)
-    applies_to: TemporalTarget
-    raw_text: str = Field(description="Exact anchor wording copied from the request.")
-    occurrence_index: int | None = Field(default=None, ge=0)
-    month: int = Field(ge=1, le=12)
-    day: int = Field(ge=1, le=31)
-    year: int | None = Field(default=None, ge=1000, le=9999)
+    anchor_id: str = Field(
+        min_length=1,
+        description="Unique pass-one local label. This is not an evidence_id or reference_key.",
+    )
+    applies_to: TemporalTarget = Field(
+        description="Trip endpoint directly constrained by the date."
+    )
+    raw_text: str = Field(description="Shortest exact quote that literally names month and day.")
+    occurrence_index: int | None = Field(
+        default=None,
+        ge=0,
+        description="Zero-based occurrence only when this exact raw_text repeats; otherwise null.",
+    )
+    month: int = Field(ge=1, le=12, description="Month number literally named by raw_text.")
+    day: int = Field(ge=1, le=31, description="Day number literally named by raw_text.")
+    year: int | None = Field(
+        default=None,
+        ge=1000,
+        le=9999,
+        description="Four-digit year only if raw_text explicitly includes it; otherwise null.",
+    )
 
 
 class MonthAnchor(ContractModel):
+    """A calendar month literally named in the request, never a deictic month."""
+
     kind: Literal["month"]
-    anchor_id: str = Field(min_length=1)
-    applies_to: TemporalTarget
-    raw_text: str = Field(description="Exact anchor wording copied from the request.")
-    occurrence_index: int | None = Field(default=None, ge=0)
-    month: int = Field(ge=1, le=12)
-    year: int | None = Field(default=None, ge=1000, le=9999)
+    anchor_id: str = Field(
+        min_length=1,
+        description="Unique pass-one local label. This is not an evidence_id or reference_key.",
+    )
+    applies_to: TemporalTarget = Field(
+        description="Trip endpoint directly constrained by the month."
+    )
+    raw_text: str = Field(description="Exact quote containing the literal month name only.")
+    occurrence_index: int | None = Field(
+        default=None,
+        ge=0,
+        description="Zero-based occurrence only when this exact raw_text repeats; otherwise null.",
+    )
+    month: int = Field(ge=1, le=12, description="Month number literally named by raw_text.")
+    year: int | None = Field(
+        default=None,
+        ge=1000,
+        le=9999,
+        description="Four-digit year only if raw_text explicitly includes it; otherwise null.",
+    )
 
 
 class HolidayAnchor(ContractModel):
+    """A supported holiday literally named in the request; no holiday window is inferred here."""
+
     kind: Literal["holiday"]
-    anchor_id: str = Field(min_length=1)
-    applies_to: TemporalTarget
-    raw_text: str = Field(description="Exact anchor wording copied from the request.")
-    occurrence_index: int | None = Field(default=None, ge=0)
-    holiday: Holiday
-    year: int | None = Field(default=None, ge=1000, le=9999)
+    anchor_id: str = Field(
+        min_length=1,
+        description="Unique pass-one local label. This is not an evidence_id or reference_key.",
+    )
+    applies_to: TemporalTarget = Field(
+        description="Trip endpoint directly constrained by the holiday."
+    )
+    raw_text: str = Field(description="Shortest exact quote that literally names the holiday.")
+    occurrence_index: int | None = Field(
+        default=None,
+        ge=0,
+        description="Zero-based occurrence only when this exact raw_text repeats; otherwise null.",
+    )
+    holiday: Holiday = Field(description="Supported holiday literally named by raw_text.")
+    year: int | None = Field(
+        default=None,
+        ge=1000,
+        le=9999,
+        description="Four-digit year only if raw_text explicitly includes it; otherwise null.",
+    )
 
 
 TemporalAnchor = ExactDateAnchor | MonthAnchor | HolidayAnchor
 
 
 class TemporalPhrase(ContractModel):
-    applies_to: TemporalPhraseTarget
+    """One shortest sufficient verbatim quote plus its coarse semantic role and claims."""
+
+    applies_to: TemporalPhraseTarget = Field(
+        description=(
+            "Coarse role: departure or return timing, trip duration, or unspecified only when the "
+            "request truly gives no endpoint cue. Unsupported seasons still use departure/return."
+        )
+    )
     raw_text: str = Field(
         description=(
             "Verbatim temporal wording that is not an explicit exact-date, month, or holiday "
@@ -373,8 +436,11 @@ class TemporalPhrase(ContractModel):
     claim_ids: list[TemporalEvidenceClaim] = Field(
         default_factory=list,
         description=(
-            "Claims supported by this quote. Empty is accepted only by the temporary legacy "
-            "adapter and is inferred from applies_to before grounding."
+            "Every meaning directly supported by this quote. Use *_anchor only for a literal date, "
+            "month, or holiday; *_period for relative/window/modifier wording; duration for exact "
+            "trip length; approximate_duration when approximation words modify trip length; "
+            "alternate_* only for explicit endpoint alternatives; temporal_unspecified only when "
+            "the endpoint is genuinely unclear. Never label trip length as a point offset."
         ),
     )
     occurrence_index: int | None = Field(
@@ -408,7 +474,7 @@ class GroundedTemporalEvidence(ContractModel):
 
 
 class CoarseIntentExtraction(ContractModel):
-    """First-pass semantics with temporal anchors separated from verbatim modifiers."""
+    """Request-text-only extraction; empty temporal lists mean no temporal evidence was stated."""
 
     travelers: int | None = Field(default=None, ge=1)
     origins: list[LocationRef] = Field(default_factory=list)
@@ -418,8 +484,20 @@ class CoarseIntentExtraction(ContractModel):
     repositioning_allowed: bool | None = None
     hard_constraints: list[str] = Field(default_factory=list)
     ambiguities: list[Ambiguity] = Field(default_factory=list)
-    date_anchors: list[TemporalAnchor] = Field(default_factory=list)
-    temporal_phrases: list[TemporalPhrase] = Field(default_factory=list)
+    date_anchors: list[TemporalAnchor] = Field(
+        default_factory=list,
+        description=(
+            "Only literally named exact dates, named months, and supported named holidays. Never "
+            "create an anchor for next month, a season, a weekday, a duration, or inferred dates."
+        ),
+    )
+    temporal_phrases: list[TemporalPhrase] = Field(
+        default_factory=list,
+        description=(
+            "Shortest sufficient verbatim temporal evidence not fully represented by a literal "
+            "anchor. Empty when the request states no temporal meaning; never invent a relation."
+        ),
+    )
 
 
 class ResolvedTemporalAnchor(ContractModel):
@@ -487,6 +565,29 @@ class TemporalEdge(str, Enum):
     END = "end"
 
 
+class TemporalComposition(str, Enum):
+    """How a relation changes the window already selected for its target.
+
+    This is deliberately a small, executable vocabulary rather than a general temporal-logic
+    language.  The values are model-visible in Pass 2 and interpreted only by deterministic code.
+    """
+
+    BASE = "base"
+    INTERSECT = "intersect"
+    UNION = "union"
+    EXTEND_START = "extend_start"
+    EXTEND_END = "extend_end"
+    EXCLUDE = "exclude"
+    ALTERNATIVE = "alternative"
+
+
+class DurationReferenceScope(str, Enum):
+    """Whether a duration applies to one date edge or every date in a departure interval."""
+
+    EDGE = "edge"
+    WHOLE_INTERVAL = "whole_interval"
+
+
 class TemporalUnit(str, Enum):
     DAY = "day"
     WEEK = "week"
@@ -521,6 +622,23 @@ class AnchorReference(ContractModel):
 class RequestFieldReference(ContractModel):
     kind: Literal["request_field"]
     field: TemporalTarget
+    scope: DurationReferenceScope = DurationReferenceScope.EDGE
+    edge: TemporalEdge | None = TemporalEdge.END
+
+    @model_validator(mode="after")
+    def validate_scope(self) -> RequestFieldReference:
+        if self.scope is DurationReferenceScope.WHOLE_INTERVAL and self.edge is not None:
+            raise ValueError("whole_interval request-field references cannot select an edge")
+        if self.scope is DurationReferenceScope.EDGE and self.edge is None:
+            raise ValueError("edge request-field references require an edge")
+        return self
+
+
+class DecisionReference(ContractModel):
+    """Reference the evaluated output of an earlier canonical relation."""
+
+    kind: Literal["decision"]
+    constraint_id: str = Field(min_length=1)
     edge: TemporalEdge
 
 
@@ -532,12 +650,20 @@ class SymbolicContextReference(ContractModel):
 
 
 TemporalReference = Annotated[
-    AnchorReference | RequestFieldReference,
+    AnchorReference | RequestFieldReference | DecisionReference,
     Field(discriminator="kind"),
 ]
 
 
-class AnchorWindowConstraint(ContractModel):
+class TemporalConstraintBase(ContractModel):
+    """Canonical graph metadata supplied by deterministic Pass-2 assembly."""
+
+    constraint_id: str | None = Field(default=None, min_length=1)
+    combine: TemporalComposition = TemporalComposition.BASE
+    combine_with: str | None = Field(default=None, min_length=1)
+
+
+class AnchorWindowConstraint(TemporalConstraintBase):
     kind: Literal["anchor_window"]
     target: TemporalTarget
     anchor_id: str = Field(min_length=1)
@@ -546,7 +672,7 @@ class AnchorWindowConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class RelativeWeekendConstraint(ContractModel):
+class RelativeWeekendConstraint(TemporalConstraintBase):
     kind: Literal["relative_weekend"]
     target: TemporalTarget
     reference: TemporalReference
@@ -556,7 +682,7 @@ class RelativeWeekendConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class RelativeWeekdayConstraint(ContractModel):
+class RelativeWeekdayConstraint(TemporalConstraintBase):
     kind: Literal["relative_weekday"]
     target: TemporalTarget
     reference: TemporalReference
@@ -567,7 +693,7 @@ class RelativeWeekdayConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class RelativeOffsetConstraint(ContractModel):
+class RelativeOffsetConstraint(TemporalConstraintBase):
     kind: Literal["relative_offset"]
     target: TemporalTarget
     reference: TemporalReference
@@ -578,7 +704,7 @@ class RelativeOffsetConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class RelativeCalendarPeriodConstraint(ContractModel):
+class RelativeCalendarPeriodConstraint(TemporalConstraintBase):
     """A calendar period relative to hidden context, not a point offset."""
 
     kind: Literal["relative_calendar_period"]
@@ -592,7 +718,7 @@ class RelativeCalendarPeriodConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class SemanticDurationConstraint(ContractModel):
+class SemanticDurationConstraint(TemporalConstraintBase):
     kind: Literal["duration"]
     target: Literal[TemporalTarget.RETURN] = TemporalTarget.RETURN
     reference: RequestFieldReference
@@ -614,10 +740,13 @@ class SemanticDurationConstraint(ContractModel):
             raise ValueError("exact and approximate durations require one stated quantity")
         if self.reference.field is not TemporalTarget.DEPARTURE:
             raise ValueError("duration reference must be the departure request field")
+        # Legacy graphs may retain an edge reference while being migrated.  Pass-2 Contract v2
+        # assembly always emits ``whole_interval``; deterministic evaluation preserves the
+        # historical full-window behavior for old, persisted test graphs.
         return self
 
 
-class MonthPortionConstraint(ContractModel):
+class MonthPortionConstraint(TemporalConstraintBase):
     kind: Literal["month_portion"]
     target: TemporalTarget
     anchor_id: str = Field(min_length=1)
@@ -626,7 +755,7 @@ class MonthPortionConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class UnboundedBoundaryConstraint(ContractModel):
+class UnboundedBoundaryConstraint(TemporalConstraintBase):
     kind: Literal["unbounded_boundary"]
     target: TemporalTarget
     reference: TemporalReference
@@ -635,7 +764,7 @@ class UnboundedBoundaryConstraint(ContractModel):
     occurrence_index: int | None = Field(default=None, ge=0)
 
 
-class UnresolvedRelationConstraint(ContractModel):
+class UnresolvedRelationConstraint(TemporalConstraintBase):
     kind: Literal["unresolved"]
     target: TemporalTarget | None = None
     raw_text: str = Field(min_length=1)

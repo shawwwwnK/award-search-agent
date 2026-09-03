@@ -8,6 +8,7 @@ from typing import Any
 from openai import OpenAI
 
 from award_agent.domain import RawRequest, RequestUnderstandingResult
+from award_agent.observability.llm_trace import LLMCallTraceCollector
 
 _INSTRUCTIONS = """Convert the travel request directly into the supplied final request-understanding schema in one pass.
 
@@ -28,11 +29,23 @@ class OnePassIntentError(RuntimeError):
 class OnePassIntentExperiment:
     """Directly ask one model call for the production workflow's final output type."""
 
-    def __init__(self, model: str, client: OpenAI | None = None) -> None:
+    def __init__(
+        self,
+        model: str,
+        client: OpenAI | None = None,
+        *,
+        capture_llm_io: bool = False,
+    ) -> None:
         if not model.strip():
             raise ValueError("model must not be empty")
         self.model = model
         self._client = client or OpenAI()
+        self._llm_trace = LLMCallTraceCollector(enabled=capture_llm_io)
+
+    def take_call_traces(self) -> list[dict[str, Any]]:
+        """Return and clear captured model calls for the current workflow run."""
+
+        return self._llm_trace.take()
 
     def run(self, request: RawRequest) -> tuple[RequestUnderstandingResult, dict[str, Any] | None]:
         payload = json.dumps(request.model_dump(mode="json"), separators=(",", ":"))
@@ -45,9 +58,25 @@ class OnePassIntentExperiment:
                 store=False,
             )
         except Exception as exc:
+            self._llm_trace.record(
+                stage="one_pass",
+                model=self.model,
+                instructions=_INSTRUCTIONS,
+                payload=payload,
+                text_format=RequestUnderstandingResult,
+                error=exc,
+            )
             raise OnePassIntentError(
                 f"one-pass intent generation failed: {type(exc).__name__}: {exc}"
             ) from exc
+        self._llm_trace.record(
+            stage="one_pass",
+            model=self.model,
+            instructions=_INSTRUCTIONS,
+            payload=payload,
+            text_format=RequestUnderstandingResult,
+            response=response,
+        )
         parsed = response.output_parsed
         if parsed is None:
             raise OnePassIntentError("OpenAI returned no parsed one-pass result")

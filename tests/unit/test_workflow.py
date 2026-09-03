@@ -141,6 +141,20 @@ def anchor_window(
     )
 
 
+def whole_month(
+    target: TemporalTarget,
+    anchor_id: str,
+    raw_text: str,
+) -> MonthPortionConstraint:
+    return MonthPortionConstraint(
+        kind="month_portion",
+        target=target,
+        anchor_id=anchor_id,
+        portion="whole",
+        raw_text=raw_text,
+    )
+
+
 def duration(
     raw_text: str,
     minimum: int,
@@ -334,7 +348,7 @@ def test_october_and_two_weeks_produce_bounded_ranges() -> None:
     )
     relations = TemporalRelationGraph(
         constraints=[
-            anchor_window(TemporalTarget.DEPARTURE, "october", "October"),
+            whole_month(TemporalTarget.DEPARTURE, "october", "October"),
             duration("2 weeks", 2, 2, TemporalUnit.WEEK),
         ]
     )
@@ -430,7 +444,7 @@ def test_tentative_sao_paulo_and_january_are_preserved_without_a_return() -> Non
     )
     relations = TemporalRelationGraph(
         constraints=[
-            anchor_window(
+            whole_month(
                 TemporalTarget.DEPARTURE,
                 "january",
                 "Maybe sometime in January",
@@ -473,7 +487,7 @@ def test_missing_origin_is_still_the_highest_priority_question() -> None:
     )
     relations = TemporalRelationGraph(
         constraints=[
-            anchor_window(TemporalTarget.DEPARTURE, "may", "May"),
+            whole_month(TemporalTarget.DEPARTURE, "may", "May"),
             duration("a week", 1, 1, TemporalUnit.WEEK),
         ]
     )

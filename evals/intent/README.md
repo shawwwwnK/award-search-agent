@@ -42,8 +42,26 @@ python -m award_agent.cli.intent_eval \
 
 The runner scores explicit structured expectations and keeps individual failures and errors from
 aborting the corpus. Free-text invariants are retained in the artifact for human review but are not
-included in the automatic pass rate. The current OpenAI adapter does not retain response usage, so
-the artifact cannot yet report token counts or cost.
+included in the automatic pass rate. The OpenAI adapter records response usage when the SDK
+provides it, but the runner does not calculate cost.
+
+For failure triage, the runner writes private per-case model-call sidecars by default under
+`evals/intent/traces/`:
+
+```bash
+python -m award_agent.cli.intent_eval \
+  --model gpt-4o-mini \
+  --trials 3 \
+  --output evals/intent/baseline/YYYY-MM-DD-gpt-4o-mini-3-trials.json
+```
+
+Every non-passing case gets a sidecar containing the exact model instructions, serialized input,
+structured-output schema, parsed output, SDK response JSON when available, and exception details for
+each initial and repair call. The baseline JSON references each sidecar and records the trace
+directory. Use `--trace-dir PATH` to override the location, `--trace-all-calls` to capture passing
+cases too, or `--no-trace` to disable sidecars for a privacy-sensitive run. These traces may contain
+private travel requests and evidence quotes; keep the directory access-controlled and do not commit
+it unless that disclosure is intentional.
 
 Use `--strategy one_pass` for the deliberately naive experiment arm. It sends only the raw request
 and context to one model call and asks directly for `RequestUnderstandingResult`; it does not run

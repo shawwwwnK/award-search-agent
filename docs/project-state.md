@@ -38,9 +38,10 @@ Feasible access to useful award-inventory data.
 
 ## Immediate next milestone
 
-Run and analyze the full ready-scenario live evaluation for the redesigned two-pass workflow after
-the offline gates pass. Compare it only with the retained historical artifacts under their original
-contracts, and report first-attempt, repair, failure-stage, latency, and usage metrics separately.
+Project-owner interpretation of the completed Pass 2 contract evaluation and selection of the next
+cut line. Dependency failures improved materially, while ID copying, evidence-to-target association,
+and deterministic-output reliability remain unresolved; no workflow or model change is selected by
+this implementation session.
 
 ## Current implementation status
 
@@ -57,6 +58,10 @@ contracts, and report first-attempt, repair, failure-stage, latency, and usage m
 - Deterministic checkpoint construction assigns canonical evidence IDs and exact offsets, stable
   anchor IDs, source order, and the symbolic `context:request_date` reference. Pass two
   selects catalog IDs rather than repeating quotes or receiving resolved calendar values.
+- Pass-two catalog entries state the canonical direct relation for explicit anchors and the allowed
+  targets and relation kinds for references and evidence. The OpenAI adapter and shared conformance
+  layer both enforce those date-free permissions; named whole-month anchors remain canonical
+  `month_portion` relations.
 - Executable eval fixtures score claim-level evidence sufficiency inside allowed source envelopes.
   Preferred human span boundaries are retained as non-blocking diagnostics rather than exact-set
   correctness requirements.
@@ -75,6 +80,8 @@ contracts, and report first-attempt, repair, failure-stage, latency, and usage m
 - Cross-pass conformance and catalog-membership validation preserve structured stage, error code,
   relation location/kind, missing or contradictory fields, evidence/reference identifiers, and the
   underlying validation cause.
+- Dependency and cycle errors identify the consuming constraint collection/index, selected relation
+  kind, evidence ID, and exact reference edge so bounded repair can address the local invalid use.
 - Each model boundary permits at most one repair using the same narrow original input, rejected
   output, and structured errors. Complete deterministic validation reruns, a second failure remains
   explicit, and repair outcomes are retained in the workflow trace.
@@ -95,6 +102,11 @@ contracts, and report first-attempt, repair, failure-stage, latency, and usage m
   pass-two wire contract has fixed per-relation collections with required item fields and no
   unsupported `oneOf`; deterministic conversion restores the typed internal
   `TemporalRelationGraph` invariants.
+- The evaluation runner writes private LLM-call sidecars for non-passing cases by default under
+  `evals/intent/traces/`. Each sidecar retains the exact model instructions, serialized input,
+  output schema, parsed output, SDK response JSON when available, and exception details for every
+  initial or repair call; `--no-trace` disables sidecars and the normal baseline artifact stores
+  only a reference to them when enabled.
 - Offline regression coverage uses fake model passes and holiday providers. It includes payload
   non-leakage and context invariance, catalog membership and claim coverage, whole relative months,
   literal duration normalization, structured error preservation, bounded repair/non-leakage, and
@@ -123,6 +135,15 @@ contracts, and report first-attempt, repair, failure-stage, latency, and usage m
   and is not a production workflow option.
 - The four requests that motivated the two-pass temporal design all completed in one live
   `gpt-4o-mini` regression run. This small run is not evidence of aggregate accuracy or stability.
+- The post-optimization Pass 2 full evaluation completed 34/48 runs and passed all blocking checks
+  in 15/48, compared with 30/48 and 11/48 in the immediate pre-Pass 2 artifact. Dependency terminal
+  errors fell 10 to 0, while explicit wire failures rose 1 to 7 because invented catalog IDs and an
+  incompatible evidence relation remained invalid after bounded repair. The evaluator contract,
+  corpus, model, deterministic calendar policy, and validation strength were unchanged.
+- An evaluation-only split-model experiment kept Pass 1 on `gpt-4o-mini` and used `gpt-4o` for Pass 2.
+  It passed 23/48 versus 15/48 and completed 40/48 versus 34/48, reducing wire and deterministic
+  failures but increasing total latency 285.463s to 451.516s and clarification failures 4 to 8.
+  This is evidence for an owner cost/quality decision, not a production model selection.
 
 ## Explicit deferred work
 

@@ -9,6 +9,7 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 import yaml
 from dotenv import load_dotenv
@@ -31,11 +32,24 @@ from award_agent.intent.openai_extractor import (
     OpenAIIntentExtractor,
 )
 from award_agent.intent.workflow import understand_request
+from award_agent.observability.llm_trace import write_eval_llm_trace
+
+DEFAULT_LLM_TRACE_DIR = Path("evals/intent/traces")
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run the ready intent-evaluation scenarios.")
     parser.add_argument("--model", required=True, help="OpenAI model ID to evaluate")
+    parser.add_argument(
+        "--pass-one-model",
+        default=None,
+        help="Optional model override for Pass 1; defaults to --model",
+    )
+    parser.add_argument(
+        "--pass-two-model",
+        default=None,
+        help="Optional model override for Pass 2; defaults to --model",
+    )
     parser.add_argument(
         "--cases",
         type=Path,
@@ -49,6 +63,24 @@ def _parser() -> argparse.ArgumentParser:
         choices=("two_pass", "one_pass"),
         default="two_pass",
         help="Workflow arm to evaluate",
+    )
+    parser.add_argument(
+        "--trace-dir",
+        type=Path,
+        default=DEFAULT_LLM_TRACE_DIR,
+        help=(
+            "Directory for per-case LLM call sidecars; non-passing cases are captured by default"
+        ),
+    )
+    parser.add_argument(
+        "--no-trace",
+        action="store_true",
+        help="Disable local LLM call sidecars for this eval run",
+    )
+    parser.add_argument(
+        "--trace-all-calls",
+        action="store_true",
+        help="With tracing enabled, capture calls for passing cases too",
     )
     return parser
 
@@ -544,26 +576,78 @@ def _usage_summary(results: Sequence[Mapping[str, Any]]) -> dict[str, int] | str
     }
 
 
+def _combine_usage(*usage_records: Mapping[str, int] | None) -> dict[str, int] | None:
+    """Combine usage from split model passes for one evaluated workflow run."""
+
+    captured = [item for item in usage_records if item is not None]
+    if not captured:
+        return None
+    return {
+        "calls": sum(item.get("calls", 0) for item in captured),
+        "captured_calls": sum(item.get("captured_calls", 0) for item in captured),
+        "missing_calls": sum(item.get("missing_calls", 0) for item in captured),
+        "input_tokens": sum(item.get("input_tokens", 0) for item in captured),
+        "output_tokens": sum(item.get("output_tokens", 0) for item in captured),
+        "total_tokens": sum(item.get("total_tokens", 0) for item in captured),
+    }
+
+
+def _combine_call_traces(
+    *trace_records: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    """Preserve pass order while assigning one run-level call sequence."""
+
+    combined: list[dict[str, Any]] = []
+    for trace_record in trace_records:
+        combined.extend(dict(trace) for trace in trace_record)
+    for sequence, trace in enumerate(combined, start=1):
+        trace["sequence"] = sequence
+    return combined
+
+
 def run_eval(
     model: str,
     cases_path: Path,
     trials: int,
     strategy: str = "two_pass",
+    pass_one_model: str | None = None,
+    pass_two_model: str | None = None,
+    trace_dir: Path | None = DEFAULT_LLM_TRACE_DIR,
+    trace_all_calls: bool = False,
 ) -> dict[str, Any]:
     if trials < 1:
         raise ValueError("trials must be positive")
     if strategy not in {"two_pass", "one_pass"}:
         raise ValueError(f"unsupported eval strategy: {strategy}")
+    if trace_all_calls and trace_dir is None:
+        raise ValueError("trace_all_calls requires trace_dir")
     scenarios = _load_ready_scenarios(cases_path)
-    extractor = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model=model))
-    one_pass = OnePassIntentExperiment(model=model)
+    generated_at = datetime.now(UTC).isoformat()
+    trace_run_dir = (
+        None
+        if trace_dir is None
+        else trace_dir / f"run-{generated_at.replace(':', '').replace('+', '-')}-{uuid4().hex[:8]}"
+    )
+    if trace_run_dir is not None:
+        trace_run_dir.mkdir(parents=True, exist_ok=True)
+    trace_count = 0
+    pass_one_extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model=pass_one_model or model),
+        capture_llm_io=trace_dir is not None,
+    )
+    pass_two_extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model=pass_two_model or model),
+        capture_llm_io=trace_dir is not None,
+    )
+    one_pass = OnePassIntentExperiment(model=model, capture_llm_io=trace_dir is not None)
     holiday_provider = NagerHolidayProvider()
     results: list[dict[str, Any]] = []
 
     for trial in range(1, trials + 1):
         for scenario in scenarios:
             if strategy == "two_pass":
-                extractor.reset_usage()
+                pass_one_extractor.reset_capture()
+                pass_two_extractor.reset_capture()
             started = time.perf_counter()
             record: dict[str, Any] = {"id": scenario["id"], "trial": trial}
             try:
@@ -581,8 +665,8 @@ def run_eval(
                 else:
                     output = understand_request(
                         request,
-                        extractor,
-                        extractor,
+                        pass_one_extractor,
+                        pass_two_extractor,
                         holiday_provider,
                     )
                 checks = _score_result(scenario["expected"], output)
@@ -680,9 +764,29 @@ def run_eval(
                     record["failure_stage"] = failure_stage
                     record["failure_code"] = failure_code
             if strategy == "two_pass":
-                record["usage"] = extractor.take_usage()
+                record["usage"] = _combine_usage(
+                    pass_one_extractor.take_usage(), pass_two_extractor.take_usage()
+                )
+                call_traces = _combine_call_traces(
+                    pass_one_extractor.take_call_traces(),
+                    pass_two_extractor.take_call_traces(),
+                )
+            else:
+                call_traces = _combine_call_traces(one_pass.take_call_traces())
             record["failure_categories"] = sorted(_failure_flags(record))
             record["latency_seconds"] = round(time.perf_counter() - started, 3)
+            if trace_run_dir is not None and (trace_all_calls or record["status"] != "passed"):
+                trace_path = write_eval_llm_trace(
+                    trace_run_dir,
+                    scenario=scenario,
+                    record=record,
+                    calls=call_traces,
+                )
+                record["llm_trace"] = {
+                    "path": str(trace_path),
+                    "calls": len(call_traces),
+                }
+                trace_count += 1
             results.append(record)
             print(f"trial={trial} id={scenario['id']} status={record['status']}", flush=True)
 
@@ -690,10 +794,12 @@ def run_eval(
     failed = sum(item["status"] == "failed" for item in results)
     errors = sum(item["status"] == "error" for item in results)
     instrumentation = _aggregate_results(results)
-    return {
-        "schema_version": 3,
-        "generated_at": datetime.now(UTC).isoformat(),
+    artifact: dict[str, Any] = {
+        "schema_version": 4,
+        "generated_at": generated_at,
         "model": model,
+        "pass_one_model": pass_one_model or model,
+        "pass_two_model": pass_two_model or model,
         "strategy": strategy,
         "cases_path": str(cases_path),
         "scenario_count": len(scenarios),
@@ -711,12 +817,28 @@ def run_eval(
         },
         "results": results,
     }
+    if trace_run_dir is not None:
+        artifact["llm_trace"] = {
+            "mode": "all_calls" if trace_all_calls else "failed_calls",
+            "directory": str(trace_run_dir),
+            "case_count": trace_count,
+        }
+    return artifact
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     load_dotenv()
     args = _parser().parse_args(argv)
-    artifact = run_eval(args.model, args.cases, args.trials, args.strategy)
+    artifact = run_eval(
+        args.model,
+        args.cases,
+        args.trials,
+        args.strategy,
+        args.pass_one_model,
+        args.pass_two_model,
+        None if args.no_trace else args.trace_dir,
+        args.trace_all_calls,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(artifact, indent=2) + "\n")
     print(json.dumps(artifact["summary"], indent=2))
