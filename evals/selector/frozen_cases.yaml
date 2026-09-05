@@ -1,0 +1,709 @@
+scenarios:
+- id: target-forward
+  category: target
+  pair: target
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Use the supplied exact-date interpretation. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied exact-date interpretation. It contributes to return.
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Leave this temporal wording unresolved for clarification.
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: target-reversed
+  category: target
+  pair: target
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Leave this temporal wording unresolved for clarification.
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied exact-date interpretation. It contributes to return.
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Use the supplied exact-date interpretation. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: reference-forward
+  category: reference
+  pair: reference
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: two weekends after Thanksgiving
+    - handle: e1
+      text: Thanksgiving
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Use the supplied weekend-after-reference interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied holiday-weekend interpretation. It contributes to
+          departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: reference-reversed
+  category: reference
+  pair: reference
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: two weekends after Thanksgiving
+    - handle: e1
+      text: Thanksgiving
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied holiday-weekend interpretation. It contributes to
+          departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Use the supplied weekend-after-reference interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+- id: composition-forward
+  category: composition
+  pair: composition
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Labor Day
+    - handle: e1
+      text: Thursday as well
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: holiday
+    available_productions:
+    - p0
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Extend the supplied departure interpretation to include Thursday.
+          It contributes to departure.
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+      - handle: c1
+        summary: Use the supplied weekend-after-reference interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: composition-reversed
+  category: composition
+  pair: composition
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Labor Day
+    - handle: e1
+      text: Thursday as well
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: holiday
+    available_productions:
+    - p0
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied weekend-after-reference interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Extend the supplied departure interpretation to include Thursday.
+          It contributes to departure.
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+- id: scope-forward
+  category: scope
+  pair: scope
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: after New Year
+    - handle: e1
+      text: New Year
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Use the supplied after-reference boundary. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied holiday-weekend interpretation. It contributes to
+          departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: scope-reversed
+  category: scope
+  pair: scope
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: after New Year
+    - handle: e1
+      text: New Year
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied holiday-weekend interpretation. It contributes to
+          departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Use the supplied after-reference boundary. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+- id: dependency-forward
+  category: dependency_closure
+  pair: dependency
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+    - handle: e1
+      text: the weekend afterwards
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: month
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Use the supplied exact-date interpretation. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied named-month interpretation. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Use the supplied return-weekend-after-departure interpretation. It
+          contributes to return.
+        target: return
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Leave this temporal wording unresolved for clarification.
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: dependency-reversed
+  category: dependency_closure
+  pair: dependency
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+    - handle: e1
+      text: the weekend afterwards
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: month
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied named-month interpretation. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Use the supplied exact-date interpretation. It contributes to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Leave this temporal wording unresolved for clarification.
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Use the supplied return-weekend-after-departure interpretation. It
+          contributes to return.
+        target: return
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: unsupported-forward
+  category: unsupported
+  pair: unsupported
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: next spring
+    local_anchors: []
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Use the supplied relative-calendar interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied relative-calendar interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: unsupported-reversed
+  category: unsupported
+  pair: unsupported
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: next spring
+    local_anchors: []
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Leave this temporal wording unresolved for clarification.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Use the supplied relative-calendar interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Use the supplied relative-calendar interpretation. It contributes
+          to departure.
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null

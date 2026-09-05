@@ -10,9 +10,11 @@ from award_agent.domain import (
     DateWindow,
     DateWindowPrecision,
     DurationModifier,
+    DurationReferenceScope,
     ExactDateAnchor,
     Holiday,
     HolidayAnchor,
+    InterpretedDuration,
     RawRequest,
     RelativeCalendarPeriodConstraint,
     RelativeOffsetConstraint,
@@ -704,6 +706,57 @@ def test_after_new_year_remains_unbounded() -> None:
     assert result.unresolved[0].field == "departure"
 
 
+def _whole_interval_duration(raw_text: str, unit: TemporalUnit) -> SemanticDurationConstraint:
+    return SemanticDurationConstraint(
+        kind="duration",
+        reference=RequestFieldReference(
+            kind="request_field",
+            field=TemporalTarget.DEPARTURE,
+            scope=DurationReferenceScope.WHOLE_INTERVAL,
+            edge=None,
+        ),
+        stated_minimum_quantity=1,
+        stated_maximum_quantity=1,
+        unit=unit,
+        modifier=DurationModifier.EXACT,
+        raw_text=raw_text,
+    )
+
+
+def test_whole_interval_day_duration_allows_an_unbounded_departure() -> None:
+    text = "Travel for 7 days."
+    graph = TemporalRelationGraph(
+        constraints=[
+            _whole_interval_duration("7 days", TemporalUnit.DAY),
+        ]
+    )
+
+    result = evaluate_temporal_relation_graph(
+        request(text), extraction(phrases=["7 days"]), graph, []
+    )
+
+    assert result.departure is None
+    assert result.interpreted_duration is not None
+
+
+def test_month_duration_does_not_inherit_day_duration_unbounded_exemption() -> None:
+    text = "Travel for 7 days and 1 month."
+    graph = TemporalRelationGraph(
+        constraints=[
+            _whole_interval_duration("7 days", TemporalUnit.DAY),
+            _whole_interval_duration("1 month", TemporalUnit.MONTH),
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as exc_info:
+        evaluate_temporal_relation_graph(
+            request(text), extraction(phrases=["7 days", "1 month"]), graph, []
+        )
+
+    assert exc_info.value.details.error_code == "unresolved_dependency"
+    assert exc_info.value.details.constraint_index == 1
+
+
 def test_explicit_return_relation_remains_authoritative_and_duration_conflicts() -> None:
     text = "Leave August 29, return the following Thursday, for 10 days."
     anchor = exact_anchor("departure", "August 29", 8, 29)
@@ -760,6 +813,26 @@ def test_explicit_return_relation_remains_authoritative_and_duration_conflicts()
         result.interpreted_duration,
     )
     assert [conflict.code for conflict in conflicts] == ["duration_date_mismatch"]
+
+
+def test_return_before_departure_suppresses_derivative_duration_mismatch() -> None:
+    departure = DateWindow(
+        start=date(2026, 7, 10),
+        end=date(2026, 7, 10),
+        precision=DateWindowPrecision.EXACT,
+        raw_text="July 10",
+    )
+    return_window = DateWindow(
+        start=date(2026, 7, 8),
+        end=date(2026, 7, 8),
+        precision=DateWindowPrecision.EXACT,
+        raw_text="July 8",
+    )
+    stated_duration = InterpretedDuration(raw_text="10 days", minimum_days=10, maximum_days=10)
+
+    conflicts = detect_conflicts(departure, return_window, stated_duration)
+
+    assert [conflict.code for conflict in conflicts] == ["return_before_departure"]
 
 
 @pytest.mark.parametrize(

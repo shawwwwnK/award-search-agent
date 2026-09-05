@@ -38,10 +38,11 @@ Feasible access to useful award-inventory data.
 
 ## Immediate next milestone
 
-Project-owner interpretation of the completed Pass 2 contract evaluation and selection of the next
-cut line. Dependency failures improved materially, while ID copying, evidence-to-target association,
-and deterministic-output reliability remain unresolved; no workflow or model change is selected by
-this implementation session.
+Run the frozen date-free temporal-selector study with explicitly chosen Mini and Luna model IDs,
+then make the compiler-route end-to-end runner decision. The deterministic scanner, candidate
+compiler, 16-case offline oracle gate, one-call OpenAI selector adapter, strict non-temporal
+compiler Pass 1, and offline frozen-evaluation harness are complete; a live selector is not
+enabled.
 
 ## Current implementation status
 
@@ -107,6 +108,83 @@ this implementation session.
   output schema, parsed output, SDK response JSON when available, and exception details for every
   initial or repair call; `--no-trace` disables sidecars and the normal baseline artifact stores
   only a reference to them when enabled.
+- An opt-in `compiler_select_v1` migration path scans `RawRequest.text` for temporal facts,
+  produces local scoped candidates, and directly compiles the existing canonical relation graph.
+  It bypasses the model-authored Pass 2 wire for fully auto-compilable requests; `two_pass`
+  remains the default rollback strategy. The scanner does not consume Pass-1 temporal anchors or
+  phrases, and the compiler path makes no temporal resolver call when all groups auto-compile.
+- `compiler_select_v1` now invokes only `extract_non_temporal()` for its model Pass 1. Its strict
+  input/output models have no temporal fields, the call has no repair path, and the workflow
+  explicitly merges that result with scanner-derived `date_anchors` and `temporal_phrases` after
+  compilation. The legacy `extract()`/`repair_extract()` path remains exclusive to `two_pass`.
+- The deterministic compiler covers all sixteen ready corpus cases in a table-driven offline
+  oracle gate using their exact raw requests and contexts, fake holiday data, static non-temporal
+  extraction, and a temporal resolver that fails if called. The gate asserts selected local IDs,
+  canonical graph kinds, computed windows, and clarification-relevant output. It preserves
+  first-week month wording and seasons as unresolved, keeps day/week duration known when the
+  departure is unbounded, and detects a strict `back before` return boundary without fabricating
+  a finite return window.
+- A local, date-free selector projection/restoration contract now exists with opaque candidate,
+  group, evidence, anchor, and production-slot handles. `OpenAIIntentExtractor` implements it as
+  a dedicated, one-call, no-repair boundary with `TemporalSelectorOutput` as the only structured
+  output and response storage disabled. A separately configured extractor keeps selector model,
+  trace, usage, and latency capture independent from Pass 1. Current production grammar has no
+  genuinely ambiguous groups, so fully auto-compiled requests make zero selector calls;
+  frozen/manual ambiguity fixtures are required to qualify a selector. Explicit production slots
+  and composition operands prevent a dependent relation from binding to an arbitrary same-target
+  producer.
+- A standalone frozen selector evaluator reconstructs private manual catalogs and asserts their
+  projections match twelve checked-in public, date-free YAML inputs before every run. It includes
+  paired candidate-order variants across target, reference, composition, scope, dependency-closure,
+  and unsupported-to-unresolved ambiguities; it uses static holiday dates and never calls Pass 1,
+  Pass 2, the workflow, or a live holiday provider. The `none`, `mini`, and `luna` arms report
+  parse, restoration, compiler completion, semantic and per-class accuracy, unsupported accuracy,
+  zero repairs, latency, and usage. A one-trial `gpt-4o-mini` versus `gpt-5.6-luna` study parsed,
+  restored, and compiled every model output with zero repairs, but achieved only 6/12 and 8/12
+  semantic selections respectively. A subsequent selector-contract v2 study with the same private
+  scenarios and a public self-sufficient projection confirmed `gpt-5.6-luna` at 36/36 semantic
+  selections over three trials, with every parse, membership, compiler, class, unsupported, and
+  zero-repair gate satisfied. `gpt-4o-mini` remained at 16/36 with two dependency compiler errors.
+  Luna is qualified only for the next selector-enabled compiler E2E experiment; the selector is
+  not yet enabled as a default and Mini remains disqualified. A matched three-trial comparison
+  found `gpt-4.1-mini` at 25/36 semantic selections (69.4%) and `gpt-4.1` at 29/36 (80.6%), versus
+  Luna's 36/36. Both 4.1 models were faster but failed blocking class gates, so neither is
+  qualified for selector experiments.
+- A matched v2 frozen-selector comparison found `gpt-5.4-mini` at 25/36 semantic selections
+  (69.4%) with complete parse/membership/compiler checks and zero repairs, but it failed all
+  composition cases, half the scope cases, and two unsupported-to-unresolved cases. It is not
+  qualified. `gpt-5.6-terra` achieved 36/36 semantic selections with every parse, membership,
+  compiler, class, unsupported, and zero-repair gate satisfied. Terra averaged 1.663 seconds and
+  761.8 tokens per request, compared with Luna's previous 1.781 seconds and 804.5 tokens per
+  request on the same v2 fixture. The project owner selected `gpt-5.6-luna` as the selector model
+  for future selector-enabled experiments because it passed the gate at materially lower published
+  token prices than Terra. Terra remains comparison evidence, not the chosen selector model. The
+  selector remains disabled by default; this is not a production-default decision. The deferred
+  decision protocol is recorded at `docs/experiments/selector-model-choice-protocol.md`.
+- A test-only, manually catalog-injected selector-to-workflow integration corpus reuses the twelve
+  frozen-v2 ambiguity cases while executing the real `projection -> selector -> restoration ->
+  compiler -> workflow` chain. The injection is accepted only for `compiler_select_v1` with an
+  exact request-text match; production grammar and normal construction are unchanged. A three-trial
+  live `gpt-5.6-luna` run completed all 36 cases with selector and exact workflow oracles matched,
+  zero errors/repairs, 36 selector attempts, 1.403 seconds mean latency, and 798 tokens/request.
+  Artifacts bind to the frozen-v2 path/SHA/contract and retain only redacted public data. A
+  post-change live ready-corpus rollback check made 16 non-temporal Pass-1 calls with zero selector
+  and Pass-2 calls. This proves test-only E2E wiring and route isolation, not independent semantic
+  generalization, genuine production-grammar ambiguity behavior, full live workflow quality, or
+  production enablement; `two_pass` remains default and the selector disabled.
+- The ready-corpus intent evaluator now has an opt-in `compiler_select_v1` arm with a separate
+  optional `--selector-model`. It constructs only the non-temporal Pass 1 boundary and an
+  explicitly configured selector; no live Pass 2 resolver is constructed. Schema-v5 artifacts
+  retain existing totals and add payload-free stage telemetry (configuration, model, attempts,
+  latency, and usage) even with `--no-trace`. Selector failures are redacted and classified
+  separately from legacy Pass-2 wire failures. A one-trial `gpt-4o-mini` compiler smoke across
+  the sixteen ready cases completed with 10 passing, 6 failed checks, and 0 errors; it made 16
+  non-temporal Pass-1 calls, 0 selector calls, and 0 Pass-2 calls. This is route evidence only,
+  not a selector result or a decision-grade accuracy estimate.
+- Clarification no longer asks for `return_or_duration` when a literal duration is known but an
+  unbounded departure prevents deriving a return. A definite `return_before_departure` conflict
+  suppresses its derivative duration-mismatch conflict. First-person discourse such as “help me
+  find” does not imply one traveler; an explicit first-person travel subject does.
 - Offline regression coverage uses fake model passes and holiday providers. It includes payload
   non-leakage and context invariance, catalog membership and claim coverage, whole relative months,
   literal duration normalization, structured error preservation, bounded repair/non-leakage, and

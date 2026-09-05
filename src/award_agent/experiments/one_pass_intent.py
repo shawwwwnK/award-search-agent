@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from typing import Any
 
 from openai import OpenAI
@@ -49,6 +50,7 @@ class OnePassIntentExperiment:
 
     def run(self, request: RawRequest) -> tuple[RequestUnderstandingResult, dict[str, Any] | None]:
         payload = json.dumps(request.model_dump(mode="json"), separators=(",", ":"))
+        started = time.perf_counter()
         try:
             response = self._client.responses.parse(
                 model=self.model,
@@ -65,6 +67,7 @@ class OnePassIntentExperiment:
                 payload=payload,
                 text_format=RequestUnderstandingResult,
                 error=exc,
+                latency_seconds=time.perf_counter() - started,
             )
             raise OnePassIntentError(
                 f"one-pass intent generation failed: {type(exc).__name__}: {exc}"
@@ -76,6 +79,7 @@ class OnePassIntentExperiment:
             payload=payload,
             text_format=RequestUnderstandingResult,
             response=response,
+            latency_seconds=time.perf_counter() - started,
         )
         parsed = response.output_parsed
         if parsed is None:

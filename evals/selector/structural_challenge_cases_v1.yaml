@@ -1,0 +1,2194 @@
+contract_version: v2
+fixture_version: v1
+control_fixture:
+  path: evals/selector/frozen_cases_v2.yaml
+  sha256: 9a3aa0031ae85fd22c48afcdee47751775004d52dcb9f0bea4fa4de28b3cb2f8
+scenarios:
+- id: endpoint-fork-departure-canonical
+  topology: endpoint_fork
+  subtype_id: explicit_endpoint_cue
+  surface_id: endpoint-fork-departure
+  order_variant: canonical
+  control_only: true
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: endpoint-fork-departure-permuted
+  topology: endpoint_fork
+  subtype_id: explicit_endpoint_cue
+  surface_id: endpoint-fork-departure
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a1
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for return using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as exact_date_anchor for departure using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: endpoint-fork-return-canonical
+  topology: endpoint_fork
+  subtype_id: explicit_endpoint_cue
+  surface_id: endpoint-fork-return
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: November 12
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for return using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for departure using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: endpoint-fork-return-permuted
+  topology: endpoint_fork
+  subtype_id: explicit_endpoint_cue
+  surface_id: endpoint-fork-return
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: November 12
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a1
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: anchored-reference-weekend-canonical
+  topology: anchored_reference_scope_fork
+  subtype_id: weekend_after_anchor
+  surface_id: anchored-reference-weekend
+  order_variant: canonical
+  control_only: true
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: two weekends after Thanksgiving
+      endpoint_cue: departure
+    - handle: e1
+      text: Thanksgiving
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as the 2nd weekend after a0 (reference_only) for departure.
+        interpretation_kind: weekend_after_anchor
+        relation_ordinal: 2
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: anchored-reference-weekend-permuted
+  topology: anchored_reference_scope_fork
+  subtype_id: weekend_after_anchor
+  surface_id: anchored-reference-weekend
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Thanksgiving
+      endpoint_cue: departure
+    - handle: e1
+      text: two weekends after Thanksgiving
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e1 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e1 as the 2nd weekend after a0 (reference_only) for departure.
+        interpretation_kind: weekend_after_anchor
+        relation_ordinal: 2
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+- id: anchored-scope-boundary-canonical
+  topology: anchored_reference_scope_fork
+  subtype_id: unbounded_after_anchor
+  surface_id: anchored-scope-boundary
+  order_variant: canonical
+  control_only: true
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: after New Year
+      endpoint_cue: departure
+    - handle: e1
+      text: New Year
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as an unbounded after-a0 (reference_only) boundary for
+          departure.
+        interpretation_kind: after_anchor_boundary
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: anchored-scope-boundary-permuted
+  topology: anchored_reference_scope_fork
+  subtype_id: unbounded_after_anchor
+  surface_id: anchored-scope-boundary
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: New Year
+      endpoint_cue: departure
+    - handle: e1
+      text: after New Year
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: holiday
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e1 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e1 as an unbounded after-a0 (reference_only) boundary for
+          departure.
+        interpretation_kind: after_anchor_boundary
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: reference_only
+        composition: null
+        composition_operand: null
+- id: unsupported-season-canonical
+  topology: unsupported_fork
+  subtype_id: season
+  surface_id: unsupported-season
+  order_variant: canonical
+  control_only: true
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: next spring
+      endpoint_cue: departure
+    local_anchors: []
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as the 1st supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 1
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 2nd supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 2
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: unsupported-season-permuted
+  topology: unsupported_fork
+  subtype_id: season
+  surface_id: unsupported-season
+  order_variant: permuted
+  control_only: true
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: next spring
+      endpoint_cue: departure
+    local_anchors: []
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 2nd supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 2
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as the 1st supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 1
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: unsupported-first-week-canonical
+  topology: unsupported_fork
+  subtype_id: first_week
+  surface_id: unsupported-first-week
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: first week of October
+      endpoint_cue: departure
+    - handle: e1
+      text: October
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: month
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as named_month_portion for departure using a0 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as named_month_portion for departure using a0 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: unsupported-first-week-permuted
+  topology: unsupported_fork
+  subtype_id: first_week
+  surface_id: unsupported-first-week
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October
+      endpoint_cue: departure
+    - handle: e1
+      text: first week of October
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: month
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e1 as named_month_portion for departure using a0 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e1 as named_month_portion for departure using a0 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: single-composition-leave-canonical
+  topology: single_composition
+  subtype_id: holiday_weekend_thursday_extension
+  surface_id: single-composition-leave
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Labor Day
+      endpoint_cue: departure
+    - handle: e1
+      text: Thursday as well
+      endpoint_cue: unspecified
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: holiday
+    available_productions:
+    - p0
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e1 as extending the start of p0 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+      - handle: c1
+        summary: Interpret e1 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: single-composition-leave-permuted
+  topology: single_composition
+  subtype_id: holiday_weekend_thursday_extension
+  surface_id: single-composition-leave
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Thursday as well
+      endpoint_cue: unspecified
+    - handle: e1
+      text: Labor Day
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions:
+    - p1
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as extending the start of p1 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e0
+        requires:
+        - p1
+        produces:
+        - p0
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p1
+- id: single-composition-travel-canonical
+  topology: single_composition
+  subtype_id: holiday_weekend_thursday_extension
+  surface_id: single-composition-travel
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Labor Day
+      endpoint_cue: departure
+    - handle: e1
+      text: Thursday as well
+      endpoint_cue: unspecified
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: holiday
+    available_productions:
+    - p0
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e1 as extending the start of p0 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+      - handle: c1
+        summary: Interpret e1 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: single-composition-travel-permuted
+  topology: single_composition
+  subtype_id: holiday_weekend_thursday_extension
+  surface_id: single-composition-travel
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: Thursday as well
+      endpoint_cue: unspecified
+    - handle: e1
+      text: Labor Day
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: holiday
+    available_productions:
+    - p1
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as extending the start of p1 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e0
+        requires:
+        - p1
+        produces:
+        - p0
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p1
+- id: dependency-closure-october-canonical
+  topology: dependency_closure
+  subtype_id: departure_to_return_weekend
+  surface_id: dependency-closure-october
+  order_variant: canonical
+  control_only: true
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    - handle: e1
+      text: the weekend afterwards
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: month
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as named_month_portion for departure using a1 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e1 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: dependency-closure-october-permuted
+  topology: dependency_closure
+  subtype_id: departure_to_return_weekend
+  surface_id: dependency-closure-october
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: the weekend afterwards
+      endpoint_cue: return
+    - handle: e1
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: month
+    - handle: a1
+      evidence: e1
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e0
+        requires:
+        - p1
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a1
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c3
+        summary: Interpret e1 as named_month_portion for departure using a0 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as exact_date_anchor for departure using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: dependency-closure-march-canonical
+  topology: dependency_closure
+  subtype_id: departure_to_return_weekend
+  surface_id: dependency-closure-march
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: March 3
+      endpoint_cue: departure
+    - handle: e1
+      text: the weekend afterwards
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: month
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as named_month_portion for departure using a1 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e1 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: dependency-closure-march-permuted
+  topology: dependency_closure
+  subtype_id: departure_to_return_weekend
+  surface_id: dependency-closure-march
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: the weekend afterwards
+      endpoint_cue: return
+    - handle: e1
+      text: March 3
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e1
+      kind: month
+    - handle: a1
+      evidence: e1
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e0
+        requires:
+        - p1
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a1
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c3
+        summary: Interpret e1 as named_month_portion for departure using a0 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as exact_date_anchor for departure using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: depth-two-october-canonical
+  topology: depth_two_composition_chain
+  subtype_id: exact_to_thursday_to_return_weekend
+  surface_id: depth-two-october
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    - handle: e1
+      text: Thursday as well
+      endpoint_cue: unspecified
+    - handle: e2
+      text: the weekend afterwards
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    available_productions:
+    - p0
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e1 as extending the start of p0 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+      - handle: c1
+        summary: Interpret e1 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e2 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e2
+        requires:
+        - p1
+        produces:
+        - p2
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Keep e2 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e2
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: depth-two-october-permuted
+  topology: depth_two_composition_chain
+  subtype_id: exact_to_thursday_to_return_weekend
+  surface_id: depth-two-october
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: the weekend afterwards
+      endpoint_cue: return
+    - handle: e1
+      text: Thursday as well
+      endpoint_cue: unspecified
+    - handle: e2
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e2
+      kind: exact_date
+    available_productions:
+    - p2
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e0
+        requires:
+        - p1
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c3
+        summary: Interpret e1 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as extending the start of p2 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p2
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p2
+- id: depth-two-march-canonical
+  topology: depth_two_composition_chain
+  subtype_id: exact_to_thursday_to_return_weekend
+  surface_id: depth-two-march
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: March 3
+      endpoint_cue: departure
+    - handle: e1
+      text: Thursday as well
+      endpoint_cue: unspecified
+    - handle: e2
+      text: the weekend afterwards
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    available_productions:
+    - p0
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e1 as extending the start of p0 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p0
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+      - handle: c1
+        summary: Interpret e1 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e2 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e2
+        requires:
+        - p1
+        produces:
+        - p2
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Keep e2 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e2
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: depth-two-march-permuted
+  topology: depth_two_composition_chain
+  subtype_id: exact_to_thursday_to_return_weekend
+  surface_id: depth-two-march
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: the weekend afterwards
+      endpoint_cue: return
+    - handle: e1
+      text: Thursday as well
+      endpoint_cue: unspecified
+    - handle: e2
+      text: March 3
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e2
+      kind: exact_date
+    available_productions:
+    - p2
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 1st return weekend after the required departure
+          production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers:
+        - e0
+        requires:
+        - p1
+        produces:
+        - p0
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c3
+        summary: Interpret e1 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as extending the start of p2 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers:
+        - e1
+        requires:
+        - p2
+        produces:
+        - p1
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p2
+- id: two-independent-october-canonical
+  topology: two_independent_groups
+  subtype_id: independent_departure_return_endpoints
+  surface_id: two-independent-october
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    - handle: e1
+      text: November 12
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    - handle: a2
+      evidence: e1
+      kind: exact_date
+    - handle: a3
+      evidence: e1
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e1 as exact_date_anchor for return using a2 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p2
+        anchor_uses:
+        - anchor: a2
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as exact_date_anchor for departure using a3 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p3
+        anchor_uses:
+        - anchor: a3
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c5
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a2
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: two-independent-october-permuted
+  topology: two_independent_groups
+  subtype_id: independent_departure_return_endpoints
+  surface_id: two-independent-october
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: November 12
+      endpoint_cue: return
+    - handle: e1
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    - handle: a2
+      evidence: e1
+      kind: exact_date
+    - handle: a3
+      evidence: e1
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a1
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a3
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as exact_date_anchor for return using a2 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p2
+        anchor_uses:
+        - anchor: a2
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c5
+        summary: Interpret e1 as exact_date_anchor for departure using a3 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p3
+        anchor_uses:
+        - anchor: a3
+          mode: direct_window
+        composition: null
+        composition_operand: null
+- id: two-independent-march-april-canonical
+  topology: two_independent_groups
+  subtype_id: independent_departure_return_endpoints
+  surface_id: two-independent-march-april
+  order_variant: canonical
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: March 3
+      endpoint_cue: departure
+    - handle: e1
+      text: April 4
+      endpoint_cue: return
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    - handle: a2
+      evidence: e1
+      kind: exact_date
+    - handle: a3
+      evidence: e1
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a0
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e1 as exact_date_anchor for return using a2 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p2
+        anchor_uses:
+        - anchor: a2
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as exact_date_anchor for departure using a3 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p3
+        anchor_uses:
+        - anchor: a3
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c5
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a2
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+- id: two-independent-march-april-permuted
+  topology: two_independent_groups
+  subtype_id: independent_departure_return_endpoints
+  surface_id: two-independent-march-april
+  order_variant: permuted
+  control_only: false
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: April 4
+      endpoint_cue: return
+    - handle: e1
+      text: March 3
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    - handle: a2
+      evidence: e1
+      kind: exact_date
+    - handle: a3
+      evidence: e1
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e0
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a1
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p0
+        anchor_uses:
+        - anchor: a0
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e0
+        requires: []
+        produces:
+        - p1
+        anchor_uses:
+        - anchor: a1
+          mode: direct_window
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers:
+        - e1
+        requires: []
+        produces: []
+        anchor_uses:
+        - anchor: a3
+          mode: unresolved_support
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as exact_date_anchor for return using a2 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p2
+        anchor_uses:
+        - anchor: a2
+          mode: direct_window
+        composition: null
+        composition_operand: null
+      - handle: c5
+        summary: Interpret e1 as exact_date_anchor for departure using a3 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers:
+        - e1
+        requires: []
+        produces:
+        - p3
+        anchor_uses:
+        - anchor: a3
+          mode: direct_window
+        composition: null
+        composition_operand: null

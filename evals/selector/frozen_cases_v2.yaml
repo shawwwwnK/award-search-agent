@@ -1,0 +1,574 @@
+contract_version: v2
+scenarios:
+- id: target-forward
+  category: target
+  pair: target
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers: [e0]
+        requires: []
+        produces: [p1]
+        anchor_uses: [{anchor: a1, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+- id: target-reversed
+  category: target
+  pair: target
+  public_input:
+    ordered_evidence:
+    - handle: e0
+      text: October 5
+      endpoint_cue: departure
+    local_anchors:
+    - handle: a0
+      evidence: e0
+      kind: exact_date
+    - handle: a1
+      evidence: e0
+      kind: exact_date
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: null
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as exact_date_anchor for return using a1 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: return
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a1, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p1]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+- id: reference-forward
+  category: reference
+  pair: reference
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: two weekends after Thanksgiving, endpoint_cue: departure}
+    - {handle: e1, text: Thanksgiving, endpoint_cue: departure}
+    local_anchors: [{handle: a0, evidence: e1, kind: holiday}]
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as the 2nd weekend after a0 (reference_only) for departure.
+        interpretation_kind: weekend_after_anchor
+        relation_ordinal: 2
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: reference_only}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+- id: reference-reversed
+  category: reference
+  pair: reference
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: two weekends after Thanksgiving, endpoint_cue: departure}
+    - {handle: e1, text: Thanksgiving, endpoint_cue: departure}
+    local_anchors: [{handle: a0, evidence: e1, kind: holiday}]
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as the 2nd weekend after a0 (reference_only) for departure.
+        interpretation_kind: weekend_after_anchor
+        relation_ordinal: 2
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: reference_only}]
+        composition: null
+        composition_operand: null
+- id: composition-forward
+  category: composition
+  pair: composition
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: Labor Day, endpoint_cue: departure}
+    - {handle: e1, text: Thursday as well, endpoint_cue: unspecified}
+    local_anchors: [{handle: a0, evidence: e0, kind: holiday}]
+    available_productions: [p0]
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e1 as extending the start of p0 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers: [e1]
+        requires: [p0]
+        produces: [p1]
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+      - handle: c1
+        summary: Interpret e1 as the 1st weekend after a0 (reference_only) for departure.
+        interpretation_kind: weekend_after_anchor
+        relation_ordinal: 1
+        target: departure
+        covers: [e1]
+        requires: [p0]
+        produces: [p1]
+        anchor_uses: [{anchor: a0, mode: reference_only}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e1]
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: composition-reversed
+  category: composition
+  pair: composition
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: Labor Day, endpoint_cue: departure}
+    - {handle: e1, text: Thursday as well, endpoint_cue: unspecified}
+    local_anchors: [{handle: a0, evidence: e0, kind: holiday}]
+    available_productions: [p0]
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e1]
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e1 as the 1st weekend after a0 (reference_only) for departure.
+        interpretation_kind: weekend_after_anchor
+        relation_ordinal: 1
+        target: departure
+        covers: [e1]
+        requires: [p0]
+        produces: [p1]
+        anchor_uses: [{anchor: a0, mode: reference_only}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e1 as extending the start of p0 to Thursday for departure.
+        interpretation_kind: extend_departure_start_to_thursday
+        target: departure
+        covers: [e1]
+        requires: [p0]
+        produces: [p1]
+        anchor_uses: []
+        composition: extend_start
+        composition_operand: p0
+- id: scope-forward
+  category: scope
+  pair: scope
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: after New Year, endpoint_cue: departure}
+    - {handle: e1, text: New Year, endpoint_cue: departure}
+    local_anchors: [{handle: a0, evidence: e1, kind: holiday}]
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as an unbounded after-a0 (reference_only) boundary for departure.
+        interpretation_kind: after_anchor_boundary
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: reference_only}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+- id: scope-reversed
+  category: scope
+  pair: scope
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: after New Year, endpoint_cue: departure}
+    - {handle: e1, text: New Year, endpoint_cue: departure}
+    local_anchors: [{handle: a0, evidence: e1, kind: holiday}]
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as holiday_weekend for departure using a0 (direct_window).
+        interpretation_kind: holiday_weekend
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as an unbounded after-a0 (reference_only) boundary for departure.
+        interpretation_kind: after_anchor_boundary
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: reference_only}]
+        composition: null
+        composition_operand: null
+- id: dependency-forward
+  category: dependency_closure
+  pair: dependency
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: October 5, endpoint_cue: departure}
+    - {handle: e1, text: the weekend afterwards, endpoint_cue: return}
+    local_anchors:
+    - {handle: a0, evidence: e0, kind: exact_date}
+    - {handle: a1, evidence: e0, kind: month}
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as named_month_portion for departure using a1 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a1, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Interpret e1 as the 1st return weekend after the required departure production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers: [e1]
+        requires: [p0]
+        produces: [p1]
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers: [e1]
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: dependency-reversed
+  category: dependency_closure
+  pair: dependency
+  public_input:
+    ordered_evidence:
+    - {handle: e0, text: October 5, endpoint_cue: departure}
+    - {handle: e1, text: the weekend afterwards, endpoint_cue: return}
+    local_anchors:
+    - {handle: a0, evidence: e0, kind: exact_date}
+    - {handle: a1, evidence: e0, kind: month}
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: [{anchor: a0, mode: unresolved_support}]
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as named_month_portion for departure using a1 (direct_window).
+        interpretation_kind: named_month_portion
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a1, mode: direct_window}]
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as exact_date_anchor for departure using a0 (direct_window).
+        interpretation_kind: exact_date_anchor
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: [{anchor: a0, mode: direct_window}]
+        composition: null
+        composition_operand: null
+    - handle: g1
+      candidates:
+      - handle: c3
+        summary: Keep e1 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: return
+        covers: [e1]
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c4
+        summary: Interpret e1 as the 1st return weekend after the required departure production.
+        interpretation_kind: return_weekend_after_departure
+        relation_ordinal: 1
+        target: return
+        covers: [e1]
+        requires: [p0]
+        produces: [p1]
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: unsupported-forward
+  category: unsupported
+  pair: unsupported
+  public_input:
+    ordered_evidence: [{handle: e0, text: next spring, endpoint_cue: departure}]
+    local_anchors: []
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Interpret e0 as the 1st supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 1
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 2nd supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 2
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+- id: unsupported-reversed
+  category: unsupported
+  pair: unsupported
+  public_input:
+    ordered_evidence: [{handle: e0, text: next spring, endpoint_cue: departure}]
+    local_anchors: []
+    available_productions: []
+    candidate_groups:
+    - handle: g0
+      candidates:
+      - handle: c0
+        summary: Keep e0 unresolved; do not infer a date, endpoint, or relation.
+        interpretation_kind: unresolved
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: []
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c1
+        summary: Interpret e0 as the 2nd supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 2
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: []
+        composition: null
+        composition_operand: null
+      - handle: c2
+        summary: Interpret e0 as the 1st supplied relative calendar period for departure.
+        interpretation_kind: relative_calendar_period
+        relation_ordinal: 1
+        target: departure
+        covers: [e0]
+        requires: []
+        produces: [p0]
+        anchor_uses: []
+        composition: null
+        composition_operand: null

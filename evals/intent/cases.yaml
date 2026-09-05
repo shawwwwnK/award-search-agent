@@ -116,7 +116,7 @@ scenarios:
         - {kind: anchor_window, target: departure, window: holiday_weekend}
         - kind: relative_weekend
           target: return
-          reference: {kind: request_field, field: departure, edge: end}
+          reference: {kind: decision, edge: end}
           direction: after
           ordinal: 1
       invariants:
@@ -294,7 +294,10 @@ scenarios:
       timezone: "America/Los_Angeles"
     expected:
       travelers: 1
-      origin: {kind: city, value: "Portland"}
+      origin:
+        kind: city
+        raw_text: "Portland"
+        accepted_values: ["Portland", "Portland, Oregon"]
       destination: {kind: region, value: "Europe"}
       cabin: business
       search_modes: [award]
@@ -386,6 +389,11 @@ scenarios:
       interpreted_duration: {minimum_days: 7, maximum_days: 14}
       literal_duration:
         {stated_minimum_quantity: 1, stated_maximum_quantity: 2, unit: week, modifier: alternative}
+      temporal_relations:
+        - kind: unbounded_boundary
+          target: departure
+          reference: {kind: anchor}
+          direction: after
       departure_window: null
       return_window: null
       invariants:

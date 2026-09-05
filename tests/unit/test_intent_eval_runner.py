@@ -42,6 +42,8 @@ from award_agent.domain import (
     UnknownField,
     UnknownReason,
 )
+from award_agent.intent.model_views import NonTemporalIntentExtraction
+from award_agent.intent.temporal_selector import TemporalSelectorValidationError
 from award_agent.observability.llm_trace import write_eval_llm_trace
 
 
@@ -442,6 +444,7 @@ def test_aggregate_results_separates_stages_repairs_and_completion() -> None:
         "repair_attempts": 3,
         "repair_successes": 1,
         "pass_one_failures": 1,
+        "selector_failures": 0,
         "pass_two_wire_failures": 1,
         "grounding_failures": 1,
         "semantic_validation_failures": 1,
@@ -551,6 +554,475 @@ def test_eval_parser_defaults_to_failure_traces_and_allows_opt_out() -> None:
         ["--model", "test-model", "--output", "result.json", "--no-trace"]
     )
     assert no_trace_args.no_trace is True
+
+
+@pytest.mark.parametrize(
+    ("arguments", "message"),
+    [
+        (
+            [
+                "--model",
+                "test-model",
+                "--output",
+                "result.json",
+                "--strategy",
+                "compiler_select_v1",
+                "--pass-two-model",
+                "legacy-model",
+            ],
+            "--pass-two-model is only compatible with --strategy two_pass",
+        ),
+        (
+            [
+                "--model",
+                "test-model",
+                "--output",
+                "result.json",
+                "--strategy",
+                "two_pass",
+                "--selector-model",
+                "selector-model",
+            ],
+            "--selector-model is only compatible with --strategy compiler_select_v1",
+        ),
+        (
+            [
+                "--model",
+                "test-model",
+                "--output",
+                "result.json",
+                "--strategy",
+                "two_pass",
+                "--selector-policy",
+                "supported_or_unresolved",
+            ],
+            "--selector-policy is only compatible with --strategy compiler_select_v1",
+        ),
+        (
+            [
+                "--model",
+                "test-model",
+                "--output",
+                "result.json",
+                "--strategy",
+                "one_pass",
+                "--selector-policy",
+                "supported_or_unresolved",
+            ],
+            "--selector-policy is only compatible with --strategy compiler_select_v1",
+        ),
+    ],
+)
+def test_eval_parser_rejects_strategy_incompatible_model_flags(
+    arguments: list[str], message: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit, match="2"):
+        _parser().parse_args(arguments)
+
+    assert message in capsys.readouterr().err
+
+
+def test_eval_parser_accepts_experiment_only_compiler_selector_policy() -> None:
+    args = _parser().parse_args(
+        [
+            "--model",
+            "test-model",
+            "--output",
+            "result.json",
+            "--strategy",
+            "compiler_select_v1",
+            "--selector-model",
+            "selector-model",
+            "--selector-policy",
+            "supported_or_unresolved",
+        ]
+    )
+
+    assert args.selector_policy == "supported_or_unresolved"
+
+
+def test_eval_parser_requires_selector_for_experiment_only_policy(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    with pytest.raises(SystemExit, match="2"):
+        _parser().parse_args(
+            [
+                "--model",
+                "test-model",
+                "--output",
+                "result.json",
+                "--strategy",
+                "compiler_select_v1",
+                "--selector-policy",
+                "supported_or_unresolved",
+            ]
+        )
+
+    assert "--selector-model is required" in capsys.readouterr().err
+
+
+def test_run_eval_rejects_experiment_only_policy_outside_compiler_strategy() -> None:
+    with pytest.raises(ValueError, match="only compatible with --strategy compiler_select_v1"):
+        intent_eval_module.run_eval(
+            "test-model",
+            Path("not-read-because-validation-fails.yaml"),
+            1,
+            strategy="one_pass",
+            selector_policy="supported_or_unresolved",
+        )
+
+
+def _single_ready_case(path: Path) -> Path:
+    path.write_text(
+        """scenarios:
+  - id: runner_case
+    status: ready
+    input: Fly from Seattle to Tokyo.
+    context:
+      reference_date: "2026-08-31"
+      timezone: UTC
+    expected: {}
+"""
+    )
+    return path
+
+
+def test_compiler_eval_constructs_only_non_temporal_pass_one_for_auto_only_ready_case(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    instances: list[Any] = []
+
+    class FakeExtractor:
+        def __init__(self, *, config: Any, capture_llm_io: bool) -> None:
+            assert capture_llm_io is True
+            self.model = config.model
+            self.calls: list[dict[str, Any]] = []
+            instances.append(self)
+
+        def reset_capture(self) -> None:
+            self.calls = []
+
+        def extract_non_temporal(self, _input: Any) -> NonTemporalIntentExtraction:
+            self.calls.append({"stage": "compiler_non_temporal_pass_one", "latency_seconds": 0.2})
+            return NonTemporalIntentExtraction()
+
+        def take_usage(self) -> dict[str, int] | None:
+            return {
+                "calls": len(self.calls),
+                "captured_calls": len(self.calls),
+                "missing_calls": 0,
+                "input_tokens": 3,
+                "output_tokens": 2,
+                "total_tokens": 5,
+            }
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            calls = self.calls
+            self.calls = []
+            return calls
+
+    def fake_understand(
+        _request: RawRequest,
+        extractor: FakeExtractor,
+        resolver: object | None,
+        _holiday_provider: object,
+        *,
+        temporal_strategy: str,
+        temporal_selector: object | None,
+        selector_policy: str,
+    ) -> RequestUnderstandingResult:
+        assert temporal_strategy == "compiler_select_v1"
+        assert resolver is None
+        assert temporal_selector is None
+        assert selector_policy == "ambiguous_only"
+        extractor.extract_non_temporal(object())
+        return _result()
+
+    monkeypatch.setattr(intent_eval_module, "OpenAIIntentExtractor", FakeExtractor)
+    monkeypatch.setattr(intent_eval_module, "understand_request", fake_understand)
+
+    artifact = intent_eval_module.run_eval(
+        "base-model",
+        _single_ready_case(tmp_path / "cases.yaml"),
+        1,
+        strategy="compiler_select_v1",
+        trace_dir=None,
+    )
+
+    assert [instance.model for instance in instances] == ["base-model"]
+    telemetry = artifact["results"][0]["stage_telemetry"]
+    assert telemetry["pass_one"]["attempts"] == 1
+    assert telemetry["selector"]["attempts"] == 0
+    assert telemetry["selector"]["enabled"] is False
+    assert telemetry["pass_two"]["attempts"] == 0
+    assert telemetry["pass_one"]["latency_seconds"] == 0.2
+    assert "llm_trace" not in artifact
+    assert artifact["stage_telemetry"]["pass_one"]["attempts"] == 1
+
+
+def test_compiler_eval_uses_independently_configured_selector_once_for_ambiguity(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    instances: list[Any] = []
+
+    class FakeExtractor:
+        def __init__(self, *, config: Any, capture_llm_io: bool) -> None:
+            self.model = config.model
+            self.calls: list[dict[str, Any]] = []
+            instances.append(self)
+
+        def reset_capture(self) -> None:
+            self.calls = []
+
+        def extract_non_temporal(self, _input: Any) -> NonTemporalIntentExtraction:
+            self.calls.append({"stage": "compiler_non_temporal_pass_one", "latency_seconds": 0.1})
+            return NonTemporalIntentExtraction()
+
+        def select_candidates(self, _input: object) -> object:
+            self.calls.append({"stage": "temporal_candidate_selector", "latency_seconds": 0.3})
+            return object()
+
+        def take_usage(self) -> None:
+            return None
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            calls = self.calls
+            self.calls = []
+            return calls
+
+    def fake_understand(
+        _request: RawRequest,
+        extractor: FakeExtractor,
+        resolver: object | None,
+        _holiday_provider: object,
+        *,
+        temporal_strategy: str,
+        temporal_selector: FakeExtractor | None,
+        selector_policy: str,
+    ) -> RequestUnderstandingResult:
+        assert temporal_strategy == "compiler_select_v1"
+        assert resolver is None
+        assert temporal_selector is not None
+        assert selector_policy == "ambiguous_only"
+        extractor.extract_non_temporal(object())
+        temporal_selector.select_candidates(object())
+        return _result()
+
+    monkeypatch.setattr(intent_eval_module, "OpenAIIntentExtractor", FakeExtractor)
+    monkeypatch.setattr(intent_eval_module, "understand_request", fake_understand)
+
+    artifact = intent_eval_module.run_eval(
+        "base-model",
+        _single_ready_case(tmp_path / "cases.yaml"),
+        1,
+        strategy="compiler_select_v1",
+        pass_one_model="pass-one-model",
+        selector_model="selector-model",
+        trace_dir=None,
+    )
+
+    assert [instance.model for instance in instances] == ["pass-one-model", "selector-model"]
+    telemetry = artifact["results"][0]["stage_telemetry"]
+    assert telemetry["pass_one"]["model"] == "pass-one-model"
+    assert telemetry["selector"] == {
+        "enabled": True,
+        "configured": True,
+        "model": "selector-model",
+        "selector_policy": "ambiguous_only",
+        "attempts": 1,
+        "latency_seconds": 0.3,
+        "usage": None,
+    }
+    assert telemetry["pass_two"]["attempts"] == 0
+
+
+def test_compiler_eval_records_and_propagates_experiment_selector_policy(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    captured: list[str] = []
+
+    class FakeExtractor:
+        def __init__(self, *, config: Any, **_kwargs: Any) -> None:
+            self.model = config.model
+
+        def reset_capture(self) -> None:
+            return None
+
+        def take_usage(self) -> None:
+            return None
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            return []
+
+    def fake_understand(
+        _request: RawRequest,
+        _extractor: FakeExtractor,
+        _resolver: object | None,
+        _holiday_provider: object,
+        *,
+        temporal_strategy: str,
+        temporal_selector: FakeExtractor | None,
+        selector_policy: str,
+    ) -> RequestUnderstandingResult:
+        assert temporal_strategy == "compiler_select_v1"
+        assert temporal_selector is not None
+        captured.append(selector_policy)
+        return _result()
+
+    monkeypatch.setattr(intent_eval_module, "OpenAIIntentExtractor", FakeExtractor)
+    monkeypatch.setattr(intent_eval_module, "understand_request", fake_understand)
+
+    artifact = intent_eval_module.run_eval(
+        "base-model",
+        _single_ready_case(tmp_path / "cases.yaml"),
+        1,
+        strategy="compiler_select_v1",
+        selector_model="selector-model",
+        selector_policy="supported_or_unresolved",
+        trace_dir=None,
+    )
+
+    assert captured == ["supported_or_unresolved"]
+    assert artifact["selector_policy"] == "supported_or_unresolved"
+    assert artifact["stage_telemetry"]["selector"]["selector_policy"] == (
+        "supported_or_unresolved"
+    )
+
+
+def test_compiler_selector_failure_is_redacted_and_never_classified_as_pass_two(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    class FakeExtractor:
+        def __init__(self, *, config: Any, **_kwargs: Any) -> None:
+            self.model = config.model
+            self.calls: list[dict[str, Any]] = []
+
+        def reset_capture(self) -> None:
+            self.calls = []
+
+        def extract_non_temporal(self, _input: Any) -> NonTemporalIntentExtraction:
+            self.calls.append({"stage": "compiler_non_temporal_pass_one", "latency_seconds": 0.1})
+            return NonTemporalIntentExtraction()
+
+        def select_candidates(self, _input: object) -> object:
+            self.calls.append({"stage": "temporal_candidate_selector", "latency_seconds": 0.2})
+            raise TemporalSelectorValidationError("unknown private candidate c31 and slot p42")
+
+        def take_usage(self) -> None:
+            return None
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            calls = self.calls
+            self.calls = []
+            return calls
+
+    def fake_understand(
+        _request: RawRequest,
+        extractor: FakeExtractor,
+        _resolver: object | None,
+        _holiday_provider: object,
+        *,
+        temporal_strategy: str,
+        temporal_selector: FakeExtractor | None,
+        selector_policy: str,
+    ) -> RequestUnderstandingResult:
+        assert temporal_strategy == "compiler_select_v1"
+        assert temporal_selector is not None
+        assert selector_policy == "ambiguous_only"
+        extractor.extract_non_temporal(object())
+        temporal_selector.select_candidates(object())
+        raise AssertionError("selector error should have stopped the run")
+
+    monkeypatch.setattr(intent_eval_module, "OpenAIIntentExtractor", FakeExtractor)
+    monkeypatch.setattr(intent_eval_module, "understand_request", fake_understand)
+
+    artifact = intent_eval_module.run_eval(
+        "base-model",
+        _single_ready_case(tmp_path / "cases.yaml"),
+        1,
+        strategy="compiler_select_v1",
+        selector_model="selector-model",
+        trace_dir=None,
+    )
+
+    result = artifact["results"][0]
+    assert result["failure_stage"] == "temporal_candidate_selector"
+    assert result["failure_code"] == "selector_validation"
+    assert result["error"] == "temporal candidate selection failed"
+    assert "private" not in json.dumps(result)
+    assert "pass_two_wire_failures" not in result["failure_categories"]
+    assert result["stage_telemetry"]["selector"]["attempts"] == 1
+
+
+def test_two_pass_eval_retains_legacy_boundaries_and_totals(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    instances: list[Any] = []
+
+    class FakeExtractor:
+        def __init__(self, *, config: Any, **_kwargs: Any) -> None:
+            self.model = config.model
+            self.calls: list[dict[str, Any]] = []
+            instances.append(self)
+
+        def reset_capture(self) -> None:
+            self.calls = []
+
+        def extract(self, _input: object) -> object:
+            self.calls.append({"stage": "pass_one", "latency_seconds": 0.1})
+            return object()
+
+        def resolve_dates(self, _input: object) -> object:
+            self.calls.append({"stage": "pass_two", "latency_seconds": 0.2})
+            return object()
+
+        def take_usage(self) -> dict[str, int]:
+            return {
+                "calls": len(self.calls),
+                "captured_calls": len(self.calls),
+                "missing_calls": 0,
+                "input_tokens": 1,
+                "output_tokens": 1,
+                "total_tokens": 2,
+            }
+
+        def take_call_traces(self) -> list[dict[str, Any]]:
+            calls = self.calls
+            self.calls = []
+            return calls
+
+    def fake_understand(
+        _request: RawRequest,
+        pass_one: FakeExtractor,
+        pass_two: FakeExtractor,
+        _holiday_provider: object,
+    ) -> RequestUnderstandingResult:
+        assert pass_one is not pass_two
+        pass_one.extract(object())
+        pass_two.resolve_dates(object())
+        return _result()
+
+    monkeypatch.setattr(intent_eval_module, "OpenAIIntentExtractor", FakeExtractor)
+    monkeypatch.setattr(intent_eval_module, "understand_request", fake_understand)
+
+    artifact = intent_eval_module.run_eval(
+        "base-model",
+        _single_ready_case(tmp_path / "cases.yaml"),
+        1,
+        pass_one_model="pass-one-model",
+        pass_two_model="pass-two-model",
+        trace_dir=None,
+    )
+
+    assert [instance.model for instance in instances] == ["pass-one-model", "pass-two-model"]
+    assert artifact["schema_version"] == 5
+    assert artifact["summary"]["runs"] == 1
+    assert artifact["summary"]["passed"] == 1
+    assert artifact["summary"]["usage"]["calls"] == 2
+    telemetry = artifact["results"][0]["stage_telemetry"]
+    assert telemetry["pass_one"]["attempts"] == 1
+    assert telemetry["pass_two"]["attempts"] == 1
+    assert telemetry["selector"]["attempts"] == 0
 
 
 def test_run_eval_links_non_passing_case_to_llm_trace_sidecar(

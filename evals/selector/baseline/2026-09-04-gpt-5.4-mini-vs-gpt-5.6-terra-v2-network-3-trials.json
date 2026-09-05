@@ -1,0 +1,3009 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-09-04T19:24:38.507446+00:00",
+  "evaluation": "frozen_temporal_selector_only",
+  "fixtures_path": "evals/selector/frozen_cases_v2.yaml",
+  "fixture": {
+    "contract_version": "v2",
+    "path": "evals/selector/frozen_cases_v2.yaml",
+    "sha256": "9a3aa0031ae85fd22c48afcdee47751775004d52dcb9f0bea4fa4de28b3cb2f8"
+  },
+  "scenario_count": 12,
+  "trials": 3,
+  "arms": {
+    "none": {
+      "model": null,
+      "selector_calls": 0
+    },
+    "mini": {
+      "model": "gpt-5.4-mini"
+    },
+    "luna": {
+      "model": "gpt-5.6-terra"
+    }
+  },
+  "summary": {
+    "arms": {
+      "none": {
+        "runs": 36,
+        "completed": 36,
+        "errors": 0,
+        "parse": {
+          "runs": 0,
+          "passed": 0,
+          "rate": 0.0
+        },
+        "membership": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "validation_compiler_completion": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "semantic_accuracy": {
+          "runs": 36,
+          "passed": 6,
+          "rate": 0.16666666666666666
+        },
+        "per_class_accuracy": {
+          "composition": {
+            "runs": 6,
+            "passed": 0,
+            "rate": 0.0
+          },
+          "dependency_closure": {
+            "runs": 6,
+            "passed": 0,
+            "rate": 0.0
+          },
+          "reference": {
+            "runs": 6,
+            "passed": 0,
+            "rate": 0.0
+          },
+          "scope": {
+            "runs": 6,
+            "passed": 0,
+            "rate": 0.0
+          },
+          "target": {
+            "runs": 6,
+            "passed": 0,
+            "rate": 0.0
+          },
+          "unsupported": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          }
+        },
+        "unsupported_to_unresolved_accuracy": {
+          "runs": 6,
+          "passed": 6,
+          "rate": 1.0
+        },
+        "repairs": {
+          "attempts": 0,
+          "successes": 0,
+          "zero_repairs": true
+        },
+        "latency_seconds": {
+          "total": 0.0,
+          "mean": 0.0
+        },
+        "usage": {
+          "selector_call_attempts": 0,
+          "sdk_usage_captured_attempts": 0,
+          "sdk_usage_missing_attempts": 0,
+          "calls": 0,
+          "captured_calls": 0,
+          "missing_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0
+        }
+      },
+      "mini": {
+        "runs": 36,
+        "completed": 36,
+        "errors": 0,
+        "parse": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "membership": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "validation_compiler_completion": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "semantic_accuracy": {
+          "runs": 36,
+          "passed": 25,
+          "rate": 0.6944444444444444
+        },
+        "per_class_accuracy": {
+          "composition": {
+            "runs": 6,
+            "passed": 0,
+            "rate": 0.0
+          },
+          "dependency_closure": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "reference": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "scope": {
+            "runs": 6,
+            "passed": 3,
+            "rate": 0.5
+          },
+          "target": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "unsupported": {
+            "runs": 6,
+            "passed": 4,
+            "rate": 0.6666666666666666
+          }
+        },
+        "unsupported_to_unresolved_accuracy": {
+          "runs": 6,
+          "passed": 4,
+          "rate": 0.6666666666666666
+        },
+        "repairs": {
+          "attempts": 0,
+          "successes": 0,
+          "zero_repairs": true
+        },
+        "latency_seconds": {
+          "total": 37.523,
+          "mean": 1.042
+        },
+        "usage": {
+          "selector_call_attempts": 36,
+          "sdk_usage_captured_attempts": 36,
+          "sdk_usage_missing_attempts": 0,
+          "calls": 36,
+          "captured_calls": 36,
+          "missing_calls": 0,
+          "input_tokens": 26208,
+          "output_tokens": 648,
+          "total_tokens": 26856
+        }
+      },
+      "luna": {
+        "runs": 36,
+        "completed": 36,
+        "errors": 0,
+        "parse": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "membership": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "validation_compiler_completion": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "semantic_accuracy": {
+          "runs": 36,
+          "passed": 36,
+          "rate": 1.0
+        },
+        "per_class_accuracy": {
+          "composition": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "dependency_closure": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "reference": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "scope": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "target": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          },
+          "unsupported": {
+            "runs": 6,
+            "passed": 6,
+            "rate": 1.0
+          }
+        },
+        "unsupported_to_unresolved_accuracy": {
+          "runs": 6,
+          "passed": 6,
+          "rate": 1.0
+        },
+        "repairs": {
+          "attempts": 0,
+          "successes": 0,
+          "zero_repairs": true
+        },
+        "latency_seconds": {
+          "total": 59.872,
+          "mean": 1.663
+        },
+        "usage": {
+          "selector_call_attempts": 36,
+          "sdk_usage_captured_attempts": 36,
+          "sdk_usage_missing_attempts": 0,
+          "calls": 36,
+          "captured_calls": 36,
+          "missing_calls": 0,
+          "input_tokens": 26208,
+          "output_tokens": 1218,
+          "total_tokens": 27426
+        }
+      }
+    },
+    "repairs": {
+      "attempts": 0,
+      "zero_repairs": true
+    },
+    "quality_gate": {
+      "thresholds": {
+        "parse_rate": 1.0,
+        "membership_rate": 1.0,
+        "compiler_completion_rate": 1.0,
+        "semantic_accuracy_rate": 0.95,
+        "target_accuracy_rate": 0.9,
+        "reference_accuracy_rate": 0.9,
+        "composition_accuracy_rate": 0.9,
+        "scope_accuracy_rate": 0.9,
+        "unsupported_to_unresolved_accuracy_rate": 1.0,
+        "repair_attempts": 0.0
+      },
+      "arms": {
+        "none": {
+          "eligible": false,
+          "passed": null,
+          "reason": "no_selector_control_is_not_gate_eligible",
+          "checks": {}
+        },
+        "mini": {
+          "eligible": true,
+          "passed": false,
+          "checks": {
+            "parse": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "membership": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "compiler_completion": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "semantic_accuracy": {
+              "actual": 0.6944444444444444,
+              "threshold": 0.95,
+              "comparison": "at_least",
+              "passed": false
+            },
+            "target_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "reference_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "composition_accuracy": {
+              "actual": 0.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": false
+            },
+            "scope_accuracy": {
+              "actual": 0.5,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": false
+            },
+            "unsupported_to_unresolved_accuracy": {
+              "actual": 0.6666666666666666,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": false
+            },
+            "repairs": {
+              "actual": 0,
+              "threshold": 0.0,
+              "comparison": "at_most",
+              "passed": true
+            }
+          }
+        },
+        "luna": {
+          "eligible": true,
+          "passed": true,
+          "checks": {
+            "parse": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "membership": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "compiler_completion": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "semantic_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.95,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "target_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "reference_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "composition_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "scope_accuracy": {
+              "actual": 1.0,
+              "threshold": 0.9,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "unsupported_to_unresolved_accuracy": {
+              "actual": 1.0,
+              "threshold": 1.0,
+              "comparison": "at_least",
+              "passed": true
+            },
+            "repairs": {
+              "actual": 0,
+              "threshold": 0.0,
+              "comparison": "at_most",
+              "passed": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": false,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": false,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 1
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.867,
+      "trial": 1
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 2.089,
+      "trial": 1
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 0.782,
+      "trial": 1
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 2.043,
+      "trial": 1
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 17,
+        "total_tokens": 725
+      },
+      "latency_seconds": 0.632,
+      "trial": 1
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 23,
+        "total_tokens": 731
+      },
+      "latency_seconds": 2.137,
+      "trial": 1
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 2.191,
+      "trial": 1
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.559,
+      "trial": 1
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 20,
+        "total_tokens": 895
+      },
+      "latency_seconds": 1.037,
+      "trial": 1
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 20,
+        "total_tokens": 895
+      },
+      "latency_seconds": 0.995,
+      "trial": 1
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 1.024,
+      "trial": 1
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 1.003,
+      "trial": 1
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 2.587,
+      "trial": 1
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 2.37,
+      "trial": 1
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.111,
+      "trial": 1
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.893,
+      "trial": 1
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 64,
+        "total_tokens": 772
+      },
+      "latency_seconds": 1.809,
+      "trial": 1
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 97,
+        "total_tokens": 805
+      },
+      "latency_seconds": 3.84,
+      "trial": 1
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.651,
+      "trial": 1
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 34,
+        "total_tokens": 743
+      },
+      "latency_seconds": 0.946,
+      "trial": 1
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 37,
+        "total_tokens": 912
+      },
+      "latency_seconds": 1.541,
+      "trial": 1
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 47,
+        "total_tokens": 922
+      },
+      "latency_seconds": 2.024,
+      "trial": 1
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 1.104,
+      "trial": 1
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 40,
+        "total_tokens": 689
+      },
+      "latency_seconds": 1.388,
+      "trial": 1
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": false,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": false,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 2
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.769,
+      "trial": 2
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.939,
+      "trial": 2
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 0.583,
+      "trial": 2
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 0.709,
+      "trial": 2
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 17,
+        "total_tokens": 725
+      },
+      "latency_seconds": 1.164,
+      "trial": 2
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 23,
+        "total_tokens": 731
+      },
+      "latency_seconds": 0.675,
+      "trial": 2
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.026,
+      "trial": 2
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.773,
+      "trial": 2
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 20,
+        "total_tokens": 895
+      },
+      "latency_seconds": 0.75,
+      "trial": 2
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 20,
+        "total_tokens": 895
+      },
+      "latency_seconds": 1.098,
+      "trial": 2
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 0.657,
+      "trial": 2
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 0.539,
+      "trial": 2
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.861,
+      "trial": 2
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.316,
+      "trial": 2
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.422,
+      "trial": 2
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.932,
+      "trial": 2
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 94,
+        "total_tokens": 802
+      },
+      "latency_seconds": 2.391,
+      "trial": 2
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 58,
+        "total_tokens": 766
+      },
+      "latency_seconds": 1.942,
+      "trial": 2
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 40,
+        "total_tokens": 749
+      },
+      "latency_seconds": 1.297,
+      "trial": 2
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 37,
+        "total_tokens": 746
+      },
+      "latency_seconds": 1.164,
+      "trial": 2
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 49,
+        "total_tokens": 924
+      },
+      "latency_seconds": 1.77,
+      "trial": 2
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 39,
+        "total_tokens": 914
+      },
+      "latency_seconds": 1.67,
+      "trial": 2
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 4.237,
+      "trial": 2
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 33,
+        "total_tokens": 682
+      },
+      "latency_seconds": 1.7,
+      "trial": 2
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": false,
+      "status": "failed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": false,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "none",
+      "repairs": 0,
+      "parse_valid": null,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": false,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": null,
+      "latency_seconds": 0.0,
+      "trial": 3
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.883,
+      "trial": 3
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.547,
+      "trial": 3
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.197,
+      "trial": 3
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.234,
+      "trial": 3
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 17,
+        "total_tokens": 725
+      },
+      "latency_seconds": 0.666,
+      "trial": 3
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 23,
+        "total_tokens": 731
+      },
+      "latency_seconds": 0.658,
+      "trial": 3
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": false,
+      "selector_call_attempted": true,
+      "status": "failed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.634,
+      "trial": 3
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 0.98,
+      "trial": 3
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 20,
+        "total_tokens": 895
+      },
+      "latency_seconds": 1.737,
+      "trial": 3
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 20,
+        "total_tokens": 895
+      },
+      "latency_seconds": 0.678,
+      "trial": 3
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 0.579,
+      "trial": 3
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "mini",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 0.689,
+      "trial": 3
+    },
+    {
+      "id": "target-forward",
+      "category": "target",
+      "pair": "target",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.004,
+      "trial": 3
+    },
+    {
+      "id": "target-reversed",
+      "category": "target",
+      "pair": "target",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 17,
+        "total_tokens": 726
+      },
+      "latency_seconds": 1.085,
+      "trial": 3
+    },
+    {
+      "id": "reference-forward",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.239,
+      "trial": 3
+    },
+    {
+      "id": "reference-reversed",
+      "category": "reference",
+      "pair": "reference",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 17,
+        "total_tokens": 735
+      },
+      "latency_seconds": 1.309,
+      "trial": 3
+    },
+    {
+      "id": "composition-forward",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 17,
+        "total_tokens": 725
+      },
+      "latency_seconds": 1.351,
+      "trial": 3
+    },
+    {
+      "id": "composition-reversed",
+      "category": "composition",
+      "pair": "composition",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 70,
+        "total_tokens": 778
+      },
+      "latency_seconds": 2.138,
+      "trial": 3
+    },
+    {
+      "id": "scope-forward",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 41,
+        "total_tokens": 750
+      },
+      "latency_seconds": 1.211,
+      "trial": 3
+    },
+    {
+      "id": "scope-reversed",
+      "category": "scope",
+      "pair": "scope",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 46,
+        "total_tokens": 755
+      },
+      "latency_seconds": 1.361,
+      "trial": 3
+    },
+    {
+      "id": "dependency-forward",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0",
+        "c3"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 47,
+        "total_tokens": 922
+      },
+      "latency_seconds": 1.226,
+      "trial": 3
+    },
+    {
+      "id": "dependency-reversed",
+      "category": "dependency_closure",
+      "pair": "dependency",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2",
+        "c4"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 39,
+        "total_tokens": 914
+      },
+      "latency_seconds": 1.03,
+      "trial": 3
+    },
+    {
+      "id": "unsupported-forward",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c2"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 0.992,
+      "trial": 3
+    },
+    {
+      "id": "unsupported-reversed",
+      "category": "unsupported",
+      "pair": "unsupported",
+      "arm": "luna",
+      "repairs": 0,
+      "parse_valid": true,
+      "membership_valid": true,
+      "compiler_completed": true,
+      "semantic_correct": true,
+      "selector_call_attempted": true,
+      "status": "passed",
+      "selected_candidates": [
+        "c0"
+      ],
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 17,
+        "total_tokens": 666
+      },
+      "latency_seconds": 0.96,
+      "trial": 3
+    }
+  ]
+}

@@ -18,6 +18,7 @@ from award_agent.domain import (
     DateWindowPrecision,
     DecisionReference,
     DurationModifier,
+    DurationReferenceScope,
     ExactDateAnchor,
     Holiday,
     HolidayAnchor,
@@ -593,7 +594,7 @@ def validate_temporal_relation_graph(
     constraint_targets_by_id: dict[str, TemporalTarget | None] = {}
     dependency_uses: dict[
         tuple[TemporalTarget, TemporalTarget],
-        list[tuple[int, str, str, str]],
+        list[tuple[int, str, str, str, bool]],
     ] = {}
 
     for constraint_index, constraint in enumerate(graph.constraints):
@@ -736,8 +737,22 @@ def validate_temporal_relation_graph(
                 if reference.edge is not None
                 else f"request_field:{reference.field.value}:whole_interval"
             )
+            # A day/week whole-interval duration has useful literal meaning without a
+            # bounded departure.  This exemption belongs to that *one constraint*, not to
+            # the target/reference pair: a companion month duration must still fail.
+            permits_unbounded_reference = (
+                isinstance(constraint, SemanticDurationConstraint)
+                and reference.scope is DurationReferenceScope.WHOLE_INTERVAL
+                and constraint.unit in {TemporalUnit.DAY, TemporalUnit.WEEK}
+            )
             dependency_uses.setdefault((target, reference.field), []).append(
-                (constraint_index, constraint.kind, evidence_id, reference_key)
+                (
+                    constraint_index,
+                    constraint.kind,
+                    evidence_id,
+                    reference_key,
+                    permits_unbounded_reference,
+                )
             )
             if not isinstance(constraint, SemanticDurationConstraint):
                 strict_dependency_edges.add((target, reference.field))
@@ -747,13 +762,15 @@ def validate_temporal_relation_graph(
 
     for target, referenced_fields in dependencies.items():
         for referenced in referenced_fields:
+            uses = dependency_uses[(target, referenced)]
+            strict_uses = [use for use in uses if not use[4]]
             if producers[referenced] == 0 and (
                 (target, referenced) in strict_dependency_edges
-                or semantic_producers[referenced] == 0
+                or (semantic_producers[referenced] == 0 and strict_uses)
             ):
-                constraint_index, relation_kind, evidence_id, reference_key = dependency_uses[
-                    (target, referenced)
-                ][0]
+                constraint_index, relation_kind, evidence_id, reference_key, _ = (
+                    strict_uses[0] if strict_uses else uses[0]
+                )
                 raise TemporalResolutionValidationError(
                     f"{target.value} depends on unresolved request field: {referenced.value}",
                     stage="pass_two_dependency_validation",
@@ -776,7 +793,7 @@ def validate_temporal_relation_graph(
         visiting.add(target)
         for dependency in dependencies[target]:
             if dependency in visiting:
-                constraint_index, relation_kind, evidence_id, reference_key = dependency_uses[
+                constraint_index, relation_kind, evidence_id, reference_key, _ = dependency_uses[
                     (target, dependency)
                 ][0]
                 raise TemporalResolutionValidationError(

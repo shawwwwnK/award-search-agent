@@ -186,7 +186,46 @@ def test_decision_target_must_be_permitted_by_its_local_evidence_entry() -> None
     with pytest.raises(TemporalResolutionValidationError) as captured:
         invalid.to_domain(model_input)
 
-    assert captured.value.details.error_code == "incompatible_evidence_target"
+    details = captured.value.details
+    assert details.error_code == "incompatible_evidence_target"
+    assert details.relation_index == 0
+    assert details.constraint_index == 0
+    assert details.selected_relation_kind == "relative_weekday"
+    assert details.collection == "relative_weekdays"
+    assert details.evidence_id == "e3"
+    assert details.reference_id == "e1"
+    assert "request:" not in details.validation_cause
+
+
+def test_decision_wire_conversion_reports_local_missing_fields_without_private_ids() -> None:
+    _, _, model_input = _fixture()
+    invalid = TemporalDecisionSetWire(
+        decisions=[
+            TemporalDecisionWire(
+                evidence="e2",
+                relation_kind="duration",
+                target="return",
+            )
+        ]
+    )
+
+    with pytest.raises(TemporalResolutionValidationError) as captured:
+        invalid.to_domain(model_input)
+
+    details = captured.value.details
+    assert details.relation_index == 0
+    assert details.constraint_index == 0
+    assert details.selected_relation_kind == "duration"
+    assert details.collection == "durations"
+    assert details.evidence_id == "e2"
+    assert details.reference_id is None
+    assert details.missing_fields == (
+        "stated_minimum_quantity",
+        "stated_maximum_quantity",
+        "unit",
+        "modifier",
+    )
+    assert "request:" not in details.validation_cause
 
 
 def test_representative_decisions_entail_windows_and_whole_interval_duration() -> None:

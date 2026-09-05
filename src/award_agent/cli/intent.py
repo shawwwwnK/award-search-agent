@@ -34,6 +34,15 @@ def _parser() -> argparse.ArgumentParser:
         required=True,
         help="OpenAI model ID selected explicitly for this workflow run",
     )
+    parser.add_argument(
+        "--temporal-strategy",
+        choices=("two_pass", "compiler_select_v1"),
+        default="two_pass",
+        help=(
+            "Temporal path to use; compiler_select_v1 is the deterministic, fully "
+            "auto-compiled migration path and two_pass remains the rollback default"
+        ),
+    )
     return parser
 
 
@@ -54,6 +63,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         model_adapter,
         model_adapter,
         NagerHolidayProvider(),
+        temporal_strategy=args.temporal_strategy,
     )
     print(result.model_dump_json(indent=2))
     return 0

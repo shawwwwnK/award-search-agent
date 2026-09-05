@@ -36,6 +36,8 @@ from award_agent.domain import (
 from award_agent.intent.model_views import (
     CoarseExtractionInput,
     CoarseExtractionRepairInput,
+    NonTemporalExtractionInput,
+    NonTemporalIntentExtraction,
     StructuredValidationErrorView,
     TemporalInterpretationInput,
     TemporalResolutionResult,
@@ -52,6 +54,7 @@ class FakePipeline:
         self.extraction = extraction
         self.relations = relations
         self.coarse_input: CoarseExtractionInput | None = None
+        self.non_temporal_input: NonTemporalExtractionInput | None = None
         self.temporal_input: TemporalInterpretationInput | None = None
 
     def extract(self, model_input: CoarseExtractionInput) -> CoarseIntentExtraction:
@@ -60,6 +63,14 @@ class FakePipeline:
 
     def repair_extract(self, model_input: CoarseExtractionRepairInput) -> CoarseIntentExtraction:
         return self.extraction
+
+    def extract_non_temporal(
+        self, model_input: NonTemporalExtractionInput
+    ) -> NonTemporalIntentExtraction:
+        self.non_temporal_input = model_input
+        return NonTemporalIntentExtraction.model_validate(
+            self.extraction.model_dump(exclude={"date_anchors", "temporal_phrases"})
+        )
 
     def resolve_dates(
         self,
@@ -230,11 +241,51 @@ def test_early_may_is_coarse_first_then_proposed_as_a_range() -> None:
     assert result.parsed_request.return_window is not None
     assert result.clarification.action is ClarificationAction.NONE
     assert pipeline.coarse_input == CoarseExtractionInput(request_text=text)
+    assert pipeline.non_temporal_input is None
     assert pipeline.temporal_input is not None
     assert pipeline.temporal_input.explicit_anchor_catalog[0].anchor_id == (
         "anchor:month:departure:77:80"
     )
     assert "2027-05-31" not in pipeline.temporal_input.model_dump_json()
+
+
+def test_compiler_strategy_uses_raw_text_temporal_facts_and_skips_pass_two() -> None:
+    text = (
+        "My boyfriend and I want to go to Thailand from SF leaving on Labor Day weekend "
+        "for about 10 days."
+    )
+    extraction = CoarseIntentExtraction(
+        travelers=2,
+        origins=[location(LocationKind.CITY, "San Francisco", "SF")],
+        destinations=[location(LocationKind.COUNTRY, "Thailand", "Thailand")],
+        # This deliberately malformed temporal output is diagnostic-only for the compiler path.
+        temporal_phrases=[
+            TemporalPhrase(
+                applies_to=TemporalPhraseTarget.DEPARTURE,
+                raw_text="not in the request",
+            )
+        ],
+    )
+    pipeline = FakePipeline(extraction, TemporalRelationGraph())
+
+    result = understand_request(
+        request(text),
+        pipeline,
+        pipeline,
+        FakeHolidayProvider(),
+        temporal_strategy="compiler_select_v1",
+    )
+
+    assert pipeline.temporal_input is None
+    assert pipeline.coarse_input is None
+    assert pipeline.non_temporal_input == NonTemporalExtractionInput(request_text=text)
+    assert result.parsed_request.departure_window is not None
+    assert result.parsed_request.departure_window.start == date(2026, 9, 4)
+    assert result.parsed_request.return_window is not None
+    assert result.parsed_request.return_window.end == date(2026, 9, 18)
+    assert all(
+        item.span.text != "not in the request" for item in result.parsed_request.temporal_evidence
+    )
 
 
 def test_explicit_airport_code_is_preserved_for_downstream_workflows() -> None:
@@ -317,6 +368,7 @@ def test_after_new_year_stays_unresolved_instead_of_inventing_a_week() -> None:
     assert result.parsed_request.date_resolution.interpreted_duration.minimum_days == 7
     assert result.parsed_request.date_resolution.interpreted_duration.maximum_days == 14
     assert result.clarification.field == "departure"
+    assert "return_or_duration" not in {unknown.field for unknown in result.parsed_request.unknowns}
     assert pipeline.temporal_input is not None
     assert pipeline.temporal_input.explicit_anchor_catalog[0].anchor_id == (
         "anchor:holiday:departure:71:79"

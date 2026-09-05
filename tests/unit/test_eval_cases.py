@@ -126,6 +126,22 @@ def test_ready_golden_set_separates_literal_semantics_from_calendar_outputs() ->
         "maximum_days": 14,
     }
 
+    return_weekend = scenarios["return_weekend_after_departure"]["expected"]
+    assert return_weekend["temporal_relations"][1]["reference"] == {
+        "kind": "decision",
+        "edge": "end",
+    }
+
+    after_new_year = scenarios["unbounded_after_new_year"]["expected"]
+    assert after_new_year["temporal_relations"] == [
+        {
+            "kind": "unbounded_boundary",
+            "target": "departure",
+            "reference": {"kind": "anchor"},
+            "direction": "after",
+        }
+    ]
+
 
 def test_unsupported_temporal_policies_remain_explicit_in_golden_set() -> None:
     payload = yaml.safe_load(Path("evals/intent/cases.yaml").read_text())
@@ -142,6 +158,7 @@ def test_unsupported_temporal_policies_remain_explicit_in_golden_set() -> None:
     }
 
     next_spring = scenarios["repositioning_allowed"]["expected"]
+    assert next_spring["origin"]["accepted_values"] == ["Portland", "Portland, Oregon"]
     assert next_spring["temporal_relations"] == [{"kind": "unresolved", "target": "departure"}]
     assert "departure" in next_spring["unknowns"]
 

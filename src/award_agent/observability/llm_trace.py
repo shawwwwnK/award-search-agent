@@ -82,6 +82,7 @@ class LLMCallTraceCollector:
         text_format: Any,
         response: Any | None = None,
         error: BaseException | None = None,
+        latency_seconds: float | None = None,
     ) -> None:
         if not self.enabled:
             return
@@ -101,6 +102,7 @@ class LLMCallTraceCollector:
                 if response is None
                 else _json_compatible(getattr(response, "output_parsed", None))
             ),
+            "latency_seconds": latency_seconds,
             "error": (
                 None if error is None else {"type": type(error).__name__, "message": str(error)}
             ),

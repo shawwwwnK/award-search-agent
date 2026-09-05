@@ -1,0 +1,1298 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-04T21:40:56.245199+00:00",
+  "evaluation": "selector_workflow_integration_test_only",
+  "manifest": {
+    "path": "evals/selector/workflow_integration_cases_v1.yaml",
+    "sha256": "caf4bca84ccb7c98398dd43bdacf6761190c895ec7167d18713e1cf4d64c433c"
+  },
+  "frozen_selector_fixture": {
+    "path": "evals/selector/frozen_cases_v2.yaml",
+    "sha256": "9a3aa0031ae85fd22c48afcdee47751775004d52dcb9f0bea4fa4de28b3cb2f8",
+    "contract_version": "v2"
+  },
+  "selector_model": "gpt-5.6-luna",
+  "scenario_count": 12,
+  "trials": 3,
+  "summary": {
+    "runs": 36,
+    "completed": 36,
+    "errors": 0,
+    "selector_oracle_matches": 36,
+    "workflow_oracle_matches": 36,
+    "zero_repairs": true,
+    "selector_attempts": 36,
+    "latency_seconds": {
+      "total": 50.511,
+      "mean": 1.403
+    }
+  },
+  "results": [
+    {
+      "case": {
+        "id": "target-forward",
+        "category": "target",
+        "pair": "target"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "ada6870f97c7b04c932d72164fe7bfda76bb9f07c51e07e2172e7d6a389ee9f9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 37,
+        "total_tokens": 746
+      },
+      "latency_seconds": 1.208,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "target-reversed",
+        "category": "target",
+        "pair": "target"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "ada6870f97c7b04c932d72164fe7bfda76bb9f07c51e07e2172e7d6a389ee9f9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 35,
+        "total_tokens": 744
+      },
+      "latency_seconds": 1.02,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "reference-forward",
+        "category": "reference",
+        "pair": "reference"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "716824f2747a5a62018f5d08df4873925173a555aaf15c6c7d1c2d4fa41ff815",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 56,
+        "total_tokens": 774
+      },
+      "latency_seconds": 1.096,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "reference-reversed",
+        "category": "reference",
+        "pair": "reference"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "716824f2747a5a62018f5d08df4873925173a555aaf15c6c7d1c2d4fa41ff815",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 62,
+        "total_tokens": 780
+      },
+      "latency_seconds": 1.215,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "composition-forward",
+        "category": "composition",
+        "pair": "composition"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "073f5cce9fb32dd8a6fc928731eb69b474cb00b74eae71c29b7f1143a575ceea",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 118,
+        "total_tokens": 826
+      },
+      "latency_seconds": 1.941,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "composition-reversed",
+        "category": "composition",
+        "pair": "composition"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "073f5cce9fb32dd8a6fc928731eb69b474cb00b74eae71c29b7f1143a575ceea",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 163,
+        "total_tokens": 871
+      },
+      "latency_seconds": 2.415,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "scope-forward",
+        "category": "scope",
+        "pair": "scope"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e4292ff45840dc6260dfdcd2dd63f470a136a162da334366b02a8d08111352ac",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 85,
+        "total_tokens": 794
+      },
+      "latency_seconds": 2.37,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "scope-reversed",
+        "category": "scope",
+        "pair": "scope"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e4292ff45840dc6260dfdcd2dd63f470a136a162da334366b02a8d08111352ac",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 68,
+        "total_tokens": 777
+      },
+      "latency_seconds": 1.298,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "dependency-forward",
+        "category": "dependency_closure",
+        "pair": "dependency"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0",
+          "c3"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e7e5d99c0098b3e5548a0ef85de6f113e81001ff02b72ba26e2e4e63906f56c9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 65,
+        "total_tokens": 940
+      },
+      "latency_seconds": 1.241,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "dependency-reversed",
+        "category": "dependency_closure",
+        "pair": "dependency"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2",
+          "c4"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e7e5d99c0098b3e5548a0ef85de6f113e81001ff02b72ba26e2e4e63906f56c9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 102,
+        "total_tokens": 977
+      },
+      "latency_seconds": 1.716,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "unsupported-forward",
+        "category": "unsupported",
+        "pair": "unsupported"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "25ff5f3cfba308986d803c69b9a0ded043d2012fc4d9eb5ad1d86a5d3d2a47c5",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 57,
+        "total_tokens": 706
+      },
+      "latency_seconds": 1.099,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "unsupported-reversed",
+        "category": "unsupported",
+        "pair": "unsupported"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "25ff5f3cfba308986d803c69b9a0ded043d2012fc4d9eb5ad1d86a5d3d2a47c5",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 42,
+        "total_tokens": 691
+      },
+      "latency_seconds": 0.949,
+      "trial": 1
+    },
+    {
+      "case": {
+        "id": "target-forward",
+        "category": "target",
+        "pair": "target"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "ada6870f97c7b04c932d72164fe7bfda76bb9f07c51e07e2172e7d6a389ee9f9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 37,
+        "total_tokens": 746
+      },
+      "latency_seconds": 0.969,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "target-reversed",
+        "category": "target",
+        "pair": "target"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "ada6870f97c7b04c932d72164fe7bfda76bb9f07c51e07e2172e7d6a389ee9f9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 37,
+        "total_tokens": 746
+      },
+      "latency_seconds": 0.975,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "reference-forward",
+        "category": "reference",
+        "pair": "reference"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "716824f2747a5a62018f5d08df4873925173a555aaf15c6c7d1c2d4fa41ff815",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 53,
+        "total_tokens": 771
+      },
+      "latency_seconds": 1.023,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "reference-reversed",
+        "category": "reference",
+        "pair": "reference"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "716824f2747a5a62018f5d08df4873925173a555aaf15c6c7d1c2d4fa41ff815",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 64,
+        "total_tokens": 782
+      },
+      "latency_seconds": 1.231,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "composition-forward",
+        "category": "composition",
+        "pair": "composition"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "073f5cce9fb32dd8a6fc928731eb69b474cb00b74eae71c29b7f1143a575ceea",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 87,
+        "total_tokens": 795
+      },
+      "latency_seconds": 1.944,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "composition-reversed",
+        "category": "composition",
+        "pair": "composition"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "073f5cce9fb32dd8a6fc928731eb69b474cb00b74eae71c29b7f1143a575ceea",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 132,
+        "total_tokens": 840
+      },
+      "latency_seconds": 1.753,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "scope-forward",
+        "category": "scope",
+        "pair": "scope"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e4292ff45840dc6260dfdcd2dd63f470a136a162da334366b02a8d08111352ac",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 58,
+        "total_tokens": 767
+      },
+      "latency_seconds": 1.341,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "scope-reversed",
+        "category": "scope",
+        "pair": "scope"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e4292ff45840dc6260dfdcd2dd63f470a136a162da334366b02a8d08111352ac",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 75,
+        "total_tokens": 784
+      },
+      "latency_seconds": 2.244,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "dependency-forward",
+        "category": "dependency_closure",
+        "pair": "dependency"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0",
+          "c3"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e7e5d99c0098b3e5548a0ef85de6f113e81001ff02b72ba26e2e4e63906f56c9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 62,
+        "total_tokens": 937
+      },
+      "latency_seconds": 1.133,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "dependency-reversed",
+        "category": "dependency_closure",
+        "pair": "dependency"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2",
+          "c4"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e7e5d99c0098b3e5548a0ef85de6f113e81001ff02b72ba26e2e4e63906f56c9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 83,
+        "total_tokens": 958
+      },
+      "latency_seconds": 2.318,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "unsupported-forward",
+        "category": "unsupported",
+        "pair": "unsupported"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "25ff5f3cfba308986d803c69b9a0ded043d2012fc4d9eb5ad1d86a5d3d2a47c5",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 50,
+        "total_tokens": 699
+      },
+      "latency_seconds": 1.28,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "unsupported-reversed",
+        "category": "unsupported",
+        "pair": "unsupported"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "25ff5f3cfba308986d803c69b9a0ded043d2012fc4d9eb5ad1d86a5d3d2a47c5",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 51,
+        "total_tokens": 700
+      },
+      "latency_seconds": 1.326,
+      "trial": 2
+    },
+    {
+      "case": {
+        "id": "target-forward",
+        "category": "target",
+        "pair": "target"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "ada6870f97c7b04c932d72164fe7bfda76bb9f07c51e07e2172e7d6a389ee9f9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 36,
+        "total_tokens": 745
+      },
+      "latency_seconds": 0.914,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "target-reversed",
+        "category": "target",
+        "pair": "target"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "ada6870f97c7b04c932d72164fe7bfda76bb9f07c51e07e2172e7d6a389ee9f9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 41,
+        "total_tokens": 750
+      },
+      "latency_seconds": 1.003,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "reference-forward",
+        "category": "reference",
+        "pair": "reference"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "716824f2747a5a62018f5d08df4873925173a555aaf15c6c7d1c2d4fa41ff815",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 56,
+        "total_tokens": 774
+      },
+      "latency_seconds": 1.237,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "reference-reversed",
+        "category": "reference",
+        "pair": "reference"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "716824f2747a5a62018f5d08df4873925173a555aaf15c6c7d1c2d4fa41ff815",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 75,
+        "total_tokens": 793
+      },
+      "latency_seconds": 1.185,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "composition-forward",
+        "category": "composition",
+        "pair": "composition"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "073f5cce9fb32dd8a6fc928731eb69b474cb00b74eae71c29b7f1143a575ceea",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 84,
+        "total_tokens": 792
+      },
+      "latency_seconds": 1.461,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "composition-reversed",
+        "category": "composition",
+        "pair": "composition"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "073f5cce9fb32dd8a6fc928731eb69b474cb00b74eae71c29b7f1143a575ceea",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 708,
+        "output_tokens": 139,
+        "total_tokens": 847
+      },
+      "latency_seconds": 1.972,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "scope-forward",
+        "category": "scope",
+        "pair": "scope"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e4292ff45840dc6260dfdcd2dd63f470a136a162da334366b02a8d08111352ac",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 70,
+        "total_tokens": 779
+      },
+      "latency_seconds": 1.108,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "scope-reversed",
+        "category": "scope",
+        "pair": "scope"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e4292ff45840dc6260dfdcd2dd63f470a136a162da334366b02a8d08111352ac",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 709,
+        "output_tokens": 69,
+        "total_tokens": 778
+      },
+      "latency_seconds": 1.237,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "dependency-forward",
+        "category": "dependency_closure",
+        "pair": "dependency"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0",
+          "c3"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e7e5d99c0098b3e5548a0ef85de6f113e81001ff02b72ba26e2e4e63906f56c9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 74,
+        "total_tokens": 949
+      },
+      "latency_seconds": 1.292,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "dependency-reversed",
+        "category": "dependency_closure",
+        "pair": "dependency"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2",
+          "c4"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "e7e5d99c0098b3e5548a0ef85de6f113e81001ff02b72ba26e2e4e63906f56c9",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 875,
+        "output_tokens": 90,
+        "total_tokens": 965
+      },
+      "latency_seconds": 1.542,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "unsupported-forward",
+        "category": "unsupported",
+        "pair": "unsupported"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c2"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "25ff5f3cfba308986d803c69b9a0ded043d2012fc4d9eb5ad1d86a5d3d2a47c5",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 51,
+        "total_tokens": 700
+      },
+      "latency_seconds": 1.138,
+      "trial": 3
+    },
+    {
+      "case": {
+        "id": "unsupported-reversed",
+        "category": "unsupported",
+        "pair": "unsupported"
+      },
+      "oracle": {
+        "selector_matched": true,
+        "workflow_matched": true
+      },
+      "selector": {
+        "attempted": true,
+        "public_output": [
+          "c0"
+        ]
+      },
+      "workflow": {
+        "completed": true,
+        "pass_one_repairs": 0,
+        "pass_two_repairs": 0,
+        "output_sha256": "25ff5f3cfba308986d803c69b9a0ded043d2012fc4d9eb5ad1d86a5d3d2a47c5",
+        "paired_output_match": true
+      },
+      "status": "passed",
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 649,
+        "output_tokens": 56,
+        "total_tokens": 705
+      },
+      "latency_seconds": 1.317,
+      "trial": 3
+    }
+  ]
+}

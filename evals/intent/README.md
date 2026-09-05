@@ -68,3 +68,49 @@ and context to one model call and asks directly for `RequestUnderstandingResult`
 the production workflow's extraction, enrichment, temporal validation, conflict, or clarification
 stages. The golden expected values are used only by the scorer after generation and are never sent
 to the model.
+
+`--strategy compiler_select_v1` is the opt-in end-to-end compiler arm. It constructs the strict
+non-temporal Pass 1 boundary and never constructs a live Pass 2 resolver. Supply
+`--selector-model MODEL_ID` only to enable the optional date-free selector for genuinely ambiguous
+compiler groups; it is independently configured from `--pass-one-model`. `--pass-two-model` is
+rejected for this strategy, as are selector model flags for `two_pass` or per-stage flags for
+`one_pass`. Schema-v5 artifacts retain the existing run totals and add per-run and aggregate
+`stage_telemetry` for Pass 1, selector, Pass 2, and one-pass: enabled/configured/model, attempts,
+latency, and SDK usage. `--no-trace` prevents sidecar writes but still retains this payload-free
+telemetry. Selector failures use the public `temporal_candidate_selector` stage and stable codes;
+they are not reported as legacy Pass-2 wire failures.
+
+## Frozen selector study
+
+The date-free temporal-candidate selector has a separate frozen study. It does not run Pass 1,
+the legacy Pass 2 resolver, the request-understanding workflow, or a live holiday provider. Its
+checked-in inputs live in `evals/selector/frozen_cases.yaml`; the private manual catalog registry
+is rebuilt before each run and must reproduce every public projection exactly. The fixture pairs
+reverse candidate order and cover target, reference, composition, anchor scope, dependency
+closure, and unsupported-to-unresolved choices.
+
+Run all control/model arms with explicit IDs (the runner does not assign a model ID to either
+label):
+
+```bash
+python -m award_agent.cli.frozen_selector_eval \
+  --mini-model YOUR_MINI_MODEL_ID \
+  --luna-model YOUR_LUNA_MODEL_ID \
+  --trials 1 \
+  --output evals/selector/baseline/YYYY-MM-DD-selector-study.json
+```
+
+The `none` control sends no selector request and chooses the conservative unresolved candidate.
+Artifacts report parse, membership, validation/compiler completion, semantic and per-class
+accuracy, unsupported-to-unresolved accuracy, zero repairs, latency, independently counted
+selector call attempts, and SDK usage availability. Exception text is not retained in the public
+artifact; failures use public stage/code classifications so private candidate and production-slot
+identifiers cannot leak.
+
+Each artifact also evaluates Mini and Luna independently against the handoff gate: 100% parse,
+membership, and compiler completion; at least 95% semantic accuracy; at least 90% target,
+reference, composition, and scope accuracy; 100% unsupported-to-unresolved accuracy; and zero
+repairs. The `none` control is comparison-only and is not gate-eligible. The CLI exits nonzero
+when either model arm fails that quality gate. Public fixture projections contain no resolved
+date, request context, source offsets, canonical IDs, or private restoration handles; result
+records retain public candidate handles only.

@@ -41,11 +41,17 @@ from award_agent.intent.model_views import (
     CoarseExtractionInput,
     CoarseExtractionRepairInput,
     ExplicitAnchorCatalogEntry,
+    NonTemporalExtractionInput,
+    NonTemporalIntentExtraction,
     RejectedCoarseExtractionView,
     StructuredValidationErrorView,
     SymbolicReferenceCatalogEntry,
     TemporalEvidenceCatalogEntry,
     TemporalInterpretationInput,
+    TemporalSelectorCandidate,
+    TemporalSelectorGroup,
+    TemporalSelectorInput,
+    TemporalSelectorOutput,
     build_temporal_interpretation_input,
 )
 from award_agent.intent.openai_extractor import (
@@ -54,6 +60,7 @@ from award_agent.intent.openai_extractor import (
     DurationWire,
     IntentExtractionError,
     MonthPortionWire,
+    NonTemporalExtractionError,
     OpenAIExtractorConfig,
     OpenAIIntentExtractor,
     RelativeCalendarPeriodWire,
@@ -63,6 +70,7 @@ from award_agent.intent.openai_extractor import (
     TemporalDecisionSetWire,
     TemporalDecisionWire,
     TemporalRelationGraphWire,
+    TemporalSelectionError,
     UnboundedBoundaryWire,
     UnresolvedWire,
 )
@@ -217,6 +225,10 @@ def request() -> RawRequest:
 
 def coarse_input() -> CoarseExtractionInput:
     return CoarseExtractionInput(request_text=request().text)
+
+
+def non_temporal_input() -> NonTemporalExtractionInput:
+    return NonTemporalExtractionInput(request_text="Travel from LAX to Sydney in May.")
 
 
 def temporal_input() -> TemporalInterpretationInput:
@@ -388,6 +400,144 @@ def duration_temporal_input() -> TemporalInterpretationInput:
     )
 
 
+def selector_input() -> TemporalSelectorInput:
+    """A public selector fixture with private restoration state intentionally attached."""
+
+    model_input = TemporalSelectorInput(
+        candidate_groups=(
+            TemporalSelectorGroup(
+                handle="g0",
+                candidates=(
+                    TemporalSelectorCandidate(
+                        handle="c0",
+                        summary="Use the supplied local interpretation.",
+                        covers=(),
+                        requires=(),
+                        produces=(),
+                    ),
+                ),
+            ),
+        ),
+    )
+    model_input._candidate_handles = {"c0": "internal:candidate"}
+    model_input._group_handles = {"g0": "internal:group"}
+    model_input._production_slots = {"p0": "slot:departure"}
+    return model_input
+
+
+def test_openai_selector_uses_only_date_free_output_contract_and_one_call() -> None:
+    model_input = selector_input()
+    client = FakeClient(
+        [TemporalSelectorOutput(selected_candidates=["c0"])],
+        [FakeUsage(11, 3, 14)],
+    )
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="selector-model"),
+        client=cast(OpenAI, client),
+        capture_llm_io=True,
+    )
+
+    result = extractor.select_candidates(model_input)
+
+    assert result.selected_candidates == ["c0"]
+    assert len(client.responses.calls) == 1
+    call = client.responses.calls[0]
+    assert call["model"] == "selector-model"
+    assert call["text_format"] is TemporalSelectorOutput
+    assert call["store"] is False
+    assert "candidate" in str(call["instructions"]).casefold()
+    assert "date-free" in str(call["instructions"]).casefold()
+    assert "endpoint_cue" in str(call["instructions"])
+    assert "reference_only" in str(call["instructions"])
+    assert "seasonal wording" in str(call["instructions"])
+    payload = json.loads(str(call["input"]))
+    assert payload == model_input.model_dump(mode="json")
+    serialized = str(call["input"])
+    for prohibited in (
+        "internal:candidate",
+        "internal:group",
+        "slot:departure",
+        "reference_date",
+        "timezone",
+        "source_start",
+        "source_end",
+        "2026-",
+    ):
+        assert prohibited not in serialized
+    assert extractor.take_usage() == {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 11,
+        "output_tokens": 3,
+        "total_tokens": 14,
+    }
+    traces = extractor.take_call_traces()
+    assert len(traces) == 1
+    assert traces[0]["stage"] == "temporal_candidate_selector"
+    assert traces[0]["request"]["model"] == "selector-model"
+    assert traces[0]["request"]["input"] == serialized
+    assert traces[0]["request"]["store"] is False
+    assert isinstance(traces[0]["latency_seconds"], float)
+    assert traces[0]["latency_seconds"] >= 0
+
+
+def test_openai_selector_output_schema_is_strict_and_requires_selection_list() -> None:
+    schema = to_strict_json_schema(TemporalSelectorOutput)
+
+    assert schema["additionalProperties"] is False
+    assert set(schema["properties"]) == {"selected_candidates"}
+    assert schema["required"] == ["selected_candidates"]
+    with pytest.raises(ValueError, match="Field required"):
+        TemporalSelectorOutput.model_validate({})
+
+
+@pytest.mark.parametrize("output", [None, CoarseIntentExtraction()])
+def test_openai_selector_rejects_missing_or_wrong_parsed_output_without_repair(
+    output: object | None,
+) -> None:
+    client = FakeClient([output])
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="selector-model"),
+        client=cast(OpenAI, client),
+    )
+
+    with pytest.raises(TemporalSelectionError):
+        extractor.select_candidates(selector_input())
+
+    assert len(client.responses.calls) == 1
+
+
+def test_openai_selector_surfaces_client_error_without_repair() -> None:
+    class FailingResponses:
+        def parse(self, **_kwargs: object) -> SimpleNamespace:
+            raise TimeoutError("provider timed out")
+
+    class FailingClient:
+        def __init__(self) -> None:
+            self.responses = FailingResponses()
+
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="selector-model"),
+        client=cast(OpenAI, FailingClient()),
+    )
+
+    with pytest.raises(TemporalSelectionError, match="candidate selection failed"):
+        extractor.select_candidates(selector_input())
+
+
+def test_openai_selector_skips_empty_candidate_groups() -> None:
+    client = FakeClient([])
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="selector-model"),
+        client=cast(OpenAI, client),
+    )
+
+    assert extractor.select_candidates(TemporalSelectorInput()).selected_candidates == []
+    assert client.responses.calls == []
+    assert extractor.take_usage() is None
+
+
 def test_openai_extractor_uses_coarse_structured_output_without_storing_response() -> None:
     client = FakeClient([CoarseIntentExtraction(travelers=2)])
     extractor = OpenAIIntentExtractor(
@@ -422,6 +572,97 @@ def test_openai_extractor_uses_coarse_structured_output_without_storing_response
     assert payload == {"request_text": "Travel in May."}
     assert "reference_date" not in str(call["input"])
     assert "timezone" not in str(call["input"])
+
+
+def test_openai_non_temporal_extractor_uses_dedicated_strict_schema_and_trace() -> None:
+    client = FakeClient(
+        [NonTemporalIntentExtraction(travelers=1)], [FakeUsage(8, 2, 10)]
+    )
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="compiler-model"),
+        client=cast(OpenAI, client),
+        capture_llm_io=True,
+    )
+
+    result = extractor.extract_non_temporal(non_temporal_input())
+
+    assert result.travelers == 1
+    call = client.responses.calls[0]
+    assert call["model"] == "compiler-model"
+    assert call["text_format"] is NonTemporalIntentExtraction
+    assert call["store"] is False
+    assert "non-temporal" in str(call["instructions"]).casefold()
+    assert "date_anchors" not in str(call["instructions"])
+    assert "temporal_phrases" not in str(call["instructions"])
+    serialized = str(call["input"])
+    assert json.loads(serialized) == {"request_text": "Travel from LAX to Sydney in May."}
+    for prohibited in ("reference_date", "timezone", "date_anchors", "temporal_phrases"):
+        assert prohibited not in serialized
+    assert extractor.take_usage() == {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 8,
+        "output_tokens": 2,
+        "total_tokens": 10,
+    }
+    traces = extractor.take_call_traces()
+    assert len(traces) == 1
+    assert traces[0]["stage"] == "compiler_non_temporal_pass_one"
+    schema = traces[0]["request"]["text_format"]
+    assert schema["name"] == "NonTemporalIntentExtraction"
+    assert "date_anchors" not in json.dumps(schema)
+    assert "temporal_phrases" not in json.dumps(schema)
+
+
+def test_non_temporal_extraction_output_schema_is_strict_and_has_no_temporal_fields() -> None:
+    schema = to_strict_json_schema(NonTemporalIntentExtraction)
+
+    assert schema["additionalProperties"] is False
+    assert set(schema["properties"]) == {
+        "travelers",
+        "origins",
+        "destinations",
+        "cabins",
+        "search_modes",
+        "repositioning_allowed",
+        "hard_constraints",
+        "ambiguities",
+    }
+    assert "date_anchors" not in json.dumps(schema)
+    assert "temporal_phrases" not in json.dumps(schema)
+    with pytest.raises(ValueError, match="Extra inputs"):
+        NonTemporalIntentExtraction.model_validate({"date_anchors": []})
+
+
+@pytest.mark.parametrize("output", [None, CoarseIntentExtraction()])
+def test_non_temporal_extractor_rejects_bad_output_without_repair(output: object | None) -> None:
+    client = FakeClient([output])
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="compiler-model"), client=cast(OpenAI, client)
+    )
+
+    with pytest.raises(NonTemporalExtractionError):
+        extractor.extract_non_temporal(non_temporal_input())
+
+    assert len(client.responses.calls) == 1
+
+
+def test_non_temporal_extractor_surfaces_client_error_without_repair() -> None:
+    class FailingResponses:
+        def parse(self, **_kwargs: object) -> SimpleNamespace:
+            raise TimeoutError("provider timed out")
+
+    class FailingClient:
+        def __init__(self) -> None:
+            self.responses = FailingResponses()
+
+    extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model="compiler-model"), client=cast(OpenAI, FailingClient())
+    )
+
+    with pytest.raises(NonTemporalExtractionError, match="non-temporal intent extraction failed"):
+        extractor.extract_non_temporal(non_temporal_input())
 
 
 def test_openai_extractor_captures_exact_model_call_when_enabled() -> None:
