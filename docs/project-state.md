@@ -181,6 +181,48 @@ enabled.
   the sixteen ready cases completed with 10 passing, 6 failed checks, and 0 errors; it made 16
   non-temporal Pass-1 calls, 0 selector calls, and 0 Pass-2 calls. This is route evidence only,
   not a selector result or a decision-grade accuracy estimate.
+- A selector-arm trace review found that the v2 public summary represented every literal duration
+  as a default `1-unit` relation ordinal, even when the evidence said (for example) “about 10
+  days.” The selector consequently chose explicit unresolved alternatives in the affected runs;
+  compiler arithmetic and clarification correctly reflected those selections. The projection now
+  emits the scanner-derived duration modifier, quantity range, and unit, and durations publish no
+  relation ordinal. Focused offline coverage verifies five literal forms, date/context non-leakage,
+  selector restoration, and deterministic compilation; the targeted test set passed 121 tests,
+  Ruff, mypy, and `git diff --check`. The repository-local ignored `.env` then supplied the API
+  key for live selector evaluation without exposing it: focused three-trial Mini and Luna Pass-1
+  selector arms improved from 0/15 to 8/15 and 5/15 respectively, both with zero errors; the full
+  Mini-plus-Luna-selector matrix improved from 24/48 to 33/48 with zero errors. Remaining selector
+  misses retain unresolved duration choices for Labor-Day-Thursday and approximate-duration wording;
+  multiple-destination remains a non-temporal Pass-1 ambiguity. The full Luna-selector matrix was
+  not completed because the combined follow-on run was stopped before further `two_pass` spending;
+  `two_pass` remains the rollback path. A later parallel Mini-versus-Luna selector comparison held
+  Luna on the non-temporal Pass 1 boundary, but both 48-run arms failed before selection with the
+  same `missing_or_invalid_model_output` Pass-1 classification. They made zero selector attempts,
+  so they are recorded only as upstream-boundary failures, not selector evidence. Sequential
+  reruns of the same Mini-versus-Luna selector arms completed without errors: Mini passed 11/48
+  (22.9%; 143.08s) and Luna passed 39/48 (81.3%; 194.20s), with 48 Pass-1 attempts and 42 selector
+  attempts per arm. This is strong end-to-end decision evidence for Luna under the shared
+  configuration, while separate stochastic Pass-1 samples prevent strict selector-only causal
+  attribution. Both still missed all three Labor-Day-Thursday trials; no fallback, compiler, or
+  deterministic validation change was made from these runs. A subsequent traced Luna-only rerun
+  produced 48 Pass-1 `APIConnectionError` sidecars and zero selector attempts; it is recorded as
+  provider-connectivity evidence, not as a selector outcome. Its immediate same-configuration
+  retry reproduced all 48 connection failures and zero selector attempts. Review confirms that
+  tracing writes only after the SDK call, so it did not cause the connection failures; current
+  artifacts cannot distinguish local network/proxy/TLS/firewall from provider connection-path
+  failure. A one-call diagnostic subsequently reproduced the error and showed an `httpx`
+  connection cause with `gaierror` errno 8; the official `api.openai.com` endpoint itself could
+  not resolve and no endpoint/proxy/certificate override was configured. That is current local DNS
+  connectivity evidence, not selector evidence. On 2026-09-05, a credential-safe recovery
+  preflight loaded the repository-local `.env` through the normal CLI mechanism and made one
+  authenticated, non-model `GET /v1/models` request: it returned HTTP 200 in 1.03 seconds. This
+  establishes that DNS, TLS, routing, and credentials were working at that later instant; it does
+  not revise the prior failed matrices. The repeatable command and failure interpretation are in
+  `docs/build-log/2026-09-04-selector-duration-projection-fix.md`. An immediately subsequent,
+  traced network-authorized Luna Pass-1 plus Luna-selector rerun completed all 48 records with
+  39/48 passes, zero transport or selector errors, 42 selector attempts, and 90 calls. The
+  sandbox attempt's 48 connection errors are retained separately and are not scored selector
+  evidence. Both artifacts and the exact trace location are recorded in that build-log entry.
 - Clarification no longer asks for `return_or_duration` when a literal duration is known but an
   unbounded departure prevents deriving a return. A definite `return_before_departure` conflict
   suppresses its derivative duration-mismatch conflict. First-person discourse such as “help me

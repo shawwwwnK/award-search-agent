@@ -1,0 +1,2816 @@
+{
+  "schema_version": 5,
+  "generated_at": "2026-09-05T01:05:59.165812+00:00",
+  "model": "gpt-5.6-luna",
+  "pass_one_model": "gpt-5.6-luna",
+  "pass_two_model": null,
+  "selector_model": "gpt-4o-mini",
+  "selector_policy": "supported_or_unresolved",
+  "strategy": "compiler_select_v1",
+  "cases_path": "evals/intent/cases.yaml",
+  "scenario_count": 16,
+  "trials": 3,
+  "summary": {
+    "runs": 48,
+    "passed": 0,
+    "failed": 0,
+    "errors": 48,
+    "pass_rate": 0.0,
+    "first_attempt_completion": {
+      "runs": 0,
+      "rate": 0.0
+    },
+    "final_completion": {
+      "runs": 0,
+      "rate": 0.0
+    },
+    "repair_attempts": 0,
+    "repair_successes": 0,
+    "pass_one_failures": 48,
+    "selector_failures": 0,
+    "pass_two_wire_failures": 0,
+    "grounding_failures": 0,
+    "semantic_validation_failures": 0,
+    "deterministic_output_failures": 0,
+    "clarification_failures": 0,
+    "latency_seconds": 65.16,
+    "usage": "unavailable: SDK responses did not provide usage",
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "labor_day_thailand",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.331,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.333
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.427,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.428
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.317,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.322
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.214,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.217
+    },
+    {
+      "id": "missing_origin",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.386,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.392
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.383,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.385
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.391,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.396
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.401,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.41
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.379,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.382
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.252,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.253
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.352,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.355
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.239,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.241
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.464,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.466
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.384,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.386
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.227,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.23
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 1,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.243,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.244
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.304,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.305
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.284,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.29
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.413,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.417
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.43,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.432
+    },
+    {
+      "id": "missing_origin",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.34,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.342
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.327,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.329
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.193,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.195
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.425,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.428
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.307,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.309
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.383,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.387
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.22,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.222
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.415,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.417
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.252,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.255
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.472,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.477
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.482,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.485
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 2,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.402,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.404
+    },
+    {
+      "id": "labor_day_thailand",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.212,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.215
+    },
+    {
+      "id": "labor_day_thursday_flexibility",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.218,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.221
+    },
+    {
+      "id": "return_weekend_after_departure",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.241,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.246
+    },
+    {
+      "id": "exact_dates_and_cabin",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.448,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.45
+    },
+    {
+      "id": "missing_origin",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.412,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.417
+    },
+    {
+      "id": "missing_travel_period",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.434,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.439
+    },
+    {
+      "id": "relative_date_expression",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.397,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.401
+    },
+    {
+      "id": "approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.483,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.487
+    },
+    {
+      "id": "conflicting_dates",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.373,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.375
+    },
+    {
+      "id": "multiple_destination_options",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.277,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.279
+    },
+    {
+      "id": "repositioning_allowed",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.37,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.38
+    },
+    {
+      "id": "adversarial_schema_instruction",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.369,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.374
+    },
+    {
+      "id": "early_month_with_approximate_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.508,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.51
+    },
+    {
+      "id": "unbounded_after_new_year",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.319,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.322
+    },
+    {
+      "id": "whole_month_with_exact_duration",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.417,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.419
+    },
+    {
+      "id": "tentative_city_and_month",
+      "trial": 3,
+      "status": "error",
+      "error_type": "NonTemporalExtractionError",
+      "error": "OpenAI non-temporal intent extraction failed",
+      "attempts": {
+        "first_attempt_completed": false,
+        "repair_attempts": 0,
+        "repair_successes": 0
+      },
+      "failure_stage": "compiler_non_temporal_pass_one",
+      "failure_code": "missing_or_invalid_model_output",
+      "usage": null,
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.487,
+          "usage": null
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-4o-mini",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "pass_two": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        },
+        "one_pass": {
+          "enabled": false,
+          "configured": false,
+          "model": null,
+          "selector_policy": null,
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "failure_categories": [
+        "pass_one_failures"
+      ],
+      "latency_seconds": 1.491
+    }
+  ],
+  "stage_telemetry": {
+    "pass_one": {
+      "enabled": true,
+      "configured": true,
+      "model": "gpt-5.6-luna",
+      "selector_policy": null,
+      "attempts": 48,
+      "latency_seconds": 65.004,
+      "usage": null
+    },
+    "selector": {
+      "enabled": true,
+      "configured": true,
+      "model": "gpt-4o-mini",
+      "selector_policy": "supported_or_unresolved",
+      "attempts": 0,
+      "latency_seconds": 0.0,
+      "usage": null
+    },
+    "pass_two": {
+      "enabled": false,
+      "configured": false,
+      "model": null,
+      "selector_policy": null,
+      "attempts": 0,
+      "latency_seconds": 0.0,
+      "usage": null
+    },
+    "one_pass": {
+      "enabled": false,
+      "configured": false,
+      "model": null,
+      "selector_policy": null,
+      "attempts": 0,
+      "latency_seconds": 0.0,
+      "usage": null
+    }
+  }
+}
