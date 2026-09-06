@@ -6,14 +6,19 @@
 
 ## Current request-understanding boundary
 
-The current slice stops after request interpretation and clarification selection. It uses two model
-passes separated by a deterministic trust checkpoint, and it uses Nager.Holidays as the source for
-U.S. federal-holiday calendar dates. Pass one receives request text only and extracts non-temporal
-fields, literally named anchors, and claim-linked exact temporal quotes. Deterministic code grounds
-evidence, assigns canonical evidence and anchor IDs, privately enriches explicit anchors, and builds
-an allowed symbolic-reference catalog. Pass two receives only the bounded temporal transcript and
-those date-free catalogs, then emits typed semantic temporal relations. Deterministic code validates
-and evaluates the relations into exact date windows before conflict and clarification policy.
+The current slice stops after request interpretation and clarification selection. It uses strict
+non-temporal Pass 1 plus a date-free opaque temporal selector. Deterministic code scans temporal
+wording, builds and validates candidate catalogs, resolves holiday anchors, restores only selected
+local candidates, compiles the canonical relation graph, evaluates calendar windows, and applies
+conflict and clarification policy. Sequential model-authored temporal resolution is retired by ADR
+0010.
+
+This boundary is complete and frozen. Luna is the configured model for both model boundaries in
+the qualified implementation: non-temporal Pass 1 and the opaque temporal selector. Sequential
+two-pass resolution is retired from the live code path. The final qualification record is the
+three-trial selector-only run with 47/48 passes (97.92%), zero errors, and one documented
+clarification miss. Further intent changes require an explicit owner decision to reopen this
+slice.
 
 ## Responsibility table
 
@@ -23,7 +28,8 @@ and evaluates the relations into exact date windows before conflict and clarific
 | Ambiguity identification | model | Ambiguity detection depends on language understanding and uncertainty recognition. |
 | Explicit airport-code preservation | deterministic code | A model-classified verbatim IATA code is already a stable downstream identifier. |
 | Holiday calendar dates | `HolidayDateProvider` | Nager.Holidays API v4 supplies U.S. federal-holiday anchors. |
-| Temporal relation interpretation | second model pass | Linguistic targets, references, directions, ordinals, weekdays, units, and ambiguity require semantic interpretation. |
+| Temporal candidate selection | selector model | It may select only deterministic, opaque local candidates, including explicit unresolved choices. |
+| Temporal relation construction | deterministic compiler | Candidate relations, targets, references, and composition are pre-authored and validated before compilation. |
 | Calendar evaluation | deterministic code | Holiday windows, weekends, weekdays, offsets, month portions, durations, and final ranges must be reproducible. |
 | Dependency/reference validation | deterministic code | Anchor existence, request-field ordering, and cycles are exact graph invariants. |
 | Schema validation | deterministic code | Contract enforcement should not depend on model behavior. |
@@ -38,35 +44,33 @@ and evaluates the relations into exact date windows before conflict and clarific
 | Ranking | deferred | Outside the current milestone. |
 | Final explanation | deferred | Outside the current milestone. |
 
-## Provisional current-slice diagram
+## Current request-understanding diagram
 
 ```mermaid
 flowchart LR
     A["RawRequest + RequestContext"]
-    B["CoarseExtractionInput: request text only"]
-    C["Pass 1: fields + explicit anchors + quotes"]
-    D["Grounding + date-free catalogs"]
+    B["NonTemporalExtractionInput: request text only"]
+    C["Pass 1: non-temporal fields only"]
+    D["Deterministic temporal scan + candidate catalog"]
+    E["Date-free opaque selector projection"]
+    F["Selector: candidate handles only"]
     J["Private calendar / holiday enrichment"]
-    E["TemporalInterpretationInput: transcript + catalog IDs"]
-    F["Pass 2: typed symbolic relations"]
-    I["Validation + deterministic calendar evaluation"]
+    I["Restore + compile + deterministic calendar evaluation"]
     G["ClarificationPolicy"]
     H["ParsedRequest + ClarificationDecision + provenance"]
 
-    A --> B --> C --> D
+    A --> B --> C
+    A --> D --> E --> F --> I
     A --> J
-    C --> J
-    D --> E
-    E --> F --> I
+    C --> H
     J --> I --> G --> H
 ```
 
-The `RawRequest` and its context remain inside deterministic orchestration. Neither model pass sees a
+The `RawRequest` context remains inside deterministic orchestration. Neither model boundary sees a
 concrete reference date, timezone, resolved anchor boundary, holiday-provider metadata, or inferred
-calendar value. Pass two may see the symbolic key `context:request_date`, but not its date value. It
-selects only supplied evidence IDs, explicit-anchor IDs, and symbolic-reference keys. `next month`
-therefore remains a symbolic whole-calendar-period relation until deterministic evaluation;
-`next spring` remains unresolved because no deterministic season policy is approved.
+calendar value. The selector sees only supplied local evidence, anchors, candidates, and production
+handles. `next month` remains a symbolic whole-calendar-period relation until deterministic
+evaluation; `next spring` remains unresolved because no deterministic season policy is approved.
 
 The holiday lookup is only exercised for holiday anchors. Exact-date and month anchors do not call
 Nager.Holidays. API failures and invalid responses surface as explicit errors; there is no
@@ -74,13 +78,8 @@ hand-coded success fallback. Unit tests inject fake model passes and a fake prov
 require network access.
 
 The retained `DateResolutionProposal` in `ParsedRequest` is generated after deterministic graph
-evaluation for trace and historical scorer compatibility. It is not accepted from the second model
-pass. The authoritative internal semantic contract after adapter conversion is
-`TemporalRelationGraph`.
+evaluation for trace and historical scorer compatibility. The authoritative internal semantic
+contract is `TemporalRelationGraph`; no model response authors it.
 
-The Responses API transport uses fixed per-relation collections with required item fields and no
-unsupported `oneOf`. It is deliberately separate from the internal domain graph. The adapter checks
-catalog membership and converts each collection into the typed internal relations without weakening
-downstream validation. Details of the information boundary and current-flow audit are in ADR 0007.
-
-This diagram is provisional and only describes the current request-understanding slice.
+This diagram describes the completed, frozen request-understanding slice. Downstream search
+planning begins after `ClarificationDecision` and is outside this implementation boundary.

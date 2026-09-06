@@ -7,7 +7,6 @@ import pytest
 import yaml
 
 from award_agent.domain import (
-    CoarseIntentExtraction,
     DecisionReference,
     Holiday,
     LocationKind,
@@ -20,17 +19,14 @@ from award_agent.domain import (
     SearchMode,
     TemporalEdge,
     TemporalEvidenceClaim,
-    TemporalRelationGraph,
     TemporalTarget,
 )
 from award_agent.intent.model_views import (
-    CoarseExtractionInput,
-    CoarseExtractionRepairInput,
+    NonTemporalAmbiguity,
     NonTemporalExtractionInput,
     NonTemporalIntentExtraction,
-    StructuredValidationErrorView,
-    TemporalInterpretationInput,
-    TemporalResolutionResult,
+    TemporalSelectorInput,
+    TemporalSelectorOutput,
 )
 from award_agent.intent.temporal_candidates import (
     AnchorUseMode,
@@ -295,6 +291,14 @@ def test_unbounded_departure_keeps_literal_duration_known() -> None:
     assert compiled.departure_window is None
     assert len(compiled.literal_duration) == 1
     assert compiled.proposal.interpreted_duration is not None
+
+
+def test_scanner_does_not_compile_a_point_offset_as_trip_duration() -> None:
+    scan = scan_temporal_request(_request("Leave in 10 days."))
+    catalog = build_temporal_candidates(scan)
+
+    assert scan.durations == ()
+    assert not any(candidate.relation is CandidateRelation.DURATION for candidate in catalog.candidates)
 
 
 def test_compiler_topologically_orders_reversed_selector_output_and_uses_departure_end() -> None:
@@ -608,7 +612,7 @@ def test_repeated_holiday_candidates_bind_the_anchor_in_their_own_clause() -> No
 
 
 class StaticNonTemporalExtractor:
-    """Compiler fixture with no legacy extraction fallback."""
+    """Selector-only Pass-1 fixture."""
 
     def __init__(self, extraction: NonTemporalIntentExtraction) -> None:
         self.extraction = extraction
@@ -618,24 +622,13 @@ class StaticNonTemporalExtractor:
     ) -> NonTemporalIntentExtraction:
         return self.extraction
 
-    def extract(self, _input: CoarseExtractionInput) -> CoarseIntentExtraction:
-        raise AssertionError("compiler_select_v1 must not call legacy Pass 1 extraction")
+class SupportedSelector:
+    """Choose the compiler-authored supported candidate from every published group."""
 
-    def repair_extract(self, _input: CoarseExtractionRepairInput) -> CoarseIntentExtraction:
-        raise AssertionError("compiler_select_v1 must not repair temporal Pass 1 output")
-
-
-class ResolverMustNotRun:
-    def resolve_dates(self, _input: TemporalInterpretationInput) -> TemporalResolutionResult:
-        raise AssertionError("compiler_select_v1 must not call the temporal resolver")
-
-    def repair_dates(
-        self,
-        _input: TemporalInterpretationInput,
-        _rejected: TemporalRelationGraph,
-        _errors: list[StructuredValidationErrorView],
-    ) -> TemporalRelationGraph:
-        raise AssertionError("compiler_select_v1 must not repair temporal Pass 2 output")
+    def select_candidates(self, model_input: TemporalSelectorInput) -> TemporalSelectorOutput:
+        return TemporalSelectorOutput(
+            selected_candidates=[group.candidates[0].handle for group in model_input.candidate_groups]
+        )
 
 
 def _non_temporal(*, origin: bool = True, destination: bool = True) -> NonTemporalIntentExtraction:
@@ -652,6 +645,146 @@ def _non_temporal(*, origin: bool = True, destination: bool = True) -> NonTempor
             else []
         ),
         search_modes=[SearchMode.AWARD],
+    )
+
+
+def test_compiler_route_preserves_city_level_locations_without_airport_ambiguity() -> None:
+    text = "I can go from LA to SF using points."
+    extraction = NonTemporalIntentExtraction(
+        travelers=1,
+        origins=[LocationRef(kind=LocationKind.CITY, value="Los Angeles", raw_text="LA")],
+        destinations=[LocationRef(kind=LocationKind.CITY, value="San Francisco", raw_text="SF")],
+        search_modes=[SearchMode.AWARD],
+    )
+
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(extraction),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.parsed_request.travelers == 1
+    assert result.parsed_request.origins == extraction.origins
+    assert result.parsed_request.destinations == extraction.destinations
+    assert not result.parsed_request.unknowns or all(
+        unknown.field not in {"origin", "destination"} for unknown in result.parsed_request.unknowns
+    )
+    assert result.clarification.field == "departure"
+
+
+def test_compiler_route_preserves_blocking_geographic_identity_ambiguity() -> None:
+    text = "I can go from Springfield to Tokyo using points."
+    extraction = NonTemporalIntentExtraction(
+        travelers=1,
+        origins=[LocationRef(kind=LocationKind.CITY, value="Springfield", raw_text="Springfield")],
+        destinations=[LocationRef(kind=LocationKind.CITY, value="Tokyo", raw_text="Tokyo")],
+        search_modes=[SearchMode.AWARD],
+        ambiguities=[
+            NonTemporalAmbiguity(
+                field="origin",
+                detail="Springfield has multiple plausible geographic identities.",
+                raw_text="Springfield",
+            )
+        ],
+    )
+
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(extraction),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert any(unknown.field == "origin" for unknown in result.parsed_request.unknowns)
+    assert result.clarification.field == "origin"
+
+
+def test_compiler_route_keeps_alternatives_and_tentative_nested_destination_nonblocking() -> None:
+    text = "I can go from SF to Brazil, probably Sao Paulo, using points."
+    extraction = NonTemporalIntentExtraction(
+        travelers=1,
+        origins=[LocationRef(kind=LocationKind.CITY, value="San Francisco", raw_text="SF")],
+        destinations=[
+            LocationRef(kind=LocationKind.COUNTRY, value="Brazil", raw_text="Brazil"),
+            LocationRef(kind=LocationKind.CITY, value="São Paulo", raw_text="Sao Paulo"),
+        ],
+        search_modes=[SearchMode.AWARD],
+        ambiguities=[
+            NonTemporalAmbiguity(
+                field="destination_preference",
+                detail="São Paulo is tentative within Brazil.",
+                raw_text="probably Sao Paulo",
+            )
+        ],
+    )
+
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(extraction),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.parsed_request.destinations == extraction.destinations
+    assert any(
+        unknown.field == "destination_preference" for unknown in result.parsed_request.unknowns
+    )
+    assert result.clarification.field == "departure"
+
+
+def test_compiler_route_keeps_explicit_destination_alternatives_without_ambiguity() -> None:
+    text = "I can go from SF to Seoul or Taipei using points."
+    extraction = NonTemporalIntentExtraction(
+        travelers=1,
+        origins=[LocationRef(kind=LocationKind.CITY, value="San Francisco", raw_text="SF")],
+        destinations=[
+            LocationRef(kind=LocationKind.CITY, value="Seoul", raw_text="Seoul"),
+            LocationRef(kind=LocationKind.CITY, value="Taipei", raw_text="Taipei"),
+        ],
+        search_modes=[SearchMode.AWARD],
+    )
+
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(extraction),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.parsed_request.destinations == extraction.destinations
+    assert all(unknown.field != "destination" for unknown in result.parsed_request.unknowns)
+    assert result.clarification.field == "departure"
+
+
+@pytest.mark.parametrize(
+    ("text", "travelers"),
+    [
+        ("I can go from SF to Tokyo using points.", 1),
+        ("I can help book flights for my parents from SF to Tokyo using points.", None),
+    ],
+)
+def test_compiler_route_preserves_first_person_traveler_contract(
+    text: str, travelers: int | None
+) -> None:
+    extraction = NonTemporalIntentExtraction(
+        travelers=travelers,
+        origins=[LocationRef(kind=LocationKind.CITY, value="San Francisco", raw_text="SF")],
+        destinations=[LocationRef(kind=LocationKind.CITY, value="Tokyo", raw_text="Tokyo")],
+        search_modes=[SearchMode.AWARD],
+    )
+
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(extraction),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.parsed_request.travelers == travelers
+    assert result.clarification.field == "departure"
+    assert any(unknown.field == "travelers" for unknown in result.parsed_request.unknowns) is (
+        travelers is None
     )
 
 
@@ -922,9 +1055,8 @@ def test_ready_case_oracles_compile_and_flow_without_a_temporal_model(
     result = understand_request(
         request,
         StaticNonTemporalExtractor(_non_temporal(origin=has_origin)),
-        ResolverMustNotRun(),
+        SupportedSelector(),
         FakeHolidayProvider(),
-        temporal_strategy="compiler_select_v1",
     )
     assert result.clarification.field == expected_clarification, case_id
     assert (

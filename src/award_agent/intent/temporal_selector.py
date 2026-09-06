@@ -1,4 +1,4 @@
-"""Planning and date-free views for optional temporal-candidate selection.
+"""Planning and date-free views for temporal-candidate selection.
 
 The selector never authors temporal graph fields.  It receives only request-local opaque
 handles for pre-built alternatives and returns a subset of those handles.  This module owns the
@@ -37,6 +37,8 @@ class TemporalSelectorValidationError(ValueError):
 
 
 TemporalSelectorPolicy = Literal["ambiguous_only", "supported_or_unresolved"]
+# The low-level default preserves frozen fixture compatibility. The selector-only workflow passes
+# ``supported_or_unresolved`` explicitly, so the production path has no policy switch.
 DEFAULT_TEMPORAL_SELECTOR_POLICY: TemporalSelectorPolicy = "ambiguous_only"
 
 
@@ -80,12 +82,10 @@ def plan_temporal_selection(
 ) -> TemporalSelectionPlan:
     """Partition a catalog without treating priority as model-facing semantic policy.
 
-    ``ambiguous_only`` is the default production-safe policy: a group with one supported
-    interpretation is deterministic, a group with none is known unsupported, and only two or
-    more supported alternatives are selector-visible.  ``supported_or_unresolved`` is an
-    experiment-only policy that asks the selector to choose between every supported
-    interpretation and its explicit unresolved alternative.  Groups with no supported option
-    remain deterministically unresolved under either policy.
+    ``supported_or_unresolved`` is the selector-only workflow policy: the selector chooses
+    between every supported interpretation and its explicit unresolved alternative.
+    ``ambiguous_only`` remains available for frozen historical fixture analysis. Groups with no
+    supported option remain deterministically unresolved under either policy.
 
     Groups that consume a value whose availability depends on a selector group join the selector
     view too, allowing it to select their explicit unresolved alternative.
@@ -293,7 +293,8 @@ def _candidate_summary(
         return (
             f"Interpret {evidence_text} as a trip duration stated as {duration.modifier.value} "
             f"{quantity} {display_unit} (minimum {duration.minimum}, maximum {duration.maximum}; "
-            f"unit {unit})."
+            f"unit {unit}). A trip duration is trip length, not a departure or return endpoint "
+            "assertion."
         )
     return f"Interpret {evidence_text} as {kind} for {target} using {anchor_text or 'no anchor'}."
 
@@ -434,7 +435,17 @@ def build_temporal_selector_input(
                 handle=evidence_public[clause.handle],
                 text=clause.text,
                 endpoint_cue=(
-                    _endpoint_cue(catalog.scan.request_text, start=clause.start, end=clause.end)
+                    (
+                        # A scanner-admitted duration is trip length.  Nearby ``leave`` or
+                        # ``return`` wording can describe a separate endpoint in the same
+                        # sentence, so it must not turn duration evidence into an endpoint
+                        # assertion.
+                        "unspecified"
+                        if clause.kind == "duration"
+                        else _endpoint_cue(
+                            catalog.scan.request_text, start=clause.start, end=clause.end
+                        )
+                    )
                     if contract_version == "v2"
                     else None
                 ),

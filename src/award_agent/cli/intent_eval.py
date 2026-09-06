@@ -15,7 +15,6 @@ import yaml
 from dotenv import load_dotenv
 
 from award_agent.domain import RawRequest, RequestContext, RequestUnderstandingResult
-from award_agent.experiments.one_pass_intent import OnePassIntentExperiment
 from award_agent.intent.evidence import (
     TemporalEvidenceValidationError,
     TemporalResolutionValidationError,
@@ -26,115 +25,26 @@ from award_agent.intent.evidence_eval import (
 )
 from award_agent.intent.holidays import NagerHolidayProvider
 from award_agent.intent.openai_extractor import (
-    DateResolutionError,
-    IntentExtractionError,
     NonTemporalExtractionError,
     OpenAIExtractorConfig,
     OpenAIIntentExtractor,
     TemporalSelectionError,
 )
 from award_agent.intent.temporal_compiler import TemporalCandidateValidationError
-from award_agent.intent.temporal_selector import (
-    DEFAULT_TEMPORAL_SELECTOR_POLICY,
-    TemporalSelectorPolicy,
-    TemporalSelectorValidationError,
-)
+from award_agent.intent.temporal_selector import TemporalSelectorValidationError
 from award_agent.intent.workflow import understand_request
 from award_agent.observability.llm_trace import write_eval_llm_trace
 
 DEFAULT_LLM_TRACE_DIR = Path("evals/intent/traces")
 
 
-class _EvalArgumentParser(argparse.ArgumentParser):
-    """Reject model-stage combinations that cannot run under the selected strategy."""
-
-    def parse_args(self, args: Any = None, namespace: Any = None) -> Any:
-        parsed = super().parse_args(args, namespace)
-        error = _strategy_model_error(
-            parsed.strategy,
-            parsed.pass_one_model,
-            parsed.pass_two_model,
-            parsed.selector_model,
-            parsed.selector_policy,
-        )
-        if error is not None:
-            self.error(error)
-        return parsed
-
-
-def _strategy_model_error(
-    strategy: str,
-    pass_one_model: str | None,
-    pass_two_model: str | None,
-    selector_model: str | None,
-    selector_policy: str = DEFAULT_TEMPORAL_SELECTOR_POLICY,
-) -> str | None:
-    """Return the stable incompatibility message shared by CLI and direct callers."""
-
-    if selector_policy not in {"ambiguous_only", "supported_or_unresolved"}:
-        return f"unsupported selector policy: {selector_policy}"
-    if strategy == "compiler_select_v1":
-        if pass_two_model is not None:
-            return "--pass-two-model is only compatible with --strategy two_pass"
-        if selector_policy == "supported_or_unresolved" and selector_model is None:
-            return (
-                "--selector-model is required when "
-                "--selector-policy supported_or_unresolved"
-            )
-        return None
-    if strategy == "two_pass":
-        if selector_model is not None:
-            return "--selector-model is only compatible with --strategy compiler_select_v1"
-        if selector_policy != DEFAULT_TEMPORAL_SELECTOR_POLICY:
-            return "--selector-policy is only compatible with --strategy compiler_select_v1"
-        return None
-    if strategy == "one_pass":
-        if selector_policy != DEFAULT_TEMPORAL_SELECTOR_POLICY:
-            return "--selector-policy is only compatible with --strategy compiler_select_v1"
-        supplied = [
-            flag
-            for flag, value in (
-                ("--pass-one-model", pass_one_model),
-                ("--pass-two-model", pass_two_model),
-                ("--selector-model", selector_model),
-            )
-            if value is not None
-        ]
-        if supplied:
-            return f"{' '.join(supplied)} is incompatible with --strategy one_pass"
-        return None
-    return f"unsupported eval strategy: {strategy}"
-
-
 def _parser() -> argparse.ArgumentParser:
-    parser = _EvalArgumentParser(description="Run the ready intent-evaluation scenarios.")
-    parser.add_argument("--model", required=True, help="OpenAI model ID to evaluate")
-    parser.add_argument(
-        "--pass-one-model",
-        default=None,
-        help="Optional model override for Pass 1; defaults to --model",
-    )
-    parser.add_argument(
-        "--pass-two-model",
-        default=None,
-        help="Optional model override for Pass 2; defaults to --model",
-    )
+    parser = argparse.ArgumentParser(description="Run the selector-only ready intent evaluation.")
+    parser.add_argument("--model", required=True, help="OpenAI model ID for non-temporal Pass 1")
     parser.add_argument(
         "--selector-model",
-        default=None,
-        help=(
-            "Optional independently configured compiler temporal-selector model; "
-            "enables selector calls only for compiler ambiguities"
-        ),
-    )
-    parser.add_argument(
-        "--selector-policy",
-        choices=("ambiguous_only", "supported_or_unresolved"),
-        default=DEFAULT_TEMPORAL_SELECTOR_POLICY,
-        help=(
-            "Compiler selector policy; supported_or_unresolved is experiment-only and "
-            "asks the selector to choose supported interpretations versus unresolved"
-        ),
+        required=True,
+        help="OpenAI model ID for the independent temporal candidate selector",
     )
     parser.add_argument(
         "--cases",
@@ -144,12 +54,6 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--output", required=True, type=Path, help="Baseline JSON output path")
     parser.add_argument("--trials", type=int, default=1, help="Runs per ready scenario")
-    parser.add_argument(
-        "--strategy",
-        choices=("two_pass", "compiler_select_v1", "one_pass"),
-        default="two_pass",
-        help="Workflow arm to evaluate",
-    )
     parser.add_argument(
         "--trace-dir",
         type=Path,
@@ -538,32 +442,6 @@ def _evaluation_summary(checks: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _repair_attempt_summary(
-    repair_trace: Mapping[str, Any] | None,
-    *,
-    completed: bool,
-) -> dict[str, int | bool]:
-    """Flatten successful-workflow repair traces into stable evaluator counters."""
-
-    traces = (
-        []
-        if repair_trace is None
-        else [
-            trace
-            for name in ("pass_one", "pass_two")
-            if isinstance((trace := repair_trace.get(name)), Mapping)
-        ]
-    )
-    if not traces and isinstance(repair_trace, Mapping):
-        traces = [repair_trace]
-    return {
-        "first_attempt_completed": completed
-        and (not traces or all(bool(trace.get("first_attempt_valid")) for trace in traces)),
-        "repair_attempts": sum(bool(trace.get("repair_ran")) for trace in traces),
-        "repair_successes": sum(bool(trace.get("repair_succeeded")) for trace in traces),
-    }
-
-
 def _failure_flags(record: Mapping[str, Any]) -> set[str]:
     """Classify independently useful failure dimensions without collapsing root causes."""
 
@@ -574,9 +452,7 @@ def _failure_flags(record: Mapping[str, Any]) -> set[str]:
             flags.add("pass_one_failures")
         if stage == "temporal_candidate_selector":
             flags.add("selector_failures")
-        if stage == "pass_two_wire_conversion":
-            flags.add("pass_two_wire_failures")
-        if stage in {"pass_two_conformance", "pass_two_dependency_validation"}:
+        if stage in {"temporal_graph_validation", "temporal_dependency_validation"}:
             flags.add("semantic_validation_failures")
         if stage == "deterministic_evaluation":
             flags.add("deterministic_output_failures")
@@ -604,34 +480,18 @@ def _failure_flags(record: Mapping[str, Any]) -> set[str]:
 
 
 def _aggregate_results(results: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    """Build completion, repair, and owning-stage metrics for a run matrix."""
+    """Build completion and owning-stage metrics for a selector-only run matrix."""
 
     completed = [item for item in results if "output" in item]
-    first_attempt_completed = sum(
-        bool((item.get("attempts") or {}).get("first_attempt_completed")) for item in completed
-    )
-    repair_attempts = sum(
-        int((item.get("attempts") or {}).get("repair_attempts", 0)) for item in results
-    )
-    repair_successes = sum(
-        int((item.get("attempts") or {}).get("repair_successes", 0)) for item in results
-    )
     failure_flags = [_failure_flags(item) for item in results]
     run_count = len(results)
     return {
-        "first_attempt_completion": {
-            "runs": first_attempt_completed,
-            "rate": first_attempt_completed / run_count if run_count else 0.0,
-        },
         "final_completion": {
             "runs": len(completed),
             "rate": len(completed) / run_count if run_count else 0.0,
         },
-        "repair_attempts": repair_attempts,
-        "repair_successes": repair_successes,
         "pass_one_failures": sum("pass_one_failures" in flags for flags in failure_flags),
         "selector_failures": sum("selector_failures" in flags for flags in failure_flags),
-        "pass_two_wire_failures": sum("pass_two_wire_failures" in flags for flags in failure_flags),
         "grounding_failures": sum("grounding_failures" in flags for flags in failure_flags),
         "semantic_validation_failures": sum(
             "semantic_validation_failures" in flags for flags in failure_flags
@@ -694,36 +554,21 @@ def _combine_call_traces(
     return combined
 
 
-_STAGE_NAMES = ("pass_one", "selector", "pass_two", "one_pass")
+_STAGE_NAMES = ("pass_one", "selector")
 
 
 def _stage_configuration(
-    strategy: str,
-    *,
-    model: str,
-    pass_one_model: str | None,
-    pass_two_model: str | None,
-    selector_model: str | None,
-    selector_policy: TemporalSelectorPolicy,
+    *, model: str, selector_model: str
 ) -> dict[str, dict[str, bool | str | None]]:
-    """Describe the model boundaries intentionally constructed for an eval strategy."""
+    """Describe the only two model boundaries constructed by selector-only evaluation."""
 
-    configured_models: dict[str, str | None] = {
-        "pass_one": (pass_one_model or model)
-        if strategy in {"two_pass", "compiler_select_v1"}
-        else None,
-        "selector": selector_model if strategy == "compiler_select_v1" else None,
-        "pass_two": (pass_two_model or model) if strategy == "two_pass" else None,
-        "one_pass": model if strategy == "one_pass" else None,
-    }
+    configured_models = {"pass_one": model, "selector": selector_model}
     return {
         stage: {
             "enabled": configured_models[stage] is not None,
             "configured": configured_models[stage] is not None,
             "model": configured_models[stage],
-            "selector_policy": (
-                selector_policy if stage == "selector" and strategy == "compiler_select_v1" else None
-            ),
+            "selector_policy": "supported_or_unresolved" if stage == "selector" else None,
         }
         for stage in _STAGE_NAMES
     }
@@ -744,10 +589,7 @@ def _stage_telemetry(
             **configuration[stage],
             "attempts": len(calls),
             "latency_seconds": round(
-                sum(
-                    float(call.get("latency_seconds", 0.0) or 0.0)
-                    for call in calls
-                ),
+                sum(float(call.get("latency_seconds", 0.0) or 0.0) for call in calls),
                 3,
             ),
             "usage": usage_by_stage.get(stage),
@@ -787,19 +629,13 @@ def _aggregate_stage_telemetry(
     return aggregated
 
 
-def _partition_stage_calls(
-    calls: Sequence[Mapping[str, Any]],
-    *,
-    strategy: str,
-) -> dict[str, list[dict[str, Any]]]:
+def _partition_stage_calls(calls: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     """Classify private traces locally; the public artifact retains metrics only."""
 
     stages: dict[str, list[dict[str, Any]]] = {stage: [] for stage in _STAGE_NAMES}
     stage_names = {
-        "pass_one": {"pass_one", "pass_one_repair", "compiler_non_temporal_pass_one"},
+        "pass_one": {"compiler_non_temporal_pass_one"},
         "selector": {"temporal_candidate_selector"},
-        "pass_two": {"pass_two", "pass_two_repair"},
-        "one_pass": {"one_pass"},
     }
     for call in calls:
         call_stage = call.get("stage")
@@ -807,9 +643,6 @@ def _partition_stage_calls(
             if call_stage in known_stages:
                 stages[stage].append(dict(call))
                 break
-    # An unknown trace stage must never be attributed to an inactive boundary.
-    if strategy == "compiler_select_v1":
-        stages["pass_two"] = []
     return stages
 
 
@@ -817,21 +650,12 @@ def run_eval(
     model: str,
     cases_path: Path,
     trials: int,
-    strategy: str = "two_pass",
-    pass_one_model: str | None = None,
-    pass_two_model: str | None = None,
-    selector_model: str | None = None,
-    selector_policy: TemporalSelectorPolicy = DEFAULT_TEMPORAL_SELECTOR_POLICY,
+    selector_model: str,
     trace_dir: Path | None = DEFAULT_LLM_TRACE_DIR,
     trace_all_calls: bool = False,
 ) -> dict[str, Any]:
     if trials < 1:
         raise ValueError("trials must be positive")
-    strategy_error = _strategy_model_error(
-        strategy, pass_one_model, pass_two_model, selector_model, selector_policy
-    )
-    if strategy_error is not None:
-        raise ValueError(strategy_error)
     if trace_all_calls and trace_dir is None:
         raise ValueError("trace_all_calls requires trace_dir")
     scenarios = _load_ready_scenarios(cases_path)
@@ -844,49 +668,23 @@ def run_eval(
     if trace_run_dir is not None:
         trace_run_dir.mkdir(parents=True, exist_ok=True)
     trace_count = 0
-    stage_configuration = _stage_configuration(
-        strategy,
-        model=model,
-        pass_one_model=pass_one_model,
-        pass_two_model=pass_two_model,
-        selector_model=selector_model,
-        selector_policy=selector_policy,
-    )
+    stage_configuration = _stage_configuration(model=model, selector_model=selector_model)
     # Capture only in memory so --no-trace still reports attempts and latency.  Payloads are
     # never put in the baseline artifact and no sidecar is written when trace_dir is None.
     capture_metrics = True
-    pass_one_extractor: OpenAIIntentExtractor | None = None
-    pass_two_extractor: OpenAIIntentExtractor | None = None
-    selector_extractor: OpenAIIntentExtractor | None = None
-    one_pass: OnePassIntentExperiment | None = None
-    if strategy in {"two_pass", "compiler_select_v1"}:
-        pass_one_extractor = OpenAIIntentExtractor(
-            config=OpenAIExtractorConfig(model=pass_one_model or model),
-            capture_llm_io=capture_metrics,
-        )
-    if strategy == "two_pass":
-        pass_two_extractor = OpenAIIntentExtractor(
-            config=OpenAIExtractorConfig(model=pass_two_model or model),
-            capture_llm_io=capture_metrics,
-        )
-    elif strategy == "compiler_select_v1" and selector_model is not None:
-        selector_extractor = OpenAIIntentExtractor(
-            config=OpenAIExtractorConfig(model=selector_model),
-            capture_llm_io=capture_metrics,
-        )
-    elif strategy == "one_pass":
-        one_pass = OnePassIntentExperiment(model=model, capture_llm_io=capture_metrics)
+    pass_one_extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model=model), capture_llm_io=capture_metrics
+    )
+    selector_extractor = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model=selector_model), capture_llm_io=capture_metrics
+    )
     holiday_provider = NagerHolidayProvider()
     results: list[dict[str, Any]] = []
 
     for trial in range(1, trials + 1):
         for scenario in scenarios:
-            if pass_one_extractor is not None:
-                pass_one_extractor.reset_capture()
-            if pass_two_extractor is not None:
-                pass_two_extractor.reset_capture()
-            if selector_extractor is not None:
-                selector_extractor.reset_capture()
+            pass_one_extractor.reset_capture()
+            selector_extractor.reset_capture()
             started = time.perf_counter()
             record: dict[str, Any] = {"id": scenario["id"], "trial": trial}
             try:
@@ -898,36 +696,13 @@ def run_eval(
                         timezone=context["timezone"],
                     ),
                 )
-                usage: dict[str, Any] | None = None
-                if strategy == "one_pass":
-                    assert one_pass is not None
-                    output, usage = one_pass.run(request)
-                elif strategy == "compiler_select_v1":
-                    assert pass_one_extractor is not None
-                    output = understand_request(
-                        request,
-                        pass_one_extractor,
-                        None,
-                        holiday_provider,
-                        temporal_strategy="compiler_select_v1",
-                        temporal_selector=selector_extractor,
-                        selector_policy=selector_policy,
-                    )
-                else:
-                    assert pass_one_extractor is not None
-                    assert pass_two_extractor is not None
-                    output = understand_request(
-                        request,
-                        pass_one_extractor,
-                        pass_two_extractor,
-                        holiday_provider,
-                    )
-                checks = _score_result(scenario["expected"], output)
-                repair_trace = (
-                    None
-                    if output.repair_trace is None
-                    else output.repair_trace.model_dump(mode="json")
+                output = understand_request(
+                    request,
+                    pass_one_extractor,
+                    selector_extractor,
+                    holiday_provider,
                 )
+                checks = _score_result(scenario["expected"], output)
                 record.update(
                     {
                         "status": "passed" if _hard_checks_pass(checks) else "failed",
@@ -935,9 +710,7 @@ def run_eval(
                         "evaluation": _evaluation_summary(checks),
                         "unscored_invariants": scenario["expected"].get("invariants", []),
                         "output": output.model_dump(mode="json"),
-                        "usage": usage,
-                        "repair_trace": repair_trace,
-                        "attempts": _repair_attempt_summary(repair_trace, completed=True),
+                        "usage": None,
                     }
                 )
             except TemporalEvidenceValidationError as exc:
@@ -973,13 +746,9 @@ def run_eval(
                         "error_type": type(exc).__name__,
                         "error": str(exc),
                         "structured_error": exc.as_dict(),
-                        "repair_trace": getattr(exc, "repair_trace", None),
                         "failure_stage": exc.details.stage,
                         "failure_code": exc.details.error_code,
                     }
-                )
-                record["attempts"] = _repair_attempt_summary(
-                    record["repair_trace"], completed=False
                 )
             except TemporalResolutionValidationError as exc:
                 record.update(
@@ -988,33 +757,23 @@ def run_eval(
                         "error_type": type(exc).__name__,
                         "error": str(exc),
                         "structured_error": exc.as_dict(),
-                        "repair_trace": getattr(exc, "repair_trace", None),
                         "failure_stage": exc.details.stage,
                         "failure_code": exc.details.error_code,
                     }
                 )
-                record["attempts"] = _repair_attempt_summary(
-                    record["repair_trace"], completed=False
-                )
             except Exception as exc:  # noqa: BLE001 - one failed case must not abort the baseline
                 failure_stage = None
                 failure_code = None
-                if isinstance(exc, (IntentExtractionError, NonTemporalExtractionError)):
+                if isinstance(exc, NonTemporalExtractionError):
                     failure_stage = "pass_one_model_output"
                     failure_code = "missing_or_invalid_model_output"
                     if isinstance(exc, NonTemporalExtractionError):
                         failure_stage = "compiler_non_temporal_pass_one"
-                elif isinstance(exc, DateResolutionError):
-                    failure_stage = "pass_two_wire_conversion"
-                    failure_code = "missing_or_invalid_model_output"
                 elif isinstance(exc, TemporalSelectionError):
                     failure_stage = "temporal_candidate_selector"
                     failure_code = "selector_model_output"
-                elif (
-                    selector_extractor is not None
-                    and isinstance(
-                        exc, (TemporalSelectorValidationError, TemporalCandidateValidationError)
-                    )
+                elif selector_extractor is not None and isinstance(
+                    exc, (TemporalSelectorValidationError, TemporalCandidateValidationError)
                 ):
                     failure_stage = "temporal_candidate_selector"
                     failure_code = "selector_validation"
@@ -1027,43 +786,24 @@ def run_eval(
                             if failure_stage == "temporal_candidate_selector"
                             else str(exc)
                         ),
-                        "attempts": _repair_attempt_summary(None, completed=False),
                     }
                 )
                 if failure_stage is not None:
                     record["failure_stage"] = failure_stage
                     record["failure_code"] = failure_code
-            pass_one_usage = (
-                None if pass_one_extractor is None else pass_one_extractor.take_usage()
-            )
-            selector_usage = (
-                None if selector_extractor is None else selector_extractor.take_usage()
-            )
-            pass_two_usage = (
-                None if pass_two_extractor is None else pass_two_extractor.take_usage()
-            )
-            one_pass_usage = None
-            if strategy == "one_pass":
-                # Retain the experiment's existing usage return when its adapter supplies one.
-                record["usage"] = usage if usage is not None else one_pass_usage
-            else:
-                record["usage"] = _combine_usage(
-                    pass_one_usage, selector_usage, pass_two_usage
-                )
+            pass_one_usage = pass_one_extractor.take_usage()
+            selector_usage = selector_extractor.take_usage()
+            record["usage"] = _combine_usage(pass_one_usage, selector_usage)
             call_traces = _combine_call_traces(
-                () if pass_one_extractor is None else pass_one_extractor.take_call_traces(),
-                () if selector_extractor is None else selector_extractor.take_call_traces(),
-                () if pass_two_extractor is None else pass_two_extractor.take_call_traces(),
-                () if one_pass is None else one_pass.take_call_traces(),
+                pass_one_extractor.take_call_traces(),
+                selector_extractor.take_call_traces(),
             )
             record["stage_telemetry"] = _stage_telemetry(
                 stage_configuration,
-                calls_by_stage=_partition_stage_calls(call_traces, strategy=strategy),
+                calls_by_stage=_partition_stage_calls(call_traces),
                 usage_by_stage={
                     "pass_one": pass_one_usage,
                     "selector": selector_usage,
-                    "pass_two": pass_two_usage,
-                    "one_pass": usage if strategy == "one_pass" else one_pass_usage,
                 },
             )
             record["failure_categories"] = sorted(_failure_flags(record))
@@ -1088,14 +828,13 @@ def run_eval(
     errors = sum(item["status"] == "error" for item in results)
     instrumentation = _aggregate_results(results)
     artifact: dict[str, Any] = {
-        "schema_version": 5,
+        "schema_version": 6,
         "generated_at": generated_at,
         "model": model,
         "pass_one_model": stage_configuration["pass_one"]["model"],
-        "pass_two_model": stage_configuration["pass_two"]["model"],
         "selector_model": stage_configuration["selector"]["model"],
-        "selector_policy": selector_policy,
-        "strategy": strategy,
+        "selector_policy": "supported_or_unresolved",
+        "architecture": "selector_only",
         "cases_path": str(cases_path),
         "scenario_count": len(scenarios),
         "trials": trials,
@@ -1129,11 +868,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         model=args.model,
         cases_path=args.cases,
         trials=args.trials,
-        strategy=args.strategy,
-        pass_one_model=args.pass_one_model,
-        pass_two_model=args.pass_two_model,
         selector_model=args.selector_model,
-        selector_policy=args.selector_policy,
         trace_dir=None if args.no_trace else args.trace_dir,
         trace_all_calls=args.trace_all_calls,
     )

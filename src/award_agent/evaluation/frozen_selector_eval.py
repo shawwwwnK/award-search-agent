@@ -1,6 +1,6 @@
 """Frozen, selector-only evaluation independent of the request-understanding runner.
 
-This evaluator intentionally does not invoke Pass 1, Pass 2, the request workflow, or a live
+This evaluator intentionally does not invoke runtime model boundaries, the request workflow, or a live
 holiday provider.  It starts from public date-free selector projections, restores selections into
 the private manual catalog, then validates and compiles them with fixed holiday dates.
 """

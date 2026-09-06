@@ -115,6 +115,24 @@ def _number(value: str) -> int:
     return int(value) if value.isdigit() else _NUMBER_WORDS[value.casefold()]
 
 
+def _is_trip_duration_context(text: str, match: re.Match[str]) -> bool:
+    """Require a local trip-span construction before admitting a duration literal.
+
+    A bare amount after ``in`` is ordinarily a point offset (``Leave in 10 days``), not a
+    trip length.  The scanner intentionally supports only the small grammar it can compile:
+    ``for``/``stay`` or ``be back after`` immediately before the amount, or a hyphenated amount
+    immediately naming a trip-like noun.  Other phrasings remain outside this deterministic
+    grammar rather than being silently compiled as a duration.
+    """
+
+    before = text[: match.start()]
+    after = text[match.end() :]
+    return bool(
+        re.search(r"\b(?:for|stay|staying|(?:be\s+)?back\s+after)\s*$", before, re.IGNORECASE)
+        or re.match(r"\s*(?:trip|stay|vacation|holiday)\b", after, re.IGNORECASE)
+    )
+
+
 def scan_temporal_request(request: RawRequest) -> TemporalScan:
     """Harvest supported temporal literals directly from raw request text.
 
@@ -210,6 +228,8 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
         re.IGNORECASE,
     )
     for match in duration_re.finditer(text):
+        if not _is_trip_duration_context(text, match):
+            continue
         item = clause(match, "duration")
         first = _number(match.group(2))
         second = _number(match.group(3)) if match.group(3) else first

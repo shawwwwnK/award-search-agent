@@ -35,13 +35,9 @@ def _parser() -> argparse.ArgumentParser:
         help="OpenAI model ID selected explicitly for this workflow run",
     )
     parser.add_argument(
-        "--temporal-strategy",
-        choices=("two_pass", "compiler_select_v1"),
-        default="two_pass",
-        help=(
-            "Temporal path to use; compiler_select_v1 is the deterministic, fully "
-            "auto-compiled migration path and two_pass remains the rollback default"
-        ),
+        "--selector-model",
+        required=True,
+        help="OpenAI model ID for the independent temporal candidate selector",
     )
     return parser
 
@@ -57,13 +53,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             timezone=args.timezone,
         ),
     )
-    model_adapter = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model=args.model))
+    pass_one_adapter = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model=args.model))
+    selector_adapter = OpenAIIntentExtractor(
+        config=OpenAIExtractorConfig(model=args.selector_model)
+    )
     result = understand_request(
         raw_request,
-        model_adapter,
-        model_adapter,
+        pass_one_adapter,
+        selector_adapter,
         NagerHolidayProvider(),
-        temporal_strategy=args.temporal_strategy,
     )
     print(result.model_dump_json(indent=2))
     return 0

@@ -569,7 +569,7 @@ class TemporalComposition(str, Enum):
     """How a relation changes the window already selected for its target.
 
     This is deliberately a small, executable vocabulary rather than a general temporal-logic
-    language.  The values are model-visible in Pass 2 and interpreted only by deterministic code.
+    language. The values are compiler-authored and interpreted only by deterministic code.
     """
 
     BASE = "base"
@@ -924,23 +924,6 @@ class ClarificationDecision(ContractModel):
         return self
 
 
-class ModelPassRepairTrace(ContractModel):
-    """Observable outcome of the single validation-repair allowance for one model pass."""
-
-    first_attempt_valid: bool
-    repair_ran: bool
-    repair_succeeded: bool
-    final_failure: dict[str, object] | None = None
-
-
-class IntentRepairTrace(ContractModel):
-    """Validation-repair trace retained with a completed request result."""
-
-    pass_one: ModelPassRepairTrace
-    pass_two: ModelPassRepairTrace
-
-
 class RequestUnderstandingResult(ContractModel):
     parsed_request: ParsedRequest
     clarification: ClarificationDecision
-    repair_trace: IntentRepairTrace | None = None

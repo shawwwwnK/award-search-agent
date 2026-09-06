@@ -73,5 +73,5 @@ def test_one_pass_experiment_captures_model_call_when_enabled() -> None:
         "text": "Fly from Seattle to Tokyo in October.",
         "context": {"reference_date": "2026-08-31", "timezone": "UTC"},
     }
-    assert trace["parsed_output"] == {"repair_trace": None}
+    assert trace["parsed_output"] == {}
     assert experiment.take_call_traces() == []

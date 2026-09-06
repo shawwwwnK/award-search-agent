@@ -560,7 +560,7 @@ def validate_temporal_relation_graph(
     if graph.constraints and not (extraction.date_anchors or extraction.temporal_phrases):
         raise TemporalResolutionValidationError(
             "the model emitted temporal relations without temporal evidence in the request",
-            stage="pass_two_conformance",
+            stage="temporal_graph_validation",
             error_code="relation_without_first_pass_evidence",
             missing_fields=("first_pass_temporal_claim",),
         )
@@ -586,7 +586,7 @@ def validate_temporal_relation_graph(
     if len(constraint_ids) != len(set(constraint_ids)):
         raise TemporalResolutionValidationError(
             "canonical temporal relation IDs must be unique",
-            stage="pass_two_dependency_validation",
+            stage="temporal_dependency_validation",
             error_code="cyclic_dependency",
             contradictory_fields=("constraint_id",),
         )
@@ -613,7 +613,7 @@ def validate_temporal_relation_graph(
                 quote=exc.quote,
                 claim_id=exc.claim_id,
                 reason=exc.reason,
-                stage="pass_two_conformance",
+                stage="temporal_graph_validation",
                 constraint_index=constraint_index,
                 relation_kind=constraint.kind,
             ) from exc
@@ -628,7 +628,7 @@ def validate_temporal_relation_graph(
         if anchor_id is not None and anchor_id not in anchors:
             raise TemporalResolutionValidationError(
                 f"temporal relation references missing anchor: {anchor_id}",
-                stage="pass_two_conformance",
+                stage="temporal_graph_validation",
                 error_code="unknown_anchor_id",
                 constraint_index=constraint_index,
                 relation_kind=constraint.kind,
@@ -641,7 +641,7 @@ def validate_temporal_relation_graph(
         ):
             raise TemporalResolutionValidationError(
                 f"month_portion requires a month anchor: {constraint.anchor_id}",
-                stage="pass_two_conformance",
+                stage="temporal_graph_validation",
                 error_code="incompatible_relation_fields",
                 constraint_index=constraint_index,
                 relation_kind=constraint.kind,
@@ -656,7 +656,7 @@ def validate_temporal_relation_graph(
             ):
                 raise TemporalResolutionValidationError(
                     f"{constraint.window} requires a holiday anchor: {constraint.anchor_id}",
-                    stage="pass_two_conformance",
+                    stage="temporal_graph_validation",
                     error_code="incompatible_relation_fields",
                     constraint_index=constraint_index,
                     relation_kind=constraint.kind,
@@ -669,7 +669,7 @@ def validate_temporal_relation_graph(
             ):
                 raise TemporalResolutionValidationError(
                     "christmas_period requires a Christmas anchor",
-                    stage="pass_two_conformance",
+                    stage="temporal_graph_validation",
                     error_code="incompatible_relation_fields",
                     constraint_index=constraint_index,
                     relation_kind=constraint.kind,
@@ -685,7 +685,7 @@ def validate_temporal_relation_graph(
         ):
             raise TemporalResolutionValidationError(
                 f"temporal relation references a missing or later decision: {reference.constraint_id}",
-                stage="pass_two_dependency_validation",
+                stage="temporal_dependency_validation",
                 error_code="unresolved_dependency",
                 constraint_index=constraint_index,
                 relation_kind=constraint.kind,
@@ -697,7 +697,7 @@ def validate_temporal_relation_graph(
         ):
             raise TemporalResolutionValidationError(
                 "non-base composition requires an earlier named operand",
-                stage="pass_two_dependency_validation",
+                stage="temporal_dependency_validation",
                 error_code="unresolved_dependency",
                 constraint_index=constraint_index,
                 relation_kind=constraint.kind,
@@ -711,7 +711,7 @@ def validate_temporal_relation_graph(
             if operand_target is not target:
                 raise TemporalResolutionValidationError(
                     "composition operands must target the same temporal field",
-                    stage="pass_two_dependency_validation",
+                    stage="temporal_dependency_validation",
                     error_code="incompatible_relation_fields",
                     constraint_index=constraint_index,
                     relation_kind=constraint.kind,
@@ -722,7 +722,7 @@ def validate_temporal_relation_graph(
         if isinstance(reference, AnchorReference) and reference.anchor_id not in anchors:
             raise TemporalResolutionValidationError(
                 f"temporal relation references missing anchor: {reference.anchor_id}",
-                stage="pass_two_conformance",
+                stage="temporal_graph_validation",
                 error_code="unknown_anchor_id",
                 constraint_index=constraint_index,
                 relation_kind=constraint.kind,
@@ -773,7 +773,7 @@ def validate_temporal_relation_graph(
                 )
                 raise TemporalResolutionValidationError(
                     f"{target.value} depends on unresolved request field: {referenced.value}",
-                    stage="pass_two_dependency_validation",
+                    stage="temporal_dependency_validation",
                     error_code="unresolved_dependency",
                     relation_index=constraint_index,
                     constraint_index=constraint_index,
@@ -798,7 +798,7 @@ def validate_temporal_relation_graph(
                 ][0]
                 raise TemporalResolutionValidationError(
                     f"cyclic temporal request-field dependency detected at {dependency.value}",
-                    stage="pass_two_dependency_validation",
+                    stage="temporal_dependency_validation",
                     error_code="cyclic_dependency",
                     relation_index=constraint_index,
                     constraint_index=constraint_index,
@@ -1003,7 +1003,7 @@ def evaluate_temporal_relation_graph(
             if window is None:
                 raise TemporalResolutionValidationError(
                     f"decision reference has not produced a window: {reference.constraint_id}",
-                    stage="pass_two_dependency_validation",
+                    stage="temporal_dependency_validation",
                     error_code="unresolved_dependency",
                     reference_id=reference.constraint_id,
                 )
@@ -1016,7 +1016,7 @@ def evaluate_temporal_relation_graph(
         if reference.edge is None:
             raise TemporalResolutionValidationError(
                 "a point relation cannot use a whole-interval reference",
-                stage="pass_two_conformance",
+                stage="temporal_graph_validation",
                 error_code="incompatible_relation_fields",
             )
         return _edge(resolved, reference.edge)
@@ -1038,7 +1038,7 @@ def evaluate_temporal_relation_graph(
             }:
                 raise TemporalResolutionValidationError(
                     f"{operation.value} requires an existing target window",
-                    stage="pass_two_conformance",
+                    stage="temporal_graph_validation",
                     error_code="unresolved_dependency",
                     relation_kind=getattr(constraint, "kind", None),
                     reference_id=getattr(constraint, "combine_with", None),
@@ -1055,7 +1055,7 @@ def evaluate_temporal_relation_graph(
             ] + timedelta(days=1):
                 raise TemporalResolutionValidationError(
                     f"{operation.value} composition requires a non-contiguous temporal result",
-                    stage="pass_two_conformance",
+                    stage="temporal_graph_validation",
                     error_code="unsupported_bounded_temporal_language",
                     relation_kind=getattr(constraint, "kind", None),
                     contradictory_fields=("combine", "combine_with"),
@@ -1066,7 +1066,7 @@ def evaluate_temporal_relation_graph(
             if end < start:
                 raise TemporalResolutionValidationError(
                     "intersect composition produced an empty temporal window",
-                    stage="pass_two_conformance",
+                    stage="temporal_graph_validation",
                     error_code="incompatible_relation_fields",
                     relation_kind=getattr(constraint, "kind", None),
                     contradictory_fields=("combine", "combine_with"),
@@ -1084,7 +1084,7 @@ def evaluate_temporal_relation_graph(
             return operand[0], candidate[0] - timedelta(days=1)
         raise TemporalResolutionValidationError(
             "exclude composition would create a non-contiguous date window",
-            stage="pass_two_conformance",
+            stage="temporal_graph_validation",
             error_code="unsupported_bounded_temporal_language",
             relation_kind=getattr(constraint, "kind", None),
             contradictory_fields=("combine",),

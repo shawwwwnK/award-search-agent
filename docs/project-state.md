@@ -2,7 +2,23 @@
 
 ## Phase
 
-Request-understanding implementation and initial evaluation.
+Request-understanding implementation — complete and frozen.
+
+## Current conclusion
+
+The project owner concluded the request-understanding implementation on 2026-09-06. The
+selector-only Luna path is the sole live path: Luna handles non-temporal Pass 1 and opaque
+temporal-candidate selection; deterministic code owns temporal scanning, validation, compilation,
+calendar evaluation, conflicts, and clarification. Sequential two-pass resolution is retired from
+the live code path and configuration. No further intent prompt, schema, compiler, clarification,
+or ready-corpus changes are authorized unless the owner explicitly reopens this slice.
+
+The qualification record is the traced three-trial run
+`evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
+47/48 passed (97.92%), with zero errors, Pass-1 boundary failures, selector failures, grounding
+failures, semantic failures, or deterministic-output failures, and one clarification miss
+(`repositioning_allowed` asked for `origin` rather than `departure`). Its 48 all-call traces are
+private/local under `evals/intent/traces/` and are not a public artifact.
 
 ## Long-term thesis
 
@@ -38,13 +54,33 @@ Feasible access to useful award-inventory data.
 
 ## Immediate next milestone
 
-Run the frozen date-free temporal-selector study with explicitly chosen Mini and Luna model IDs,
-then make the compiler-route end-to-end runner decision. The deterministic scanner, candidate
-compiler, 16-case offline oracle gate, one-call OpenAI selector adapter, strict non-temporal
-compiler Pass 1, and offline frozen-evaluation harness are complete; a live selector is not
-enabled.
+Request-understanding implementation is frozen as of 2026-09-06. Preserve the current typed
+boundary and its evaluation evidence; do not make further prompt, schema, compiler, clarification,
+or ready-corpus changes unless the project owner explicitly reopens this slice. The freeze
+handoff, including the earlier four-failure walkthrough, is
+`docs/handoffs/2026-09-05-intent-freeze-handoff.md`. The subsequent architecture decision is
+selector-only (ADR 0010): sequential `two_pass` is retired from live code, configuration, and
+the ready evaluator. Earlier references to it below are historical evaluation evidence only.
+The next project stage may begin from the frozen `ClarificationDecision` boundary; it must not
+silently reopen or modify request understanding.
 
 ## Current implementation status
+
+- Selector-only request understanding is the sole live path (ADR 0010). It requires separately
+  configured non-temporal Pass 1 and temporal selector adapters before work begins.
+- The compiler owns all temporal facts and always uses `supported_or_unresolved`; the selector can
+  choose only opaque candidate handles, including explicit unresolved choices. There is no runtime
+  strategy switch or fallback.
+- The ready evaluator is schema v6 and records only Pass 1 and selector telemetry. Version-5 and
+  older artifacts remain historical evidence and are intentionally not rewritten.
+- The test-only catalog injection is exact-request matched and exists only in selector workflow
+  integration. It is not exposed through application or evaluator configuration.
+
+## Historical implementation and evaluation log (superseded where ADR 0010 conflicts)
+
+Everything in this section is retained historical evidence. Statements about `two_pass`, rollback,
+legacy Pass 2, selector enablement, or earlier scores describe prior experiments and must not be
+read as current runtime status; the current conclusion is recorded above.
 
 - Typed request, extraction, parsed-request, unknown, conflict, and clarification contracts exist.
 - Point-balance and spending-budget constraints are intentionally excluded from the MVP request

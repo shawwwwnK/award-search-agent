@@ -30,27 +30,30 @@ def test_cli_parses_model_as_run_specific_input() -> None:
             "UTC",
             "--model",
             "intent-eval-candidate",
+            "--selector-model",
+            "selector-candidate",
         ]
     )
 
     assert args.model == "intent-eval-candidate"
     assert args.reference_date == date(2026, 8, 30)
-    assert args.temporal_strategy == "two_pass"
+    assert args.selector_model == "selector-candidate"
 
 
-def test_cli_accepts_the_opt_in_compiler_strategy() -> None:
-    args = _parser().parse_args(
-        [
-            "Travel from Seattle to Tokyo.",
-            "--reference-date",
-            "2026-08-30",
-            "--timezone",
-            "UTC",
-            "--model",
-            "intent-eval-candidate",
-            "--temporal-strategy",
-            "compiler_select_v1",
-        ]
-    )
-
-    assert args.temporal_strategy == "compiler_select_v1"
+def test_cli_rejects_removed_temporal_strategy_switch() -> None:
+    with pytest.raises(SystemExit):
+        _parser().parse_args(
+            [
+                "Travel from Seattle to Tokyo.",
+                "--reference-date",
+                "2026-08-30",
+                "--timezone",
+                "UTC",
+                "--model",
+                "intent-eval-candidate",
+                "--selector-model",
+                "selector-candidate",
+                "--temporal-strategy",
+                "retired",
+            ]
+        )

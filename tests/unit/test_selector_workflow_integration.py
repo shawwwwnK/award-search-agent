@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import json
 from pathlib import Path
 
@@ -25,7 +26,10 @@ from award_agent.intent.temporal_selector import (
     TemporalSelectorValidationError,
     plan_temporal_selection,
 )
-from award_agent.intent.workflow import understand_request
+from award_agent.intent.workflow import (
+    _understand_request_with_frozen_catalog,
+    understand_request,
+)
 
 
 class OracleSelector:
@@ -33,6 +37,7 @@ class OracleSelector:
 
     def __init__(self) -> None:
         self.calls: list[TemporalSelectorInput] = []
+
         self.reset_calls = 0
 
     def reset_capture(self) -> None:
@@ -58,7 +63,8 @@ class OracleSelector:
             == {
                 candidate.handle
                 for candidate in item.catalog.candidates
-                if candidate.exclusive_group in plan_temporal_selection(item.catalog).selector_groups
+                if candidate.exclusive_group
+                in plan_temporal_selection(item.catalog).selector_groups
             }
         )
         oracle = set(case.oracle_candidates)
@@ -69,6 +75,12 @@ class OracleSelector:
                 if private in oracle
             ]
         )
+
+
+def test_public_workflow_signature_exposes_no_evaluation_catalog_or_policy_override() -> None:
+    parameters = set(inspect.signature(understand_request).parameters)
+
+    assert parameters == {"request", "extractor", "temporal_selector", "holiday_provider"}
 
 
 def test_integration_preflight_reuses_every_frozen_manual_case() -> None:
@@ -98,7 +110,6 @@ def test_integration_runs_only_selector_through_real_workflow_and_redacts_artifa
         "errors": 0,
         "selector_oracle_matches": 12,
         "workflow_oracle_matches": 12,
-        "zero_repairs": True,
         "selector_attempts": 12,
         "latency_seconds": artifact["summary"]["latency_seconds"],
     }
@@ -111,8 +122,6 @@ def test_integration_runs_only_selector_through_real_workflow_and_redacts_artifa
     assert len(selector.calls) == 12
     assert selector.reset_calls == 12
     assert all(record["workflow"]["paired_output_match"] for record in artifact["results"])
-    assert all(record["workflow"]["pass_one_repairs"] == 0 for record in artifact["results"])
-    assert all(record["workflow"]["pass_two_repairs"] == 0 for record in artifact["results"])
     assert all(record["selector"]["attempted"] for record in artifact["results"])
     assert all(record["selector"]["public_output"] for record in artifact["results"])
     serialized = json.dumps(artifact)
@@ -142,24 +151,12 @@ def test_workflow_rejects_an_injected_catalog_for_different_request_text() -> No
     mismatched = case.request.model_copy(update={"text": "Leave October 6."})
 
     with pytest.raises(ValueError, match="request text must exactly match"):
-        understand_request(
+        _understand_request_with_frozen_catalog(
             mismatched,
             object(),  # type: ignore[arg-type]
+            OracleSelector(),
             None,
-            temporal_strategy="compiler_select_v1",
-            evaluation_temporal_catalog=case.catalog,
-        )
-
-
-def test_workflow_rejects_an_injected_catalog_outside_compiler_strategy() -> None:
-    case = frozen_selector_case_registry()["target-forward"]
-
-    with pytest.raises(ValueError, match="only supported by compiler_select_v1"):
-        understand_request(
-            case.request,
-            object(),  # type: ignore[arg-type]
-            None,
-            evaluation_temporal_catalog=case.catalog,
+            catalog=case.catalog,
         )
 
 
@@ -181,12 +178,12 @@ def test_workflow_surfaces_a_structurally_invalid_injected_catalog() -> None:
     )
 
     with pytest.raises(TemporalSelectorValidationError, match="exactly one unresolved"):
-        understand_request(
+        _understand_request_with_frozen_catalog(
             case.request,
-            StaticNonTemporalExtractor(),  # type: ignore[arg-type]
+            StaticNonTemporalExtractor(),
+            OracleSelector(),
             None,
-            temporal_strategy="compiler_select_v1",
-            evaluation_temporal_catalog=invalid_catalog,
+            catalog=invalid_catalog,
         )
 
 
@@ -242,7 +239,6 @@ def test_integration_cli_returns_nonzero_on_explicit_error(
             "selector_oracle_matches": 0,
             "workflow_oracle_matches": 0,
             "runs": 1,
-            "zero_repairs": True,
         },
         "results": [{"workflow": {"paired_output_match": False}}],
     }
@@ -253,10 +249,5 @@ def test_integration_cli_returns_nonzero_on_explicit_error(
     )
     output = tmp_path / "integration.json"
 
-    assert (
-        integration_cli.main(
-            ["--selector-model", "luna-id", "--output", str(output)]
-        )
-        == 1
-    )
+    assert integration_cli.main(["--selector-model", "luna-id", "--output", str(output)]) == 1
     assert json.loads(output.read_text())["summary"]["errors"] == 1

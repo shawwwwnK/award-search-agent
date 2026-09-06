@@ -7,26 +7,17 @@ import pytest
 
 from award_agent.domain import (
     AnchorReference,
-    CoarseIntentExtraction,
     DurationModifier,
     Holiday,
     RawRequest,
     RelativeWeekendConstraint,
     RequestContext,
-    TemporalPhrase,
-    TemporalPhraseTarget,
-    TemporalRelationGraph,
     TemporalTarget,
     TemporalUnit,
 )
 from award_agent.intent.model_views import (
-    CoarseExtractionInput,
-    CoarseExtractionRepairInput,
     NonTemporalExtractionInput,
     NonTemporalIntentExtraction,
-    StructuredValidationErrorView,
-    TemporalInterpretationInput,
-    TemporalResolutionResult,
     TemporalSelectorInput,
     TemporalSelectorOutput,
 )
@@ -380,14 +371,15 @@ def test_selector_v2_publishes_safe_semantics_and_relation_ordinals() -> None:
     ("text", "minimum", "maximum", "unit", "modifier", "summary"),
     [
         (
-            "Travel for about 10 days.",
+            "Leave for about 10 days.",
             10,
             10,
             TemporalUnit.DAY,
             DurationModifier.APPROXIMATE,
             (
                 "Interpret e0 as a trip duration stated as approximate 10 days "
-                "(minimum 10, maximum 10; unit day)."
+                "(minimum 10, maximum 10; unit day). A trip duration is trip length, not a "
+                "departure or return endpoint assertion."
             ),
         ),
         (
@@ -398,7 +390,8 @@ def test_selector_v2_publishes_safe_semantics_and_relation_ordinals() -> None:
             DurationModifier.APPROXIMATE,
             (
                 "Interpret e0 as a trip duration stated as approximate 9 days "
-                "(minimum 9, maximum 9; unit day)."
+                "(minimum 9, maximum 9; unit day). A trip duration is trip length, not a "
+                "departure or return endpoint assertion."
             ),
         ),
         (
@@ -409,7 +402,8 @@ def test_selector_v2_publishes_safe_semantics_and_relation_ordinals() -> None:
             DurationModifier.EXACT,
             (
                 "Interpret e0 as a trip duration stated as exact 2 weeks "
-                "(minimum 2, maximum 2; unit week)."
+                "(minimum 2, maximum 2; unit week). A trip duration is trip length, not a "
+                "departure or return endpoint assertion."
             ),
         ),
         (
@@ -420,7 +414,8 @@ def test_selector_v2_publishes_safe_semantics_and_relation_ordinals() -> None:
             DurationModifier.ALTERNATIVE,
             (
                 "Interpret e0 as a trip duration stated as alternative 1 to 2 weeks "
-                "(minimum 1, maximum 2; unit week)."
+                "(minimum 1, maximum 2; unit week). A trip duration is trip length, not a "
+                "departure or return endpoint assertion."
             ),
         ),
         (
@@ -431,7 +426,8 @@ def test_selector_v2_publishes_safe_semantics_and_relation_ordinals() -> None:
             DurationModifier.APPROXIMATE,
             (
                 "Interpret e0 as a trip duration stated as approximate 1 week "
-                "(minimum 1, maximum 1; unit week)."
+                "(minimum 1, maximum 1; unit week). A trip duration is trip length, not a "
+                "departure or return endpoint assertion."
             ),
         ),
     ],
@@ -454,6 +450,7 @@ def test_selector_duration_projection_preserves_literal_and_restores_compilable_
     assert duration_candidate.interpretation_kind == "trip_duration"
     assert duration_candidate.summary == summary
     assert duration_candidate.relation_ordinal is None
+    assert model_input.ordered_evidence[0].endpoint_cue == "unspecified"
     serialized = model_input.model_dump_json()
     for forbidden in ("reference_date", "timezone", "2026-", "slot:"):
         assert forbidden not in serialized
@@ -787,34 +784,13 @@ def test_selector_preflight_rejects_a_cycle_between_availability_dependencies() 
 
 
 class StaticExtractor:
-    def __init__(self, extraction: CoarseIntentExtraction) -> None:
-        self.extraction = extraction
-
-    def extract(self, model_input: CoarseExtractionInput) -> CoarseIntentExtraction:
-        return self.extraction
-
-    def repair_extract(self, model_input: CoarseExtractionRepairInput) -> CoarseIntentExtraction:
-        raise AssertionError("compiler path must not repair pass-one temporal output")
+    def __init__(self, extraction: NonTemporalIntentExtraction | None = None) -> None:
+        self.extraction = extraction or NonTemporalIntentExtraction()
 
     def extract_non_temporal(
         self, _input: NonTemporalExtractionInput
     ) -> NonTemporalIntentExtraction:
-        return NonTemporalIntentExtraction.model_validate(
-            self.extraction.model_dump(exclude={"date_anchors", "temporal_phrases"})
-        )
-
-
-class ResolverMustNotRun:
-    def resolve_dates(self, model_input: TemporalInterpretationInput) -> TemporalResolutionResult:
-        raise AssertionError("compiler path must not call the temporal resolver")
-
-    def repair_dates(
-        self,
-        model_input: TemporalInterpretationInput,
-        rejected_output: TemporalRelationGraph,
-        validation_errors: list[StructuredValidationErrorView],
-    ) -> TemporalRelationGraph:
-        raise AssertionError("compiler path must not call the temporal resolver")
+        return self.extraction
 
 
 class RecordingSelector:
@@ -827,17 +803,15 @@ class RecordingSelector:
         return TemporalSelectorOutput(selected_candidates=self.selected)
 
 
-def test_auto_only_compiler_path_does_not_call_selector() -> None:
+def test_selector_only_workflow_calls_selector_for_supported_candidates() -> None:
     selector = RecordingSelector()
     result = understand_request(
         _request("Leave October 5."),
-        StaticExtractor(CoarseIntentExtraction()),
-        ResolverMustNotRun(),
-        temporal_strategy="compiler_select_v1",
-        temporal_selector=selector,
+        StaticExtractor(),
+        selector,
     )
 
-    assert selector.calls == []
+    assert len(selector.calls) == 1
     assert result.parsed_request.departure_window is not None
 
 
@@ -845,15 +819,12 @@ def test_supported_or_unresolved_forces_safe_groups_through_selector() -> None:
     catalog = build_temporal_candidates(scan_temporal_request(_request("Leave October 5.")))
 
     default_plan = plan_temporal_selection(catalog)
-    experiment_plan = plan_temporal_selection(
-        catalog, policy="supported_or_unresolved"
-    )
+    plan = plan_temporal_selection(catalog, policy="supported_or_unresolved")
 
     assert default_plan.selector_groups == ()
-    assert len(default_plan.auto_selected) == 1
-    assert experiment_plan.auto_selected == ()
-    assert experiment_plan.selector_groups == (catalog.candidates[0].exclusive_group,)
-    selector_input = build_temporal_selector_input(catalog, experiment_plan)
+    assert plan.auto_selected == ()
+    assert plan.selector_groups == (catalog.candidates[0].exclusive_group,)
+    selector_input = build_temporal_selector_input(catalog, plan)
     serialized = selector_input.model_dump_json()
     assert len(selector_input.candidate_groups) == 1
     assert "slot:" not in serialized
@@ -895,20 +866,11 @@ def test_workflow_selector_view_uses_raw_text_not_malformed_pass_one_temporal_ou
         lambda scan: _ambiguous_catalog(scan),
     )
     selector = RecordingSelector()
-    extraction = CoarseIntentExtraction(
-        temporal_phrases=[
-            TemporalPhrase(
-                applies_to=TemporalPhraseTarget.DEPARTURE,
-                raw_text="not in the raw request",
-            )
-        ]
-    )
+    extraction = NonTemporalIntentExtraction()
     result = understand_request(
         _request(),
         StaticExtractor(extraction),
-        ResolverMustNotRun(),
-        temporal_strategy="compiler_select_v1",
-        temporal_selector=selector,
+        selector,
     )
 
     assert len(selector.calls) == 1
@@ -918,59 +880,21 @@ def test_workflow_selector_view_uses_raw_text_not_malformed_pass_one_temporal_ou
     assert result.parsed_request.departure_window is not None
 
 
-def test_workflow_without_selector_compiles_ambiguous_group_as_unresolved(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    from award_agent.intent import workflow
-
-    monkeypatch.setattr(
-        workflow,
-        "build_temporal_candidates",
-        lambda scan: _ambiguous_catalog(scan),
-    )
-    result = understand_request(
-        _request(),
-        StaticExtractor(CoarseIntentExtraction()),
-        ResolverMustNotRun(),
-        temporal_strategy="compiler_select_v1",
-    )
-
-    assert result.parsed_request.departure_window is None
-    assert result.parsed_request.date_resolution is not None
-    assert result.parsed_request.date_resolution.unresolved
-    assert result.parsed_request.temporal_relations is not None
-    assert [
-        constraint.kind for constraint in result.parsed_request.temporal_relations.constraints
-    ] == ["unresolved"]
-
-
-def test_supported_or_unresolved_requires_selector_before_non_temporal_pass_one() -> None:
+def test_selector_is_required_before_non_temporal_pass_one() -> None:
     class ExtractorMustNotRun:
         def __init__(self) -> None:
             self.calls = 0
 
         def extract_non_temporal(self, _input: NonTemporalExtractionInput) -> NonTemporalIntentExtraction:
             self.calls += 1
-            raise AssertionError("supported_or_unresolved must fail before Pass 1")
+            raise AssertionError("selector preflight must fail before Pass 1")
 
     extractor = ExtractorMustNotRun()
-    with pytest.raises(ValueError, match="requires a temporal_selector"):
+    with pytest.raises(TypeError, match="requires callable select_candidates"):
         understand_request(
             _request("Leave October 5."),
-            extractor,  # type: ignore[arg-type]
-            ResolverMustNotRun(),
-            temporal_strategy="compiler_select_v1",
-            selector_policy="supported_or_unresolved",
+            extractor,
+            None,  # type: ignore[arg-type]
         )
 
     assert extractor.calls == 0
-
-
-def test_two_pass_rejects_the_experiment_only_selector_policy() -> None:
-    with pytest.raises(ValueError, match="only supported by compiler_select_v1"):
-        understand_request(
-            _request(),
-            StaticExtractor(CoarseIntentExtraction()),
-            ResolverMustNotRun(),
-            selector_policy="supported_or_unresolved",
-        )

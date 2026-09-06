@@ -134,6 +134,45 @@ quality or selector behavior.
   boundary failures. This run is a fresh stochastic sample, so it should be compared with earlier
   matched runs as evidence rather than merged into them as an additional controlled trial.
 
+## Duration cue and Pass-1 contract follow-up (2026-09-05)
+
+- The scanner now treats a literal as a trip duration only in local trip-span constructions
+  (`for`/`stay`, `be back after`, or a trip/stay/vacation/holiday noun). `Leave in 10 days` is
+  consequently no longer misclassified as a duration. Selector-v2 projection publishes
+  `endpoint_cue: unspecified` for scanner-classified durations, since a trip length is not
+  textual evidence for either departure or return; supported duration candidates retain their
+  canonical return target. The selector summary makes this distinction explicit.
+- Both Pass-1 prompts now share one semantic-rules section: a city is sufficient without airport
+  expansion; true unresolved geographic identity uses singular `origin`/`destination`; explicit
+  alternatives are valid options; a tentative nested place is `destination_preference`; and a
+  first-person travel subject (including modal `I can go`) counts as one traveler while booking,
+  helping, and search discourse do not. Compiler-route ambiguity fields are restricted to the
+  canonical vocabulary; the legacy rollback ambiguity wire is unchanged.
+- Focused duration/selector and Pass-1 tests, then the integrated suite, passed: 394 tests,
+  Ruff, mypy (66 source files), and `git diff --check`. Architecture review verified the changes
+  against ADRs 0004 and 0009 before live evaluation.
+- A full all-call traced Luna rerun used `compiler_select_v1`, Luna for Pass 1 and selector,
+  `supported_or_unresolved`, the sixteen ready cases, and three trials. It completed 48/48
+  records with 44/48 passes (91.67%), 4 failed checks, zero errors/repairs/boundary failures,
+  42 selector attempts, 90 calls, 95,837 captured tokens, and 156.750 seconds total latency.
+  Artifact:
+  `evals/intent/baseline/2026-09-05-gpt-5.6-luna-pass1-selector-supported-unresolved-duration-and-pass1-fix-3-trials.json`.
+  Its 48 all-call sidecars are private under
+  `evals/intent/traces/run-2026-09-06T042519.441007-0000-52a80988`.
+- Compared with the direct previous traced network run (39/48; 81.25%), this fresh sample gained
+  five passes, eliminated all six deterministic-output failures, and made all six previously
+  systematic duration records pass: `labor_day_thursday_flexibility` and
+  `approximate_duration` each moved 0/3 to 3/3. Trace review confirms the former contradictory
+  duration cue caused Luna to select unresolved; after the contract correction it selected the
+  supported duration candidate. The comparison is empirical evidence, not a controlled proof
+  for other records because both runs sampled a nondeterministic model.
+- Four remaining failures are Pass-1 extraction behavior: two omit tentative São Paulo while
+  emitting `destination_preference`, one treats San Jose as a blocking geographic ambiguity, and
+  one adversarial request omits traveler and first-cabin extraction. No additional change was
+  made from this evidence. The next narrow candidate is to state explicitly that a tentative
+  nested city must remain in `destinations` as well as receive `destination_preference`; treat
+  San Jose and adversarial extraction as separate prompt/eval questions.
+
 ## Owner interpretation
 
 <!-- Project owner: record any live-evaluation conclusion and the next cut line here. -->

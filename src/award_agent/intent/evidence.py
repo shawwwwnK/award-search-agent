@@ -30,9 +30,8 @@ class EvidenceErrorCode(str, Enum):
 ValidationStage = Literal[
     "pass_one_grounding",
     "pass_one_anchor_validation",
-    "pass_two_wire_conversion",
-    "pass_two_conformance",
-    "pass_two_dependency_validation",
+    "temporal_graph_validation",
+    "temporal_dependency_validation",
     "deterministic_evaluation",
 ]
 
@@ -94,11 +93,6 @@ class TemporalResolutionValidationError(ValueError):
     def as_dict(self) -> dict[str, Any]:
         return self.details.as_dict()
 
-    def attach_repair_trace(self, trace: dict[str, Any]) -> TemporalResolutionValidationError:
-        """Attach date-free attempt metadata without changing the structured root cause."""
-
-        self.repair_trace = trace
-        return self
 
 
 class TemporalEvidenceValidationError(TemporalResolutionValidationError):

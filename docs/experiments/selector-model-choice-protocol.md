@@ -1,10 +1,11 @@
-# Deferred selector-model choice protocol
+# Historical selector-model choice protocol
 
 ## Status and scope
 
-This is a test plan, not an enablement decision.  It applies only to the date-free temporal
-candidate selector.  It does not choose the Pass-1 model and does not authorize enabling the
-selector in the request-understanding workflow.
+This is an archived selector-screen test plan. ADR 0010 subsequently selected the selector-only
+request-understanding architecture and retired sequential temporal resolution. It remains a
+reference for future selector-model comparisons, but it does not change the frozen Luna model
+decision, the current runtime, or reintroduce a fallback path.
 
 The checked-in v2 fixture at `evals/selector/frozen_cases_v2.yaml` is a useful regression and
 development screen, but it has twelve semantic stems paired into two order variants and repeated
@@ -27,7 +28,11 @@ Before a candidate-comparison run:
 
 ## Decision sequence
 
-### 1. Development screen (current frozen v2 fixture)
+The sequence below records the historical model-choice protocol. It is not an outstanding release
+checklist for the frozen intent implementation; any future run must be explicitly authorized and
+must preserve the current selector-only boundary.
+
+### 1. Development screen (archived frozen v2 fixture)
 
 Run every candidate on the fixed v2 fixture with three trials and both opaque-handle order
 variants.  Report parse, membership, compiler completion, semantic accuracy, each class,
@@ -75,10 +80,12 @@ Separate a parse or restoration rejection from a dangerous but schema-valid sema
 Any private-data leak, invalid membership, unsafe compiler completion, or selection of an
 unsupported interpretation is a release blocker rather than an accuracy trade-off.
 
-### 4. Selector-path integration evaluation
+### 4. Selector-path integration evaluation (historical protocol)
 
-Keep the current 16-case ready corpus as a compiler-route rollback-isolation test: while its
-grammar yields no genuine ambiguity, it must make zero selector and Pass-2 calls.
+The 16-case ready corpus was used as a compiler-route rollback-isolation test: while its grammar
+yielded no genuine ambiguity, it had to make zero selector and Pass-2 calls. The historical
+Pass-2 reference is retained only to explain those earlier artifacts; it is not a current runtime
+stage.
 
 Add a test-only, manually constructed ambiguity integration corpus that exercises:
 
@@ -95,21 +102,27 @@ p50/p95/p99/max latency, 429/5xx/error rate, parse/membership/compiler failure r
 tokens, and calculated cost using the dated pricing snapshot.  Repeat on a separate day before
 choosing a default.
 
-Rollback criteria are any safety failure, gate miss, materially regressed tail latency/cost outside
-the pre-registered budget, or trace/privacy failure.  Keep `two_pass` as the default rollback path
-until the project owner explicitly accepts the evidence and enables the selector.
+At the time this protocol was written, rollback criteria were any safety failure, gate miss,
+materially regressed tail latency/cost outside the pre-registered budget, or trace/privacy failure.
+The former `two_pass` rollback language is superseded by ADR 0010; two-pass is retired and is not
+a current fallback path.
 
-## Current evidence boundary
+## Historical evidence boundary
 
 The validated v2 frozen study qualified `gpt-5.6-luna` and `gpt-5.6-terra` only for a
 selector-enabled compiler E2E experiment. The project owner selected `gpt-5.6-luna` for those
-future experiments on 2026-09-04, based on its passed screen and lower published token pricing.
+experiments on 2026-09-04, based on its passed screen and lower published token pricing.
 `gpt-4o-mini`, `gpt-4.1-mini`, `gpt-4.1`, and `gpt-5.4-mini` did not pass the current screen.
 Luna subsequently passed the test-only selector-to-workflow integration gate across the same
-known frozen-v2 stems. Results for later candidates belong in dated baseline artifacts and the
-build log; none should change the production default without the protocol above.
+known frozen-v2 stems. These are historical comparison results, not the current intent
+qualification record.
 
 ## Project-owner decision record
 
-<!-- Project owner: record cost/latency budget, acceptance of holdout evidence, and any explicit
-selector-default decision here. Luna is selected only for future selector-enabled experiments. -->
+The project owner concluded on 2026-09-06 that request understanding is complete and frozen. The
+selector-only Luna path is the sole live path, and sequential two-pass resolution is retired. The
+final qualification record is
+`evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
+47/48 passed (97.92%) over three trials, with zero errors and one documented clarification miss.
+Its all-call traces remain private/local under `evals/intent/traces/`. No further intent changes
+are authorized without an explicit owner decision to reopen the slice.

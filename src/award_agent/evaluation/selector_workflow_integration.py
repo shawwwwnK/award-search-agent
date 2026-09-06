@@ -2,7 +2,7 @@
 
 This is deliberately separate from the ready-corpus evaluator.  The production grammar has no
 selector groups, so this module injects the existing private manual ambiguity catalogs through a
-guarded ``compiler_select_v1`` workflow hook.  Pass 1 and holiday resolution are static; the
+guarded private workflow helper. Pass 1 and holiday resolution are static; the
 selector is the only boundary a live run may exercise.
 """
 
@@ -23,12 +23,10 @@ from pydantic import ValidationError
 
 from award_agent.domain import (
     CabinClass,
-    CoarseIntentExtraction,
     LocationKind,
     LocationRef,
     RequestUnderstandingResult,
     SearchMode,
-    TemporalRelationGraph,
 )
 from award_agent.evaluation.frozen_selector_cases import (
     FrozenSelectorCase,
@@ -41,13 +39,8 @@ from award_agent.evaluation.frozen_selector_eval import (
 )
 from award_agent.intent.extractor import TemporalCandidateSelector
 from award_agent.intent.model_views import (
-    CoarseExtractionInput,
-    CoarseExtractionRepairInput,
     NonTemporalExtractionInput,
     NonTemporalIntentExtraction,
-    StructuredValidationErrorView,
-    TemporalInterpretationInput,
-    TemporalResolutionResult,
     TemporalSelectorInput,
     TemporalSelectorOutput,
 )
@@ -57,7 +50,7 @@ from award_agent.intent.openai_extractor import (
     TemporalSelectionError,
 )
 from award_agent.intent.temporal_selector import TemporalSelectorValidationError
-from award_agent.intent.workflow import understand_request
+from award_agent.intent.workflow import _understand_request_with_frozen_catalog
 
 DEFAULT_SELECTOR_WORKFLOW_MANIFEST = Path("evals/selector/workflow_integration_cases_v1.yaml")
 
@@ -88,27 +81,6 @@ class _StaticNonTemporalExtractor:
             cabins=[CabinClass.ECONOMY],
             search_modes=[SearchMode.AWARD],
         )
-
-    def extract(self, _model_input: CoarseExtractionInput) -> CoarseIntentExtraction:
-        raise AssertionError("selector workflow integration must not call legacy Pass 1")
-
-    def repair_extract(self, _model_input: CoarseExtractionRepairInput) -> CoarseIntentExtraction:
-        raise AssertionError("selector workflow integration must not repair legacy Pass 1")
-
-
-class _ResolverMustNotRun:
-    """Fail closed if an integration run leaks into the legacy temporal resolver."""
-
-    def resolve_dates(self, _model_input: TemporalInterpretationInput) -> TemporalResolutionResult:
-        raise AssertionError("selector workflow integration must not call the temporal resolver")
-
-    def repair_dates(
-        self,
-        _model_input: TemporalInterpretationInput,
-        _rejected_output: TemporalRelationGraph,
-        _validation_errors: list[StructuredValidationErrorView],
-    ) -> TemporalRelationGraph:
-        raise AssertionError("selector workflow integration must not repair the temporal resolver")
 
 
 SelectorFactory = Callable[[str], TemporalCandidateSelector]
@@ -224,15 +196,21 @@ def _load_manifest(path: Path) -> tuple[_ManifestCase, ...]:
     try:
         payload = yaml.safe_load(path.read_bytes())
     except OSError as exc:
-        raise SelectorWorkflowFixtureError(f"cannot read selector workflow manifest: {path}") from exc
+        raise SelectorWorkflowFixtureError(
+            f"cannot read selector workflow manifest: {path}"
+        ) from exc
     except yaml.YAMLError as exc:
-        raise SelectorWorkflowFixtureError(f"cannot parse selector workflow manifest: {path}") from exc
+        raise SelectorWorkflowFixtureError(
+            f"cannot parse selector workflow manifest: {path}"
+        ) from exc
     if not isinstance(payload, Mapping) or set(payload) != {"contract_version", "scenarios"}:
         raise SelectorWorkflowFixtureError(
             "selector workflow manifest must contain only contract_version and scenarios"
         )
     if payload["contract_version"] != "v1" or not isinstance(payload["scenarios"], list):
-        raise SelectorWorkflowFixtureError("selector workflow manifest must use contract_version v1")
+        raise SelectorWorkflowFixtureError(
+            "selector workflow manifest must use contract_version v1"
+        )
     cases: list[_ManifestCase] = []
     seen: set[str] = set()
     for item in payload["scenarios"]:
@@ -242,13 +220,17 @@ def _load_manifest(path: Path) -> tuple[_ManifestCase, ...]:
             )
         values = tuple(item[key] for key in ("id", "category", "pair"))
         if not all(isinstance(value, str) and value for value in values) or values[0] in seen:
-            raise SelectorWorkflowFixtureError("selector workflow scenario labels must be unique non-empty strings")
+            raise SelectorWorkflowFixtureError(
+                "selector workflow scenario labels must be unique non-empty strings"
+            )
         seen.add(values[0])
         cases.append(_ManifestCase(*values))
 
     registry = frozen_selector_case_registry()
     if {case.identifier for case in cases} != set(registry):
-        raise SelectorWorkflowFixtureError("selector workflow manifest must exactly cover frozen cases")
+        raise SelectorWorkflowFixtureError(
+            "selector workflow manifest must exactly cover frozen cases"
+        )
     for case in cases:
         private = registry[case.identifier]
         if (case.category, case.pair) != (private.category, private.pair):
@@ -269,7 +251,9 @@ def _preflight_selector_workflow_cases(
     registry = {item.fixture.identifier: item.fixture for item in frozen_cases}
     contract_versions = {item.contract_version for item in frozen_cases}
     if contract_versions != {"v2"}:
-        raise SelectorWorkflowFixtureError("selector workflow integration requires frozen v2 fixtures")
+        raise SelectorWorkflowFixtureError(
+            "selector workflow integration requires frozen v2 fixtures"
+        )
     frozen_bytes = DEFAULT_FROZEN_SELECTOR_FIXTURES.read_bytes()
     return _PreparedIntegrationCases(
         cases=tuple(registry[item.identifier] for item in _load_manifest(manifest_path)),
@@ -317,7 +301,9 @@ def _workflow_fingerprint(result: RequestUnderstandingResult) -> str:
     return hashlib.sha256(serialized.encode()).hexdigest()
 
 
-def _oracle_selector_output(case: FrozenSelectorCase, model_input: TemporalSelectorInput) -> set[str]:
+def _oracle_selector_output(
+    case: FrozenSelectorCase, model_input: TemporalSelectorInput
+) -> set[str]:
     """Translate the private oracle to opaque public handles for in-memory evaluation only."""
 
     oracle = set(case.oracle_candidates)
@@ -349,9 +335,7 @@ def _workflow_oracle_matches(case: FrozenSelectorCase, result: RequestUnderstand
     unresolved = tuple(
         (item.field, item.raw_text, item.reason) for item in parsed.date_resolution.unresolved
     )
-    conflicts = tuple(
-        (item.code, tuple(item.fields), item.detail) for item in parsed.conflicts
-    )
+    conflicts = tuple((item.code, tuple(item.fields), item.detail) for item in parsed.conflicts)
     clarification = (
         result.clarification.action.value,
         result.clarification.field,
@@ -379,7 +363,7 @@ def _run_case(
         "case": {"id": case.identifier, "category": case.category, "pair": case.pair},
         "oracle": {"selector_matched": False, "workflow_matched": False},
         "selector": {"attempted": False, "public_output": None},
-        "workflow": {"completed": False, "pass_one_repairs": 0, "pass_two_repairs": 0},
+        "workflow": {"completed": False},
     }
     # Capture the selector's public output separately before the workflow crosses restoration.
     # This makes one call explicit and prevents an accidental retry from hiding in a workflow
@@ -388,37 +372,37 @@ def _run_case(
         selector_input_holder: list[TemporalSelectorInput] = []
 
         class _SingleUseSelector:
-            def select_candidates(self, model_input: TemporalSelectorInput) -> TemporalSelectorOutput:
+            def select_candidates(
+                self, model_input: TemporalSelectorInput
+            ) -> TemporalSelectorOutput:
                 if selector_input_holder:
-                    raise AssertionError("selector workflow integration made more than one selector call")
+                    raise AssertionError(
+                        "selector workflow integration made more than one selector call"
+                    )
                 selector_input_holder.append(model_input)
                 record["selector"]["attempted"] = True
                 output = selector.select_candidates(model_input)
                 if not isinstance(output, TemporalSelectorOutput):
                     output = TemporalSelectorOutput.model_validate(output)
                 record["selector"]["public_output"] = output.selected_candidates
-                record["oracle"]["selector_matched"] = (
-                    set(output.selected_candidates) == _oracle_selector_output(case, model_input)
-                )
+                record["oracle"]["selector_matched"] = set(
+                    output.selected_candidates
+                ) == _oracle_selector_output(case, model_input)
                 return output
 
-        result = understand_request(
+        result = _understand_request_with_frozen_catalog(
             case.request,
             _StaticNonTemporalExtractor(),
-            _ResolverMustNotRun(),
+            _SingleUseSelector(),
             StaticFrozenHolidayProvider(),
-            temporal_strategy="compiler_select_v1",
-            temporal_selector=_SingleUseSelector(),
-            evaluation_temporal_catalog=case.catalog,
+            catalog=case.catalog,
         )
         if len(selector_input_holder) != 1:
-            raise AssertionError("selector workflow integration did not make exactly one selector call")
-        if result.repair_trace is None:
-            raise AssertionError("selector workflow integration did not retain a repair trace")
+            raise AssertionError(
+                "selector workflow integration did not make exactly one selector call"
+            )
         record["workflow"] = {
             "completed": True,
-            "pass_one_repairs": int(result.repair_trace.pass_one.repair_ran),
-            "pass_two_repairs": int(result.repair_trace.pass_two.repair_ran),
             "output_sha256": _workflow_fingerprint(result),
         }
         record["oracle"]["workflow_matched"] = _workflow_oracle_matches(case, result)
@@ -449,17 +433,10 @@ def _summary(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "workflow_oracle_matches": sum(
             bool(item["oracle"]["workflow_matched"]) for item in records
         ),
-        "zero_repairs": all(
-            item["workflow"]["pass_one_repairs"] == 0
-            and item["workflow"]["pass_two_repairs"] == 0
-            for item in records
-        ),
         "selector_attempts": sum(bool(item["selector"]["attempted"]) for item in records),
         "latency_seconds": {
             "total": round(sum(float(item["latency_seconds"]) for item in records), 3),
-            "mean": round(
-                sum(float(item["latency_seconds"]) for item in records) / len(records), 3
-            )
+            "mean": round(sum(float(item["latency_seconds"]) for item in records) / len(records), 3)
             if records
             else 0.0,
         },
@@ -474,10 +451,16 @@ def _attach_pair_checks(
         by_pair[str(record["case"]["pair"])].append(record)
     for pair, paired in by_pair.items():
         if len(paired) != 2:
-            raise SelectorWorkflowFixtureError(f"selector workflow pair {pair!r} must have two variants")
+            raise SelectorWorkflowFixtureError(
+                f"selector workflow pair {pair!r} must have two variants"
+            )
         identifiers = [str(item["case"]["id"]) for item in paired]
         first, second = (results[identifier] for identifier in identifiers)
-        equal = first is not None and second is not None and first.model_dump(mode="json") == second.model_dump(mode="json")
+        equal = (
+            first is not None
+            and second is not None
+            and first.model_dump(mode="json") == second.model_dump(mode="json")
+        )
         for item in paired:
             item["workflow"]["paired_output_match"] = equal
 
