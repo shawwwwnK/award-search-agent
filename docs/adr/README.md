@@ -12,3 +12,17 @@ Expected sections:
 - Consequences
 - Evaluation
 - Revisit trigger
+
+## Index
+
+- [0001: Request understanding is a typed workflow node](0001-request-understanding-boundary.md)
+- [0002: Nager holiday date provider](0002-nager-holiday-date-provider.md)
+- [0003: Two-pass temporal resolution](0003-two-pass-temporal-resolution.md)
+- [0004: Location names are resolver candidates](0004-location-names-are-resolver-candidates.md)
+- [0005: Claim-linked temporal evidence](0005-claim-linked-temporal-evidence.md)
+- [0006: Typed temporal relation graph](0006-typed-temporal-relation-graph.md)
+- [0007: Minimum-disclosure two-pass intent workflow](0007-minimum-disclosure-two-pass-intent-workflow.md)
+- [0008: Pass-two decision contract v2](0008-pass-two-decision-contract-v2.md)
+- [0009: Deterministic temporal candidate compiler](0009-deterministic-temporal-candidate-compiler.md)
+- [0010: Selector-only temporal understanding](0010-selector-only-temporal-understanding.md)
+- [0011: Iterative all-blockers clarification sessions](0011-iterative-clarification-sessions.md)

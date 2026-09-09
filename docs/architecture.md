@@ -13,12 +13,14 @@ local candidates, compiles the canonical relation graph, evaluates calendar wind
 conflict and clarification policy. Sequential model-authored temporal resolution is retired by ADR
 0010.
 
-This boundary is complete and frozen. Luna is the configured model for both model boundaries in
+The initial-turn boundary is complete and frozen. Luna is the configured model for both model boundaries in
 the qualified implementation: non-temporal Pass 1 and the opaque temporal selector. Sequential
 two-pass resolution is retired from the live code path. The final qualification record is the
 three-trial selector-only run with 47/48 passes (97.92%), zero errors, and one documented
-clarification miss. Further intent changes require an explicit owner decision to reopen this
-slice.
+clarification miss. On 2026-09-08, the project owner approved the additive iterative
+clarification-session boundary in ADR 0011. It accepts answers to a prompt that lists all current
+blockers, applies any valid subset with turn-level provenance, and recomputes the remaining
+blockers until the session is `ready` or `stopped`. The initial-turn behavior remains frozen.
 
 ## Responsibility table
 
@@ -37,7 +39,9 @@ slice.
 | Evidence, anchor, and symbolic-reference catalogs | deterministic code | Stable IDs and allowed membership form the trust boundary between model passes. |
 | Claim/evidence sufficiency evaluation | deterministic code | Allowed envelopes and required fragments are fixture-defined correctness rules. |
 | Conflict detection | deterministic code | Contradiction checks need explicit, auditable rules. |
-| Clarification selection | deterministic policy | Asking at most one focused question should follow stable policy. |
+| Initial clarification selection | deterministic policy | The frozen initial turn returns one legacy prioritized decision; the session converts active blockers into one all-blockers message. |
+| Clarification-session reduction | deterministic code | It collects every active blocker, applies typed in-scope amendments and supported explicit corrections, and atomically recomputes effective state. |
+| Clarification-answer interpretation | narrow model boundary | It may propose typed amendments for current blockers or an explicit supported correction; it cannot invent arbitrary constraints. |
 | Point balances and spending budgets | deferred | Excluded from MVP extraction, parsed output, and clarification policy. |
 | Search planning | deferred | Outside the current milestone. |
 | Travel-provider calls | deferred | Outside the current milestone. |
@@ -81,5 +85,36 @@ The retained `DateResolutionProposal` in `ParsedRequest` is generated after dete
 evaluation for trace and historical scorer compatibility. The authoritative internal semantic
 contract is `TemporalRelationGraph`; no model response authors it.
 
-This diagram describes the completed, frozen request-understanding slice. Downstream search
-planning begins after `ClarificationDecision` and is outside this implementation boundary.
+This diagram describes the completed initial-turn request-understanding slice. The live workflow
+currently stops at `ClarificationDecision`. ADR 0011 adds an implementation-stage continuation
+boundary between an `ask` decision and later search planning.
+
+## Iterative clarification-session boundary
+
+```mermaid
+flowchart LR
+    A["Frozen initial ParsedRequest + ClarificationDecision"]
+    B["ClarificationSession / EffectiveRequest"]
+    C["Collect all blocking requirements"]
+    D["One prompt listing all blockers"]
+    E["One user answer"]
+    F["Interpret typed in-scope amendments"]
+    G["Atomic deterministic reduction + recomputation"]
+    H["Ready"]
+    I["Stopped"]
+
+    A --> B --> C
+    C -->|none| H
+    C -->|one or more| D --> E --> F --> G --> C
+    E -->|decline/cancel/limits| I
+```
+
+The session stores immutable revisions and answer-turn provenance. A prompt has exact coverage of
+the current blocker set; an answer may resolve any subset and may explicitly correct a supported
+already-resolved field. The local experimental Streamlit
+harness may call this boundary through an application controller but contains no parsing, policy,
+merge, provider, or persistence logic. LangChain and LangGraph are not part of this stage.
+The answer-interpreter model boundary receives only answer identity/text and active typed blockers;
+the original `RequestContext`, effective state, and ledger remain deterministic-only.
+The detailed implementation sequence and acceptance gates are in
+`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.

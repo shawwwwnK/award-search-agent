@@ -1,0 +1,323 @@
+contract_version: v1
+# Synthetic, redacted fixtures.  The evaluator turns each declarative amendment
+# into an answer-grounded typed contract and runs the public controller.
+scenarios:
+  - id: all_at_once
+    final_projection_sha256: b40796c1cbd2668ff82b96178b4ee78be82ce45c094c9ca0ac73685ed31a9963
+    equivalence_group: fixed_dates
+    initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "AAA BBB depart October 6 return October 16 two"
+        amendments:
+          - {target: origin, requirements: [origin], fragment: AAA, value: AAA}
+          - {target: destination, requirements: [destination], fragment: BBB, value: BBB}
+          - {target: departure, requirements: [departure], fragment: "depart October 6"}
+          - {target: return_or_duration, requirements: [return_or_duration], fragment: "return October 16"}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: ready, blockers: [], accepted_count: 5, accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 3, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}, {ordinal: 4, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "return October 16"}}, {ordinal: 5, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {origin: AAA, destination: BBB, departure: "2026-10-06", return: "2026-10-16", travelers: 2}}
+  - id: subset_multi_turn
+    final_projection_sha256: e5d38cd4398b4e9b1ad6c3f7b5449825bdd837bfda738fed83952195dc1c8d61
+    initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "AAA two"
+        amendments:
+          - {target: origin, requirements: [origin], fragment: AAA, value: AAA}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration], accepted_count: 2, accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}]}
+      - text: "BBB depart October 6"
+        amendments:
+          - {target: destination, requirements: [destination], fragment: BBB, value: BBB}
+          - {target: departure, requirements: [departure], fragment: "depart October 6"}
+        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted_count: 2, accepted: [{ordinal: 1, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 2, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}]}
+      - text: "10 days"
+        amendments:
+          - {target: return_or_duration, requirements: [return_or_duration], fragment: "10 days"}
+        expect: {status: ready, blockers: [], accepted_count: 1, accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "10 days"}}], fields: {duration_days: 10, return: "2026-10-16"}}
+  - id: duration_after_departure
+    final_projection_sha256: 0191f6c4f28c94dfc4db0f69af5f76ab98decaf47cff1d470b9b0417288dd262
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "depart October 6"
+        amendments: [{target: departure, requirements: [departure], fragment: "depart October 6"}]
+        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted: [{ordinal: 1, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}], fields: {departure: "2026-10-06"}}
+      - text: "about 10 days"
+        amendments: [{target: return_or_duration, requirements: [return_or_duration], fragment: "about 10 days"}]
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "about 10 days"}}], fields: {duration_days: 9, return: "2026-10-15"}}
+  - id: bare_date_ambiguous
+    final_projection_sha256: ae75756a198e3ae2bc46163e200fc598893a6d5947844a6b80130788ca800d06
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "October 6"
+        amendments: [{target: departure, requirements: [departure], fragment: "October 6"}]
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration], accepted_count: 0, accepted: [], rejected_reasons: [ambiguous]}
+  - id: origin_correction_with_sibling
+    final_projection_sha256: 8d17e972e4e494f5cf0aa0fd38195f9660f2dbb6995c89e612ccc371ea67234b
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually change origin to CCC and two"
+        amendments:
+          - {target: origin, correction: true, fragment: "Actually change origin to CCC", value: CCC}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: CCC}]}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {origin: CCC, travelers: 2}}
+  - id: departure_correction
+    final_projection_sha256: 386e859c866cdf07634657b265c78243fb127bce054f54933dd5a9b49be76547
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually make departure October 8 and two"
+        amendments:
+          - {target: departure, correction: true, fragment: "Actually make departure October 8"}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: departure, requirements: [], is_correction: true, payload: {temporal_text: "Actually make departure October 8"}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {departure: "2026-10-08", return: "2026-10-18", travelers: 2}}
+  - id: duration_correction
+    final_projection_sha256: 0d3d27787ed5adaa98ec9b5d0012b595a3bf0e04e74b50d54f0181cdd10fff1d
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually make the trip 7 days and two"
+        amendments:
+          - {target: return_or_duration, correction: true, fragment: "Actually make the trip 7 days"}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: return_or_duration, requirements: [], is_correction: true, payload: {temporal_text: "Actually make the trip 7 days"}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {duration_days: 7, return: "2026-10-13"}}
+  - id: valid_sibling_unsupported_revision
+    final_projection_sha256: e6e9985324009255685a5c160c121bc44498be3e172dfc911ae0a192f0b41fe8
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two and add cabin"
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        rejected: [{fragment: "add cabin", reason: unsupported_request_revision}]
+        expect: {status: stopped, blockers: [], stop_reason: unsupported_request_revision, accepted: [{ordinal: 1, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {travelers: 2}}
+  - id: cancellation
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "cancel"
+        expect: {status: stopped, blockers: [], stop_reason: cancelled, accepted_count: 0, accepted: []}
+  - id: no_progress_limit
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "unsure"
+        expect: {status: awaiting_answer, blockers: [travelers], accepted: []}
+      - text: "still unsure"
+        expect: {status: stopped, blockers: [], stop_reason: no_progress_limit, accepted: []}
+  - id: answer_turn_limit
+    final_projection_sha256: 8e48853489506a67ff640781c85499158166cb38f8a86b74f6c9bda4167298b9
+    initial_origin: AAA
+    initial_unknowns: [destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "Actually change origin to BBB"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to BBB", value: BBB}]
+        expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration, travelers], accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: BBB}]}}]}
+      - text: "Actually change origin to CCC"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to CCC", value: CCC}]
+        expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration, travelers], accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: CCC}]}}]}
+      - text: "Actually change origin to DDD"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to DDD", value: DDD}]
+        expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration, travelers], accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: DDD}]}}]}
+      - text: "Actually change origin to EEE"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to EEE", value: EEE}]
+        expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration, travelers], accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: EEE}]}}]}
+      - text: "Actually change origin to FFF"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to FFF", value: FFF}]
+        expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration, travelers], accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: FFF}]}}]}
+      - text: "Actually change origin to GGG"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to GGG", value: GGG}]
+        expect: {status: stopped, blockers: [], stop_reason: answer_turn_limit, accepted: [{ordinal: 1, target: origin, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: GGG}]}}]}
+  - id: stale_command
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - kind: stale
+        text: "two"
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        expect: {error: command_error}
+  - id: wrong_prompt
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - kind: wrong_prompt
+        text: "two"
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        expect: {error: command_error}
+  - id: replay_and_message_mismatch
+    final_projection_sha256: 14a417bc8ab47eda7423bc44163e8c9625f26926b019475baeffce53b52ac4f5
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two"
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}]}
+      - kind: replay
+        text: "two"
+        expect: {status: ready, blockers: [], replayed: true}
+      - kind: replay_different_text
+        text: "three"
+        expect: {error: command_error}
+  - id: interpreter_failure
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two"
+        fault: interpreter
+        expect: {error: system_error}
+  - id: grounding_failure
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two"
+        fault: grounding
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        expect: {error: system_error}
+  - id: temporal_normalizer_failure
+    final_projection_sha256: ae75756a198e3ae2bc46163e200fc598893a6d5947844a6b80130788ca800d06
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "depart October 6"
+        fault: temporal_normalizer
+        amendments: [{target: departure, requirements: [departure], fragment: "depart October 6"}]
+        expect: {error: system_error}
+  - id: reducer_failure
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two"
+        fault: reducer
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        expect: {error: system_error}
+  - id: temporal_rejection_preserves_sibling
+    final_projection_sha256: ae75756a198e3ae2bc46163e200fc598893a6d5947844a6b80130788ca800d06
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "depart 2/30"
+        amendments: [{target: departure, requirements: [departure], fragment: "depart 2/30"}]
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration], accepted: [], rejected_reasons: [invalid]}
+  - id: conflict_first_then_ready
+    final_projection_sha256: bcefd1b4240e7a861345ddebf033ddd970c6f8fd777af058d5fecb27b917f19b
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_duration_days: 7
+    initial_unknowns: [departure]
+    initial_conflicts: [date_order]
+    turns:
+      - text: "depart October 6"
+        amendments: [{target: conflicting_dates, requirements: [conflict:date_order], fragment: "depart October 6"}]
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: conflicting_dates, requirements: [conflict:date_order], is_correction: false, payload: {temporal_text: "depart October 6"}}], fields: {departure: "2026-10-06", return: "2026-10-13"}}
+  - id: duplicate_field_collision
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two or three"
+        amendments:
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+          - {target: travelers, requirements: [travelers], fragment: three, travelers: 3}
+        expect: {status: awaiting_answer, blockers: [travelers], accepted_count: 0, accepted: [], rejected_reasons: [ambiguous, ambiguous]}
+  - id: unambiguous_bare_departure_date
+    final_projection_sha256: 88237c198165bf24ac6f623abd40c4948a0c796b8215ebd155fd8b0d0f987e3f
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_duration_days: 7
+    initial_unknowns: [departure]
+    turns:
+      - text: "October 6"
+        amendments: [{target: departure, requirements: [departure], fragment: "October 6"}]
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "October 6"}}], fields: {departure: "2026-10-06", return: "2026-10-13"}}
+  - id: valid_invalid_temporal_siblings
+    final_projection_sha256: 1e44f76e9f5c6702ad4b91bec5f616ecdda55f959e3dcd8a5d6aaeef490b2fc1
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "depart October 6 return 2/30"
+        amendments:
+          - {target: departure, requirements: [departure], fragment: "depart October 6"}
+          - {target: return_or_duration, requirements: [return_or_duration], fragment: "return 2/30"}
+        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted_count: 1, accepted: [{ordinal: 1, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}], rejected_reasons: [invalid], fields: {departure: "2026-10-06"}}
+  - id: destination_correction
+    final_projection_sha256: 0bd438d1e3ac05dd2c5270c76b5e60b3a96cc2dda88545be11c22e129248ccbf
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_departure: "2026-10-06"
+    initial_duration_days: 7
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually change destination to CCC and two"
+        amendments:
+          - {target: destination, correction: true, fragment: "Actually change destination to CCC", value: CCC}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: destination, requirements: [], is_correction: true, payload: {locations: [{kind: airport, value: CCC}]}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {destination: CCC, travelers: 2}}
+  - id: traveler_correction
+    final_projection_sha256: 50195b765b8dc3208aad7c7c92684d06ed69bd51cccb0189a3dd1f0168586171
+    initial_origin: AAA
+    initial_destination: BBB
+    initial_departure: "2026-10-06"
+    initial_duration_days: 7
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "Actually change travelers to two and depart October 8"
+        amendments:
+          - {target: travelers, correction: true, fragment: "Actually change travelers to two", travelers: 2}
+          - {target: departure, requirements: [departure], fragment: "depart October 8"}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: travelers, requirements: [], is_correction: true, payload: {travelers: 2}}, {ordinal: 2, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 8"}}], fields: {travelers: 2, departure: "2026-10-08", return: "2026-10-15"}}
+  - id: terminal_rejects_next_command
+    final_projection_sha256: 32b31836689ec18a36ff81e8b47a1a254dce1706ce6dfe90933bcd5c7e28628d
+    initial_unknowns: [travelers]
+    turns:
+      - text: "cancel"
+        expect: {status: stopped, blockers: [], stop_reason: cancelled, accepted_count: 0, accepted: []}
+      - kind: terminal
+        text: "two"
+        amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
+        expect: {error: command_error}
+  - id: equivalent_grouped_answers
+    final_projection_sha256: fb5e04b3636ff8a77faf58a87efa6dc1d1307a68e10ba0e11909acdba2d9544c
+    equivalence_group: fixed_dates
+    initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "AAA BBB two"
+        amendments:
+          - {target: origin, requirements: [origin], fragment: AAA, value: AAA}
+          - {target: destination, requirements: [destination], fragment: BBB, value: BBB}
+          - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration], accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 3, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}]}
+      - text: "depart October 6 return October 16"
+        amendments:
+          - {target: departure, requirements: [departure], fragment: "depart October 6"}
+          - {target: return_or_duration, requirements: [return_or_duration], fragment: "return October 16"}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}, {ordinal: 2, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "return October 16"}}], fields: {origin: AAA, destination: BBB, travelers: 2, departure: "2026-10-06", return: "2026-10-16"}}
+  - id: unsupported_correction_unresolved_field
+    final_projection_sha256: 6e238b802f5a072eeb488e5f291aec378545cdc8c1ce247f0bf34b3b9805ac40
+    initial_unknowns: [origin]
+    turns:
+      - text: "Actually change origin to AAA"
+        amendments: [{target: origin, correction: true, fragment: "Actually change origin to AAA", value: AAA}]
+        expect: {status: stopped, blockers: [], stop_reason: unsupported_request_revision, accepted: [], fields: {origin: null}}

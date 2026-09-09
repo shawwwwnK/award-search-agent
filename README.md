@@ -4,7 +4,20 @@ Award Travel Agent is an independent portfolio project for building a narrow, me
 
 ## Current milestone
 
-Request understanding — complete and frozen:
+Iterative clarification continuation — implementation active.
+
+The current work is to add an additive session boundary after the frozen initial turn. Each
+clarification prompt will list every current blocking requirement; a user may resolve any subset,
+and the session will recompute the remaining blockers until it is ready or explicitly stopped.
+It uses a conversation-aware `EffectiveRequest` with turn-level provenance and does not mutate the
+initial `ParsedRequest`. A local Streamlit harness is allowed only for validation; it is not a
+production UI. The decision is recorded in ADR 0011.
+
+The implementation handoff, including step-by-step scope, invariants, code entry points, and
+acceptance gates, is
+[`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`](docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md).
+
+The initial request-understanding turn remains qualified and frozen:
 
 `raw request -> ParsedRequest -> ClarificationDecision`
 
@@ -13,8 +26,9 @@ temporal-candidate selection, while deterministic code scans, validates, compile
 clarifies temporal facts. Sequential two-pass resolution has been retired. The final qualification
 record is the traced three-trial Luna run at
 `evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
-47/48 records passed (97.92%), with zero errors and one documented clarification miss. Do not
-change the intent slice without an explicit owner decision to reopen it.
+47/48 records passed (97.92%), with zero errors and one documented clarification miss. The owner
+has approved the additive clarification-continuation contract in ADR 0011; the existing parser,
+selector, compiler, clarification policy, and ready corpus remain unchanged.
 
 ## Intended workflow
 
@@ -47,6 +61,8 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
+To run the optional local clarification harness, install `.[harness]` as well.
+
 Run tests:
 
 ```bash
@@ -64,6 +80,37 @@ Run type checks:
 ```bash
 mypy src tests
 ```
+
+## Local clarification harness
+
+After producing a frozen `RequestUnderstandingResult` JSON through the existing
+initial workflow, install the optional dependency and run:
+
+```bash
+python -m pip install -e ".[harness]"
+streamlit run apps/clarification_harness.py
+```
+
+The harness is an ephemeral local validation surface. It calls the public
+clarification controller only after an explicit form submission. Paste a frozen
+`RequestUnderstandingResult` JSON snapshot, choose the answer-interpreter model
+explicitly, and start a session. The harness validates the JSON against the
+domain contract, then shows the deterministic prompt, active typed blockers,
+status, terminal reason when applicable, and the current session JSON.
+
+It stores the session and surfaced errors only in Streamlit `session_state`.
+The interpreter is constructed and `apply_clarification_answer()` is invoked
+only inside the submit event, so ordinary Streamlit reruns cannot invoke a
+model. No request context, resolved dates, effective request, ledger, or
+session limits are sent by the UI to the model; the continuation interpreter
+receives only its answer message and active typed blockers. The adapter uses
+Responses with storage disabled. This harness has no persistence, provider
+calls, deployment behavior, or UI-owned workflow policy.
+
+Live clarification evaluations always save full private model-call trace sidecars
+under `evals/clarification/traces/`; that directory is gitignored. Their public
+JSON artifacts remain redacted and contain only aggregate telemetry and trace
+run metadata.
 
 ## Parse a request
 
@@ -112,7 +159,7 @@ recorded in ADR 0010.
 - Provider integrations
 - Ranking
 - RAG
-- Web UI
+- Production Web UI
 - Authentication
 - Persistence
 - Multi-agent orchestration

@@ -1,0 +1,108 @@
+contract_version: v1
+# Synthetic answers only. The live evaluator never sends offline scripted amendments.
+scenarios:
+  - id: origin_only
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_travelers: 2
+    initial_unknowns: [origin]
+    turns:
+      - text: "SFO"
+        expect: {status: ready, blockers: [], fields: {origin: SFO}}
+  - id: destination_only
+    initial_origin: SFO
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_travelers: 2
+    initial_unknowns: [destination]
+    turns:
+      - text: "NRT"
+        expect: {status: ready, blockers: [], fields: {destination: NRT}}
+  - id: travelers_only
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "two travelers"
+        expect: {status: ready, blockers: [], fields: {travelers: 2}}
+  - id: departure_only
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_duration_days: 10
+    initial_travelers: 2
+    initial_unknowns: [departure]
+    turns:
+      - text: "depart October 6"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-10-06", return: "2026-10-16"}}
+  - id: duration_only
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_travelers: 2
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "10 days"
+        expect: {status: ready, blockers: [], fields: {duration_days: 10, return: "2026-10-16"}}
+  - id: all_at_once
+    initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "from SFO to NRT, depart October 6, return October 16, two travelers"
+        expect: {status: ready, blockers: [], fields: {origin: SFO, destination: NRT, departure: "2026-10-06", return: "2026-10-16", travelers: 2}}
+  - id: subset_two_turn
+    initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "from SFO to NRT, two travelers"
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration]}
+      - text: "depart October 6 and return October 16"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-10-06", return: "2026-10-16"}}
+  - id: bare_date_recovery
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "October 6"
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration]}
+      - text: "depart October 6 and return October 16"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-10-06", return: "2026-10-16"}}
+  - id: origin_correction_with_sibling
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually change origin to LAX, and two travelers"
+        expect: {status: ready, blockers: [], fields: {origin: LAX, travelers: 2}}
+  - id: departure_correction
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually make departure October 8, and two travelers"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-10-08", return: "2026-10-18", travelers: 2}}
+  - id: no_progress_limit
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "I am not sure yet"
+        expect: {status: awaiting_answer, blockers: [travelers]}
+      - text: "I still do not know"
+        expect: {status: stopped, blockers: [], stop_reason: no_progress_limit}
+  - id: cancellation
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_departure: "2026-10-06"
+    initial_duration_days: 10
+    initial_unknowns: [travelers]
+    turns:
+      - text: "cancel"
+        expect: {status: stopped, blockers: [], stop_reason: cancelled}

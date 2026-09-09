@@ -2,13 +2,15 @@
 
 ## Now
 
-- Define request-understanding contracts.
-- Add the first intent-evaluation cases.
-- Implement parsing and deterministic clarification behavior.
+- Implement the ADR-0011 iterative clarification session and its `EffectiveRequest` contract.
+- Add an all-blockers continuation corpus, deterministic reducer tests, and qualification runner.
+- Add a local, ephemeral Streamlit validation harness.
+
+Implementation handoff: `docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.
 
 ## Next
 
-- Run a provider-feasibility spike.
+- Run live continuation qualification only after offline gates pass.
 - Build a fixed-planner, one-provider vertical slice.
 
 ## Later

@@ -44,9 +44,24 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
-Implement request understanding only:
+Implement and qualify iterative clarification continuation:
+
+- issue one clarification message listing every current blocking requirement;
+- accept answers that resolve any subset, preserving turn-level provenance and recomputing every
+  remaining requirement after each response; and
+- provide a local, experimental Streamlit harness for validation only.
+
+The initial request-understanding boundary is qualified and remains frozen at:
 
 `raw request -> ParsedRequest -> ClarificationDecision`
+
+The project owner approved the iterative continuation design in ADR 0011. Keep the existing
+initial parser, temporal compiler, selector, clarification policy, and ready corpus frozen; the
+new session boundary is additive. The Seats.aero feasibility spike passed; fixed search planning
+and provider integration remain deferred until clarification continuation is qualified.
+
+Implementation sequence and frozen-boundary details:
+`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.
 
 ## Architecture boundaries
 
@@ -54,6 +69,15 @@ Implement request understanding only:
 - Deterministic code must perform date arithmetic, schema validation, conflict checks, and clarification policy.
 - Unknowns and conflicts must be preserved.
 - Hard constraints must never be silently invented.
+- A clarification answer must retain its turn-level provenance and must not silently overwrite
+  unrelated hard constraints.
+- Clarification prompts must enumerate all current blockers deterministically; one user answer may
+  resolve any subset of them.
+- An explicit, grounded correction to a supported already-resolved request field must be applied
+  atomically and trigger full recomputation; new unsupported constraints remain explicit instead
+  of being silently accepted.
+- Do not introduce LangChain or LangGraph for this stage. Use explicit Python/Pydantic contracts
+  and deterministic state reduction.
 - The intent component must not expand cities into airports.
 - The intent component must not call travel providers.
 - Model-dependent behavior must sit behind a narrow interface.
@@ -65,11 +89,14 @@ Implement request understanding only:
 - Provider integrations
 - Ranking
 - RAG
-- Web UI
+- Production Web UI
 - Authentication
 - Persistence
 - Multi-agent orchestration
 - Deployment infrastructure
+
+A local Streamlit interface is allowed only as an experimental validation harness: no persistence,
+authentication, deployment, provider calls, or workflow logic in the UI layer.
 
 ## Development expectations
 

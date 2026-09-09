@@ -2,16 +2,27 @@
 
 ## Phase
 
-Request-understanding implementation — complete and frozen.
+Iterative clarification continuation — implementation and qualification active.
 
 ## Current conclusion
 
-The project owner concluded the request-understanding implementation on 2026-09-06. The
+The project owner concluded the initial request-understanding implementation on 2026-09-06. The
 selector-only Luna path is the sole live path: Luna handles non-temporal Pass 1 and opaque
 temporal-candidate selection; deterministic code owns temporal scanning, validation, compilation,
 calendar evaluation, conflicts, and clarification. Sequential two-pass resolution is retired from
-the live code path and configuration. No further intent prompt, schema, compiler, clarification,
-or ready-corpus changes are authorized unless the owner explicitly reopens this slice.
+the live code path and configuration. On 2026-09-08, the owner explicitly reopened a narrow
+follow-on slice: accept iterative answers to a clarification prompt, produce a conversation-aware
+effective request, and recompute all remaining blockers after every response. The project owner
+approved the architecture in ADR 0011: one prompt lists all current blocking requirements, a user
+may resolve any subset, and the loop reaches `ready` or `stopped`. The additive continuation
+boundary is now implemented and qualified offline plus through a three-trial live Luna run. The
+existing parser, selector, temporal compiler, clarification policy, and ready corpus remain
+frozen.
+
+The clarification-stage LLM model is `gpt-5.6-luna`. The separate answer-only interpreter uses
+Luna behind its narrow contract; deterministic code retains temporal context, grounding,
+validation, reduction, and blocker policy. GPT-4o mini remains recorded comparison evidence, not
+a fallback or runtime alternative for this stage.
 
 The qualification record is the traced three-trial run
 `evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
@@ -30,7 +41,8 @@ Award-search agent.
 
 ## Current slice
 
-Request understanding and clarification.
+Iterative clarification continuation: turn an initial parsed snapshot plus successive user answers
+into a traceable `EffectiveRequest` that is `ready` for later planning or explicitly `stopped`.
 
 ## Representative request
 
@@ -38,7 +50,8 @@ Request understanding and clarification.
 
 ## Intended current output
 
-A typed parsed request, explicit unknowns/conflicts, and at most one focused clarification question.
+An `EffectiveRequest`, full blocker-set clarification prompt, and traceable session state after
+each response, terminating at `ready` or `stopped`.
 
 ## Current technical assumptions
 
@@ -52,20 +65,36 @@ A typed parsed request, explicit unknowns/conflicts, and at most one focused cla
 
 Feasible access to useful award-inventory data.
 
-## Immediate next milestone
+## Immediate milestone
 
-Request-understanding implementation is frozen as of 2026-09-06. Preserve the current typed
-boundary and its evaluation evidence; do not make further prompt, schema, compiler, clarification,
-or ready-corpus changes unless the project owner explicitly reopens this slice. The freeze
-handoff, including the earlier four-failure walkthrough, is
-`docs/handoffs/2026-09-05-intent-freeze-handoff.md`. The subsequent architecture decision is
-selector-only (ADR 0010): sequential `two_pass` is retired from live code, configuration, and
-the ready evaluator. Earlier references to it below are historical evaluation evidence only.
-The next project stage may begin from the frozen `ClarificationDecision` boundary; it must not
-silently reopen or modify request understanding.
+Implement the approved iterative clarification session (ADR 0011) and its separate continuation
+corpus. Every prompt must list all current blocking requirements in deterministic order; each
+answer may resolve any subset. Preserve immutable revisions, answer-turn evidence, and atomic
+merge semantics. Do not silently mutate a prior `ParsedRequest`, re-run initial parsing, or reopen
+unrelated frozen request-understanding behavior. An explicit, grounded correction to a supported
+already-resolved field is an approved amendment and must trigger full recomputation. The local
+Streamlit harness may exercise only this session boundary and must remain ephemeral and
+provider-free.
+
+The implementation sequence, contract invariants, code entry points, and acceptance gates are in
+`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.
+
+After this design and its implementation are qualified, the following cut is a fixed-planner,
+one-provider vertical slice: `ClarificationSession(ready).effective_request -> fixed SearchPlan ->
+provider query -> traced result or explicit error`. The freeze handoff is
+`docs/handoffs/2026-09-05-intent-freeze-handoff.md`; ADR 0010 remains the current selector-only
+request-understanding decision. Earlier references to `two_pass` are historical evidence only.
 
 ## Current implementation status
 
+- Seats.aero passed one narrow cached-search access-and-response-shape spike; no application
+  adapter or provider error fixture exists yet. SerpAPI Google Flights remains a later cash-fare
+  candidate. See
+  `docs/provider-feasibility/2026-09-08-initial-provider-intake.md`.
+- The frozen initial workflow stops after `ClarificationDecision`; the additive continuation
+  boundary owns subsequent answers, deterministic reduction, a local-only Streamlit harness, and
+  separate offline/live corpora under ADR 0011. Every live continuation evaluation writes
+  all-call private trace sidecars by default and a redacted public artifact.
 - Selector-only request understanding is the sole live path (ADR 0010). It requires separately
   configured non-temporal Pass 1 and temporal selector adapters before work begins.
 - The compiler owns all temporal facts and always uses `supported_or_unresolved`; the selector can

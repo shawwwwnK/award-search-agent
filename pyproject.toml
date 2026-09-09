@@ -19,6 +19,8 @@ award-intent = "award_agent.cli.intent:main"
 award-intent-eval = "award_agent.cli.intent_eval:main"
 award-frozen-selector-eval = "award_agent.cli.frozen_selector_eval:main"
 award-selector-workflow-integration-eval = "award_agent.cli.selector_workflow_integration_eval:main"
+award-clarification-continuation-eval = "award_agent.cli.clarification_continuation_eval:main"
+award-clarification-live-eval = "award_agent.cli.clarification_live_eval:main"
 
 [project.optional-dependencies]
 dev = [
@@ -28,6 +30,9 @@ dev = [
     "pytest-cov>=5.0",
     "ruff>=0.6",
     "types-PyYAML>=6.0",
+]
+harness = [
+    "streamlit>=1.40,<2",
 ]
 
 [tool.setuptools]
