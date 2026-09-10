@@ -59,9 +59,7 @@ def _wire() -> _ClarificationAnswerWireOutput:
                     "fact_id": "d",
                     "quote": "mid october",
                     "occurrence": 0,
-                    "operation": "set",
                     "target": "departure_window",
-                    "requirement_ids": ["departure"],
                     "location_kind": None,
                     "location_value": None,
                     "travelers": None,
@@ -82,9 +80,7 @@ def _wire() -> _ClarificationAnswerWireOutput:
                     "fact_id": "n",
                     "quote": "about 12 days",
                     "occurrence": 0,
-                    "operation": "set",
                     "target": "duration",
-                    "requirement_ids": ["return"],
                     "location_kind": None,
                     "location_value": None,
                     "travelers": None,
@@ -125,6 +121,10 @@ def test_adapter_sends_least_authority_input_and_converts_exact_spans() -> None:
     }
     assert "reference_date" not in str(payload)
     assert "timezone" not in str(payload)
+    schema = call["text_format"].model_json_schema()
+    fact_properties = schema["$defs"]["_WireFact"]["properties"]
+    assert "operation" not in fact_properties
+    assert "requirement_ids" not in fact_properties
 
 
 def test_adapter_fails_closed_for_api_error_and_unmatched_quote() -> None:

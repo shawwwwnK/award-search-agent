@@ -10,12 +10,7 @@ from award_agent.clarification.interpreter import (
     ClarificationUnresolvedFragment,
     interpret_answer,
 )
-from award_agent.clarification.semantic import (
-    SemanticOperation,
-    SemanticTarget,
-    TemporalAstKind,
-    TemporalSemanticAst,
-)
+from award_agent.clarification.semantic import SemanticTarget, TemporalAstKind, TemporalSemanticAst
 from award_agent.domain import (
     BlockingRequirement,
     BlockingRequirementKind,
@@ -70,7 +65,6 @@ def test_receiver_accepts_multiple_grounded_semantic_facts_without_lexical_rules
             ClarificationSemanticFact(
                 fact_id="departure",
                 span=_span(text, "Actually mid october for depature"),
-                operation=SemanticOperation.REPLACE,
                 target=SemanticTarget.DEPARTURE_WINDOW,
                 temporal=TemporalSemanticAst(
                     kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"
@@ -79,9 +73,7 @@ def test_receiver_accepts_multiple_grounded_semantic_facts_without_lexical_rules
             ClarificationSemanticFact(
                 fact_id="duration",
                 span=_span(text, "about 12 days"),
-                operation=SemanticOperation.SET,
                 target=SemanticTarget.DURATION,
-                requirement_ids=("return",),
                 temporal=TemporalSemanticAst(
                     kind=TemporalAstKind.DURATION, quantity=12, unit="day", approximate=True
                 ),
@@ -95,30 +87,30 @@ def test_receiver_accepts_multiple_grounded_semantic_facts_without_lexical_rules
     ]
 
 
-def test_receiver_rejects_unauthorized_replace_and_ungrounded_fact() -> None:
+def test_receiver_contract_has_no_receiver_authorship_fields_and_rejects_ungrounded_fact() -> None:
     text = "LAX"
-    unauthorized = ClarificationAnswerInterpretation(
+    semantic_fact = ClarificationAnswerInterpretation(
         facts=(
             ClarificationSemanticFact(
                 fact_id="origin",
                 span=_span(text, "LAX"),
-                operation=SemanticOperation.REPLACE,
                 target=SemanticTarget.ORIGIN,
                 location_kind=LocationKind.AIRPORT,
                 location_value="LAX",
             ),
         )
     )
-    with pytest.raises(ClarificationInterpretationError, match="not authorized"):
-        interpret_answer(FakeInterpreter(unauthorized), _input(text))
+    assert (
+        interpret_answer(FakeInterpreter(semantic_fact), _input(text)).facts == semantic_fact.facts
+    )
+    assert "operation" not in semantic_fact.facts[0].model_dump()
+    assert "requirement_ids" not in semantic_fact.facts[0].model_dump()
     bad = ClarificationAnswerInterpretation(
         facts=(
             ClarificationSemanticFact(
                 fact_id="origin",
                 span=MessageSpan(message_id="a1", start=0, end=3, text="SFO"),
-                operation=SemanticOperation.SET,
                 target=SemanticTarget.ORIGIN,
-                requirement_ids=("origin",),
                 location_kind=LocationKind.AIRPORT,
                 location_value="SFO",
             ),
@@ -128,34 +120,14 @@ def test_receiver_rejects_unauthorized_replace_and_ungrounded_fact() -> None:
         interpret_answer(FakeInterpreter(bad), _input(text))
 
 
-def test_receiver_rejects_replace_linked_to_an_unrelated_active_requirement() -> None:
+def test_receiver_accepts_correction_semantics_without_an_authorship_link() -> None:
     text = "Actually October 12"
     output = ClarificationAnswerInterpretation(
         facts=(
             ClarificationSemanticFact(
                 fact_id="departure",
                 span=_span(text, text),
-                operation=SemanticOperation.REPLACE,
                 target=SemanticTarget.DEPARTURE_WINDOW,
-                requirement_ids=("return",),
-                temporal=TemporalSemanticAst(kind=TemporalAstKind.CALENDAR_DATE, month=10, day=12),
-            ),
-        )
-    )
-    with pytest.raises(ClarificationInterpretationError, match="unrelated active requirement"):
-        interpret_answer(FakeInterpreter(output), _input(text))
-
-
-def test_receiver_accepts_replace_linked_only_to_the_matching_active_requirement() -> None:
-    text = "Actually October 12"
-    output = ClarificationAnswerInterpretation(
-        facts=(
-            ClarificationSemanticFact(
-                fact_id="departure",
-                span=_span(text, text),
-                operation=SemanticOperation.REPLACE,
-                target=SemanticTarget.DEPARTURE_WINDOW,
-                requirement_ids=("departure",),
                 temporal=TemporalSemanticAst(kind=TemporalAstKind.CALENDAR_DATE, month=10, day=12),
             ),
         )
@@ -177,12 +149,12 @@ def test_model_input_has_no_context_values_or_ledger() -> None:
     assert "effective_request" not in str(payload)
 
 
-def test_unresolved_fragment_is_answer_local_and_linked_to_active_requirement() -> None:
+def test_unresolved_fragment_is_answer_local_and_can_name_a_semantic_target() -> None:
     text = "either Monday or Tuesday"
     output = ClarificationAnswerInterpretation(
         unresolved_fragments=(
             ClarificationUnresolvedFragment(
-                span=_span(text, text), requirement_ids=("departure",), reason="alternative"
+                span=_span(text, text), target=SemanticTarget.DEPARTURE_WINDOW, reason="alternative"
             ),
         )
     )

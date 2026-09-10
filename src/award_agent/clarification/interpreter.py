@@ -13,7 +13,6 @@ from typing import Protocol
 from pydantic import Field, model_validator
 
 from award_agent.clarification.semantic import (
-    SemanticOperation,
     SemanticTarget,
     TemporalSemanticAst,
 )
@@ -60,11 +59,17 @@ class ClarificationAnswerInterpreterInput(SessionContractModel):
 
 
 class ClarificationSemanticFact(SessionContractModel):
+    """A receiver-owned, grounded semantic fact.
+
+    This is deliberately not an amendment.  In particular, a receiver cannot
+    choose whether it is a set or correction, or attach itself to an active
+    blocker.  Those are authority decisions made from the current session
+    state after the model has supplied only its semantic target and value.
+    """
+
     fact_id: str = Field(min_length=1)
     span: MessageSpan
-    operation: SemanticOperation
     target: SemanticTarget
-    requirement_ids: tuple[str, ...] = ()
     location_kind: LocationKind | None = None
     location_value: str | None = None
     travelers: int | None = Field(default=None, ge=1)
@@ -94,7 +99,7 @@ class ClarificationSemanticFact(SessionContractModel):
 
 class ClarificationUnresolvedFragment(SessionContractModel):
     span: MessageSpan
-    requirement_ids: tuple[str, ...] = ()
+    target: SemanticTarget | None = None
     reason: str = Field(min_length=1, max_length=80)
 
 
@@ -125,16 +130,6 @@ class ClarificationAnswerInterpreter(Protocol):
     ) -> ClarificationAnswerInterpretation: ...
 
 
-_TARGET_REQUIREMENT_KIND = {
-    SemanticTarget.ORIGIN: "origin",
-    SemanticTarget.DESTINATION: "destination",
-    SemanticTarget.TRAVELERS: "travelers",
-    SemanticTarget.DEPARTURE_WINDOW: "departure",
-    SemanticTarget.RETURN_WINDOW: "return_or_duration",
-    SemanticTarget.DURATION: "return_or_duration",
-}
-
-
 def validate_message_span(*, message_id: str, text: str, span: MessageSpan) -> None:
     if span.message_id != message_id:
         raise ClarificationInterpretationError(
@@ -150,37 +145,10 @@ def validate_answer_interpretation(
     input: ClarificationAnswerInterpreterInput, interpretation: ClarificationAnswerInterpretation
 ) -> ClarificationAnswerInterpretation:
     """Validate grounding and authority only; never inspect words for meaning."""
-    requirements = {item.requirement_id: item for item in input.ordered_requirements}
     for fact in interpretation.facts:
         validate_message_span(message_id=input.message_id, text=input.text, span=fact.span)
-        links = set(fact.requirement_ids)
-        if not links.issubset(requirements):
-            raise ClarificationInterpretationError("semantic fact links an inactive requirement")
-        expected = _TARGET_REQUIREMENT_KIND[fact.target]
-        if fact.operation is SemanticOperation.SET:
-            if not links:
-                raise ClarificationInterpretationError(
-                    "set fact requires an active requirement link"
-                )
-            if any(requirements[item].kind.value != expected for item in links):
-                raise ClarificationInterpretationError(
-                    "semantic fact links an incompatible requirement"
-                )
-        else:
-            if fact.target not in input.correction_eligible_targets:
-                raise ClarificationInterpretationError(
-                    "replace fact is not authorized for this target"
-                )
-            if links and any(requirements[item].kind.value != expected for item in links):
-                raise ClarificationInterpretationError(
-                    "replace fact links an unrelated active requirement"
-                )
     for fragment in interpretation.unresolved_fragments:
         validate_message_span(message_id=input.message_id, text=input.text, span=fragment.span)
-        if not set(fragment.requirement_ids).issubset(requirements):
-            raise ClarificationInterpretationError(
-                "unresolved fragment links an inactive requirement"
-            )
     return interpretation
 
 

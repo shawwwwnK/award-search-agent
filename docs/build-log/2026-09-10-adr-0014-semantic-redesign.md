@@ -19,6 +19,13 @@
 - The architecture review identified live-qualification gaps in the initial experiment/gate design;
   those findings were used to strengthen the typed offline gate. No live OpenAI calls were made in
   this stage.
+- A subsequent live-harness report exposed a receiver metadata linkage failure for the reasonable
+  combined answer “leave early October and go for about a week.” The receiver contract was reduced
+  so it supplies only grounded semantic targets and values; deterministic session policy now derives
+  amendment operation and requirement linkage. A target authorization miss is an independently
+  rejected model proposal, not a terminal user-request error, so an accepted sibling remains usable.
+- Focused controller/interpreter/semantic tests passed: 21 tests.
+- Full unit suite after the follow-up authorization fix passed: 380 tests.
 
 ## Current limitations
 

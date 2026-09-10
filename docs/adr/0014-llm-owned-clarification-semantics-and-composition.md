@@ -49,8 +49,10 @@ customer-facing question. The contract can contain:
 
 - a discourse classification such as answer, correction, conflict, decline/cancel, non-answer,
   or unsupported request;
-- zero or more independently targeted amendments, each with an allowed field, operation
-  (`set`/`replace`), requirement or correction target, and exact answer-local evidence span;
+- zero or more independently targeted semantic facts, each with an allowed field, typed value,
+  and exact answer-local evidence span. The receiver does not select an amendment operation or
+  link itself to a blocker: deterministic state policy derives `set` with the one compatible
+  active blocker, or `replace` without a blocker link for an eligible already-resolved field;
 - closed symbolic temporal semantics for dates, windows, relative periods, and durations, rather
   than model-calculated calendar dates;
 - explicit alternatives, ambiguities, conflicts, and unsupported fragments when one bounded

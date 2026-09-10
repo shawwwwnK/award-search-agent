@@ -41,7 +41,6 @@ from award_agent.clarification.interpreter import (
 )
 from award_agent.clarification.issues import derive_clarification_issues
 from award_agent.clarification.semantic import (
-    SemanticOperation,
     SemanticTarget,
     SemanticTemporalCompileError,
     TemporalAstKind,
@@ -271,16 +270,12 @@ def _duration_fact(
     text: str,
     *,
     identifier: str = "duration",
-    operation: SemanticOperation = SemanticOperation.SET,
-    requirement_ids: tuple[str, ...] = ("return_or_duration",),
     approximate: bool = True,
 ) -> ClarificationSemanticFact:
     return ClarificationSemanticFact(
         fact_id=identifier,
         span=_span(message_id, text),
-        operation=operation,
         target=SemanticTarget.DURATION,
-        requirement_ids=requirement_ids,
         temporal=TemporalSemanticAst(
             kind=TemporalAstKind.DURATION, quantity=12, unit="day", approximate=approximate
         ),
@@ -298,9 +293,7 @@ def _schema_span_grounding() -> None:
         lambda: ClarificationSemanticFact(
             fact_id="bad-shape",
             span=_span(input.message_id, input.text),
-            operation=SemanticOperation.SET,
             target=SemanticTarget.DURATION,
-            requirement_ids=("return_or_duration",),
             location_kind=LocationKind.AIRPORT,
             location_value="SFO",
         ),
@@ -330,58 +323,19 @@ def _schema_span_grounding() -> None:
     )
 
 
-def _set_replace_authorization() -> None:
+def _state_authorization_is_not_receiver_authorship() -> None:
     input = _input()
     fact = _duration_fact(input.message_id, input.text)
     validate_answer_interpretation(input, ClarificationAnswerInterpretation(facts=(fact,)))
-    _assert_raises(
-        ClarificationInterpretationError,
-        lambda: validate_answer_interpretation(
-            input,
-            ClarificationAnswerInterpretation(
-                facts=(fact.model_copy(update={"requirement_ids": ()}),)
-            ),
-        ),
-    )
-    _assert_raises(
-        ClarificationInterpretationError,
-        lambda: validate_answer_interpretation(
-            input,
-            ClarificationAnswerInterpretation(
-                facts=(fact.model_copy(update={"requirement_ids": ("departure",)}),)
-            ),
-        ),
-    )
     correction = ClarificationSemanticFact(
         fact_id="dep",
         span=_span(input.message_id, input.text),
-        operation=SemanticOperation.REPLACE,
         target=SemanticTarget.DEPARTURE_WINDOW,
         temporal=TemporalSemanticAst(kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"),
     )
     validate_answer_interpretation(input, ClarificationAnswerInterpretation(facts=(correction,)))
-    _assert_raises(
-        ClarificationInterpretationError,
-        lambda: validate_answer_interpretation(
-            input,
-            ClarificationAnswerInterpretation(
-                facts=(
-                    fact.model_copy(
-                        update={"operation": SemanticOperation.REPLACE, "requirement_ids": ()}
-                    ),
-                )
-            ),
-        ),
-    )
-    _assert_raises(
-        ClarificationInterpretationError,
-        lambda: validate_answer_interpretation(
-            input,
-            ClarificationAnswerInterpretation(
-                facts=(correction.model_copy(update={"requirement_ids": ("return_or_duration",)}),)
-            ),
-        ),
-    )
+    assert "operation" not in fact.model_dump()
+    assert "requirement_ids" not in fact.model_dump()
 
 
 def _temporal_calendar_ranges_dependencies() -> None:
@@ -589,16 +543,12 @@ def _fact(
     *,
     identifier: str,
     target: SemanticTarget,
-    operation: SemanticOperation,
-    requirement_ids: tuple[str, ...] = (),
     temporal: TemporalSemanticAst,
 ) -> ClarificationSemanticFact:
     return ClarificationSemanticFact(
         fact_id=identifier,
         span=_span(message_id, text),
-        operation=operation,
         target=target,
-        requirement_ids=requirement_ids,
         temporal=temporal,
     )
 
@@ -611,8 +561,6 @@ def _conflicts_siblings_atomicity() -> None:
         text,
         identifier="return-before",
         target=SemanticTarget.RETURN_WINDOW,
-        operation=SemanticOperation.SET,
-        requirement_ids=("return_or_duration",),
         temporal=TemporalSemanticAst(
             kind=TemporalAstKind.CALENDAR_DATE, year=2026, month=10, day=1
         ),
@@ -643,7 +591,6 @@ def _conflicts_siblings_atomicity() -> None:
         good_text,
         identifier="dep",
         target=SemanticTarget.DEPARTURE_WINDOW,
-        operation=SemanticOperation.REPLACE,
         temporal=TemporalSemanticAst(kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"),
     )
     duration = _duration_fact("siblings-message", good_text, identifier="duration")
@@ -666,8 +613,6 @@ def _conflicts_siblings_atomicity() -> None:
         bad_text,
         identifier="bad",
         target=SemanticTarget.RETURN_WINDOW,
-        operation=SemanticOperation.SET,
-        requirement_ids=("return_or_duration",),
         temporal=TemporalSemanticAst(kind=TemporalAstKind.DURATION, quantity=2, unit="day"),
     )
     retained = apply_clarification_answer(
@@ -800,7 +745,7 @@ def _composer_coverage_linkage_failure_redaction() -> None:
 
 _CHECKS: dict[str, Callable[[], None]] = {
     "schema_and_span_grounding": _schema_span_grounding,
-    "set_replace_authorization": _set_replace_authorization,
+    "set_replace_authorization": _state_authorization_is_not_receiver_authorship,
     "temporal_calendar_ranges_and_dependencies": _temporal_calendar_ranges_dependencies,
     "fuzzy_assumption_disclosure": _fuzzy_assumption_disclosure,
     "conflict_preservation_sibling_atomicity": _conflicts_siblings_atomicity,

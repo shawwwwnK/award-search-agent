@@ -95,6 +95,29 @@ class ClarificationCompositionPending:
     pending: PendingPromptTransition
 
 
+@dataclass(frozen=True)
+class _AuthorizedSemanticFact:
+    """A semantic fact after deterministic session-scope authorization.
+
+    The receiver supplies no operation or requirement links.  This local form
+    is the only place where a semantic target becomes a reducer amendment.
+    """
+
+    fact: ClarificationSemanticFact
+    operation: SemanticOperation
+    requirement_ids: tuple[str, ...]
+
+
+_TARGET_REQUIREMENT_KIND = {
+    SemanticTarget.ORIGIN: "origin",
+    SemanticTarget.DESTINATION: "destination",
+    SemanticTarget.TRAVELERS: "travelers",
+    SemanticTarget.DEPARTURE_WINDOW: "departure",
+    SemanticTarget.RETURN_WINDOW: "return_or_duration",
+    SemanticTarget.DURATION: "return_or_duration",
+}
+
+
 def _build_prompt(
     effective: EffectiveRequest,
     *,
@@ -215,8 +238,68 @@ def _correction_eligible_targets(effective: EffectiveRequest) -> tuple[SemanticT
     return tuple(targets)
 
 
-def _materialize_semantic_facts(
+def _authorize_semantic_facts(
     facts: tuple[ClarificationSemanticFact, ...],
+    *,
+    requirements: tuple[BlockingRequirement, ...],
+    effective: EffectiveRequest,
+) -> tuple[tuple[_AuthorizedSemanticFact, ...], tuple[RejectedFragment, ...]]:
+    """Bind model semantics to the current session without reading answer text.
+
+    A target with one compatible active requirement is necessarily a ``set``.
+    Only a target that is already resolved and explicitly correction-eligible
+    becomes a ``replace``.  All other model facts are independently retained
+    as a rejected proposal so a bad sibling cannot erase a usable one.
+    """
+
+    correction_eligible = set(_correction_eligible_targets(effective))
+    authorized: list[_AuthorizedSemanticFact] = []
+    rejected: list[RejectedFragment] = []
+    for fact in facts:
+        expected_kind = _TARGET_REQUIREMENT_KIND[fact.target]
+        compatible = tuple(
+            requirement.requirement_id
+            for requirement in requirements
+            if requirement.kind.value == expected_kind
+        )
+        if len(compatible) == 1:
+            authorized.append(
+                _AuthorizedSemanticFact(
+                    fact=fact,
+                    operation=SemanticOperation.SET,
+                    requirement_ids=compatible,
+                )
+            )
+        elif not compatible and fact.target in correction_eligible:
+            authorized.append(
+                _AuthorizedSemanticFact(
+                    fact=fact,
+                    operation=SemanticOperation.REPLACE,
+                    requirement_ids=(),
+                )
+            )
+        else:
+            rejected.append(
+                RejectedFragment(
+                    span=fact.span,
+                    # A target emitted by the receiver is a proposal, not an
+                    # attempted user-level request revision.  Reject it
+                    # independently so a valid sibling can still resolve the
+                    # active blocker; its presence must not terminally stop
+                    # the turn.
+                    reason=RejectedFragmentReason.INVALID,
+                    detail=(
+                        "receiver target is neither an active compatible requirement "
+                        "nor an eligible resolved correction"
+                    ),
+                    reason_code="receiver.target_not_authorized",
+                )
+            )
+    return tuple(authorized), tuple(rejected)
+
+
+def _materialize_semantic_facts(
+    facts: tuple[_AuthorizedSemanticFact, ...],
     *,
     effective: EffectiveRequest,
 ) -> tuple[
@@ -229,8 +312,9 @@ def _materialize_semantic_facts(
     compiled: dict[str, tuple[TemporalContribution, ...]] = {}
     prior_compiled: dict[str, CompiledSemanticTemporalFact] = {}
     rejected: list[RejectedFragment] = []
-    for fact in facts:
-        correction = fact.operation is SemanticOperation.REPLACE
+    for authorized_fact in facts:
+        fact = authorized_fact.fact
+        correction = authorized_fact.operation is SemanticOperation.REPLACE
         amendment: TypedAmendment
         if fact.target in {SemanticTarget.ORIGIN, SemanticTarget.DESTINATION}:
             assert fact.location_kind is not None and fact.location_value is not None
@@ -239,7 +323,7 @@ def _materialize_semantic_facts(
                 target=AmendmentTarget.ORIGIN
                 if fact.target is SemanticTarget.ORIGIN
                 else AmendmentTarget.DESTINATION,
-                requirement_ids=fact.requirement_ids,
+                requirement_ids=authorized_fact.requirement_ids,
                 span=fact.span,
                 is_correction=correction,
                 locations=(
@@ -255,7 +339,7 @@ def _materialize_semantic_facts(
             amendment = TravelersAmendment(
                 amendment_id=fact.fact_id,
                 target=AmendmentTarget.TRAVELERS,
-                requirement_ids=fact.requirement_ids,
+                requirement_ids=authorized_fact.requirement_ids,
                 span=fact.span,
                 is_correction=correction,
                 travelers=fact.travelers,
@@ -266,7 +350,7 @@ def _materialize_semantic_facts(
                 amendment = TemporalAmendment(
                     amendment_id=fact.fact_id,
                     target=AmendmentTarget.DEPARTURE,
-                    requirement_ids=fact.requirement_ids,
+                    requirement_ids=authorized_fact.requirement_ids,
                     span=fact.span,
                     is_correction=correction,
                     temporal_text=fact.span.text,
@@ -275,7 +359,7 @@ def _materialize_semantic_facts(
                 amendment = TemporalAmendment(
                     amendment_id=fact.fact_id,
                     target=AmendmentTarget.RETURN_OR_DURATION,
-                    requirement_ids=fact.requirement_ids,
+                    requirement_ids=authorized_fact.requirement_ids,
                     span=fact.span,
                     is_correction=correction,
                     temporal_text=fact.span.text,
@@ -295,7 +379,7 @@ def _materialize_semantic_facts(
                         span=fact.span,
                         reason=RejectedFragmentReason.AMBIGUOUS,
                         detail="receiver semantic fact could not be compiled",
-                        requirement_ids=fact.requirement_ids,
+                        requirement_ids=authorized_fact.requirement_ids,
                         reason_code="receiver.semantic_compile",
                     )
                 )
@@ -506,8 +590,13 @@ def apply_clarification_answer(
         )
         return ClarificationTransition(session=next_session, revision=next_revision)
 
+    authorized_facts, authorization_rejections = _authorize_semantic_facts(
+        interpretation.facts,
+        requirements=current.prompt.requirements,
+        effective=current.effective_request,
+    )
     materialized, compiled_temporal_contributions, compilation_rejections = (
-        _materialize_semantic_facts(interpretation.facts, effective=current.effective_request)
+        _materialize_semantic_facts(authorized_facts, effective=current.effective_request)
     )
     scoped, scope_rejections = _filter_corrections_and_collisions(
         materialized,
@@ -527,12 +616,18 @@ def apply_clarification_answer(
                 span=item.span,
                 reason=RejectedFragmentReason.AMBIGUOUS,
                 detail="receiver could not resolve this answer fragment",
-                requirement_ids=item.requirement_ids,
+                requirement_ids=tuple(
+                    requirement.requirement_id
+                    for requirement in current.prompt.requirements
+                    if item.target is not None
+                    and requirement.kind.value == _TARGET_REQUIREMENT_KIND[item.target]
+                ),
                 reason_code=f"receiver.{item.reason}",
             )
             for item in interpretation.unresolved_fragments
         )
         + compilation_rejections
+        + authorization_rejections
         + scope_rejections
     )
     blocker_ids = tuple(

@@ -21,18 +21,14 @@ from award_agent.clarification.interpreter import (
     ClarificationDiscourseAct,
     ClarificationSemanticFact,
 )
-from award_agent.clarification.semantic import (
-    SemanticOperation,
-    SemanticTarget,
-    TemporalAstKind,
-    TemporalSemanticAst,
-)
+from award_agent.clarification.semantic import SemanticTarget, TemporalAstKind, TemporalSemanticAst
 from award_agent.domain import (
     ClarificationAction,
     ClarificationAnswerCommand,
     ClarificationDecision,
     DateWindow,
     DateWindowPrecision,
+    MessageSpan,
     ParsedRequest,
     RequestContext,
     RequestUnderstandingResult,
@@ -129,49 +125,40 @@ def _fact(
     text: str,
     quote: str,
     target: SemanticTarget,
-    operation: SemanticOperation,
     temporal: TemporalSemanticAst,
-    requirement_ids: tuple[str, ...] = (),
 ) -> ClarificationSemanticFact:
     start = text.index(quote)
-    from award_agent.domain import MessageSpan
-
     return ClarificationSemanticFact(
         fact_id=identifier,
         span=MessageSpan(message_id="m1", start=start, end=start + len(quote), text=quote),
-        operation=operation,
         target=target,
-        requirement_ids=requirement_ids,
         temporal=temporal,
     )
 
 
-def test_typo_correction_and_duration_are_independent_receiver_facts() -> None:
+def test_resolved_departure_correction_and_return_duration_become_ready() -> None:
     session = start_clarification(_initial(), session_id="semantic", composer=FakeComposer())
-    text = "Actually mid october for depature and the trip will be about 12 days"
+    text = "I want to leave early October and go for about a week"
     receiver = FakeInterpreter(
         ClarificationAnswerInterpretation(
             facts=(
                 _fact(
                     "departure",
                     text,
-                    "Actually mid october for depature",
+                    "leave early October",
                     SemanticTarget.DEPARTURE_WINDOW,
-                    SemanticOperation.REPLACE,
                     TemporalSemanticAst(
-                        kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"
+                        kind=TemporalAstKind.MONTH_PORTION, month=10, portion="early"
                     ),
                 ),
                 _fact(
                     "duration",
                     text,
-                    "about 12 days",
+                    "about a week",
                     SemanticTarget.DURATION,
-                    SemanticOperation.SET,
                     TemporalSemanticAst(
-                        kind=TemporalAstKind.DURATION, quantity=12, unit="day", approximate=True
+                        kind=TemporalAstKind.DURATION, quantity=1, unit="week", approximate=True
                     ),
-                    ("return_or_duration",),
                 ),
             )
         )
@@ -180,13 +167,13 @@ def test_typo_correction_and_duration_are_independent_receiver_facts() -> None:
     effective = transition.revision.effective_request
     assert transition.revision.status.value == "ready"
     assert (effective.departure_window.start, effective.departure_window.end) == (
-        date(2026, 10, 11),
-        date(2026, 10, 20),
+        date(2026, 10, 1),
+        date(2026, 10, 10),
     )  # type: ignore[union-attr]
     assert (
         effective.interpreted_duration.minimum_days,
         effective.interpreted_duration.maximum_days,
-    ) == (11, 13)  # type: ignore[union-attr]
+    ) == (6, 8)  # type: ignore[union-attr]
     assert len(transition.revision.outcome.accepted_amendments) == 2  # type: ignore[union-attr]
 
 
@@ -211,11 +198,9 @@ def test_invalid_semantic_fact_is_rejected_while_session_can_continue() -> None:
                     text,
                     text,
                     SemanticTarget.DURATION,
-                    SemanticOperation.SET,
                     TemporalSemanticAst(
                         kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"
                     ),
-                    ("return_or_duration",),
                 ),
             )
         )
@@ -229,6 +214,92 @@ def test_invalid_semantic_fact_is_rejected_while_session_can_continue() -> None:
     assert (
         transition.revision.outcome.rejected_fragments[0].reason_code == "receiver.semantic_compile"
     )
+
+
+def test_invalid_sibling_does_not_discard_a_valid_duration_fact() -> None:
+    session = start_clarification(_initial(), session_id="valid-sibling", composer=FakeComposer())
+    text = "about a week and the other date thing"
+    receiver = FakeInterpreter(
+        ClarificationAnswerInterpretation(
+            facts=(
+                _fact(
+                    "duration",
+                    text,
+                    "about a week",
+                    SemanticTarget.DURATION,
+                    TemporalSemanticAst(
+                        kind=TemporalAstKind.DURATION, quantity=1, unit="week", approximate=True
+                    ),
+                ),
+                _fact(
+                    "bad-return",
+                    text,
+                    "other date thing",
+                    SemanticTarget.RETURN_WINDOW,
+                    TemporalSemanticAst(kind=TemporalAstKind.DURATION, quantity=2, unit="day"),
+                ),
+            )
+        )
+    )
+
+    transition = apply_clarification_answer(session, _command(session, text), receiver)
+
+    assert transition.revision.status.value == "ready"
+    assert {item.amendment_id for item in transition.revision.outcome.accepted_amendments} == {
+        "duration"
+    }
+    assert (
+        transition.revision.outcome.rejected_fragments[0].reason_code == "receiver.semantic_compile"
+    )
+
+
+def test_unauthorized_target_sibling_does_not_terminally_stop_valid_duration() -> None:
+    initial = _initial()
+    session = start_clarification(
+        initial.model_copy(
+            update={"parsed_request": initial.parsed_request.model_copy(update={"travelers": None})}
+        ),
+        session_id="unauthorized-sibling",
+        composer=FakeComposer(),
+    )
+    text = "about a week and a different other thing"
+    receiver = FakeInterpreter(
+        ClarificationAnswerInterpretation(
+            facts=(
+                _fact(
+                    "duration",
+                    text,
+                    "about a week",
+                    SemanticTarget.DURATION,
+                    TemporalSemanticAst(
+                        kind=TemporalAstKind.DURATION, quantity=1, unit="week", approximate=True
+                    ),
+                ),
+                ClarificationSemanticFact(
+                    fact_id="unsupported-return",
+                    span=MessageSpan(
+                        message_id="m1",
+                        start=text.index("different other thing"),
+                        end=text.index("different other thing") + len("different other thing"),
+                        text="different other thing",
+                    ),
+                    target=SemanticTarget.TRAVELERS,
+                    travelers=2,
+                ),
+            )
+        )
+    )
+
+    transition = apply_clarification_answer(session, _command(session, text), receiver)
+
+    assert transition.revision.status.value == "ready"
+    assert {item.amendment_id for item in transition.revision.outcome.accepted_amendments} == {
+        "duration"
+    }
+    rejected = transition.revision.outcome.rejected_fragments
+    assert len(rejected) == 1
+    assert rejected[0].reason.value == "invalid"
+    assert rejected[0].reason_code == "receiver.target_not_authorized"
 
 
 def test_composer_receives_authoritative_post_reduction_requirements_and_issues() -> None:
