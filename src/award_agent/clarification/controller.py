@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-import re
+import json
 from dataclasses import dataclass
-from typing import Literal, cast
+from hashlib import sha256
 from uuid import uuid4
 
 from award_agent.clarification.blockers import (
@@ -13,42 +13,32 @@ from award_agent.clarification.blockers import (
 )
 from award_agent.clarification.composer import (
     ClarificationPromptComposer,
+    ClarificationPromptComposerInput,
+    compose_prompt,
 )
 from award_agent.clarification.interpreter import (
-    ClarificationAnswerInterpretation,
     ClarificationAnswerInterpreter,
     ClarificationAnswerInterpreterInput,
+    ClarificationDiscourseAct,
+    ClarificationSemanticFact,
     interpret_answer,
 )
 from award_agent.clarification.issues import derive_clarification_issues
 from award_agent.clarification.projection import project_initial_request
 from award_agent.clarification.reducer import apply_amendments
-from award_agent.clarification.temporal import (
-    AmbiguousClarificationTemporalAnswer,
-    ClarificationTemporalNormalizationError,
-    UnsupportedClarificationTemporalAnswer,
-    recover_ordered_numeric_date_pair,
-)
-from award_agent.clarification.temporal_approximations import (
-    ClarificationTemporalApproximationError,
-    ClarificationTemporalApproximationProjection,
-    compile_temporal_approximation_selection,
-    harvest_temporal_approximation_projection,
-    unresolved_approximation_rejections,
-)
-from award_agent.clarification.temporal_templates import (
-    ClarificationTemporalTemplateError,
-    compile_temporal_template_selection,
-    harvest_temporal_template_projection,
-    target_for_template_candidate,
-    unresolved_template_rejections,
+from award_agent.clarification.semantic import (
+    CompiledSemanticTemporalFact,
+    SemanticOperation,
+    SemanticTarget,
+    SemanticTemporalCompileError,
+    compile_temporal_ast,
 )
 from award_agent.domain import (
     AmendmentTarget,
-    AnswerMessageSource,
     AnswerTurn,
     BlockingRequirement,
     ClarificationAnswerCommand,
+    ClarificationIssue,
     ClarificationPrompt,
     ClarificationSession,
     ClarificationSessionLimits,
@@ -57,24 +47,35 @@ from award_agent.domain import (
     ClarificationStopReason,
     DateWindow,
     EffectiveRequest,
+    LocationAmendment,
     LocationRef,
     MessageSpan,
+    PendingPromptTransition,
     PromptCompositionSource,
     RejectedFragment,
     RejectedFragmentReason,
-    RequestContext,
     RequestUnderstandingResult,
     ResolutionOutcome,
     TemporalAmendment,
     TemporalContribution,
-    TemporalContributionKind,
-    TemporalTemplateProvenance,
+    TravelersAmendment,
     TypedAmendment,
 )
 
 
 class ClarificationCommandError(ValueError):
     """A caller command cannot be applied to this session state."""
+
+
+class ClarificationPromptCompositionFailedError(RuntimeError):
+    """A retryable composer failure prevented a prompt-bearing transition.
+
+    A prompt is part of an immutable session revision.  Callers must retry the
+    same command (or restart initial-session creation) with a healthy
+    composer; no revision is returned or recorded when composition fails.
+    """
+
+    code = "prompt_composition_failed"
 
 
 @dataclass(frozen=True)
@@ -86,52 +87,67 @@ class ClarificationTransition:
     replayed: bool = False
 
 
+@dataclass(frozen=True)
+class ClarificationCompositionPending:
+    """Caller-storable result when only LLM presentation remains retryable."""
+
+    session: ClarificationSession
+    pending: PendingPromptTransition
+
+
 def _build_prompt(
     effective: EffectiveRequest,
     *,
     requirements: tuple[BlockingRequirement, ...],
     revision: int,
     composer: ClarificationPromptComposer | None,
-    receiver_interpretation: ClarificationAnswerInterpretation | None = None,
     rejected_fragments: tuple[RejectedFragment, ...] = (),
+    issues: tuple[ClarificationIssue, ...] | None = None,
 ) -> ClarificationPrompt | None:
-    """Render the authoritative prompt without a second model round trip.
-
-    The initial prompt is deterministic.  On later turns, presentation may
-    reuse question items returned by the answer receiver only after the
-    reducer has recomputed the exact remaining requirement IDs.  ``composer``
-    remains an ignored compatibility parameter for callers from ADR 0012; it
-    must never be invoked here.
-    """
+    """Compose one prompt from the authoritative post-reduction issue set."""
 
     if not requirements:
         return None
-    issues = derive_clarification_issues(requirements, rejected_fragments=rejected_fragments)
-    del composer
-    expected_ids = tuple(requirement.requirement_id for requirement in requirements)
-    if (
-        receiver_interpretation is None
-        or receiver_interpretation.next_question_requirement_ids != expected_ids
-        or not receiver_interpretation.next_question_items
-    ):
-        return build_clarification_prompt(
-            effective,
-            revision=revision,
-            issues=issues,
-            composition_source=PromptCompositionSource.FALLBACK,
-            fallback_code=(
-                "receiver.no_usable_followup"
-                if receiver_interpretation is not None
-                else None
+    issues = issues or derive_clarification_issues(
+        requirements, rejected_fragments=rejected_fragments
+    )
+    if composer is None:
+        raise ClarificationPromptCompositionFailedError(
+            "prompt_composition_failed: no clarification prompt composer is configured"
+        )
+    try:
+        composition = compose_prompt(
+            composer,
+            ClarificationPromptComposerInput(
+                requirements=requirements,
+                issues=issues,
             ),
         )
+    except Exception as exc:  # A model or contract failure is retryable and non-mutating.
+        raise ClarificationPromptCompositionFailedError(
+            "prompt_composition_failed: clarification prompt composition failed"
+        ) from exc
     return build_clarification_prompt(
         effective,
         revision=revision,
         issues=issues,
-        question_items=receiver_interpretation.next_question_items,
+        question_items=tuple(item.question for item in composition.question_items),
         composition_source=PromptCompositionSource.MODEL,
     )
+
+
+def _composition_key(
+    *,
+    base_revision: int,
+    requirements: tuple[BlockingRequirement, ...],
+    issues: tuple[ClarificationIssue, ...],
+) -> str:
+    payload = {
+        "base_revision": base_revision,
+        "requirements": [item.model_dump(mode="json") for item in requirements],
+        "issues": [item.model_dump(mode="json") for item in issues],
+    }
+    return sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
 def start_clarification(
@@ -182,377 +198,112 @@ def _session_at_revision(
     )
 
 
-def _is_cancel(text: str) -> bool:
-    normalized = re.sub(r"[\s,.!?]+", " ", text.casefold().replace("’", "'")).strip()
-    return (
-        re.fullmatch(
-            r"(?:please )?(?:cancel(?: this)?|stop(?: here)?|never ?mind|no(?: thanks| thank you)?|i (?:do not|don't) want to continue)",
-            normalized,
-        )
-        is not None
-    )
+def _correction_eligible_targets(effective: EffectiveRequest) -> tuple[SemanticTarget, ...]:
+    targets: list[SemanticTarget] = []
+    if effective.origins:
+        targets.append(SemanticTarget.ORIGIN)
+    if effective.destinations:
+        targets.append(SemanticTarget.DESTINATION)
+    if effective.travelers is not None:
+        targets.append(SemanticTarget.TRAVELERS)
+    if effective.departure_window is not None:
+        targets.append(SemanticTarget.DEPARTURE_WINDOW)
+    if effective.return_window is not None:
+        targets.append(SemanticTarget.RETURN_WINDOW)
+    if effective.interpreted_duration is not None:
+        targets.append(SemanticTarget.DURATION)
+    return tuple(targets)
 
 
-def _rejected_temporal_fragment(
-    amendment: TemporalAmendment,
-    error: Exception,
-) -> RejectedFragment:
-    if isinstance(error, AmbiguousClarificationTemporalAnswer):
-        reason = RejectedFragmentReason.AMBIGUOUS
-    elif isinstance(error, UnsupportedClarificationTemporalAnswer):
-        reason = RejectedFragmentReason.INVALID
-    else:
-        reason = RejectedFragmentReason.INVALID
-    return RejectedFragment(
-        span=amendment.span,
-        reason=reason,
-        detail=str(error),
-        requirement_ids=amendment.requirement_ids,
-    )
-
-
-def _validate_temporal_subset(
-    amendments: tuple[TypedAmendment, ...],
+def _materialize_semantic_facts(
+    facts: tuple[ClarificationSemanticFact, ...],
     *,
-    answer_text: str,
-    requirements: tuple[BlockingRequirement, ...],
-    context: RequestContext,
-    precompiled_amendment_ids: frozenset[str] = frozenset(),
-) -> tuple[tuple[TypedAmendment, ...], tuple[RejectedFragment, ...]]:
-    """Keep independent non-temporal siblings when one answer date is ambiguous."""
-
-    from award_agent.clarification.temporal import normalize_temporal_amendment
-
-    accepted: list[TypedAmendment] = []
+    effective: EffectiveRequest,
+) -> tuple[
+    tuple[TypedAmendment, ...],
+    dict[str, tuple[TemporalContribution, ...]],
+    tuple[RejectedFragment, ...],
+]:
+    """Compile independent receiver facts without reading answer semantics."""
+    amendments: list[TypedAmendment] = []
+    compiled: dict[str, tuple[TemporalContribution, ...]] = {}
+    prior_compiled: dict[str, CompiledSemanticTemporalFact] = {}
     rejected: list[RejectedFragment] = []
-    for amendment in amendments:
-        if not isinstance(amendment, TemporalAmendment):
-            accepted.append(amendment)
-            continue
-        if amendment.amendment_id in precompiled_amendment_ids:
-            accepted.append(amendment)
-            continue
-        try:
-            normalize_temporal_amendment(
-                amendment,
-                answer_text=answer_text,
-                requirements=requirements,
-                context=context,
-            )
-        except (
-            AmbiguousClarificationTemporalAnswer,
-            ClarificationTemporalNormalizationError,
-            UnsupportedClarificationTemporalAnswer,
-        ) as exc:
-            rejected.append(_rejected_temporal_fragment(amendment, exc))
-        else:
-            accepted.append(amendment)
-    return tuple(accepted), tuple(rejected)
-
-
-def _recover_ordered_date_pair(
-    interpretation: ClarificationAnswerInterpretation,
-    *,
-    message_id: str,
-    text: str,
-    requirements: tuple[BlockingRequirement, ...],
-) -> ClarificationAnswerInterpretation:
-    """Accept the closed literal pair grammar even if the receiver rejected it.
-
-    The receiver is prompted to emit the two narrow amendments itself. This
-    deterministic recovery protects the simple, fully-grounded case from a
-    conservative model classification, without broadening any ambiguous date
-    grammar.
-    """
-
-    if any(isinstance(item, TemporalAmendment) for item in interpretation.amendments):
-        return interpretation
-    recovered = recover_ordered_numeric_date_pair(
-        message_id=message_id,
-        text=text,
-        requirements=requirements,
-    )
-    if not recovered:
-        return interpretation
-    recovered_requirement_ids = {
-        requirement_id for amendment in recovered for requirement_id in amendment.requirement_ids
-    }
-    rejected = tuple(
-        fragment
-        for fragment in interpretation.rejected_fragments
-        if not (
-            set(fragment.requirement_ids) == recovered_requirement_ids
-            and fragment.span.start <= recovered[0].span.start
-            and fragment.span.end >= recovered[-1].span.end
-        )
-    )
-    return interpretation.model_copy(
-        update={
-            "amendments": interpretation.amendments + recovered,
-            "rejected_fragments": rejected,
-        }
-    )
-
-
-def _exclude_registry_covered_legacy_temporal_amendments(
-    amendments: tuple[TypedAmendment, ...],
-    *,
-    interpretation: object,
-) -> tuple[tuple[TypedAmendment, ...], tuple[RejectedFragment, ...]]:
-    """Route registered surface grammar exclusively through the registry.
-
-    The model may still use the legacy temporal amendment shape for facts that
-    the registry does not harvest (exact dates, named months, durations).  It
-    must not get two competing ways to process a registered relative phrase.
-    """
-
-    from award_agent.clarification.interpreter import ClarificationAnswerInterpretation
-
-    assert isinstance(interpretation, ClarificationAnswerInterpretation)
-    ranges = tuple(
-        (item.span.start, item.span.end)
-        for item in interpretation.temporal_template_selection.selected
-    ) + tuple(
-        (item.span.start, item.span.end)
-        for item in interpretation.temporal_template_selection.unresolved
-    )
-    accepting_ranges = tuple(
-        (item.span.start, item.span.end)
-        for item in interpretation.temporal_approximation_selection.selected
-    ) + tuple(
-        (item.span.start, item.span.end)
-        for item in interpretation.temporal_approximation_selection.unresolved
-    )
-    accepted: list[TypedAmendment] = []
-    rejected: list[RejectedFragment] = []
-    for amendment in amendments:
-        if isinstance(amendment, TemporalAmendment) and any(
-            amendment.span.start < end and start < amendment.span.end for start, end in accepting_ranges
-        ):
-            # The accepting registry owns these words. It emits one canonical
-            # rejection only if it cannot safely classify them; the legacy
-            # shape must not create a second, conflicting rejection.
-            continue
-        if isinstance(amendment, TemporalAmendment) and any(
-            amendment.span.start < end and start < amendment.span.end for start, end in ranges
-        ):
-            rejected.append(
-                RejectedFragment(
-                    span=amendment.span,
-                    reason=RejectedFragmentReason.INVALID,
-                    detail=(
-                        "registered temporal wording must be classified through the approved "
-                        "template registry"
+    for fact in facts:
+        correction = fact.operation is SemanticOperation.REPLACE
+        amendment: TypedAmendment
+        if fact.target in {SemanticTarget.ORIGIN, SemanticTarget.DESTINATION}:
+            assert fact.location_kind is not None and fact.location_value is not None
+            amendment = LocationAmendment(
+                amendment_id=fact.fact_id,
+                target=AmendmentTarget.ORIGIN
+                if fact.target is SemanticTarget.ORIGIN
+                else AmendmentTarget.DESTINATION,
+                requirement_ids=fact.requirement_ids,
+                span=fact.span,
+                is_correction=correction,
+                locations=(
+                    LocationRef(
+                        kind=fact.location_kind,
+                        value=fact.location_value,
+                        raw_text=fact.location_value,
                     ),
-                    requirement_ids=amendment.requirement_ids,
-                )
-            )
-        else:
-            accepted.append(amendment)
-    return tuple(accepted), tuple(rejected)
-
-
-def _overlaps(left: MessageSpan, right: MessageSpan) -> bool:
-    return left.start < right.end and right.start < left.end
-
-
-def _registry_rejected_fragment(
-    *,
-    span: MessageSpan,
-    requirement_ids: tuple[str, ...],
-    classification: Literal["ambiguous", "unsupported"],
-    reason_code: str,
-) -> RejectedFragment:
-    """Translate a closed registry result into the shared issue source."""
-
-    reason = (
-        RejectedFragmentReason.AMBIGUOUS
-        if classification == "ambiguous"
-        else RejectedFragmentReason.INVALID
-    )
-    return RejectedFragment(
-        span=span,
-        reason=reason,
-        detail="temporal wording needs clarification",
-        requirement_ids=requirement_ids,
-        reason_code=reason_code,
-    )
-
-
-def _reconcile_temporal_registries(interpretation: object) -> tuple[RejectedFragment, ...]:
-    """Give overlapping temporal surface text one authoritative outcome.
-
-    The accepting registry is newer policy.  An accepted approximation masks a
-    v1 unresolved classification over the same words; an accepting unresolved
-    span is likewise the sole canonical rejection.  Two positive, overlapping
-    registry selections would be competing semantic authority and fail closed.
-    """
-
-    from award_agent.clarification.interpreter import ClarificationAnswerInterpretation
-
-    assert isinstance(interpretation, ClarificationAnswerInterpretation)
-    old = interpretation.temporal_template_selection
-    accepting = interpretation.temporal_approximation_selection
-    if any(
-        _overlaps(left.span, right.span)
-        for left in old.selected
-        for right in accepting.selected + accepting.unresolved
-    ):
-        raise ClarificationCommandError("overlapping temporal registries selected incompatible outcomes")
-    accepting_spans = tuple(item.span for item in accepting.selected) + tuple(
-        item.span for item in accepting.unresolved
-    )
-    return tuple(
-        _registry_rejected_fragment(
-            span=span,
-            requirement_ids=requirement_ids,
-            classification=classification,
-            reason_code=reason_code,
-        )
-        for span, requirement_ids, classification, reason_code in unresolved_template_rejections(old)
-        if not any(_overlaps(span, accepting_span) for accepting_span in accepting_spans)
-    )
-
-
-def _selected_approximation_amendments(
-    interpretation: object,
-    *,
-    projection: object,
-    answer_text: str,
-    requirements: tuple[BlockingRequirement, ...],
-    context: RequestContext,
-) -> tuple[tuple[TemporalAmendment, ...], dict[str, tuple[TemporalContribution, ...]]]:
-    """Compile ADR 0012's accepting registry into reducer-owned facts."""
-
-    from award_agent.clarification.interpreter import ClarificationAnswerInterpretation
-
-    assert isinstance(interpretation, ClarificationAnswerInterpretation)
-    assert isinstance(projection, ClarificationTemporalApproximationProjection)
-    try:
-        facts = compile_temporal_approximation_selection(
-            projection,
-            interpretation.temporal_approximation_selection,
-            context=context,
-            text=answer_text,
-            requirements=requirements,
-        )
-    except ClarificationTemporalApproximationError as exc:
-        # A malformed selection is never a success-shaped response.
-        raise ClarificationCommandError("temporal approximation compilation failed") from exc
-
-    amendments: list[TemporalAmendment] = []
-    compiled: dict[str, tuple[TemporalContribution, ...]] = {}
-    for fact in facts:
-        amendment_id = f"{fact.candidate.span.message_id}:approximation:{fact.candidate.candidate_id}"
-        amendment = TemporalAmendment(
-            amendment_id=amendment_id,
-            target=cast(
-                "Literal[AmendmentTarget.DEPARTURE, AmendmentTarget.RETURN_OR_DURATION]",
-                fact.candidate.target,
-            ),
-            requirement_ids=(fact.candidate.requirement_id,) if fact.candidate.requirement_id else (),
-            span=fact.candidate.span,
-            is_correction=fact.candidate.is_correction,
-            temporal_text=fact.candidate.span.text,
-        )
-        if fact.duration is not None:
-            kind = TemporalContributionKind.DURATION
-            contribution = TemporalContribution(
-                contribution_id=f"answer:{amendment_id}:{kind.value}", kind=kind,
-                source=AnswerMessageSource(span=fact.candidate.span), raw_text=fact.duration.raw_text,
-                amendment_id=amendment_id, interpreted_duration=fact.duration,
-                interpretation_provenance=fact.provenance,
-            )
-        else:
-            assert fact.window is not None
-            kind = (
-                TemporalContributionKind.DEPARTURE_WINDOW
-                if fact.candidate.target is AmendmentTarget.DEPARTURE
-                else TemporalContributionKind.RETURN_WINDOW
-            )
-            contribution = TemporalContribution(
-                contribution_id=f"answer:{amendment_id}:{kind.value}", kind=kind,
-                source=AnswerMessageSource(span=fact.candidate.span), raw_text=fact.window.raw_text,
-                amendment_id=amendment_id, date_window=fact.window,
-                interpretation_provenance=fact.provenance,
-            )
-        compiled[amendment_id] = (contribution,)
-        amendments.append(amendment)
-    return tuple(amendments), compiled
-
-
-def _selected_template_amendments(
-    interpretation: object,
-    *,
-    projection: object,
-    answer_text: str,
-    requirements: tuple[BlockingRequirement, ...],
-    context: RequestContext,
-) -> tuple[tuple[TemporalAmendment, ...], dict[str, tuple[TemporalContribution, ...]]]:
-    """Materialize opaque model selections into reducer-owned answer facts."""
-
-    from award_agent.clarification.interpreter import ClarificationAnswerInterpretation
-    from award_agent.clarification.temporal_templates import ClarificationTemporalTemplateProjection
-
-    assert isinstance(interpretation, ClarificationAnswerInterpretation)
-    assert isinstance(projection, ClarificationTemporalTemplateProjection)
-    try:
-        facts = compile_temporal_template_selection(
-            projection,
-            interpretation.temporal_template_selection,
-            context=context,
-            text=answer_text,
-            requirements=requirements,
-            additional_classified_spans=tuple(
-                item.span
-                for item in (
-                    interpretation.temporal_approximation_selection.selected
-                    + interpretation.temporal_approximation_selection.unresolved
-                    + interpretation.rejected_fragments
-                )
-            ),
-        )
-    except ClarificationTemporalTemplateError as exc:
-        # The interpreter contract has already checked membership and closure.
-        # A failure here is a deterministic registry/compiler defect, never a
-        # success-shaped answer reduction.
-        raise ClarificationCommandError("temporal template compilation failed") from exc
-
-    amendments: list[TemporalAmendment] = []
-    compiled: dict[str, tuple[TemporalContribution, ...]] = {}
-    for fact in facts:
-        target = target_for_template_candidate(fact.candidate, requirements)
-        amendment_id = f"{fact.candidate.span.message_id}:template:{fact.candidate.candidate_id}"
-        amendment = TemporalAmendment(
-            amendment_id=amendment_id,
-            target=target,
-            requirement_ids=(fact.candidate.requirement_id,),
-            span=fact.candidate.span,
-            temporal_text=fact.candidate.span.text,
-        )
-        kind = (
-            TemporalContributionKind.DEPARTURE_WINDOW
-            if target.value == "departure"
-            else TemporalContributionKind.RETURN_WINDOW
-        )
-        compiled[amendment_id] = (
-            TemporalContribution(
-                contribution_id=f"answer:{amendment_id}:{kind.value}",
-                kind=kind,
-                source=AnswerMessageSource(span=fact.candidate.span),
-                raw_text=fact.window.raw_text,
-                amendment_id=amendment_id,
-                date_window=fact.window,
-                template_provenance=TemporalTemplateProvenance(
-                    template_id=fact.template_id,
-                    registry_version=projection.registry_version,
-                    candidate_id=fact.candidate.candidate_id,
-                    dependency_candidate_ids=fact.candidate.dependency_candidate_ids,
                 ),
-            ),
-        )
+            )
+        elif fact.target is SemanticTarget.TRAVELERS:
+            assert fact.travelers is not None
+            amendment = TravelersAmendment(
+                amendment_id=fact.fact_id,
+                target=AmendmentTarget.TRAVELERS,
+                requirement_ids=fact.requirement_ids,
+                span=fact.span,
+                is_correction=correction,
+                travelers=fact.travelers,
+            )
+        else:
+            assert fact.temporal is not None
+            if fact.target is SemanticTarget.DEPARTURE_WINDOW:
+                amendment = TemporalAmendment(
+                    amendment_id=fact.fact_id,
+                    target=AmendmentTarget.DEPARTURE,
+                    requirement_ids=fact.requirement_ids,
+                    span=fact.span,
+                    is_correction=correction,
+                    temporal_text=fact.span.text,
+                )
+            else:
+                amendment = TemporalAmendment(
+                    amendment_id=fact.fact_id,
+                    target=AmendmentTarget.RETURN_OR_DURATION,
+                    requirement_ids=fact.requirement_ids,
+                    span=fact.span,
+                    is_correction=correction,
+                    temporal_text=fact.span.text,
+                )
+            try:
+                compiled_fact = compile_temporal_ast(
+                    amendment_id=fact.fact_id,
+                    target=fact.target,
+                    ast=fact.temporal,
+                    span=fact.span,
+                    context=effective.context,
+                    prior_compiled_facts=prior_compiled,
+                )
+            except SemanticTemporalCompileError:
+                rejected.append(
+                    RejectedFragment(
+                        span=fact.span,
+                        reason=RejectedFragmentReason.AMBIGUOUS,
+                        detail="receiver semantic fact could not be compiled",
+                        requirement_ids=fact.requirement_ids,
+                        reason_code="receiver.semantic_compile",
+                    )
+                )
+                continue
+            compiled[fact.fact_id] = (compiled_fact.contribution,)
+            prior_compiled[fact.fact_id] = compiled_fact
         amendments.append(amendment)
-    return tuple(amendments), compiled
+    return tuple(amendments), compiled, tuple(rejected)
 
 
 def _amendment_field(amendment: TypedAmendment) -> str | None:
@@ -587,27 +338,11 @@ def _filter_corrections_and_collisions(
     *,
     effective: EffectiveRequest,
 ) -> tuple[tuple[TypedAmendment, ...], tuple[RejectedFragment, ...]]:
-    """Reject unsupported corrections and non-independent same-field writes."""
-
-    counts: dict[str, int] = {}
-    for amendment in amendments:
-        field = _amendment_field(amendment)
-        if field is not None:
-            counts[field] = counts.get(field, 0) + 1
+    """Reject unsupported corrections; receiver contract owns fact uniqueness."""
     accepted: list[TypedAmendment] = []
     rejected: list[RejectedFragment] = []
     for amendment in amendments:
-        field = _amendment_field(amendment)
-        if field is not None and counts[field] > 1:
-            rejected.append(
-                RejectedFragment(
-                    span=amendment.span,
-                    reason=RejectedFragmentReason.AMBIGUOUS,
-                    detail="multiple amendments in one answer target the same field",
-                    requirement_ids=amendment.requirement_ids,
-                )
-            )
-        elif amendment.is_correction and not _is_supported_correction(amendment, effective):
+        if amendment.is_correction and not _is_supported_correction(amendment, effective):
             rejected.append(
                 RejectedFragment(
                     span=amendment.span,
@@ -704,7 +439,7 @@ def apply_clarification_answer(
     command: ClarificationAnswerCommand,
     interpreter: ClarificationAnswerInterpreter,
     composer: ClarificationPromptComposer | None = None,
-) -> ClarificationTransition:
+) -> ClarificationTransition | ClarificationCompositionPending:
     """Apply one answer atomically, or raise without writing a new revision.
 
     Replay lookup intentionally precedes revision freshness and terminal checks;
@@ -745,7 +480,16 @@ def apply_clarification_answer(
         prompt_id=current.prompt.prompt_id,
         message=answer_span,
     )
-    if _is_cancel(command.text):
+    interpretation = interpret_answer(
+        interpreter,
+        ClarificationAnswerInterpreterInput(
+            message_id=command.message_id,
+            text=command.text,
+            ordered_requirements=current.prompt.requirements,
+            correction_eligible_targets=_correction_eligible_targets(current.effective_request),
+        ),
+    )
+    if interpretation.discourse_act is ClarificationDiscourseAct.CANCEL:
         next_revision = ClarificationSessionRevision(
             revision=current.revision + 1,
             effective_request=current.effective_request,
@@ -762,92 +506,34 @@ def apply_clarification_answer(
         )
         return ClarificationTransition(session=next_session, revision=next_revision)
 
-    template_projection = harvest_temporal_template_projection(
-        message_id=command.message_id,
-        text=command.text,
-        requirements=current.prompt.requirements,
-    )
-    approximation_projection = harvest_temporal_approximation_projection(
-        message_id=command.message_id,
-        text=command.text,
-        requirements=current.prompt.requirements,
-    )
-    interpretation = interpret_answer(
-        interpreter,
-        ClarificationAnswerInterpreterInput(
-            message_id=command.message_id,
-            text=command.text,
-            requirements=current.prompt.requirements,
-            temporal_template_projection=template_projection,
-            temporal_approximation_projection=approximation_projection,
-        ),
-    )
-    interpretation = _recover_ordered_date_pair(
-        interpretation,
-        message_id=command.message_id,
-        text=command.text,
-        requirements=current.prompt.requirements,
-    )
-    template_amendments, compiled_temporal_contributions = _selected_template_amendments(
-        interpretation,
-        projection=template_projection,
-        answer_text=command.text,
-        requirements=current.prompt.requirements,
-        context=current.effective_request.context,
-    )
-    approximation_amendments, compiled_approximation_contributions = (
-        _selected_approximation_amendments(
-            interpretation,
-            projection=approximation_projection,
-            answer_text=command.text,
-            requirements=current.prompt.requirements,
-            context=current.effective_request.context,
-        )
-    )
-    non_registry_amendments, registry_rejections = (
-        _exclude_registry_covered_legacy_temporal_amendments(
-            interpretation.amendments, interpretation=interpretation
-        )
+    materialized, compiled_temporal_contributions, compilation_rejections = (
+        _materialize_semantic_facts(interpretation.facts, effective=current.effective_request)
     )
     scoped, scope_rejections = _filter_corrections_and_collisions(
-        non_registry_amendments + template_amendments + approximation_amendments,
+        materialized,
         effective=current.effective_request,
     )
-    accepted, temporal_rejections = _validate_temporal_subset(
-        scoped,
-        answer_text=command.text,
-        requirements=current.prompt.requirements,
-        context=current.effective_request.context,
-        precompiled_amendment_ids=frozenset(
-            compiled_temporal_contributions | compiled_approximation_contributions
-        ),
-    )
+    accepted = scoped
     effective = apply_amendments(
         current.effective_request,
         accepted,
         answer_text=command.text,
         requirements=current.prompt.requirements,
-        compiled_temporal_contributions=(
-            compiled_temporal_contributions | compiled_approximation_contributions
-        ),
+        compiled_temporal_contributions=(compiled_temporal_contributions),
     )
     rejected = (
-        interpretation.rejected_fragments
-        + _reconcile_temporal_registries(interpretation)
-        + tuple(
-            _registry_rejected_fragment(
-                span=span,
-                requirement_ids=requirement_ids,
-                classification=classification,
-                reason_code=reason_code,
+        tuple(
+            RejectedFragment(
+                span=item.span,
+                reason=RejectedFragmentReason.AMBIGUOUS,
+                detail="receiver could not resolve this answer fragment",
+                requirement_ids=item.requirement_ids,
+                reason_code=f"receiver.{item.reason}",
             )
-            for span, requirement_ids, classification, reason_code in unresolved_approximation_rejections(
-                interpretation.temporal_approximation_selection
-            )
+            for item in interpretation.unresolved_fragments
         )
-        + registry_rejections
+        + compilation_rejections
         + scope_rejections
-        + temporal_rejections
     )
     blocker_ids = tuple(
         requirement.requirement_id for requirement in collect_blocking_requirements(effective)
@@ -880,14 +566,36 @@ def apply_clarification_answer(
         status = ClarificationSessionStatus.AWAITING_ANSWER
         stop_reason = None
         requirements = collect_blocking_requirements(effective)
-        prompt = _build_prompt(
-            effective,
-            requirements=requirements,
-            revision=next_number,
-            composer=composer,
-            receiver_interpretation=interpretation,
-            rejected_fragments=rejected,
-        )
+        issues = derive_clarification_issues(requirements, rejected_fragments=rejected)
+        try:
+            prompt = _build_prompt(
+                effective,
+                requirements=requirements,
+                revision=next_number,
+                composer=composer,
+                issues=issues,
+            )
+        except ClarificationPromptCompositionFailedError:
+            return ClarificationCompositionPending(
+                session=session,
+                pending=PendingPromptTransition(
+                    session_id=session.session_id,
+                    base_revision=current.revision,
+                    revision=next_number,
+                    answer_turn=answer_turn,
+                    effective_request=effective,
+                    outcome=ResolutionOutcome(
+                        accepted_amendments=accepted, rejected_fragments=rejected
+                    ),
+                    requirements=requirements,
+                    issues=issues,
+                    composition_key=_composition_key(
+                        base_revision=current.revision,
+                        requirements=requirements,
+                        issues=issues,
+                    ),
+                ),
+            )
         assert prompt is not None
     next_revision = ClarificationSessionRevision(
         revision=next_number,
@@ -907,9 +615,67 @@ def apply_clarification_answer(
     return ClarificationTransition(session=next_session, revision=next_revision)
 
 
+def retry_prompt_composition(
+    session: ClarificationSession,
+    pending: PendingPromptTransition,
+    composer: ClarificationPromptComposer,
+) -> ClarificationTransition | ClarificationCompositionPending:
+    """Complete a previously reduced answer without invoking its receiver again."""
+
+    current = session.current_revision
+    if pending.session_id != session.session_id or pending.base_revision != current.revision:
+        raise ClarificationCommandError(
+            "pending prompt transition does not match the current session"
+        )
+    if current.status is not ClarificationSessionStatus.AWAITING_ANSWER:
+        raise ClarificationCommandError(
+            "only an awaiting-answer session can retry prompt composition"
+        )
+    if current.prompt is None or pending.answer_turn.prompt_id != current.prompt.prompt_id:
+        raise ClarificationCommandError(
+            "pending prompt transition does not match the pending prompt"
+        )
+    expected_key = _composition_key(
+        base_revision=pending.base_revision,
+        requirements=pending.requirements,
+        issues=pending.issues,
+    )
+    if pending.composition_key != expected_key:
+        raise ClarificationCommandError("pending prompt transition has an invalid composition key")
+    try:
+        prompt = _build_prompt(
+            pending.effective_request,
+            requirements=pending.requirements,
+            revision=pending.revision,
+            composer=composer,
+            issues=pending.issues,
+        )
+    except ClarificationPromptCompositionFailedError:
+        return ClarificationCompositionPending(session=session, pending=pending)
+    assert prompt is not None
+    revision = ClarificationSessionRevision(
+        revision=pending.revision,
+        effective_request=pending.effective_request,
+        answer_turn=pending.answer_turn,
+        outcome=pending.outcome,
+        prompt=prompt,
+        status=ClarificationSessionStatus.AWAITING_ANSWER,
+    )
+    next_session = ClarificationSession(
+        session_id=session.session_id,
+        initial_result=session.initial_result,
+        limits=session.limits,
+        revisions=session.revisions + (revision,),
+    )
+    return ClarificationTransition(session=next_session, revision=revision)
+
+
 __all__ = [
     "ClarificationCommandError",
+    "ClarificationCompositionPending",
+    "ClarificationPromptCompositionFailedError",
     "ClarificationTransition",
     "apply_clarification_answer",
+    "retry_prompt_composition",
     "start_clarification",
 ]

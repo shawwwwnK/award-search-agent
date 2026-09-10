@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from award_agent.clarification.temporal import normalize_temporal_amendment
 from award_agent.domain import (
     AmendmentTarget,
     AnswerMessageSource,
@@ -91,8 +90,10 @@ def apply_amendments(
 
     This function is pure: caller-held effective state is never altered.  The
     controller decides which user-level failures become rejected fragments;
-    exceptions here are reducer/normalization failures and leave a session
-    revision uncommitted.
+    exceptions here are reducer failures and leave a session revision
+    uncommitted.  ``answer_text`` and ``requirements`` remain temporarily in
+    the signature for caller compatibility.  They are deliberately not read:
+    raw-answer semantics belong only to the receiver under ADR 0014.
     """
 
     travelers = effective.travelers
@@ -124,20 +125,13 @@ def apply_amendments(
             continue
 
         assert isinstance(amendment, TemporalAmendment)
-        supplied = (compiled_temporal_contributions or {}).get(amendment.amendment_id)
-        normalization = None
-        if supplied is None:
-            normalization = normalize_temporal_amendment(
-                amendment,
-                answer_text=answer_text,
-                requirements=requirements,
-                context=effective.context,
+        contributions_to_apply = (compiled_temporal_contributions or {}).get(
+            amendment.amendment_id
+        )
+        if contributions_to_apply is None:
+            raise ValueError(
+                "temporal amendments require receiver-approved compiled semantic contributions"
             )
-        if supplied is not None:
-            contributions_to_apply = supplied
-        else:
-            assert normalization is not None
-            contributions_to_apply = normalization.contributions
         for contribution in contributions_to_apply:
             contributions = tuple(
                 existing for existing in contributions if existing.kind is not contribution.kind

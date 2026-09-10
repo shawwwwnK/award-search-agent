@@ -1,0 +1,50 @@
+contract_version: clarification_semantic_guardrails_v2
+# This is intentionally only disclosed development metadata. Each `evidence`
+# label is opaque; receiver facts are constructed by the deterministic gate,
+# never recovered from these strings. The independent owner holdout is not in
+# this repository and cannot be executed or recreated by implementation work.
+corpus: disclosed_development
+owner_held_holdout:
+  status: inaccessible_to_implementation
+  reason: executed externally by the owner or independent evaluator
+cases:
+  - id: static_boundary
+    family: static_boundary
+    check: static_no_raw_answer_parser
+    evidence: opaque-static
+    expected: no_semantic_parser_hooks
+  - id: schema_and_grounding
+    family: schema_span_grounding
+    check: schema_and_span_grounding
+    evidence: opaque-schema
+    expected: closed_contract_and_exact_span
+  - id: operation_authority
+    family: authority_and_state
+    check: set_replace_authorization
+    evidence: opaque-authority
+    expected: unauthorized_set_or_replace_rejected
+  - id: calendar_ranges_dependencies
+    family: temporal_compilation
+    check: temporal_calendar_ranges_and_dependencies
+    evidence: opaque-calendar
+    expected: deterministic_bounded_compilation
+  - id: fuzzy_disclosure
+    family: accepting_provenance
+    check: fuzzy_assumption_disclosure
+    evidence: opaque-fuzzy
+    expected: visible_assumption_provenance
+  - id: conflict_siblings_atomicity
+    family: reduction_and_session
+    check: conflict_preservation_sibling_atomicity
+    evidence: opaque-reduction
+    expected: conflicts_preserved_and_writes_atomic
+  - id: revisions_ready_no_progress
+    family: reduction_and_session
+    check: immutable_revisions_concurrency_idempotency_ready_policy
+    evidence: opaque-session
+    expected: immutable_replay_and_terminal_policy
+  - id: composer_failure_privacy
+    family: composer_and_privacy
+    check: composer_coverage_linkage_failure_and_redaction
+    evidence: opaque-composer
+    expected: linked_questions_or_explicit_failure

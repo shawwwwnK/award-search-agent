@@ -7,24 +7,17 @@ import pytest
 
 from award_agent.clarification.interpreter import ClarificationAnswerInterpreterInput
 from award_agent.clarification.openai_interpreter import (
-    _INSTRUCTIONS,
     OpenAIClarificationAnswerInterpreter,
     OpenAIClarificationInterpretationError,
     OpenAIClarificationInterpreterConfig,
     _ClarificationAnswerWireOutput,
 )
-from award_agent.domain import (
-    BlockingRequirement,
-    BlockingRequirementKind,
-    EffectiveField,
-    LocationAmendment,
-)
+from award_agent.domain import BlockingRequirement, BlockingRequirementKind, EffectiveField
 
 
 class _Responses:
     def __init__(self, output: object | Exception) -> None:
-        self.output = output
-        self.calls: list[dict[str, object]] = []
+        self.output, self.calls = output, []
 
     def parse(self, **kwargs: object) -> object:
         self.calls.append(kwargs)
@@ -38,180 +31,111 @@ class _Client:
         self.responses = _Responses(output)
 
 
-def _input(text: str = "SFO and two") -> ClarificationAnswerInterpreterInput:
+def _input() -> ClarificationAnswerInterpreterInput:
     return ClarificationAnswerInterpreterInput(
-        message_id="answer-1",
-        text=text,
-        requirements=(
+        message_id="a1",
+        text="mid october and about 12 days",
+        ordered_requirements=(
             BlockingRequirement(
-                requirement_id="origin",
-                kind=BlockingRequirementKind.ORIGIN,
-                field=EffectiveField.ORIGIN,
+                requirement_id="departure",
+                kind=BlockingRequirementKind.DEPARTURE,
+                field=EffectiveField.DEPARTURE,
             ),
             BlockingRequirement(
-                requirement_id="travelers",
-                kind=BlockingRequirementKind.TRAVELERS,
-                field=EffectiveField.TRAVELERS,
+                requirement_id="return",
+                kind=BlockingRequirementKind.RETURN_OR_DURATION,
+                field=EffectiveField.RETURN_OR_DURATION,
             ),
         ),
     )
 
 
-def test_openai_adapter_uses_fixed_wire_schema_disables_storage_and_excludes_context() -> None:
-    wire = _ClarificationAnswerWireOutput.model_validate(
+def _wire() -> _ClarificationAnswerWireOutput:
+    return _ClarificationAnswerWireOutput.model_validate(
         {
-            "location_amendments": [
+            "discourse_act": "answer",
+            "facts": [
                 {
-                    "quote": "SFO",
+                    "fact_id": "d",
+                    "quote": "mid october",
                     "occurrence": 0,
-                    "requirement_ids": ["origin"],
-                    "is_correction": False,
-                    "target": "origin",
-                    "kind": "airport",
-                    "value_quote": "SFO",
-                }
-            ],
-            "traveler_amendments": [
+                    "operation": "set",
+                    "target": "departure_window",
+                    "requirement_ids": ["departure"],
+                    "location_kind": None,
+                    "location_value": None,
+                    "travelers": None,
+                    "temporal": {
+                        "kind": "month_portion",
+                        "year": None,
+                        "month": 10,
+                        "day": None,
+                        "portion": "mid",
+                        "weekday": None,
+                        "relation": None,
+                        "quantity": None,
+                        "unit": None,
+                        "approximate": False,
+                    },
+                },
                 {
-                    "quote": "two",
+                    "fact_id": "n",
+                    "quote": "about 12 days",
                     "occurrence": 0,
-                    "requirement_ids": ["travelers"],
-                    "is_correction": False,
-                    "target": "travelers",
-                    "travelers": 2,
-                }
+                    "operation": "set",
+                    "target": "duration",
+                    "requirement_ids": ["return"],
+                    "location_kind": None,
+                    "location_value": None,
+                    "travelers": None,
+                    "temporal": {
+                        "kind": "duration",
+                        "year": None,
+                        "month": None,
+                        "day": None,
+                        "portion": None,
+                        "weekday": None,
+                        "relation": None,
+                        "quantity": 12,
+                        "unit": "day",
+                        "approximate": True,
+                    },
+                },
             ],
-            "temporal_amendments": [],
-            "rejected_fragments": [],
-            "selected_temporal_templates": [],
-            "unresolved_temporal_spans": [],
-                "temporal_template_classification_complete": True,
-                "selected_temporal_approximations": [],
-                "unresolved_temporal_approximation_spans": [],
-                "temporal_approximation_classification_complete": True,
+            "unresolved_fragments": [],
         }
     )
-    client = _Client(wire)
-    adapter = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="gpt-5.6-luna"),
-        client=client,  # type: ignore[arg-type]
-    )
 
-    result = adapter.interpret(_input())
 
-    assert [item.target.value for item in result.amendments] == ["origin", "travelers"]
-    assert isinstance(result.amendments[0], LocationAmendment)
-    assert result.amendments[0].locations[0].value == "SFO"
-    assert result.next_question is None
-    assert result.next_question_requirement_ids == ()
+def test_adapter_sends_least_authority_input_and_converts_exact_spans() -> None:
+    client = _Client(_wire())
+    result = OpenAIClarificationAnswerInterpreter(
+        OpenAIClarificationInterpreterConfig(model="gpt-5.6-luna"), client=client
+    ).interpret(_input())  # type: ignore[arg-type]
+    assert [item.span.text for item in result.facts] == ["mid october", "about 12 days"]
     call = client.responses.calls[0]
-    assert call["model"] == "gpt-5.6-luna"
     assert call["store"] is False
-    assert call["text_format"] is _ClarificationAnswerWireOutput
     payload = json.loads(str(call["input"]))
     assert set(payload) == {
-        "message_id", "text", "requirements", "temporal_template_projection",
-        "temporal_approximation_projection",
-    }
-    assert payload["temporal_template_projection"] == {
-        "registry_version": "clarification-temporal-templates-v2",
-        "choices": [],
+        "message_id",
+        "text",
+        "ordered_requirements",
+        "correction_eligible_targets",
+        "temporal_affordance_catalog_version",
     }
     assert "reference_date" not in str(payload)
     assert "timezone" not in str(payload)
-    assert "Do not put a phrase in both registries" in _INSTRUCTIONS
-    assert "do not emit a positive selection in either registry" in _INSTRUCTIONS
 
 
-def test_openai_adapter_optionally_captures_private_raw_call_trace() -> None:
-    wire = _ClarificationAnswerWireOutput.model_validate(
-        {
-            "location_amendments": [],
-            "traveler_amendments": [],
-            "temporal_amendments": [],
-            "rejected_fragments": [],
-            "selected_temporal_templates": [],
-            "unresolved_temporal_spans": [],
-                "temporal_template_classification_complete": True,
-                "selected_temporal_approximations": [],
-                "unresolved_temporal_approximation_spans": [],
-                "temporal_approximation_classification_complete": True,
-        }
-    )
-    adapter = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="model"),
-        client=_Client(wire),  # type: ignore[arg-type]
-        capture_llm_io=True,
-    )
-
-    adapter.interpret(_input())
-
-    traces = adapter.take_call_traces()
-    assert len(traces) == 1
-    assert traces[0]["request"]["store"] is False
-    assert json.loads(traces[0]["request"]["input"])["text"] == "SFO and two"
-    assert adapter.take_call_traces() == []
-
-
-def test_taking_usage_does_not_discard_private_call_traces() -> None:
-    wire = _ClarificationAnswerWireOutput.model_validate(
-        {
-            "location_amendments": [],
-            "traveler_amendments": [],
-            "temporal_amendments": [],
-            "rejected_fragments": [],
-            "selected_temporal_templates": [],
-            "unresolved_temporal_spans": [],
-                "temporal_template_classification_complete": True,
-                "selected_temporal_approximations": [],
-                "unresolved_temporal_approximation_spans": [],
-                "temporal_approximation_classification_complete": True,
-        }
-    )
-    adapter = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="model"),
-        client=_Client(wire),  # type: ignore[arg-type]
-        capture_llm_io=True,
-    )
-
-    adapter.interpret(_input())
-
-    assert adapter.take_usage() is None
-    assert len(adapter.take_call_traces()) == 1
-
-
-def test_openai_adapter_fails_closed_for_api_error_wrong_type_and_unmatched_quote() -> None:
-    adapter = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="model"),
-        client=_Client(RuntimeError("offline")),  # type: ignore[arg-type]
-    )
+def test_adapter_fails_closed_for_api_error_and_unmatched_quote() -> None:
     with pytest.raises(OpenAIClarificationInterpretationError, match="failed"):
-        adapter.interpret(_input())
-
-    wrong_type = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="model"),
-        client=_Client(object()),  # type: ignore[arg-type]
+        OpenAIClarificationAnswerInterpreter(
+            OpenAIClarificationInterpreterConfig(model="x"), client=_Client(RuntimeError("offline"))
+        ).interpret(_input())  # type: ignore[arg-type]
+    bad = _wire().model_copy(
+        update={"facts": (_wire().facts[0].model_copy(update={"quote": "missing"}),)}
     )
-    with pytest.raises(OpenAIClarificationInterpretationError, match="unexpected"):
-        wrong_type.interpret(_input())
-
-    unmatched = _ClarificationAnswerWireOutput.model_validate(
-        {
-            "location_amendments": [],
-            "traveler_amendments": [],
-            "temporal_amendments": [],
-            "rejected_fragments": [{"quote": "missing", "occurrence": 0, "reason": "invalid"}],
-            "selected_temporal_templates": [],
-            "unresolved_temporal_spans": [],
-                "temporal_template_classification_complete": True,
-                "selected_temporal_approximations": [],
-                "unresolved_temporal_approximation_spans": [],
-                "temporal_approximation_classification_complete": True,
-        }
-    )
-    invalid = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="model"),
-        client=_Client(unmatched),  # type: ignore[arg-type]
-    )
-    with pytest.raises(OpenAIClarificationInterpretationError, match="quote occurrence"):
-        invalid.interpret(_input())
+    with pytest.raises(OpenAIClarificationInterpretationError, match="occurrence"):
+        OpenAIClarificationAnswerInterpreter(
+            OpenAIClarificationInterpreterConfig(model="x"), client=_Client(bad)
+        ).interpret(_input())  # type: ignore[arg-type]

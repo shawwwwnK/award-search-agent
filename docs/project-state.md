@@ -2,7 +2,7 @@
 
 ## Phase
 
-Iterative clarification continuation — accepting-behavior refinement implemented and qualified.
+Iterative clarification continuation — ADR 0014 semantic-boundary redesign in implementation.
 
 ## Current conclusion
 
@@ -18,6 +18,13 @@ may resolve any subset, and the loop reaches `ready` or `stopped`. The additive 
 boundary is now implemented and qualified offline plus through a three-trial live Luna run. The
 existing parser, selector, temporal compiler, clarification policy, and ready corpus remain
 frozen.
+
+ADR 0014 supersedes continuation raw-answer grammar/recovery and ADR 0013's one-call prompt
+strategy. The clarification receiver is now the only semantic reader of an answer; deterministic
+code validates typed output, compiles symbolic temporal semantics, and reduces state. Prompt copy
+is post-reduction LLM output, without a deterministic clarification fallback. The new offline
+gate is executable typed-conformance evidence; a live receiver or composer-model-selection
+qualification has not yet run.
 
 The follow-up relative-time repair is continuation-only: answer messages may use `this weekend`,
 `this <weekday>`, or `on <weekday>`, and complete numbered answer lines map positionally to the

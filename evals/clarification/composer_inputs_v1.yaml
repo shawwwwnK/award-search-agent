@@ -1,0 +1,72 @@
+contract_version: v1
+# Frozen, synthetic post-reduction ComposerInput bundles.  These are prompt
+# inputs only: no effective request, calendar context, or answer ledger.
+bundles:
+  - id: missing_departure
+    requirements:
+      - {requirement_id: departure, kind: departure, field: departure}
+    issues:
+      - {issue_id: departure:missing, requirement_id: departure, kind: missing, reason: A departure timing is still needed., reason_code: state.missing}
+  - id: missing_trip_length
+    requirements:
+      - {requirement_id: return_or_duration, kind: return_or_duration, field: return_or_duration}
+    issues:
+      - {issue_id: return_or_duration:missing, requirement_id: return_or_duration, kind: missing, reason: A return date or trip length is still needed., reason_code: state.missing}
+  - id: multi_missing
+    requirements:
+      - {requirement_id: origin, kind: origin, field: origin}
+      - {requirement_id: destination, kind: destination, field: destination}
+      - {requirement_id: travelers, kind: travelers, field: travelers}
+    issues:
+      - {issue_id: origin:missing, requirement_id: origin, kind: missing, reason: A departure location is still needed., reason_code: state.missing}
+      - {issue_id: destination:missing, requirement_id: destination, kind: missing, reason: A destination is still needed., reason_code: state.missing}
+      - {issue_id: travelers:missing, requirement_id: travelers, kind: missing, reason: A traveler count is still needed., reason_code: state.missing}
+  - id: ambiguous_departure
+    requirements:
+      - {requirement_id: departure, kind: departure, field: departure}
+    issues:
+      - issue_id: departure:answer:1
+        requirement_id: departure
+        kind: ambiguous
+        reason: The answer phrase needs a clearer departure timing.
+        reason_code: answer.ambiguous
+        span: {message_id: synthetic:1, start: 0, end: 15, text: early or late oct}
+  - id: ambiguous_duration
+    requirements:
+      - {requirement_id: return_or_duration, kind: return_or_duration, field: return_or_duration}
+    issues:
+      - issue_id: return_or_duration:answer:1
+        requirement_id: return_or_duration
+        kind: ambiguous
+        reason: The answer phrase needs a clearer return date or trip length.
+        reason_code: answer.ambiguous
+        span: {message_id: synthetic:2, start: 0, end: 12, text: a week or two}
+  - id: unsupported_destination
+    requirements:
+      - {requirement_id: destination, kind: destination, field: destination}
+    issues:
+      - issue_id: destination:answer:1
+        requirement_id: destination
+        kind: unsupported
+        reason: The answer phrase needs a clearer destination.
+        reason_code: answer.unsupported
+        span: {message_id: synthetic:3, start: 0, end: 16, text: somewhere cheap}
+  - id: return_conflict
+    requirements:
+      - {requirement_id: conflict:return_before_departure, kind: conflict, conflict_code: return_before_departure}
+    issues:
+      - {issue_id: conflict:return_before_departure:conflict, requirement_id: conflict:return_before_departure, kind: conflict, reason: The travel details conflict and need one clear choice., reason_code: state.conflict}
+  - id: mixed_issue_bundle
+    requirements:
+      - {requirement_id: origin, kind: origin, field: origin}
+      - {requirement_id: departure, kind: departure, field: departure}
+      - {requirement_id: return_or_duration, kind: return_or_duration, field: return_or_duration}
+    issues:
+      - {issue_id: origin:missing, requirement_id: origin, kind: missing, reason: A departure location is still needed., reason_code: state.missing}
+      - issue_id: departure:answer:1
+        requirement_id: departure
+        kind: ambiguous
+        reason: The answer phrase needs a clearer departure timing.
+        reason_code: answer.ambiguous
+        span: {message_id: synthetic:4, start: 0, end: 7, text: sometime}
+      - {issue_id: return_or_duration:missing, requirement_id: return_or_duration, kind: missing, reason: A return date or trip length is still needed., reason_code: state.missing}

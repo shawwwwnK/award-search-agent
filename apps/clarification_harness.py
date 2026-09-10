@@ -1,4 +1,4 @@
-"""Local, ephemeral Streamlit validation harness for ADR 0011 sessions.
+"""Local, ephemeral Streamlit validation harness for ADR 0014 sessions.
 
 Run with ``streamlit run apps/clarification_harness.py`` after installing the
 optional ``harness`` dependency.  This module deliberately keeps Streamlit out
@@ -19,8 +19,10 @@ from award_agent.clarification import (
     ClarificationCommandError,
     ClarificationInterpretationError,
     OpenAIClarificationAnswerInterpreter,
+    OpenAIClarificationComposerConfig,
     OpenAIClarificationInterpretationError,
     OpenAIClarificationInterpreterConfig,
+    OpenAIClarificationPromptComposer,
     apply_clarification_answer,
     start_clarification,
 )
@@ -87,6 +89,7 @@ def _start_from_raw_request(
     timezone: str,
     extraction_model: str,
     selector_model: str,
+    composer: OpenAIClarificationPromptComposer,
 ) -> ClarificationSession:
     """Compose the frozen initial workflow with the additive session boundary."""
 
@@ -100,7 +103,7 @@ def _start_from_raw_request(
         OpenAIIntentExtractor(OpenAIExtractorConfig(model=selector_model)),
         NagerHolidayProvider(),
     )
-    return start_clarification(initial)
+    return start_clarification(initial, composer=composer)
 
 
 def _trace_has_error(traces: list[Mapping[str, Any]]) -> bool:
@@ -201,7 +204,7 @@ def _render_model_diagnostics(st: object) -> None:
     if not records:
         return
     st.caption(  # type: ignore[attr-defined]
-        "Event-scoped interpreter telemetry (local only; raw traces "
+        "Event-scoped receiver/composer telemetry (local only; raw traces "
         "are private and not shown):"
     )
     st.json(records)  # type: ignore[attr-defined]
@@ -235,8 +238,7 @@ def _render_prompt_diagnostics(st: object, session: object) -> None:
                 [issue.model_dump(mode="json") for issue in prompt.issues]
             )
             st.caption(  # type: ignore[attr-defined]
-                "Receiver follow-up items are rendered only after their blocker IDs match "
-                "this post-reduction issue state."
+                "This copy was generated after deterministic blocker recomputation."
             )
 
         disclosures = []
@@ -280,9 +282,14 @@ def main() -> None:
         help="Explicit model for frozen initial opaque temporal-candidate selection.",
     )
     clarification_model = st.text_input(
-        "Clarification interpreter model",
+        "Clarification receiver model",
         value="gpt-5.6-luna",
-        help="This model is selected explicitly and is used only after Submit answer.",
+        help="Interprets an answer only after Submit answer.",
+    )
+    composer_model = st.text_input(
+        "Clarification composer model",
+        value="gpt-5.6-luna",
+        help="Authors each initial or post-reduction follow-up prompt.",
     )
 
     st.subheader("Start from a raw request")
@@ -299,21 +306,38 @@ def main() -> None:
         if not request_text.strip():
             _record_error(st, "Enter a travel request before starting a session.")
         else:
+            composer: OpenAIClarificationPromptComposer | None = None
+            composer_error: BaseException | None = None
             try:
+                composer = OpenAIClarificationPromptComposer(
+                    OpenAIClarificationComposerConfig(model=composer_model),
+                    capture_llm_io=True,
+                )
                 st.session_state[_SESSION_KEY] = _start_from_raw_request(
                     request_text=request_text,
                     reference_date=reference_date,
                     timezone=timezone,
                     extraction_model=extraction_model,
                     selector_model=selector_model,
+                    composer=composer,
                 )
             except Exception as exc:  # noqa: BLE001 - local harness must surface setup failures.
+                composer_error = exc
                 _record_error(
                     st,
                     f"Initial request was not accepted ({type(exc).__name__}): {exc}",
                 )
             else:
                 st.session_state.pop(_ERROR_KEY, None)
+            finally:
+                _record_model_diagnostics(
+                    st,
+                    event="initial_start",
+                    stage="prompt_composer",
+                    model=composer_model,
+                    adapter=composer,
+                    error=composer_error,
+                )
 
     with st.expander("Or start from frozen RequestUnderstandingResult JSON"):
         raw_initial = st.text_area(
@@ -323,13 +347,29 @@ def main() -> None:
         )
         start_from_json = st.button("Start from frozen JSON")
     if start_from_json:
+        composer = None
+        composer_error = None
         try:
             initial = RequestUnderstandingResult.model_validate(json.loads(raw_initial))
-            st.session_state[_SESSION_KEY] = start_clarification(initial)
+            composer = OpenAIClarificationPromptComposer(
+                OpenAIClarificationComposerConfig(model=composer_model),
+                capture_llm_io=True,
+            )
+            st.session_state[_SESSION_KEY] = start_clarification(initial, composer=composer)
         except Exception as exc:  # noqa: BLE001 - retain the prior session on setup failures.
+            composer_error = exc
             _record_error(st, f"Initial result was not accepted: {exc}")
         else:
             st.session_state.pop(_ERROR_KEY, None)
+        finally:
+            _record_model_diagnostics(
+                st,
+                event="json_start",
+                stage="prompt_composer",
+                model=composer_model,
+                adapter=composer,
+                error=composer_error,
+            )
 
     _show_error(st)
     session = st.session_state.get(_SESSION_KEY)
@@ -365,6 +405,7 @@ def main() -> None:
                 st.warning("Enter an answer before submitting.")
             else:
                 interpreter: OpenAIClarificationAnswerInterpreter | None = None
+                composer: OpenAIClarificationPromptComposer | None = None
                 interpreter_error: BaseException | None = None
                 command = ClarificationAnswerCommand(
                     session_id=session.session_id,
@@ -382,7 +423,13 @@ def main() -> None:
                         # Exact model payloads stay in private local diagnostics.
                         capture_llm_io=True,
                     )
-                    transition = apply_clarification_answer(session, command, interpreter)
+                    composer = OpenAIClarificationPromptComposer(
+                        OpenAIClarificationComposerConfig(model=composer_model),
+                        capture_llm_io=True,
+                    )
+                    transition = apply_clarification_answer(
+                        session, command, interpreter, composer=composer
+                    )
                 except (
                     ClarificationCommandError,
                     ClarificationInterpretationError,
@@ -416,6 +463,14 @@ def main() -> None:
                         stage="answer_interpreter",
                         model=clarification_model,
                         adapter=interpreter,
+                        error=interpreter_error,
+                    )
+                    _record_model_diagnostics(
+                        st,
+                        event="answer_submit",
+                        stage="prompt_composer",
+                        model=composer_model,
+                        adapter=composer,
                         error=interpreter_error,
                     )
     else:

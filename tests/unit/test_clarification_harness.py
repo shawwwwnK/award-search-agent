@@ -67,8 +67,8 @@ def test_harness_model_paths_are_confined_to_explicit_form_submissions() -> None
     ]
     assert call_names.count("apply_clarification_answer") == 1
     assert call_names.count("OpenAIClarificationAnswerInterpreter") == 1
-    assert call_names.count("OpenAIClarificationPromptComposer") == 0
-    assert call_names.count("OpenAIClarificationComposerConfig") == 0
+    assert call_names.count("OpenAIClarificationPromptComposer") == 3
+    assert call_names.count("OpenAIClarificationComposerConfig") == 3
     assert call_names.count("understand_request") == 1
     assert call_names.count("OpenAIIntentExtractor") == 2
 
@@ -86,8 +86,8 @@ def test_harness_model_paths_are_confined_to_explicit_form_submissions() -> None
     ]
     assert "apply_clarification_answer" in submit_call_names
     assert "OpenAIClarificationAnswerInterpreter" in submit_call_names
-    assert "OpenAIClarificationPromptComposer" not in submit_call_names
-    assert "OpenAIClarificationComposerConfig" not in submit_call_names
+    assert "OpenAIClarificationPromptComposer" in submit_call_names
+    assert "OpenAIClarificationComposerConfig" in submit_call_names
 
     initial_submit_branch = next(
         node
@@ -102,8 +102,8 @@ def test_harness_model_paths_are_confined_to_explicit_form_submissions() -> None
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
     ]
     assert "_start_from_raw_request" in initial_call_names
-    assert "OpenAIClarificationPromptComposer" not in initial_call_names
-    assert "OpenAIClarificationComposerConfig" not in initial_call_names
+    assert "OpenAIClarificationPromptComposer" in initial_call_names
+    assert "OpenAIClarificationComposerConfig" in initial_call_names
 
     json_start_branch = next(
         node
@@ -117,8 +117,8 @@ def test_harness_model_paths_are_confined_to_explicit_form_submissions() -> None
         for node in ast.walk(json_start_branch)
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
     ]
-    assert "OpenAIClarificationPromptComposer" not in json_start_call_names
-    assert "OpenAIClarificationComposerConfig" not in json_start_call_names
+    assert "OpenAIClarificationPromptComposer" in json_start_call_names
+    assert "OpenAIClarificationComposerConfig" in json_start_call_names
 
     initial_helper = next(
         node
@@ -213,5 +213,5 @@ def test_harness_frozen_json_start_surfaces_setup_failures_without_replacing_ses
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
     ]
     assert "_record_error" in branch_call_names
-    assert "OpenAIClarificationPromptComposer" not in branch_call_names
+    assert "OpenAIClarificationPromptComposer" in branch_call_names
     assert "start_clarification" in branch_call_names

@@ -39,40 +39,7 @@ _REQUIRED_FIELDS: tuple[tuple[str, BlockingRequirementKind, EffectiveField], ...
 
 _REQUIRED_FIELD_ORDER = {field: index for index, (field, _, _) in enumerate(_REQUIRED_FIELDS)}
 
-_PROMPT_LABELS: dict[BlockingRequirementKind, str] = {
-    BlockingRequirementKind.CONFLICT: "Could you clarify the dates that conflict?",
-    BlockingRequirementKind.ORIGIN: "Where will you be departing from?",
-    BlockingRequirementKind.DESTINATION: "Where would you like to go?",
-    BlockingRequirementKind.DEPARTURE: (
-        "When would you like to leave? A month, date, or date range all work."
-    ),
-    BlockingRequirementKind.RETURN_OR_DURATION: (
-        "When would you like to return, or how long would you like the trip to be?"
-    ),
-    BlockingRequirementKind.TRAVELERS: "How many people will be traveling?",
-}
-
 _PROMPT_INTRO = "I’d be happy to help plan this trip. To narrow it down, could you share:"
-
-
-def _safe_phrase(text: str) -> str:
-    """Bound quoted answer context in a fallback prompt."""
-
-    normalized = " ".join(text.split())
-    return normalized[:120] + ("…" if len(normalized) > 120 else "")
-
-
-def _fallback_question(requirement: BlockingRequirement, issues: tuple[ClarificationIssue, ...]) -> str:
-    answer_issue = next((item for item in issues if item.span is not None), None)
-    if answer_issue is not None:
-        assert answer_issue.span is not None
-        phrase = _safe_phrase(answer_issue.span.text)
-        if answer_issue.kind.value == "ambiguous":
-            return f"When you said “{phrase},” what should I use for that detail?"
-        return f"I couldn’t safely use “{phrase}.” Could you clarify that detail?"
-    if requirement.kind is BlockingRequirementKind.CONFLICT:
-        return "Which of the conflicting details should I use?"
-    return _PROMPT_LABELS[requirement.kind]
 
 
 def collect_blocking_requirements(
@@ -133,35 +100,21 @@ def render_clarification_prompt(
     prompt_id: str | None = None,
     issues: Iterable[ClarificationIssue] | None = None,
     question_items: tuple[str, ...] | None = None,
-    composition_source: PromptCompositionSource = PromptCompositionSource.FALLBACK,
+    composition_source: PromptCompositionSource = PromptCompositionSource.MODEL,
     fallback_code: str | None = None,
 ) -> ClarificationPrompt | None:
-    """Render one all-blockers prompt, or ``None`` when no prompt is needed.
-
-    The fallback prompt deliberately excludes conflict details, unknown
-    details, raw request text, and location/date evidence. A validated
-    model-authored follow-up may replace its copy after a response, but the
-    typed ``requirements`` tuple remains the machine-readable coverage
-    contract.
-    """
+    """Render validated model-authored copy, or ``None`` without blockers."""
 
     ordered_requirements = tuple(sorted(requirements, key=_requirement_sort_key))
     if not ordered_requirements:
         return None
 
     ordered_issues = tuple(issues or derive_clarification_issues(ordered_requirements))
-    issues_by_requirement: dict[str, tuple[ClarificationIssue, ...]] = {
-        requirement.requirement_id: tuple(
-            issue for issue in ordered_issues if issue.requirement_id == requirement.requirement_id
-        )
-        for requirement in ordered_requirements
-    }
-    if question_items is not None and len(question_items) != len(ordered_requirements):
+    if question_items is None:
+        raise ValueError("clarification prompt copy must be supplied by the composer")
+    if len(question_items) != len(ordered_requirements):
         raise ValueError("prompt question items must cover every active requirement")
-    rendered_questions = question_items or tuple(
-        _fallback_question(requirement, issues_by_requirement[requirement.requirement_id])
-        for requirement in ordered_requirements
-    )
+    rendered_questions = question_items
     message_lines = [_PROMPT_INTRO]
     message_lines.extend(
         f"{index}. {question}"
@@ -186,7 +139,7 @@ def build_clarification_prompt(
     prompt_id: str | None = None,
     issues: Iterable[ClarificationIssue] | None = None,
     question_items: tuple[str, ...] | None = None,
-    composition_source: PromptCompositionSource = PromptCompositionSource.FALLBACK,
+    composition_source: PromptCompositionSource = PromptCompositionSource.MODEL,
     fallback_code: str | None = None,
 ) -> ClarificationPrompt | None:
     """Collect blockers and render the session's single pending prompt."""

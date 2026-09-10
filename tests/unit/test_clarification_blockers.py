@@ -107,7 +107,12 @@ def test_prompt_is_one_template_message_with_exact_requirement_coverage() -> Non
         conflicts=(Conflict(code="date_conflict", fields=["departure"], detail="private detail"),),
     )
 
-    prompt = build_clarification_prompt(effective, revision=3, prompt_id="prompt-3")
+    prompt = build_clarification_prompt(
+        effective,
+        revision=3,
+        prompt_id="prompt-3",
+        question_items=("Question A?", "Question B?", "Question C?", "Question D?"),
+    )
 
     assert prompt is not None
     assert prompt.prompt_id == "prompt-3"
@@ -121,16 +126,17 @@ def test_prompt_is_one_template_message_with_exact_requirement_coverage() -> Non
     assert prompt.message.count("\n") == len(prompt.requirements)
     assert "private detail" not in prompt.message
     assert "A trip request" not in prompt.message
-    assert prompt.message.startswith("I’d be happy to help plan this trip.")
-    assert "Where will you be departing from?" in prompt.message
-    assert "How many people will be traveling?" in prompt.message
+    assert "Question A?" in prompt.message
+    assert "Question D?" in prompt.message
 
 
 def test_prompt_renderer_orders_an_iterable_even_when_input_is_not_canonical() -> None:
     effective = _effective(unknowns=(_unknown("travelers"), _unknown("origin")))
     requirements = collect_blocking_requirements(effective)
 
-    prompt = render_clarification_prompt(tuple(reversed(requirements)), revision=0)
+    prompt = render_clarification_prompt(
+        tuple(reversed(requirements)), revision=0, question_items=("Origin?", "Travelers?")
+    )
 
     assert prompt is not None
     assert tuple(item.requirement_id for item in prompt.requirements) == ("origin", "travelers")

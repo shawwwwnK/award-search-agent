@@ -1,4 +1,4 @@
-"""Redacted live qualification runner for the clarification-answer model seam."""
+"""Redacted live qualification runner for the ADR 0014 receiver/composer seams."""
 
 from __future__ import annotations
 
@@ -17,6 +17,10 @@ import yaml
 
 from award_agent.clarification.blockers import collect_blocking_requirements
 from award_agent.clarification.controller import apply_clarification_answer, start_clarification
+from award_agent.clarification.openai_composer import (
+    OpenAIClarificationComposerConfig,
+    OpenAIClarificationPromptComposer,
+)
 from award_agent.clarification.openai_interpreter import (
     OpenAIClarificationAnswerInterpreter,
     OpenAIClarificationInterpretationError,
@@ -109,7 +113,8 @@ _RESOLUTION_FIELDS = {
 
 def run_live_clarification_eval(
     *,
-    model: str,
+    interpreter_model: str = "gpt-5.6-luna",
+    composer_model: str = "gpt-5.6-luna",
     trials: int = 3,
     fixture_path: Path = DEFAULT_LIVE_CLARIFICATION_FIXTURES,
     trace_dir: Path = DEFAULT_LIVE_CLARIFICATION_TRACE_DIR,
@@ -128,10 +133,15 @@ def run_live_clarification_eval(
     for trial in range(1, trials + 1):
         for scenario in cases:
             identifier = str(scenario["id"])
-            session = start_clarification(_initial(scenario), session_id=f"live-{identifier}-{trial}")
+            composer = OpenAIClarificationPromptComposer(
+                OpenAIClarificationComposerConfig(model=composer_model), capture_llm_io=True
+            )
+            session = start_clarification(
+                _initial(scenario), session_id=f"live-{identifier}-{trial}", composer=composer
+            )
             initial_snapshot = deepcopy(session.initial_result.model_dump(mode="python"))
             adapter = OpenAIClarificationAnswerInterpreter(
-                OpenAIClarificationInterpreterConfig(model=model), capture_llm_io=True
+                OpenAIClarificationInterpreterConfig(model=interpreter_model), capture_llm_io=True
             )
             run_started = perf_counter()
             system_error = False
@@ -157,7 +167,7 @@ def run_live_clarification_eval(
                 )
                 before = _field_summary(session)
                 try:
-                    session = apply_clarification_answer(session, command, adapter).session
+                    session = apply_clarification_answer(session, command, adapter, composer=composer).session
                 except (OpenAIClarificationInterpretationError, ValueError):
                     system_error = True
                     break
@@ -209,6 +219,14 @@ def run_live_clarification_eval(
                 "output_tokens": 0,
                 "total_tokens": 0,
             }
+            composer_usage = composer.take_usage() or {
+                "calls": 0,
+                "captured_calls": 0,
+                "missing_calls": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "total_tokens": 0,
+            }
             final_expect = scenario["turns"][-1]["expect"]
             assert isinstance(final_expect, Mapping)
             terminal_ok, _, _ = _check(final_expect, session)
@@ -235,6 +253,7 @@ def run_live_clarification_eval(
                     ),
                     "latency_seconds": perf_counter() - run_started,
                     "usage": usage,
+                    "composer_usage": composer_usage,
                     "template_outcomes": [
                         {
                             "target": (
@@ -248,7 +267,7 @@ def run_live_clarification_eval(
                         if contribution.template_provenance is not None
                     ],
             }
-            call_traces = adapter.take_call_traces()
+            call_traces = [*adapter.take_call_traces(), *composer.take_call_traces()]
             # Always write trace sidecars. They are private/gitignored and never
             # become part of the public redacted artifact.
             write_eval_llm_trace(
@@ -317,7 +336,7 @@ def run_live_clarification_eval(
     return {
         "schema_version": "clarification_live_eval_v1",
         "fixture": {"path": str(fixture_path), "sha256": sha256(raw).hexdigest(), "redacted": True},
-        "model": model,
+        "models": {"interpreter": interpreter_model, "composer": composer_model},
         "trials": trials,
         "generated_at": generated_at,
         "llm_trace": {
@@ -366,9 +385,16 @@ def run_live_clarification_eval(
             "stop_reasons": dict(sorted(stop_reasons.items())),
             "instrumentation": {
                 "calls": calls,
+                "composer_calls": sum(int(record["composer_usage"]["calls"]) for record in records),
                 "latency_seconds": sum(float(record["latency_seconds"]) for record in records),
                 "input_tokens": sum(int(record["usage"]["input_tokens"]) for record in records),
                 "output_tokens": sum(int(record["usage"]["output_tokens"]) for record in records),
+                "composer_input_tokens": sum(
+                    int(record["composer_usage"]["input_tokens"]) for record in records
+                ),
+                "composer_output_tokens": sum(
+                    int(record["composer_usage"]["output_tokens"]) for record in records
+                ),
             },
             "live_gate": {
                 "passed": len(records) >= 36

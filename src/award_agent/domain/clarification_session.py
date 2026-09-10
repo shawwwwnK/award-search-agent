@@ -601,6 +601,40 @@ class ClarificationSessionRevision(SessionContractModel):
         return self
 
 
+class PendingPromptTransition(SessionContractModel):
+    """A validated, durable semantic transition awaiting presentation only.
+
+    The receiver and reducer have already run.  Retrying this object may call
+    only the prompt composer, never reinterpret the user's answer.
+    """
+
+    session_id: str = Field(min_length=1)
+    base_revision: int = Field(ge=0)
+    revision: int = Field(ge=1)
+    answer_turn: AnswerTurn
+    effective_request: EffectiveRequest
+    outcome: ResolutionOutcome
+    requirements: tuple[BlockingRequirement, ...] = Field(min_length=1)
+    issues: tuple[ClarificationIssue, ...] = Field(min_length=1)
+    composition_key: str = Field(pattern=r"^[a-f0-9]{64}$")
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
+        {"answer_turn", "effective_request", "outcome", "requirements", "issues"}
+    )
+
+    @model_validator(mode="after")
+    def validate_shape(self) -> PendingPromptTransition:
+        if self.revision != self.base_revision + 1:
+            raise ValueError("pending prompt revision must immediately follow its base revision")
+        if self.answer_turn.expected_revision != self.base_revision:
+            raise ValueError("pending prompt answer turn must target the base revision")
+        requirement_ids = tuple(item.requirement_id for item in self.requirements)
+        if len(requirement_ids) != len(set(requirement_ids)):
+            raise ValueError("pending prompt requirements must be unique")
+        if {item.requirement_id for item in self.issues} != set(requirement_ids):
+            raise ValueError("pending prompt issues must cover its requirements")
+        return self
+
+
 def _validate_outcome_grounding(
     *,
     answer_turn: AnswerTurn,
