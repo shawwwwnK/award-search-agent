@@ -13,6 +13,7 @@ from award_agent.clarification.composer import (
     ClarificationQuestionItem,
 )
 from award_agent.clarification.interpreter import (
+    CALENDAR_PROPOSAL_CONTRACT_VERSION,
     ClarificationAnswerInterpretation,
     ClarificationAnswerInterpreter,
     ClarificationInterpretationUnavailable,
@@ -22,6 +23,7 @@ from award_agent.evaluation.clarification_behavior_live import (
     DEFAULT_LIVE_BEHAVIOR_FIXTURES,
     ClarificationBehaviorLiveFixtureError,
     _load_cases,
+    _provider_stage_counts,
     _repair_telemetry,
     _string_leaves,
     _v3_outcome_failures,
@@ -339,6 +341,15 @@ def test_live_behavior_public_artifact_is_redacted_and_stage_separated(tmp_path:
         and len(item["response_schema_sha256"]) == 64
         for item in adapter_metadata.values()
     )
+    assert (
+        artifact["summary"]["metadata"]["proposal_contract_version"]
+        == CALENDAR_PROPOSAL_CONTRACT_VERSION
+    )
+    assert artifact["summary"]["metadata"]["provider_stage_counts"] == {
+        "preflight_rejected": 0,
+        "inference_reached": 0,
+        "structured_result_returned": 0,
+    }
     assert set(artifact["summary"]["metadata"]["slice_metrics"]) >= {"class:conflict", "family:conflict"}
     assert set(artifact["summary"]["behavioral"]) >= {
         "false_blocking",
@@ -521,6 +532,23 @@ def test_repair_telemetry_counts_completed_nonpending_repair_workflow() -> None:
     )
 
     assert telemetry["repaired_workflows"] == 1
+
+
+def test_provider_stage_counts_are_exact_and_nonexclusive() -> None:
+    counts = _provider_stage_counts(
+        (
+            {"adapter": {"provider_stage": "preflight_rejected"}},
+            {"adapter": {"provider_stage": "inference_reached"}},
+            {"adapter": {"provider_stage": "structured_result_returned"}},
+            {"adapter": {"provider_stage": "structured_result_returned"}},
+        )
+    )
+
+    assert counts == {
+        "preflight_rejected": 1,
+        "inference_reached": 3,
+        "structured_result_returned": 2,
+    }
 
 
 def test_live_behavior_missing_trace_is_an_exact_safety_failure(tmp_path: Path) -> None:

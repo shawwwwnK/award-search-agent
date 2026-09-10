@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from types import SimpleNamespace
 from typing import Any, cast
 
@@ -16,7 +17,6 @@ from award_agent.clarification.interpreter import (
 from award_agent.clarification.openai_interpreter import (
     OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION,
     OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256,
-    OpenAIClarificationAdapterPreflightError,
     OpenAIClarificationAnswerInterpreter,
     OpenAIClarificationInterpretationError,
     OpenAIClarificationInterpreterConfig,
@@ -160,14 +160,20 @@ def test_adapter_returns_retryable_unavailable_for_api_error_and_unmatched_quote
 def test_provider_schema_rejection_is_adapter_preflight_not_model_repair() -> None:
     client = _Client(ValueError("Invalid schema for response_format"))
     interpreter = OpenAIClarificationAnswerInterpreter(
-        OpenAIClarificationInterpreterConfig(model="x"), client=cast(OpenAI, client)
+        OpenAIClarificationInterpreterConfig(model="x"),
+        client=cast(OpenAI, client),
+        capture_llm_io=True,
     )
 
-    with pytest.raises(OpenAIClarificationAdapterPreflightError, match="response schema"):
-        interpreter.interpret(_input())
+    unavailable = interpreter.interpret(_input())
 
+    assert isinstance(unavailable, ClarificationInterpretationUnavailable)
+    assert unavailable.code == "receiver_provider_schema_unavailable"
     assert len(client.responses.calls) == 1
     assert interpreter.repair_budget_consumed() is False
+    adapter = interpreter.take_call_traces()[0]["adapter"]
+    assert isinstance(adapter, Mapping)
+    assert adapter["provider_stage"] == "preflight_rejected"
 
 
 def test_adapter_aggregates_attempted_and_usage_less_calls_without_last_response_loss() -> None:
@@ -236,13 +242,20 @@ def test_adapter_repairs_an_unavailable_structured_response_once_with_traceable_
         "interpreter",
         "interpreter_repair",
     ]
+    adapters: list[Mapping[str, object]] = []
+    for trace in traces:
+        adapter = trace["adapter"]
+        assert isinstance(adapter, Mapping)
+        adapters.append(adapter)
+    assert [adapter["provider_stage"] for adapter in adapters] == [
+        "inference_reached",
+        "structured_result_returned",
+    ]
     assert all(
-        item["adapter"]
-        == {
-            "version": OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION,
-            "response_schema_sha256": OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256,
-        }
-        for item in traces
+        adapter["version"] == OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION
+        and adapter["response_schema_sha256"]
+        == OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256
+        for adapter in adapters
     )
 
 
@@ -320,9 +333,111 @@ def test_flat_recurring_and_offset_anchor_forms_convert_without_text_inference()
     assert second.calendar_operation.kind == "offset_interval"
 
 
+def test_flat_arrays_convert_compatible_fact_kinds_with_prior_fact_anchor() -> None:
+    input = ClarificationAnswerInterpreterInput(
+        message_id="all-arrays",
+        text="LA two mid october Saturday seven later about 12 days",
+        ordered_requirements=(),
+    )
+    wire = _ClarificationAnswerWireOutput.model_validate(
+        {
+            "discourse_act": "answer",
+            "location_facts": [
+                {
+                    "fact_id": "origin",
+                    "quote": "LA",
+                    "occurrence": 0,
+                    "target": "origin",
+                    "location_kind": "city",
+                    "location_value": "Los Angeles",
+                }
+            ],
+            "traveler_facts": [
+                {
+                    "fact_id": "travelers",
+                    "quote": "two",
+                    "occurrence": 0,
+                    "target": "travelers",
+                    "travelers": 2,
+                }
+            ],
+            "literal_interval_facts": [
+                {
+                    "fact_id": "departure",
+                    "quote": "mid october",
+                    "occurrence": 0,
+                    "target": "departure_window",
+                    "start_year": None,
+                    "start_month": 10,
+                    "start_day": 11,
+                    "end_year": None,
+                    "end_month": 10,
+                    "end_day": 20,
+                    "approximate": True,
+                }
+            ],
+            "recurring_interval_facts": [],
+            "offset_interval_facts": [
+                {
+                    "fact_id": "return",
+                    "quote": "seven later",
+                    "occurrence": 0,
+                    "target": "return_window",
+                    "anchor_kind": "prior_fact",
+                    "anchor_fact_id": "departure",
+                    "anchor_edge": "start",
+                    "start_offset_days": 7,
+                    "end_offset_days": None,
+                    "approximate": False,
+                }
+            ],
+            "duration_facts": [
+                {
+                    "fact_id": "duration",
+                    "quote": "about 12 days",
+                    "occurrence": 0,
+                    "target": "duration",
+                    "minimum_days": 11,
+                    "maximum_days": 13,
+                    "approximate": True,
+                }
+            ],
+            "unresolved_fragments": [],
+        }
+    )
+
+    converted = _convert_wire_output(wire, input)
+    assert [fact.fact_id for fact in converted.facts] == [
+        "origin",
+        "travelers",
+        "departure",
+        "return",
+        "duration",
+    ]
+    assert converted.facts[3].calendar_operation is not None
+    assert converted.facts[3].calendar_operation.kind == "offset_interval"
+
+
 @pytest.mark.parametrize(
     "update",
     [
+        {
+            "literal_interval_facts": [
+                {
+                    "fact_id": "x",
+                    "quote": "mid october",
+                    "occurrence": 0,
+                    "target": "departure_window",
+                    "start_year": None,
+                    "start_month": 10,
+                    "start_day": 11,
+                    "end_year": 2026,
+                    "end_month": None,
+                    "end_day": None,
+                    "approximate": False,
+                }
+            ]
+        },
         {
             "literal_interval_facts": [
                 {
@@ -361,6 +476,50 @@ def test_flat_invalid_shapes_are_converter_failures(update: dict[str, object]) -
     )
     with pytest.raises(OpenAIClarificationInterpretationError):
         _convert_wire_output(wire, _input())
+
+
+def test_flat_converter_rejects_global_ids_and_internal_construction_errors() -> None:
+    duplicate = _ClarificationAnswerWireOutput.model_validate(
+        {
+            **_wire().model_dump(mode="python"),
+            "location_facts": [
+                {
+                    "fact_id": "d",
+                    "quote": "mid october",
+                    "occurrence": 0,
+                    "target": "origin",
+                    "location_kind": "city",
+                    "location_value": "Los Angeles",
+                }
+            ],
+        }
+    )
+    with pytest.raises(OpenAIClarificationInterpretationError, match="duplicate"):
+        _convert_wire_output(duplicate, _input())
+
+    inverted_offset = _ClarificationAnswerWireOutput.model_validate(
+        {
+            **_wire().model_dump(mode="python"),
+            "literal_interval_facts": [],
+            "duration_facts": [],
+            "offset_interval_facts": [
+                {
+                    "fact_id": "return",
+                    "quote": "mid october",
+                    "occurrence": 0,
+                    "target": "return_window",
+                    "anchor_kind": "request_date",
+                    "anchor_fact_id": None,
+                    "anchor_edge": None,
+                    "start_offset_days": 3,
+                    "end_offset_days": 2,
+                    "approximate": False,
+                }
+            ],
+        }
+    )
+    with pytest.raises(OpenAIClarificationInterpretationError, match="invalid structured"):
+        _convert_wire_output(inverted_offset, _input())
 
 
 def test_adapter_repairs_only_requested_calendar_facts_with_separate_trace_and_usage() -> None:

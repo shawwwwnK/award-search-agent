@@ -116,13 +116,6 @@ _FORBIDDEN_TEXT_METHODS = {
     "search",
     "fullmatch",
 }
-_OPENAI_CONVERTER_FUNCTIONS = {
-    "_span",
-    "_convert_wire_output",
-    "_fact",
-    "_calendar_fact",
-    "_anchor",
-}
 _REQUIRED_FAMILIES = frozenset(
     {
         "schema_span_grounding",
@@ -323,47 +316,123 @@ def audit_continuation_raw_answer_boundary(
 def find_openai_converter_semantic_parser_violations(
     source: str, *, path: str = "openai_interpreter.py"
 ) -> tuple[ParserBoundaryViolation, ...]:
-    """Allow only exact ``text.find(quote, cursor)`` span grounding in DTO conversion."""
+    """Audit the complete OpenAI adapter for raw-answer semantic parsing.
+
+    The adapter may ground model-provided quotes with the exact span lookup,
+    validate its configured model name, and classify provider errors.  Those
+    operations are structural rather than answer interpretation.  Every other
+    text operation is rejected wherever it appears, including helper methods
+    outside the DTO conversion functions.
+    """
     try:
         tree = ast.parse(source, filename=path)
     except SyntaxError as exc:  # pragma: no cover
         return (ParserBoundaryViolation(path, exc.lineno or 0, "source does not parse"),)
+
     violations: list[ParserBoundaryViolation] = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.ImportFrom) and node.module == "re" or isinstance(node, ast.Import) and any(alias.name == "re" for alias in node.names):
-            violations.append(
-                ParserBoundaryViolation(path, node.lineno, "forbidden converter import: re")
-            )
-        if not isinstance(node, ast.FunctionDef) or node.name not in _OPENAI_CONVERTER_FUNCTIONS:
-            continue
-        for call in ast.walk(node):
-            if not isinstance(call, ast.Call):
-                continue
-            name = _call_name(call)
+
+    class _OpenAIAdapterAudit(ast.NodeVisitor):
+        def __init__(self) -> None:
+            self.class_names: list[str] = []
+            self.function_names: list[str] = []
+
+        def visit_ClassDef(self, node: ast.ClassDef) -> None:
+            self.class_names.append(node.name)
+            self.generic_visit(node)
+            self.class_names.pop()
+
+        def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+            self.function_names.append(node.name)
+            self.generic_visit(node)
+            self.function_names.pop()
+
+        def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
+            self.function_names.append(node.name)
+            self.generic_visit(node)
+            self.function_names.pop()
+
+        def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+            if node.module == "re":
+                violations.append(
+                    ParserBoundaryViolation(path, node.lineno, "forbidden converter import: re")
+                )
+            self.generic_visit(node)
+
+        def visit_Import(self, node: ast.Import) -> None:
+            if any(alias.name == "re" for alias in node.names):
+                violations.append(
+                    ParserBoundaryViolation(path, node.lineno, "forbidden converter import: re")
+                )
+            self.generic_visit(node)
+
+        def visit_Call(self, node: ast.Call) -> None:
+            name = _call_name(node)
             if name in {"int", "float"}:
                 violations.append(
                     ParserBoundaryViolation(
-                        path, call.lineno, "forbidden converter numeric inference"
+                        path, node.lineno, "forbidden converter numeric inference"
                     )
                 )
-            elif name in _FORBIDDEN_TEXT_METHODS:
-                allowed_span_find = (
-                    node.name == "_span"
-                    and name == "find"
-                    and isinstance(call.func, ast.Attribute)
-                    and isinstance(call.func.value, ast.Name)
-                    and call.func.value.id == "text"
-                    and len(call.args) == 2
-                    and all(isinstance(arg, ast.Name) for arg in call.args)
-                    and [arg.id for arg in call.args if isinstance(arg, ast.Name)]
-                    == ["quote", "cursor"]
-                )
-                if not allowed_span_find:
-                    violations.append(
-                        ParserBoundaryViolation(
-                            path, call.lineno, f"forbidden converter text operation: {name}"
-                        )
+            elif name in _FORBIDDEN_TEXT_METHODS and not self._is_explicit_exemption(node, name):
+                violations.append(
+                    ParserBoundaryViolation(
+                        path, node.lineno, f"forbidden converter text operation: {name}"
                     )
+                )
+            self.generic_visit(node)
+
+        def _is_explicit_exemption(self, node: ast.Call, name: str) -> bool:
+            return (
+                self._is_exact_span_lookup(node, name)
+                or self._is_config_model_strip(node, name)
+                or self._is_provider_error_classification(node, name)
+            )
+
+        def _is_exact_span_lookup(self, node: ast.Call, name: str) -> bool:
+            return (
+                self.function_names == ["_span"]
+                and name == "find"
+                and isinstance(node.func, ast.Attribute)
+                and isinstance(node.func.value, ast.Name)
+                and node.func.value.id == "text"
+                and len(node.args) == 2
+                and not node.keywords
+                and all(isinstance(arg, ast.Name) for arg in node.args)
+                and [arg.id for arg in node.args if isinstance(arg, ast.Name)]
+                == ["quote", "cursor"]
+            )
+
+        def _is_config_model_strip(self, node: ast.Call, name: str) -> bool:
+            return (
+                self.class_names == ["OpenAIClarificationInterpreterConfig"]
+                and self.function_names == ["__post_init__"]
+                and name == "strip"
+                and isinstance(node.func, ast.Attribute)
+                and isinstance(node.func.value, ast.Attribute)
+                and isinstance(node.func.value.value, ast.Name)
+                and node.func.value.value.id == "self"
+                and node.func.value.attr == "model"
+                and not node.args
+                and not node.keywords
+            )
+
+        def _is_provider_error_classification(self, node: ast.Call, name: str) -> bool:
+            return (
+                self.function_names == ["_is_provider_schema_rejection"]
+                and name == "casefold"
+                and isinstance(node.func, ast.Attribute)
+                and isinstance(node.func.value, ast.Call)
+                and isinstance(node.func.value.func, ast.Name)
+                and node.func.value.func.id == "str"
+                and len(node.func.value.args) == 1
+                and not node.func.value.keywords
+                and isinstance(node.func.value.args[0], ast.Name)
+                and node.func.value.args[0].id == "error"
+                and not node.args
+                and not node.keywords
+            )
+
+    _OpenAIAdapterAudit().visit(tree)
     return tuple(violations)
 
 

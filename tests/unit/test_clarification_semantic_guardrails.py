@@ -71,16 +71,36 @@ def test_raw_answer_parser_audit_rejects_phrase_processing_hooks() -> None:
     ]
 
 
-def test_openai_converter_audit_allows_only_exact_quote_span_grounding() -> None:
+def test_openai_adapter_audit_allows_only_structural_text_exemptions() -> None:
     assert (
         find_openai_converter_semantic_parser_violations(
-            "def _span(text, quote, cursor):\n    return text.find(quote, cursor)\n"
+            """
+class OpenAIClarificationInterpreterConfig:
+    def __post_init__(self):
+        return self.model.strip()
+
+def _span(text, quote, cursor):
+    return text.find(quote, cursor)
+
+def _is_provider_schema_rejection(error):
+    return str(error).casefold()
+"""
         )
         == ()
     )
+
+
+def test_openai_adapter_audit_covers_non_converter_helpers() -> None:
     violations = find_openai_converter_semantic_parser_violations(
-        "def _convert_wire_output(text):\n    return text.casefold()\n"
+        """
+def _helper(text):
+    return text.casefold()
+
+def _another_helper(text):
+    return text.strip()
+"""
     )
     assert [(item.line, item.detail) for item in violations] == [
-        (2, "forbidden converter text operation: casefold"),
+        (3, "forbidden converter text operation: casefold"),
+        (6, "forbidden converter text operation: strip"),
     ]

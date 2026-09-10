@@ -28,7 +28,10 @@ from award_agent.clarification.controller import (
     apply_clarification_answer,
     start_clarification,
 )
-from award_agent.clarification.interpreter import ClarificationAnswerInterpreter
+from award_agent.clarification.interpreter import (
+    CALENDAR_PROPOSAL_CONTRACT_VERSION,
+    ClarificationAnswerInterpreter,
+)
 from award_agent.clarification.openai_composer import (
     OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION,
     OPENAI_CLARIFICATION_COMPOSER_RESPONSE_SCHEMA_SHA256,
@@ -812,6 +815,23 @@ def _repair_telemetry(
     }
 
 
+def _provider_stage_counts(traces: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    """Count non-exclusive provider milestones from private trace metadata."""
+
+    stages = [
+        trace.get("adapter", {}).get("provider_stage")
+        for trace in traces
+        if isinstance(trace.get("adapter"), Mapping)
+    ]
+    preflight = sum(stage == "preflight_rejected" for stage in stages)
+    structured = sum(stage == "structured_result_returned" for stage in stages)
+    return {
+        "preflight_rejected": preflight,
+        "inference_reached": sum(stage in {"inference_reached", "structured_result_returned"} for stage in stages),
+        "structured_result_returned": structured,
+    }
+
+
 def _string_leaves(value: object) -> set[str]:
     if isinstance(value, str):
         return {value}
@@ -923,6 +943,9 @@ def run_live_clarification_behavior_eval(
                     "question_composition": {"sources": {}, "manual_review_required": 0},
                     "valid_siblings": {"expected": 0, "retained": 0},
                     "repair_telemetry": repair_telemetry,
+                    "provider_stage_counts": _provider_stage_counts(
+                        [*interpreter_traces, *composer_traces]
+                    ),
                     "latency_seconds": perf_counter() - started,
                     "stages": stages,
                 }
@@ -1161,6 +1184,9 @@ def run_live_clarification_behavior_eval(
                     },
                     "valid_siblings": {"expected": valid_siblings_expected, "retained": valid_siblings_retained},
                     "repair_telemetry": repair_telemetry,
+                    "provider_stage_counts": _provider_stage_counts(
+                        [*interpreter_traces, *composer_traces]
+                    ),
                     "latency_seconds": perf_counter() - started,
                     "stages": stages,
                 }
@@ -1352,7 +1378,7 @@ def run_live_clarification_behavior_eval(
                     "pending_composer": sum(record["repair_telemetry"]["pending_composer"] for record in records),
                 },
             },
-            "metadata": {"mode": mode, "pool": pool, "execution": "live_openai", "evaluator_version": EVALUATOR_VERSION, "adapter": {"interpreter": {"version": OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION, "response_schema_sha256": OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256}, "composer": {"version": OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION, "response_schema_sha256": OPENAI_CLARIFICATION_COMPOSER_RESPONSE_SCHEMA_SHA256}}, "scenario_distribution": dict(sorted(family_counts.items())), "answer_class_distribution": dict(sorted(class_counts.items())), "slice_metrics": slice_metrics, "stop_reasons": dict(sorted(stop_reasons.items())), "trial_variance": {"rates": trial_rates, "mean": mean_rate, "variance": variance}, "errors": {"model": total_stage["interpreter"]["errors"] + total_stage["composer"]["errors"], "system": system_errors, "evaluator": evaluator_errors}},
+            "metadata": {"mode": mode, "pool": pool, "execution": "live_openai", "evaluator_version": EVALUATOR_VERSION, "proposal_contract_version": CALENDAR_PROPOSAL_CONTRACT_VERSION, "adapter": {"interpreter": {"version": OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION, "response_schema_sha256": OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256}, "composer": {"version": OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION, "response_schema_sha256": OPENAI_CLARIFICATION_COMPOSER_RESPONSE_SCHEMA_SHA256}}, "provider_stage_counts": {key: sum(record["provider_stage_counts"][key] for record in records) for key in ("preflight_rejected", "inference_reached", "structured_result_returned")}, "scenario_distribution": dict(sorted(family_counts.items())), "answer_class_distribution": dict(sorted(class_counts.items())), "slice_metrics": slice_metrics, "stop_reasons": dict(sorted(stop_reasons.items())), "trial_variance": {"rates": trial_rates, "mean": mean_rate, "variance": variance}, "errors": {"model": total_stage["interpreter"]["errors"] + total_stage["composer"]["errors"], "system": system_errors, "evaluator": evaluator_errors}},
             "instrumentation": {
                 "stages": total_stage,
                 "totals": {

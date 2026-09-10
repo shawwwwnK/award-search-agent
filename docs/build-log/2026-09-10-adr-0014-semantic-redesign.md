@@ -59,6 +59,18 @@
 - This entry records architecture and evaluation-design decisions only. No ADR 0015 implementation
   tests or live evaluation results are asserted here.
 
+## ADR 0015 implementation checkpoint
+
+- Implemented the generic proposal runtime, flat OpenAI-only response DTO, bounded repair/pending
+  behavior, v3 behavioral evaluator, adapter/schema telemetry, and module-wide raw-text boundary
+  audit. The isolated one-call provider schema smoke reached inference and returned a parsed
+  response; the prior eight-case diagnostic that was rejected before inference remains
+  non-semantic adapter evidence only.
+- At the weekly-limit stop point, the uncommitted post-smoke hardening delta passed repository Ruff,
+  `mypy src tests`, `pytest -q tests/unit` (427 tests), the semantic guardrail CLI, and
+  `git diff --check`. No post-smoke v3 behavioral rerun was made.
+- Handover: `docs/handoffs/2026-09-10-adr-0015-v3-live-rerun-handover.md`.
+
 ## OpenAI flat-wire preflight correction
 
 - The first v3 development diagnostic (`f582925`, one trial, eight scenarios) was inspected after

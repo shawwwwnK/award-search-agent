@@ -184,6 +184,7 @@ class OpenAIClarificationPromptComposer:
                 payload=payload,
                 text_format=_ClarificationPromptComposerWireOutput,
                 adapter_version=OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION,
+                provider_stage="inference_reached",
                 error=exc,
                 latency_seconds=time.perf_counter() - started,
             )
@@ -196,6 +197,7 @@ class OpenAIClarificationPromptComposer:
             payload=payload,
             text_format=_ClarificationPromptComposerWireOutput,
             adapter_version=OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION,
+            provider_stage="structured_result_returned",
             response=response,
             latency_seconds=time.perf_counter() - started,
         )

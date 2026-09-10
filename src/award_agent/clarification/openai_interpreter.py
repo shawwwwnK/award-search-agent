@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
 from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -91,14 +91,14 @@ class _WireLiteralIntervalFact(_WireFactBase):
 
 
 class _WireAnchoredFact(_WireFactBase):
-    anchor_kind: str
+    anchor_kind: Literal["request_date", "prior_fact"]
     anchor_fact_id: str | None = Field(..., min_length=1)
-    anchor_edge: str | None = Field(...)
+    anchor_edge: Literal["start", "end"] | None = Field(...)
 
 
 class _WireRecurringIntervalFact(_WireAnchoredFact):
     weekday: int = Field(ge=0, le=6)
-    inclusion: str
+    inclusion: Literal["on_or_after", "strictly_after"]
     cycles_after_anchor: int = Field(ge=0, le=104)
     span_days: int = Field(ge=1, le=31)
     approximate: bool
@@ -143,10 +143,6 @@ class OpenAIClarificationInterpretationError(RuntimeError):
     pass
 
 
-class OpenAIClarificationAdapterPreflightError(RuntimeError):
-    """The provider rejected this adapter's response schema before inference."""
-
-
 def _is_provider_schema_rejection(error: BaseException) -> bool:
     message = str(error).casefold()
     return any(
@@ -180,6 +176,27 @@ def _span(*, message_id: str, text: str, quote: str, occurrence: int) -> Message
 def _convert_wire_output(
     wire: _ClarificationAnswerWireOutput, input: ClarificationAnswerInterpreterInput
 ) -> ClarificationAnswerInterpretation:
+    """Convert provider-safe DTOs without letting construction failures escape.
+
+    The provider validates the flat JSON shape, but constructing the internal
+    typed proposal can still reject impossible combinations (for example, an
+    inverted offset).  Those are receiver-output errors, not application
+    errors: keep them on the bounded repair/pending path.
+    """
+
+    try:
+        return _convert_wire_output_unchecked(wire, input)
+    except OpenAIClarificationInterpretationError:
+        raise
+    except (ValidationError, ValueError, TypeError) as exc:
+        raise OpenAIClarificationInterpretationError(
+            "OpenAI returned an invalid structured calendar proposal"
+        ) from exc
+
+
+def _convert_wire_output_unchecked(
+    wire: _ClarificationAnswerWireOutput, input: ClarificationAnswerInterpreterInput
+) -> ClarificationAnswerInterpretation:
     facts: list[ClarificationSemanticFact] = []
     for item in wire.location_facts:
         if item.target not in {SemanticTarget.ORIGIN, SemanticTarget.DESTINATION}:
@@ -192,14 +209,17 @@ def _convert_wire_output(
             raise OpenAIClarificationInterpretationError("traveler fact has incompatible target")
         facts.append(_fact(input, traveler, travelers=traveler.travelers))
     for literal in wire.literal_interval_facts:
-        if (literal.end_month is None) != (literal.end_day is None):
+        if (
+            (literal.end_month is None) != (literal.end_day is None)
+            or (literal.end_year is not None and literal.end_month is None)
+        ):
             raise OpenAIClarificationInterpretationError("literal interval has partial end")
+        if literal.target not in {SemanticTarget.DEPARTURE_WINDOW, SemanticTarget.RETURN_WINDOW}:
+            raise OpenAIClarificationInterpretationError("literal interval has incompatible target")
         end = None
         if literal.end_month is not None:
             assert literal.end_day is not None
-            end = CalendarDay(
-                year=literal.end_year, month=literal.end_month, day=literal.end_day
-            )
+            end = CalendarDay(year=literal.end_year, month=literal.end_month, day=literal.end_day)
         facts.append(
             _calendar_fact(
                 input,
@@ -214,6 +234,10 @@ def _convert_wire_output(
             )
         )
     for recurring in wire.recurring_interval_facts:
+        if recurring.target not in {SemanticTarget.DEPARTURE_WINDOW, SemanticTarget.RETURN_WINDOW}:
+            raise OpenAIClarificationInterpretationError(
+                "recurring interval has incompatible target"
+            )
         facts.append(
             _calendar_fact(
                 input,
@@ -229,6 +253,8 @@ def _convert_wire_output(
             )
         )
     for offset in wire.offset_interval_facts:
+        if offset.target not in {SemanticTarget.DEPARTURE_WINDOW, SemanticTarget.RETURN_WINDOW}:
+            raise OpenAIClarificationInterpretationError("offset interval has incompatible target")
         facts.append(
             _calendar_fact(
                 input,
@@ -242,6 +268,8 @@ def _convert_wire_output(
             )
         )
     for duration in wire.duration_facts:
+        if duration.target is not SemanticTarget.DURATION:
+            raise OpenAIClarificationInterpretationError("duration fact has incompatible target")
         facts.append(
             _calendar_fact(
                 input,
@@ -341,6 +369,7 @@ class OpenAIClarificationAnswerInterpreter:
         self._usage_records: list[dict[str, int]] = []
         self._call_count = 0
         self._repair_available = True
+        self._provider_preflight_failed = False
 
     def reset_usage(self) -> None:
         self._usage_records = []
@@ -377,25 +406,31 @@ class OpenAIClarificationAnswerInterpreter:
         self, input: ClarificationAnswerInterpreterInput
     ) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
         self._repair_available = True
+        self._provider_preflight_failed = False
         parsed = self._parse(
             instructions=_INSTRUCTIONS,
             payload=input.model_dump(mode="json"),
             stage="interpreter",
         )
         if parsed is None:
+            if self._provider_preflight_failed:
+                return ClarificationInterpretationUnavailable(
+                    code="receiver_provider_schema_unavailable",
+                    detail="The model provider rejected the receiver schema before interpretation.",
+                )
             repaired = self._repair_missing_wire_output(input)
             if isinstance(repaired, ClarificationInterpretationUnavailable):
                 return repaired
             parsed = repaired
         try:
             return _convert_wire_output(parsed, input)
-        except (OpenAIClarificationInterpretationError, ValidationError):
+        except (OpenAIClarificationInterpretationError, ValidationError, ValueError):
             repaired = self._repair_wire_output(input, parsed)
             if isinstance(repaired, ClarificationInterpretationUnavailable):
                 return repaired
             try:
                 return _convert_wire_output(repaired, input)
-            except (OpenAIClarificationInterpretationError, ValidationError):
+            except (OpenAIClarificationInterpretationError, ValidationError, ValueError):
                 return ClarificationInterpretationUnavailable(
                     code="receiver_repair_invalid",
                     detail="The clarification receiver returned an unusable repaired proposal.",
@@ -563,7 +598,10 @@ class OpenAIClarificationAnswerInterpreter:
         started = time.perf_counter()
         try:
             response = self._client.responses.parse(**request)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - provider SDK has no stable error base
+            provider_schema_rejection = _is_provider_schema_rejection(exc)
+            if provider_schema_rejection:
+                self._provider_preflight_failed = True
             self._traces.record(
                 stage=stage,
                 model=self._config.model,
@@ -571,13 +609,14 @@ class OpenAIClarificationAnswerInterpreter:
                 payload=request["input"],
                 text_format=_ClarificationAnswerWireOutput,
                 adapter_version=OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION,
+                provider_stage=(
+                    "preflight_rejected"
+                    if provider_schema_rejection
+                    else "inference_reached"
+                ),
                 error=exc,
                 latency_seconds=time.perf_counter() - started,
             )
-            if _is_provider_schema_rejection(exc):
-                raise OpenAIClarificationAdapterPreflightError(
-                    "OpenAI rejected the clarification response schema before inference"
-                ) from exc
             return None
         parsed = getattr(response, "output_parsed", None)
         self._traces.record(
@@ -587,6 +626,7 @@ class OpenAIClarificationAnswerInterpreter:
             payload=request["input"],
             text_format=_ClarificationAnswerWireOutput,
             adapter_version=OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION,
+            provider_stage="structured_result_returned",
             response=response,
             latency_seconds=time.perf_counter() - started,
         )
@@ -614,7 +654,6 @@ class OpenAIClarificationAnswerInterpreter:
 
 
 __all__ = [
-    "OpenAIClarificationAdapterPreflightError",
     "OpenAIClarificationAnswerInterpreter",
     "OpenAIClarificationInterpretationError",
     "OpenAIClarificationInterpreterConfig",

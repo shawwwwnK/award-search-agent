@@ -90,6 +90,7 @@ class LLMCallTraceCollector:
         payload: str,
         text_format: Any,
         adapter_version: str | None = None,
+        provider_stage: str | None = None,
         response: Any | None = None,
         error: BaseException | None = None,
         latency_seconds: float | None = None,
@@ -102,6 +103,7 @@ class LLMCallTraceCollector:
             "adapter": {
                 "version": adapter_version,
                 "response_schema_sha256": response_schema_sha256(text_format),
+                "provider_stage": provider_stage,
             },
             "request": {
                 "model": model,
