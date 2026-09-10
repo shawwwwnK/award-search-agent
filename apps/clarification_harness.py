@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 from award_agent.clarification import (
     ClarificationCommandError,
     ClarificationInterpretationError,
+    ClarificationInterpretationPending,
     OpenAIClarificationAnswerInterpreter,
     OpenAIClarificationComposerConfig,
     OpenAIClarificationInterpretationError,
@@ -154,8 +155,7 @@ def _record_model_diagnostics(
         (
             str(trace["error"].get("type"))
             for trace in traces
-            if isinstance(trace.get("error"), Mapping)
-            and trace["error"].get("type")
+            if isinstance(trace.get("error"), Mapping) and trace["error"].get("type")
         ),
         None,
     )
@@ -405,7 +405,7 @@ def main() -> None:
                 st.warning("Enter an answer before submitting.")
             else:
                 interpreter: OpenAIClarificationAnswerInterpreter | None = None
-                composer: OpenAIClarificationPromptComposer | None = None
+                answer_composer: OpenAIClarificationPromptComposer | None = None
                 interpreter_error: BaseException | None = None
                 command = ClarificationAnswerCommand(
                     session_id=session.session_id,
@@ -423,12 +423,12 @@ def main() -> None:
                         # Exact model payloads stay in private local diagnostics.
                         capture_llm_io=True,
                     )
-                    composer = OpenAIClarificationPromptComposer(
+                    answer_composer = OpenAIClarificationPromptComposer(
                         OpenAIClarificationComposerConfig(model=composer_model),
                         capture_llm_io=True,
                     )
                     transition = apply_clarification_answer(
-                        session, command, interpreter, composer=composer
+                        session, command, interpreter, composer=answer_composer
                     )
                 except (
                     ClarificationCommandError,
@@ -453,9 +453,16 @@ def main() -> None:
                         f"Answer processing failed ({type(exc).__name__}): {exc}",
                     )
                 else:
-                    st.session_state[_SESSION_KEY] = transition.session
-                    st.session_state.pop(_ERROR_KEY, None)
-                    st.rerun()
+                    if isinstance(transition, ClarificationInterpretationPending):
+                        st.warning(
+                            "Your answer was not applied because the receiver needs a retry "
+                            f"({transition.code}). The current question is unchanged; submit again "
+                            "when you are ready."
+                        )
+                    else:
+                        st.session_state[_SESSION_KEY] = transition.session
+                        st.session_state.pop(_ERROR_KEY, None)
+                        st.rerun()
                 finally:
                     _record_model_diagnostics(
                         st,
@@ -470,7 +477,7 @@ def main() -> None:
                         event="answer_submit",
                         stage="prompt_composer",
                         model=composer_model,
-                        adapter=composer,
+                        adapter=answer_composer,
                         error=interpreter_error,
                     )
     else:

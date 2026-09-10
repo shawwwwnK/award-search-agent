@@ -1,0 +1,28 @@
+contract_version: v3-live
+# Sample behavior-only oracle. It is not a replacement for the qualified v2
+# baseline and contains no internal receiver proposal or prompt-copy goldens.
+scenarios:
+  - id: ambiguous_departure_asks
+    family: ambiguity_safety
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "October 3 or October 10"
+        oracle:
+          expected_action: ask
+          must_resolve: []
+          must_remain_blocked: [departure]
+          protected_fields: [origin, destination, travelers, departure]
+          forbidden_outcomes: [unsafe_ambiguity_acceptance, protected_field_mutation]
+          state_envelope:
+            statuses: [awaiting_answer]
+            relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]
+          question_intent:
+            required: true
+            requirement_ids: [departure]
+            issue_kinds: [ambiguous]
+          disclosure: {required: false}
+          properties: {}

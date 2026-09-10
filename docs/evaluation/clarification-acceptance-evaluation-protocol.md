@@ -1,19 +1,20 @@
 # Clarification acceptance evaluation protocol
 
-This protocol qualifies the LLM-owned clarification boundary in ADR 0014. It is designed to
+This protocol qualifies the LLM-owned clarification boundary in ADRs 0014 and 0015. It is designed to
 reward accepting, grounded conversational behavior without turning the implementation into a
 fixture-matching exercise.
 
 ## Evaluation boundary
 
-The answer receiver is evaluated for interpreting raw clarification language into the typed
-semantic contract. The deterministic suite is evaluated for validating that contract and reducing
-state. The composer is evaluated only for writing questions from authoritative blockers and issue
-records. Composer copy cannot change safety or state.
+The answer receiver is evaluated for interpreting raw clarification language into grounded,
+generic calendar proposals. It alone decides how language maps to a proposal. The deterministic
+suite is evaluated for validating and executing the proposal, then reducing state; it must not
+infer semantics from raw answer text. The composer is evaluated only for writing questions from
+authoritative blockers and issue records. Composer copy cannot change safety or state.
 
 There are no language-understanding unit goldens. Unit and offline guardrail tests use fake,
-already-typed receiver/composer outputs to test schema, evidence-span integrity, symbolic temporal
-compilation, calendar arithmetic, conflict handling, reduction, provenance, revisions,
+already-typed receiver/composer outputs to test schema, evidence-span integrity, generic calendar
+proposal evaluation, calendar arithmetic, conflict handling, reduction, provenance, revisions,
 idempotency, and error behavior. They must not assert that a deterministic parser understands a
 raw phrase, typo, or paraphrase. A raw answer may be retained for exact evidence-span integrity
 checks, but deterministic code must not infer semantics from it.
@@ -32,55 +33,141 @@ No implementation or prompt change may be made in response to a hidden case with
 and a new preregistration. Public reports contain hashes, family counts, aggregate metrics, and
 failure counts only.
 
+## V3 action/property oracle
+
+Every behavioral fixture states an acceptable final behavior, not a prescribed internal AST or
+question wording. A v3 oracle contains:
+
+```yaml
+expected_action: resolve | partial_resolve_and_ask | ask | stop | pending_retryable
+must_resolve: [departure, return_or_duration]
+must_remain_blocked: []
+protected_fields: [origin, destination]
+state_envelope:
+  statuses: [ready]
+  relations: [ready_iff_no_blockers]
+properties:
+  departure_window: {year: 2026, month: 10, start_day: [1, 10], end_day: [1, 10]}
+  duration_days: [9, 11]
+forbidden_outcomes:
+  - unsafe_ambiguity_acceptance
+  - protected_field_mutation
+question_intent:
+  required: false
+  requirement_ids: []
+  issue_kinds: []
+disclosure: {required: true}
+valid_siblings: [departure]
+```
+
+`state_envelope`, `properties`, and `values` describe observable permitted outcomes: statuses,
+blocker/prompt relations, bounded date or duration envelopes, and exact values only where the
+product actually requires them. `question_intent` checks requirement and issue linkage, not
+generated wording. `disclosure` checks generic approximation provenance/disclosure only when an
+approximation was accepted. The oracle has no field for receiver ASTs, proposal handles, or
+customer-facing copy. A fixture may permit several safe outcomes only when they are all explicitly
+declared.
+
+The checked-in v3 file is a **pilot corpus** and validates the action/property-oracle machinery.
+It is not a behavioral qualification corpus. Its actions are `resolve`,
+`partial_resolve_and_ask`, `ask`, `stop`, and `pending_retryable`; the latter means a visibly
+communicated, non-mutating retryable receiver/composer outcome, not an ordinary ask or user
+no-progress answer.
+
 ## Gates
 
 ### Safety and offline guardrails
 
 This is a hard 100% gate and runs without live model or provider access. It covers:
 
-- typed contract and closed-semantic validation;
+- typed generic-proposal validation and deterministic calendar evaluation;
 - exact answer-message identity and evidence-span bounds/integrity;
+- acyclic same-answer dependency topology, opaque fact-reference integrity, and graph-order
+  calculation without any raw-text ordering or phrase inference;
 - authorized requirement/correction targets and no unrelated hard-constraint mutation;
 - deterministic temporal compilation, calendar arithmetic, bounded/nonempty windows, and conflict
   preservation;
 - atomic independent-subset reduction, immutable revisions, provenance, concurrency, replay and
   idempotency behavior;
-- exact blocker coverage/order, ready-state policy, explicit unsupported/error outcomes, and
+- exact blocker coverage/order, ready-state policy, explicit unsupported and pending/retryable
+  outcomes, and
   privacy/redaction;
 - composer question-set schema, complete ordered blocker coverage, and issue linkage.
 
-An invalid receiver or composer output must be explicit and non-success-shaped. There is no
+An invalid receiver result gets at most one model-owned repair attempt across wire/schema,
+grounding, semantic, and calculation validation. A residual invalid proposal must be explicit,
+non-success-shaped, non-mutating, visibly retryable/pending, and retain valid independent
+siblings; it must not leak as a raw exception or consume a user no-progress turn. There is no
 deterministic semantic recovery and no robotic question fallback. Instrumentation or review must
 also verify that continuation deterministic code never calls a raw-answer parser or applies
 phrase-specific typo/endpoint/numbered-line rules.
 
-### Behavioral acceptance
+### Behavioral and semantic-diagnostic acceptance
 
-Run the receiver and composer over all three corpus classes using property/action oracles, not
-literal answer strings. Include typo and casing variants, natural date and duration language,
+Run the receiver and composer over all three corpus classes using the v3 action/property oracles,
+not literal answer strings. Include typo and casing variants, natural date and duration language,
 multiple independent facts, grounded corrections, alternatives, conflicts, cancellations,
 non-answers, unsupported revisions, and prompt-injection-like text.
 
-Report at least false blocking, incorrect acceptance, valid-sibling retention, assumption
-disclosure, conflict preservation, turns to ready, convergence within limits, targeted-question
-rate, generic-repeat rate, composer invalid-output rate, and paraphrase/metamorphic consistency.
+Report the following distinct dimensions by semantic family and corpus split; do not collapse them
+into terminal correctness:
+
+- **Semantic diagnosis:** receiver understood the answer, correctly identified a genuine
+  ambiguity/conflict, or correctly identified unsupported intent. This is expert/human-reviewed
+  diagnostic evidence and does not by itself pass the workflow.
+- **Behavioral task outcome:** action/property-oracle success, false-block rate, incorrect
+  acceptance, valid-sibling retention, assumption disclosure, conflict preservation, turns to
+  ready, and convergence.
+- **Safety:** unauthorized mutation, ungrounded fact, fabricated assumption, success-shaped
+  failure, protected-field change, and raw exception exposure. These are zero-tolerance failures.
+- **Operational quality:** first-pass proposal validity, one-repair success/failure rate, pending
+  rate, model calls, repair-attributed latency/tokens/cost, targeted-question rate,
+  generic-repeat rate, and composer invalid-output rate.
+
 Fuzzy windows are scored against an approved bounded envelope; question quality is scored for
 clarity, specificity, non-leading wording, and naturalness. Human review is authoritative for
-materially surprising assumptions and naturalness. Behavioral metrics are reported by semantic
-family and split; they are not collapsed into terminal correctness.
+materially surprising assumptions and naturalness. An LLM judge may scale calibrated semantic or
+copy review but never override a deterministic safety finding.
+
+Every rate records an explicit numerator and denominator. A zero-denominator metric is reported
+as **not applicable**, never `0%` or `100%`; it cannot support a pass claim. Qualification
+requires an owner-approved nonzero eligible population for each metric used as a gate—for example,
+reasonable answers for false-blocking, real alternatives/conflicts for incorrect acceptance,
+accepted approximations for disclosure, repair-eligible failures for repair success, and questions
+for targeted/generic-repeat rates. The report must show fixture-family coverage and mark a pilot
+as diagnostic when it cannot exercise those denominators.
 
 ### Live qualification
 
 Run the frozen adapters through the locked holdout and rotating challenge after the offline gate
 passes. Capture private, gitignored traces for every receiver and composer call; public artifacts
 must be redacted aggregates. A live failure can never yield `ready`: model errors, invalid output,
-grounding failures, and composition failures remain explicit and are counted.
+grounding failures, and composition failures remain explicit and are counted. A receiver contract
+failure is first offered one shared repair; a residual failure is recorded as `pending_retryable`,
+with visible retry communication, rather than as a user-visible raw exception or an ordinary
+no-progress answer.
 
-The live safety gate is zero unauthorized mutations and zero success-shaped system/model failures,
-with exact blocker and prompt coverage for every successfully processed turn. Terminal outcomes
-and behavioral quality use preregistered thresholds and confidence intervals; if a threshold has
-not yet been owner-approved, report it diagnostically rather than silently promoting it to a
-release gate. A passing development run is never sufficient for qualification.
+The live safety gate is zero unauthorized mutations, raw exception exposures, and success-shaped
+system/model failures, with exact blocker and prompt coverage for every successfully processed
+turn. Terminal outcomes and behavioral quality use preregistered thresholds and confidence
+intervals; if a threshold has not yet been owner-approved, report it diagnostically rather than
+silently promoting it to a release gate. A passing development run is never sufficient for
+qualification.
+
+## Anti-overfit procedure
+
+Development fixtures may be used to improve prompts, schemas, and proposal execution. They are
+not qualification evidence on their own. Before a live qualification run, freeze and record the
+receiver/composer prompts, model IDs, schema/proposal version, repair policy, evaluator version,
+corpus hashes, action/property oracle version, trial count, and scoring rules. Keep the locked
+holdout out of the workspace; report only hashes, family aggregates, and redacted failure counts.
+
+The independent evaluator also generates rotating post-freeze metamorphic challenges: typo,
+punctuation, ordering, wording, and equivalent-reference variants, plus paired accept/ask boundary
+cases. When a hidden case becomes visible during debugging, promote it to disclosed regression
+coverage and replace it in the holdout/challenge pool. Do not tune against a hidden result without
+a new freeze and preregistration. The evaluator must retain first-pass, repair, and pending traces
+privately so a score cannot hide representation failures behind an aggregate pass rate.
 
 ## Preregistered composer experiment: Luna versus GPT-4o-mini
 

@@ -22,10 +22,10 @@ from typing import Any, Literal, cast
 import yaml
 
 import award_agent.clarification.controller as controller_module
-import award_agent.clarification.reducer as reducer_module
 from award_agent.clarification.blockers import collect_blocking_requirements
 from award_agent.clarification.controller import (
     ClarificationCommandError,
+    ClarificationTransition,
     apply_clarification_answer,
     start_clarification,
 )
@@ -377,7 +377,7 @@ class _ScriptedInterpreter:
                 "template_selection is required for a scripted template acceptance"
             )
         if selection_payload is None:
-            return ClarificationAnswerInterpretation(
+            return ClarificationAnswerInterpretation(  # type: ignore[call-arg]  # Historical v1 adapter.
                 amendments=tuple(amendments),
                 rejected_fragments=tuple(rejected),
                 temporal_template_selection=ClarificationTemporalTemplateSelection(complete=True),
@@ -398,7 +398,7 @@ class _ScriptedInterpreter:
             ClarificationTemporalTemplateBinding,
             ClarificationTemporalTemplateUnresolved,
         )
-        return ClarificationAnswerInterpretation(
+        return ClarificationAnswerInterpretation(  # type: ignore[call-arg]  # Historical v1 adapter.
             amendments=tuple(amendments),
             rejected_fragments=tuple(rejected),
             temporal_template_selection=ClarificationTemporalTemplateSelection(
@@ -725,7 +725,7 @@ def run_clarification_continuation_eval(
             error: str | None = None
             replayed = False
             original_reducer = controller_module.apply_amendments
-            original_normalizer = reducer_module.normalize_temporal_amendment
+            original_normalizer = controller_module.evaluate_calendar_proposals
             fault = turn.get("fault")
             if fault == "reducer":
                 _replace_fixture_dependency(
@@ -735,24 +735,26 @@ def run_clarification_continuation_eval(
                 )
             elif fault == "temporal_normalizer":
                 _replace_fixture_dependency(
-                    reducer_module,
-                    "normalize_temporal_amendment",
+                    controller_module,
+                    "evaluate_calendar_proposals",
                     lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("scripted temporal failure")),
                 )
             try:
                 transition = apply_clarification_answer(session, command, interpreter)
+                if not isinstance(transition, ClarificationTransition):
+                    raise TypeError("scripted evaluator received a retryable pending transition")
                 session = transition.session
                 replayed = transition.replayed
                 if kind != "replay":
                     previous_command = command
             except ClarificationCommandError:
                 error = "command_error"
-            except (ClarificationInterpretationError, RuntimeError):
+            except (ClarificationInterpretationError, RuntimeError, TypeError):
                 error = "system_error"
             finally:
                 _replace_fixture_dependency(controller_module, "apply_amendments", original_reducer)
                 _replace_fixture_dependency(
-                    reducer_module, "normalize_temporal_amendment", original_normalizer
+                    controller_module, "evaluate_calendar_proposals", original_normalizer
                 )
             failures = _check(expect, session, error=error, replayed=replayed)
             prompt_coverage = _prompt_coverage_check(session)

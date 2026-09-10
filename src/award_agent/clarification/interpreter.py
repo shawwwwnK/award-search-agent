@@ -8,18 +8,19 @@ from answer text.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from pydantic import Field, model_validator
 
-from award_agent.clarification.semantic import (
-    SemanticTarget,
-    TemporalSemanticAst,
+from award_agent.clarification.calendar_plan import (
+    CALENDAR_PLAN_VERSION,
+    CalendarCalculationOperation,
 )
+from award_agent.clarification.semantic import SemanticTarget
 from award_agent.domain import BlockingRequirement, LocationKind, MessageSpan
 from award_agent.domain.clarification_session import SessionContractModel
 
-TEMPORAL_AFFORDANCE_CATALOG_VERSION = "clarification-semantic-temporal-v1"
+CALENDAR_PROPOSAL_CONTRACT_VERSION = CALENDAR_PLAN_VERSION
 
 
 class ClarificationInterpretationError(ValueError):
@@ -40,7 +41,7 @@ class ClarificationAnswerInterpreterInput(SessionContractModel):
     text: str = Field(min_length=1)
     ordered_requirements: tuple[BlockingRequirement, ...]
     correction_eligible_targets: tuple[SemanticTarget, ...] = ()
-    temporal_affordance_catalog_version: str = TEMPORAL_AFFORDANCE_CATALOG_VERSION
+    calendar_proposal_contract_version: str = CALENDAR_PROPOSAL_CONTRACT_VERSION
 
     @model_validator(mode="after")
     def valid_scope(self) -> ClarificationAnswerInterpreterInput:
@@ -49,8 +50,8 @@ class ClarificationAnswerInterpreterInput(SessionContractModel):
             raise ValueError("receiver requirements must have unique IDs")
         if len(self.correction_eligible_targets) != len(set(self.correction_eligible_targets)):
             raise ValueError("receiver correction-eligible targets must be unique")
-        if self.temporal_affordance_catalog_version != TEMPORAL_AFFORDANCE_CATALOG_VERSION:
-            raise ValueError("unsupported temporal affordance catalog version")
+        if self.calendar_proposal_contract_version != CALENDAR_PROPOSAL_CONTRACT_VERSION:
+            raise ValueError("unsupported calendar proposal contract version")
         return self
 
     @property
@@ -73,21 +74,21 @@ class ClarificationSemanticFact(SessionContractModel):
     location_kind: LocationKind | None = None
     location_value: str | None = None
     travelers: int | None = Field(default=None, ge=1)
-    temporal: TemporalSemanticAst | None = None
+    calendar_operation: CalendarCalculationOperation | None = None
 
     @model_validator(mode="after")
     def closed_value_shape(self) -> ClarificationSemanticFact:
         if self.target in {SemanticTarget.ORIGIN, SemanticTarget.DESTINATION}:
             valid = self.location_kind is not None and bool(self.location_value)
-            invalid = self.travelers is not None or self.temporal is not None
+            invalid = self.travelers is not None or self.calendar_operation is not None
         elif self.target is SemanticTarget.TRAVELERS:
             valid = self.travelers is not None
             invalid = any(
                 value is not None
-                for value in (self.location_kind, self.location_value, self.temporal)
+                for value in (self.location_kind, self.location_value, self.calendar_operation)
             )
         else:
-            valid = self.temporal is not None
+            valid = self.calendar_operation is not None
             invalid = any(
                 value is not None
                 for value in (self.location_kind, self.location_value, self.travelers)
@@ -124,10 +125,58 @@ class ClarificationAnswerInterpretation(SessionContractModel):
         return self
 
 
+class ClarificationInterpretationUnavailable(SessionContractModel):
+    """A retryable receiver outcome that is safe to show as a pending state.
+
+    This prevents a reasonable user response from becoming a user-visible
+    schema exception when the model cannot provide usable semantics after its
+    one bounded repair attempt.
+    """
+
+    code: str = Field(min_length=1, max_length=120)
+    detail: str = Field(min_length=1, max_length=500)
+    repair_attempted: bool = False
+
+
+class ClarificationCalendarProposalIssue(SessionContractModel):
+    """Typed deterministic feedback for one model-owned calendar repair."""
+
+    fact_id: str = Field(min_length=1)
+    code: str = Field(min_length=1, max_length=120)
+    path: tuple[str, ...] = Field(min_length=1)
+    detail: str = Field(min_length=1, max_length=500)
+
+
 class ClarificationAnswerInterpreter(Protocol):
     def interpret(
         self, input: ClarificationAnswerInterpreterInput
-    ) -> ClarificationAnswerInterpretation: ...
+    ) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable: ...
+
+
+class ClarificationCalendarProposalRepairer(Protocol):
+    """Optional extension used once when typed calendar evaluation rejects facts."""
+
+    def repair_calendar_proposals(
+        self,
+        input: ClarificationAnswerInterpreterInput,
+        *,
+        facts: tuple[ClarificationSemanticFact, ...],
+        issues: tuple[ClarificationCalendarProposalIssue, ...],
+    ) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable: ...
+
+
+@runtime_checkable
+class ClarificationRepairBudget(Protocol):
+    """Optional, narrow per-turn repair-budget observation capability.
+
+    A receiver that spends its repair attempt before the controller sees a
+    calendar failure exposes this boolean.  Interpreters without repair support
+    deliberately need not implement it; the controller remains compatible
+    with deterministic fakes and treats their missing repair capability as a
+    retryable pending outcome only if a repair is actually needed.
+    """
+
+    def repair_budget_consumed(self) -> bool: ...
 
 
 def validate_message_span(*, message_id: str, text: str, span: MessageSpan) -> None:
@@ -142,9 +191,12 @@ def validate_message_span(*, message_id: str, text: str, span: MessageSpan) -> N
 
 
 def validate_answer_interpretation(
-    input: ClarificationAnswerInterpreterInput, interpretation: ClarificationAnswerInterpretation
-) -> ClarificationAnswerInterpretation:
+    input: ClarificationAnswerInterpreterInput,
+    interpretation: ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable,
+) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
     """Validate grounding and authority only; never inspect words for meaning."""
+    if isinstance(interpretation, ClarificationInterpretationUnavailable):
+        return interpretation
     for fact in interpretation.facts:
         validate_message_span(message_id=input.message_id, text=input.text, span=fact.span)
     for fragment in interpretation.unresolved_fragments:
@@ -154,17 +206,21 @@ def validate_answer_interpretation(
 
 def interpret_answer(
     interpreter: ClarificationAnswerInterpreter, input: ClarificationAnswerInterpreterInput
-) -> ClarificationAnswerInterpretation:
+) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
     return validate_answer_interpretation(input, interpreter.interpret(input))
 
 
 __all__ = [
-    "TEMPORAL_AFFORDANCE_CATALOG_VERSION",
+    "CALENDAR_PROPOSAL_CONTRACT_VERSION",
     "ClarificationAnswerInterpretation",
     "ClarificationAnswerInterpreter",
     "ClarificationAnswerInterpreterInput",
+    "ClarificationCalendarProposalIssue",
+    "ClarificationCalendarProposalRepairer",
     "ClarificationDiscourseAct",
     "ClarificationInterpretationError",
+    "ClarificationInterpretationUnavailable",
+    "ClarificationRepairBudget",
     "ClarificationSemanticFact",
     "ClarificationUnresolvedFragment",
     "interpret_answer",

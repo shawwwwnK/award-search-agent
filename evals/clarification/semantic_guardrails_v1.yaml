@@ -1,4 +1,4 @@
-contract_version: clarification_semantic_guardrails_v2
+contract_version: clarification_semantic_guardrails_v3
 # This is intentionally only disclosed development metadata. Each `evidence`
 # label is opaque; receiver facts are constructed by the deterministic gate,
 # never recovered from these strings. The independent owner holdout is not in
@@ -18,6 +18,16 @@ cases:
     check: schema_and_span_grounding
     evidence: opaque-schema
     expected: closed_contract_and_exact_span
+  - id: receiver_repair_unavailability
+    family: authority_and_state
+    check: receiver_repair_unavailability
+    evidence: opaque-repair
+    expected: repair_exhaustion_remains_typed_and_never_becomes_local_semantics
+  - id: repair_and_interpretation_pending
+    family: authority_and_state
+    check: repair_and_interpretation_pending_safety
+    evidence: opaque-repair-pending
+    expected: receiver_unavailability_is_non_mutating_and_calendar_repair_is_single_shot
   - id: operation_authority
     family: authority_and_state
     check: set_replace_authorization

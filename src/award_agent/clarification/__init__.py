@@ -5,6 +5,13 @@ from award_agent.clarification.blockers import (
     collect_blocking_requirements,
     render_clarification_prompt,
 )
+from award_agent.clarification.calendar_plan import (
+    CalendarCalculationOperation,
+    CalendarCalculationProposal,
+    CalendarCalculationReceipt,
+    CalendarProposalTarget,
+    evaluate_calendar_proposals,
+)
 from award_agent.clarification.composer import (
     ClarificationCompositionError,
     ClarificationPromptComposer,
@@ -17,6 +24,7 @@ from award_agent.clarification.composer import (
 from award_agent.clarification.controller import (
     ClarificationCommandError,
     ClarificationCompositionPending,
+    ClarificationInterpretationPending,
     ClarificationPromptCompositionFailedError,
     ClarificationTransition,
     apply_clarification_answer,
@@ -29,6 +37,8 @@ from award_agent.clarification.interpreter import (
     ClarificationAnswerInterpreterInput,
     ClarificationDiscourseAct,
     ClarificationInterpretationError,
+    ClarificationInterpretationUnavailable,
+    ClarificationRepairBudget,
     ClarificationSemanticFact,
     ClarificationUnresolvedFragment,
     interpret_answer,
@@ -55,6 +65,10 @@ from award_agent.clarification.semantic import (
 )
 
 __all__ = [
+    "CalendarCalculationOperation",
+    "CalendarCalculationProposal",
+    "CalendarCalculationReceipt",
+    "CalendarProposalTarget",
     "ClarificationAnswerInterpretation",
     "ClarificationAnswerInterpreter",
     "ClarificationAnswerInterpreterInput",
@@ -63,11 +77,14 @@ __all__ = [
     "ClarificationCompositionPending",
     "ClarificationDiscourseAct",
     "ClarificationInterpretationError",
+    "ClarificationInterpretationPending",
+    "ClarificationInterpretationUnavailable",
     "ClarificationPromptComposer",
     "ClarificationPromptComposerInput",
     "ClarificationPromptComposition",
     "ClarificationPromptCompositionFailedError",
     "ClarificationQuestionItem",
+    "ClarificationRepairBudget",
     "ClarificationSemanticFact",
     "ClarificationTransition",
     "ClarificationUnresolvedFragment",
@@ -87,6 +104,7 @@ __all__ = [
     "compile_temporal_ast",
     "compose_prompt",
     "derive_clarification_issues",
+    "evaluate_calendar_proposals",
     "interpret_answer",
     "project_initial_request",
     "render_clarification_prompt",

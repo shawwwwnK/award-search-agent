@@ -14,6 +14,8 @@ def test_semantic_guardrail_gate_passes_without_live_model_access() -> None:
     assert [item["id"] for item in artifact["checks"]] == [
         "static_no_raw_answer_parser",
         "schema_and_span_grounding",
+        "receiver_repair_unavailability",
+        "repair_and_interpretation_pending_safety",
         "set_replace_authorization",
         "temporal_calendar_ranges_and_dependencies",
         "fuzzy_assumption_disclosure",

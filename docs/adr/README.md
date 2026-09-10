@@ -29,3 +29,4 @@ Expected sections:
 - [0012: Accepting clarification and behavioral evaluation](0012-accepting-clarification-and-behavioral-evaluation.md)
 - [0013: Single-call clarification receiver](0013-single-call-clarification-receiver.md)
 - [0014: LLM-owned clarification semantics and composition](0014-llm-owned-clarification-semantics-and-composition.md)
+- [0015: Generic model-authored clarification calendar proposals](0015-generic-model-authored-clarification-calendar-proposals.md)

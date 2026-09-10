@@ -2,7 +2,7 @@
 
 ## Phase
 
-Iterative clarification continuation — ADR 0014 semantic-boundary redesign in implementation.
+Iterative clarification continuation — ADR 0015 generic calendar-proposal redesign in implementation.
 
 ## Current conclusion
 
@@ -20,63 +20,41 @@ existing parser, selector, temporal compiler, clarification policy, and ready co
 frozen.
 
 ADR 0014 supersedes continuation raw-answer grammar/recovery and ADR 0013's one-call prompt
-strategy. The clarification receiver is now the only semantic reader of an answer; deterministic
-code validates typed output, compiles symbolic temporal semantics, and reduces state. Prompt copy
-is post-reduction LLM output, without a deterministic clarification fallback. The new offline
-gate is executable typed-conformance evidence; a live receiver or composer-model-selection
-qualification has not yet run.
+strategy. The clarification receiver is the only semantic reader of an answer; prompt copy is
+post-reduction LLM output, without a deterministic clarification fallback. ADR 0015 further
+supersedes ADR 0014's clarification temporal representation: the receiver owns generic,
+grounded calendar-calculation proposals rather than a phrase-oriented temporal mini-language.
+Deterministic code validates invariant safety, evaluates the proposal against immutable context
+through an acyclic same-answer fact graph, and reduces state; it does not parse or repair answer
+wording. A proposal failure receives at most one shared model-owned repair across schema,
+grounding, and calculation failures and otherwise becomes a visibly communicated, non-mutating
+pending/retryable outcome, not a raw user-visible exception or a user no-progress turn.
 
-The follow-up relative-time repair is continuation-only: answer messages may use `this weekend`,
-`this <weekday>`, or `on <weekday>`, and complete numbered answer lines map positionally to the
-ordered typed prompt requirements. The frozen initial parser remains unchanged and still does not
-recognize a bare `this weekend` in an initial raw request. If a model returns only a narrow temporal
-fact span, deterministic cue validation may inspect only that fact's same-answer physical sentence
-or line; alternatives, distant cues, and target mismatches are re-asked. The fresh three-trial
-online recovery qualification passed 48/48 terminal outcomes and 60/60 exact blocker/prompt checks
-with zero errors or unauthorized mutations; details and private trace metadata are recorded in the
-build log below.
+The frozen initial parser remains unchanged. In particular, none of the historic
+continuation-only raw-text rules for `this weekend`, weekdays, endpoint cues, numbered answers,
+or `following`/`afterwards` are current policy. Their prior qualifications and artifacts are
+historical evidence for superseded implementations, not qualification of ADR 0015.
 
-The continuation-only relative selector has subsequently been qualified with a global, date-free
-affordance catalog selected by the answer model and compiled deterministically. It retains
-same-answer-only `following`/`afterwards` dependencies and does not expose calendar state or
-template identities to the model. The final redacted three-trial Luna artifact
-`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-3-trials-template-v2-final-qualified.json`
-records 48/48 terminal-correct sessions, 60/60 exact blocker and prompt checks, zero system
-errors, and zero unauthorized mutations. Each protected target passed 3/3; private all-call
-traces are retained separately.
+The clarification-stage receiver is currently configured as `gpt-5.6-luna`; GPT-4o mini remains
+comparison evidence, not a fallback or runtime alternative. The live Luna/Luna run completed with
+telemetry reconciliation but exposed representation-boundary failures for reasonable answers.
+It is diagnostic evidence only, not a qualification result. The checked-in v3 pilot corpus
+verifies action/property-oracle and observability plumbing, but it does not provide a non-vacuous
+qualifying denominator for every behavioral metric. The v3 protocol separates semantic diagnosis,
+safe workflow action/property success, hard safety, and operational repair/pending metrics. No
+live receiver or composer model-selection qualification exists for the ADR 0015 boundary yet.
 
-The clarification-stage LLM model is `gpt-5.6-luna`. The separate answer-only interpreter uses
-Luna behind its narrow contract; deterministic code retains temporal context, grounding,
-validation, reduction, and blocker policy. GPT-4o mini remains recorded comparison evidence, not
-a fallback or runtime alternative for this stage.
+### Superseded clarification evidence
 
-ADR 0013 supersedes ADR 0012's separate prompt-composer runtime call: each processed answer uses
-only the answer receiver model call. The receiver may return ordered follow-up items, but the
-controller renders them only after exact deterministic agreement with recomputed remaining
-blockers; otherwise it uses the issue-specific fallback.
-
-On 2026-09-10, the project owner refined the next clarification cut in ADR 0012. Clarification
-must be more accepting than frozen initial intent: it should turn reasonable, grounded fuzzy
-answers into one bounded, visible approximation and move forward rather than re-ask solely for
-narrow grammar mismatch. True alternatives, conflicts, unresolved endpoint ownership, and
-unsupported revisions remain explicit blockers. ADR 0012 originally authorized a separate
-post-reduction prompt composer to receive authoritative remaining requirements plus answer-local
-issue records. ADR 0013 supersedes that runtime call: the answer receiver returns any proposed
-follow-up items in the same response, and deterministic post-reduction validation decides whether
-to render them. Qualification retains exact deterministic safety
-gates but add a property-based behavioral corpus and human-calibrated metrics for false blocking,
-unnecessary clarification, assumption disclosure, and targeted follow-ups. Existing exact v1
-corpora remain conformance evidence, not the sole optimization target.
-
-ADR 0012 is now implemented and qualified. The final public three-trial Luna artifact,
-`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-behavior-v2-final.json`, passed its exact
-safety gate with zero model, system, or evaluator errors and 129/129 private-traced calls
-captured. It recorded zero false blocks (0/27), zero incorrect acceptances (0/12), all required
-assumption disclosures (24/24), and all valid siblings retained (18/18). Its behavioral metrics
-remain diagnostic rather than owner-approved release thresholds: the three conflict trajectories
-remained safe but received generic rather than sufficiently issue-specific follow-up wording
-(12/15 targeted questions; generic-repeat rate 0.20). The evidence establishes safe accepting
-behavior; it also identifies conflict-prompt specificity as the next bounded quality concern.
+The following records are retained as evidence for their then-current continuation contracts,
+not as ADR 0015 qualification. Historic recovery/template artifacts reported 48/48 terminal
+outcomes, 60/60 exact blocker/prompt checks, and zero unauthorized mutations; they relied on the
+retired deterministic raw-text recovery/relative-selector policy. The ADR 0012 behavioral-v2
+artifact reported zero false blocks (0/27), zero incorrect acceptances (0/12), assumption
+disclosures (24/24), and valid-sibling retention (18/18), while also identifying generic conflict
+follow-ups (12/15 targeted questions). The detailed files and private trace metadata remain in
+the build log and artifact history; their scores must not be carried forward to the new proposal
+boundary.
 
 The qualification record is the traced three-trial run
 `evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
@@ -105,7 +83,8 @@ into a traceable `EffectiveRequest` that is `ready` for later planning or explic
 ## Intended current output
 
 An `EffectiveRequest`, full blocker-set clarification prompt, and traceable session state after
-each response, terminating at `ready` or `stopped`.
+each response, terminating at `ready`, explicit `stopped`, or non-mutating pending/retryable
+interpretation when the model contract cannot safely process a reasonable answer.
 
 ## Current technical assumptions
 
@@ -121,22 +100,21 @@ Feasible access to useful award-inventory data.
 
 ## Immediate milestone
 
-The accepting clarification refinement in ADR 0012 is implemented and qualified without changing
-the frozen initial workflow. Every prompt's typed requirements list all current blocking requirements in
-deterministic order; under ADR 0013, the answer receiver may return issue-specific follow-up
-items in the same call, which are rendered only after deterministic validation and otherwise use
-an issue-specific fallback. Each answer may
-resolve any subset, including a reasonable, grounded bounded approximation whose assumption is
-visible and traceable. Preserve immutable revisions, answer-turn evidence, and atomic
-merge semantics. Do not silently mutate a prior `ParsedRequest`, re-run initial parsing, or reopen
-unrelated frozen request-understanding behavior. An explicit, grounded correction to a supported
-already-resolved field is an approved amendment and must trigger full recomputation. The local
-Streamlit harness may exercise only this session boundary and must remain ephemeral and
-provider-free.
+Implement ADRs 0014 and 0015 without changing the frozen initial workflow. Every prompt's typed
+requirements list all current blockers in deterministic order; the post-reduction composer writes
+their user-facing copy. Each answer may resolve any subset, including a reasonable, grounded
+bounded approximation whose assumption is visible and traceable. The receiver alone maps answer
+language into generic calendar proposals; deterministic code must not add phrase-specific
+recovery. Preserve immutable revisions, answer-turn evidence, atomic merge semantics, and full
+recomputation after a supported correction. The receiver's same-answer references must be acyclic
+rather than text-order dependent. One shared failed model repair becomes visibly communicated,
+pending/retryable state rather than an exception, silent fallback, or no-progress strike. Generic
+approximation provenance drives a visible disclosure when one is used. The local Streamlit harness
+may exercise only this session boundary and must remain ephemeral and provider-free.
 
-The implemented sequence, contract invariants, code entry points, and acceptance gates are in
-`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`; ADR 0013 is the
-newer policy where it differs from ADR 0012's prompt-composer runtime decision.
+The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
+clarification acceptance protocol are the current policy where they differ from ADRs 0011--0013
+or that handoff.
 
 After this design and its implementation are qualified, the following cut is a fixed-planner,
 one-provider vertical slice: `ClarificationSession(ready).effective_request -> fixed SearchPlan ->
@@ -154,19 +132,20 @@ request-understanding decision. Earlier references to `two_pass` are historical 
   boundary owns subsequent answers, deterministic reduction, a local-only Streamlit harness, and
   separate offline/live corpora under ADR 0011. Every live continuation evaluation writes
   all-call private trace sidecars by default and a redacted public artifact.
-- The continuation temporal normalizer accepts `this weekend`, `this <weekday>`, and `on <weekday>`
-  using the immutable initial `RequestContext`; complete numbered answer lines map one-based to
-  ordered typed blockers. This is an answer-only grammar and does not broaden the frozen initial
-  parser, which still leaves a bare `this weekend` unresolved when it appears in the initial raw
-  request.
-- Narrow temporal fact spans may borrow endpoint cues only from the same answer message and same
-  physical sentence or line under the deterministic normalizer. Alternatives/disjunctions, distant
-  or cross-line cues, and target mismatches remain explicit ambiguity and trigger a re-ask; accepted
-  contributions retain the narrow span as provenance.
-- The separate continuation corpus contains 30 scenarios and 43 turns. Its latest offline
-  evaluator run passed 43/43 turns with exact blocker/prompt coverage. The fresh online recovery
-  qualification also passed 48/48 terminal outcomes and 60/60 exact blocker/prompt checks; see the
-  build log for the redacted artifact and private trace directory.
+- The continuation receiver owns raw language and emits generic calendar proposals. Deterministic
+  continuation code may validate/evaluate those proposals but may not scan answer language for
+  relative-time phrases, endpoint cues, line positions, typo variants, or other semantic repairs.
+- Receiver proposal failures share exactly one model-owned repair across schema, grounding, and
+  calculation stages. A residual failure is a visibly communicated, non-mutating pending/retryable
+  outcome; valid independent facts are retained and it never leaks as a raw schema exception or
+  automatically counts as user no-progress. Same-answer fact references form an acyclic graph and
+  are evaluated by dependency, not source-text order.
+- The v1/v2 continuation corpus and historic three-trial scores are retained as historical
+  conformance evidence. They are not ADR 0015 qualification evidence. The checked-in v3 corpus is
+  an oracle/telemetry pilot, not a qualifying run. Current qualification requires v3
+  action/property oracles, non-vacuous eligible metric denominators, a locked holdout, rotating
+  post-freeze metamorphic challenges, and separate semantic-diagnostic, behavioral, safety, and
+  operational metrics.
 - Selector-only request understanding is the sole live path (ADR 0010). It requires separately
   configured non-temporal Pass 1 and temporal selector adapters before work begins.
 - The compiler owns all temporal facts and always uses `supported_or_unresolved`; the selector can

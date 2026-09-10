@@ -1,0 +1,3350 @@
+{
+  "schema_version": "clarification_live_eval_v1",
+  "fixture": {
+    "path": "evals/clarification/live_cases_v1.yaml",
+    "sha256": "0f3a491e6fbf8b27c6c7ed09bbbdc9fcc05d59595a256612dccec654f1ea887c",
+    "redacted": true
+  },
+  "models": {
+    "interpreter": "gpt-5.6-luna",
+    "composer": "gpt-5.6-luna"
+  },
+  "trials": 3,
+  "generated_at": "2026-09-10T22:03:33.986228+00:00",
+  "llm_trace": {
+    "mode": "all_calls",
+    "directory": "evals/clarification/traces/run-2026-09-10T220333.986228-0000-6665e016",
+    "case_count": 48
+  },
+  "records": [
+    {
+      "scenario": "numbered_next_weekend_afterwards_and_solo",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 12.12476229085587,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1297,
+        "output_tokens": 595,
+        "total_tokens": 1892
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 450,
+        "output_tokens": 108,
+        "total_tokens": 558
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1297,
+          "output_tokens": 595,
+          "total_tokens": 1892,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 8.759032333036885,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 450,
+          "output_tokens": 108,
+          "total_tokens": 558,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.3222950831986964,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_next_friday_and_date_and_solo",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 5.7909420831128955,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1298,
+        "output_tokens": 400,
+        "total_tokens": 1698
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 450,
+        "output_tokens": 108,
+        "total_tokens": 558
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1298,
+          "output_tokens": 400,
+          "total_tokens": 1698,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.221296042203903,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 450,
+          "output_tokens": 108,
+          "total_tokens": 558,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.525792625034228,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_this_weekend_and_monday",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 6.237476000096649,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 419,
+        "total_tokens": 1682
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 406,
+        "output_tokens": 82,
+        "total_tokens": 488
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1263,
+          "output_tokens": 419,
+          "total_tokens": 1682,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.616434416966513,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.5733111670706421,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "ambiguous_disjunctive_relative_dates",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 2,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 13.208563166903332,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 998,
+        "total_tokens": 2261
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 406,
+        "output_tokens": 82,
+        "total_tokens": 488
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1263,
+          "output_tokens": 998,
+          "total_tokens": 2261,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 11.617903458885849,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.5528306250926107,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "origin_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin"
+      ],
+      "resolution_linked": [
+        "origin"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.201800874900073,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1221,
+        "output_tokens": 97,
+        "total_tokens": 1318
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 355,
+        "output_tokens": 43,
+        "total_tokens": 398
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1221,
+          "output_tokens": 97,
+          "total_tokens": 1318,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.0289130420424044,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.1249195830896497,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "destination_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "destination"
+      ],
+      "resolution_linked": [
+        "destination"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.227058832999319,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1221,
+        "output_tokens": 110,
+        "total_tokens": 1331
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 354,
+        "output_tokens": 43,
+        "total_tokens": 397
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1221,
+          "output_tokens": 110,
+          "total_tokens": 1331,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.8165399578865618,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 354,
+          "output_tokens": 43,
+          "total_tokens": 397,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.3741705000866205,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "travelers_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.667892042081803,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1224,
+        "output_tokens": 98,
+        "total_tokens": 1322
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1224,
+          "output_tokens": 98,
+          "total_tokens": 1322,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.508131542010233,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.1239067919086665,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "departure_only",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 4.012573084095493,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1233,
+        "output_tokens": 181,
+        "total_tokens": 1414
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 355,
+        "output_tokens": 43,
+        "total_tokens": 398
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1233,
+          "output_tokens": 181,
+          "total_tokens": 1414,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.9001587911043316,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.085720333037898,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "duration_only",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 4.124876416986808,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1227,
+        "output_tokens": 172,
+        "total_tokens": 1399
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 366,
+        "output_tokens": 57,
+        "total_tokens": 423
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1227,
+          "output_tokens": 172,
+          "total_tokens": 1399,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.2936847500968724,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 366,
+          "output_tokens": 57,
+          "total_tokens": 423,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.8020470840856433,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "all_at_once",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 12.42039024992846,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1345,
+        "output_tokens": 611,
+        "total_tokens": 1956
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 529,
+        "output_tokens": 177,
+        "total_tokens": 706
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1345,
+          "output_tokens": 611,
+          "total_tokens": 1956,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 10.212907457957044,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 529,
+          "output_tokens": 177,
+          "total_tokens": 706,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.1719826250337064,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "subset_two_turn",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 2,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers"
+      ],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 12.65676120808348,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2593,
+        "output_tokens": 703,
+        "total_tokens": 3296
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 935,
+        "output_tokens": 231,
+        "total_tokens": 1166
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2593,
+          "output_tokens": 703,
+          "total_tokens": 3296,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 8.729163040872663,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 935,
+          "output_tokens": 231,
+          "total_tokens": 1166,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.8694337918423116,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "bare_date_recovery",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 0,
+      "turns_total": 2,
+      "exact_blockers": 0,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [],
+      "resolution_linked": [
+        "departure"
+      ],
+      "system_error": true,
+      "errors": [
+        "unexpected field mutation"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 6.683184250025079,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1253,
+        "output_tokens": 251,
+        "total_tokens": 1504
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 772,
+        "output_tokens": 135,
+        "total_tokens": 907
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1253,
+          "output_tokens": 251,
+          "total_tokens": 1504,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.064431624952704,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 772,
+          "output_tokens": 135,
+          "total_tokens": 907,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.573163375025615,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "origin_correction_with_sibling",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 5.3105962090194225,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1235,
+        "output_tokens": 175,
+        "total_tokens": 1410
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1235,
+          "output_tokens": 175,
+          "total_tokens": 1410,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.592399332905188,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.660126583185047,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "departure_correction",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.948245917214081,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1232,
+        "output_tokens": 249,
+        "total_tokens": 1481
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1232,
+          "output_tokens": 249,
+          "total_tokens": 1481,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.869893667055294,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.0173862078227103,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "no_progress_limit",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "latency_seconds": 7.6368836250621825,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2458,
+        "output_tokens": 130,
+        "total_tokens": 2588
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 90,
+        "total_tokens": 808
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2458,
+          "output_tokens": 130,
+          "total_tokens": 2588,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 4.831512917298824,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 718,
+          "output_tokens": 90,
+          "total_tokens": 808,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.7374116249848157,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "cancellation",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "latency_seconds": 2.168008334003389,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1222,
+        "output_tokens": 28,
+        "total_tokens": 1250
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1222,
+          "output_tokens": 28,
+          "total_tokens": 1250,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.0123895411379635,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.0943755840416998,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_next_weekend_afterwards_and_solo",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 8.547807417111471,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1297,
+        "output_tokens": 600,
+        "total_tokens": 1897
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 450,
+        "output_tokens": 108,
+        "total_tokens": 558
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1297,
+          "output_tokens": 600,
+          "total_tokens": 1897,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 6.037832583067939,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 450,
+          "output_tokens": 108,
+          "total_tokens": 558,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.476811416912824,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_next_friday_and_date_and_solo",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 6.043942041927949,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1298,
+        "output_tokens": 414,
+        "total_tokens": 1712
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 450,
+        "output_tokens": 100,
+        "total_tokens": 550
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1298,
+          "output_tokens": 414,
+          "total_tokens": 1712,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.9779297499917448,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 450,
+          "output_tokens": 100,
+          "total_tokens": 550,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.008870790945366,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_this_weekend_and_monday",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 5.904711541021243,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 390,
+        "total_tokens": 1653
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 406,
+        "output_tokens": 82,
+        "total_tokens": 488
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1263,
+          "output_tokens": 390,
+          "total_tokens": 1653,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.360504791839048,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.507075667148456,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "ambiguous_disjunctive_relative_dates",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 2,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 12.824104249943048,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2524,
+        "output_tokens": 863,
+        "total_tokens": 3387
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 828,
+        "output_tokens": 208,
+        "total_tokens": 1036
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2524,
+          "output_tokens": 863,
+          "total_tokens": 3387,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 8.988271957961842,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 828,
+          "output_tokens": 208,
+          "total_tokens": 1036,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.7519172069150954,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "origin_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin"
+      ],
+      "resolution_linked": [
+        "origin"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.7809953331016004,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1221,
+        "output_tokens": 108,
+        "total_tokens": 1329
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 355,
+        "output_tokens": 43,
+        "total_tokens": 398
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1221,
+          "output_tokens": 108,
+          "total_tokens": 1329,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.6377946250140667,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.077113333158195,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "destination_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "destination"
+      ],
+      "resolution_linked": [
+        "destination"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.4109445840585977,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1221,
+        "output_tokens": 110,
+        "total_tokens": 1331
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 354,
+        "output_tokens": 43,
+        "total_tokens": 397
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1221,
+          "output_tokens": 110,
+          "total_tokens": 1331,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.87705854116939,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 354,
+          "output_tokens": 43,
+          "total_tokens": 397,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.4836362500209361,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "travelers_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.665549207944423,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1224,
+        "output_tokens": 98,
+        "total_tokens": 1322
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1224,
+          "output_tokens": 98,
+          "total_tokens": 1322,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.228064874885604,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.3855179159436375,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "departure_only",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 3.5834388751536608,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1233,
+        "output_tokens": 219,
+        "total_tokens": 1452
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 355,
+        "output_tokens": 43,
+        "total_tokens": 398
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1233,
+          "output_tokens": 219,
+          "total_tokens": 1452,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.5980082501191646,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 0.9485944581683725,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "duration_only",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 3.511357792187482,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1227,
+        "output_tokens": 168,
+        "total_tokens": 1395
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 366,
+        "output_tokens": 53,
+        "total_tokens": 419
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1227,
+          "output_tokens": 168,
+          "total_tokens": 1395,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.254817542154342,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 366,
+          "output_tokens": 53,
+          "total_tokens": 419,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.213905000127852,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "all_at_once",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 8.244374874979258,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1345,
+        "output_tokens": 664,
+        "total_tokens": 2009
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 529,
+        "output_tokens": 157,
+        "total_tokens": 686
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1345,
+          "output_tokens": 664,
+          "total_tokens": 2009,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 6.4426265000365674,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 529,
+          "output_tokens": 157,
+          "total_tokens": 686,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.7682411251589656,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "subset_two_turn",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 2,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers"
+      ],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 10.665284750051796,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2593,
+        "output_tokens": 666,
+        "total_tokens": 3259
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 935,
+        "output_tokens": 239,
+        "total_tokens": 1174
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2593,
+          "output_tokens": 666,
+          "total_tokens": 3259,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 7.304419416934252,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 935,
+          "output_tokens": 239,
+          "total_tokens": 1174,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.3012104160152376,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "bare_date_recovery",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 0,
+      "turns_total": 2,
+      "exact_blockers": 0,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [],
+      "resolution_linked": [
+        "departure"
+      ],
+      "system_error": true,
+      "errors": [
+        "unexpected field mutation"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 7.202051125001162,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1253,
+        "output_tokens": 342,
+        "total_tokens": 1595
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 772,
+        "output_tokens": 138,
+        "total_tokens": 910
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1253,
+          "output_tokens": 342,
+          "total_tokens": 1595,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.8984836670570076,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 772,
+          "output_tokens": 138,
+          "total_tokens": 910,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.2233483749441803,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "origin_correction_with_sibling",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.761486500035971,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1235,
+        "output_tokens": 220,
+        "total_tokens": 1455
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1235,
+          "output_tokens": 220,
+          "total_tokens": 1455,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.6518391252029687,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.0611590419430286,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "departure_correction",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.624492290895432,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1232,
+        "output_tokens": 273,
+        "total_tokens": 1505
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1232,
+          "output_tokens": 273,
+          "total_tokens": 1505,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.4006466248538345,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.167494999943301,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "no_progress_limit",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "latency_seconds": 9.493553249863908,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2458,
+        "output_tokens": 269,
+        "total_tokens": 2727
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 729,
+        "output_tokens": 92,
+        "total_tokens": 821
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2458,
+          "output_tokens": 269,
+          "total_tokens": 2727,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 6.369200625224039,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 729,
+          "output_tokens": 92,
+          "total_tokens": 821,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.0409076667856425,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "cancellation",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "latency_seconds": 2.241481167031452,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1222,
+        "output_tokens": 48,
+        "total_tokens": 1270
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1222,
+          "output_tokens": 48,
+          "total_tokens": 1270,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.226859875023365,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 0.9706752910278738,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_next_weekend_afterwards_and_solo",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 7.723134209169075,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1297,
+        "output_tokens": 521,
+        "total_tokens": 1818
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 450,
+        "output_tokens": 105,
+        "total_tokens": 555
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1297,
+          "output_tokens": 521,
+          "total_tokens": 1818,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.884173874976113,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 450,
+          "output_tokens": 105,
+          "total_tokens": 555,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.7969607079867274,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_next_friday_and_date_and_solo",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 5.59729166701436,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1298,
+        "output_tokens": 411,
+        "total_tokens": 1709
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 450,
+        "output_tokens": 100,
+        "total_tokens": 550
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1298,
+          "output_tokens": 411,
+          "total_tokens": 1709,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.168659250019118,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 450,
+          "output_tokens": 100,
+          "total_tokens": 550,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.371851208154112,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "numbered_this_weekend_and_monday",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 5.109052707906812,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 361,
+        "total_tokens": 1624
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 406,
+        "output_tokens": 82,
+        "total_tokens": 488
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1263,
+          "output_tokens": 361,
+          "total_tokens": 1624,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.6105747499968857,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.461103375069797,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "ambiguous_disjunctive_relative_dates",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 2,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 6.144573249854147,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 509,
+        "total_tokens": 1772
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 406,
+        "output_tokens": 82,
+        "total_tokens": 488
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1263,
+          "output_tokens": 509,
+          "total_tokens": 1772,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.964071291964501,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.137522165896371,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "origin_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin"
+      ],
+      "resolution_linked": [
+        "origin"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.6806367500685155,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1221,
+        "output_tokens": 127,
+        "total_tokens": 1348
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 355,
+        "output_tokens": 43,
+        "total_tokens": 398
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1221,
+          "output_tokens": 127,
+          "total_tokens": 1348,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.119545582914725,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.510827667079866,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "destination_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "destination"
+      ],
+      "resolution_linked": [
+        "destination"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.9782682911027223,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1221,
+        "output_tokens": 100,
+        "total_tokens": 1321
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 354,
+        "output_tokens": 43,
+        "total_tokens": 397
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1221,
+          "output_tokens": 100,
+          "total_tokens": 1321,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.9401929159648716,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 354,
+          "output_tokens": 43,
+          "total_tokens": 397,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 0.9831382089760154,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "travelers_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.8752049580216408,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1224,
+        "output_tokens": 98,
+        "total_tokens": 1322
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1224,
+          "output_tokens": 98,
+          "total_tokens": 1322,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.7408503328915685,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.081361958058551,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "departure_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure"
+      ],
+      "resolution_linked": [
+        "departure"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.9829685839358717,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1233,
+        "output_tokens": 208,
+        "total_tokens": 1441
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 355,
+        "output_tokens": 43,
+        "total_tokens": 398
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1233,
+          "output_tokens": 208,
+          "total_tokens": 1441,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.888046167092398,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.0428719997871667,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "duration_only",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 6.297683666925877,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1227,
+        "output_tokens": 169,
+        "total_tokens": 1396
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 366,
+        "output_tokens": 53,
+        "total_tokens": 419
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1227,
+          "output_tokens": 169,
+          "total_tokens": 1396,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.731375499861315,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 366,
+          "output_tokens": 53,
+          "total_tokens": 419,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.5275629160460085,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "all_at_once",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 0,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 0,
+      "resolution_expected": [],
+      "resolution_linked": [],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 8.488433416932821,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1345,
+        "output_tokens": 678,
+        "total_tokens": 2023
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 529,
+        "output_tokens": 154,
+        "total_tokens": 683
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1345,
+          "output_tokens": 678,
+          "total_tokens": 2023,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 6.484081499977037,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 529,
+          "output_tokens": 154,
+          "total_tokens": 683,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.9569277910050005,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "subset_two_turn",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 2,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers"
+      ],
+      "system_error": true,
+      "errors": [
+        "model or session error: ValidationError"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 12.332059166859835,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2593,
+        "output_tokens": 615,
+        "total_tokens": 3208
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 935,
+        "output_tokens": 236,
+        "total_tokens": 1171
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2593,
+          "output_tokens": 615,
+          "total_tokens": 3208,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 7.356914750067517,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 935,
+          "output_tokens": 236,
+          "total_tokens": 1171,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 4.91029466711916,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "bare_date_recovery",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 0,
+      "turns_total": 2,
+      "exact_blockers": 0,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [],
+      "resolution_linked": [
+        "departure"
+      ],
+      "system_error": true,
+      "errors": [
+        "unexpected field mutation"
+      ],
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 7.380560250021517,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1253,
+        "output_tokens": 328,
+        "total_tokens": 1581
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 772,
+        "output_tokens": 138,
+        "total_tokens": 910
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1253,
+          "output_tokens": 328,
+          "total_tokens": 1581,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.5985425831750035,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 772,
+          "output_tokens": 138,
+          "total_tokens": 910,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.725986334029585,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "origin_correction_with_sibling",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.4940130000468343,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1235,
+        "output_tokens": 209,
+        "total_tokens": 1444
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1235,
+          "output_tokens": 209,
+          "total_tokens": 1444,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.4303847081027925,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 0.9856165829114616,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "departure_correction",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.8217542089987546,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1232,
+        "output_tokens": 242,
+        "total_tokens": 1474
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1232,
+          "output_tokens": 242,
+          "total_tokens": 1474,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.7509461669251323,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.014900416135788,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "no_progress_limit",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "latency_seconds": 4.867760332999751,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 2458,
+        "output_tokens": 139,
+        "total_tokens": 2597
+      },
+      "composer_usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 718,
+        "output_tokens": 90,
+        "total_tokens": 808
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 2458,
+          "output_tokens": 139,
+          "total_tokens": 2597,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.938530250219628,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 718,
+          "output_tokens": 90,
+          "total_tokens": 808,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 1.8395254579372704,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    },
+    {
+      "scenario": "cancellation",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "errors": [],
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "latency_seconds": 3.3673439999110997,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1222,
+        "output_tokens": 47,
+        "total_tokens": 1269
+      },
+      "composer_usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 359,
+        "output_tokens": 45,
+        "total_tokens": 404
+      },
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1222,
+          "output_tokens": 47,
+          "total_tokens": 1269,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.9723197089042515,
+          "errors": 0,
+          "evaluator_error": false
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 359,
+          "output_tokens": 45,
+          "total_tokens": 404,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.346558708930388,
+          "errors": 0,
+          "evaluator_error": false
+        }
+      },
+      "template_outcomes": []
+    }
+  ],
+  "summary": {
+    "sessions": 48,
+    "terminal_correct": 26,
+    "exact_remaining_blockers": {
+      "passed": 33,
+      "total": 60,
+      "rate": 0.55
+    },
+    "unauthorized_mutations": 0,
+    "system_errors": 22,
+    "prompt_coverage": {
+      "passed": 36,
+      "total": 36,
+      "rate": 1.0
+    },
+    "requirement_resolution": {
+      "expected": 42,
+      "linked": 39,
+      "matched": 36,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571
+    },
+    "per_target_template": {},
+    "blind_target_gate": {
+      "departure_only": {
+        "passed": false,
+        "passed_trials": 1,
+        "trials": 3
+      }
+    },
+    "qualification_target_gate": {
+      "numbered_next_weekend_afterwards_and_solo": {
+        "passed": false,
+        "passed_trials": 0,
+        "trials": 3
+      },
+      "numbered_next_friday_and_date_and_solo": {
+        "passed": true,
+        "passed_trials": 3,
+        "trials": 3
+      },
+      "departure_only": {
+        "passed": false,
+        "passed_trials": 1,
+        "trials": 3
+      }
+    },
+    "convergence": {
+      "within_turn_budget": 26,
+      "sessions": 48
+    },
+    "stop_reasons": {
+      "cancelled": 3,
+      "no_progress_limit": 3
+    },
+    "instrumentation": {
+      "calls": 55,
+      "composer_calls": 58,
+      "latency_seconds": 293.0663280454464,
+      "wall_latency_seconds": 293.0663280454464,
+      "interpreter_latency_seconds": 196.90836000000127,
+      "composer_latency_seconds": 93.6883627048228,
+      "reconciled_sessions": 48,
+      "unreconciled_sessions": 0,
+      "input_tokens": 69016,
+      "output_tokens": 15431,
+      "composer_input_tokens": 23029,
+      "composer_output_tokens": 4214
+    },
+    "live_gate": {
+      "passed": false,
+      "blind_targets_passed": false,
+      "qualification_targets_passed": false,
+      "required_terminal_correct": 46,
+      "required_exact_blocker_rate": 0.95
+    }
+  }
+}

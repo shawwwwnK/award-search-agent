@@ -391,7 +391,7 @@ class _ScriptedInterpreter:
             else f'When you said “{phrase},” what should I use for {requirement_id.replace("_", " ")}?'
             for requirement_id in next_requirement_ids
         )
-        return ClarificationAnswerInterpretation(
+        return ClarificationAnswerInterpretation(  # type: ignore[call-arg]  # Historical v2 adapter.
             amendments=tuple(amendments),
             next_question_requirement_ids=next_requirement_ids,
             next_question_items=next_question_items,

@@ -15,7 +15,7 @@ from math import sqrt
 from pathlib import Path
 from random import Random
 from time import perf_counter
-from typing import Any
+from typing import Any, cast
 from uuid import uuid4
 
 import yaml
@@ -228,7 +228,7 @@ def run_clarification_composer_experiment(
                 pair_values[(trial, bundle_index)][arm] = {
                     "valid": float(valid),
                     "linkage": float(valid),
-                    "latency": float(record["latency_seconds"]),
+                    "latency": float(cast(float, record["latency_seconds"])),
                     "tokens": float(usage["total_tokens"]),
                 }
     arm_summary: dict[str, dict[str, Any]] = {}

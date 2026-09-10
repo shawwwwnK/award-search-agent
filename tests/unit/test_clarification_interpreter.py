@@ -2,6 +2,11 @@
 
 import pytest
 
+from award_agent.clarification.calendar_plan import (
+    CalendarDay,
+    DurationOperation,
+    LiteralIntervalOperation,
+)
 from award_agent.clarification.interpreter import (
     ClarificationAnswerInterpretation,
     ClarificationAnswerInterpreterInput,
@@ -10,7 +15,7 @@ from award_agent.clarification.interpreter import (
     ClarificationUnresolvedFragment,
     interpret_answer,
 )
-from award_agent.clarification.semantic import SemanticTarget, TemporalAstKind, TemporalSemanticAst
+from award_agent.clarification.semantic import SemanticTarget
 from award_agent.domain import (
     BlockingRequirement,
     BlockingRequirementKind,
@@ -66,16 +71,16 @@ def test_receiver_accepts_multiple_grounded_semantic_facts_without_lexical_rules
                 fact_id="departure",
                 span=_span(text, "Actually mid october for depature"),
                 target=SemanticTarget.DEPARTURE_WINDOW,
-                temporal=TemporalSemanticAst(
-                    kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"
+                calendar_operation=LiteralIntervalOperation(
+                    start=CalendarDay(month=10, day=11), end=CalendarDay(month=10, day=20)
                 ),
             ),
             ClarificationSemanticFact(
                 fact_id="duration",
                 span=_span(text, "about 12 days"),
                 target=SemanticTarget.DURATION,
-                temporal=TemporalSemanticAst(
-                    kind=TemporalAstKind.DURATION, quantity=12, unit="day", approximate=True
+                calendar_operation=DurationOperation(
+                    minimum_days=11, maximum_days=13, approximate=True
                 ),
             ),
         )
@@ -128,7 +133,7 @@ def test_receiver_accepts_correction_semantics_without_an_authorship_link() -> N
                 fact_id="departure",
                 span=_span(text, text),
                 target=SemanticTarget.DEPARTURE_WINDOW,
-                temporal=TemporalSemanticAst(kind=TemporalAstKind.CALENDAR_DATE, month=10, day=12),
+                calendar_operation=LiteralIntervalOperation(start=CalendarDay(month=10, day=12)),
             ),
         )
     )
@@ -142,7 +147,7 @@ def test_model_input_has_no_context_values_or_ledger() -> None:
         "text",
         "ordered_requirements",
         "correction_eligible_targets",
-        "temporal_affordance_catalog_version",
+        "calendar_proposal_contract_version",
     }
     assert "reference_date" not in str(payload)
     assert "timezone" not in str(payload)

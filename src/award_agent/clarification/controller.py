@@ -7,9 +7,18 @@ from dataclasses import dataclass
 from hashlib import sha256
 from uuid import uuid4
 
+from pydantic import ValidationError
+
 from award_agent.clarification.blockers import (
     build_clarification_prompt,
     collect_blocking_requirements,
+)
+from award_agent.clarification.calendar_plan import (
+    CalendarCalculationError,
+    CalendarCalculationProposal,
+    CalendarCalculationReceipt,
+    CalendarProposalTarget,
+    evaluate_calendar_proposals,
 )
 from award_agent.clarification.composer import (
     ClarificationPromptComposer,
@@ -19,19 +28,20 @@ from award_agent.clarification.composer import (
 from award_agent.clarification.interpreter import (
     ClarificationAnswerInterpreter,
     ClarificationAnswerInterpreterInput,
+    ClarificationCalendarProposalIssue,
     ClarificationDiscourseAct,
+    ClarificationInterpretationError,
+    ClarificationInterpretationUnavailable,
+    ClarificationRepairBudget,
     ClarificationSemanticFact,
-    interpret_answer,
+    validate_answer_interpretation,
 )
 from award_agent.clarification.issues import derive_clarification_issues
 from award_agent.clarification.projection import project_initial_request
 from award_agent.clarification.reducer import apply_amendments
 from award_agent.clarification.semantic import (
-    CompiledSemanticTemporalFact,
     SemanticOperation,
     SemanticTarget,
-    SemanticTemporalCompileError,
-    compile_temporal_ast,
 )
 from award_agent.domain import (
     AmendmentTarget,
@@ -54,6 +64,7 @@ from award_agent.domain import (
     PromptCompositionSource,
     RejectedFragment,
     RejectedFragmentReason,
+    RequestContext,
     RequestUnderstandingResult,
     ResolutionOutcome,
     TemporalAmendment,
@@ -93,6 +104,21 @@ class ClarificationCompositionPending:
 
     session: ClarificationSession
     pending: PendingPromptTransition
+
+
+@dataclass(frozen=True)
+class ClarificationInterpretationPending:
+    """A non-mutating, retryable receiver result for unavailable semantics."""
+
+    session: ClarificationSession
+    code: str
+    detail: str
+    repair_attempted: bool
+    answer_turn: AnswerTurn | None = None
+    effective_request: EffectiveRequest | None = None
+    outcome: ResolutionOutcome | None = None
+    requirements: tuple[BlockingRequirement, ...] = ()
+    issues: tuple[ClarificationIssue, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -310,8 +336,9 @@ def _materialize_semantic_facts(
     """Compile independent receiver facts without reading answer semantics."""
     amendments: list[TypedAmendment] = []
     compiled: dict[str, tuple[TemporalContribution, ...]] = {}
-    prior_compiled: dict[str, CompiledSemanticTemporalFact] = {}
+    prior_receipts: dict[str, CalendarCalculationReceipt] = {}
     rejected: list[RejectedFragment] = []
+    pending_temporal: list[_AuthorizedSemanticFact] = []
     for authorized_fact in facts:
         fact = authorized_fact.fact
         correction = authorized_fact.operation is SemanticOperation.REPLACE
@@ -345,49 +372,184 @@ def _materialize_semantic_facts(
                 travelers=fact.travelers,
             )
         else:
-            assert fact.temporal is not None
-            if fact.target is SemanticTarget.DEPARTURE_WINDOW:
-                amendment = TemporalAmendment(
-                    amendment_id=fact.fact_id,
-                    target=AmendmentTarget.DEPARTURE,
-                    requirement_ids=authorized_fact.requirement_ids,
-                    span=fact.span,
-                    is_correction=correction,
-                    temporal_text=fact.span.text,
-                )
-            else:
-                amendment = TemporalAmendment(
-                    amendment_id=fact.fact_id,
-                    target=AmendmentTarget.RETURN_OR_DURATION,
-                    requirement_ids=authorized_fact.requirement_ids,
-                    span=fact.span,
-                    is_correction=correction,
-                    temporal_text=fact.span.text,
-                )
-            try:
-                compiled_fact = compile_temporal_ast(
-                    amendment_id=fact.fact_id,
-                    target=fact.target,
-                    ast=fact.temporal,
-                    span=fact.span,
-                    context=effective.context,
-                    prior_compiled_facts=prior_compiled,
-                )
-            except SemanticTemporalCompileError:
-                rejected.append(
-                    RejectedFragment(
-                        span=fact.span,
-                        reason=RejectedFragmentReason.AMBIGUOUS,
-                        detail="receiver semantic fact could not be compiled",
-                        requirement_ids=authorized_fact.requirement_ids,
-                        reason_code="receiver.semantic_compile",
-                    )
-                )
-                continue
-            compiled[fact.fact_id] = (compiled_fact.contribution,)
-            prior_compiled[fact.fact_id] = compiled_fact
+            pending_temporal.append(authorized_fact)
+            continue
         amendments.append(amendment)
+    # A plan edge may point to a fact emitted later in the same answer.  Retry
+    # only facts whose typed anchors can become available; an independent bad
+    # sibling never blocks a valid component.
+    while pending_temporal:
+        deferred: list[_AuthorizedSemanticFact] = []
+        progressed = False
+        for authorized_fact in pending_temporal:
+            try:
+                amendment, receipt = _materialize_calendar_fact(
+                    authorized_fact, context=effective.context, prior_receipts=prior_receipts
+                )
+            except (CalendarCalculationError, ValidationError):
+                deferred.append(authorized_fact)
+                continue
+            amendments.append(amendment)
+            compiled[receipt.fact_id] = (receipt.contribution,)
+            prior_receipts[receipt.fact_id] = receipt
+            progressed = True
+        if not progressed:
+            rejected.extend(
+                RejectedFragment(
+                    span=item.fact.span,
+                    reason=RejectedFragmentReason.AMBIGUOUS,
+                    detail="receiver calendar proposal could not be evaluated safely",
+                    requirement_ids=item.requirement_ids,
+                    reason_code="receiver.calendar_plan_compile",
+                )
+                for item in deferred
+            )
+            break
+        pending_temporal = deferred
     return tuple(amendments), compiled, tuple(rejected)
+
+
+def _materialize_calendar_fact(
+    authorized_fact: _AuthorizedSemanticFact,
+    *,
+    context: RequestContext,
+    prior_receipts: dict[str, CalendarCalculationReceipt],
+) -> tuple[TemporalAmendment, CalendarCalculationReceipt]:
+    fact = authorized_fact.fact
+    assert fact.calendar_operation is not None
+    amendment = TemporalAmendment(
+        amendment_id=fact.fact_id,
+        target=(
+            AmendmentTarget.DEPARTURE
+            if fact.target is SemanticTarget.DEPARTURE_WINDOW
+            else AmendmentTarget.RETURN_OR_DURATION
+        ),
+        requirement_ids=authorized_fact.requirement_ids,
+        span=fact.span,
+        is_correction=authorized_fact.operation is SemanticOperation.REPLACE,
+        temporal_text=fact.span.text,
+    )
+    (receipt,) = evaluate_calendar_proposals(
+        proposals=(
+            CalendarCalculationProposal(
+                fact_id=fact.fact_id,
+                target=CalendarProposalTarget(fact.target.value),
+                evidence=fact.span,
+                operation=fact.calendar_operation,
+            ),
+        ),
+        context=context,
+        prior_receipts=prior_receipts,
+    )
+    return amendment, receipt
+
+
+def _repair_calendar_failures(
+    *,
+    interpreter: ClarificationAnswerInterpreter,
+    receiver_input: ClarificationAnswerInterpreterInput,
+    authorized_facts: tuple[_AuthorizedSemanticFact, ...],
+    compilation_rejections: tuple[RejectedFragment, ...],
+    effective: EffectiveRequest,
+    requirements: tuple[BlockingRequirement, ...],
+    repair_budget_consumed: bool,
+) -> tuple[
+    tuple[TypedAmendment, ...],
+    dict[str, tuple[TemporalContribution, ...]],
+    tuple[RejectedFragment, ...],
+    ClarificationInterpretationUnavailable | None,
+]:
+    """Ask the same model once to repair only calendar facts its evaluator rejected.
+
+    This remains a semantic/model operation: local code merely supplies typed
+    validation path information and accepts the repaired fact through the
+    identical grounding and authorization gates.  An unavailable repair leaves
+    the original rejected proposal explicit and cannot erase valid siblings.
+    """
+
+    rejected_spans = {
+        (item.span.message_id, item.span.start, item.span.end)
+        for item in compilation_rejections
+        if item.reason_code == "receiver.calendar_plan_compile"
+    }
+    failed = tuple(
+        item.fact
+        for item in authorized_facts
+        if (item.fact.span.message_id, item.fact.span.start, item.fact.span.end) in rejected_spans
+        and item.fact.calendar_operation is not None
+    )
+    if not failed:
+        return (), {}, compilation_rejections, None
+    if repair_budget_consumed:
+        return (
+            (),
+            {},
+            compilation_rejections,
+            ClarificationInterpretationUnavailable(
+                code="receiver_repair_budget_exhausted",
+                detail="The clarification receiver already used its one repair attempt.",
+                repair_attempted=True,
+            ),
+        )
+    repair = getattr(interpreter, "repair_calendar_proposals", None)
+    if not callable(repair):
+        return (
+            (),
+            {},
+            compilation_rejections,
+            ClarificationInterpretationUnavailable(
+                code="receiver_repair_unavailable",
+                detail="The clarification receiver cannot repair its calendar proposal.",
+                repair_attempted=False,
+            ),
+        )
+    issues = tuple(
+        ClarificationCalendarProposalIssue(
+            fact_id=fact.fact_id,
+            code="calendar_plan_evaluation_failed",
+            path=("facts", fact.fact_id, "calendar_operation"),
+            detail="The typed calendar proposal could not be evaluated safely.",
+        )
+        for fact in failed
+    )
+    repaired = repair(receiver_input, facts=failed, issues=issues)
+    if isinstance(repaired, ClarificationInterpretationUnavailable):
+        return (), {}, compilation_rejections, repaired
+    repaired = validate_answer_interpretation(receiver_input, repaired)
+    assert not isinstance(repaired, ClarificationInterpretationUnavailable)
+    repaired_authorized, repair_authorization_rejections = _authorize_semantic_facts(
+        repaired.facts, requirements=requirements, effective=effective
+    )
+    repaired_amendments, repaired_compiled, repaired_rejections = _materialize_semantic_facts(
+        repaired_authorized, effective=effective
+    )
+    repaired_ids = {amendment.amendment_id for amendment in repaired_amendments}
+    remaining = tuple(
+        item
+        for item in compilation_rejections
+        if item.span is None
+        or not any(
+            fact.fact_id in repaired_ids
+            and (fact.span.message_id, fact.span.start, fact.span.end)
+            == (item.span.message_id, item.span.start, item.span.end)
+            for fact in failed
+        )
+    )
+    return (
+        repaired_amendments,
+        repaired_compiled,
+        remaining + repair_authorization_rejections + repaired_rejections,
+        None,
+    )
+
+
+def _adapter_repair_budget_consumed(interpreter: object) -> bool:
+    """Read the explicit optional budget capability without adapter duck typing."""
+    return (
+        interpreter.repair_budget_consumed()
+        if isinstance(interpreter, ClarificationRepairBudget)
+        else False
+    )
 
 
 def _amendment_field(amendment: TypedAmendment) -> str | None:
@@ -523,7 +685,7 @@ def apply_clarification_answer(
     command: ClarificationAnswerCommand,
     interpreter: ClarificationAnswerInterpreter,
     composer: ClarificationPromptComposer | None = None,
-) -> ClarificationTransition | ClarificationCompositionPending:
+) -> ClarificationTransition | ClarificationCompositionPending | ClarificationInterpretationPending:
     """Apply one answer atomically, or raise without writing a new revision.
 
     Replay lookup intentionally precedes revision freshness and terminal checks;
@@ -564,15 +726,60 @@ def apply_clarification_answer(
         prompt_id=current.prompt.prompt_id,
         message=answer_span,
     )
-    interpretation = interpret_answer(
-        interpreter,
-        ClarificationAnswerInterpreterInput(
-            message_id=command.message_id,
-            text=command.text,
-            ordered_requirements=current.prompt.requirements,
-            correction_eligible_targets=_correction_eligible_targets(current.effective_request),
-        ),
+    receiver_input = ClarificationAnswerInterpreterInput(
+        message_id=command.message_id,
+        text=command.text,
+        ordered_requirements=current.prompt.requirements,
+        correction_eligible_targets=_correction_eligible_targets(current.effective_request),
     )
+    repair_consumed = False
+    interpretation = interpreter.interpret(receiver_input)
+    if isinstance(interpretation, ClarificationInterpretationUnavailable):
+        return ClarificationInterpretationPending(
+            session=session,
+            code=interpretation.code,
+            detail=interpretation.detail,
+            repair_attempted=interpretation.repair_attempted,
+        )
+    try:
+        interpretation = validate_answer_interpretation(receiver_input, interpretation)
+    except ClarificationInterpretationError:
+        repair = getattr(interpreter, "repair_interpretation", None)
+        if not callable(repair):
+            return ClarificationInterpretationPending(
+                session=session,
+                code="receiver_grounding_invalid",
+                detail="The clarification receiver returned invalid answer grounding.",
+                repair_attempted=False,
+            )
+        grounding_issues = tuple(
+            ClarificationCalendarProposalIssue(
+                fact_id=fact.fact_id,
+                code="answer_grounding_failed",
+                path=("facts", fact.fact_id, "span"),
+                detail="Ground the fact in the exact answer text.",
+            )
+            for fact in interpretation.facts
+        )
+        repaired = repair(receiver_input, facts=interpretation.facts, issues=grounding_issues)
+        repair_consumed = True
+        if isinstance(repaired, ClarificationInterpretationUnavailable):
+            return ClarificationInterpretationPending(
+                session=session,
+                code=repaired.code,
+                detail=repaired.detail,
+                repair_attempted=True,
+            )
+        try:
+            interpretation = validate_answer_interpretation(receiver_input, repaired)
+        except ClarificationInterpretationError:
+            return ClarificationInterpretationPending(
+                session=session,
+                code="receiver_repair_grounding_invalid",
+                detail="The clarification receiver returned invalid repaired grounding.",
+                repair_attempted=True,
+            )
+    assert not isinstance(interpretation, ClarificationInterpretationUnavailable)
     if interpretation.discourse_act is ClarificationDiscourseAct.CANCEL:
         next_revision = ClarificationSessionRevision(
             revision=current.revision + 1,
@@ -598,6 +805,22 @@ def apply_clarification_answer(
     materialized, compiled_temporal_contributions, compilation_rejections = (
         _materialize_semantic_facts(authorized_facts, effective=current.effective_request)
     )
+    (
+        repaired_amendments,
+        repaired_compiled,
+        compilation_rejections,
+        repair_unavailable,
+    ) = _repair_calendar_failures(
+        interpreter=interpreter,
+        receiver_input=receiver_input,
+        authorized_facts=authorized_facts,
+        compilation_rejections=compilation_rejections,
+        effective=current.effective_request,
+        requirements=current.prompt.requirements,
+        repair_budget_consumed=repair_consumed or _adapter_repair_budget_consumed(interpreter),
+    )
+    materialized += repaired_amendments
+    compiled_temporal_contributions.update(repaired_compiled)
     scoped, scope_rejections = _filter_corrections_and_collisions(
         materialized,
         effective=current.effective_request,
@@ -630,6 +853,22 @@ def apply_clarification_answer(
         + authorization_rejections
         + scope_rejections
     )
+    if repair_unavailable is not None:
+        pending_requirements = collect_blocking_requirements(effective)
+        pending_issues = derive_clarification_issues(
+            pending_requirements, rejected_fragments=rejected
+        )
+        return ClarificationInterpretationPending(
+            session=session,
+            code=repair_unavailable.code,
+            detail=repair_unavailable.detail,
+            repair_attempted=True,
+            answer_turn=answer_turn,
+            effective_request=effective,
+            outcome=ResolutionOutcome(accepted_amendments=accepted, rejected_fragments=rejected),
+            requirements=pending_requirements,
+            issues=pending_issues,
+        )
     blocker_ids = tuple(
         requirement.requirement_id for requirement in collect_blocking_requirements(effective)
     )
@@ -768,6 +1007,7 @@ def retry_prompt_composition(
 __all__ = [
     "ClarificationCommandError",
     "ClarificationCompositionPending",
+    "ClarificationInterpretationPending",
     "ClarificationPromptCompositionFailedError",
     "ClarificationTransition",
     "apply_clarification_answer",

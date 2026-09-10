@@ -1,0 +1,91 @@
+contract_version: v3-live
+development_corpus: true
+# Disclosed development corpus for outcome-level evaluation. It deliberately
+# does not prescribe receiver ASTs, calendar proposal handles, or question copy.
+scenarios:
+  - id: clear_explicit_dates
+    family: clear_resolvable
+    pair_id: explicit_dates
+    pair_role: accept
+    equivalence_group: explicit_dates_forms
+    answer_class: reasonably_resolvable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Leave October 6 and return October 16"
+        oracle: {expected_action: resolve, must_resolve: [departure, return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers], forbidden_outcomes: [], state_envelope: {statuses: [ready], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: false}, disclosure: {required: false}, values: {departure: "2026-10-06", return: "2026-10-16"}, properties: {return_after_departure: true, bounded_departure_window: true, bounded_return_window: true}}
+  - id: clear_explicit_dates_paraphrase
+    family: clear_resolvable
+    equivalence_group: explicit_dates_forms
+    answer_class: reasonably_resolvable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Oct 6 outbound, Oct 16 back"
+        oracle: {expected_action: resolve, must_resolve: [departure, return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers], forbidden_outcomes: [], state_envelope: {statuses: [ready], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: false}, disclosure: {required: false}, values: {departure: "2026-10-06", return: "2026-10-16"}, properties: {return_after_departure: true, bounded_departure_window: true, bounded_return_window: true}}
+  - id: explicit_date_alternatives
+    family: alternatives
+    pair_id: explicit_dates
+    pair_role: ask
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "October 6 or October 9"
+        oracle: {expected_action: ask, must_resolve: [], must_remain_blocked: [departure], protected_fields: [origin, destination, travelers, departure], forbidden_outcomes: [unsafe_ambiguity_acceptance], state_envelope: {statuses: [awaiting_answer], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: true, requirement_ids: [departure], issue_kinds: [ambiguous]}, disclosure: {required: false}, properties: {}}
+  - id: bare_return_endpoint
+    family: endpoint_ambiguity
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "October 16"
+        oracle: {expected_action: ask, must_resolve: [], must_remain_blocked: [departure, return_or_duration], protected_fields: [origin, destination, travelers, departure, return_or_duration], forbidden_outcomes: [unsafe_ambiguity_acceptance], state_envelope: {statuses: [awaiting_answer], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: true, requirement_ids: [departure, return_or_duration], issue_kinds: [ambiguous]}, disclosure: {required: false}, properties: {}}
+  - id: correction_with_duration_sibling
+    family: correction_sibling
+    answer_class: correction
+    initial_origin: SFO
+    initial_destination: England
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_unknowns: [return_or_duration, travelers]
+    turns:
+      - text: "Actually mid October for depature and about 12 days; two travelers"
+        oracle: {expected_action: resolve, must_resolve: [return_or_duration, travelers], must_remain_blocked: [], protected_fields: [origin, destination], forbidden_outcomes: [], state_envelope: {statuses: [ready], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: false}, disclosure: {required: true}, properties: {departure_window: {year: 2026, month: 10, start_day: [11, 20], end_day: [11, 20]}, duration_days: [11, 13], bounded_departure_window: true}}
+  - id: valid_siblings_with_ambiguous_departure
+    family: sibling_retention
+    answer_class: ambiguous
+    initial_destination: France
+    initial_unknowns: [origin, departure, return_or_duration, travelers]
+    turns:
+      - text: "SFO, October 3 or October 9, one week, two travelers"
+        oracle: {expected_action: partial_resolve_and_ask, must_resolve: [origin, return_or_duration, travelers], must_remain_blocked: [departure], protected_fields: [destination], valid_siblings: [origin, return_or_duration, travelers], forbidden_outcomes: [unsafe_ambiguity_acceptance], state_envelope: {statuses: [awaiting_answer], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: true, requirement_ids: [departure], issue_kinds: [ambiguous]}, disclosure: {required: false}, properties: {duration_days: [7, 7]}}
+  - id: fuzzy_month_disclosed
+    family: disclosed_approximation
+    answer_class: safely_assumable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "Early next month"
+        oracle: {expected_action: resolve, must_resolve: [departure], must_remain_blocked: [], protected_fields: [origin, destination, travelers], forbidden_outcomes: [], state_envelope: {statuses: [ready], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: false}, disclosure: {required: true}, properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, bounded_departure_window: true}}
+  - id: return_before_departure_conflict
+    family: conflict
+    answer_class: conflict
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-11-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "Return October 16"
+        oracle: {expected_action: ask, must_resolve: [], must_remain_blocked: [conflict:return_before_departure], protected_fields: [origin, destination, travelers], forbidden_outcomes: [unsafe_ambiguity_acceptance], state_envelope: {statuses: [awaiting_answer], relations: [ready_iff_no_blockers, prompt_covers_remaining_blockers]}, question_intent: {required: true, requirement_ids: [conflict:return_before_departure], issue_kinds: [conflict]}, disclosure: {required: false}, properties: {}}

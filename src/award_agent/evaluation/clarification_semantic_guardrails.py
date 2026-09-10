@@ -12,12 +12,26 @@ import json
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import date
+from functools import partial
 from pathlib import Path
 from typing import Any
 
 import yaml
 from pydantic import ValidationError
 
+from award_agent.clarification.calendar_plan import (
+    CalendarAnchorEdge,
+    CalendarCalculationError,
+    CalendarCalculationOperation,
+    CalendarCalculationProposal,
+    CalendarDay,
+    CalendarProposalTarget,
+    DurationOperation,
+    LiteralIntervalOperation,
+    OffsetIntervalOperation,
+    PriorFactAnchor,
+    evaluate_calendar_proposals,
+)
 from award_agent.clarification.composer import (
     ClarificationCompositionError,
     ClarificationPromptComposerInput,
@@ -27,6 +41,8 @@ from award_agent.clarification.composer import (
 )
 from award_agent.clarification.controller import (
     ClarificationCommandError,
+    ClarificationInterpretationPending,
+    ClarificationTransition,
     apply_clarification_answer,
     start_clarification,
 )
@@ -34,19 +50,14 @@ from award_agent.clarification.interpreter import (
     ClarificationAnswerInterpretation,
     ClarificationAnswerInterpreterInput,
     ClarificationInterpretationError,
+    ClarificationInterpretationUnavailable,
     ClarificationSemanticFact,
     ClarificationUnresolvedFragment,
     interpret_answer,
     validate_answer_interpretation,
 )
 from award_agent.clarification.issues import derive_clarification_issues
-from award_agent.clarification.semantic import (
-    SemanticTarget,
-    SemanticTemporalCompileError,
-    TemporalAstKind,
-    TemporalSemanticAst,
-    compile_temporal_ast,
-)
+from award_agent.clarification.semantic import SemanticTarget
 from award_agent.domain import (
     BlockingRequirement,
     BlockingRequirementKind,
@@ -66,12 +77,17 @@ from award_agent.domain import (
     UnknownReason,
 )
 
-GUARDRAIL_EVALUATOR_VERSION = "clarification_semantic_guardrails_v2"
+GUARDRAIL_EVALUATOR_VERSION = "clarification_semantic_guardrails_v3"
 DEFAULT_CLARIFICATION_SEMANTIC_GUARDRAIL_FIXTURES = Path(
     "evals/clarification/semantic_guardrails_v1.yaml"
 )
 
-_CONTINUATION_SOURCES = ("controller.py", "interpreter.py", "semantic.py", "reducer.py")
+_CONTINUATION_SOURCES = (
+    "calendar_plan.py",
+    "controller.py",
+    "interpreter.py",
+    "reducer.py",
+)
 _FORBIDDEN_MODULE_PREFIXES = (
     "award_agent.clarification.temporal",
     "award_agent.clarification.temporal_templates",
@@ -125,15 +141,40 @@ class ClarificationSemanticGuardrailError(AssertionError):
 
 
 class _TypedReceiver:
-    def __init__(self, result: ClarificationAnswerInterpretation) -> None:
+    def __init__(
+        self, result: ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable
+    ) -> None:
         self.result = result
         self.inputs: list[ClarificationAnswerInterpreterInput] = []
 
     def interpret(
         self, input: ClarificationAnswerInterpreterInput
-    ) -> ClarificationAnswerInterpretation:
+    ) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
         self.inputs.append(input)
         return self.result
+
+
+class _RepairingReceiver(_TypedReceiver):
+    def __init__(
+        self,
+        result: ClarificationAnswerInterpretation,
+        repaired: ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable,
+    ) -> None:
+        super().__init__(result)
+        self.repaired = repaired
+        self.repair_calls: list[
+            tuple[tuple[ClarificationSemanticFact, ...], tuple[object, ...]]
+        ] = []
+
+    def repair_calendar_proposals(
+        self,
+        _input: ClarificationAnswerInterpreterInput,
+        *,
+        facts: tuple[ClarificationSemanticFact, ...],
+        issues: tuple[object, ...],
+    ) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
+        self.repair_calls.append((facts, issues))
+        return self.repaired
 
 
 class _TypedComposer:
@@ -184,6 +225,21 @@ def _assert_raises(expected: type[Exception], callable_: Callable[[], object]) -
             f"expected {expected.__name__}, got {type(exc).__name__}: {exc}"
         ) from exc
     raise ClarificationSemanticGuardrailError(f"expected {expected.__name__} was accepted")
+
+
+def _require_transition(value: object) -> ClarificationTransition:
+    """Guardrail fixtures must not silently accept an unexpected pending state."""
+    if not isinstance(value, ClarificationTransition):
+        raise ClarificationSemanticGuardrailError(
+            f"expected committed transition, got {type(value).__name__}"
+        )
+    return value
+
+
+def _validate_single_fact(
+    input: ClarificationAnswerInterpreterInput, fact: ClarificationSemanticFact
+) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
+    return validate_answer_interpretation(input, ClarificationAnswerInterpretation(facts=(fact,)))
 
 
 def _call_name(call: ast.Call) -> str | None:
@@ -276,9 +332,27 @@ def _duration_fact(
         fact_id=identifier,
         span=_span(message_id, text),
         target=SemanticTarget.DURATION,
-        temporal=TemporalSemanticAst(
-            kind=TemporalAstKind.DURATION, quantity=12, unit="day", approximate=approximate
+        calendar_operation=DurationOperation(
+            minimum_days=11 if approximate else 12,
+            maximum_days=13 if approximate else 12,
+            approximate=approximate,
         ),
+    )
+
+
+def _calendar_proposal(
+    message_id: str,
+    text: str,
+    *,
+    identifier: str,
+    target: CalendarProposalTarget,
+    operation: CalendarCalculationOperation,
+) -> CalendarCalculationProposal:
+    return CalendarCalculationProposal(
+        fact_id=identifier,
+        target=target,
+        evidence=_span(message_id, text),
+        operation=operation,
     )
 
 
@@ -308,9 +382,7 @@ def _schema_span_grounding() -> None:
         bad = fact.model_copy(update={"span": span})
         _assert_raises(
             ClarificationInterpretationError,
-            lambda bad=bad: validate_answer_interpretation(
-                input, ClarificationAnswerInterpretation(facts=(bad,))
-            ),
+            partial(_validate_single_fact, input, bad),
         )
     fragment = ClarificationUnresolvedFragment(
         span=MessageSpan(message_id=input.message_id, start=0, end=1, text="x"), reason="ambiguous"
@@ -323,6 +395,65 @@ def _schema_span_grounding() -> None:
     )
 
 
+def _receiver_repair_unavailability_is_typed_and_nonsemantic() -> None:
+    """A depleted receiver repair budget cannot become locally inferred facts."""
+    input = _input()
+    unavailable = ClarificationInterpretationUnavailable(
+        code="receiver_schema_repair_exhausted",
+        detail="opaque model output did not validate",
+        repair_attempted=True,
+    )
+    assert interpret_answer(_TypedReceiver(unavailable), input) == unavailable
+
+
+def _repair_and_interpretation_pending_are_non_mutating_or_single_shot() -> None:
+    session = start_clarification(
+        _initial(), session_id="repair-pending", composer=_TypedComposer()
+    )
+    original = session.model_copy(deep=True)
+    command = _command(session, "repair-pending-answer", "opaque-repair-pending")
+    unavailable = apply_clarification_answer(
+        session,
+        command,
+        _TypedReceiver(
+            ClarificationInterpretationUnavailable(
+                code="receiver_repair_exhausted",
+                detail="opaque receiver failure",
+                repair_attempted=True,
+            )
+        ),
+        _TypedComposer(),
+    )
+    assert isinstance(unavailable, ClarificationInterpretationPending)
+    assert unavailable.session == original and unavailable.repair_attempted
+
+    bad = _fact(
+        command.message_id,
+        command.text,
+        identifier="return",
+        target=SemanticTarget.RETURN_WINDOW,
+        calendar_operation=DurationOperation(minimum_days=2, maximum_days=2),
+    )
+    repaired = _fact(
+        command.message_id,
+        command.text,
+        identifier="return",
+        target=SemanticTarget.RETURN_WINDOW,
+        calendar_operation=LiteralIntervalOperation(start=CalendarDay(month=10, day=25)),
+    )
+    receiver = _RepairingReceiver(
+        ClarificationAnswerInterpretation(facts=(bad,)),
+        ClarificationAnswerInterpretation(facts=(repaired,)),
+    )
+    result = _require_transition(
+        apply_clarification_answer(session, command, receiver, _TypedComposer())
+    )
+    assert len(receiver.repair_calls) == 1
+    assert result.revision.status.value == "ready"
+    assert result.revision.outcome is not None
+    assert {item.amendment_id for item in result.revision.outcome.accepted_amendments} == {"return"}
+
+
 def _state_authorization_is_not_receiver_authorship() -> None:
     input = _input()
     fact = _duration_fact(input.message_id, input.text)
@@ -331,7 +462,9 @@ def _state_authorization_is_not_receiver_authorship() -> None:
         fact_id="dep",
         span=_span(input.message_id, input.text),
         target=SemanticTarget.DEPARTURE_WINDOW,
-        temporal=TemporalSemanticAst(kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"),
+        calendar_operation=LiteralIntervalOperation(
+            start=CalendarDay(month=10, day=11), end=CalendarDay(month=10, day=20)
+        ),
     )
     validate_answer_interpretation(input, ClarificationAnswerInterpretation(facts=(correction,)))
     assert "operation" not in fact.model_dump()
@@ -340,152 +473,205 @@ def _state_authorization_is_not_receiver_authorship() -> None:
 
 def _temporal_calendar_ranges_dependencies() -> None:
     context = RequestContext(reference_date=date(2026, 9, 10), timezone="America/Los_Angeles")
-    exact = compile_temporal_ast(
-        amendment_id="exact",
-        target=SemanticTarget.DEPARTURE_WINDOW,
-        ast=TemporalSemanticAst(kind=TemporalAstKind.CALENDAR_DATE, month=1, day=3),
-        span=_span("exact", "opaque-exact"),
+    (exact,) = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "exact",
+                "opaque-exact",
+                identifier="exact",
+                target=CalendarProposalTarget.DEPARTURE_WINDOW,
+                operation=LiteralIntervalOperation(start=CalendarDay(month=1, day=3)),
+            ),
+        ),
         context=context,
-    ).contribution
-    assert exact.date_window is not None and exact.date_window.start == date(2027, 1, 3)
+    )
+    assert exact.contribution.date_window is not None
+    assert exact.contribution.date_window.start == date(2027, 1, 3)
     for portion, bounds in {
         "early": (1, 10),
         "mid": (11, 20),
         "late": (21, 31),
         "whole": (1, 31),
     }.items():
-        window = compile_temporal_ast(
-            amendment_id=portion,
-            target=SemanticTarget.DEPARTURE_WINDOW,
-            ast=TemporalSemanticAst(kind=TemporalAstKind.MONTH_PORTION, month=10, portion=portion),
-            span=_span("calendar", "opaque-calendar"),
+        (receipt,) = evaluate_calendar_proposals(
+            proposals=(
+                _calendar_proposal(
+                    "calendar",
+                    "opaque-calendar",
+                    identifier=portion,
+                    target=CalendarProposalTarget.DEPARTURE_WINDOW,
+                    operation=LiteralIntervalOperation(
+                        start=CalendarDay(month=10, day=bounds[0]),
+                        end=CalendarDay(month=10, day=bounds[1]),
+                    ),
+                ),
+            ),
             context=context,
-        ).contribution.date_window
+        )
+        window = receipt.contribution.date_window
         assert (
             window is not None
             and (window.start.day, window.end.day) == bounds
             and window.start <= window.end
         )
-    leap = compile_temporal_ast(
-        amendment_id="leap",
-        target=SemanticTarget.RETURN_WINDOW,
-        ast=TemporalSemanticAst(kind=TemporalAstKind.CALENDAR_DATE, year=2028, month=2, day=29),
-        span=_span("leap", "opaque-leap"),
-        context=context,
-    ).contribution
-    assert leap.date_window is not None and leap.date_window.start == date(2028, 2, 29)
-    cross_year = compile_temporal_ast(
-        amendment_id="range",
-        target=SemanticTarget.DEPARTURE_WINDOW,
-        ast=TemporalSemanticAst(
-            kind=TemporalAstKind.DATE_RANGE, month=12, day=29, end_month=1, end_day=3
+    (leap,) = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "leap",
+                "opaque-leap",
+                identifier="leap",
+                target=CalendarProposalTarget.RETURN_WINDOW,
+                operation=LiteralIntervalOperation(start=CalendarDay(year=2028, month=2, day=29)),
+            ),
         ),
-        span=_span("range", "opaque-range"),
         context=context,
-    ).contribution
-    assert cross_year.date_window is not None and (
-        cross_year.date_window.start,
-        cross_year.date_window.end,
+    )
+    assert leap.contribution.date_window is not None
+    assert leap.contribution.date_window.start == date(2028, 2, 29)
+    (cross_year,) = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "range",
+                "opaque-range",
+                identifier="range",
+                target=CalendarProposalTarget.DEPARTURE_WINDOW,
+                operation=LiteralIntervalOperation(
+                    start=CalendarDay(month=12, day=29), end=CalendarDay(month=1, day=3)
+                ),
+            ),
+        ),
+        context=context,
+    )
+    assert cross_year.contribution.date_window is not None and (
+        cross_year.contribution.date_window.start,
+        cross_year.contribution.date_window.end,
     ) == (date(2026, 12, 29), date(2027, 1, 3))
     _assert_raises(
-        SemanticTemporalCompileError,
-        lambda: compile_temporal_ast(
-            amendment_id="wrong",
-            target=SemanticTarget.DURATION,
-            ast=TemporalSemanticAst(kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"),
-            span=_span("wrong", "opaque-wrong"),
-            context=context,
+        ValidationError,
+        lambda: _calendar_proposal(
+            "wrong",
+            "opaque-wrong",
+            identifier="wrong",
+            target=CalendarProposalTarget.DURATION,
+            operation=LiteralIntervalOperation(start=CalendarDay(month=10, day=11)),
         ),
     )
     _assert_raises(
-        SemanticTemporalCompileError,
-        lambda: compile_temporal_ast(
-            amendment_id="bad-date",
-            target=SemanticTarget.DEPARTURE_WINDOW,
-            ast=TemporalSemanticAst(kind=TemporalAstKind.CALENDAR_DATE, year=2026, month=2, day=29),
-            span=_span("bad", "opaque-bad"),
+        CalendarCalculationError,
+        lambda: evaluate_calendar_proposals(
+            proposals=(
+                _calendar_proposal(
+                    "bad",
+                    "opaque-bad",
+                    identifier="bad-date",
+                    target=CalendarProposalTarget.DEPARTURE_WINDOW,
+                    operation=LiteralIntervalOperation(
+                        start=CalendarDay(year=2026, month=2, day=29)
+                    ),
+                ),
+            ),
             context=context,
         ),
     )
-    duration = compile_temporal_ast(
-        amendment_id="week",
-        target=SemanticTarget.DURATION,
-        ast=TemporalSemanticAst(kind=TemporalAstKind.DURATION, quantity=2, unit="week"),
-        span=_span("week", "opaque-week"),
+    (duration,) = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "week",
+                "opaque-week",
+                identifier="week",
+                target=CalendarProposalTarget.DURATION,
+                operation=DurationOperation(minimum_days=14, maximum_days=14),
+            ),
+        ),
         context=context,
-    ).contribution
-    assert duration.interpreted_duration is not None and (
-        duration.interpreted_duration.minimum_days,
-        duration.interpreted_duration.maximum_days,
+    )
+    assert duration.contribution.interpreted_duration is not None and (
+        duration.contribution.interpreted_duration.minimum_days,
+        duration.contribution.interpreted_duration.maximum_days,
     ) == (14, 14)
-    relative = TemporalSemanticAst(
-        kind=TemporalAstKind.RELATIVE_TO_PRIOR_FACT,
-        anchor_fact_id="departure",
-        relation="after",
-        quantity=12,
-        unit="day",
-    )
     _assert_raises(
-        SemanticTemporalCompileError,
-        lambda: compile_temporal_ast(
-            amendment_id="return",
-            target=SemanticTarget.RETURN_WINDOW,
-            ast=relative,
-            span=_span("return", "opaque-return"),
+        CalendarCalculationError,
+        lambda: evaluate_calendar_proposals(
+            proposals=(
+                _calendar_proposal(
+                    "return",
+                    "opaque-return",
+                    identifier="return",
+                    target=CalendarProposalTarget.RETURN_WINDOW,
+                    operation=OffsetIntervalOperation(
+                        anchor=PriorFactAnchor(fact_id="departure", edge=CalendarAnchorEdge.START),
+                        start_offset_days=12,
+                    ),
+                ),
+            ),
             context=context,
         ),
     )
-    departure = compile_temporal_ast(
-        amendment_id="departure",
-        target=SemanticTarget.DEPARTURE_WINDOW,
-        ast=TemporalSemanticAst(
-            kind=TemporalAstKind.DATE_RANGE, month=10, day=11, end_month=10, end_day=20
+    receipts = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "return",
+                "opaque-return",
+                identifier="return",
+                target=CalendarProposalTarget.RETURN_WINDOW,
+                operation=OffsetIntervalOperation(
+                    anchor=PriorFactAnchor(fact_id="departure", edge=CalendarAnchorEdge.START),
+                    start_offset_days=12,
+                ),
+            ),
+            _calendar_proposal(
+                "departure",
+                "opaque-departure",
+                identifier="departure",
+                target=CalendarProposalTarget.DEPARTURE_WINDOW,
+                operation=LiteralIntervalOperation(
+                    start=CalendarDay(month=10, day=11), end=CalendarDay(month=10, day=20)
+                ),
+            ),
         ),
-        span=_span("departure", "opaque-departure"),
         context=context,
     )
-    returned = compile_temporal_ast(
-        amendment_id="return",
-        target=SemanticTarget.RETURN_WINDOW,
-        ast=relative,
-        span=_span("return", "opaque-return"),
-        context=context,
-        prior_compiled_facts={"departure": departure},
-    ).contribution
-    assert returned.date_window is not None and (
-        returned.date_window.start,
-        returned.date_window.end,
-    ) == (date(2026, 10, 23), date(2026, 11, 1))
+    returned = next(receipt for receipt in receipts if receipt.fact_id == "return")
+    assert returned.contribution.date_window is not None
+    assert returned.contribution.date_window.start == date(2026, 10, 23)
 
 
 def _fuzzy_assumption_disclosure() -> None:
     context = RequestContext(reference_date=date(2026, 9, 10), timezone="America/Los_Angeles")
-    fuzzy = compile_temporal_ast(
-        amendment_id="fuzzy",
-        target=SemanticTarget.DURATION,
-        ast=TemporalSemanticAst(
-            kind=TemporalAstKind.DURATION, quantity=12, unit="day", approximate=True
+    (fuzzy,) = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "fuzzy",
+                "opaque-fuzzy",
+                identifier="fuzzy",
+                target=CalendarProposalTarget.DURATION,
+                operation=DurationOperation(minimum_days=11, maximum_days=13, approximate=True),
+            ),
         ),
-        span=_span("fuzzy", "opaque-fuzzy"),
         context=context,
-    ).contribution
-    assert fuzzy.interpreted_duration is not None and (
-        fuzzy.interpreted_duration.minimum_days,
-        fuzzy.interpreted_duration.maximum_days,
+    )
+    assert fuzzy.contribution.interpreted_duration is not None and (
+        fuzzy.contribution.interpreted_duration.minimum_days,
+        fuzzy.contribution.interpreted_duration.maximum_days,
     ) == (11, 13)
-    assert fuzzy.interpretation_provenance is not None
-    assert fuzzy.interpretation_provenance.assumption_disclosure is not None
-    assert fuzzy.interpretation_provenance.assumption_disclosure.message.strip()
-    exact = compile_temporal_ast(
-        amendment_id="not-fuzzy",
-        target=SemanticTarget.DURATION,
-        ast=TemporalSemanticAst(kind=TemporalAstKind.DURATION, quantity=12, unit="day"),
-        span=_span("exact", "opaque-exact"),
+    assert fuzzy.contribution.interpretation_provenance is not None
+    assert fuzzy.contribution.interpretation_provenance.assumption_disclosure is not None
+    assert fuzzy.contribution.interpretation_provenance.assumption_disclosure.message.strip()
+    (exact,) = evaluate_calendar_proposals(
+        proposals=(
+            _calendar_proposal(
+                "exact",
+                "opaque-exact",
+                identifier="not-fuzzy",
+                target=CalendarProposalTarget.DURATION,
+                operation=DurationOperation(minimum_days=12, maximum_days=12),
+            ),
+        ),
         context=context,
-    ).contribution
+    )
     assert (
-        exact.interpretation_provenance is None
-        or exact.interpretation_provenance.assumption_disclosure is None
+        exact.contribution.interpretation_provenance is None
+        or exact.contribution.interpretation_provenance.assumption_disclosure is None
     )
 
 
@@ -543,13 +729,13 @@ def _fact(
     *,
     identifier: str,
     target: SemanticTarget,
-    temporal: TemporalSemanticAst,
+    calendar_operation: CalendarCalculationOperation,
 ) -> ClarificationSemanticFact:
     return ClarificationSemanticFact(
         fact_id=identifier,
         span=_span(message_id, text),
         target=target,
-        temporal=temporal,
+        calendar_operation=calendar_operation,
     )
 
 
@@ -561,15 +747,15 @@ def _conflicts_siblings_atomicity() -> None:
         text,
         identifier="return-before",
         target=SemanticTarget.RETURN_WINDOW,
-        temporal=TemporalSemanticAst(
-            kind=TemporalAstKind.CALENDAR_DATE, year=2026, month=10, day=1
-        ),
+        calendar_operation=LiteralIntervalOperation(start=CalendarDay(year=2026, month=10, day=1)),
     )
-    conflict = apply_clarification_answer(
-        session,
-        _command(session, "conflict-message", text),
-        _TypedReceiver(ClarificationAnswerInterpretation(facts=(return_fact,))),
-        _TypedComposer(),
+    conflict = _require_transition(
+        apply_clarification_answer(
+            session,
+            _command(session, "conflict-message", text),
+            _TypedReceiver(ClarificationAnswerInterpretation(facts=(return_fact,))),
+            _TypedComposer(),
+        )
     )
     assert conflict.revision.status.value == "awaiting_answer"
     assert {item.code for item in conflict.revision.effective_request.conflicts} == {
@@ -591,21 +777,27 @@ def _conflicts_siblings_atomicity() -> None:
         good_text,
         identifier="dep",
         target=SemanticTarget.DEPARTURE_WINDOW,
-        temporal=TemporalSemanticAst(kind=TemporalAstKind.MONTH_PORTION, month=10, portion="mid"),
+        calendar_operation=LiteralIntervalOperation(
+            start=CalendarDay(month=10, day=11), end=CalendarDay(month=10, day=20)
+        ),
     )
     duration = _duration_fact("siblings-message", good_text, identifier="duration")
-    applied = apply_clarification_answer(
-        sibling,
-        _command(sibling, "siblings-message", good_text),
-        _TypedReceiver(ClarificationAnswerInterpretation(facts=(departure, duration))),
-        _TypedComposer(),
+    applied = _require_transition(
+        apply_clarification_answer(
+            sibling,
+            _command(sibling, "siblings-message", good_text),
+            _TypedReceiver(ClarificationAnswerInterpretation(facts=(departure, duration))),
+            _TypedComposer(),
+        )
     )
+    assert applied.revision.outcome is not None
     assert {item.amendment_id for item in applied.revision.outcome.accepted_amendments} == {
         "dep",
         "duration",
     }
     assert applied.revision.effective_request.hard_constraints == ("preserve-me",)
     atomic = start_clarification(_initial(), session_id="atomic", composer=_TypedComposer())
+    atomic_snapshot = atomic.model_copy(deep=True)
     bad_text = "opaque-atomic"
     good = _duration_fact("atomic-message", bad_text, identifier="good")
     bad = _fact(
@@ -613,7 +805,7 @@ def _conflicts_siblings_atomicity() -> None:
         bad_text,
         identifier="bad",
         target=SemanticTarget.RETURN_WINDOW,
-        temporal=TemporalSemanticAst(kind=TemporalAstKind.DURATION, quantity=2, unit="day"),
+        calendar_operation=DurationOperation(minimum_days=2, maximum_days=2),
     )
     retained = apply_clarification_answer(
         atomic,
@@ -621,10 +813,17 @@ def _conflicts_siblings_atomicity() -> None:
         _TypedReceiver(ClarificationAnswerInterpretation(facts=(good, bad))),
         _TypedComposer(),
     )
-    assert {item.amendment_id for item in retained.revision.outcome.accepted_amendments} == {"good"}
-    assert (
-        retained.revision.outcome.rejected_fragments[0].reason_code == "receiver.semantic_compile"
-    )
+    assert isinstance(retained, ClarificationInterpretationPending)
+    # An unavailable/exhausted model repair does not commit an answer turn or
+    # consume no-progress budget, but it must retain the independently valid
+    # sibling and the rejected calendar proposal in its retryable payload.
+    assert retained.session == atomic_snapshot
+    assert len(atomic.revisions) == len(atomic_snapshot.revisions) == 1
+    assert retained.outcome is not None
+    assert {item.amendment_id for item in retained.outcome.accepted_amendments} == {"good"}
+    assert retained.outcome.rejected_fragments[0].reason_code == "receiver.calendar_plan_compile"
+    assert retained.effective_request is not None
+    assert retained.effective_request.interpreted_duration is not None
 
 
 def _revisions_concurrency_idempotency_ready_policy() -> None:
@@ -632,18 +831,22 @@ def _revisions_concurrency_idempotency_ready_policy() -> None:
     original = session.model_copy(deep=True)
     command = _command(session, "replay-message", "opaque-ready")
     fact = _duration_fact("replay-message", command.text)
-    transitioned = apply_clarification_answer(
-        session,
-        command,
-        _TypedReceiver(ClarificationAnswerInterpretation(facts=(fact,))),
-        _TypedComposer(),
+    transitioned = _require_transition(
+        apply_clarification_answer(
+            session,
+            command,
+            _TypedReceiver(ClarificationAnswerInterpretation(facts=(fact,))),
+            _TypedComposer(),
+        )
     )
     assert session == original and transitioned.revision.status.value == "ready"
-    replay = apply_clarification_answer(
-        transitioned.session,
-        command,
-        _TypedReceiver(ClarificationAnswerInterpretation(facts=(fact,))),
-        _TypedComposer(),
+    replay = _require_transition(
+        apply_clarification_answer(
+            transitioned.session,
+            command,
+            _TypedReceiver(ClarificationAnswerInterpretation(facts=(fact,))),
+            _TypedComposer(),
+        )
     )
     assert replay.replayed and replay.session == transitioned.session
     _assert_raises(
@@ -667,18 +870,22 @@ def _revisions_concurrency_idempotency_ready_policy() -> None:
     no_progress = start_clarification(
         _initial(), session_id="no-progress", composer=_TypedComposer()
     )
-    first = apply_clarification_answer(
-        no_progress,
-        _command(no_progress, "np-1", "opaque-np-1"),
-        _TypedReceiver(ClarificationAnswerInterpretation()),
-        _TypedComposer(),
+    first = _require_transition(
+        apply_clarification_answer(
+            no_progress,
+            _command(no_progress, "np-1", "opaque-np-1"),
+            _TypedReceiver(ClarificationAnswerInterpretation()),
+            _TypedComposer(),
+        )
     )
     assert first.revision.status.value == "awaiting_answer"
-    second = apply_clarification_answer(
-        first.session,
-        _command(first.session, "np-2", "opaque-np-2"),
-        _TypedReceiver(ClarificationAnswerInterpretation()),
-        _TypedComposer(),
+    second = _require_transition(
+        apply_clarification_answer(
+            first.session,
+            _command(first.session, "np-2", "opaque-np-2"),
+            _TypedReceiver(ClarificationAnswerInterpretation()),
+            _TypedComposer(),
+        )
     )
     assert (
         second.revision.status.value == "stopped"
@@ -740,11 +947,14 @@ def _composer_coverage_linkage_failure_redaction() -> None:
         len(session.revisions) == 1 and session.current_revision.status.value == "awaiting_answer"
     )
     completed = retry_prompt_composition(session, pending.pending, _TypedComposer())
+    assert isinstance(completed, ClarificationTransition)
     assert completed.revision.status.value == "awaiting_answer"
 
 
 _CHECKS: dict[str, Callable[[], None]] = {
     "schema_and_span_grounding": _schema_span_grounding,
+    "receiver_repair_unavailability": _receiver_repair_unavailability_is_typed_and_nonsemantic,
+    "repair_and_interpretation_pending_safety": _repair_and_interpretation_pending_are_non_mutating_or_single_shot,
     "set_replace_authorization": _state_authorization_is_not_receiver_authorship,
     "temporal_calendar_ranges_and_dependencies": _temporal_calendar_ranges_dependencies,
     "fuzzy_assumption_disclosure": _fuzzy_assumption_disclosure,
@@ -805,6 +1015,11 @@ def preflight_clarification_semantic_guardrail_cases(
             raise ClarificationSemanticGuardrailError(
                 "semantic guardrail case fields must be non-empty strings"
             )
+        assert isinstance(identifier, str)
+        assert isinstance(family, str)
+        assert isinstance(check, str)
+        assert isinstance(evidence, str)
+        assert isinstance(expected, str)
         if not evidence.startswith("opaque-"):
             raise ClarificationSemanticGuardrailError(
                 "semantic guardrail evidence must remain opaque"

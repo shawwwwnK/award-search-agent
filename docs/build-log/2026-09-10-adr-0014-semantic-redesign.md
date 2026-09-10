@@ -40,6 +40,25 @@
 - The durable composer-only retry path needs a final architecture review before any live
   qualification or model-selection conclusion.
 
+## ADR 0015 design follow-up
+
+- Architecture accepted ADR 0015 after trace review showed that several reasonable clarification
+  answers were understood semantically but rejected solely at the receiver representation boundary.
+  The new boundary is generic model-authored calendar-calculation proposals, not a growing
+  deterministic list of phrase-specific temporal relations.
+- The approved policy permits one shared bounded model-owned repair per answer across receiver
+  schema, grounding, and calendar-calculation failures. Same-answer fact references form an
+  acyclic dependency graph rather than relying on text order. A residual failure is recorded as
+  visibly communicated, non-mutating pending/retryable state and must not leak a raw schema
+  exception, silently choose an interpretation, or count as user no-progress.
+- The clarification acceptance protocol now specifies v3 action/property oracles and separates
+  semantic diagnosis from end-to-end behavioral success, hard safety, and operational repair/pending
+  metrics. It requires explicit numerators/denominators and labels zero-denominator metrics not
+  applicable, preventing a pilot from making a vacuous qualification claim. Historical v1/v2
+  artifacts remain historical evidence; they do not qualify the ADR 0015 runtime.
+- This entry records architecture and evaluation-design decisions only. No ADR 0015 implementation
+  tests or live evaluation results are asserted here.
+
 ## Project-owner decisions
 
 - _Placeholder: record any model-selection or latency decision after reviewed experimental

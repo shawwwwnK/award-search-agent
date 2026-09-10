@@ -15,13 +15,17 @@ from award_agent.clarification.composer import (
 from award_agent.clarification.interpreter import (
     ClarificationAnswerInterpretation,
     ClarificationAnswerInterpreter,
+    ClarificationInterpretationUnavailable,
 )
 from award_agent.cli.clarification_behavior_live_eval import _parser
 from award_agent.evaluation.clarification_behavior_live import (
     DEFAULT_LIVE_BEHAVIOR_FIXTURES,
     ClarificationBehaviorLiveFixtureError,
     _load_cases,
+    _repair_telemetry,
     _string_leaves,
+    _v3_outcome_failures,
+    _v3_unnecessary_clarification,
     _value_failures,
     run_live_clarification_behavior_eval,
 )
@@ -32,7 +36,9 @@ class _FakeInterpreter:
         self.calls = 0
         self._traces: list[dict[str, object]] = []
 
-    def interpret(self, _input: object) -> ClarificationAnswerInterpretation:
+    def interpret(
+        self, _input: object
+    ) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
         self.calls += 1
         self._traces.append(
             {
@@ -89,6 +95,7 @@ class _FakeComposer:
 class _ErrorTraceInterpreter(_FakeInterpreter):
     def interpret(self, input: object) -> ClarificationAnswerInterpretation:
         result = super().interpret(input)
+        assert isinstance(result, ClarificationAnswerInterpretation)
         self._traces[-1]["error"] = {"type": "Synthetic", "message": "simulated"}
         return result
 
@@ -109,24 +116,194 @@ class _MissingTraceInterpreter(_FakeInterpreter):
         return []
 
 
+class _PendingTraceInterpreter(_FakeInterpreter):
+    def interpret(self, input: object) -> ClarificationAnswerInterpretation | ClarificationInterpretationUnavailable:
+        super().interpret(input)
+        self._traces[-1]["error"] = {"type": "Unavailable", "handled": True}
+        return ClarificationInterpretationUnavailable(
+            code="receiver_unavailable",
+            detail="retryable test receiver outcome",
+        )
+
+
 def _failing_interpreter_factory(_model: str) -> ClarificationAnswerInterpreter:
     raise RuntimeError("synthetic constructor failure")
 
 
-def test_live_behavior_fixture_preflight_has_required_public_coverage() -> None:
+def test_live_behavior_fixture_preflight_has_required_v3_development_coverage() -> None:
     cases, _ = _load_cases(DEFAULT_LIVE_BEHAVIOR_FIXTURES)
 
-    assert len(cases) >= 16
+    assert len(cases) >= 8
     assert {str(case["family"]) for case in cases} >= {
-        "accepting",
-        "accepting_paraphrase",
-        "paired_boundary",
-        "partial_sibling",
-        "targeted_composer",
-        "correction",
-        "no_progress",
+        "clear_resolvable",
+        "alternatives",
+        "endpoint_ambiguity",
+        "correction_sibling",
+        "sibling_retention",
+        "disclosed_approximation",
         "conflict",
     }
+
+
+def test_v3_sample_fixture_uses_only_behavioral_outcome_oracles() -> None:
+    sample = Path("evals/clarification/live_cases_v3_sample.yaml")
+    cases, _ = _load_cases(sample)
+
+    oracle = cases[0]["turns"][0]["oracle"]
+    assert oracle["expected_action"] == "ask"
+    assert "proposal" not in json.dumps(oracle)
+    assert "question_intent" in oracle  # typed intent, not literal composed copy
+    assert "Could you" not in json.dumps(oracle)
+
+
+def test_v3_development_corpus_covers_relational_and_acceptance_boundaries() -> None:
+    cases, _ = _load_cases(Path("evals/clarification/live_cases_v3_development.yaml"))
+    families = {case["family"] for case in cases}
+    serialized = json.dumps(cases)
+
+    assert {
+        "clear_resolvable",
+        "alternatives",
+        "endpoint_ambiguity",
+        "correction_sibling",
+        "sibling_retention",
+        "disclosed_approximation",
+        "conflict",
+    }.issubset(families)
+    assert "return_after_departure" in serialized
+    assert "proposal" not in serialized
+
+    by_id = {case["id"]: case for case in cases}
+    for identifier in ("clear_explicit_dates", "clear_explicit_dates_paraphrase"):
+        oracle = by_id[identifier]["turns"][0]["oracle"]
+        assert oracle["values"] == {"departure": "2026-10-06", "return": "2026-10-16"}
+    sibling_oracle = by_id["valid_siblings_with_ambiguous_departure"]["turns"][0]["oracle"]
+    assert sibling_oracle["disclosure"]["required"] is False
+
+
+def test_v3_development_corpus_cannot_pass_without_required_family_coverage(tmp_path: Path) -> None:
+    invalid = tmp_path / "missing-conflict.yaml"
+    invalid.write_text(
+        DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace(
+            "family: conflict", "family: another-family", 1
+        )
+    )
+
+    with pytest.raises(ClarificationBehaviorLiveFixtureError, match="required scenario families"):
+        _load_cases(invalid)
+
+
+def test_v3_sample_runs_through_observable_outcome_scorer(tmp_path: Path) -> None:
+    artifact = run_live_clarification_behavior_eval(
+        trials=1,
+        fixture_path=Path("evals/clarification/live_cases_v3_sample.yaml"),
+        trace_dir=tmp_path / "private-traces",
+        interpreter_factory=lambda _model: _FakeInterpreter(),
+        composer_factory=lambda _model: _FakeComposer(),
+    )
+
+    assert artifact["schema_version"] == "clarification_behavior_live_eval_v3"
+    assert artifact["records"][0]["turn_metrics"][0]["observed_action"] == "ask"
+    assert artifact["summary"]["behavioral"]["paired_accept_ask"]["passed"] is False
+    assert artifact["summary"]["behavioral"]["paraphrase_consistency"]["passed"] is False
+
+
+def test_v3_oracle_rejects_internal_proposal_assertions(tmp_path: Path) -> None:
+    sample = Path("evals/clarification/live_cases_v3_sample.yaml")
+    invalid = tmp_path / "internal-token.yaml"
+    invalid.write_text(
+        sample.read_text().replace(
+            "          expected_action: ask",
+            "          proposal_token: should-not-be-graded\n          expected_action: ask",
+        )
+    )
+
+    with pytest.raises(ClarificationBehaviorLiveFixtureError, match="observable outcome"):
+        _load_cases(invalid)
+
+
+def _v3_ask_oracle() -> dict[str, object]:
+    return {
+        "expected_action": "ask",
+        "must_resolve": [],
+        "must_remain_blocked": ["departure"],
+        "protected_fields": ["origin", "destination", "travelers", "departure"],
+        "forbidden_outcomes": ["unsafe_ambiguity_acceptance", "protected_field_mutation"],
+        "state_envelope": {
+            "statuses": ["awaiting_answer"],
+            "relations": ["ready_iff_no_blockers", "prompt_covers_remaining_blockers"],
+        },
+        "question_intent": {
+            "required": True,
+            "requirement_ids": ["departure"],
+            "issue_kinds": ["ambiguous"],
+        },
+        "disclosure": {"required": False},
+        "properties": {},
+    }
+
+
+def test_v3_scores_equivalent_internal_forms_and_question_wording_identically() -> None:
+    oracle = _v3_ask_oracle()
+
+    def assess(prompt_message: str) -> tuple[str, list[str], list[str]]:
+        return _v3_outcome_failures(
+            oracle=oracle,
+            answer_class="ambiguous",
+            status="awaiting_answer",
+            before_blockers=("departure",),
+            blockers=("departure",),
+            before_values={"departure": None},
+            after_values={"departure": None},
+            prompt_requirement_ids=("departure",),
+            prompt_issue_kinds=("ambiguous",),
+            prompt_message=prompt_message,
+            disclosure_present=False,
+        )
+
+    first = assess("Which October date should I use?")
+    second = assess("Could you choose one of those departure dates?")
+
+    assert first == second == ("ask", [], [])
+
+
+def test_v3_unsafe_ambiguity_acceptance_fails_closed() -> None:
+    action, safety, behavioral = _v3_outcome_failures(
+        oracle=_v3_ask_oracle(),
+        answer_class="ambiguous",
+        status="ready",
+        before_blockers=("departure",),
+        blockers=(),
+        before_values={"departure": None},
+        after_values={"departure": ("2026-10-03", "2026-10-03")},
+        prompt_requirement_ids=None,
+        prompt_issue_kinds=(),
+        prompt_message=None,
+        disclosure_present=False,
+    )
+
+    assert action == "resolve"
+    assert "unsafe ambiguity acceptance" in safety
+    assert "forbidden outcome: unsafe_ambiguity_acceptance" in safety
+    assert behavioral
+
+
+def test_v3_unnecessary_clarification_uses_structured_outcome_not_copy() -> None:
+    resolve_oracle = _v3_ask_oracle() | {"expected_action": "resolve"}
+
+    assert _v3_unnecessary_clarification(
+        action="ask",
+        oracle=resolve_oracle,
+        behavioral_failures=("false blocking", "outcome action outside expected envelope"),
+    )
+    assert _v3_unnecessary_clarification(
+        action="ask",
+        oracle=resolve_oracle,
+        behavioral_failures=("forbidden outcome: unnecessary_ask",),
+    )
+    assert not _v3_unnecessary_clarification(
+        action="ask", oracle=_v3_ask_oracle(), behavioral_failures=()
+    )
 
 
 def test_live_behavior_cli_keeps_stage_models_separate_and_defaults_to_luna() -> None:
@@ -202,13 +379,14 @@ def test_live_behavior_public_artifact_is_redacted_and_stage_separated(tmp_path:
 
 
 def test_live_behavior_fixture_rejects_private_marker_and_too_few_cases(tmp_path: Path) -> None:
+    legacy = Path("evals/clarification/live_cases_v2.yaml")
     private = tmp_path / "private.yaml"
-    private.write_text(DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text() + "\napi_key: forbidden\n")
+    private.write_text(legacy.read_text() + "\napi_key: forbidden\n")
     with pytest.raises(ClarificationBehaviorLiveFixtureError, match="privacy"):
         _load_cases(private)
 
     short = tmp_path / "short.yaml"
-    payload = DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace("  - id:", "  - id:", 1)
+    payload = legacy.read_text().replace("  - id:", "  - id:", 1)
     lines = payload.splitlines()
     # Retain only the first scenario so fixture cardinality is rejected before
     # any call factory could be used.
@@ -219,21 +397,21 @@ def test_live_behavior_fixture_rejects_private_marker_and_too_few_cases(tmp_path
 
     malformed_envelope = tmp_path / "malformed-envelope.yaml"
     malformed_envelope.write_text(
-        DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace("start_day: [1, 3]", "start_day: [1]", 1)
+        legacy.read_text().replace("start_day: [1, 3]", "start_day: [1]", 1)
     )
     with pytest.raises(ClarificationBehaviorLiveFixtureError, match="departure_window"):
         _load_cases(malformed_envelope)
 
     missing_conflict = tmp_path / "missing-conflict.yaml"
     missing_conflict.write_text(
-        DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace("family: conflict", "family: another-family", 1)
+        legacy.read_text().replace("family: conflict", "family: another-family", 1)
     )
     with pytest.raises(ClarificationBehaviorLiveFixtureError, match="required scenario families"):
         _load_cases(missing_conflict)
 
     invalid_iso = tmp_path / "invalid-iso.yaml"
     invalid_iso.write_text(
-        DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace(
+        legacy.read_text().replace(
             '{departure: "2026-10-06"', '{departure: "10/06/2026"', 1
         )
     )
@@ -242,7 +420,7 @@ def test_live_behavior_fixture_rejects_private_marker_and_too_few_cases(tmp_path
 
     invalid_sibling = tmp_path / "invalid-sibling.yaml"
     invalid_sibling.write_text(
-        DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace(
+        legacy.read_text().replace(
             "valid_siblings: [origin, return_or_duration, travelers]",
             "valid_siblings: [origin, departure]",
             1,
@@ -253,7 +431,7 @@ def test_live_behavior_fixture_rejects_private_marker_and_too_few_cases(tmp_path
 
     unknown_requirement = tmp_path / "unknown-requirement.yaml"
     unknown_requirement.write_text(
-        DEFAULT_LIVE_BEHAVIOR_FIXTURES.read_text().replace(
+        legacy.read_text().replace(
             "initial_unknowns: [origin, departure, return_or_duration, travelers]",
             "initial_unknowns: [origin, departure, return_or_duration, unknown_field]",
             1,
@@ -273,9 +451,69 @@ def test_live_behavior_trace_error_is_an_exact_safety_failure(tmp_path: Path) ->
 
     assert artifact["summary"]["exact_safety_gate"]["passed"] is False
     assert any(
-        "model trace reconciliation failed" in record["safety_failures"]
+        "unhandled model trace error" in record["safety_failures"]
         for record in artifact["records"]
     )
+
+
+def test_v3_pending_receiver_is_reported_without_trace_reconciliation_failure(tmp_path: Path) -> None:
+    fixture = tmp_path / "pending.yaml"
+    fixture.write_text(
+        Path("evals/clarification/live_cases_v3_sample.yaml")
+        .read_text()
+        .replace("expected_action: ask", "expected_action: pending_retryable")
+    )
+    artifact = run_live_clarification_behavior_eval(
+        trials=1,
+        fixture_path=fixture,
+        trace_dir=tmp_path / "private-traces",
+        interpreter_factory=lambda _model: _PendingTraceInterpreter(),
+        composer_factory=lambda _model: _FakeComposer(),
+    )
+
+    record = artifact["records"][0]
+    assert record["turn_metrics"][0]["observed_action"] == "pending_retryable"
+    assert record["repair_telemetry"]["pending_receiver"] == 1
+    assert "model trace reconciliation failed" not in record["safety_failures"]
+    assert artifact["summary"]["exact_safety_gate"]["passed"] is True
+
+
+def test_repair_telemetry_does_not_count_pending_repair_as_workflow_success() -> None:
+    telemetry = _repair_telemetry(
+        (
+            {"stage": "interpreter", "latency_seconds": 0.1, "error": None},
+            {"stage": "interpreter_repair", "latency_seconds": 0.2, "error": None},
+            {"stage": "interpreter_repair", "latency_seconds": 0.3, "error": {"type": "bad"}},
+        ),
+        pending_retryable=1,
+        pending_receiver=1,
+        pending_composer=0,
+    )
+
+    assert telemetry == {
+        "first_pass_calls": 1,
+        "repair_calls": 2,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.5,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0,
+    }
+
+
+def test_repair_telemetry_counts_completed_nonpending_repair_workflow() -> None:
+    telemetry = _repair_telemetry(
+        (
+            {"stage": "interpreter", "latency_seconds": 0.1, "error": None},
+            {"stage": "interpreter_repair", "latency_seconds": 0.2, "error": None},
+        ),
+        pending_retryable=0,
+        pending_receiver=0,
+        pending_composer=0,
+    )
+
+    assert telemetry["repaired_workflows"] == 1
 
 
 def test_live_behavior_missing_trace_is_an_exact_safety_failure(tmp_path: Path) -> None:
@@ -316,7 +554,7 @@ def test_live_behavior_qualification_mode_keeps_pair_trials_and_trace_totals(tmp
     )
 
     assert artifact["summary"]["metadata"]["mode"] == "qualification"
-    assert artifact["summary"]["behavioral"]["paired_accept_ask"]["trial_runs"] == 4
+    assert artifact["summary"]["behavioral"]["paired_accept_ask"]["trial_runs"] == 2
     assert artifact["llm_trace"]["sidecars"] == 2 * artifact["fixture"]["scenario_count"]
     for stage in artifact["summary"]["instrumentation"]["stages"].values():
         assert set(stage) >= {
