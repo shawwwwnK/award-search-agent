@@ -1,0 +1,1572 @@
+{
+  "schema_version": "clarification_live_eval_v1",
+  "fixture": {
+    "path": "evals/clarification/live_cases_v1.yaml",
+    "sha256": "dcb03d7e200c74d1a50b84bc1e4de992fa59cfbc678a5fd06b2bb174651c314d",
+    "redacted": true
+  },
+  "model": "gpt-5.6-luna",
+  "trials": 3,
+  "generated_at": "2026-09-10T06:15:28.692143+00:00",
+  "llm_trace": {
+    "mode": "all_calls",
+    "directory": "evals/clarification/traces/run-2026-09-10T061528.692143-0000-ec8e65a4",
+    "case_count": 48
+  },
+  "records": [
+    {
+      "scenario": "numbered_next_weekend_afterwards_and_solo",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 6.329877583077177,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1725,
+        "output_tokens": 230,
+        "total_tokens": 1955
+      }
+    },
+    {
+      "scenario": "numbered_next_friday_and_date_and_solo",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "return_or_duration",
+        "travelers",
+        "departure"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 6.798831457970664,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1648,
+        "output_tokens": 349,
+        "total_tokens": 1997
+      }
+    },
+    {
+      "scenario": "numbered_this_weekend_and_monday",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.365697625093162,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1686,
+        "output_tokens": 127,
+        "total_tokens": 1813
+      }
+    },
+    {
+      "scenario": "ambiguous_disjunctive_relative_dates",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 11.157020916230977,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3226,
+        "output_tokens": 451,
+        "total_tokens": 3677
+      }
+    },
+    {
+      "scenario": "origin_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin"
+      ],
+      "resolution_linked": [
+        "origin"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.3478209997992963,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1503,
+        "output_tokens": 149,
+        "total_tokens": 1652
+      }
+    },
+    {
+      "scenario": "destination_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "destination"
+      ],
+      "resolution_linked": [
+        "destination"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.3005210829433054,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1503,
+        "output_tokens": 145,
+        "total_tokens": 1648
+      }
+    },
+    {
+      "scenario": "travelers_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.653314792085439,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1507,
+        "output_tokens": 143,
+        "total_tokens": 1650
+      }
+    },
+    {
+      "scenario": "departure_only",
+      "trial": 1,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 7.653182666981593,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1645,
+        "output_tokens": 382,
+        "total_tokens": 2027
+      }
+    },
+    {
+      "scenario": "duration_only",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.6713068748358637,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1509,
+        "output_tokens": 150,
+        "total_tokens": 1659
+      }
+    },
+    {
+      "scenario": "all_at_once",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 7.150256250053644,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1753,
+        "output_tokens": 354,
+        "total_tokens": 2107
+      }
+    },
+    {
+      "scenario": "subset_two_turn",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers",
+        "return_or_duration",
+        "departure"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 11.995726709021255,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3209,
+        "output_tokens": 589,
+        "total_tokens": 3798
+      }
+    },
+    {
+      "scenario": "bare_date_recovery",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 8.89830999984406,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3070,
+        "output_tokens": 389,
+        "total_tokens": 3459
+      }
+    },
+    {
+      "scenario": "origin_correction_with_sibling",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.8655812500510365,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1518,
+        "output_tokens": 227,
+        "total_tokens": 1745
+      }
+    },
+    {
+      "scenario": "departure_correction",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.372591000050306,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1515,
+        "output_tokens": 240,
+        "total_tokens": 1755
+      }
+    },
+    {
+      "scenario": "no_progress_limit",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "latency_seconds": 6.788563834037632,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3020,
+        "output_tokens": 335,
+        "total_tokens": 3355
+      }
+    },
+    {
+      "scenario": "cancellation",
+      "trial": 1,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "latency_seconds": 0.007590166991576552,
+      "usage": {
+        "calls": 0,
+        "captured_calls": 0,
+        "missing_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    },
+    {
+      "scenario": "numbered_next_weekend_afterwards_and_solo",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.8845745830330998,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1725,
+        "output_tokens": 191,
+        "total_tokens": 1916
+      }
+    },
+    {
+      "scenario": "numbered_next_friday_and_date_and_solo",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "return_or_duration",
+        "travelers",
+        "departure"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 6.084388958057389,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1648,
+        "output_tokens": 364,
+        "total_tokens": 2012
+      }
+    },
+    {
+      "scenario": "numbered_this_weekend_and_monday",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.776471707969904,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1686,
+        "output_tokens": 212,
+        "total_tokens": 1898
+      }
+    },
+    {
+      "scenario": "ambiguous_disjunctive_relative_dates",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 12.305368500063196,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3226,
+        "output_tokens": 548,
+        "total_tokens": 3774
+      }
+    },
+    {
+      "scenario": "origin_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin"
+      ],
+      "resolution_linked": [
+        "origin"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.363436834188178,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1503,
+        "output_tokens": 161,
+        "total_tokens": 1664
+      }
+    },
+    {
+      "scenario": "destination_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "destination"
+      ],
+      "resolution_linked": [
+        "destination"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.0347302919253707,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1503,
+        "output_tokens": 149,
+        "total_tokens": 1652
+      }
+    },
+    {
+      "scenario": "travelers_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.6796402919571847,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1507,
+        "output_tokens": 143,
+        "total_tokens": 1650
+      }
+    },
+    {
+      "scenario": "departure_only",
+      "trial": 2,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 6.236048792023212,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1645,
+        "output_tokens": 265,
+        "total_tokens": 1910
+      }
+    },
+    {
+      "scenario": "duration_only",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.3876298328395933,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1509,
+        "output_tokens": 177,
+        "total_tokens": 1686
+      }
+    },
+    {
+      "scenario": "all_at_once",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 6.069044083124027,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1753,
+        "output_tokens": 336,
+        "total_tokens": 2089
+      }
+    },
+    {
+      "scenario": "subset_two_turn",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers",
+        "return_or_duration",
+        "departure"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 9.396859166910872,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3209,
+        "output_tokens": 479,
+        "total_tokens": 3688
+      }
+    },
+    {
+      "scenario": "bare_date_recovery",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 7.599814582848921,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3070,
+        "output_tokens": 372,
+        "total_tokens": 3442
+      }
+    },
+    {
+      "scenario": "origin_correction_with_sibling",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.121465582866222,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1518,
+        "output_tokens": 226,
+        "total_tokens": 1744
+      }
+    },
+    {
+      "scenario": "departure_correction",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.306673541897908,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1515,
+        "output_tokens": 226,
+        "total_tokens": 1741
+      }
+    },
+    {
+      "scenario": "no_progress_limit",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "latency_seconds": 6.93424945906736,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3020,
+        "output_tokens": 347,
+        "total_tokens": 3367
+      }
+    },
+    {
+      "scenario": "cancellation",
+      "trial": 2,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "latency_seconds": 0.012257583206519485,
+      "usage": {
+        "calls": 0,
+        "captured_calls": 0,
+        "missing_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    },
+    {
+      "scenario": "numbered_next_weekend_afterwards_and_solo",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.226192124886438,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1725,
+        "output_tokens": 210,
+        "total_tokens": 1935
+      }
+    },
+    {
+      "scenario": "numbered_next_friday_and_date_and_solo",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "return_or_duration",
+        "travelers",
+        "departure"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 7.059946709079668,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1648,
+        "output_tokens": 371,
+        "total_tokens": 2019
+      }
+    },
+    {
+      "scenario": "numbered_this_weekend_and_monday",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 4.642240999964997,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1686,
+        "output_tokens": 236,
+        "total_tokens": 1922
+      }
+    },
+    {
+      "scenario": "ambiguous_disjunctive_relative_dates",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 8.627019417006522,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3226,
+        "output_tokens": 395,
+        "total_tokens": 3621
+      }
+    },
+    {
+      "scenario": "origin_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin"
+      ],
+      "resolution_linked": [
+        "origin"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.927389624994248,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1503,
+        "output_tokens": 154,
+        "total_tokens": 1657
+      }
+    },
+    {
+      "scenario": "destination_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "destination"
+      ],
+      "resolution_linked": [
+        "destination"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.3020250839181244,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1503,
+        "output_tokens": 159,
+        "total_tokens": 1662
+      }
+    },
+    {
+      "scenario": "travelers_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.872247708030045,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1507,
+        "output_tokens": 141,
+        "total_tokens": 1648
+      }
+    },
+    {
+      "scenario": "departure_only",
+      "trial": 3,
+      "terminal_correct": false,
+      "processed_turns": 1,
+      "turns_correct": 0,
+      "turns_total": 1,
+      "exact_blockers": 0,
+      "field_checks": 0,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "departure"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "latency_seconds": 4.10476112505421,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1645,
+        "output_tokens": 175,
+        "total_tokens": 1820
+      }
+    },
+    {
+      "scenario": "duration_only",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 2.9705627921503037,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1509,
+        "output_tokens": 152,
+        "total_tokens": 1661
+      }
+    },
+    {
+      "scenario": "all_at_once",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "departure",
+        "return_or_duration",
+        "travelers"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 8.139403667068109,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1753,
+        "output_tokens": 335,
+        "total_tokens": 2088
+      }
+    },
+    {
+      "scenario": "subset_two_turn",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "origin",
+        "destination",
+        "travelers",
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "origin",
+        "destination",
+        "travelers",
+        "return_or_duration",
+        "departure"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 10.17403845791705,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3209,
+        "output_tokens": 595,
+        "total_tokens": 3804
+      }
+    },
+    {
+      "scenario": "bare_date_recovery",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "departure",
+        "return_or_duration"
+      ],
+      "resolution_linked": [
+        "departure",
+        "return_or_duration"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 8.329399292124435,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3070,
+        "output_tokens": 389,
+        "total_tokens": 3459
+      }
+    },
+    {
+      "scenario": "origin_correction_with_sibling",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.948703625006601,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1518,
+        "output_tokens": 229,
+        "total_tokens": 1747
+      }
+    },
+    {
+      "scenario": "departure_correction",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [
+        "travelers"
+      ],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "ready",
+      "stop_reason": null,
+      "latency_seconds": 3.844936833018437,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1515,
+        "output_tokens": 227,
+        "total_tokens": 1742
+      }
+    },
+    {
+      "scenario": "no_progress_limit",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 2,
+      "turns_correct": 2,
+      "turns_total": 2,
+      "exact_blockers": 2,
+      "field_checks": 2,
+      "prompt_coverage": 2,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "latency_seconds": 8.537563750054687,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 3020,
+        "output_tokens": 393,
+        "total_tokens": 3413
+      }
+    },
+    {
+      "scenario": "cancellation",
+      "trial": 3,
+      "terminal_correct": true,
+      "processed_turns": 1,
+      "turns_correct": 1,
+      "turns_total": 1,
+      "exact_blockers": 1,
+      "field_checks": 1,
+      "prompt_coverage": 1,
+      "resolution_expected": [
+        "travelers"
+      ],
+      "resolution_linked": [],
+      "system_error": false,
+      "initial_snapshot_unchanged": true,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "latency_seconds": 0.009845291031524539,
+      "usage": {
+        "calls": 0,
+        "captured_calls": 0,
+        "missing_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      }
+    }
+  ],
+  "summary": {
+    "sessions": 48,
+    "terminal_correct": 45,
+    "exact_remaining_blockers": {
+      "passed": 57,
+      "total": 60,
+      "rate": 0.95
+    },
+    "unauthorized_mutations": 0,
+    "system_errors": 0,
+    "prompt_coverage": {
+      "passed": 60,
+      "total": 60,
+      "rate": 1.0
+    },
+    "requirement_resolution": {
+      "expected": 93,
+      "linked": 84,
+      "matched": 84,
+      "precision": 1.0,
+      "recall": 0.9032258064516129
+    },
+    "convergence": {
+      "within_turn_budget": 45,
+      "sessions": 48
+    },
+    "stop_reasons": {
+      "cancelled": 3,
+      "no_progress_limit": 3
+    },
+    "instrumentation": {
+      "calls": 57,
+      "latency_seconds": 259.26512350235134,
+      "input_tokens": 90111,
+      "output_tokens": 12617
+    },
+    "live_gate": {
+      "passed": false,
+      "required_terminal_correct": 46,
+      "required_exact_blocker_rate": 0.95
+    }
+  }
+}

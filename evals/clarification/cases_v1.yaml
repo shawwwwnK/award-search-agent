@@ -2,21 +2,87 @@ contract_version: v1
 # Synthetic, redacted fixtures.  The evaluator turns each declarative amendment
 # into an answer-grounded typed contract and runs the public controller.
 scenarios:
+  - id: numbered_next_weekend_afterwards_and_solo
+    coverage_group: registry_baseline
+    reference_date: "2026-09-09"
+    final_projection_sha256: 2b7a45a4ddc146e0690d3934b8e1115d9e4a861b0d24aeddf5f31f76deffba15
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_unknowns: [departure, return_or_duration, travelers]
+    turns:
+      - text: |-
+          1. Next weekend
+          2. The Wednesday afterwards
+          3. Just myself
+        amendments:
+          - {target: travelers, requirements: [travelers], fragment: "3. Just myself", travelers: 1}
+        template_selection: {selected: [{handle: h1, fragment: "Next weekend"}, {handle: h6, fragment: "The Wednesday afterwards", weekday: wednesday}], unresolved: []}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 1}}, {ordinal: 1, template_candidate: c0, provenance: {template_id: next_weekend, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "Next weekend"}}, {ordinal: 1, template_candidate: c1, provenance: {template_id: weekday_afterwards, registry_version: clarification-temporal-templates-v2, candidate_id: c1, dependency_candidate_ids: [c0]}, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "The Wednesday afterwards"}}], fields: {departure: "2026-09-19", return: "2026-09-23", travelers: 1}}
+  - id: numbered_next_friday_and_date_and_solo
+    coverage_group: registry_baseline
+    reference_date: "2026-09-09"
+    final_projection_sha256: 4a27587ac527cbd0f8ff819bc17727c9366df08dd80e38398e6642092481baf7
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_unknowns: [departure, return_or_duration, travelers]
+    turns:
+      - text: |-
+          1. Next Friday
+          2. 9/20
+          3. Just myself
+        amendments:
+          - {target: return_or_duration, requirements: [return_or_duration], fragment: "2. 9/20"}
+          - {target: travelers, requirements: [travelers], fragment: "3. Just myself", travelers: 1}
+        template_selection: {selected: [{handle: h3, fragment: "Next Friday", weekday: friday}], unresolved: []}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "2. 9/20"}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 1}}, {ordinal: 1, template_candidate: c0, provenance: {template_id: next_weekday, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "Next Friday"}}], fields: {departure: "2026-09-18", return: "2026-09-20", travelers: 1}}
+  - id: numbered_this_weekend_and_monday
+    coverage_group: registry_baseline
+    reference_date: "2026-09-09"
+    final_projection_sha256: 438af59811fe32c3daafdfcf65927dd09562b9b16ac98c748785a79690f4cda3
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: |-
+          1. This weekend
+          2. On Monday
+        amendments: []
+        template_selection: {selected: [{handle: h2, fragment: "This weekend"}, {handle: h5, fragment: "On Monday", weekday: monday}], unresolved: []}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, template_candidate: c0, provenance: {template_id: this_weekend, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "This weekend"}}, {ordinal: 1, template_candidate: c1, provenance: {template_id: on_weekday, registry_version: clarification-temporal-templates-v2, candidate_id: c1, dependency_candidate_ids: []}, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "On Monday"}}], fields: {departure: "2026-09-12", return: "2026-09-14"}}
+  - id: ambiguous_disjunctive_relative_dates
+    coverage_group: registry_baseline
+    reference_date: "2026-09-09"
+    final_projection_sha256: 4323bace24ae1c02ec17e00697e145606199669810252ce6c38fa6a9ce7ddea9
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Either this Friday or on Monday works for me"
+        amendments: []
+        template_selection: {selected: [], unresolved: [{fragment: "this Friday", requirement_ids: [departure, return_or_duration], reason: ambiguous}, {fragment: "on Monday", requirement_ids: [departure, return_or_duration], reason: ambiguous}]}
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration], accepted_count: 0, accepted: [], rejected_reasons: [ambiguous, ambiguous]}
+      - text: "Leave this Friday and return on Monday"
+        amendments: []
+        template_selection: {selected: [{handle: h4, fragment: "this Friday", weekday: friday}, {handle: h5, fragment: "on Monday", weekday: monday}], unresolved: []}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, template_candidate: c0, provenance: {template_id: this_weekday, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "this Friday"}}, {ordinal: 1, template_candidate: c1, provenance: {template_id: on_weekday, registry_version: clarification-temporal-templates-v2, candidate_id: c1, dependency_candidate_ids: []}, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "on Monday"}}], fields: {departure: "2026-09-11", return: "2026-09-14"}}
   - id: all_at_once
-    final_projection_sha256: b40796c1cbd2668ff82b96178b4ee78be82ce45c094c9ca0ac73685ed31a9963
+    coverage_group: fresh_generated_registry
+    final_projection_sha256: 412f21f9a07dbed0fc29178e68720377bb614428cae526fb3e852b89539a7a22
     equivalence_group: fixed_dates
     initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
     turns:
-      - text: "AAA BBB depart October 6 return October 16 two"
+      - text: "from AAA to BBB, leave the weekend after this one, return the following Wednesday, two travelers"
         amendments:
           - {target: origin, requirements: [origin], fragment: AAA, value: AAA}
           - {target: destination, requirements: [destination], fragment: BBB, value: BBB}
-          - {target: departure, requirements: [departure], fragment: "depart October 6"}
-          - {target: return_or_duration, requirements: [return_or_duration], fragment: "return October 16"}
           - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
-        expect: {status: ready, blockers: [], accepted_count: 5, accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 3, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}, {ordinal: 4, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "return October 16"}}, {ordinal: 5, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}], fields: {origin: AAA, destination: BBB, departure: "2026-10-06", return: "2026-10-16", travelers: 2}}
+        template_selection: {selected: [{handle: h1, fragment: "the weekend after this one"}, {handle: h6, fragment: "the following Wednesday", weekday: wednesday}], unresolved: []}
+        expect: {status: ready, blockers: [], accepted_count: 5, accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 3, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}, {ordinal: 1, template_candidate: c0, provenance: {template_id: next_weekend, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "the weekend after this one"}}, {ordinal: 1, template_candidate: c1, provenance: {template_id: weekday_afterwards, registry_version: clarification-temporal-templates-v2, candidate_id: c1, dependency_candidate_ids: [c0]}, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "the following Wednesday"}}], fields: {origin: AAA, destination: BBB, departure: "2026-09-19", return: "2026-09-23", travelers: 2}}
   - id: subset_multi_turn
-    final_projection_sha256: e5d38cd4398b4e9b1ad6c3f7b5449825bdd837bfda738fed83952195dc1c8d61
+    coverage_group: fresh_generated_registry
+    final_projection_sha256: 1e07c1aeed717014202b44e84b54552ecb4a58437fd8229619761a21cc642b69
     initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
     turns:
       - text: "AAA two"
@@ -24,28 +90,30 @@ scenarios:
           - {target: origin, requirements: [origin], fragment: AAA, value: AAA}
           - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
         expect: {status: awaiting_answer, blockers: [destination, departure, return_or_duration], accepted_count: 2, accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}]}
-      - text: "BBB depart October 6"
+      - text: "BBB leaving Wednesday of next week"
         amendments:
           - {target: destination, requirements: [destination], fragment: BBB, value: BBB}
-          - {target: departure, requirements: [departure], fragment: "depart October 6"}
-        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted_count: 2, accepted: [{ordinal: 1, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 2, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}]}
+        template_selection: {selected: [{handle: h3, fragment: "Wednesday of next week", weekday: wednesday}], unresolved: []}
+        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted_count: 2, accepted: [{ordinal: 1, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 1, template_candidate: c0, provenance: {template_id: next_weekday, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "Wednesday of next week"}}]}
       - text: "10 days"
         amendments:
           - {target: return_or_duration, requirements: [return_or_duration], fragment: "10 days"}
-        expect: {status: ready, blockers: [], accepted_count: 1, accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "10 days"}}], fields: {duration_days: 10, return: "2026-10-16"}}
+        expect: {status: ready, blockers: [], accepted_count: 1, accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "10 days"}}], fields: {duration_days: 10, return: "2026-09-26"}}
   - id: duration_after_departure
-    final_projection_sha256: 0191f6c4f28c94dfc4db0f69af5f76ab98decaf47cff1d470b9b0417288dd262
+    coverage_group: fresh_generated_registry
+    final_projection_sha256: 8557a03e1611199a96568912bfa845e38205ad924e32745c93aaaa1087b01624
     initial_origin: AAA
     initial_destination: BBB
     initial_travelers: 2
     initial_unknowns: [departure, return_or_duration]
     turns:
-      - text: "depart October 6"
-        amendments: [{target: departure, requirements: [departure], fragment: "depart October 6"}]
-        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted: [{ordinal: 1, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}], fields: {departure: "2026-10-06"}}
+      - text: "leaving Wednesday of next week"
+        amendments: []
+        template_selection: {selected: [{handle: h3, fragment: "Wednesday of next week", weekday: wednesday}], unresolved: []}
+        expect: {status: awaiting_answer, blockers: [return_or_duration], accepted: [{ordinal: 1, template_candidate: c0, provenance: {template_id: next_weekday, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "Wednesday of next week"}}], fields: {departure: "2026-09-16"}}
       - text: "about 10 days"
         amendments: [{target: return_or_duration, requirements: [return_or_duration], fragment: "about 10 days"}]
-        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "about 10 days"}}], fields: {duration_days: 9, return: "2026-10-15"}}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "about 10 days"}}], fields: {duration_days: 9, return: "2026-09-25"}}
   - id: bare_date_ambiguous
     final_projection_sha256: ae75756a198e3ae2bc46163e200fc598893a6d5947844a6b80130788ca800d06
     initial_origin: AAA
@@ -299,7 +367,8 @@ scenarios:
         amendments: [{target: travelers, requirements: [travelers], fragment: two, travelers: 2}]
         expect: {error: command_error}
   - id: equivalent_grouped_answers
-    final_projection_sha256: fb5e04b3636ff8a77faf58a87efa6dc1d1307a68e10ba0e11909acdba2d9544c
+    coverage_group: fresh_generated_registry
+    final_projection_sha256: 67663d22d1d64fdecc40ed3acda239d1b06f54324575d13af5d71c9f370e4dfb
     equivalence_group: fixed_dates
     initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
     turns:
@@ -309,11 +378,10 @@ scenarios:
           - {target: destination, requirements: [destination], fragment: BBB, value: BBB}
           - {target: travelers, requirements: [travelers], fragment: two, travelers: 2}
         expect: {status: awaiting_answer, blockers: [departure, return_or_duration], accepted: [{ordinal: 1, target: origin, requirements: [origin], is_correction: false, payload: {locations: [{kind: airport, value: AAA}]}}, {ordinal: 2, target: destination, requirements: [destination], is_correction: false, payload: {locations: [{kind: airport, value: BBB}]}}, {ordinal: 3, target: travelers, requirements: [travelers], is_correction: false, payload: {travelers: 2}}]}
-      - text: "depart October 6 return October 16"
-        amendments:
-          - {target: departure, requirements: [departure], fragment: "depart October 6"}
-          - {target: return_or_duration, requirements: [return_or_duration], fragment: "return October 16"}
-        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "depart October 6"}}, {ordinal: 2, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "return October 16"}}], fields: {origin: AAA, destination: BBB, travelers: 2, departure: "2026-10-06", return: "2026-10-16"}}
+      - text: "leave the weekend after this one, return the following Wednesday"
+        amendments: []
+        template_selection: {selected: [{handle: h1, fragment: "the weekend after this one"}, {handle: h6, fragment: "the following Wednesday", weekday: wednesday}], unresolved: []}
+        expect: {status: ready, blockers: [], accepted: [{ordinal: 1, template_candidate: c0, provenance: {template_id: next_weekend, registry_version: clarification-temporal-templates-v2, candidate_id: c0, dependency_candidate_ids: []}, target: departure, requirements: [departure], is_correction: false, payload: {temporal_text: "the weekend after this one"}}, {ordinal: 1, template_candidate: c1, provenance: {template_id: weekday_afterwards, registry_version: clarification-temporal-templates-v2, candidate_id: c1, dependency_candidate_ids: [c0]}, target: return_or_duration, requirements: [return_or_duration], is_correction: false, payload: {temporal_text: "the following Wednesday"}}], fields: {origin: AAA, destination: BBB, travelers: 2, departure: "2026-09-19", return: "2026-09-23"}}
   - id: unsupported_correction_unresolved_field
     final_projection_sha256: 6e238b802f5a072eeb488e5f291aec378545cdc8c1ce247f0bf34b3b9805ac40
     initial_unknowns: [origin]

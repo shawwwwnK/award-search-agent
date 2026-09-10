@@ -1,6 +1,52 @@
 contract_version: v1
 # Synthetic answers only. The live evaluator never sends offline scripted amendments.
 scenarios:
+  - id: numbered_next_weekend_afterwards_and_solo
+    qualification_target: true
+    reference_date: "2026-09-09"
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_unknowns: [departure, return_or_duration, travelers]
+    turns:
+      - text: |-
+          1. Next weekend
+          2. The Wednesday afterwards
+          3. Just myself
+        expect: {status: ready, blockers: [], fields: {departure: "2026-09-19", return: "2026-09-23", travelers: 1}}
+  - id: numbered_next_friday_and_date_and_solo
+    qualification_target: true
+    reference_date: "2026-09-09"
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_unknowns: [departure, return_or_duration, travelers]
+    turns:
+      - text: |-
+          1. Next Friday
+          2. 9/20
+          3. Just myself
+        expect: {status: ready, blockers: [], fields: {departure: "2026-09-18", return: "2026-09-20", travelers: 1}}
+  - id: numbered_this_weekend_and_monday
+    reference_date: "2026-09-09"
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: |-
+          1. This weekend
+          2. On Monday
+        expect: {status: ready, blockers: [], fields: {departure: "2026-09-12", return: "2026-09-14"}}
+  - id: ambiguous_disjunctive_relative_dates
+    reference_date: "2026-09-09"
+    initial_origin: SFO
+    initial_destination: NRT
+    initial_travelers: 2
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Either this Friday or on Monday works for me"
+        expect: {status: awaiting_answer, blockers: [departure, return_or_duration]}
+      - text: "Leave this Friday and return on Monday"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-09-11", return: "2026-09-14"}}
   - id: origin_only
     initial_destination: NRT
     initial_departure: "2026-10-06"
@@ -29,14 +75,16 @@ scenarios:
       - text: "two travelers"
         expect: {status: ready, blockers: [], fields: {travelers: 2}}
   - id: departure_only
+    blind_target: true
+    qualification_target: true
     initial_origin: SFO
     initial_destination: NRT
     initial_duration_days: 10
     initial_travelers: 2
     initial_unknowns: [departure]
     turns:
-      - text: "depart October 6"
-        expect: {status: ready, blockers: [], fields: {departure: "2026-10-06", return: "2026-10-16"}}
+      - text: "I am leaning toward leaving Wednesday of next week, if that works for you"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-09-16", return: "2026-09-26"}}
   - id: duration_only
     initial_origin: SFO
     initial_destination: NRT
@@ -49,15 +97,15 @@ scenarios:
   - id: all_at_once
     initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
     turns:
-      - text: "from SFO to NRT, depart October 6, return October 16, two travelers"
-        expect: {status: ready, blockers: [], fields: {origin: SFO, destination: NRT, departure: "2026-10-06", return: "2026-10-16", travelers: 2}}
+      - text: "from SFO to NRT, leave the weekend after this one, return the following Wednesday, two travelers"
+        expect: {status: ready, blockers: [], fields: {origin: SFO, destination: NRT, departure: "2026-09-19", return: "2026-09-23", travelers: 2}}
   - id: subset_two_turn
     initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
     turns:
       - text: "from SFO to NRT, two travelers"
         expect: {status: awaiting_answer, blockers: [departure, return_or_duration]}
-      - text: "depart October 6 and return October 16"
-        expect: {status: ready, blockers: [], fields: {departure: "2026-10-06", return: "2026-10-16"}}
+      - text: "leave the weekend after this one and return October 16"
+        expect: {status: ready, blockers: [], fields: {departure: "2026-09-19", return: "2026-10-16"}}
   - id: bare_date_recovery
     initial_origin: SFO
     initial_destination: NRT

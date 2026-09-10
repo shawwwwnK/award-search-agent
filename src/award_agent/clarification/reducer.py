@@ -85,6 +85,7 @@ def apply_amendments(
     *,
     answer_text: str,
     requirements: tuple[BlockingRequirement, ...],
+    compiled_temporal_contributions: dict[str, tuple[TemporalContribution, ...]] | None = None,
 ) -> EffectiveRequest:
     """Apply an independently validated amendment set as one new projection.
 
@@ -123,13 +124,21 @@ def apply_amendments(
             continue
 
         assert isinstance(amendment, TemporalAmendment)
-        normalization = normalize_temporal_amendment(
-            amendment,
-            answer_text=answer_text,
-            requirements=requirements,
-            context=effective.context,
-        )
-        for contribution in normalization.contributions:
+        supplied = (compiled_temporal_contributions or {}).get(amendment.amendment_id)
+        normalization = None
+        if supplied is None:
+            normalization = normalize_temporal_amendment(
+                amendment,
+                answer_text=answer_text,
+                requirements=requirements,
+                context=effective.context,
+            )
+        if supplied is not None:
+            contributions_to_apply = supplied
+        else:
+            assert normalization is not None
+            contributions_to_apply = normalization.contributions
+        for contribution in contributions_to_apply:
             contributions = tuple(
                 existing for existing in contributions if existing.kind is not contribution.kind
             ) + (contribution,)

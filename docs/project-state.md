@@ -2,7 +2,7 @@
 
 ## Phase
 
-Iterative clarification continuation — implementation and qualification active.
+Iterative clarification continuation — accepting-behavior refinement implemented and qualified.
 
 ## Current conclusion
 
@@ -19,10 +19,57 @@ boundary is now implemented and qualified offline plus through a three-trial liv
 existing parser, selector, temporal compiler, clarification policy, and ready corpus remain
 frozen.
 
+The follow-up relative-time repair is continuation-only: answer messages may use `this weekend`,
+`this <weekday>`, or `on <weekday>`, and complete numbered answer lines map positionally to the
+ordered typed prompt requirements. The frozen initial parser remains unchanged and still does not
+recognize a bare `this weekend` in an initial raw request. If a model returns only a narrow temporal
+fact span, deterministic cue validation may inspect only that fact's same-answer physical sentence
+or line; alternatives, distant cues, and target mismatches are re-asked. The fresh three-trial
+online recovery qualification passed 48/48 terminal outcomes and 60/60 exact blocker/prompt checks
+with zero errors or unauthorized mutations; details and private trace metadata are recorded in the
+build log below.
+
+The continuation-only relative selector has subsequently been qualified with a global, date-free
+affordance catalog selected by the answer model and compiled deterministically. It retains
+same-answer-only `following`/`afterwards` dependencies and does not expose calendar state or
+template identities to the model. The final redacted three-trial Luna artifact
+`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-3-trials-template-v2-final-qualified.json`
+records 48/48 terminal-correct sessions, 60/60 exact blocker and prompt checks, zero system
+errors, and zero unauthorized mutations. Each protected target passed 3/3; private all-call
+traces are retained separately.
+
 The clarification-stage LLM model is `gpt-5.6-luna`. The separate answer-only interpreter uses
 Luna behind its narrow contract; deterministic code retains temporal context, grounding,
 validation, reduction, and blocker policy. GPT-4o mini remains recorded comparison evidence, not
 a fallback or runtime alternative for this stage.
+
+ADR 0013 supersedes ADR 0012's separate prompt-composer runtime call: each processed answer uses
+only the answer receiver model call. The receiver may return ordered follow-up items, but the
+controller renders them only after exact deterministic agreement with recomputed remaining
+blockers; otherwise it uses the issue-specific fallback.
+
+On 2026-09-10, the project owner refined the next clarification cut in ADR 0012. Clarification
+must be more accepting than frozen initial intent: it should turn reasonable, grounded fuzzy
+answers into one bounded, visible approximation and move forward rather than re-ask solely for
+narrow grammar mismatch. True alternatives, conflicts, unresolved endpoint ownership, and
+unsupported revisions remain explicit blockers. ADR 0012 originally authorized a separate
+post-reduction prompt composer to receive authoritative remaining requirements plus answer-local
+issue records. ADR 0013 supersedes that runtime call: the answer receiver returns any proposed
+follow-up items in the same response, and deterministic post-reduction validation decides whether
+to render them. Qualification retains exact deterministic safety
+gates but add a property-based behavioral corpus and human-calibrated metrics for false blocking,
+unnecessary clarification, assumption disclosure, and targeted follow-ups. Existing exact v1
+corpora remain conformance evidence, not the sole optimization target.
+
+ADR 0012 is now implemented and qualified. The final public three-trial Luna artifact,
+`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-behavior-v2-final.json`, passed its exact
+safety gate with zero model, system, or evaluator errors and 129/129 private-traced calls
+captured. It recorded zero false blocks (0/27), zero incorrect acceptances (0/12), all required
+assumption disclosures (24/24), and all valid siblings retained (18/18). Its behavioral metrics
+remain diagnostic rather than owner-approved release thresholds: the three conflict trajectories
+remained safe but received generic rather than sufficiently issue-specific follow-up wording
+(12/15 targeted questions; generic-repeat rate 0.20). The evidence establishes safe accepting
+behavior; it also identifies conflict-prompt specificity as the next bounded quality concern.
 
 The qualification record is the traced three-trial run
 `evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
@@ -67,17 +114,22 @@ Feasible access to useful award-inventory data.
 
 ## Immediate milestone
 
-Implement the approved iterative clarification session (ADR 0011) and its separate continuation
-corpus. Every prompt must list all current blocking requirements in deterministic order; each
-answer may resolve any subset. Preserve immutable revisions, answer-turn evidence, and atomic
+The accepting clarification refinement in ADR 0012 is implemented and qualified without changing
+the frozen initial workflow. Every prompt's typed requirements list all current blocking requirements in
+deterministic order; under ADR 0013, the answer receiver may return issue-specific follow-up
+items in the same call, which are rendered only after deterministic validation and otherwise use
+an issue-specific fallback. Each answer may
+resolve any subset, including a reasonable, grounded bounded approximation whose assumption is
+visible and traceable. Preserve immutable revisions, answer-turn evidence, and atomic
 merge semantics. Do not silently mutate a prior `ParsedRequest`, re-run initial parsing, or reopen
 unrelated frozen request-understanding behavior. An explicit, grounded correction to a supported
 already-resolved field is an approved amendment and must trigger full recomputation. The local
 Streamlit harness may exercise only this session boundary and must remain ephemeral and
 provider-free.
 
-The implementation sequence, contract invariants, code entry points, and acceptance gates are in
-`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.
+The implemented sequence, contract invariants, code entry points, and acceptance gates are in
+`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`; ADR 0013 is the
+newer policy where it differs from ADR 0012's prompt-composer runtime decision.
 
 After this design and its implementation are qualified, the following cut is a fixed-planner,
 one-provider vertical slice: `ClarificationSession(ready).effective_request -> fixed SearchPlan ->
@@ -95,6 +147,19 @@ request-understanding decision. Earlier references to `two_pass` are historical 
   boundary owns subsequent answers, deterministic reduction, a local-only Streamlit harness, and
   separate offline/live corpora under ADR 0011. Every live continuation evaluation writes
   all-call private trace sidecars by default and a redacted public artifact.
+- The continuation temporal normalizer accepts `this weekend`, `this <weekday>`, and `on <weekday>`
+  using the immutable initial `RequestContext`; complete numbered answer lines map one-based to
+  ordered typed blockers. This is an answer-only grammar and does not broaden the frozen initial
+  parser, which still leaves a bare `this weekend` unresolved when it appears in the initial raw
+  request.
+- Narrow temporal fact spans may borrow endpoint cues only from the same answer message and same
+  physical sentence or line under the deterministic normalizer. Alternatives/disjunctions, distant
+  or cross-line cues, and target mismatches remain explicit ambiguity and trigger a re-ask; accepted
+  contributions retain the narrow span as provenance.
+- The separate continuation corpus contains 30 scenarios and 43 turns. Its latest offline
+  evaluator run passed 43/43 turns with exact blocker/prompt coverage. The fresh online recovery
+  qualification also passed 48/48 terminal outcomes and 60/60 exact blocker/prompt checks; see the
+  build log for the redacted artifact and private trace directory.
 - Selector-only request understanding is the sole live path (ADR 0010). It requires separately
   configured non-temporal Pass 1 and temporal selector adapters before work begins.
 - The compiler owns all temporal facts and always uses `supported_or_unresolved`; the selector can

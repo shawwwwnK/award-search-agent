@@ -1,0 +1,185 @@
+contract_version: v2-live
+# Synthetic travel answers only. Raw answer text is never included in the
+# public result; it is retained solely in private, gitignored trace sidecars.
+scenarios:
+  - id: accepting_numbered_early_next_month
+    family: accepting
+    answer_class: safely_assumable
+    initial_destination: France
+    initial_unknowns: [origin, departure, return_or_duration, travelers]
+    turns:
+      - text: "1. SFO\n2. Early next month\n3. For a week\n4. I'm solo traveling"
+        oracle: {must_resolve: [origin, departure, return_or_duration, travelers], must_remain_blocked: [], protected_fields: [destination], permitted_statuses: [ready], values: {origin: SFO, travelers: 1}, properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, duration_days: [7, 7]}, disclosure_required: true, question_required: false}
+  - id: accepting_beginning_october
+    family: accepting_paraphrase
+    equivalence_group: early_october
+    answer_class: reasonably_resolvable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "I want to leave during the beginning of October for a week"
+        oracle: {must_resolve: [departure, return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers], permitted_statuses: [ready], properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, duration_days: [7, 7]}, disclosure_required: true, question_required: false}
+  - id: accepting_early_october_paraphrase
+    family: accepting_paraphrase
+    equivalence_group: early_october
+    answer_class: reasonably_resolvable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Leave early October and stay one week"
+        oracle: {must_resolve: [departure, return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers], permitted_statuses: [ready], properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, duration_days: [7, 7]}, disclosure_required: true, question_required: false}
+  - id: accepting_duration_only
+    family: accepting
+    answer_class: safely_assumable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "About a week"
+        oracle: {must_resolve: [return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [ready], properties: {duration_days: [6, 8]}, disclosure_required: true, question_required: false}
+  - id: paired_accept_early_october
+    family: paired_boundary
+    pair_id: month_portion
+    pair_role: accept
+    answer_class: reasonably_resolvable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "Early October"
+        oracle: {must_resolve: [departure], must_remain_blocked: [], protected_fields: [origin, destination, travelers], permitted_statuses: [ready], properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}}, disclosure_required: true, question_required: false}
+  - id: paired_ask_october_alternatives
+    family: paired_boundary
+    pair_id: month_portion
+    pair_role: ask
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "October 3 or October 10"
+        oracle: {must_resolve: [], must_remain_blocked: [departure], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [awaiting_answer], properties: {}, disclosure_required: false, question_required: true}
+  - id: paired_accept_one_week
+    family: paired_boundary
+    pair_id: week_duration
+    pair_role: accept
+    answer_class: safely_assumable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "For a week"
+        oracle: {must_resolve: [return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [ready], properties: {duration_days: [7, 7]}, disclosure_required: true, question_required: false}
+  - id: paired_ask_week_or_two
+    family: paired_boundary
+    pair_id: week_duration
+    pair_role: ask
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "A week or two"
+        oracle: {must_resolve: [], must_remain_blocked: [return_or_duration], protected_fields: [origin, destination, travelers, departure, return_or_duration], permitted_statuses: [awaiting_answer], properties: {}, disclosure_required: false, question_required: true}
+  - id: partial_siblings_preserved
+    family: partial_sibling
+    answer_class: safely_assumable
+    initial_destination: France
+    initial_unknowns: [origin, departure, return_or_duration, travelers]
+    turns:
+      - text: "1. SFO\n2. Early next month or late October\n3. a week\n4. solo"
+        oracle: {must_resolve: [origin, return_or_duration, travelers], must_remain_blocked: [departure], valid_siblings: [origin, return_or_duration, travelers], protected_fields: [destination], permitted_statuses: [awaiting_answer], values: {origin: SFO, travelers: 1}, properties: {duration_days: [7, 7]}, disclosure_required: true, question_required: true}
+  - id: targeted_discrete_followup
+    family: targeted_composer
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "Early October or late October"
+        oracle: {must_resolve: [], must_remain_blocked: [departure], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [awaiting_answer], properties: {}, disclosure_required: false, question_required: true}
+  - id: correction_late_october
+    family: correction
+    answer_class: correction
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_duration_days: 7
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually, leave late October"
+        oracle: {must_resolve: [], must_remain_blocked: [travelers], protected_fields: [origin, destination, travelers], permitted_statuses: [awaiting_answer], properties: {departure_window: {year: 2026, month: 10, start_day: [21, 31], end_day: [21, 31]}}, disclosure_required: true, question_required: false}
+  - id: partial_plain_locations
+    family: partial_sibling
+    answer_class: reasonably_resolvable
+    initial_unknowns: [origin, destination, departure, return_or_duration, travelers]
+    turns:
+      - text: "SFO to France, two travelers"
+        oracle: {must_resolve: [origin, destination, travelers], must_remain_blocked: [departure, return_or_duration], valid_siblings: [origin, destination, travelers], protected_fields: [], permitted_statuses: [awaiting_answer], values: {origin: SFO, destination: France, travelers: 2}, properties: {}, disclosure_required: false, question_required: false}
+  - id: nonanswer_first_turn
+    family: no_progress
+    answer_class: nonanswer
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "I'm not sure yet"
+        oracle: {must_resolve: [], must_remain_blocked: [departure], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [awaiting_answer], properties: {}, disclosure_required: false, question_required: false}
+  - id: no_progress_stop_boundary
+    family: no_progress
+    answer_class: nonanswer
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "I don't know yet"
+        oracle: {must_resolve: [], must_remain_blocked: [departure], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [awaiting_answer], properties: {}, disclosure_required: false, question_required: false}
+      - text: "Still not sure"
+        oracle: {must_resolve: [], must_remain_blocked: [], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [stopped], properties: {}, disclosure_required: false, question_required: false}
+  - id: explicit_dates_ready
+    family: explicit_resolution
+    answer_class: reasonably_resolvable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Leave October 6 and return October 16"
+        oracle: {must_resolve: [departure, return_or_duration], must_remain_blocked: [], protected_fields: [origin, destination, travelers], permitted_statuses: [ready], values: {departure: "2026-10-06", return: "2026-10-16"}, properties: {}, disclosure_required: false, question_required: false}
+  - id: cancel_boundary
+    family: cancellation
+    answer_class: nonanswer
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "cancel"
+        oracle: {must_resolve: [], must_remain_blocked: [], protected_fields: [origin, destination, travelers, departure], permitted_statuses: [stopped], properties: {}, disclosure_required: false, question_required: false}
+  - id: conflict_must_remain_grounded
+    family: conflict
+    answer_class: conflict
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-11-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "Return early October"
+        oracle: {must_resolve: [], must_remain_blocked: [conflict:return_before_departure], protected_fields: [origin, destination, travelers], permitted_statuses: [awaiting_answer], properties: {}, disclosure_required: false, question_required: true}

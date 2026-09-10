@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from datetime import date
 from hashlib import sha256
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, cast
 
 import yaml
 
@@ -34,6 +34,7 @@ from award_agent.clarification.interpreter import (
     ClarificationAnswerInterpreterInput,
     ClarificationInterpretationError,
 )
+from award_agent.clarification.temporal_templates import ClarificationTemporalTemplateSelection
 from award_agent.domain import (
     AmendmentTarget,
     ClarificationAction,
@@ -62,6 +63,7 @@ from award_agent.domain import (
 )
 
 DEFAULT_CLARIFICATION_CONTINUATION_FIXTURES = Path("evals/clarification/cases_v1.yaml")
+DEFAULT_FIXTURE_REFERENCE_DATE = date(2026, 9, 8)
 
 
 class ClarificationContinuationFixtureError(ValueError):
@@ -127,6 +129,43 @@ def _validate_accepted_payload_oracle(item: Mapping[str, Any]) -> None:
         _require_string(payload["temporal_text"], "accepted temporal text")
         return
     raise ClarificationContinuationFixtureError(f"unsupported accepted amendment target {target!r}")
+
+
+def _validate_template_provenance_oracle(item: Mapping[str, Any]) -> None:
+    """Require an exact registry provenance oracle for template amendments."""
+
+    is_template = item.get("template_candidate") is not None
+    provenance = item.get("provenance")
+    if not is_template:
+        if provenance is not None:
+            raise ClarificationContinuationFixtureError(
+                "legacy amendment oracle cannot declare template provenance"
+            )
+        return
+    _require_string(item["template_candidate"], "template candidate")
+    if not isinstance(provenance, Mapping):
+        raise ClarificationContinuationFixtureError(
+            "template amendment oracle needs provenance"
+        )
+    required = {"template_id", "registry_version", "candidate_id", "dependency_candidate_ids"}
+    if set(provenance) != required:
+        raise ClarificationContinuationFixtureError(
+            "template provenance oracle must contain exact registry fields"
+        )
+    _require_string(provenance["template_id"], "template provenance template_id")
+    _require_string(provenance["registry_version"], "template provenance registry_version")
+    _require_string(provenance["candidate_id"], "template provenance candidate_id")
+    dependencies = provenance["dependency_candidate_ids"]
+    if not isinstance(dependencies, list) or not all(
+        isinstance(candidate_id, str) and candidate_id for candidate_id in dependencies
+    ):
+        raise ClarificationContinuationFixtureError(
+            "template provenance dependency_candidate_ids must be a list of strings"
+        )
+    if provenance["candidate_id"] in dependencies or len(dependencies) != len(set(dependencies)):
+        raise ClarificationContinuationFixtureError(
+            "template provenance dependencies must be unique and exclude the candidate"
+        )
 
 
 def _privacy_violations(value: object, *, path: str = "fixture") -> list[str]:
@@ -246,6 +285,7 @@ def preflight_clarification_continuation_cases(
                         if not isinstance(item["payload"], Mapping):
                             raise ClarificationContinuationFixtureError("accepted amendment payload must be a mapping")
                         _validate_accepted_payload_oracle(item)
+                        _validate_template_provenance_oracle(item)
         prepared.append(PreparedClarificationContinuationCase(identifier, scenario))
     return tuple(prepared)
 
@@ -326,8 +366,74 @@ class _ScriptedInterpreter:
                     reason=RejectedFragmentReason(_require_string(fragment.get("reason"), "rejected.reason")),
                     detail=_require_string(fragment.get("detail", "scripted rejection"), "rejected.detail"),
                 )
+                )
+        selection_payload = self._turn.get("template_selection")
+        expected_templates = self._turn.get("expect", {}).get("accepted", ())
+        if selection_payload is None and any(
+            isinstance(item, Mapping) and item.get("template_candidate") is not None
+            for item in expected_templates
+        ):
+            raise ClarificationContinuationFixtureError(
+                "template_selection is required for a scripted template acceptance"
             )
-        return ClarificationAnswerInterpretation(amendments=tuple(amendments), rejected_fragments=tuple(rejected))
+        if selection_payload is None:
+            return ClarificationAnswerInterpretation(
+                amendments=tuple(amendments),
+                rejected_fragments=tuple(rejected),
+                temporal_template_selection=ClarificationTemporalTemplateSelection(complete=True),
+            )
+        if not isinstance(selection_payload, Mapping):
+            raise ClarificationContinuationFixtureError("template_selection must be a mapping")
+        selected = selection_payload.get("selected", ())
+        unresolved = selection_payload.get("unresolved", ())
+        if not isinstance(selected, list) or not all(isinstance(item, Mapping) for item in selected):
+            raise ClarificationContinuationFixtureError(
+                "template_selection.selected must be a list of handle/fragment mappings"
+            )
+        if not isinstance(unresolved, list) or not all(isinstance(item, Mapping) for item in unresolved):
+            raise ClarificationContinuationFixtureError(
+                "template_selection.unresolved must be a list of fragment mappings"
+            )
+        from award_agent.clarification.temporal_templates import (
+            ClarificationTemporalTemplateBinding,
+            ClarificationTemporalTemplateUnresolved,
+        )
+        return ClarificationAnswerInterpretation(
+            amendments=tuple(amendments),
+            rejected_fragments=tuple(rejected),
+            temporal_template_selection=ClarificationTemporalTemplateSelection(
+                selected=tuple(
+                    ClarificationTemporalTemplateBinding(
+                        template_handle=_require_string(item.get("handle"), "template_selection.selected.handle"),
+                        span=_span(input.message_id, input.text, _require_string(item.get("fragment"), "template_selection.selected.fragment")),
+                        weekday=(
+                            _require_string(item.get("weekday"), "template_selection.selected.weekday")
+                            if item.get("weekday") is not None
+                            else None
+                        ),
+                    )
+                    for item in selected
+                ),
+                unresolved=tuple(
+                    ClarificationTemporalTemplateUnresolved(
+                        span=_span(input.message_id, input.text, _require_string(item.get("fragment"), "template_selection.unresolved.fragment")),
+                        requirement_ids=tuple(
+                            _require_string(value, "template_selection.unresolved.requirement_ids item")
+                            for value in item.get("requirement_ids", ())
+                        ),
+                        reason=cast(
+                            "Literal['ambiguous', 'unsupported']",
+                            _require_string(
+                                item.get("reason", "unsupported"),
+                                "template_selection.unresolved.reason",
+                            ),
+                        ),
+                    )
+                    for item in unresolved
+                ),
+                complete=True,
+            ),
+        )
 
 
 def _initial(case: Mapping[str, Any]) -> RequestUnderstandingResult:
@@ -335,7 +441,8 @@ def _initial(case: Mapping[str, Any]) -> RequestUnderstandingResult:
         UnknownField(field=_require_string(field, "initial_unknowns item"), reason=UnknownReason.MISSING, detail="fixture unknown")
         for field in case["initial_unknowns"]
     ]
-    context = RequestContext(reference_date=date(2026, 9, 8), timezone="America/Los_Angeles")
+    reference_date = date.fromisoformat(str(case.get("reference_date", DEFAULT_FIXTURE_REFERENCE_DATE)))
+    context = RequestContext(reference_date=reference_date, timezone="America/Los_Angeles")
     origin = case.get("initial_origin")
     destination = case.get("initial_destination")
     departure = case.get("initial_departure")
@@ -486,27 +593,42 @@ def _typed_acceptance_failures(
     """
 
     outcome = session.current_revision.outcome
-    actual = [] if outcome is None else [
-        {
-            "id": item.amendment_id,
-            "target": item.target.value,
-            "requirements": list(item.requirement_ids),
-            "is_correction": item.is_correction,
-            "payload": _normalized_amendment_payload(item),
+    actual: list[dict[str, Any]] = []
+    if outcome is not None:
+        contributions = {
+            item.amendment_id: item.template_provenance
+            for item in session.current_revision.effective_request.temporal_contributions
+            if item.amendment_id is not None and item.template_provenance is not None
         }
-        for item in outcome.accepted_amendments
-    ]
+        for item in outcome.accepted_amendments:
+            row: dict[str, Any] = {
+                "id": item.amendment_id,
+                "target": item.target.value,
+                "requirements": list(item.requirement_ids),
+                "is_correction": item.is_correction,
+                "payload": _normalized_amendment_payload(item),
+            }
+            provenance = contributions.get(item.amendment_id)
+            if provenance is not None:
+                row["provenance"] = provenance.model_dump(mode="json")
+            actual.append(row)
     declared = turn.get("expect", {}).get("accepted", [])
-    expected = [
-        {
-            "id": f"{message_id}:a{item['ordinal']}",
+    expected: list[dict[str, Any]] = []
+    for item in declared:
+        row = {
+            "id": (
+                f"{message_id}:template:{item['template_candidate']}"
+                if item.get("template_candidate") is not None
+                else f"{message_id}:a{item['ordinal']}"
+            ),
             "target": item["target"],
             "requirements": list(item["requirements"]),
             "is_correction": item["is_correction"],
             "payload": dict(item["payload"]),
         }
-        for item in declared
-    ]
+        if item.get("template_candidate") is not None:
+            row["provenance"] = dict(item["provenance"])
+        expected.append(row)
     matched = sum(item in expected for item in actual)
     grounding_failures = [] if outcome is None else [
         f"accepted amendment {item.amendment_id!r} is not grounded in answer message {message_id!r}"
@@ -736,6 +858,67 @@ def run_clarification_continuation_eval(
     expected_accepted_total = sum(len(oracle["expected"]) for oracle in accepted_oracles)
     actual_accepted_total = sum(len(oracle["actual"]) for oracle in accepted_oracles)
     matched_accepted_total = sum(int(oracle["matched"]) for oracle in accepted_oracles)
+    template_expected: Counter[str] = Counter()
+    template_actual: Counter[str] = Counter()
+    template_matched: Counter[str] = Counter()
+    target_template_expected: Counter[tuple[str, str]] = Counter()
+    target_template_actual: Counter[tuple[str, str]] = Counter()
+    target_template_matched: Counter[tuple[str, str]] = Counter()
+    for oracle in accepted_oracles:
+        expected_by_id = {item["id"]: item for item in oracle["expected"]}
+        actual_by_id = {item["id"]: item for item in oracle["actual"]}
+        for item in expected_by_id.values():
+            provenance = item.get("provenance")
+            if isinstance(provenance, Mapping):
+                template_expected[str(provenance["template_id"])] += 1
+                target_template_expected[(str(item["target"]), str(provenance["template_id"]))] += 1
+        for item in actual_by_id.values():
+            provenance = item.get("provenance")
+            if isinstance(provenance, Mapping):
+                template_actual[str(provenance["template_id"])] += 1
+                if item == expected_by_id.get(item["id"]):
+                    template_matched[str(provenance["template_id"])] += 1
+                    target_template_matched[(str(item["target"]), str(provenance["template_id"]))] += 1
+                target_template_actual[(str(item["target"]), str(provenance["template_id"]))] += 1
+    template_ids = sorted(set(template_expected) | set(template_actual))
+    template_coverage = {
+        "expected": sum(template_expected.values()),
+        "actual": sum(template_actual.values()),
+        "matched": sum(template_matched.values()),
+        "per_template": {
+            template_id: {
+                "expected": template_expected[template_id],
+                "actual": template_actual[template_id],
+                "matched": template_matched[template_id],
+                "exact": (
+                    template_expected[template_id] == template_actual[template_id]
+                    == template_matched[template_id]
+                ),
+            }
+            for template_id in template_ids
+        },
+        "per_target_template": {
+            f"{target}:{template_id}": {
+                "target": target,
+                "template_id": template_id,
+                "expected": target_template_expected[(target, template_id)],
+                "actual": target_template_actual[(target, template_id)],
+                "matched": target_template_matched[(target, template_id)],
+                "exact": (
+                    target_template_expected[(target, template_id)]
+                    == target_template_actual[(target, template_id)]
+                    == target_template_matched[(target, template_id)]
+                ),
+            }
+            for target, template_id in sorted(
+                set(target_template_expected) | set(target_template_actual)
+            )
+        },
+        "exact": (
+            template_expected == template_actual == template_matched
+            and bool(template_expected)
+        ),
+    }
     correctly_linked_resolutions = sum(
         requirement_id in (set(record["before_blockers"]) - set(record["blockers"]))
         for record in records if record["error"] is None
@@ -758,6 +941,19 @@ def run_clarification_continuation_eval(
     }
     if equivalence_failures:
         failed_records.append({"scenario": "equivalence", "status": "failed"})
+    scenario_groups: dict[str, dict[str, int]] = {}
+    for case in cases:
+        group = case.payload.get("coverage_group")
+        if not isinstance(group, str):
+            continue
+        group_records = [record for record in records if record["scenario"] == case.identifier]
+        summary = scenario_groups.setdefault(
+            group, {"scenarios": 0, "turns": 0, "passed": 0, "failed": 0}
+        )
+        summary["scenarios"] += 1
+        summary["turns"] += len(group_records)
+        summary["passed"] += sum(record["status"] == "passed" for record in group_records)
+        summary["failed"] += sum(record["status"] == "failed" for record in group_records)
     return {
         "schema_version": "clarification_continuation_eval_v1",
         "fixture": {"path": str(fixture_path), "sha256": sha256(raw).hexdigest(), "redacted": True},
@@ -793,6 +989,8 @@ def run_clarification_continuation_eval(
                     "correction flag, and normalized target-specific payload equality"
                 ),
             },
+            "template_coverage": template_coverage,
+            "scenario_groups": scenario_groups,
             "convergence": {
                 "ready_sessions": sum(value is not None for value in ready_by_scenario.values()),
                 "turns_to_ready": ready_by_scenario,

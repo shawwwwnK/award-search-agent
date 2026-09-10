@@ -21,6 +21,8 @@ clarification miss. On 2026-09-08, the project owner approved the additive itera
 clarification-session boundary in ADR 0011. It accepts answers to a prompt that lists all current
 blockers, applies any valid subset with turn-level provenance, and recomputes the remaining
 blockers until the session is `ready` or `stopped`. The initial-turn behavior remains frozen.
+That frozen initial parser still does not recognize a bare `this weekend`; support for that phrase
+and the related `this`/`on` weekday forms is scoped to clarification answers only.
 
 ## Responsibility table
 
@@ -115,6 +117,44 @@ already-resolved field. The local experimental Streamlit
 harness may call this boundary through an application controller but contains no parsing, policy,
 merge, provider, or persistence logic. LangChain and LangGraph are not part of this stage.
 The answer-interpreter model boundary receives only answer identity/text and active typed blockers;
-the original `RequestContext`, effective state, and ledger remain deterministic-only.
+the original `RequestContext`, effective state, and ledger remain deterministic-only. The
+clarification-specific temporal normalizer resolves `this weekend`, `this <weekday>`, and
+`on <weekday>` from the retained context. A complete numbered answer line maps one-based to the
+ordered typed prompt requirements; the mapping is not inferred from incidental numbers in prose.
+When the model returns a narrow temporal fact span, deterministic endpoint-cue repair is bounded
+to that same answer message and the fact's same physical sentence or answer line. It accepts a
+single local fact, or exactly two local facts joined by one `and`/`then`, only when the cue agrees
+with the typed target; alternatives/disjunctions, cross-line or cross-sentence facts, distant cues,
+multiple uncoordinated facts, and target mismatches are explicitly ambiguous and re-asked. The
+narrow span remains the provenance source even when local cue context is used for validation.
+For continuation-only relative expressions not handled by that legacy normalizer, the model sees
+one static, date-free catalog of opaque temporal affordances and grounds answer-local spans plus
+weekday slots. It receives no reference date, session state, fixture key, candidate, or internal
+template ID. Deterministic code validates complete selection/unresolved provenance, blocker
+ownership, same-answer departure dependencies, and calendar arithmetic. The selector is global
+rather than a regex-harvested per-answer candidate list; the frozen initial path is unchanged.
 The detailed implementation sequence and acceptance gates are in
 `docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.
+
+## Approved accepting-clarification refinement
+
+[ADR 0012](adr/0012-accepting-clarification-and-behavioral-evaluation.md) defines the next
+continuation cut without changing the frozen initial workflow. It refines the session boundary so
+that a reasonable, grounded fuzzy answer may become one bounded, visible approximation instead of
+being rejected for narrow grammar mismatch. Deterministic code still owns span grounding, symbolic
+meaning validation, date arithmetic, state reduction, and all blocker policy; discrete choices,
+conflicts, and unresolved endpoint ownership remain targeted clarification cases.
+
+ADR 0013 removes the separate prompt-writing runtime boundary. The answer receiver may return
+ordered follow-up items in the same call that interprets an answer. The controller renders them
+only after deterministic reduction when their IDs exactly equal the authoritative remaining
+blockers; a mismatch uses the issue-specific deterministic fallback. Evaluation correspondingly keeps exact safety
+invariants as gates while assessing conversational behavior through property-based acceptable
+actions, false-blocking and incorrect-assumption rates, paraphrase robustness, and
+human-calibrated review rather than one golden fuzzy interpretation.
+
+The implementation is qualified by the redacted three-trial Luna behavioral artifact at
+`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-behavior-v2-final.json`: 129/129 calls were
+privately captured, with zero model/system/evaluator errors, zero false blocks, and zero incorrect
+acceptances. Its conflict follow-ups remained safe but were generically worded in three trials;
+this is a recorded presentation-quality finding, not a state-safety exception.

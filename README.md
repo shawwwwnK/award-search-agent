@@ -83,29 +83,51 @@ mypy src tests
 
 ## Local clarification harness
 
-After producing a frozen `RequestUnderstandingResult` JSON through the existing
-initial workflow, install the optional dependency and run:
+Install the optional dependency and run:
 
 ```bash
 python -m pip install -e ".[harness]"
 streamlit run apps/clarification_harness.py
 ```
 
-The harness is an ephemeral local validation surface. It calls the public
-clarification controller only after an explicit form submission. Paste a frozen
-`RequestUnderstandingResult` JSON snapshot, choose the answer-interpreter model
-explicitly, and start a session. The harness validates the JSON against the
-domain contract, then shows the deterministic prompt, active typed blockers,
-status, terminal reason when applicable, and the current session JSON.
+The harness is an ephemeral local validation surface. Its preferred path starts
+from a raw travel request: select explicit initial-extraction, temporal-selector,
+clarification-interpreter, and prompt-composer models; enter a reference date and
+IANA timezone; then click **Understand request and start session**. That single
+explicit form event
+runs the frozen public initial workflow and passes its resulting
+`RequestUnderstandingResult` to `start_clarification()`. A collapsible JSON
+input remains available for replaying an existing frozen snapshot.
 
-It stores the session and surfaced errors only in Streamlit `session_state`.
-The interpreter is constructed and `apply_clarification_answer()` is invoked
-only inside the submit event, so ordinary Streamlit reruns cannot invoke a
-model. No request context, resolved dates, effective request, ledger, or
-session limits are sent by the UI to the model; the continuation interpreter
-receives only its answer message and active typed blockers. The adapter uses
-Responses with storage disabled. This harness has no persistence, provider
-calls, deployment behavior, or UI-owned workflow policy.
+The session view shows the prompt composition source, authoritative issue records,
+active assumption disclosures, next clarification prompt, active typed blockers,
+status, terminal reason when applicable, and the current session JSON. Assumptions
+remain visible after the session reaches `ready`. Answers remain in their form
+after an error, which is displayed immediately and leaves the stored session at
+its prior revision.
+
+The harness loads the repository-local, gitignored `.env` using the existing
+`python-dotenv` dependency. Put `OPENAI_API_KEY` there; it is not copied into
+source code, session state, session JSON, or UI output.
+
+It stores the session, surfaced errors, and additional local diagnostics only in
+Streamlit `session_state`.
+The interpreter and post-reduction prompt composer are constructed and invoked
+only inside explicit raw-start, frozen-JSON-start, or answer-submit events, so
+ordinary Streamlit reruns cannot invoke a model. The initial models likewise run
+only inside the separate initial-request submit event. No request context,
+resolved dates, effective request, ledger, or session limits are sent to the
+clarification models: the interpreter receives only its answer message and active
+typed blockers plus date-free temporal catalogs, while the composer receives only
+authoritative active blockers and post-reduction issue records. Responses storage
+is disabled.
+Aggregate interpreter/composer call counts, usage, latency, and error status are
+captured per explicit event outside the domain session. Exact model-facing traces
+are labeled private/local and are not shown in the public session JSON.
+There are no travel-search or inventory-provider calls. A named U.S. federal
+holiday in the initial request may use the existing Nager calendar boundary.
+This harness has no persistence, deployment behavior, or UI-owned workflow
+policy.
 
 Live clarification evaluations always save full private model-call trace sidecars
 under `evals/clarification/traces/`; that directory is gitignored. Their public

@@ -1,0 +1,216 @@
+contract_version: v2
+scenarios:
+  - id: reported_early_next_month_week
+    answer_class: safely_assumable
+    initial_destination: France
+    initial_unknowns: [origin, departure, return_or_duration, travelers]
+    turns:
+      - text: "1. SFO\n2. Early next month\n3. For a week\n4. I'm solo traveling"
+        amendments:
+          - {target: origin, requirements: [origin], fragment: "1. SFO", value: SFO}
+          - {target: travelers, requirements: [travelers], fragment: "4. I'm solo traveling", travelers: 1}
+        approximations:
+          - {handle: a1, fragment: "Early next month", month_reference: next_month}
+          - {handle: a4, fragment: "a week"}
+        oracle:
+          must_resolve: [origin, departure, return_or_duration, travelers]
+          must_remain_blocked: []
+          protected_fields: [destination]
+          permitted_statuses: [ready]
+          permitted_semantic_actions: [accept_with_visible_assumption]
+          properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, duration_days: [7, 7]}
+          disclosure_required: true
+          question_required: false
+          forbidden: [generic_repeat]
+  - id: beginning_october_open_surface
+    answer_class: reasonably_resolvable
+    equivalence_group: early_october
+    pair_id: month_portion_accept_ask
+    pair_role: accept
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "I want to leave during the beginning of October for a week"
+        approximations:
+          - {handle: a1, fragment: "the beginning of October", month_reference: named_month, month_name: october}
+          - {handle: a4, fragment: "a week"}
+        oracle:
+          must_resolve: [departure, return_or_duration]
+          must_remain_blocked: []
+          protected_fields: [origin, destination, travelers]
+          permitted_statuses: [ready]
+          permitted_semantic_actions: [accept_with_visible_assumption]
+          properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, duration_days: [7, 7]}
+          disclosure_required: true
+          question_required: false
+          forbidden: [generic_repeat]
+  - id: early_october_paraphrase
+    answer_class: reasonably_resolvable
+    equivalence_group: early_october
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure, return_or_duration]
+    turns:
+      - text: "Leave early October and stay one week"
+        approximations:
+          - {handle: a1, fragment: "early October", month_reference: named_month, month_name: october}
+          - {handle: a4, fragment: "one week"}
+        oracle:
+          must_resolve: [departure, return_or_duration]
+          must_remain_blocked: []
+          protected_fields: [origin, destination, travelers]
+          permitted_statuses: [ready]
+          permitted_semantic_actions: [accept_with_visible_assumption]
+          properties: {departure_window: {year: 2026, month: 10, start_day: [1, 3], end_day: [3, 10]}, duration_days: [7, 7]}
+          disclosure_required: true
+          question_required: false
+          forbidden: [generic_repeat]
+  - id: discrete_month_alternative
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    pair_id: month_portion_accept_ask
+    pair_role: ask
+    turns:
+      - text: "Early October or late October"
+        approximations_unresolved: ["Early October or late October"]
+        oracle:
+          must_resolve: []
+          must_remain_blocked: [departure]
+          protected_fields: [origin, destination, travelers, departure]
+          permitted_statuses: [awaiting_answer]
+          permitted_semantic_actions: [targeted_follow_up]
+          properties: {}
+          disclosure_required: false
+          question_required: true
+          forbidden: [generic_repeat]
+  - id: ordinary_week_duration
+    answer_class: safely_assumable
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "a week"
+        approximations: [{handle: a4, fragment: "a week"}]
+        oracle:
+          must_resolve: [return_or_duration]
+          must_remain_blocked: []
+          protected_fields: [origin, destination, travelers, departure]
+          permitted_statuses: [ready]
+          permitted_semantic_actions: [accept_with_visible_assumption]
+          properties: {duration_days: [7, 7]}
+          disclosure_required: true
+          question_required: false
+          forbidden: [generic_repeat]
+  - id: duration_alternative
+    answer_class: ambiguous
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "a week or two"
+        approximations_unresolved: ["a week or two"]
+        oracle:
+          must_resolve: []
+          must_remain_blocked: [return_or_duration]
+          protected_fields: [origin, destination, travelers, departure, return_or_duration]
+          permitted_statuses: [awaiting_answer]
+          permitted_semantic_actions: [targeted_follow_up]
+          properties: {}
+          disclosure_required: false
+          question_required: true
+          forbidden: [generic_repeat]
+  - id: mixed_valid_siblings_with_ambiguous_date
+    answer_class: safely_assumable
+    initial_destination: France
+    initial_unknowns: [origin, departure, return_or_duration, travelers]
+    turns:
+      - text: "1. SFO\n2. Early next month or late October\n3. a week\n4. solo"
+        amendments:
+          - {target: origin, requirements: [origin], fragment: "1. SFO", value: SFO}
+          - {target: travelers, requirements: [travelers], fragment: "4. solo", travelers: 1}
+        approximations:
+          - {handle: a4, fragment: "a week"}
+        approximations_unresolved:
+          - {fragment: "Early next month or late October", requirements: [departure]}
+        oracle:
+          must_resolve: [origin, return_or_duration, travelers]
+          must_remain_blocked: [departure]
+          valid_siblings: [origin, return_or_duration, travelers]
+          protected_fields: [destination]
+          permitted_statuses: [awaiting_answer]
+          permitted_semantic_actions: [targeted_follow_up]
+          properties: {duration_days: [7, 7]}
+          disclosure_required: true
+          question_required: true
+          forbidden: [generic_repeat]
+  - id: correction_replaces_assumption
+    answer_class: correction
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-10-06"
+    initial_duration_days: 7
+    initial_unknowns: [travelers]
+    turns:
+      - text: "Actually, leave late October"
+        approximations:
+          - {handle: a3, fragment: "late October", month_reference: named_month, month_name: october, correction: true}
+        oracle:
+          must_resolve: []
+          must_remain_blocked: [travelers]
+          protected_fields: [origin, destination, travelers]
+          permitted_statuses: [awaiting_answer]
+          permitted_semantic_actions: [correction_applied]
+          properties: {departure_window: {year: 2026, month: 10, start_day: [21, 31], end_day: [21, 31]}}
+          disclosure_required: true
+          question_required: false
+          forbidden: []
+  - id: nonanswer_preserves_state
+    answer_class: nonanswer
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_unknowns: [departure]
+    turns:
+      - text: "I'm not sure yet"
+        oracle:
+          must_resolve: []
+          must_remain_blocked: [departure]
+          protected_fields: [origin, destination, travelers, departure]
+          permitted_statuses: [awaiting_answer]
+          permitted_semantic_actions: [awaiting_answer]
+          properties: {}
+          disclosure_required: false
+          question_required: false
+          forbidden: []
+  - id: conflict_requires_clarification
+    answer_class: conflict
+    initial_origin: SFO
+    initial_destination: France
+    initial_travelers: 1
+    initial_departure: "2026-11-06"
+    initial_unknowns: [return_or_duration]
+    turns:
+      - text: "return early October"
+        approximations:
+          - {handle: a1, fragment: "early October", month_reference: named_month, month_name: october}
+        oracle:
+          must_resolve: []
+          must_remain_blocked: [conflict:return_before_departure]
+          protected_fields: [origin, destination, travelers]
+          permitted_statuses: [awaiting_answer]
+          permitted_semantic_actions: [awaiting_answer]
+          properties: {}
+          disclosure_required: false
+          question_required: false
+          forbidden: []

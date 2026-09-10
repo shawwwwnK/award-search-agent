@@ -121,8 +121,9 @@ def test_prompt_is_one_template_message_with_exact_requirement_coverage() -> Non
     assert prompt.message.count("\n") == len(prompt.requirements)
     assert "private detail" not in prompt.message
     assert "A trip request" not in prompt.message
-    assert "Where would you like to depart from?" in prompt.message
-    assert "How many travelers need seats?" in prompt.message
+    assert prompt.message.startswith("I’d be happy to help plan this trip.")
+    assert "Where will you be departing from?" in prompt.message
+    assert "How many people will be traveling?" in prompt.message
 
 
 def test_prompt_renderer_orders_an_iterable_even_when_input_is_not_canonical() -> None:
@@ -141,9 +142,7 @@ def test_initial_projection_preserves_unknowns_and_conflicts_for_blocker_collect
         context=_CONTEXT,
         travelers=None,
         origins=[],
-        destinations=[
-            LocationRef(kind=LocationKind.CITY, value="Tokyo", raw_text="Tokyo")
-        ],
+        destinations=[LocationRef(kind=LocationKind.CITY, value="Tokyo", raw_text="Tokyo")],
         departure_expression=None,
         return_expression=None,
         departure_window=None,

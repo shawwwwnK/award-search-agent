@@ -47,13 +47,44 @@ temporal state from active source-keyed contributions, and recomputes unknowns/c
 next complete blocker set. It never reruns initial parsing or silently changes unrelated
 constraints.
 
+The response may also carry a concise, customer-service-oriented `next_question` and the ordered
+IDs of the requirements it believes remain. That prose is not policy: after deterministic
+reduction, the controller uses it only when the IDs exactly equal the recomputed canonical blocker
+set and no answer fragment was rejected. Otherwise it renders the deterministic friendly fallback.
+The structured prompt requirements remain authoritative, no second model call is made, and the
+model still receives no effective request, calendar context, or ledger.
+
 The continuation owns a separate `MessageSpan` with message ID, offsets, and exact text; frozen
 initial-message span contracts are not widened. A clarification-specific temporal normalizer
 interprets answer spans under the original `RequestContext`: a bare duration is supported only
 when return/duration is active, and a bare date is supported only when its endpoint is
-unambiguous from the pending requirements or explicit answer cue. Ambiguous multi-endpoint dates
-are re-asked. Cross-turn anaphora is deferred. This leaves the frozen initial temporal
-scanner/compiler unchanged.
+unambiguous from the pending requirements or explicit answer cue. The continuation grammar also
+supports `this weekend`, `this <weekday>`, and `on <weekday>`, resolving them deterministically
+against that immutable context. A complete numbered answer line uses its one-based ordinal to
+map to the correspondingly ordered typed prompt requirement; incidental numbers elsewhere in
+prose do not establish endpoint ownership. Ambiguous multi-endpoint dates are re-asked. Cross-turn
+anaphora is deferred. This leaves the frozen initial temporal scanner/compiler unchanged: in
+particular, the frozen initial parser still does not recognize a bare `this weekend` in the raw
+request. The relative-period support is continuation-only after a clarification session starts.
+
+For bounded answer-only relative expressions outside that legacy normalizer, the answer model
+selects from one global, date-free catalog of opaque operator affordances and grounds only
+answer-local spans plus a weekday slot where required. The catalog is constant across sessions:
+it receives no calendar dates, request state, fixture identifiers, candidates, or internal
+template IDs. Deterministic continuation code validates complete classification and slot grounding,
+maps each span to an ordered blocker or local endpoint cue, enforces the same-answer-only
+departure dependency for `following`/`afterwards` weekdays, and performs all date arithmetic.
+Unsupported relative spans remain explicit rejected provenance. This replaces answer-text regex
+candidate harvesting; it does not add cross-turn anaphora or alter the frozen initial boundary.
+
+When a model returns only a narrow temporal fact span, deterministic cue recovery is limited to
+that same answer message and the fact's same physical sentence or answer line. It may use a nearby
+departure or return cue only when the local segment contains one supported fact, or exactly two
+supported facts joined by one explicit `and` or `then`, and the resulting endpoint must agree with
+the typed amendment target. A disjunction or alternative (`or`/`either`), facts in separate
+sentences or lines, multiple facts without one coordinator, a distant cue, or a swapped target is
+ambiguous or invalid and is re-asked. Accepted recovery preserves the original narrow span as
+provenance; it does not widen the source evidence or infer ownership from unrelated answer text.
 
 Session status is `awaiting_answer`, `ready`, or `stopped`. A session becomes ready only with no
 current blockers and no unresolved explicit attempted request revision. New hard constraints and

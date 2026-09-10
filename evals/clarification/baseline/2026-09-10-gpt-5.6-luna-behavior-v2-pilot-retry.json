@@ -1,0 +1,1336 @@
+{
+  "schema_version": "clarification_behavior_live_eval_v2",
+  "fixture": {
+    "sha256": "056de6b5e5a07b1f4c3c60e74d8c563064fce1c2c801d3fd495856b6e4bc7052",
+    "redacted": true,
+    "scenario_count": 17,
+    "private_holdout": false
+  },
+  "models": {
+    "interpreter": "gpt-5.6-luna",
+    "composer": "gpt-5.6-luna"
+  },
+  "trials": 1,
+  "generated_at": "2026-09-10T16:32:21.528679+00:00",
+  "llm_trace": {
+    "mode": "all_calls_private",
+    "directory": "evals/clarification/traces-behavior-v2/run-2026-09-10T163221.528679-0000-c7c3f821",
+    "sidecars": 17
+  },
+  "records": [
+    {
+      "scenario": "accepting_numbered_early_next_month",
+      "family": "accepting",
+      "answer_class": "safely_assumable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": true,
+      "safety_failures": [
+        "system error: ClarificationInterpretationError"
+      ],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 14.175629457924515,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2749,
+          "output_tokens": 454,
+          "total_tokens": 3203,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 10.968139083124697,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 549,
+          "output_tokens": 124,
+          "total_tokens": 673,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.1701410410460085,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "accepting_beginning_october",
+      "family": "accepting_paraphrase",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 6.132163459202275,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2694,
+          "output_tokens": 348,
+          "total_tokens": 3042,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.25738212489523,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 430,
+          "output_tokens": 74,
+          "total_tokens": 504,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.8343132908921689,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "accepting_early_october_paraphrase",
+      "family": "accepting_paraphrase",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 4.903072000015527,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2692,
+          "output_tokens": 267,
+          "total_tokens": 2959,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.215264500118792,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 430,
+          "output_tokens": 74,
+          "total_tokens": 504,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.646831916878,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "accepting_duration_only",
+      "family": "accepting",
+      "answer_class": "safely_assumable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 4.918263166910037,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2663,
+          "output_tokens": 188,
+          "total_tokens": 2851,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.5370749589055777,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 373,
+          "output_tokens": 52,
+          "total_tokens": 425,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.314187499927357,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "paired_accept_early_october",
+      "family": "paired_boundary",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 5.027810540981591,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2658,
+          "output_tokens": 220,
+          "total_tokens": 2878,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.743022082839161,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 360,
+          "output_tokens": 43,
+          "total_tokens": 403,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.260001040995121,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "paired_ask_october_alternatives",
+      "family": "paired_boundary",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": true,
+      "safety_failures": [
+        "system error: ClarificationInterpretationError"
+      ],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 4.674895958043635,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2665,
+          "output_tokens": 279,
+          "total_tokens": 2944,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.3912293328903615,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 360,
+          "output_tokens": 43,
+          "total_tokens": 403,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.2680386248975992,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "paired_accept_one_week",
+      "family": "paired_boundary",
+      "answer_class": "safely_assumable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 5.271785957971588,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2663,
+          "output_tokens": 219,
+          "total_tokens": 2882,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.58018304198049,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 373,
+          "output_tokens": 55,
+          "total_tokens": 428,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.6576476250775158,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "paired_ask_week_or_two",
+      "family": "paired_boundary",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": true,
+      "safety_failures": [
+        "system error: ClarificationCommandError"
+      ],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 4.580133333802223,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2666,
+          "output_tokens": 242,
+          "total_tokens": 2908,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.2240555840544403,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 373,
+          "output_tokens": 54,
+          "total_tokens": 427,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.3391112911049277,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "partial_siblings_preserved",
+      "family": "partial_sibling",
+      "answer_class": "safely_assumable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": true,
+      "safety_failures": [
+        "system error: ClarificationInterpretationError"
+      ],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 9.669888749951497,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2746,
+          "output_tokens": 749,
+          "total_tokens": 3495,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 7.658364749979228,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 549,
+          "output_tokens": 132,
+          "total_tokens": 681,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.9804573329165578,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "targeted_discrete_followup",
+      "family": "targeted_composer",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 1
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 6.4162137501407415,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2661,
+          "output_tokens": 248,
+          "total_tokens": 2909,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.4774085839744657,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 841,
+          "output_tokens": 99,
+          "total_tokens": 940,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.8993710840586573,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "correction_late_october",
+      "family": "correction",
+      "answer_class": "correction",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 8.531901916954666,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2664,
+          "output_tokens": 353,
+          "total_tokens": 3017,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.6151908750180155,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 730,
+          "output_tokens": 90,
+          "total_tokens": 820,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.859230708796531,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "partial_plain_locations",
+      "family": "partial_sibling",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 3,
+        "retained": 3
+      },
+      "latency_seconds": 7.898247750010341,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2749,
+          "output_tokens": 316,
+          "total_tokens": 3065,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.246587583096698,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 1035,
+          "output_tokens": 225,
+          "total_tokens": 1260,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 4.603968458715826,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "nonanswer_first_turn",
+      "family": "no_progress",
+      "answer_class": "nonanswer",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 5.4275381250772625,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2658,
+          "output_tokens": 159,
+          "total_tokens": 2817,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.5031069999095052,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 720,
+          "output_tokens": 90,
+          "total_tokens": 810,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.884626999963075,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "no_progress_stop_boundary",
+      "family": "no_progress",
+      "answer_class": "nonanswer",
+      "trial": 1,
+      "final_status": "stopped",
+      "stop_reason": "no_progress_limit",
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        },
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 6.258771333144978,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 5315,
+          "output_tokens": 267,
+          "total_tokens": 5582,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 3.839519666042179,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 720,
+          "output_tokens": 86,
+          "total_tokens": 806,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.3619389180094004,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "explicit_dates_ready",
+      "family": "explicit_resolution",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 4.591600541956723,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2688,
+          "output_tokens": 275,
+          "total_tokens": 2963,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.1144418329931796,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 430,
+          "output_tokens": 79,
+          "total_tokens": 509,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.4356550418306142,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "cancel_boundary",
+      "family": "cancellation",
+      "answer_class": "nonanswer",
+      "trial": 1,
+      "final_status": "stopped",
+      "stop_reason": "cancelled",
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 1.1252478340175003,
+      "stages": {
+        "interpreter": {
+          "calls": 0,
+          "captured_calls": 0,
+          "missing_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 0,
+          "reconciled": true,
+          "latency_seconds": 0,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 360,
+          "output_tokens": 43,
+          "total_tokens": 403,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.0996422090101987,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "conflict_must_remain_grounded",
+      "family": "conflict",
+      "answer_class": "conflict",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": false,
+      "safety_failures": [],
+      "behavioral_failures": [
+        "targeted question missing",
+        "generic repeat"
+      ],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "latency_seconds": 6.037091291043907,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2667,
+          "output_tokens": 231,
+          "total_tokens": 2898,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.006588584044948,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 757,
+          "output_tokens": 117,
+          "total_tokens": 874,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.9831964999902993,
+          "errors": 0
+        }
+      }
+    }
+  ],
+  "summary": {
+    "exact_safety_gate": {
+      "passed": false,
+      "failed": 4
+    },
+    "behavioral": {
+      "false_blocking": {
+        "count": 0,
+        "denominator": 9,
+        "rate": 0.0
+      },
+      "incorrect_acceptance": {
+        "count": 0,
+        "denominator": 4,
+        "rate": 0.0
+      },
+      "targeted_question": {
+        "required": 2,
+        "targeted": 1
+      },
+      "valid_sibling_retention": {
+        "expected": 3,
+        "retained": 3
+      },
+      "property_envelopes": {
+        "failed_records": 0,
+        "failure_count": 0
+      },
+      "assumption_disclosure": {
+        "required": 6,
+        "missing": 0
+      },
+      "materially_incorrect_assumption": {
+        "count": 0,
+        "denominator": 6
+      },
+      "unnecessary_clarification": {
+        "count": 0,
+        "denominator": 9
+      },
+      "generic_repeat_rate": 0.5,
+      "turns_to_ready": {
+        "ready_sessions": 6,
+        "mean": 1.0
+      },
+      "paired_accept_ask": {
+        "passed": true,
+        "pairs": 2,
+        "trial_runs": 2
+      },
+      "paraphrase_consistency": {
+        "passed": true,
+        "trial_runs": 1
+      }
+    },
+    "metadata": {
+      "mode": "pilot",
+      "pool": "public",
+      "execution": "live_openai",
+      "evaluator_version": "clarification_behavior_live_eval_v2.1",
+      "adapter_versions": {
+        "interpreter": "openai_clarification_interpreter_v2",
+        "composer": "openai_clarification_composer_v1"
+      },
+      "scenario_distribution": {
+        "accepting": 2,
+        "accepting_paraphrase": 2,
+        "cancellation": 1,
+        "conflict": 1,
+        "correction": 1,
+        "explicit_resolution": 1,
+        "no_progress": 2,
+        "paired_boundary": 4,
+        "partial_sibling": 2,
+        "targeted_composer": 1
+      },
+      "answer_class_distribution": {
+        "ambiguous": 3,
+        "conflict": 1,
+        "correction": 1,
+        "nonanswer": 3,
+        "reasonably_resolvable": 5,
+        "safely_assumable": 4
+      },
+      "slice_metrics": {
+        "family:accepting": {
+          "sessions": 2,
+          "safety_failures": 1,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:accepting_paraphrase": {
+          "sessions": 2,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:paired_boundary": {
+          "sessions": 4,
+          "safety_failures": 2,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:partial_sibling": {
+          "sessions": 2,
+          "safety_failures": 1,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:targeted_composer": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:correction": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:no_progress": {
+          "sessions": 2,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:explicit_resolution": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:cancellation": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:conflict": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:safely_assumable": {
+          "sessions": 4,
+          "safety_failures": 2,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:reasonably_resolvable": {
+          "sessions": 5,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:ambiguous": {
+          "sessions": 3,
+          "safety_failures": 2,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:correction": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:nonanswer": {
+          "sessions": 3,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:conflict": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        }
+      },
+      "stop_reasons": {
+        "cancelled": 1,
+        "no_progress_limit": 1
+      },
+      "trial_variance": {
+        "rates": {
+          "1": 0.9411764705882353
+        },
+        "mean": 0.9411764705882353,
+        "variance": 0.0
+      },
+      "errors": {
+        "model": 0,
+        "system": 4,
+        "evaluator": 0
+      }
+    },
+    "instrumentation": {
+      "stages": {
+        "interpreter": {
+          "calls": 17,
+          "captured_calls": 17,
+          "missing_calls": 0,
+          "trace_count": 17,
+          "input_tokens": 45598,
+          "output_tokens": 4815,
+          "total_tokens": 50413,
+          "errors": 0,
+          "reconciled_sessions": 17,
+          "unreconciled_sessions": 0,
+          "latency_seconds": 66.37755958386697
+        },
+        "composer": {
+          "calls": 23,
+          "captured_calls": 23,
+          "missing_calls": 0,
+          "trace_count": 23,
+          "input_tokens": 9390,
+          "output_tokens": 1480,
+          "total_tokens": 10870,
+          "errors": 0,
+          "reconciled_sessions": 17,
+          "unreconciled_sessions": 0,
+          "latency_seconds": 38.59835958410986
+        }
+      },
+      "totals": {
+        "calls": 40,
+        "captured_calls": 40,
+        "missing_calls": 0,
+        "trace_count": 40,
+        "input_tokens": 54988,
+        "output_tokens": 6295,
+        "total_tokens": 61283,
+        "errors": 0,
+        "reconciled_sessions": 34,
+        "unreconciled_sessions": 0,
+        "latency_seconds": 104.97591916797683
+      }
+    }
+  }
+}

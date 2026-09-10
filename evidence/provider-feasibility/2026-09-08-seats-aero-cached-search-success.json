@@ -1,0 +1,55 @@
+{
+  "artifact_schema_version": 1,
+  "provider": "seats_aero",
+  "operation": "cached_search",
+  "captured_on": "2026-09-08",
+  "request": {
+    "method": "GET",
+    "endpoint": "https://seats.aero/partnerapi/search",
+    "parameters": {
+      "origin_airport": "SFO",
+      "destination_airport": "NRT",
+      "start_date": "2027-03-10",
+      "end_date": "2027-03-12",
+      "take": 10,
+      "include_trips": false
+    },
+    "authorization": "Partner-Authorization header used; value omitted"
+  },
+  "transport": {
+    "http_status": 200,
+    "latency_seconds": 0.138014,
+    "response_bytes": 22505
+  },
+  "response_summary": {
+    "top_level_fields": ["count", "cursor", "data", "hasMore", "moreURL"],
+    "returned_records": 10,
+    "returned_departure_dates": ["2027-03-10", "2027-03-11"],
+    "all_records_include_updated_at": true,
+    "first_record_contract_fields": [
+      "ID",
+      "Route",
+      "Date",
+      "Source",
+      "UpdatedAt",
+      "YAvailable",
+      "YMileageCost",
+      "YRemainingSeats",
+      "WAvailable",
+      "WMileageCost",
+      "WRemainingSeats",
+      "JAvailable",
+      "JMileageCost",
+      "JRemainingSeats",
+      "FAvailable",
+      "FMileageCost",
+      "FRemainingSeats"
+    ],
+    "route_contract_fields": ["OriginAirport", "DestinationAirport", "Source"]
+  },
+  "limitations": [
+    "This is cached availability, not a live-search or booking-availability verification.",
+    "No raw provider response, authorization value, pricing value, or account data is retained.",
+    "The response proves field presence for this request only; program-specific completeness remains variable."
+  ]
+}

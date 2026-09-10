@@ -159,6 +159,63 @@ class TemporalContributionKind(str, Enum):
     DURATION = "duration"
 
 
+class TemporalTemplateProvenance(SessionContractModel):
+    """Auditable origin for a continuation-only approved temporal template.
+
+    The template registry is intentionally separate from the frozen initial
+    intent compiler.  The answer span remains on ``source``; this record says
+    precisely which versioned, date-free template was selected and which
+    answer-local candidates it depended on.
+    """
+
+    template_id: str = Field(min_length=1)
+    registry_version: str = Field(min_length=1)
+    candidate_id: str = Field(min_length=1)
+    dependency_candidate_ids: tuple[str, ...] = ()
+
+    @model_validator(mode="after")
+    def validate_dependencies(self) -> TemporalTemplateProvenance:
+        if self.candidate_id in self.dependency_candidate_ids:
+            raise ValueError("template provenance cannot depend on itself")
+        if len(self.dependency_candidate_ids) != len(set(self.dependency_candidate_ids)):
+            raise ValueError("template provenance dependency candidate IDs must be unique")
+        return self
+
+
+class AssumptionDisclosure(SessionContractModel):
+    """A concise user-visible statement of an accepted approximation.
+
+    This records disclosure, rather than authorizing an interpretation. The
+    corresponding policy and symbolic interpretation remain explicit in
+    ``TemporalAnswerInterpretationProvenance`` so a reducer cannot smuggle an
+    arbitrary calendar value into an otherwise helpful clarification answer.
+    """
+
+    disclosure_id: str = Field(min_length=1)
+    message: str = Field(min_length=1)
+
+
+class TemporalAnswerInterpretationProvenance(SessionContractModel):
+    """Policy-versioned provenance for a continuation-only interpretation.
+
+    The initial intent temporal contracts deliberately do not use this model.
+    ``candidate_ids`` identify the answer-local candidates that the approved
+    policy used; their date evaluation is still a deterministic reducer task.
+    """
+
+    policy_version: str = Field(min_length=1)
+    interpretation_id: str = Field(min_length=1)
+    candidate_ids: tuple[str, ...] = Field(min_length=1)
+    assumption_disclosure: AssumptionDisclosure | None = None
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"assumption_disclosure"})
+
+    @model_validator(mode="after")
+    def validate_candidate_ids(self) -> TemporalAnswerInterpretationProvenance:
+        if len(self.candidate_ids) != len(set(self.candidate_ids)):
+            raise ValueError("temporal interpretation candidate IDs must be unique")
+        return self
+
+
 class TemporalContribution(SessionContractModel):
     """One active, source-keyed temporal fact used to rebuild effective timing."""
 
@@ -171,8 +228,16 @@ class TemporalContribution(SessionContractModel):
     amendment_id: str | None = Field(default=None, min_length=1)
     date_window: DateWindow | None = None
     interpreted_duration: InterpretedDuration | None = None
+    template_provenance: TemporalTemplateProvenance | None = None
+    interpretation_provenance: TemporalAnswerInterpretationProvenance | None = None
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
-        {"source", "date_window", "interpreted_duration"}
+        {
+            "source",
+            "date_window",
+            "interpreted_duration",
+            "template_provenance",
+            "interpretation_provenance",
+        }
     )
 
     @model_validator(mode="after")
@@ -188,6 +253,14 @@ class TemporalContribution(SessionContractModel):
             raise ValueError("initial temporal contributions cannot name an amendment")
         if isinstance(self.source, AnswerMessageSource) and self.amendment_id is None:
             raise ValueError("answer temporal contributions require an amendment ID")
+        if self.interpretation_provenance is not None and not isinstance(
+            self.source, AnswerMessageSource
+        ):
+            raise ValueError("temporal interpretation provenance requires an answer-message source")
+        if self.template_provenance is not None and self.interpretation_provenance is not None:
+            raise ValueError(
+                "temporal template and interpretation provenance are mutually exclusive"
+            )
         return self
 
 
@@ -239,6 +312,14 @@ class EffectiveRequest(SessionContractModel):
         contribution_ids = [item.contribution_id for item in self.temporal_contributions]
         if len(contribution_ids) != len(set(contribution_ids)):
             raise ValueError("effective request temporal contribution IDs must be unique")
+        disclosure_ids = [
+            item.interpretation_provenance.assumption_disclosure.disclosure_id
+            for item in self.temporal_contributions
+            if item.interpretation_provenance is not None
+            and item.interpretation_provenance.assumption_disclosure is not None
+        ]
+        if len(disclosure_ids) != len(set(disclosure_ids)):
+            raise ValueError("effective request active assumption disclosure IDs must be unique")
         return self
 
 
@@ -277,17 +358,78 @@ class BlockingRequirement(SessionContractModel):
         return self
 
 
+class ClarificationIssueKind(str, Enum):
+    """The post-reduction reason an otherwise active blocker remains."""
+
+    MISSING = "missing"
+    AMBIGUOUS = "ambiguous"
+    UNSUPPORTED = "unsupported"
+    CONFLICT = "conflict"
+
+
+class ClarificationIssue(SessionContractModel):
+    """Authoritative, answer-local context for one active requirement.
+
+    Requirement linkage is validated by ``ClarificationPrompt`` because only a
+    prompt knows the active blocker set. ``reason_code`` is intentionally
+    stable and machine-readable while ``reason`` is a safe human-facing
+    explanation for a composer or deterministic fallback.
+    """
+
+    issue_id: str = Field(min_length=1)
+    requirement_id: str = Field(min_length=1)
+    kind: ClarificationIssueKind
+    reason: str = Field(min_length=1)
+    span: MessageSpan | None = None
+    reason_code: str = Field(min_length=1)
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"span"})
+
+
+class PromptCompositionSource(str, Enum):
+    """Whether customer-facing copy was accepted from the composer or fallback."""
+
+    MODEL = "model"
+    FALLBACK = "fallback"
+
+
 class ClarificationPrompt(SessionContractModel):
     prompt_id: str = Field(min_length=1)
     revision: int = Field(ge=0)
     requirements: tuple[BlockingRequirement, ...] = ()
     message: str = Field(min_length=1)
+    issues: tuple[ClarificationIssue, ...] = ()
+    composition_source: PromptCompositionSource = PromptCompositionSource.FALLBACK
+    fallback_code: str | None = Field(default=None, min_length=1)
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"issues"})
 
     @model_validator(mode="after")
     def validate_unique_requirements(self) -> ClarificationPrompt:
         requirement_ids = [item.requirement_id for item in self.requirements]
         if len(requirement_ids) != len(set(requirement_ids)):
             raise ValueError("clarification prompt requirement IDs must be unique")
+        issue_ids = [item.issue_id for item in self.issues]
+        if len(issue_ids) != len(set(issue_ids)):
+            raise ValueError("clarification prompt issue IDs must be unique")
+        issue_requirement_ids = [item.requirement_id for item in self.issues]
+        if self.issues and set(issue_requirement_ids) != set(requirement_ids):
+            raise ValueError("clarification prompt issues must exactly link active requirements")
+        requirements_by_id = {item.requirement_id: item for item in self.requirements}
+        for issue in self.issues:
+            requirement = requirements_by_id[issue.requirement_id]
+            if requirement.kind is BlockingRequirementKind.CONFLICT:
+                if issue.kind is not ClarificationIssueKind.CONFLICT:
+                    raise ValueError("conflict requirements require conflict clarification issues")
+            elif issue.kind not in {
+                ClarificationIssueKind.MISSING,
+                ClarificationIssueKind.AMBIGUOUS,
+                ClarificationIssueKind.UNSUPPORTED,
+            }:
+                raise ValueError("field requirements cannot use conflict clarification issues")
+        if (
+            self.composition_source is PromptCompositionSource.MODEL
+            and self.fallback_code is not None
+        ):
+            raise ValueError("model-composed prompts cannot carry a fallback code")
         return self
 
 
@@ -377,6 +519,15 @@ class RejectedFragment(SessionContractModel):
     span: MessageSpan
     reason: RejectedFragmentReason
     detail: str = Field(min_length=1)
+    requirement_ids: tuple[str, ...] = ()
+    reason_code: str | None = Field(default=None, min_length=1)
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"span"})
+
+    @model_validator(mode="after")
+    def validate_requirement_links(self) -> RejectedFragment:
+        if len(self.requirement_ids) != len(set(self.requirement_ids)):
+            raise ValueError("rejected fragment requirement IDs must be unique")
+        return self
 
 
 class ResolutionOutcome(SessionContractModel):
@@ -423,6 +574,8 @@ class ClarificationSessionRevision(SessionContractModel):
         if self.status is ClarificationSessionStatus.AWAITING_ANSWER:
             if self.prompt is None or self.stop_reason is not None:
                 raise ValueError("awaiting-answer revisions require a prompt and no stop reason")
+            if not self.prompt.requirements:
+                raise ValueError("awaiting-answer revisions require active blocking requirements")
         elif self.status is ClarificationSessionStatus.READY:
             if self.prompt is not None or self.stop_reason is not None:
                 raise ValueError("ready revisions cannot have a prompt or stop reason")
@@ -430,6 +583,21 @@ class ClarificationSessionRevision(SessionContractModel):
             raise ValueError("stopped revisions require a stop reason and no prompt")
         if self.answer_turn is not None and self.outcome is not None:
             _validate_outcome_grounding(answer_turn=self.answer_turn, outcome=self.outcome)
+        if self.prompt is not None:
+            if self.revision == 0:
+                if any(issue.span is not None for issue in self.prompt.issues):
+                    raise ValueError("initial prompt issues cannot cite answer spans")
+            elif self.answer_turn is None:
+                if any(issue.span is not None for issue in self.prompt.issues):
+                    raise ValueError("prompt issue spans require the revision answer turn")
+            else:
+                for issue in self.prompt.issues:
+                    if issue.span is not None:
+                        _validate_answer_local_span(
+                            span=issue.span,
+                            answer_message=self.answer_turn.message,
+                            label="prompt issue",
+                        )
         return self
 
 
@@ -441,8 +609,35 @@ def _validate_outcome_grounding(
     """Ensure this revision's accepted amendments belong to its answer message."""
 
     for amendment in outcome.accepted_amendments:
-        if amendment.span.message_id != answer_turn.message.message_id:
-            raise ValueError("accepted amendments must be grounded in the recorded answer message")
+        _validate_answer_local_span(
+            span=amendment.span,
+            answer_message=answer_turn.message,
+            label="accepted amendment",
+        )
+    for fragment in outcome.rejected_fragments:
+        _validate_answer_local_span(
+            span=fragment.span,
+            answer_message=answer_turn.message,
+            label="rejected fragment",
+        )
+
+
+def _validate_answer_local_span(
+    *,
+    span: MessageSpan,
+    answer_message: MessageSpan,
+    label: str,
+) -> None:
+    """Require evidence to be an exact substring of its recorded answer."""
+
+    if span.message_id != answer_message.message_id:
+        raise ValueError(f"{label} must be grounded in the recorded answer message")
+    if span.start < answer_message.start or span.end > answer_message.end:
+        raise ValueError(f"{label} span must lie within the recorded answer message")
+    relative_start = span.start - answer_message.start
+    relative_end = span.end - answer_message.start
+    if answer_message.text[relative_start:relative_end] != span.text:
+        raise ValueError(f"{label} span text must exactly match the recorded answer message")
 
 
 def _validate_effective_provenance(
@@ -500,7 +695,9 @@ class ClarificationSession(SessionContractModel):
             if revision.status is ClarificationSessionStatus.AWAITING_ANSWER:
                 assert revision.prompt is not None
                 if revision.prompt.requirements != blockers:
-                    raise ValueError("pending prompt requirements must exactly match active blockers")
+                    raise ValueError(
+                        "pending prompt requirements must exactly match active blockers"
+                    )
             if revision.status is ClarificationSessionStatus.READY and blockers:
                 raise ValueError("ready session revisions cannot retain blocking requirements")
         answer_message_ids: list[str] = []
@@ -517,8 +714,17 @@ class ClarificationSession(SessionContractModel):
                 raise ValueError("answer turn number must match its resulting revision")
             if revision.answer_turn.expected_revision != previous.revision:
                 raise ValueError("answer turn expected revision must match the prior revision")
-            if previous.prompt is None or revision.answer_turn.prompt_id != previous.prompt.prompt_id:
+            if (
+                previous.prompt is None
+                or revision.answer_turn.prompt_id != previous.prompt.prompt_id
+            ):
                 raise ValueError("answer turn prompt ID must match the prior pending prompt")
+            active_requirement_ids = {item.requirement_id for item in previous.prompt.requirements}
+            for fragment in revision.outcome.rejected_fragments:
+                if not set(fragment.requirement_ids).issubset(active_requirement_ids):
+                    raise ValueError(
+                        "rejected fragment requirement links must be active in the prior prompt"
+                    )
             answer_message_ids.append(revision.answer_turn.message.message_id)
             for amendment in revision.outcome.accepted_amendments:
                 amendments_by_id[amendment.amendment_id] = amendment
@@ -547,9 +753,12 @@ __all__ = [
     "AmendmentTarget",
     "AnswerMessageSource",
     "AnswerTurn",
+    "AssumptionDisclosure",
     "BlockingRequirement",
     "BlockingRequirementKind",
     "ClarificationAnswerCommand",
+    "ClarificationIssue",
+    "ClarificationIssueKind",
     "ClarificationPrompt",
     "ClarificationSession",
     "ClarificationSessionLimits",
@@ -563,10 +772,12 @@ __all__ = [
     "InitialSnapshotSource",
     "LocationAmendment",
     "MessageSpan",
+    "PromptCompositionSource",
     "RejectedFragment",
     "RejectedFragmentReason",
     "ResolutionOutcome",
     "TemporalAmendment",
+    "TemporalAnswerInterpretationProvenance",
     "TemporalContribution",
     "TemporalContributionKind",
     "TravelersAmendment",

@@ -9,6 +9,7 @@ description = "Scaffold for an award-travel request-understanding workflow."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "httpx[socks]>=0.23,<1",
     "openai>=1.50,<2",
     "pydantic>=2,<3",
     "python-dotenv>=1,<2",
@@ -21,6 +22,8 @@ award-frozen-selector-eval = "award_agent.cli.frozen_selector_eval:main"
 award-selector-workflow-integration-eval = "award_agent.cli.selector_workflow_integration_eval:main"
 award-clarification-continuation-eval = "award_agent.cli.clarification_continuation_eval:main"
 award-clarification-live-eval = "award_agent.cli.clarification_live_eval:main"
+award-clarification-behavior-eval = "award_agent.cli.clarification_behavior_eval:main"
+award-clarification-behavior-live-eval = "award_agent.cli.clarification_behavior_live_eval:main"
 
 [project.optional-dependencies]
 dev = [

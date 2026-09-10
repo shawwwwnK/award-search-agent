@@ -7,6 +7,7 @@ from collections.abc import Mapping
 from copy import deepcopy
 from datetime import UTC, datetime
 from hashlib import sha256
+from math import ceil
 from pathlib import Path
 from time import perf_counter
 from typing import Any
@@ -37,6 +38,12 @@ class ClarificationLiveFixtureError(ValueError):
     """A live synthetic trajectory is malformed or would leak private data."""
 
 
+def _required_terminal_correct(session_count: int) -> int:
+    """Return the minimum terminal successes for the 95% live gate."""
+
+    return ceil(0.95 * session_count)
+
+
 def _load_cases(path: Path) -> tuple[list[Mapping[str, Any]], bytes]:
     try:
         raw = path.read_bytes()
@@ -63,6 +70,10 @@ def _load_cases(path: Path) -> tuple[list[Mapping[str, Any]], bytes]:
             raise ClarificationLiveFixtureError("live scenarios need one or more turns")
         ids.add(identifier)
         prepared.append(scenario)
+    if not any(item.get("blind_target") is True for item in prepared):
+        raise ClarificationLiveFixtureError("live qualification needs at least one blind_target scenario")
+    if not any(item.get("qualification_target") is True for item in prepared):
+        raise ClarificationLiveFixtureError("live qualification needs at least one qualification_target scenario")
     return prepared, raw
 
 
@@ -224,6 +235,18 @@ def run_live_clarification_eval(
                     ),
                     "latency_seconds": perf_counter() - run_started,
                     "usage": usage,
+                    "template_outcomes": [
+                        {
+                            "target": (
+                                "departure"
+                                if contribution.kind.value == "departure_window"
+                                else "return_or_duration"
+                            ),
+                            "template_id": contribution.template_provenance.template_id,
+                        }
+                        for contribution in session.effective_request.temporal_contributions
+                        if contribution.template_provenance is not None
+                    ],
             }
             call_traces = adapter.take_call_traces()
             # Always write trace sidecars. They are private/gitignored and never
@@ -254,6 +277,43 @@ def run_live_clarification_eval(
     )
     prompt_coverage_total = sum(int(record["processed_turns"]) for record in records)
     prompt_coverage_passed = sum(int(record["prompt_coverage"]) for record in records)
+    required_terminal_correct = _required_terminal_correct(len(records))
+    target_template: dict[tuple[str, str], dict[str, int]] = {}
+    for record in records:
+        template_outcomes = record["template_outcomes"]
+        assert isinstance(template_outcomes, list)
+        for item in template_outcomes:
+            assert isinstance(item, Mapping)
+            key = (str(item["target"]), str(item["template_id"]))
+            metric = target_template.setdefault(key, {"seen": 0, "terminal_correct": 0})
+            metric["seen"] += 1
+            metric["terminal_correct"] += int(bool(record["terminal_correct"]))
+    blind_trials = {
+        str(scenario["id"]): [
+            bool(record["terminal_correct"])
+            for record in records
+            if record["scenario"] == scenario["id"]
+        ]
+        for scenario in cases
+        if scenario.get("blind_target") is True
+    }
+    blind_target_gate = {
+        identifier: {"passed": all(outcomes) and len(outcomes) == trials, "passed_trials": sum(outcomes), "trials": len(outcomes)}
+        for identifier, outcomes in blind_trials.items()
+    }
+    qualification_trials = {
+        str(scenario["id"]): [
+            bool(record["terminal_correct"])
+            for record in records
+            if record["scenario"] == scenario["id"]
+        ]
+        for scenario in cases
+        if scenario.get("qualification_target") is True
+    }
+    qualification_target_gate = {
+        identifier: {"passed": all(outcomes) and len(outcomes) == trials, "passed_trials": sum(outcomes), "trials": len(outcomes)}
+        for identifier, outcomes in qualification_trials.items()
+    }
     return {
         "schema_version": "clarification_live_eval_v1",
         "fixture": {"path": str(fixture_path), "sha256": sha256(raw).hexdigest(), "redacted": True},
@@ -284,6 +344,17 @@ def run_live_clarification_eval(
                 "precision": matched_resolutions / len(linked_resolutions) if linked_resolutions else 1.0,
                 "recall": matched_resolutions / len(expected_resolutions) if expected_resolutions else 1.0,
             },
+            "per_target_template": {
+                f"{target}:{template_id}": {
+                    "target": target,
+                    "template_id": template_id,
+                    **metric,
+                    "rate": metric["terminal_correct"] / metric["seen"] if metric["seen"] else 0.0,
+                }
+                for (target, template_id), metric in sorted(target_template.items())
+            },
+            "blind_target_gate": blind_target_gate,
+            "qualification_target_gate": qualification_target_gate,
             "convergence": {
                 "within_turn_budget": sum(
                     bool(record["terminal_correct"])
@@ -301,11 +372,23 @@ def run_live_clarification_eval(
             },
             "live_gate": {
                 "passed": len(records) >= 36
-                and terminal_correct >= 35
+                and terminal_correct >= required_terminal_correct
                 and blockers_exact / blocker_total >= 0.95
                 and unauthorized == 0
-                and system_errors == 0,
-                "required_terminal_correct": 35,
+                and system_errors == 0
+                and all(item["passed"] for item in blind_target_gate.values())
+                and all(item["passed"] for item in qualification_target_gate.values()),
+                # No aggregate threshold may mask a blind-target miss.
+                # Kept alongside the numeric gates for an explicit artifact audit.
+                "blind_targets_passed": all(
+                    item["passed"] for item in blind_target_gate.values()
+                ),
+                # The listed core selector trajectories must each be 3/3;
+                # aggregate success cannot mask a targeted regression.
+                "qualification_targets_passed": all(
+                    item["passed"] for item in qualification_target_gate.values()
+                ),
+                "required_terminal_correct": required_terminal_correct,
                 "required_exact_blocker_rate": 0.95,
             },
         },

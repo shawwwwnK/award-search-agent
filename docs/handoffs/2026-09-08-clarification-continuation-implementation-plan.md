@@ -19,6 +19,69 @@ Do not change `ParsedRequest`, `RequestUnderstandingResult`, `understand_request
 the temporal scanner/compiler, clarification policy, or the ready corpus. The new session boundary
 is additive. Do not add LangChain or LangGraph.
 
+## Superseding next cut — accepting clarification (2026-09-10)
+
+### Superseding runtime decision — single-call receiver (2026-09-10)
+
+[ADR 0013](../adr/0013-single-call-clarification-receiver.md) supersedes the separate
+prompt-composer call described in Steps 4–6 below. The answer receiver is the only model call for
+a processed answer; the initial prompt is deterministic. Receiver-returned follow-up items may be
+rendered only after their ordered IDs exactly match recomputed blockers, otherwise the
+issue-specific deterministic fallback is used. Retain the older composer material as historical
+qualification evidence, but do not invoke it in the controller or local harness.
+
+The completed ADR 0011 implementation and its v1 qualification evidence remain historical
+conformance records. [ADR 0012](../adr/0012-accepting-clarification-and-behavioral-evaluation.md)
+authorizes the next refinement: the clarification session, unlike the frozen initial intent path,
+must accept reasonable grounded fuzzy answers when they can be represented as one bounded, visible
+approximation. It must not block a cooperative user merely because their wording differs from a
+narrow grammar.
+
+Implement this cut in the following order:
+
+1. Add a new answer-derived approximation/provenance contract and failing regressions for the
+   reported `SFO` / `early next month` / `for a week` / solo trajectory. Keep the initial parser
+   and its contracts untouched.
+2. Extend continuation-only temporal semantics so the answer model maps open wording to approved
+   symbolic meanings (month portions and ordinary approximate durations); deterministic code must
+   validate source spans and compile the bounded values. Document and version the chosen fuzzy
+   envelopes. Do not add phrase-specific rules without evidence across multiple paraphrases.
+3. Derive authoritative post-reduction `ClarificationIssue` records for missing, ambiguous,
+   unsupported, and conflicting remaining requirements. Link an issue to its exact answer-local
+   span and stable reason code when one exists.
+4. Replace answer-interpreter-owned `next_question` with a narrow post-reduction prompt-composer
+   protocol and adapter. Its structured question items must link to the ordered authoritative
+   blocker and issue IDs. It receives no effective state, ledger, or calendar context and cannot
+   mutate a session.
+5. Render an issue-specific deterministic fallback if the composer fails or fails validation. A
+   rejected answer phrase must never cause a generic repeated question. A successful semantic
+   reduction must remain committed if prompt composition fails.
+6. Update the local harness to make composer calls only on explicit start/answer submissions and
+   separately trace the interpreter and composer. Ordinary reruns remain side-effect free.
+7. Add behavioral v2 offline/live evaluation alongside—not in place of—the exact v1 conformance
+   suites. Use property/action oracles, a private rotating holdout, paired boundary cases,
+   paraphrase/metamorphic tests, and human-calibrated review. Treat false blocking, unnecessary
+   clarification, targeted-question quality, assumption disclosure, and materially incorrect
+   assumptions as separate metrics. Retain 100% deterministic safety gates.
+
+Do not implement a multi-window or accept-everything policy in this cut. Discrete alternatives,
+contradictions, and unresolved endpoint ownership remain targeted clarification cases because the
+current `DateWindow` contract cannot represent them truthfully.
+
+## ADR 0012 completion evidence (2026-09-10)
+
+The accepting refinement is implemented and the behavioral v2 evaluation is qualified. The final
+three-trial Luna artifact is
+`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-behavior-v2-final.json`: its exact safety
+gate passed with 0 model/system/evaluator errors and 129/129 captured private trace calls. It
+reported 0/27 false blocks, 0/12 incorrect acceptances, 24/24 required assumption disclosures,
+and 18/18 valid sibling facts retained. The two accept/ask pairs and paraphrase checks passed.
+
+The behavioral measurements are diagnostic, not new release thresholds. The three conflict
+trajectories safely preserved their conflicts but generated generic rather than sufficiently
+issue-specific follow-up wording (12/15 targeted follow-ups; generic-repeat rate 0.20). Preserve
+that finding for a separate bounded quality cut; do not rewrite the evidence as a safety failure.
+
 ## User-visible behavior
 
 The first frozen result remains an initial snapshot. If it needs clarification, the continuation
@@ -31,6 +94,13 @@ when travelers are missing, “Two travelers, and actually make the departure Oc
 both travelers and departure, then recompute the effective temporal state. New unsupported
 constraints or unsupported field revisions must remain explicit and cannot yield a misleading
 `ready` result.
+
+Continuation answers may also use the small deterministic relative-time grammar: `this weekend`,
+`this <weekday>`, or `on <weekday>`. A complete numbered answer line maps one-based to the
+correspondingly ordered typed requirement in the pending prompt, so an answer with two numbered
+lines can resolve departure and return/duration together. This does not expand the frozen initial
+parser; a bare `this weekend` in the initial raw request remains unrecognized there and can still
+leave departure as a blocker.
 
 `ready` means ready for later planning, not directly ready to query Seats.aero; location-to-airport
 resolution remains a later planning responsibility.
@@ -71,8 +141,9 @@ isolation.
 ## Step 2 — blocker collection and prompt rendering
 
 Implement deterministic `collect_blocking_requirements(effective_request)` from the closed blocker
-policy. Use stable semantic IDs without user text. Render exactly one template-based prompt with
-conflicts first, then origin, destination, departure, return/duration, and travelers.
+policy. Use stable semantic IDs without user text. Render exactly one customer-service-oriented
+fallback prompt with conflicts first, then origin, destination, departure, return/duration, and
+travelers. The typed requirements, rather than free-text copy, remain the exact coverage contract.
 
 **Tests:** exact blocker coverage, stable order, duplicate suppression, ready-with-no-blockers,
 and exclusion of nonblocking unknowns.
@@ -88,6 +159,9 @@ corrections to supported resolved fields. It must never produce generic dictiona
 The model-facing input is limited to the answer message ID/text and current typed blocker
 requirements. The original `RequestContext`, effective request, ledger, limits, and all concrete
 calendar values remain deterministic-only.
+It may additionally return one candidate `next_question` with its ordered remaining requirement
+IDs. The controller may use that copy only after reduction when the IDs exactly match the canonical
+remaining blockers and no answer fragment was rejected; otherwise it uses the Step-2 fallback.
 An answer may resolve multiple requirements. Record rejected fragments explicitly.
 
 **Tests:** fake-interpreter multi-field and subset answers, mixed valid/invalid fragments, explicit
@@ -104,17 +178,42 @@ clarification-specific temporal normalizer under the original `RequestContext`:
 - Accept bare duration such as `10 days` only while return/duration is active.
 - Accept a bare date only when endpoint ownership is unambiguous from active requirements or an
   explicit cue.
+- Accept `this weekend`, `this <weekday>`, and `on <weekday>` using deterministic arithmetic from
+  the immutable original reference date. For a complete numbered answer line, use its one-based
+  position to select the corresponding ordered temporal blocker.
+- If the model quotes only the narrow temporal fact, recover a nearby endpoint cue only from the
+  same answer message and the fact's same physical sentence or answer line. Accept one local fact,
+  or exactly two local facts joined by one explicit `and`/`then`, only when the cue and deterministic
+  endpoint agree with the typed amendment target. Re-ask alternatives/disjunctions (`or`/`either`),
+  facts split across sentences or lines, multiple facts without one coordinator, distant cues, and
+  target mismatches; preserve the narrow source span as provenance.
 - Accept explicit correction cues such as “make departure October 6”.
 - Re-ask ambiguous multi-endpoint answers.
 
 Rebuild effective temporal state from active source-keyed contributions. Defer cross-turn anaphora,
 such as “same dates, one week later.”
 
-**Tests:** durations, endpoint ownership, corrections, conflict recomputation, original-context
-preservation, and explicit model/grounding/compiler/holiday failures.
+**Tests:** durations, endpoint ownership, relative weekend/weekday answers, numbered prompt-answer
+mapping, corrections, conflict recomputation, original-context preservation, and explicit
+model/grounding/compiler/holiday failures.
 
 **Exit:** every accepted temporal fact is turn-grounded and deterministically evaluated without
 changing the frozen scanner/compiler.
+
+## Post-implementation qualification update (2026-09-10)
+
+The clarification-only relative selector is implemented as one global, static, date-free catalog
+of opaque affordances. The answer model selects a grounded local span and weekday slot where
+needed; deterministic code validates complete classification, assigns ownership from the numbered
+prompt or local cues, enforces same-answer-only departure dependencies, and compiles dates. It
+does not scan an answer to manufacture candidates, expose calendar/session state to the model, or
+extend cross-turn anaphora. Unsupported spans remain explicit provenance.
+
+The redacted final Luna artifact is
+`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-3-trials-template-v2-final-qualified.json`.
+It contains 48/48 terminal-correct sessions, 60/60 exact blocker and prompt checks, zero system
+errors, and zero unauthorized mutations. The three protected target trajectories each passed all
+three trials; the private all-call sidecars are retained outside the artifact.
 
 ## Step 5 — controller and atomic transitions
 
