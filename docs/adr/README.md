@@ -28,3 +28,4 @@ Expected sections:
 - [0011: Iterative all-blockers clarification sessions](0011-iterative-clarification-sessions.md)
 - [0012: Accepting clarification and behavioral evaluation](0012-accepting-clarification-and-behavioral-evaluation.md)
 - [0013: Single-call clarification receiver](0013-single-call-clarification-receiver.md)
+- [0014: LLM-owned clarification semantics and composition](0014-llm-owned-clarification-semantics-and-composition.md)
