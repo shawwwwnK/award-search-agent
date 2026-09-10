@@ -117,6 +117,29 @@
   requirements: a preregistered locked holdout, rotating post-freeze challenge, owner-approved
   thresholds, repeated trials/confidence intervals, and human review of question naturalness.
 
+## V3 public development matrix (three trials)
+
+- Ran the same disclosed eight-scenario v3 pilot corpus for three Luna/Luna trials. The redacted
+  aggregate artifact is
+  `evals/clarification/baseline/2026-09-10-gpt-5.6-luna-v3-development-diagnostic-3-trials-a86bb59.json`;
+  its 24 private sidecars remain ignored under
+  `evals/clarification/traces-v3-diagnostic-3trial-a86bb59/`.
+- Provider and observability execution was complete: `preflight_rejected=0`,
+  `inference_reached=63`, `structured_result_returned=63`, and all 63 calls were captured and
+  reconciled with zero reported model, system, or evaluator errors. The command exited nonzero
+  only because its safety/behavior gate failed; it was not retried.
+- The current evaluator reports 6 safety-failing records, false blocking in 3/9 eligible turns,
+  incorrect acceptance in 3/12, missing disclosure in 3/6, valid-sibling retention in 3/9, and
+  0/5 completed repair workflows (all five became receiver-pending). The failure distribution is
+  stable for `bare_return_endpoint`, `fuzzy_month_disclosed`, and
+  `return_before_departure_conflict` (three trials each); the public artifact also records all
+  three `explicit_date_alternatives` trials and two `valid_siblings_with_ambiguous_departure`
+  trials as behavioral failures.
+- This matrix is disclosed development evidence only. It increases confidence that the flat wire
+  schema and trace capture work, but it does not override the one-trial trace audit: the
+  approximation-disclosure and conflict action classifications need evaluator review before they
+  are interpreted as product-safety defects. No qualification claim is made.
+
 ## Project-owner decisions
 
 - _Placeholder: record any model-selection or latency decision after reviewed experimental
