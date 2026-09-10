@@ -1,8 +1,15 @@
-"""Least-authority post-reduction prompt-composition boundary (ADR 0012)."""
+"""Least-authority post-reduction prompt-composition boundary (ADR 0014).
+
+The composer is deliberately a presentation-only model boundary.  The
+controller supplies the deterministic, post-reduction blocker set and the
+canonical issue records; the composer supplies customer-facing question copy
+only.  In particular, this module has no session, effective-request, or
+calendar input and contains no natural-language fallback renderer.
+"""
 
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Any, Protocol
 
 from pydantic import Field, model_validator
 
@@ -15,7 +22,14 @@ class ClarificationCompositionError(ValueError):
 
 
 class ClarificationPromptComposerInput(SessionContractModel):
-    """Only active requirements and post-reduction issues cross this boundary."""
+    """Only active requirements and post-reduction issues cross this boundary.
+
+    The domain models are retained here so the controller can pass the
+    authoritative records without copying them into a second contract.  The
+    OpenAI adapter uses :meth:`model_input` to project those records to a
+    smaller model-facing payload, excluding offsets, message IDs, reason
+    codes, and any future fields added to the session ledger.
+    """
 
     requirements: tuple[BlockingRequirement, ...]
     issues: tuple[ClarificationIssue, ...]
@@ -25,9 +39,46 @@ class ClarificationPromptComposerInput(SessionContractModel):
         requirement_ids = [item.requirement_id for item in self.requirements]
         if len(requirement_ids) != len(set(requirement_ids)):
             raise ValueError("composer requirements must have unique IDs")
-        if {item.requirement_id for item in self.issues} != set(requirement_ids):
+        issue_ids = [item.issue_id for item in self.issues]
+        if len(issue_ids) != len(set(issue_ids)):
+            raise ValueError("composer issues must have unique IDs")
+        requirement_id_set = set(requirement_ids)
+        if any(item.requirement_id not in requirement_id_set for item in self.issues):
+            raise ValueError("composer issues must link active requirements")
+        if {item.requirement_id for item in self.issues} != requirement_id_set:
             raise ValueError("composer issues must exactly cover active requirements")
         return self
+
+    def model_input(self) -> dict[str, list[dict[str, Any]]]:
+        """Return the least-authority payload intended for a composer model.
+
+        ``BlockingRequirement`` and ``ClarificationIssue`` are session-domain
+        contracts, so serializing them wholesale would accidentally expose
+        implementation details such as conflict codes, provenance offsets, or
+        message IDs.  The model needs only stable linkage, blocker kind, a
+        safe deterministic explanation, and optional answer phrase text for a
+        targeted question.
+        """
+
+        return {
+            "requirements": [
+                {
+                    "requirement_id": requirement.requirement_id,
+                    "kind": requirement.kind.value,
+                }
+                for requirement in self.requirements
+            ],
+            "issues": [
+                {
+                    "issue_id": issue.issue_id,
+                    "requirement_id": issue.requirement_id,
+                    "kind": issue.kind.value,
+                    "reason": issue.reason,
+                    "span": {"text": issue.span.text} if issue.span is not None else None,
+                }
+                for issue in self.issues
+            ],
+        }
 
 
 class ClarificationQuestionItem(SessionContractModel):
@@ -66,11 +117,14 @@ def validate_prompt_composition(
         raise ClarificationCompositionError(
             "composer question items must exactly match active requirements in canonical order"
         )
-    issue_ids_by_requirement: dict[str, set[str]] = {}
+    issue_ids_by_requirement: dict[str, tuple[str, ...]] = {}
     for issue in input.issues:
-        issue_ids_by_requirement.setdefault(issue.requirement_id, set()).add(issue.issue_id)
+        issue_ids_by_requirement[issue.requirement_id] = (
+            *issue_ids_by_requirement.get(issue.requirement_id, ()),
+            issue.issue_id,
+        )
     for item in composition.question_items:
-        if set(item.issue_ids) != issue_ids_by_requirement[item.requirement_id]:
+        if item.issue_ids != issue_ids_by_requirement[item.requirement_id]:
             raise ClarificationCompositionError(
                 "composer question items must exactly cover their requirement issues"
             )
@@ -81,7 +135,12 @@ def compose_prompt(
     composer: ClarificationPromptComposer,
     input: ClarificationPromptComposerInput,
 ) -> ClarificationPromptComposition:
-    return validate_prompt_composition(input, composer.compose(input))
+    composition = composer.compose(input)
+    if not isinstance(composition, ClarificationPromptComposition):
+        raise ClarificationCompositionError(
+            "composer must return a ClarificationPromptComposition"
+        )
+    return validate_prompt_composition(input, composition)
 
 
 __all__ = [

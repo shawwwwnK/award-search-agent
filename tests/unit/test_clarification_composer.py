@@ -1,4 +1,4 @@
-"""ADR 0012 post-reduction issue and prompt-composition tests."""
+"""ADR 0014 post-reduction issue and prompt-composition tests."""
 
 from __future__ import annotations
 
@@ -16,7 +16,10 @@ from award_agent.clarification.composer import (
 )
 from award_agent.clarification.issues import derive_clarification_issues
 from award_agent.clarification.openai_composer import (
+    DEFAULT_CLARIFICATION_COMPOSER_MODEL,
+    GPT_4O_MINI_CLARIFICATION_COMPOSER_MODEL,
     OpenAIClarificationComposerConfig,
+    OpenAIClarificationComposerError,
     OpenAIClarificationPromptComposer,
     _ClarificationPromptComposerWireOutput,
 )
@@ -129,6 +132,51 @@ def test_composer_requires_exact_requirement_order_and_issue_coverage() -> None:
         validate_prompt_composition(input, bad)
 
 
+def test_composer_input_rejects_duplicate_or_unknown_issue_links() -> None:
+    requirements = _requirements()
+    issues = derive_clarification_issues(requirements)
+
+    with pytest.raises(ValueError, match="unique IDs"):
+        ClarificationPromptComposerInput(
+            requirements=requirements,
+            issues=(*issues, issues[0].model_copy(deep=True)),
+        )
+
+    with pytest.raises(ValueError, match="active requirements"):
+        ClarificationPromptComposerInput(
+            requirements=requirements,
+            issues=(
+                issues[0],
+                issues[1].model_copy(update={"requirement_id": "not-active"}),
+            ),
+        )
+
+
+def test_model_input_is_a_least_authority_projection() -> None:
+    requirements = _requirements()
+    input = ClarificationPromptComposerInput(
+        requirements=requirements,
+        issues=derive_clarification_issues(requirements),
+    )
+
+    payload = input.model_input()
+
+    assert payload["requirements"] == [
+        {"requirement_id": "departure", "kind": "departure"},
+        {"requirement_id": "travelers", "kind": "travelers"},
+    ]
+    assert payload["issues"][0] == {
+        "issue_id": "departure:missing",
+        "requirement_id": "departure",
+        "kind": "missing",
+        "reason": "A departure timing is still needed.",
+        "span": None,
+    }
+    serialized = json.dumps(payload)
+    for forbidden in ("field", "conflict_code", "reason_code", "message_id", "start", "end"):
+        assert forbidden not in serialized
+
+
 class _Responses:
     def __init__(self, output: object) -> None:
         self.output = output
@@ -179,3 +227,46 @@ def test_openai_composer_receives_only_requirements_and_issues() -> None:
     assert set(payload) == {"requirements", "issues"}
     assert "reference_date" not in str(payload)
     assert "effective_request" not in str(payload)
+    assert "message_id" not in str(payload)
+    assert call["max_output_tokens"] == 300
+
+
+def test_openai_composer_supports_experiment_model_configuration() -> None:
+    assert OpenAIClarificationComposerConfig().model == DEFAULT_CLARIFICATION_COMPOSER_MODEL
+    assert (
+        OpenAIClarificationComposerConfig(model=GPT_4O_MINI_CLARIFICATION_COMPOSER_MODEL).model
+        == "gpt-4o-mini"
+    )
+    assert OpenAIClarificationComposerConfig(temperature=0.2).temperature == 0.2
+    with pytest.raises(ValueError, match="between 0 and 2"):
+        OpenAIClarificationComposerConfig(temperature=2.1)
+
+
+def test_openai_composer_rejects_unlinked_model_items() -> None:
+    requirements = _requirements()
+    input = ClarificationPromptComposerInput(
+        requirements=requirements, issues=derive_clarification_issues(requirements)
+    )
+    wire = _ClarificationPromptComposerWireOutput.model_validate(
+        {
+            "question_items": [
+                {
+                    "requirement_id": "departure",
+                    "issue_ids": ["travelers:missing"],
+                    "question": "When would you like to leave?",
+                },
+                {
+                    "requirement_id": "travelers",
+                    "issue_ids": ["travelers:missing"],
+                    "question": "How many people will be traveling?",
+                },
+            ]
+        }
+    )
+    composer = OpenAIClarificationPromptComposer(
+        OpenAIClarificationComposerConfig(model="model"),
+        client=_Client(wire),  # type: ignore[arg-type]
+    )
+
+    with pytest.raises(OpenAIClarificationComposerError, match="canonical validation"):
+        composer.compose(input)
