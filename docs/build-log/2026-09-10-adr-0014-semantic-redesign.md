@@ -59,6 +59,21 @@
 - This entry records architecture and evaluation-design decisions only. No ADR 0015 implementation
   tests or live evaluation results are asserted here.
 
+## OpenAI flat-wire preflight correction
+
+- The first v3 development diagnostic (`f582925`, one trial, eight scenarios) was inspected after
+  trace capture. Every receiver call was rejected by OpenAI before inference because the prior
+  generated Structured Output schema contained `oneOf`. The diagnostic's repair calls repeated
+  that same rejected schema. It is retained as adapter/preflight and telemetry evidence only, not
+  as a semantic, behavioral, latency, or model-comparison result.
+- Architecture approved an OpenAI-only flat wire envelope with fixed arrays per fact kind and flat
+  nullable anchor fields. Structural wire conversion restores the unchanged generic internal
+  calendar-proposal model and does not inspect raw answer text.
+- A provider schema rejection is now a preflight pending outcome: it is visibly retryable and
+  non-mutating, does not consume the receiver repair budget, and must not be counted as model
+  understanding failure. Future live artifacts/traces bind the proposal-contract version,
+  wire-adapter version, and canonical generated-schema hash.
+
 ## Project-owner decisions
 
 - _Placeholder: record any model-selection or latency decision after reviewed experimental

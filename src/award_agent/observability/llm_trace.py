@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 from collections.abc import Mapping, Sequence
+from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +42,14 @@ def _schema_snapshot(text_format: Any) -> dict[str, Any]:
         except Exception:  # noqa: BLE001 - tracing must not affect the model call
             return {"name": getattr(text_format, "__name__", repr(text_format))}
     return {"name": getattr(text_format, "__name__", repr(text_format))}
+
+
+def response_schema_sha256(text_format: Any) -> str:
+    """Stable hash for a Structured Output DTO schema, never model output."""
+
+    snapshot = _schema_snapshot(text_format)
+    canonical = json.dumps(snapshot, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+    return sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def _response_snapshot(response: Any) -> str:
@@ -80,6 +89,7 @@ class LLMCallTraceCollector:
         instructions: str,
         payload: str,
         text_format: Any,
+        adapter_version: str | None = None,
         response: Any | None = None,
         error: BaseException | None = None,
         latency_seconds: float | None = None,
@@ -89,6 +99,10 @@ class LLMCallTraceCollector:
         trace: dict[str, Any] = {
             "sequence": len(self._traces) + 1,
             "stage": stage,
+            "adapter": {
+                "version": adapter_version,
+                "response_schema_sha256": response_schema_sha256(text_format),
+            },
             "request": {
                 "model": model,
                 "instructions": instructions,

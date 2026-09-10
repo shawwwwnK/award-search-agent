@@ -56,6 +56,24 @@ The model does not set a concrete resolved calendar date authoritatively, select
 link, override protected state, or choose the final amendment authority. Those remain state-policy
 and invariant decisions. This is an invariant boundary, not a second language parser.
 
+### OpenAI uses a flat provider adapter, not the internal proposal schema
+
+The generic calculation contract remains the internal, provider-independent contract. The OpenAI
+Responses adapter alone uses a flat structured-output envelope: separate fixed fact arrays for
+location, traveler, literal interval, recurring interval, offset interval, duration, and unresolved
+facts. Anchors are flat nullable fields with an explicit anchor kind. The adapter structurally
+translates those typed wire fields into the internal generic proposal. It does not inspect raw
+answer text, classify a phrase, infer missing semantics, or broaden the internal proposal model.
+
+This separation exists because OpenAI Structured Outputs rejects schemas containing `oneOf` before
+model inference. The flat wire envelope must contain no `oneOf`; a provider-specific schema shape
+is not an architectural change to the model-owned semantic boundary.
+
+If the provider rejects the submitted schema before inference, classify it as an
+**adapter/preflight pending** outcome, not as a semantic receiver failure. Retrying the identical
+schema is futile and must not spend the answer turn's single model-repair budget. The session stays
+non-mutating and visibly retryable while the adapter/schema is corrected.
+
 ### One bounded, model-owned repair; no user-visible contract exception
 
 If a receiver result fails wire/schema conversion, grounding, semantic validation, or calendar
@@ -121,6 +139,9 @@ not evidence that the ADR 0015 runtime is qualified.
   or system outcomes rather than blamed on a reasonable user answer.
 - The receiver may need a repair call, increasing worst-case latency and cost; reports must make
   repair rate and repair latency visible rather than hiding them in aggregate success.
+- OpenAI wire changes require provider-schema conformance coverage in addition to internal
+  proposal tests. A provider preflight rejection is actionable adapter evidence, not model-quality
+  evidence.
 - The evaluator can distinguish unsafe acceptance, correct ambiguity handling, semantic
   understanding, representation gaps, and genuine user non-progress.
 
@@ -130,7 +151,10 @@ Use [the clarification acceptance evaluation protocol](../evaluation/clarificati
 The hard offline gate remains 100% for safety invariants and includes proof that no continuation
 code semantically parses raw answer text. Live qualification uses disclosed cases, a locked
 external holdout, and rotating post-freeze challenges. It reports outcome/action correctness and
-properties by family, with repair attribution, rather than one terminal-exactness score.
+properties by family, with repair attribution, rather than one terminal-exactness score. Every
+trace/artifact records the internal proposal-contract version, provider wire-adapter version, and
+hash of the canonical generated provider schema so a provider preflight failure can be separated
+from semantic behavior.
 
 ## Revisit trigger
 

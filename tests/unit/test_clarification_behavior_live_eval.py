@@ -332,6 +332,13 @@ def test_live_behavior_public_artifact_is_redacted_and_stage_separated(tmp_path:
     assert artifact["summary"]["metadata"]["mode"] == "pilot"
     assert artifact["summary"]["metadata"]["pool"] == "public"
     assert artifact["summary"]["metadata"]["execution"] == "live_openai"
+    adapter_metadata = artifact["summary"]["metadata"]["adapter"]
+    assert set(adapter_metadata) == {"interpreter", "composer"}
+    assert all(
+        isinstance(item["version"], str)
+        and len(item["response_schema_sha256"]) == 64
+        for item in adapter_metadata.values()
+    )
     assert set(artifact["summary"]["metadata"]["slice_metrics"]) >= {"class:conflict", "family:conflict"}
     assert set(artifact["summary"]["behavioral"]) >= {
         "false_blocking",

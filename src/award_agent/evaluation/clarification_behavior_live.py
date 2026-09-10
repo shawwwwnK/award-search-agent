@@ -30,10 +30,14 @@ from award_agent.clarification.controller import (
 )
 from award_agent.clarification.interpreter import ClarificationAnswerInterpreter
 from award_agent.clarification.openai_composer import (
+    OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION,
+    OPENAI_CLARIFICATION_COMPOSER_RESPONSE_SCHEMA_SHA256,
     OpenAIClarificationComposerConfig,
     OpenAIClarificationPromptComposer,
 )
 from award_agent.clarification.openai_interpreter import (
+    OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION,
+    OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256,
     OpenAIClarificationAnswerInterpreter,
     OpenAIClarificationInterpreterConfig,
 )
@@ -1348,7 +1352,7 @@ def run_live_clarification_behavior_eval(
                     "pending_composer": sum(record["repair_telemetry"]["pending_composer"] for record in records),
                 },
             },
-            "metadata": {"mode": mode, "pool": pool, "execution": "live_openai", "evaluator_version": EVALUATOR_VERSION, "adapter_versions": {"interpreter": "openai_clarification_interpreter_v2", "composer": "openai_clarification_composer_v1"}, "scenario_distribution": dict(sorted(family_counts.items())), "answer_class_distribution": dict(sorted(class_counts.items())), "slice_metrics": slice_metrics, "stop_reasons": dict(sorted(stop_reasons.items())), "trial_variance": {"rates": trial_rates, "mean": mean_rate, "variance": variance}, "errors": {"model": total_stage["interpreter"]["errors"] + total_stage["composer"]["errors"], "system": system_errors, "evaluator": evaluator_errors}},
+            "metadata": {"mode": mode, "pool": pool, "execution": "live_openai", "evaluator_version": EVALUATOR_VERSION, "adapter": {"interpreter": {"version": OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION, "response_schema_sha256": OPENAI_CLARIFICATION_INTERPRETER_RESPONSE_SCHEMA_SHA256}, "composer": {"version": OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION, "response_schema_sha256": OPENAI_CLARIFICATION_COMPOSER_RESPONSE_SCHEMA_SHA256}}, "scenario_distribution": dict(sorted(family_counts.items())), "answer_class_distribution": dict(sorted(class_counts.items())), "slice_metrics": slice_metrics, "stop_reasons": dict(sorted(stop_reasons.items())), "trial_variance": {"rates": trial_rates, "mean": mean_rate, "variance": variance}, "errors": {"model": total_stage["interpreter"]["errors"] + total_stage["composer"]["errors"], "system": system_errors, "evaluator": evaluator_errors}},
             "instrumentation": {
                 "stages": total_stage,
                 "totals": {

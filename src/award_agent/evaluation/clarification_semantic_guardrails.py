@@ -116,6 +116,13 @@ _FORBIDDEN_TEXT_METHODS = {
     "search",
     "fullmatch",
 }
+_OPENAI_CONVERTER_FUNCTIONS = {
+    "_span",
+    "_convert_wire_output",
+    "_fact",
+    "_calendar_fact",
+    "_anchor",
+}
 _REQUIRED_FAMILIES = frozenset(
     {
         "schema_span_grounding",
@@ -300,9 +307,64 @@ def find_raw_answer_semantic_parser_violations(
 def audit_continuation_raw_answer_boundary(
     source_root: Path = Path("src/award_agent/clarification"),
 ) -> tuple[ParserBoundaryViolation, ...]:
-    return find_raw_answer_semantic_parser_violations(
-        {name: (source_root / name).read_text() for name in _CONTINUATION_SOURCES}
+    violations = list(
+        find_raw_answer_semantic_parser_violations(
+            {name: (source_root / name).read_text() for name in _CONTINUATION_SOURCES}
+        )
     )
+    violations.extend(
+        find_openai_converter_semantic_parser_violations(
+            (source_root / "openai_interpreter.py").read_text(), path="openai_interpreter.py"
+        )
+    )
+    return tuple(violations)
+
+
+def find_openai_converter_semantic_parser_violations(
+    source: str, *, path: str = "openai_interpreter.py"
+) -> tuple[ParserBoundaryViolation, ...]:
+    """Allow only exact ``text.find(quote, cursor)`` span grounding in DTO conversion."""
+    try:
+        tree = ast.parse(source, filename=path)
+    except SyntaxError as exc:  # pragma: no cover
+        return (ParserBoundaryViolation(path, exc.lineno or 0, "source does not parse"),)
+    violations: list[ParserBoundaryViolation] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module == "re" or isinstance(node, ast.Import) and any(alias.name == "re" for alias in node.names):
+            violations.append(
+                ParserBoundaryViolation(path, node.lineno, "forbidden converter import: re")
+            )
+        if not isinstance(node, ast.FunctionDef) or node.name not in _OPENAI_CONVERTER_FUNCTIONS:
+            continue
+        for call in ast.walk(node):
+            if not isinstance(call, ast.Call):
+                continue
+            name = _call_name(call)
+            if name in {"int", "float"}:
+                violations.append(
+                    ParserBoundaryViolation(
+                        path, call.lineno, "forbidden converter numeric inference"
+                    )
+                )
+            elif name in _FORBIDDEN_TEXT_METHODS:
+                allowed_span_find = (
+                    node.name == "_span"
+                    and name == "find"
+                    and isinstance(call.func, ast.Attribute)
+                    and isinstance(call.func.value, ast.Name)
+                    and call.func.value.id == "text"
+                    and len(call.args) == 2
+                    and all(isinstance(arg, ast.Name) for arg in call.args)
+                    and [arg.id for arg in call.args if isinstance(arg, ast.Name)]
+                    == ["quote", "cursor"]
+                )
+                if not allowed_span_find:
+                    violations.append(
+                        ParserBoundaryViolation(
+                            path, call.lineno, f"forbidden converter text operation: {name}"
+                        )
+                    )
+    return tuple(violations)
 
 
 def _input(text: str = "opaque-answer") -> ClarificationAnswerInterpreterInput:
@@ -1094,6 +1156,7 @@ __all__ = [
     "ClarificationSemanticGuardrailError",
     "ParserBoundaryViolation",
     "audit_continuation_raw_answer_boundary",
+    "find_openai_converter_semantic_parser_violations",
     "find_raw_answer_semantic_parser_violations",
     "preflight_clarification_semantic_guardrail_cases",
     "run_offline_clarification_semantic_guardrails",

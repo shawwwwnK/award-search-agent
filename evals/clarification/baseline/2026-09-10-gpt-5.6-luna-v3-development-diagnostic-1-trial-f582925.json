@@ -1,0 +1,949 @@
+{
+  "schema_version": "clarification_behavior_live_eval_v3",
+  "fixture": {
+    "sha256": "f3bceaf0c723bf4fea24d0da5687d853695721bc15546acf9a7021e48199d692",
+    "redacted": true,
+    "scenario_count": 8,
+    "private_holdout": false
+  },
+  "models": {
+    "interpreter": "gpt-5.6-luna",
+    "composer": "gpt-5.6-luna"
+  },
+  "trials": 1,
+  "generated_at": "2026-09-10T23:08:36.564601+00:00",
+  "llm_trace": {
+    "mode": "all_calls_private",
+    "directory": "evals/clarification/traces-v3-diagnostic-f582925/run-2026-09-10T230836.564601-0000-916dffa3",
+    "sidecars": 8
+  },
+  "records": [
+    {
+      "scenario": "clear_explicit_dates",
+      "family": "clear_resolvable",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "status outside permitted envelope"
+      ],
+      "property_failures": [
+        "departure window is not bounded",
+        "return window is not bounded",
+        "return is not after departure"
+      ],
+      "value_failures": [
+        "exact value mismatch: departure",
+        "exact value mismatch: return"
+      ],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.1525460418779403,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 3.955035415943712,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.33838116680271924,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.5619302501436323,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "clear_explicit_dates_paraphrase",
+      "family": "clear_resolvable",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "status outside permitted envelope"
+      ],
+      "property_failures": [
+        "departure window is not bounded",
+        "return window is not bounded",
+        "return is not after departure"
+      ],
+      "value_failures": [
+        "exact value mismatch: departure",
+        "exact value mismatch: return"
+      ],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.12792791705578566,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 2.103645999915898,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.48499604198150337,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 74,
+          "total_tokens": 480,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.577029790962115,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "explicit_date_alternatives",
+      "family": "alternatives",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "outcome action outside expected envelope",
+        "question intent mismatch"
+      ],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "ask",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.16045358311384916,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 2.101590499980375,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.657987249083817,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.4031603340990841,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "bare_return_endpoint",
+      "family": "endpoint_ambiguity",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "outcome action outside expected envelope",
+        "question intent mismatch"
+      ],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "ask",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.16184379113838077,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 2.9520487918052822,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.5721262081060559,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.2980492080096155,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "correction_with_duration_sibling",
+      "family": "correction_sibling",
+      "answer_class": "correction",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "accepted approximation has no disclosure",
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "status outside permitted envelope"
+      ],
+      "property_failures": [
+        "departure window outside acceptable envelope",
+        "duration outside acceptable envelope"
+      ],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "pending_retryable",
+          "disclosure_required": true,
+          "disclosure_missing": true,
+          "materially_incorrect_assumption": true,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.11207291600294411,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 1.9438653748948127,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.3560859989374876,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 410,
+          "output_tokens": 79,
+          "total_tokens": 489,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.5475561250932515,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "valid_siblings_with_ambiguous_departure",
+      "family": "sibling_retention",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "question intent mismatch"
+      ],
+      "property_failures": [
+        "duration outside acceptable envelope"
+      ],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "partial_resolve_and_ask",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 3,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.1397776671219617,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 2.4273797918576747,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.3240590002387762,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 490,
+          "output_tokens": 124,
+          "total_tokens": 614,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.052646083990112,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "fuzzy_month_disclosed",
+      "family": "disclosed_approximation",
+      "answer_class": "safely_assumable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "accepted approximation has no disclosure",
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "status outside permitted envelope"
+      ],
+      "property_failures": [
+        "departure window missing",
+        "departure window is not bounded"
+      ],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "pending_retryable",
+          "disclosure_required": true,
+          "disclosure_missing": true,
+          "materially_incorrect_assumption": true,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.17309041693806648,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 1.32094670785591,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.3334211250767112,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 355,
+          "output_tokens": 43,
+          "total_tokens": 398,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 0.9485939578153193,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "return_before_departure_conflict",
+      "family": "conflict",
+      "answer_class": "conflict",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "required blocker silently cleared",
+        "unsafe ambiguity acceptance",
+        "forbidden outcome: unsafe_ambiguity_acceptance",
+        "model trace reconciliation failed",
+        "unhandled model trace error"
+      ],
+      "behavioral_failures": [
+        "outcome action outside expected envelope",
+        "question intent mismatch"
+      ],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "ask",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 1,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0.17457595793530345,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "latency_seconds": 1.7729944579768926,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 0,
+          "missing_calls": 2,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "trace_count": 2,
+          "reconciled": false,
+          "latency_seconds": 0.31980341696180403,
+          "errors": 2
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 366,
+          "output_tokens": 53,
+          "total_tokens": 419,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.4028362920507789,
+          "errors": 0
+        }
+      }
+    }
+  ],
+  "summary": {
+    "exact_safety_gate": {
+      "passed": false,
+      "failed": 8
+    },
+    "behavioral": {
+      "false_blocking": {
+        "count": 3,
+        "denominator": 3,
+        "rate": 1.0,
+        "eligible": true
+      },
+      "incorrect_acceptance": {
+        "count": 1,
+        "denominator": 4,
+        "rate": 0.25,
+        "eligible": true
+      },
+      "targeted_question": {
+        "required": 4,
+        "targeted": 0
+      },
+      "valid_sibling_retention": {
+        "expected": 3,
+        "retained": 0
+      },
+      "property_envelopes": {
+        "failed_records": 5,
+        "failure_count": 11
+      },
+      "assumption_disclosure": {
+        "required": 2,
+        "missing": 2
+      },
+      "materially_incorrect_assumption": {
+        "count": 2,
+        "denominator": 2
+      },
+      "unnecessary_clarification": {
+        "count": 5,
+        "denominator": 3
+      },
+      "generic_repeat_rate": {
+        "count": 4,
+        "denominator": 4,
+        "rate": 1.0,
+        "eligible": true
+      },
+      "turns_to_ready": {
+        "ready_sessions": 0,
+        "mean": null
+      },
+      "paired_accept_ask": {
+        "passed": false,
+        "pairs": 1,
+        "trial_runs": 1
+      },
+      "paraphrase_consistency": {
+        "passed": false,
+        "trial_runs": 1
+      },
+      "repair_transitions": {
+        "first_pass_calls": 8,
+        "repair_calls": 8,
+        "repaired_workflows": 0,
+        "pending_retryable": 8,
+        "pending_receiver": 8,
+        "pending_composer": 0
+      }
+    },
+    "metadata": {
+      "mode": "pilot",
+      "pool": "public",
+      "execution": "live_openai",
+      "evaluator_version": "clarification_behavior_live_eval_v3.0",
+      "adapter_versions": {
+        "interpreter": "openai_clarification_interpreter_v2",
+        "composer": "openai_clarification_composer_v1"
+      },
+      "scenario_distribution": {
+        "alternatives": 1,
+        "clear_resolvable": 2,
+        "conflict": 1,
+        "correction_sibling": 1,
+        "disclosed_approximation": 1,
+        "endpoint_ambiguity": 1,
+        "sibling_retention": 1
+      },
+      "answer_class_distribution": {
+        "ambiguous": 3,
+        "conflict": 1,
+        "correction": 1,
+        "reasonably_resolvable": 2,
+        "safely_assumable": 1
+      },
+      "slice_metrics": {
+        "family:clear_resolvable": {
+          "sessions": 2,
+          "safety_failures": 2,
+          "behavioral_failures": 2,
+          "false_blocking": 2,
+          "incorrect_acceptance": 0
+        },
+        "family:alternatives": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:endpoint_ambiguity": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:correction_sibling": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "family:sibling_retention": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "family:disclosed_approximation": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "family:conflict": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 1
+        },
+        "class:reasonably_resolvable": {
+          "sessions": 2,
+          "safety_failures": 2,
+          "behavioral_failures": 2,
+          "false_blocking": 2,
+          "incorrect_acceptance": 0
+        },
+        "class:ambiguous": {
+          "sessions": 3,
+          "safety_failures": 3,
+          "behavioral_failures": 3,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "class:correction": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "class:safely_assumable": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "class:conflict": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 1
+        }
+      },
+      "stop_reasons": {},
+      "trial_variance": {
+        "rates": {
+          "1": 0.0
+        },
+        "mean": 0.0,
+        "variance": 0.0
+      },
+      "errors": {
+        "model": 16,
+        "system": 0,
+        "evaluator": 0
+      }
+    },
+    "instrumentation": {
+      "stages": {
+        "interpreter": {
+          "calls": 16,
+          "captured_calls": 0,
+          "missing_calls": 16,
+          "trace_count": 16,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "errors": 16,
+          "reconciled_sessions": 0,
+          "unreconciled_sessions": 8,
+          "latency_seconds": 3.3868602071888745
+        },
+        "composer": {
+          "calls": 8,
+          "captured_calls": 8,
+          "missing_calls": 0,
+          "trace_count": 8,
+          "input_tokens": 3194,
+          "output_tokens": 580,
+          "total_tokens": 3774,
+          "errors": 0,
+          "reconciled_sessions": 8,
+          "unreconciled_sessions": 0,
+          "latency_seconds": 14.791802042163908
+        }
+      },
+      "totals": {
+        "calls": 24,
+        "captured_calls": 8,
+        "missing_calls": 16,
+        "trace_count": 24,
+        "input_tokens": 3194,
+        "output_tokens": 580,
+        "total_tokens": 3774,
+        "errors": 16,
+        "reconciled_sessions": 8,
+        "unreconciled_sessions": 8,
+        "latency_seconds": 18.178662249352783
+      }
+    }
+  }
+}

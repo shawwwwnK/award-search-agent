@@ -38,11 +38,16 @@ historical evidence for superseded implementations, not qualification of ADR 001
 The clarification-stage receiver is currently configured as `gpt-5.6-luna`; GPT-4o mini remains
 comparison evidence, not a fallback or runtime alternative. The live Luna/Luna run completed with
 telemetry reconciliation but exposed representation-boundary failures for reasonable answers.
-It is diagnostic evidence only, not a qualification result. The checked-in v3 pilot corpus
-verifies action/property-oracle and observability plumbing, but it does not provide a non-vacuous
-qualifying denominator for every behavioral metric. The v3 protocol separates semantic diagnosis,
-safe workflow action/property success, hard safety, and operational repair/pending metrics. No
-live receiver or composer model-selection qualification exists for the ADR 0015 boundary yet.
+It is diagnostic evidence only, not a qualification result. The prior one-trial v3 development
+diagnostic had all eight scenarios rejected by the provider's `oneOf` output schema before model
+inference, so it is adapter/preflight evidence rather than semantic or behavioral evidence. The
+OpenAI-only flat wire adapter now structurally translates provider-safe fixed fact arrays into the
+internal generic proposal contract without raw-text parsing. The checked-in v3 pilot corpus still
+does not provide a non-vacuous qualifying denominator for every behavioral metric. Future traces
+and artifacts bind the internal proposal-contract version, wire-adapter version, and generated
+schema hash; the v3 protocol separates semantic diagnosis, safe workflow action/property success,
+hard safety, and operational repair/pending metrics. No live receiver or composer model-selection
+qualification exists for the ADR 0015 boundary yet.
 
 ### Superseded clarification evidence
 
@@ -140,6 +145,11 @@ request-understanding decision. Earlier references to `two_pass` are historical 
   outcome; valid independent facts are retained and it never leaks as a raw schema exception or
   automatically counts as user no-progress. Same-answer fact references form an acyclic graph and
   are evaluated by dependency, not source-text order.
+- The OpenAI adapter is intentionally flat and provider-specific: fixed arrays by fact kind and
+  flat anchor fields structurally translate into the provider-independent calendar proposal. A
+  provider schema rejection is pre-inference adapter/pending evidence, never a semantic failure;
+  retrying the identical schema does not spend the repair budget. Live artifacts retain the
+  proposal-contract version, wire-adapter version, and generated-schema hash.
 - The v1/v2 continuation corpus and historic three-trial scores are retained as historical
   conformance evidence. They are not ADR 0015 qualification evidence. The checked-in v3 corpus is
   an oracle/telemetry pilot, not a qualifying run. Current qualification requires v3

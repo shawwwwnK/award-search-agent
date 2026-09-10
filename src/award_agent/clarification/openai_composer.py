@@ -22,10 +22,11 @@ from award_agent.clarification.composer import (
     ClarificationQuestionItem,
     validate_prompt_composition,
 )
-from award_agent.observability.llm_trace import LLMCallTraceCollector
+from award_agent.observability.llm_trace import LLMCallTraceCollector, response_schema_sha256
 
 DEFAULT_CLARIFICATION_COMPOSER_MODEL = "gpt-5.6-luna"
 GPT_4O_MINI_CLARIFICATION_COMPOSER_MODEL = "gpt-4o-mini"
+OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION = "openai_clarification_composer_v2"
 
 _INSTRUCTIONS = """Write natural, concise clarification questions for a travel request.
 
@@ -57,6 +58,11 @@ class _WireQuestionItem(_WireModel):
 
 class _ClarificationPromptComposerWireOutput(_WireModel):
     question_items: tuple[_WireQuestionItem, ...]
+
+
+OPENAI_CLARIFICATION_COMPOSER_RESPONSE_SCHEMA_SHA256 = response_schema_sha256(
+    _ClarificationPromptComposerWireOutput
+)
 
 
 class OpenAIClarificationComposerError(RuntimeError):
@@ -177,6 +183,7 @@ class OpenAIClarificationPromptComposer:
                 instructions=_INSTRUCTIONS,
                 payload=payload,
                 text_format=_ClarificationPromptComposerWireOutput,
+                adapter_version=OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION,
                 error=exc,
                 latency_seconds=time.perf_counter() - started,
             )
@@ -188,6 +195,7 @@ class OpenAIClarificationPromptComposer:
             instructions=_INSTRUCTIONS,
             payload=payload,
             text_format=_ClarificationPromptComposerWireOutput,
+            adapter_version=OPENAI_CLARIFICATION_COMPOSER_ADAPTER_VERSION,
             response=response,
             latency_seconds=time.perf_counter() - started,
         )

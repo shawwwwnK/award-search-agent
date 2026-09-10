@@ -2,6 +2,7 @@
 
 from award_agent.evaluation.clarification_semantic_guardrails import (
     audit_continuation_raw_answer_boundary,
+    find_openai_converter_semantic_parser_violations,
     find_raw_answer_semantic_parser_violations,
     run_offline_clarification_semantic_guardrails,
 )
@@ -67,4 +68,19 @@ def test_raw_answer_parser_audit_rejects_phrase_processing_hooks() -> None:
 
     assert [(item.line, item.detail) for item in violations] == [
         (1, "forbidden answer-text operation: casefold"),
+    ]
+
+
+def test_openai_converter_audit_allows_only_exact_quote_span_grounding() -> None:
+    assert (
+        find_openai_converter_semantic_parser_violations(
+            "def _span(text, quote, cursor):\n    return text.find(quote, cursor)\n"
+        )
+        == ()
+    )
+    violations = find_openai_converter_semantic_parser_violations(
+        "def _convert_wire_output(text):\n    return text.casefold()\n"
+    )
+    assert [(item.line, item.detail) for item in violations] == [
+        (2, "forbidden converter text operation: casefold"),
     ]

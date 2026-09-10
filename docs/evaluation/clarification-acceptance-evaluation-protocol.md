@@ -12,6 +12,12 @@ suite is evaluated for validating and executing the proposal, then reducing stat
 infer semantics from raw answer text. The composer is evaluated only for writing questions from
 authoritative blockers and issue records. Composer copy cannot change safety or state.
 
+For OpenAI only, a flat provider wire adapter sits before the receiver contract. It uses fixed
+arrays by fact kind and flat anchor fields because the provider rejects `oneOf` schemas. Its
+translation into the internal proposal model is structural: it validates typed fields and never
+reads a quote or raw answer to recover meaning. The provider wire form is not an evaluation target;
+v3 oracles must continue to judge only observable outcomes.
+
 There are no language-understanding unit goldens. Unit and offline guardrail tests use fake,
 already-typed receiver/composer outputs to test schema, evidence-span integrity, generic calendar
 proposal evaluation, calendar arithmetic, conflict handling, reduction, provenance, revisions,
@@ -102,6 +108,12 @@ deterministic semantic recovery and no robotic question fallback. Instrumentatio
 also verify that continuation deterministic code never calls a raw-answer parser or applies
 phrase-specific typo/endpoint/numbered-line rules.
 
+Provider rejection of the submitted structured-output schema is different: it is an
+adapter/preflight pending outcome before model inference. It receives no semantic repair attempt
+with the identical schema, does not consume user no-progress, and cannot be counted as an
+interpreter understanding, behavioral, or model-quality failure. The hard gate requires a
+provider-schema smoke that reaches inference before a live behavioral matrix is eligible to run.
+
 ### Behavioral and semantic-diagnostic acceptance
 
 Run the receiver and composer over all three corpus classes using the v3 action/property oracles,
@@ -123,6 +135,11 @@ into terminal correctness:
 - **Operational quality:** first-pass proposal validity, one-repair success/failure rate, pending
   rate, model calls, repair-attributed latency/tokens/cost, targeted-question rate,
   generic-repeat rate, and composer invalid-output rate.
+
+Every artifact includes internal proposal-contract version, provider wire-adapter version,
+canonical generated-schema hash, and provider stage counts (preflight rejected, inference reached,
+structured result returned). This makes adapter defects auditable without exposing private answer
+payloads or treating a pre-inference rejection as a model response.
 
 Fuzzy windows are scored against an approved bounded envelope; question quality is scored for
 clarity, specificity, non-leading wording, and naturalness. Human review is authoritative for
@@ -168,6 +185,16 @@ cases. When a hidden case becomes visible during debugging, promote it to disclo
 coverage and replace it in the holdout/challenge pool. Do not tune against a hidden result without
 a new freeze and preregistration. The evaluator must retain first-pass, repair, and pending traces
 privately so a score cannot hide representation failures behind an aggregate pass rate.
+
+## Superseded v3 preflight diagnostic
+
+The one-trial v3 development diagnostic recorded at
+`evals/clarification/baseline/2026-09-10-gpt-5.6-luna-v3-development-diagnostic-1-trial-f582925.json`
+had all eight scenarios rejected by the provider's prior `oneOf` schema before inference. Its
+automatic pending/retry attempts repeated the same rejected schema and therefore add no semantic
+or behavioral evidence. Retain it only as adapter-failure and trace-capture evidence; do not use
+its false blocks, pending counts, latency, or terminal outcomes in a receiver baseline or model
+comparison. The flat OpenAI wire-adapter schema supersedes that diagnostic for future live runs.
 
 ## Preregistered composer experiment: Luna versus GPT-4o-mini
 
