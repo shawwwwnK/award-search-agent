@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
 from datetime import UTC, datetime
 from hashlib import sha256
@@ -16,14 +16,19 @@ from uuid import uuid4
 import yaml
 
 from award_agent.clarification.blockers import collect_blocking_requirements
-from award_agent.clarification.controller import apply_clarification_answer, start_clarification
+from award_agent.clarification.composer import ClarificationPromptComposer
+from award_agent.clarification.controller import (
+    ClarificationCompositionPending,
+    apply_clarification_answer,
+    start_clarification,
+)
+from award_agent.clarification.interpreter import ClarificationAnswerInterpreter
 from award_agent.clarification.openai_composer import (
     OpenAIClarificationComposerConfig,
     OpenAIClarificationPromptComposer,
 )
 from award_agent.clarification.openai_interpreter import (
     OpenAIClarificationAnswerInterpreter,
-    OpenAIClarificationInterpretationError,
     OpenAIClarificationInterpreterConfig,
 )
 from award_agent.domain import ClarificationAnswerCommand
@@ -110,6 +115,70 @@ _RESOLUTION_FIELDS = {
     "return_or_duration": {"return", "duration_days"},
 }
 
+_USAGE_FIELDS = (
+    "calls",
+    "captured_calls",
+    "missing_calls",
+    "input_tokens",
+    "output_tokens",
+    "total_tokens",
+)
+
+
+def _drain_telemetry(adapter: Any) -> tuple[dict[str, int], list[dict[str, Any]]]:
+    """Drain the common adapter telemetry contract into a stable record shape."""
+
+    usage = adapter.take_usage() or {}
+    normalized = {key: int(usage.get(key, 0)) for key in _USAGE_FIELDS}
+    return normalized, adapter.take_call_traces()
+
+
+def _empty_usage() -> dict[str, int]:
+    return {key: 0 for key in _USAGE_FIELDS}
+
+
+def _safe_drain_telemetry(
+    adapter: Any | None, system_errors: list[str]
+) -> tuple[dict[str, int], list[dict[str, Any]], bool]:
+    """Collect diagnostic evidence without allowing a drain failure to abort a run."""
+
+    if adapter is None:
+        return _empty_usage(), [], False
+    try:
+        usage, traces = _drain_telemetry(adapter)
+        return usage, traces, False
+    except Exception as exc:  # noqa: BLE001 - evaluator diagnostics must not hide later sessions.
+        system_errors.append(f"telemetry drain error: {type(exc).__name__}")
+        # Do not let the synthetic zero aggregate look like a clean no-call
+        # session. Call accounting is unknowable after a failed drain, so this
+        # must be visibly unreconciled and fail the qualification gate.
+        return _empty_usage(), [], True
+
+
+def _stage_summary(
+    usage: Mapping[str, int], traces: Sequence[Mapping[str, Any]], *, drain_failed: bool = False
+) -> dict[str, object]:
+    """Report model-stage timing separately from the full session wall clock.
+
+    Missing provider usage does not mean a missing call: an attempted call is
+    reconciled when every attempt has a trace and every attempt is classified
+    as either usage-captured or usage-missing.
+    """
+
+    trace_count = len(traces)
+    return {
+        **usage,
+        "trace_count": trace_count,
+        "reconciled": (
+            not drain_failed
+            and usage["calls"] == trace_count
+            and usage["captured_calls"] + usage["missing_calls"] == usage["calls"]
+        ),
+        "latency_seconds": sum(float(trace.get("latency_seconds") or 0.0) for trace in traces),
+        "errors": sum(trace.get("error") is not None for trace in traces) + int(drain_failed),
+        "evaluator_error": drain_failed,
+    }
+
 
 def run_live_clarification_eval(
     *,
@@ -118,12 +187,24 @@ def run_live_clarification_eval(
     trials: int = 3,
     fixture_path: Path = DEFAULT_LIVE_CLARIFICATION_FIXTURES,
     trace_dir: Path = DEFAULT_LIVE_CLARIFICATION_TRACE_DIR,
+    interpreter_factory: Callable[[str], ClarificationAnswerInterpreter] | None = None,
+    composer_factory: Callable[[str], ClarificationPromptComposer] | None = None,
 ) -> dict[str, Any]:
     """Run 12+ synthetic trajectories with private all-call trace sidecars."""
 
     if trials < 1:
         raise ValueError("trials must be positive")
     cases, raw = _load_cases(fixture_path)
+    make_interpreter = interpreter_factory or (
+        lambda model: OpenAIClarificationAnswerInterpreter(
+            OpenAIClarificationInterpreterConfig(model=model), capture_llm_io=True
+        )
+    )
+    make_composer = composer_factory or (
+        lambda model: OpenAIClarificationPromptComposer(
+            OpenAIClarificationComposerConfig(model=model), capture_llm_io=True
+        )
+    )
     records: list[dict[str, Any]] = []
     generated_at = datetime.now(UTC).isoformat()
     trace_run_dir = trace_dir / (
@@ -133,104 +214,127 @@ def run_live_clarification_eval(
     for trial in range(1, trials + 1):
         for scenario in cases:
             identifier = str(scenario["id"])
-            composer = OpenAIClarificationPromptComposer(
-                OpenAIClarificationComposerConfig(model=composer_model), capture_llm_io=True
-            )
-            session = start_clarification(
-                _initial(scenario), session_id=f"live-{identifier}-{trial}", composer=composer
-            )
-            initial_snapshot = deepcopy(session.initial_result.model_dump(mode="python"))
-            adapter = OpenAIClarificationAnswerInterpreter(
-                OpenAIClarificationInterpreterConfig(model=interpreter_model), capture_llm_io=True
-            )
+            # Start before initial prompt composition so the per-record wall
+            # time contains every stage that generated the session result.
             run_started = perf_counter()
             system_error = False
+            errors: list[str] = []
+            composer: ClarificationPromptComposer | None = None
+            adapter: ClarificationAnswerInterpreter | None = None
+            session: Any | None = None
+            initial_snapshot: object | None = None
             checks: list[bool] = []
             blocker_checks: list[bool] = []
             field_checks: list[bool] = []
             prompt_checks: list[bool] = []
             resolution_expected: list[str] = []
             resolution_linked: list[str] = []
-            for turn_number, turn in enumerate(scenario["turns"], start=1):
-                assert isinstance(turn, Mapping)
-                current = session.current_revision
-                if current.prompt is None:
-                    system_error = True
-                    break
-                expected_before = _blockers(session)
-                command = ClarificationAnswerCommand(
-                    session_id=session.session_id,
-                    expected_revision=current.revision,
-                    prompt_id=current.prompt.prompt_id,
-                    message_id=f"{identifier}-{trial}-{turn_number}",
-                    text=str(turn["text"]),
+            try:
+                composer = make_composer(composer_model)
+                adapter = make_interpreter(interpreter_model)
+                session = start_clarification(
+                    _initial(scenario), session_id=f"live-{identifier}-{trial}", composer=composer
                 )
-                before = _field_summary(session)
-                try:
-                    session = apply_clarification_answer(session, command, adapter, composer=composer).session
-                except (OpenAIClarificationInterpretationError, ValueError):
-                    system_error = True
-                    break
-                expect = turn["expect"]
-                assert isinstance(expect, Mapping)
-                check, blockers_ok, fields_ok = _check(expect, session)
-                checks.append(check)
-                blocker_checks.append(blockers_ok)
-                field_checks.append(fields_ok)
-                prompt_checks.append(_prompt_coverage(session))
-                expected_after = list(expect.get("blockers", []))
-                resolution_expected.extend(
-                    requirement for requirement in expected_before if requirement not in expected_after
-                )
-                outcome = session.current_revision.outcome
-                if outcome is not None:
-                    resolution_linked.extend(
-                        requirement
-                        for amendment in outcome.accepted_amendments
-                        for requirement in amendment.requirement_ids
+                initial_snapshot = deepcopy(session.initial_result.model_dump(mode="python"))
+                for turn_number, turn in enumerate(scenario["turns"], start=1):
+                    assert isinstance(turn, Mapping)
+                    current = session.current_revision
+                    if current.prompt is None:
+                        system_error = True
+                        errors.append("missing pending prompt")
+                        break
+                    expected_before = _blockers(session)
+                    command = ClarificationAnswerCommand(
+                        session_id=session.session_id,
+                        expected_revision=current.revision,
+                        prompt_id=current.prompt.prompt_id,
+                        message_id=f"{identifier}-{trial}-{turn_number}",
+                        text=str(turn["text"]),
                     )
-                expected_fields = set(expect.get("fields", {}))
-                expected_fields.update(
-                    field
-                    for requirement in expected_before
-                    if requirement not in expected_after
-                    for field in _RESOLUTION_FIELDS.get(requirement, set())
+                    before = _field_summary(session)
+                    try:
+                        transition = apply_clarification_answer(
+                            session, command, adapter, composer=composer
+                        )
+                    except Exception as exc:  # noqa: BLE001 - preserve this run and continue matrix.
+                        system_error = True
+                        errors.append(f"model or session error: {type(exc).__name__}")
+                        break
+                    if isinstance(transition, ClarificationCompositionPending):
+                        system_error = True
+                        errors.append("post-answer prompt composition pending")
+                        break
+                    session = transition.session
+                    expect = turn["expect"]
+                    assert isinstance(expect, Mapping)
+                    check, blockers_ok, fields_ok = _check(expect, session)
+                    checks.append(check)
+                    blocker_checks.append(blockers_ok)
+                    field_checks.append(fields_ok)
+                    prompt_checks.append(_prompt_coverage(session))
+                    expected_after = list(expect.get("blockers", []))
+                    resolution_expected.extend(
+                        requirement for requirement in expected_before if requirement not in expected_after
+                    )
+                    outcome = session.current_revision.outcome
+                    if outcome is not None:
+                        resolution_linked.extend(
+                            requirement
+                            for amendment in outcome.accepted_amendments
+                            for requirement in amendment.requirement_ids
+                        )
+                    expected_fields = set(expect.get("fields", {}))
+                    expected_fields.update(
+                        field
+                        for requirement in expected_before
+                        if requirement not in expected_after
+                        for field in _RESOLUTION_FIELDS.get(requirement, set())
+                    )
+                    changed = {
+                        key
+                        for key, value in _field_summary(session).items()
+                        if before.get(key) != value
+                    }
+                    # Any accepted amendment can cause deterministic temporal
+                    # projection to materialize a return date from a retained
+                    # departure/duration pair. It is derived state, not a model
+                    # mutation, and remains provenance-checked by the controller.
+                    if not changed.issubset(expected_fields | {"return"}):
+                        system_error = True
+                        errors.append("unexpected field mutation")
+                        break
+                    if session.status.value != "awaiting_answer" and turn_number != len(scenario["turns"]):
+                        system_error = True
+                        errors.append("terminated before final fixture turn")
+                        break
+            except Exception as exc:  # noqa: BLE001 - one session must not abort the matrix.
+                system_error = True
+                errors.append(f"setup or evaluator error: {type(exc).__name__}")
+            finally:
+                usage, interpreter_traces, interpreter_drain_failed = _safe_drain_telemetry(
+                    adapter, errors
                 )
-                changed = {
-                    key
-                    for key, value in _field_summary(session).items()
-                    if before.get(key) != value
-                }
-                # Any accepted amendment can cause deterministic temporal
-                # projection to materialize a return date from a retained
-                # departure/duration pair. It is derived state, not a model
-                # mutation, and remains provenance-checked by the controller.
-                if not changed.issubset(expected_fields | {"return"}):
+                composer_usage, composer_traces, composer_drain_failed = _safe_drain_telemetry(
+                    composer, errors
+                )
+                if interpreter_drain_failed or composer_drain_failed:
                     system_error = True
-                    break
-                if session.status.value != "awaiting_answer" and turn_number != len(scenario["turns"]):
-                    system_error = True
-                    break
-            usage = adapter.take_usage() or {
-                "calls": 0,
-                "captured_calls": 0,
-                "missing_calls": 0,
-                "input_tokens": 0,
-                "output_tokens": 0,
-                "total_tokens": 0,
-            }
-            composer_usage = composer.take_usage() or {
-                "calls": 0,
-                "captured_calls": 0,
-                "missing_calls": 0,
-                "input_tokens": 0,
-                "output_tokens": 0,
-                "total_tokens": 0,
+            stages = {
+                "interpreter": _stage_summary(
+                    usage, interpreter_traces, drain_failed=interpreter_drain_failed
+                ),
+                "composer": _stage_summary(
+                    composer_usage, composer_traces, drain_failed=composer_drain_failed
+                ),
             }
             final_expect = scenario["turns"][-1]["expect"]
             assert isinstance(final_expect, Mapping)
-            terminal_ok, _, _ = _check(final_expect, session)
-            terminal_ok = terminal_ok and session.status.value in {"ready", "stopped"} and not system_error
+            terminal_ok = False
+            if session is not None:
+                terminal_ok, _, _ = _check(final_expect, session)
+                terminal_ok = (
+                    terminal_ok and session.status.value in {"ready", "stopped"} and not system_error
+                )
             record = {
                     "scenario": identifier,
                     "trial": trial,
@@ -244,16 +348,22 @@ def run_live_clarification_eval(
                     "resolution_expected": resolution_expected,
                     "resolution_linked": resolution_linked,
                     "system_error": system_error,
-                    "initial_snapshot_unchanged": session.initial_result.model_dump(mode="python") == initial_snapshot,
-                    "final_status": session.status.value,
+                    "errors": errors,
+                    "initial_snapshot_unchanged": (
+                        True
+                        if session is None
+                        else session.initial_result.model_dump(mode="python") == initial_snapshot
+                    ),
+                    "final_status": "system_error" if session is None else session.status.value,
                     "stop_reason": (
                         session.current_revision.stop_reason.value
-                        if session.current_revision.stop_reason
+                        if session is not None and session.current_revision.stop_reason
                         else None
                     ),
                     "latency_seconds": perf_counter() - run_started,
                     "usage": usage,
                     "composer_usage": composer_usage,
+                    "stages": stages,
                     "template_outcomes": [
                         {
                             "target": (
@@ -263,11 +373,13 @@ def run_live_clarification_eval(
                             ),
                             "template_id": contribution.template_provenance.template_id,
                         }
-                        for contribution in session.effective_request.temporal_contributions
+                        for contribution in (
+                            () if session is None else session.effective_request.temporal_contributions
+                        )
                         if contribution.template_provenance is not None
                     ],
             }
-            call_traces = [*adapter.take_call_traces(), *composer.take_call_traces()]
+            call_traces = [*interpreter_traces, *composer_traces]
             # Always write trace sidecars. They are private/gitignored and never
             # become part of the public redacted artifact.
             write_eval_llm_trace(
@@ -286,7 +398,7 @@ def run_live_clarification_eval(
     unauthorized = sum(not bool(record["initial_snapshot_unchanged"]) for record in records)
     system_errors = sum(bool(record["system_error"]) for record in records)
     stop_reasons = Counter(str(record["stop_reason"]) for record in records if record["stop_reason"])
-    calls = sum(int(record["usage"]["calls"]) for record in records)
+    calls = sum(int(record["stages"]["interpreter"]["calls"]) for record in records)
     expected_resolutions = [requirement for record in records for requirement in record["resolution_expected"]]
     linked_resolutions = [requirement for record in records for requirement in record["resolution_linked"]]
     matched_resolutions = sum(
@@ -385,15 +497,40 @@ def run_live_clarification_eval(
             "stop_reasons": dict(sorted(stop_reasons.items())),
             "instrumentation": {
                 "calls": calls,
-                "composer_calls": sum(int(record["composer_usage"]["calls"]) for record in records),
+                "composer_calls": sum(
+                    int(record["stages"]["composer"]["calls"]) for record in records
+                ),
+                # Retained for artifact compatibility; it is explicitly wall
+                # time and includes controller work plus initial composition.
                 "latency_seconds": sum(float(record["latency_seconds"]) for record in records),
-                "input_tokens": sum(int(record["usage"]["input_tokens"]) for record in records),
-                "output_tokens": sum(int(record["usage"]["output_tokens"]) for record in records),
+                "wall_latency_seconds": sum(float(record["latency_seconds"]) for record in records),
+                "interpreter_latency_seconds": sum(
+                    float(record["stages"]["interpreter"]["latency_seconds"])
+                    for record in records
+                ),
+                "composer_latency_seconds": sum(
+                    float(record["stages"]["composer"]["latency_seconds"])
+                    for record in records
+                ),
+                "reconciled_sessions": sum(
+                    all(bool(stage["reconciled"]) for stage in record["stages"].values())
+                    for record in records
+                ),
+                "unreconciled_sessions": sum(
+                    not all(bool(stage["reconciled"]) for stage in record["stages"].values())
+                    for record in records
+                ),
+                "input_tokens": sum(
+                    int(record["stages"]["interpreter"]["input_tokens"]) for record in records
+                ),
+                "output_tokens": sum(
+                    int(record["stages"]["interpreter"]["output_tokens"]) for record in records
+                ),
                 "composer_input_tokens": sum(
-                    int(record["composer_usage"]["input_tokens"]) for record in records
+                    int(record["stages"]["composer"]["input_tokens"]) for record in records
                 ),
                 "composer_output_tokens": sum(
-                    int(record["composer_usage"]["output_tokens"]) for record in records
+                    int(record["stages"]["composer"]["output_tokens"]) for record in records
                 ),
             },
             "live_gate": {

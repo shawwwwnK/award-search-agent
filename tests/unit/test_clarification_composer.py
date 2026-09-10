@@ -242,6 +242,43 @@ def test_openai_composer_supports_experiment_model_configuration() -> None:
         OpenAIClarificationComposerConfig(temperature=2.1)
 
 
+def test_openai_composer_reports_usage_less_attempts_for_evaluator_reconciliation() -> None:
+    requirements = _requirements()
+    input = ClarificationPromptComposerInput(
+        requirements=requirements, issues=derive_clarification_issues(requirements)
+    )
+    wire = _ClarificationPromptComposerWireOutput.model_validate(
+        {
+            "question_items": [
+                {
+                    "requirement_id": "departure",
+                    "issue_ids": ["departure:missing"],
+                    "question": "When would you like to leave?",
+                },
+                {
+                    "requirement_id": "travelers",
+                    "issue_ids": ["travelers:missing"],
+                    "question": "How many people will be traveling?",
+                },
+            ]
+        }
+    )
+    composer = OpenAIClarificationPromptComposer(
+        OpenAIClarificationComposerConfig(model="model"), client=_Client(wire)  # type: ignore[arg-type]
+    )
+
+    composer.compose(input)
+
+    assert composer.take_usage() == {
+        "calls": 1,
+        "captured_calls": 0,
+        "missing_calls": 1,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+    }
+
+
 def test_openai_composer_rejects_unlinked_model_items() -> None:
     requirements = _requirements()
     input = ClarificationPromptComposerInput(

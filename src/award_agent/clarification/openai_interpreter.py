@@ -168,7 +168,45 @@ class OpenAIClarificationAnswerInterpreter:
     ) -> None:
         self._config, self._client = config, client or OpenAI()
         self._traces = LLMCallTraceCollector(enabled=capture_llm_io)
-        self._last_usage: dict[str, int] | None = None
+        # Usage is session-local evaluator telemetry, not a property of the
+        # last response.  A clarification can make several receiver calls,
+        # including failed or usage-less ones, all of which must remain
+        # visible to the evaluator.
+        self._usage_records: list[dict[str, int]] = []
+        self._call_count = 0
+
+    def reset_usage(self) -> None:
+        self._usage_records = []
+        self._call_count = 0
+
+    def reset_capture(self) -> None:
+        self.reset_usage()
+        self._traces.reset()
+
+    def _capture_usage(self, response: Any) -> None:
+        usage = getattr(response, "usage", None)
+        if usage is None:
+            return
+        if isinstance(usage, dict):
+            payload = usage
+        else:
+            dump = getattr(usage, "model_dump", None)
+            payload = dump(mode="json") if callable(dump) else {}
+        input_tokens, output_tokens = payload.get("input_tokens"), payload.get("output_tokens")
+        if not isinstance(input_tokens, int) or not isinstance(output_tokens, int):
+            return
+        total_tokens = payload.get("total_tokens")
+        self._usage_records.append(
+            {
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "total_tokens": (
+                    total_tokens
+                    if isinstance(total_tokens, int)
+                    else input_tokens + output_tokens
+                ),
+            }
+        )
 
     def interpret(
         self, input: ClarificationAnswerInterpreterInput
@@ -181,6 +219,7 @@ class OpenAIClarificationAnswerInterpreter:
             "text_format": _ClarificationAnswerWireOutput,
             "store": False,
         }
+        self._call_count += 1
         started = time.perf_counter()
         try:
             response = self._client.responses.parse(**request)
@@ -207,23 +246,26 @@ class OpenAIClarificationAnswerInterpreter:
             response=response,
             latency_seconds=time.perf_counter() - started,
         )
+        self._capture_usage(response)
         if not isinstance(parsed, _ClarificationAnswerWireOutput):
             raise OpenAIClarificationInterpretationError(
                 "OpenAI returned an unexpected clarification output type"
             )
-        usage = getattr(response, "usage", None)
-        if usage is not None:
-            self._last_usage = {
-                key: value
-                for key in ("input_tokens", "output_tokens", "total_tokens")
-                if isinstance((value := getattr(usage, key, None)), int)
-            }
-            self._last_usage["elapsed_ms"] = int((time.perf_counter() - started) * 1000)
         return _convert_wire_output(parsed, input)
 
     def take_usage(self) -> dict[str, int] | None:
-        result, self._last_usage = self._last_usage, None
-        return result
+        records, calls = self._usage_records, self._call_count
+        self.reset_usage()
+        if not calls:
+            return None
+        return {
+            "calls": calls,
+            "captured_calls": len(records),
+            "missing_calls": calls - len(records),
+            "input_tokens": sum(item["input_tokens"] for item in records),
+            "output_tokens": sum(item["output_tokens"] for item in records),
+            "total_tokens": sum(item["total_tokens"] for item in records),
+        }
 
     def take_call_traces(self) -> list[dict[str, object]]:
         return self._traces.take()

@@ -26,6 +26,12 @@
   rejected model proposal, not a terminal user-request error, so an accepted sibling remains usable.
 - Focused controller/interpreter/semantic tests passed: 21 tests.
 - Full unit suite after the follow-up authorization fix passed: 380 tests.
+- Repaired a live-evaluator telemetry contract regression found by two failed Luna/Luna runs:
+  receiver and composer telemetry now aggregates attempted/captured/missing calls across a session,
+  and the evaluator records stage and wall-clock latency separately. Initial/post-answer composer
+  failures and telemetry-drain failures now produce explicit failed records, continue the matrix,
+  and fail the live gate closed rather than masking instrumentation loss. No live calls were made
+  while verifying this repair; the offline full unit suite passed: 386 tests.
 
 ## Current limitations
 

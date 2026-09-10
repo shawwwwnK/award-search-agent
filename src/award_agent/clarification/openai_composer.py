@@ -117,7 +117,10 @@ class OpenAIClarificationPromptComposer:
     def take_usage(self) -> dict[str, int] | None:
         records, calls = self._usage_records, self._call_count
         self.reset_usage()
-        if not records:
+        # An attempted call without SDK usage is still a call.  Returning a
+        # zero-valued aggregate here preserves reconciliation evidence rather
+        # than making the evaluator mistake it for no call at all.
+        if not calls:
             return None
         return {
             "calls": calls,
@@ -132,7 +135,11 @@ class OpenAIClarificationPromptComposer:
         usage = getattr(response, "usage", None)
         if usage is None:
             return
-        payload = usage if isinstance(usage, dict) else usage.model_dump(mode="json")
+        if isinstance(usage, dict):
+            payload = usage
+        else:
+            dump = getattr(usage, "model_dump", None)
+            payload = dump(mode="json") if callable(dump) else {}
         input_tokens, output_tokens = payload.get("input_tokens"), payload.get("output_tokens")
         if not isinstance(input_tokens, int) or not isinstance(output_tokens, int):
             return

@@ -16,19 +16,19 @@ from award_agent.domain import BlockingRequirement, BlockingRequirementKind, Eff
 
 
 class _Responses:
-    def __init__(self, output: object | Exception) -> None:
-        self.output, self.calls = output, []
+    def __init__(self, output: object | Exception, usage: object | None = None) -> None:
+        self.output, self.usage, self.calls = output, usage, []
 
     def parse(self, **kwargs: object) -> object:
         self.calls.append(kwargs)
         if isinstance(self.output, Exception):
             raise self.output
-        return SimpleNamespace(output_parsed=self.output, usage=None)
+        return SimpleNamespace(output_parsed=self.output, usage=self.usage)
 
 
 class _Client:
-    def __init__(self, output: object | Exception) -> None:
-        self.responses = _Responses(output)
+    def __init__(self, output: object | Exception, usage: object | None = None) -> None:
+        self.responses = _Responses(output, usage)
 
 
 def _input() -> ClarificationAnswerInterpreterInput:
@@ -139,3 +139,37 @@ def test_adapter_fails_closed_for_api_error_and_unmatched_quote() -> None:
         OpenAIClarificationAnswerInterpreter(
             OpenAIClarificationInterpreterConfig(model="x"), client=_Client(bad)
         ).interpret(_input())  # type: ignore[arg-type]
+
+
+def test_adapter_aggregates_attempted_and_usage_less_calls_without_last_response_loss() -> None:
+    interpreter = OpenAIClarificationAnswerInterpreter(
+        OpenAIClarificationInterpreterConfig(model="x"),
+        client=_Client(_wire(), {"input_tokens": 3, "output_tokens": 5, "total_tokens": 8}),
+    )
+
+    interpreter.interpret(_input())  # type: ignore[arg-type]
+    interpreter.interpret(_input())  # type: ignore[arg-type]
+
+    assert interpreter.take_usage() == {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 6,
+        "output_tokens": 10,
+        "total_tokens": 16,
+    }
+    assert interpreter.take_usage() is None
+
+    failed = OpenAIClarificationAnswerInterpreter(
+        OpenAIClarificationInterpreterConfig(model="x"), client=_Client(RuntimeError("offline"))
+    )
+    with pytest.raises(OpenAIClarificationInterpretationError):
+        failed.interpret(_input())  # type: ignore[arg-type]
+    assert failed.take_usage() == {
+        "calls": 1,
+        "captured_calls": 0,
+        "missing_calls": 1,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+    }
