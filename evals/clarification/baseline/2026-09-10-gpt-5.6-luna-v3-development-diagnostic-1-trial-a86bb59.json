@@ -1,0 +1,940 @@
+{
+  "schema_version": "clarification_behavior_live_eval_v3",
+  "fixture": {
+    "sha256": "f3bceaf0c723bf4fea24d0da5687d853695721bc15546acf9a7021e48199d692",
+    "redacted": true,
+    "scenario_count": 8,
+    "private_holdout": false
+  },
+  "models": {
+    "interpreter": "gpt-5.6-luna",
+    "composer": "gpt-5.6-luna"
+  },
+  "trials": 1,
+  "generated_at": "2026-09-10T23:30:33.797368+00:00",
+  "llm_trace": {
+    "mode": "all_calls_private",
+    "directory": "evals/clarification/traces-v3-diagnostic-a86bb59/run-2026-09-10T233033.797368-0000-1146f0e3",
+    "sidecars": 8
+  },
+  "records": [
+    {
+      "scenario": "clear_explicit_dates",
+      "family": "clear_resolvable",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "resolve",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 2,
+        "structured_result_returned": 2
+      },
+      "latency_seconds": 5.664247666019946,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1755,
+          "output_tokens": 285,
+          "total_tokens": 2040,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.619390708161518,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 82,
+          "total_tokens": 488,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.9827856668271124,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "clear_explicit_dates_paraphrase",
+      "family": "clear_resolvable",
+      "answer_class": "reasonably_resolvable",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "resolve",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 2,
+        "structured_result_returned": 2
+      },
+      "latency_seconds": 6.102613333845511,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1758,
+          "output_tokens": 318,
+          "total_tokens": 2076,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 4.022773958044127,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 406,
+          "output_tokens": 107,
+          "total_tokens": 513,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.0220264999661595,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "explicit_date_alternatives",
+      "family": "alternatives",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "ask",
+          "observed_action": "ask",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 1
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 3,
+        "structured_result_returned": 3
+      },
+      "latency_seconds": 8.50833766697906,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1721,
+          "output_tokens": 512,
+          "total_tokens": 2233,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 5.966952708084136,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 723,
+          "output_tokens": 95,
+          "total_tokens": 818,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.4803203328046948,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "bare_return_endpoint",
+      "family": "endpoint_ambiguity",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "required blocker silently cleared",
+        "protected fields changed",
+        "unsafe ambiguity acceptance",
+        "forbidden outcome: unsafe_ambiguity_acceptance"
+      ],
+      "behavioral_failures": [
+        "outcome action outside expected envelope",
+        "question intent mismatch"
+      ],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "ask",
+          "observed_action": "partial_resolve_and_ask",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 3,
+        "structured_result_returned": 3
+      },
+      "latency_seconds": 6.574199749855325,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1748,
+          "output_tokens": 244,
+          "total_tokens": 1992,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.9473005421459675,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 761,
+          "output_tokens": 125,
+          "total_tokens": 886,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.5536440419964492,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "correction_with_duration_sibling",
+      "family": "correction_sibling",
+      "answer_class": "correction",
+      "trial": 1,
+      "final_status": "ready",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": true,
+      "safety_failures": [],
+      "behavioral_failures": [],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "resolve",
+          "disclosure_required": true,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": 1,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {},
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 2,
+        "structured_result_returned": 2
+      },
+      "latency_seconds": 9.682381624821573,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1769,
+          "output_tokens": 704,
+          "total_tokens": 2473,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 8.3962338748388,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 410,
+          "output_tokens": 76,
+          "total_tokens": 486,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 1.212127875071019,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "valid_siblings_with_ambiguous_departure",
+      "family": "sibling_retention",
+      "answer_class": "ambiguous",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": false,
+      "safety_failures": [],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "question intent mismatch"
+      ],
+      "property_failures": [
+        "duration outside acceptable envelope"
+      ],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "partial_resolve_and_ask",
+          "observed_action": "pending_retryable",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 3,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 1,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 7.0897955829277635,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 3,
+        "structured_result_returned": 3
+      },
+      "latency_seconds": 17.035790791967884,
+      "stages": {
+        "interpreter": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 4068,
+          "output_tokens": 1527,
+          "total_tokens": 5595,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 14.424434290966019,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 490,
+          "output_tokens": 124,
+          "total_tokens": 614,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.5360025831032544,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "fuzzy_month_disclosed",
+      "family": "disclosed_approximation",
+      "answer_class": "safely_assumable",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": false,
+      "behavioral_passed": false,
+      "safety_failures": [
+        "accepted approximation has no disclosure"
+      ],
+      "behavioral_failures": [
+        "false blocking",
+        "outcome action outside expected envelope",
+        "status outside permitted envelope"
+      ],
+      "property_failures": [
+        "departure window missing",
+        "departure window is not bounded"
+      ],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "resolve",
+          "observed_action": "ask",
+          "disclosure_required": true,
+          "disclosure_missing": true,
+          "materially_incorrect_assumption": true,
+          "unnecessary_clarification": true
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 0,
+        "targeted": 0
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 3,
+        "structured_result_returned": 3
+      },
+      "latency_seconds": 5.94387545902282,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1717,
+          "output_tokens": 205,
+          "total_tokens": 1922,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 3.6677650418132544,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 719,
+          "output_tokens": 101,
+          "total_tokens": 820,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.202540749916807,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "scenario": "return_before_departure_conflict",
+      "family": "conflict",
+      "answer_class": "conflict",
+      "trial": 1,
+      "final_status": "awaiting_answer",
+      "stop_reason": null,
+      "safety_passed": true,
+      "behavioral_passed": false,
+      "safety_failures": [],
+      "behavioral_failures": [
+        "outcome action outside expected envelope"
+      ],
+      "property_failures": [],
+      "value_failures": [],
+      "turn_metrics": [
+        {
+          "expected_action": "ask",
+          "observed_action": "partial_resolve_and_ask",
+          "disclosure_required": false,
+          "disclosure_missing": false,
+          "materially_incorrect_assumption": false,
+          "unnecessary_clarification": false
+        }
+      ],
+      "turns_to_ready": null,
+      "targeted_questions": {
+        "required": 1,
+        "targeted": 1
+      },
+      "question_composition": {
+        "sources": {
+          "model": 1
+        },
+        "manual_review_required": 0
+      },
+      "valid_siblings": {
+        "expected": 0,
+        "retained": 0
+      },
+      "repair_telemetry": {
+        "first_pass_calls": 1,
+        "repair_calls": 0,
+        "repair_errors": 0,
+        "repaired_workflows": 0,
+        "repair_latency_seconds": 0,
+        "pending_retryable": 0,
+        "pending_receiver": 0,
+        "pending_composer": 0
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 3,
+        "structured_result_returned": 3
+      },
+      "latency_seconds": 5.978035124950111,
+      "stages": {
+        "interpreter": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 1729,
+          "output_tokens": 220,
+          "total_tokens": 1949,
+          "trace_count": 1,
+          "reconciled": true,
+          "latency_seconds": 2.9573297081515193,
+          "errors": 0
+        },
+        "composer": {
+          "calls": 2,
+          "captured_calls": 2,
+          "missing_calls": 0,
+          "input_tokens": 742,
+          "output_tokens": 121,
+          "total_tokens": 863,
+          "trace_count": 2,
+          "reconciled": true,
+          "latency_seconds": 2.918855625204742,
+          "errors": 0
+        }
+      }
+    }
+  ],
+  "summary": {
+    "exact_safety_gate": {
+      "passed": false,
+      "failed": 2
+    },
+    "behavioral": {
+      "false_blocking": {
+        "count": 1,
+        "denominator": 3,
+        "rate": 0.3333333333333333,
+        "eligible": true
+      },
+      "incorrect_acceptance": {
+        "count": 1,
+        "denominator": 4,
+        "rate": 0.25,
+        "eligible": true
+      },
+      "targeted_question": {
+        "required": 4,
+        "targeted": 2
+      },
+      "valid_sibling_retention": {
+        "expected": 3,
+        "retained": 0
+      },
+      "property_envelopes": {
+        "failed_records": 2,
+        "failure_count": 3
+      },
+      "assumption_disclosure": {
+        "required": 2,
+        "missing": 1
+      },
+      "materially_incorrect_assumption": {
+        "count": 1,
+        "denominator": 2
+      },
+      "unnecessary_clarification": {
+        "count": 2,
+        "denominator": 3
+      },
+      "generic_repeat_rate": {
+        "count": 2,
+        "denominator": 4,
+        "rate": 0.5,
+        "eligible": true
+      },
+      "turns_to_ready": {
+        "ready_sessions": 3,
+        "mean": 1.0
+      },
+      "paired_accept_ask": {
+        "passed": true,
+        "pairs": 1,
+        "trial_runs": 1
+      },
+      "paraphrase_consistency": {
+        "passed": true,
+        "trial_runs": 1
+      },
+      "repair_transitions": {
+        "first_pass_calls": 8,
+        "repair_calls": 1,
+        "repaired_workflows": 0,
+        "pending_retryable": 1,
+        "pending_receiver": 1,
+        "pending_composer": 0
+      }
+    },
+    "metadata": {
+      "mode": "pilot",
+      "pool": "public",
+      "execution": "live_openai",
+      "evaluator_version": "clarification_behavior_live_eval_v3.0",
+      "proposal_contract_version": "clarification-calendar-plan-v1",
+      "adapter": {
+        "interpreter": {
+          "version": "openai_clarification_interpreter_flat_v3",
+          "response_schema_sha256": "a37093bc5b1120add021f8e1fba75c2f15119dce57ae067603033c617c89924d"
+        },
+        "composer": {
+          "version": "openai_clarification_composer_v2",
+          "response_schema_sha256": "c15139011a833a144dcbf877898166d7402b64e918ef6f50d7be6e6c58f376e6"
+        }
+      },
+      "provider_stage_counts": {
+        "preflight_rejected": 0,
+        "inference_reached": 21,
+        "structured_result_returned": 21
+      },
+      "scenario_distribution": {
+        "alternatives": 1,
+        "clear_resolvable": 2,
+        "conflict": 1,
+        "correction_sibling": 1,
+        "disclosed_approximation": 1,
+        "endpoint_ambiguity": 1,
+        "sibling_retention": 1
+      },
+      "answer_class_distribution": {
+        "ambiguous": 3,
+        "conflict": 1,
+        "correction": 1,
+        "reasonably_resolvable": 2,
+        "safely_assumable": 1
+      },
+      "slice_metrics": {
+        "family:clear_resolvable": {
+          "sessions": 2,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:alternatives": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:endpoint_ambiguity": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 1
+        },
+        "family:correction_sibling": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "family:sibling_retention": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "family:disclosed_approximation": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "family:conflict": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:reasonably_resolvable": {
+          "sessions": 2,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:ambiguous": {
+          "sessions": 3,
+          "safety_failures": 1,
+          "behavioral_failures": 2,
+          "false_blocking": 1,
+          "incorrect_acceptance": 1
+        },
+        "class:correction": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 0,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        },
+        "class:safely_assumable": {
+          "sessions": 1,
+          "safety_failures": 1,
+          "behavioral_failures": 1,
+          "false_blocking": 1,
+          "incorrect_acceptance": 0
+        },
+        "class:conflict": {
+          "sessions": 1,
+          "safety_failures": 0,
+          "behavioral_failures": 1,
+          "false_blocking": 0,
+          "incorrect_acceptance": 0
+        }
+      },
+      "stop_reasons": {},
+      "trial_variance": {
+        "rates": {
+          "1": 0.5
+        },
+        "mean": 0.5,
+        "variance": 0.0
+      },
+      "errors": {
+        "model": 0,
+        "system": 0,
+        "evaluator": 0
+      }
+    },
+    "instrumentation": {
+      "stages": {
+        "interpreter": {
+          "calls": 9,
+          "captured_calls": 9,
+          "missing_calls": 0,
+          "trace_count": 9,
+          "input_tokens": 16265,
+          "output_tokens": 4015,
+          "total_tokens": 20280,
+          "errors": 0,
+          "reconciled_sessions": 8,
+          "unreconciled_sessions": 0,
+          "latency_seconds": 47.00218083220534
+        },
+        "composer": {
+          "calls": 12,
+          "captured_calls": 12,
+          "missing_calls": 0,
+          "trace_count": 12,
+          "input_tokens": 4657,
+          "output_tokens": 831,
+          "total_tokens": 5488,
+          "errors": 0,
+          "reconciled_sessions": 8,
+          "unreconciled_sessions": 0,
+          "latency_seconds": 17.908303374890238
+        }
+      },
+      "totals": {
+        "calls": 21,
+        "captured_calls": 21,
+        "missing_calls": 0,
+        "trace_count": 21,
+        "input_tokens": 20922,
+        "output_tokens": 4846,
+        "total_tokens": 25768,
+        "errors": 0,
+        "reconciled_sessions": 16,
+        "unreconciled_sessions": 0,
+        "latency_seconds": 64.91048420709558
+      }
+    }
+  }
+}

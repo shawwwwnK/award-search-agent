@@ -86,6 +86,37 @@
   understanding failure. Future live artifacts/traces bind the proposal-contract version,
   wire-adapter version, and canonical generated-schema hash.
 
+## V3 public development diagnostic after flat-wire hardening
+
+- An independent architecture review approved exactly one disclosed, one-trial v3 diagnostic at
+  `a86bb59`; it did not approve qualification. Before that run, repository Ruff, `mypy src tests`,
+  `pytest -q tests/unit` (427 tests), the semantic-guardrail CLI, and `git diff --check` passed.
+- The Luna/Luna development run used the eight-scenario public v3 pilot corpus and wrote its
+  redacted artifact to
+  `evals/clarification/baseline/2026-09-10-gpt-5.6-luna-v3-development-diagnostic-1-trial-a86bb59.json`.
+  Its private all-call sidecars remain ignored under
+  `evals/clarification/traces-v3-diagnostic-a86bb59/`.
+- The final flat interpreter schema reached structured inference: `preflight_rejected=0`,
+  `inference_reached=21`, and `structured_result_returned=21`. All 21 model calls were captured
+  and reconciled; the artifact reports zero model, system, and evaluator errors. It binds proposal
+  contract `clarification-calendar-plan-v1`, interpreter adapter
+  `openai_clarification_interpreter_flat_v3`, and schema hash
+  `a37093bc5b1120add021f8e1fba75c2f15119dce57ae067603033c617c89924d`.
+- This was diagnostic evidence, not qualification: the current artifact's exact safety gate failed
+  for 2 of 8 records. Trace review confirmed one genuine unsafe ambiguity acceptance/protected-field
+  change in `bare_return_endpoint`: the receiver proposed a return fact without preserving the
+  ambiguity, and deterministic reduction and composition mechanically followed that authorized
+  proposal. `fuzzy_month_disclosed` instead safely re-asked after the receiver proposed only an
+  unresolved fact; its recorded undisclosed-approximation safety failure is an evaluator false
+  positive because no approximation was accepted. The run also recorded a receiver-repair-to-pending
+  outcome that failed independent-sibling retention after the repair repeated duplicate targets.
+  The conflict scenario reached the required conflict-specific prompt; its only failure is the
+  evaluator's `partial_resolve_and_ask` classification versus the fixture's `ask` action. No
+  automatic rerun was made.
+- Qualification remains blocked by these safety findings and by the pre-existing protocol
+  requirements: a preregistered locked holdout, rotating post-freeze challenge, owner-approved
+  thresholds, repeated trials/confidence intervals, and human review of question naturalness.
+
 ## Project-owner decisions
 
 - _Placeholder: record any model-selection or latency decision after reviewed experimental
