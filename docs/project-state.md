@@ -2,7 +2,8 @@
 
 ## Phase
 
-Iterative clarification continuation — ADR 0015 generic calendar-proposal redesign in implementation.
+Iterative clarification continuation — ADR 0015 generic calendar-proposal stage closed pending a
+future owner-approved follow-up.
 
 ## Current conclusion
 
@@ -48,6 +49,17 @@ and artifacts bind the internal proposal-contract version, wire-adapter version,
 schema hash; the v3 protocol separates semantic diagnosis, safe workflow action/property success,
 hard safety, and operational repair/pending metrics. No live receiver or composer model-selection
 qualification exists for the ADR 0015 boundary yet.
+
+On 2026-09-10, the project owner closed this ADR 0015 implementation/evaluation stage for now.
+The final disclosed Luna/Luna matrix ran all eight public pilot scenarios for three trials (24
+sessions): all 63 calls reached structured results with zero preflight, runtime, or telemetry
+errors, but the current evaluator gate failed. Trace review confirmed an unsafe ambiguous-endpoint
+acceptance, safe-but-unsuccessful alternatives and bounded-month handling, and loss of independent
+siblings after an exhausted invalid-proposal repair. It also identified two evaluator
+classification issues (disclosure when no approximation was accepted, and conflict blocker
+replacement classified as partial resolution). These are diagnostic findings, not qualification or
+a direction to resume ADR 0015 work. The closeout is
+`docs/handoffs/2026-09-10-adr-0015-stage-closeout.md`.
 
 ### Superseded clarification evidence
 
@@ -105,17 +117,12 @@ Feasible access to useful award-inventory data.
 
 ## Immediate milestone
 
-Implement ADRs 0014 and 0015 without changing the frozen initial workflow. Every prompt's typed
-requirements list all current blockers in deterministic order; the post-reduction composer writes
-their user-facing copy. Each answer may resolve any subset, including a reasonable, grounded
-bounded approximation whose assumption is visible and traceable. The receiver alone maps answer
-language into generic calendar proposals; deterministic code must not add phrase-specific
-recovery. Preserve immutable revisions, answer-turn evidence, atomic merge semantics, and full
-recomputation after a supported correction. The receiver's same-answer references must be acyclic
-rather than text-order dependent. One shared failed model repair becomes visibly communicated,
-pending/retryable state rather than an exception, silent fallback, or no-progress strike. Generic
-approximation provenance drives a visible disclosure when one is used. The local Streamlit harness
-may exercise only this session boundary and must remain ephemeral and provider-free.
+The ADR 0015 implementation/evaluation stage is closed for now. Its generic-proposal design and
+the frozen initial workflow remain unchanged; do not make further ADR 0015 live evaluations or
+semantic-boundary changes without explicit owner reopening. If reopened, begin from the documented
+failure ownership and closeout, rather than treating the public pilot as qualification. Preserve
+the current no-raw-text-parsing boundary, one-repair/pending policy, immutable-state invariants,
+and private-trace/redacted-artifact discipline until then.
 
 The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
 clarification acceptance protocol are the current policy where they differ from ADRs 0011--0013

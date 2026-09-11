@@ -142,5 +142,25 @@
 
 ## Project-owner decisions
 
+## Three-trial diagnostic trace investigation and stage closeout
+
+- The owner requested a full disclosed development matrix rather than further pre-qualification
+  work. The worker ran the eight-scenario v3 public corpus for three Luna/Luna trials; its public
+  artifact has 24 records and 63/63 structured, captured, reconciled calls with no provider,
+  model, system, or evaluator runtime errors.
+- Independent private-trace review found one genuine unsafe receiver outcome in all three
+  `bare_return_endpoint` trials: the receiver supplied a return fact without preserving the
+  endpoint ambiguity, so reduction legitimately applied its authorized proposal. It also found
+  safe operational failures: duplicate semantic targets caused alternatives to become pending in
+  all three trials, caused valid independent siblings to be lost in two trials, and left bounded
+  month handling unresolved in all three trials.
+- The audit separated two evaluator issues from product behavior. The fuzzy-month disclosure
+  safety failure was emitted although no approximation was accepted; the conflict scenario reached
+  a conflict-specific prompt but was scored as `partial_resolve_and_ask` rather than the fixture's
+  `ask`. The composer was not the primary cause of any reviewed failure.
+- The owner closed this stage for now. No repair, rerun, qualification claim, or hidden-holdout
+  work was performed. See
+  `docs/handoffs/2026-09-10-adr-0015-stage-closeout.md` for the evidence-backed closeout.
+
 - _Placeholder: record any model-selection or latency decision after reviewed experimental
   evidence exists._
