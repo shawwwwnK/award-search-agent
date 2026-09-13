@@ -1,0 +1,290 @@
+contract_version: one_way_award_v2
+purpose: >
+  Immutable disclosed live qualification denominator for ADR 0016 one-way award request
+  understanding. This replaces v1 as the active corpus; prior round-trip and v1 artifacts
+  remain historical evidence.
+scenarios:
+  - id: one_way_ready_exact_airports
+    coverage_family: ready_exact_airports
+    description: A complete exact-date award request with explicit airport codes is ready.
+    input: Find two business award seats from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 2
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      cabin: business
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_ready_whole_month
+    coverage_family: ready_whole_month
+    description: A whole-month outbound window stays bounded without return semantics.
+    input: Find one award seat from SFO to BKK in May 2027.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2027-05-01", end: "2027-05-31"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_ready_early_month
+    coverage_family: ready_early_month
+    description: Existing early-month policy remains available for outbound planning.
+    input: Find one award seat from SFO to BKK in early May 2027.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2027-05-01", end: "2027-05-10"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_ready_holiday_window
+    coverage_family: ready_holiday_window
+    description: The existing bounded outbound holiday-window mechanism remains in scope.
+    input: I need one award seat from Seattle to Tokyo over Labor Day weekend.
+    context: {reference_date: "2026-08-29", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: city, value: Seattle}
+      destination: {kind: city, value: Tokyo}
+      search_modes: [award]
+      departure_window: {start: "2026-09-04", end: "2026-09-07"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_ready_relative_next_month
+    coverage_family: ready_relative_next_month
+    description: The existing next-month outbound calculation remains a bounded window.
+    input: Find one award seat from SFO to BKK next month.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2026-09-01", end: "2026-09-30"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_ready_relative_weekend
+    coverage_family: ready_relative_weekend
+    description: A grounded relative outbound weekend remains supported.
+    input: Find one award seat from New York to Lisbon two weekends after Thanksgiving.
+    context: {reference_date: "2026-11-20", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: city, value: New York}
+      destination: {kind: city, value: Lisbon}
+      search_modes: [award]
+      departure_window: {start: "2026-12-05", end: "2026-12-06"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_missing_origin
+    coverage_family: missing_origin
+    description: Origin remains a required one-way blocker.
+    input: Find one award seat to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unknowns: [origin]
+      unsupported_request_parts: []
+      clarification: {action: ask, field: origin}
+    status: ready
+
+  - id: one_way_missing_destination
+    coverage_family: missing_destination
+    description: Destination remains a required one-way blocker.
+    input: Find one award seat from SFO on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unknowns: [destination]
+      unsupported_request_parts: []
+      clarification: {action: ask, field: destination}
+    status: ready
+
+  - id: one_way_missing_departure
+    coverage_family: missing_departure
+    description: A one-way request still requires bounded outbound timing.
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      unknowns: [departure]
+      unsupported_request_parts: []
+      clarification: {action: ask, field: departure}
+    status: ready
+
+  - id: one_way_missing_travelers
+    coverage_family: missing_travelers
+    description: Traveler count remains a required one-way blocker.
+    input: Find award seats from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unknowns: [travelers]
+      unsupported_request_parts: []
+      clarification: {action: ask, field: travelers}
+    status: ready
+
+  - id: one_way_unbounded_departure
+    coverage_family: unbounded_departure
+    description: A generic after-New-Year boundary is not silently turned into a finite window.
+    input: Find one award seat from SFO to BKK after New Year.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      unknowns: [departure]
+      unsupported_request_parts: []
+      clarification: {action: ask, field: departure}
+    status: ready
+
+  - id: one_way_ambiguous_departure
+    coverage_family: ambiguous_departure
+    description: An unsupported broad season stays unresolved instead of being invented.
+    input: Find one award seat from SFO to BKK next spring.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      unknowns: [departure]
+      unsupported_request_parts: []
+      clarification: {action: ask, field: departure}
+    status: ready
+
+  - id: one_way_explicit_return_unsupported
+    coverage_family: explicit_return_unsupported
+    description: An explicit return date gets separate-one-way guidance.
+    input: Find two business award seats from Seattle to Tokyo leaving October 5 and returning October 15.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 2
+      origin: {kind: city, value: Seattle}
+      destination: {kind: city, value: Tokyo}
+      cabin: business
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: [return_or_duration_not_supported]
+      clarification:
+        action: unsupported
+        field: one_way_award_scope
+        reason: return_or_duration_not_supported
+    status: ready
+
+  - id: one_way_duration_unsupported
+    coverage_family: duration_return_unsupported
+    description: A trip duration gets separate-one-way guidance and cannot create active return state.
+    input: Find one award seat from SFO to BKK on October 5 for ten days.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: [return_or_duration_not_supported]
+      clarification:
+        action: unsupported
+        field: one_way_award_scope
+        reason: return_or_duration_not_supported
+    status: ready
+
+  - id: one_way_relative_return_unsupported
+    coverage_family: relative_return_unsupported
+    description: A relative return phrase also gets separate-one-way guidance.
+    input: Find one award seat from SFO to BKK leaving October 5 and come back the weekend afterwards.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: [return_or_duration_not_supported]
+      clarification:
+        action: unsupported
+        field: one_way_award_scope
+        reason: return_or_duration_not_supported
+    status: ready
+
+  - id: one_way_cash_only_unsupported
+    coverage_family: cash_only_unsupported
+    description: Cash-only requests are invalid in the active award-only boundary.
+    input: Find one cash flight from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [cash]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: [cash_only_not_supported]
+      clarification:
+        action: unsupported
+        field: one_way_award_scope
+        reason: cash_only_not_supported
+    status: ready
+
+  - id: one_way_mixed_award_cash_eligible
+    coverage_family: mixed_award_cash_eligible
+    description: Mixed requests retain award eligibility without claiming cash coverage.
+    input: Find one award and cash flight from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      search_modes: [award, cash]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready
+
+  - id: one_way_default_award_home_airport_not_return
+    coverage_family: default_award_home_airport_not_return
+    description: Unstated mode defaults to award and home-airport wording is not a return cue.
+    input: Find one business-class seat from my home airport SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      travelers: 1
+      origin: {kind: airport, value: SFO}
+      destination: {kind: airport, value: BKK}
+      cabin: business
+      search_modes: [award]
+      departure_window: {start: "2026-10-05", end: "2026-10-05"}
+      unsupported_request_parts: []
+      clarification: {action: none}
+    status: ready

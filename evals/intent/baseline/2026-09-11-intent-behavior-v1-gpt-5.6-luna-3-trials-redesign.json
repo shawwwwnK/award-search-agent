@@ -1,0 +1,2898 @@
+{
+  "schema_version": 9,
+  "generated_at": "2026-09-11T23:12:36.809806+00:00",
+  "model": "gpt-5.6-luna",
+  "architecture": "one_llm_semantic_receiver",
+  "request_scope": "one_way_award_v1",
+  "contract_version": "intent_behavior_v1",
+  "semantic_contract": {
+    "adapter_contract_version": "openai_semantic_intent_v1",
+    "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+    "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+  },
+  "cases_path": "evals/intent/one_way_award_behavior_cases_v1.yaml",
+  "fixture_sha256": "52a98b9ca316b9a2744c21072d6d0d603bcf4265f45328b6358ef2f1a238607a",
+  "scenario_count": 19,
+  "trials": 3,
+  "summary": {
+    "runs": 57,
+    "passed": 8,
+    "failed": 49,
+    "errors": 0,
+    "pass_rate": 0.14035087719298245,
+    "ordinary_language_pending": 46,
+    "operational_outcomes": {
+      "ordinary_language_pending": {
+        "numerator": 46,
+        "denominator": 57
+      },
+      "fault_injection_pending": {
+        "numerator": 1,
+        "denominator": 1
+      }
+    },
+    "usage": {
+      "calls": 11,
+      "captured_calls": 11,
+      "missing_calls": 0,
+      "input_tokens": 19761,
+      "output_tokens": 5336,
+      "total_tokens": 25097
+    },
+    "cost": "not calculated"
+  },
+  "results": [
+    {
+      "id": "ready_exact_airports",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 6.355,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 6.348,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_exact_airports__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_whole_month",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.418,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.405,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_whole_month__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_early_month",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.664,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.651,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_early_month__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_holiday_window",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.353,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.343,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_holiday_window__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_relative_next_month",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.707,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.695,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_relative_next_month__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_relative_weekend",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.592,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.58,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_relative_weekend__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "typo_recognizable_date",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.672,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.662,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/typo_recognizable_date__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_origin",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.862,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.853,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_origin__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_destination",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 8.213,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 8.199,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_destination__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_departure",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 1.854,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 1.809,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_departure__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_travelers",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.884,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.871,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_travelers__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "unbounded_departure",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.106,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.092,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/unbounded_departure__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ambiguous_departure",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.988,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.974,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ambiguous_departure__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "explicit_return_unsupported",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.69,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.675,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/explicit_return_unsupported__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "duration_return_unsupported",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 5.115,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 5.1,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/duration_return_unsupported__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "relative_return_unsupported",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.226,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.213,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/relative_return_unsupported__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "cash_only_unsupported",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": false
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": false
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:cash_coverage_claim",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "unsupported",
+      "latency_seconds": 4.541,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1795,
+        "output_tokens": 540,
+        "total_tokens": 2335
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 4.534,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1795,
+            "output_tokens": 540,
+            "total_tokens": 2335
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/cash_only_unsupported__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "mixed_award_cash_eligible",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": false
+        },
+        {
+          "name": "travelers",
+          "passed": false
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:cash_coverage_claim",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "clarification",
+      "latency_seconds": 3.197,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1797,
+        "output_tokens": 394,
+        "total_tokens": 2191
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.178,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1797,
+            "output_tokens": 394,
+            "total_tokens": 2191
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/mixed_award_cash_eligible__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "default_award_home_airport_not_return",
+      "trial": 1,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.078,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.067,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/default_award_home_airport_not_return__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_exact_airports",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:city_expanded_to_airports",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "ready",
+      "latency_seconds": 3.505,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1796,
+        "output_tokens": 446,
+        "total_tokens": 2242
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.493,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1796,
+            "output_tokens": 446,
+            "total_tokens": 2242
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_exact_airports__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_whole_month",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.499,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.486,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_whole_month__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_early_month",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.456,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.443,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_early_month__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_holiday_window",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.567,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.556,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_holiday_window__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_relative_next_month",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.976,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.961,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_relative_next_month__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_relative_weekend",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.076,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.064,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_relative_weekend__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "typo_recognizable_date",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.701,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.683,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/typo_recognizable_date__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_origin",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.4,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.389,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_origin__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_destination",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.399,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.392,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_destination__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_departure",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 1.744,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 1.732,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_departure__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_travelers",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.146,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.132,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_travelers__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "unbounded_departure",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.229,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.215,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/unbounded_departure__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ambiguous_departure",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.06,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.048,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ambiguous_departure__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "explicit_return_unsupported",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.806,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.796,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/explicit_return_unsupported__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "duration_return_unsupported",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "unsupported",
+      "latency_seconds": 5.332,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1798,
+        "output_tokens": 603,
+        "total_tokens": 2401
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 5.311,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1798,
+            "output_tokens": 603,
+            "total_tokens": 2401
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/duration_return_unsupported__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "relative_return_unsupported",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "unsupported",
+      "latency_seconds": 3.808,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1801,
+        "output_tokens": 469,
+        "total_tokens": 2270
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.798,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1801,
+            "output_tokens": 469,
+            "total_tokens": 2270
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/relative_return_unsupported__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "cash_only_unsupported",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.455,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.442,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/cash_only_unsupported__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "mixed_award_cash_eligible",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.857,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.848,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/mixed_award_cash_eligible__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "default_award_home_airport_not_return",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.035,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.014,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/default_award_home_airport_not_return__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_exact_airports",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:city_expanded_to_airports",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "ready",
+      "latency_seconds": 3.434,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1796,
+        "output_tokens": 446,
+        "total_tokens": 2242
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.42,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1796,
+            "output_tokens": 446,
+            "total_tokens": 2242
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_exact_airports__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_whole_month",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.495,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.482,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_whole_month__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_early_month",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.266,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.255,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_early_month__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_holiday_window",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.493,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.479,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_holiday_window__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_relative_next_month",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.925,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.913,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_relative_next_month__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ready_relative_weekend",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.632,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.622,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ready_relative_weekend__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "typo_recognizable_date",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.124,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.116,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/typo_recognizable_date__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_origin",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.822,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.81,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_origin__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_destination",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "clarification",
+      "latency_seconds": 4.152,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1792,
+        "output_tokens": 500,
+        "total_tokens": 2292
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 4.144,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1792,
+            "output_tokens": 500,
+            "total_tokens": 2292
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_destination__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_departure",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 1.7,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 1.685,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_departure__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "missing_travelers",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "clarification",
+      "latency_seconds": 4.543,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1794,
+        "output_tokens": 415,
+        "total_tokens": 2209
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 4.53,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1794,
+            "output_tokens": 415,
+            "total_tokens": 2209
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/missing_travelers__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "unbounded_departure",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.948,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.934,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/unbounded_departure__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "ambiguous_departure",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.382,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.367,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/ambiguous_departure__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "explicit_return_unsupported",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:city_expanded_to_airports",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "unsupported",
+      "latency_seconds": 3.886,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1799,
+        "output_tokens": 501,
+        "total_tokens": 2300
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.876,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1799,
+            "output_tokens": 501,
+            "total_tokens": 2300
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/explicit_return_unsupported__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "duration_return_unsupported",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "unsupported",
+      "latency_seconds": 5.758,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1798,
+        "output_tokens": 680,
+        "total_tokens": 2478
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 5.742,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1798,
+            "output_tokens": 680,
+            "total_tokens": 2478
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/duration_return_unsupported__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "relative_return_unsupported",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 4.016,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 4.003,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/relative_return_unsupported__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "cash_only_unsupported",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": false
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": false
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:cash_coverage_claim",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "unsupported",
+      "latency_seconds": 2.549,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 1795,
+        "output_tokens": 342,
+        "total_tokens": 2137
+      },
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.536,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 1795,
+            "output_tokens": 342,
+            "total_tokens": 2137
+          },
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/cash_only_unsupported__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "mixed_award_cash_eligible",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 2.681,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 2.667,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/mixed_award_cash_eligible__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "default_award_home_airport_not_return",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "action": "pending_retryable",
+      "latency_seconds": 3.125,
+      "usage": null,
+      "stage_telemetry": {
+        "semantic_receiver": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "attempts": 1,
+          "latency_seconds": 3.109,
+          "usage": null,
+          "adapter_contract_version": "openai_semantic_intent_v1",
+          "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+          "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a/default_award_home_airport_not_return__trial-3.json",
+        "calls": 1
+      }
+    }
+  ],
+  "stage_telemetry": {
+    "semantic_receiver": {
+      "enabled": true,
+      "configured": true,
+      "model": "gpt-5.6-luna",
+      "attempts": 57,
+      "latency_seconds": 193.742,
+      "adapter_contract_version": "openai_semantic_intent_v1",
+      "adapter_sha256": "990c7488f0a7595a0e2a1a5a76767fdceda16000ff5cbb00c27f6687835a8ee6",
+      "strict_response_schema_sha256": "b84d14a5471fd43b7955aba413989215a86552f3a6d8325fc2ed48e444a9fc92"
+    }
+  },
+  "llm_trace": {
+    "mode": "all_calls",
+    "directory": "evals/intent/traces/run-2026-09-11T231236.809806-0000-6635779a",
+    "case_count": 57
+  }
+}

@@ -10,7 +10,10 @@ from dotenv import load_dotenv
 
 from award_agent.domain import RawRequest, RequestContext
 from award_agent.intent.holidays import NagerHolidayProvider
-from award_agent.intent.openai_extractor import OpenAIExtractorConfig, OpenAIIntentExtractor
+from award_agent.intent.openai_interpreter import (
+    OpenAISemanticIntentConfig,
+    OpenAISemanticIntentInterpreter,
+)
 from award_agent.intent.workflow import understand_request
 
 
@@ -34,11 +37,6 @@ def _parser() -> argparse.ArgumentParser:
         required=True,
         help="OpenAI model ID selected explicitly for this workflow run",
     )
-    parser.add_argument(
-        "--selector-model",
-        required=True,
-        help="OpenAI model ID for the independent temporal candidate selector",
-    )
     return parser
 
 
@@ -53,14 +51,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             timezone=args.timezone,
         ),
     )
-    pass_one_adapter = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model=args.model))
-    selector_adapter = OpenAIIntentExtractor(
-        config=OpenAIExtractorConfig(model=args.selector_model)
-    )
+    interpreter = OpenAISemanticIntentInterpreter(config=OpenAISemanticIntentConfig(model=args.model))
     result = understand_request(
         raw_request,
-        pass_one_adapter,
-        selector_adapter,
+        interpreter,
         NagerHolidayProvider(),
     )
     print(result.model_dump_json(indent=2))

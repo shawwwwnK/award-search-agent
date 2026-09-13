@@ -30,17 +30,15 @@ def test_cli_parses_model_as_run_specific_input() -> None:
             "UTC",
             "--model",
             "intent-eval-candidate",
-            "--selector-model",
-            "selector-candidate",
         ]
     )
 
     assert args.model == "intent-eval-candidate"
     assert args.reference_date == date(2026, 8, 30)
-    assert args.selector_model == "selector-candidate"
+    assert not hasattr(args, "selector_model")
 
 
-def test_cli_rejects_removed_temporal_strategy_switch() -> None:
+def test_cli_rejects_removed_selector_and_temporal_strategy_switches() -> None:
     with pytest.raises(SystemExit):
         _parser().parse_args(
             [

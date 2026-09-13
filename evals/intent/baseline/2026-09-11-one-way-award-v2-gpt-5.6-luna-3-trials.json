@@ -1,0 +1,4673 @@
+{
+  "schema_version": 8,
+  "generated_at": "2026-09-11T21:49:48.763701+00:00",
+  "model": "gpt-5.6-luna",
+  "pass_one_model": "gpt-5.6-luna",
+  "selector_model": "gpt-5.6-luna",
+  "selector_policy": "supported_or_unresolved",
+  "architecture": "selector_only",
+  "request_scope": "one_way_award_v1",
+  "contract_version": "one_way_award_v2",
+  "cases_path": "evals/intent/one_way_award_cases_v2.yaml",
+  "scenario_count": 18,
+  "fixture_sha256": "2997939d6ec84806238e8755a864f24469fb5cc70a0bc962debcd286e7a49517",
+  "trials": 3,
+  "summary": {
+    "runs": 54,
+    "passed": 52,
+    "failed": 2,
+    "errors": 0,
+    "pass_rate": 0.9629629629629629,
+    "final_completion": {
+      "runs": 54,
+      "rate": 1.0
+    },
+    "pass_one_failures": 0,
+    "selector_failures": 0,
+    "grounding_failures": 0,
+    "semantic_validation_failures": 2,
+    "deterministic_output_failures": 0,
+    "clarification_failures": 0,
+    "latency_seconds": 153.129,
+    "usage": {
+      "captured_runs": 54,
+      "missing_runs": 0,
+      "input_tokens": 65070,
+      "output_tokens": 5989,
+      "total_tokens": 71059,
+      "calls": 102,
+      "captured_calls": 102,
+      "missing_calls": 0
+    },
+    "cost": "not calculated; token usage is partial when failed parses omit usage"
+  },
+  "results": [
+    {
+      "id": "one_way_ready_exact_airports",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.402,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1262,
+        "output_tokens": 100,
+        "total_tokens": 1362
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.062,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 737,
+            "output_tokens": 83,
+            "total_tokens": 820
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.335,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_exact_airports__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_whole_month",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.785,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1261,
+        "output_tokens": 120,
+        "total_tokens": 1381
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.604,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 737,
+            "output_tokens": 81,
+            "total_tokens": 818
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 2.177,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 524,
+            "output_tokens": 39,
+            "total_tokens": 563
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_whole_month__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_early_month",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.306,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1279,
+        "output_tokens": 98,
+        "total_tokens": 1377
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.49,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 738,
+            "output_tokens": 81,
+            "total_tokens": 819
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.811,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 541,
+            "output_tokens": 17,
+            "total_tokens": 558
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_early_month__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_holiday_window",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 4.21,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1276,
+        "output_tokens": 133,
+        "total_tokens": 1409
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.843,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 80,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.241,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 541,
+            "output_tokens": 53,
+            "total_tokens": 594
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_holiday_window__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_relative_next_month",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.266,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1222,
+        "output_tokens": 112,
+        "total_tokens": 1334
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.313,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 734,
+            "output_tokens": 81,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.948,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 488,
+            "output_tokens": 31,
+            "total_tokens": 519
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_relative_next_month__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_relative_weekend",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 4.221,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1286,
+        "output_tokens": 211,
+        "total_tokens": 1497
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.4,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 157,
+            "total_tokens": 892
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.815,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 551,
+            "output_tokens": 54,
+            "total_tokens": 605
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_relative_weekend__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_origin",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.379,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1258,
+        "output_tokens": 82,
+        "total_tokens": 1340
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.556,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 733,
+            "output_tokens": 65,
+            "total_tokens": 798
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.817,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_origin__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_destination",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.963,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1258,
+        "output_tokens": 112,
+        "total_tokens": 1370
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.058,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 733,
+            "output_tokens": 81,
+            "total_tokens": 814
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.898,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 31,
+            "total_tokens": 556
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_destination__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_departure",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 1.374,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 732,
+        "output_tokens": 81,
+        "total_tokens": 813
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.37,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 732,
+            "output_tokens": 81,
+            "total_tokens": 813
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_departure__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "one_way_missing_travelers",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.778,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1260,
+        "output_tokens": 98,
+        "total_tokens": 1358
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.535,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.239,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_travelers__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_unbounded_departure",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.207,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1277,
+        "output_tokens": 121,
+        "total_tokens": 1398
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.662,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.449,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 542,
+            "output_tokens": 40,
+            "total_tokens": 582
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_unbounded_departure__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ambiguous_departure",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 1.523,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 734,
+        "output_tokens": 81,
+        "total_tokens": 815
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.518,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 734,
+            "output_tokens": 81,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ambiguous_departure__trial-1.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "one_way_explicit_return_unsupported",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.987,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1265,
+        "output_tokens": 96,
+        "total_tokens": 1361
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.859,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 740,
+            "output_tokens": 79,
+            "total_tokens": 819
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.119,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_explicit_return_unsupported__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_duration_unsupported",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.073,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1264,
+        "output_tokens": 98,
+        "total_tokens": 1362
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.33,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 739,
+            "output_tokens": 81,
+            "total_tokens": 820
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.736,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_duration_unsupported__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_relative_return_unsupported",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.543,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1267,
+        "output_tokens": 98,
+        "total_tokens": 1365
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.428,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 742,
+            "output_tokens": 81,
+            "total_tokens": 823
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.109,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_relative_return_unsupported__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_cash_only_unsupported",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.154,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1261,
+        "output_tokens": 98,
+        "total_tokens": 1359
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.467,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 736,
+            "output_tokens": 81,
+            "total_tokens": 817
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.679,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_cash_only_unsupported__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_mixed_award_cash_eligible",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.504,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 100,
+        "total_tokens": 1363
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.568,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 738,
+            "output_tokens": 83,
+            "total_tokens": 821
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.931,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_mixed_award_cash_eligible__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_default_award_home_airport_not_return",
+      "trial": 1,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.958,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1265,
+        "output_tokens": 101,
+        "total_tokens": 1366
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.481,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 740,
+            "output_tokens": 84,
+            "total_tokens": 824
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.469,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_default_award_home_airport_not_return__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_exact_airports",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.959,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1262,
+        "output_tokens": 100,
+        "total_tokens": 1362
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.44,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 737,
+            "output_tokens": 83,
+            "total_tokens": 820
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.513,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_exact_airports__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_whole_month",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.367,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1261,
+        "output_tokens": 170,
+        "total_tokens": 1431
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.169,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 737,
+            "output_tokens": 130,
+            "total_tokens": 867
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.19,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 524,
+            "output_tokens": 40,
+            "total_tokens": 564
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_whole_month__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_early_month",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.826,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1279,
+        "output_tokens": 120,
+        "total_tokens": 1399
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.672,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 738,
+            "output_tokens": 81,
+            "total_tokens": 819
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 2.147,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 541,
+            "output_tokens": 39,
+            "total_tokens": 580
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_early_month__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_holiday_window",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.324,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1276,
+        "output_tokens": 94,
+        "total_tokens": 1370
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.562,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 77,
+            "total_tokens": 812
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.755,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 541,
+            "output_tokens": 17,
+            "total_tokens": 558
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_holiday_window__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_relative_next_month",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 4.636,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1222,
+        "output_tokens": 118,
+        "total_tokens": 1340
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 3.21,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 734,
+            "output_tokens": 81,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.42,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 488,
+            "output_tokens": 37,
+            "total_tokens": 525
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_relative_next_month__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_relative_weekend",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.818,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1286,
+        "output_tokens": 167,
+        "total_tokens": 1453
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.8,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 130,
+            "total_tokens": 865
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.007,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 551,
+            "output_tokens": 37,
+            "total_tokens": 588
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_relative_weekend__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_origin",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.084,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1258,
+        "output_tokens": 82,
+        "total_tokens": 1340
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.316,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 733,
+            "output_tokens": 65,
+            "total_tokens": 798
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.761,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_origin__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_destination",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.892,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1258,
+        "output_tokens": 116,
+        "total_tokens": 1374
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.588,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 733,
+            "output_tokens": 81,
+            "total_tokens": 814
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.299,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 35,
+            "total_tokens": 560
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_destination__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_departure",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 1.269,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 732,
+        "output_tokens": 81,
+        "total_tokens": 813
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.266,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 732,
+            "output_tokens": 81,
+            "total_tokens": 813
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_departure__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "one_way_missing_travelers",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.986,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1260,
+        "output_tokens": 115,
+        "total_tokens": 1375
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.827,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.153,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 34,
+            "total_tokens": 559
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_travelers__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_unbounded_departure",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.348,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1277,
+        "output_tokens": 124,
+        "total_tokens": 1401
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.269,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.073,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 542,
+            "output_tokens": 43,
+            "total_tokens": 585
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_unbounded_departure__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ambiguous_departure",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 1.271,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 734,
+        "output_tokens": 81,
+        "total_tokens": 815
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.266,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 734,
+            "output_tokens": 81,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ambiguous_departure__trial-2.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "one_way_explicit_return_unsupported",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.362,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1265,
+        "output_tokens": 96,
+        "total_tokens": 1361
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.542,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 740,
+            "output_tokens": 79,
+            "total_tokens": 819
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.811,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_explicit_return_unsupported__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_duration_unsupported",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.426,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1264,
+        "output_tokens": 98,
+        "total_tokens": 1362
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.461,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 739,
+            "output_tokens": 81,
+            "total_tokens": 820
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.96,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_duration_unsupported__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_relative_return_unsupported",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.042,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1267,
+        "output_tokens": 196,
+        "total_tokens": 1463
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.011,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 742,
+            "output_tokens": 160,
+            "total_tokens": 902
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.027,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 36,
+            "total_tokens": 561
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_relative_return_unsupported__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_cash_only_unsupported",
+      "trial": 2,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": false
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 3.173,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1261,
+        "output_tokens": 196,
+        "total_tokens": 1457
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.401,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 736,
+            "output_tokens": 179,
+            "total_tokens": 915
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.767,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_cash_only_unsupported__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_mixed_award_cash_eligible",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.874,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 100,
+        "total_tokens": 1363
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.267,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 738,
+            "output_tokens": 83,
+            "total_tokens": 821
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.597,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_mixed_award_cash_eligible__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_default_award_home_airport_not_return",
+      "trial": 2,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.88,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1265,
+        "output_tokens": 98,
+        "total_tokens": 1363
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.8,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 740,
+            "output_tokens": 81,
+            "total_tokens": 821
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.07,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_default_award_home_airport_not_return__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_exact_airports",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.583,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1262,
+        "output_tokens": 126,
+        "total_tokens": 1388
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.474,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 737,
+            "output_tokens": 83,
+            "total_tokens": 820
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.101,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 43,
+            "total_tokens": 568
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_exact_airports__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_whole_month",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.948,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1261,
+        "output_tokens": 130,
+        "total_tokens": 1391
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.854,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 737,
+            "output_tokens": 85,
+            "total_tokens": 822
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.085,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 524,
+            "output_tokens": 45,
+            "total_tokens": 569
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_whole_month__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_early_month",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.442,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1279,
+        "output_tokens": 115,
+        "total_tokens": 1394
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.28,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 738,
+            "output_tokens": 81,
+            "total_tokens": 819
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.155,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 541,
+            "output_tokens": 34,
+            "total_tokens": 575
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_early_month__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_holiday_window",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.737,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1276,
+        "output_tokens": 126,
+        "total_tokens": 1402
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.437,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 77,
+            "total_tokens": 812
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.294,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 541,
+            "output_tokens": 49,
+            "total_tokens": 590
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_holiday_window__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_relative_next_month",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.593,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1222,
+        "output_tokens": 113,
+        "total_tokens": 1335
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.575,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 734,
+            "output_tokens": 81,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.013,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 488,
+            "output_tokens": 32,
+            "total_tokens": 520
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_relative_next_month__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ready_relative_weekend",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.39,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1286,
+        "output_tokens": 116,
+        "total_tokens": 1402
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.309,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.068,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 551,
+            "output_tokens": 35,
+            "total_tokens": 586
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ready_relative_weekend__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_origin",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.613,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1258,
+        "output_tokens": 82,
+        "total_tokens": 1340
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.333,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 733,
+            "output_tokens": 65,
+            "total_tokens": 798
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.273,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_origin__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_destination",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.548,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1258,
+        "output_tokens": 98,
+        "total_tokens": 1356
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.367,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 733,
+            "output_tokens": 81,
+            "total_tokens": 814
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.175,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_destination__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_missing_departure",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 1.282,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 732,
+        "output_tokens": 81,
+        "total_tokens": 813
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.278,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 732,
+            "output_tokens": 81,
+            "total_tokens": 813
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_departure__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "one_way_missing_travelers",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.952,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1260,
+        "output_tokens": 98,
+        "total_tokens": 1358
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.971,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.976,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_missing_travelers__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_unbounded_departure",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.801,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1277,
+        "output_tokens": 119,
+        "total_tokens": 1396
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.645,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 735,
+            "output_tokens": 81,
+            "total_tokens": 816
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.149,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 542,
+            "output_tokens": 38,
+            "total_tokens": 580
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_unbounded_departure__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_ambiguous_departure",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "unknowns",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 1.333,
+      "usage": {
+        "calls": 1,
+        "captured_calls": 1,
+        "missing_calls": 0,
+        "input_tokens": 734,
+        "output_tokens": 81,
+        "total_tokens": 815
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.327,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 734,
+            "output_tokens": 81,
+            "total_tokens": 815
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 0,
+          "latency_seconds": 0,
+          "usage": null
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_ambiguous_departure__trial-3.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "one_way_explicit_return_unsupported",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.141,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1265,
+        "output_tokens": 96,
+        "total_tokens": 1361
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.983,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 740,
+            "output_tokens": 79,
+            "total_tokens": 819
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.149,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_explicit_return_unsupported__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_duration_unsupported",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.02,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1264,
+        "output_tokens": 98,
+        "total_tokens": 1362
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.106,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 739,
+            "output_tokens": 81,
+            "total_tokens": 820
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.909,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_duration_unsupported__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_relative_return_unsupported",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 3.112,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1267,
+        "output_tokens": 98,
+        "total_tokens": 1365
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.023,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 742,
+            "output_tokens": 81,
+            "total_tokens": 823
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.084,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_relative_return_unsupported__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_cash_only_unsupported",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.052,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1261,
+        "output_tokens": 98,
+        "total_tokens": 1359
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.285,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 736,
+            "output_tokens": 81,
+            "total_tokens": 817
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.751,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_cash_only_unsupported__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_mixed_award_cash_eligible",
+      "trial": 3,
+      "status": "passed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [],
+      "latency_seconds": 2.449,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1263,
+        "output_tokens": 117,
+        "total_tokens": 1380
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 1.324,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 738,
+            "output_tokens": 83,
+            "total_tokens": 821
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 1.116,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 34,
+            "total_tokens": 559
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_mixed_award_cash_eligible__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "one_way_default_award_home_airport_not_return",
+      "trial": 3,
+      "status": "failed",
+      "checks": [
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "cabin",
+          "passed": true
+        },
+        {
+          "name": "search_modes",
+          "passed": false
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_request_parts",
+          "passed": true
+        },
+        {
+          "name": "clarification",
+          "passed": true
+        }
+      ],
+      "failure_stage": null,
+      "failure_code": null,
+      "failure_categories": [
+        "semantic_validation_failures"
+      ],
+      "latency_seconds": 2.963,
+      "usage": {
+        "calls": 2,
+        "captured_calls": 2,
+        "missing_calls": 0,
+        "input_tokens": 1265,
+        "output_tokens": 105,
+        "total_tokens": 1370
+      },
+      "stage_telemetry": {
+        "pass_one": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": null,
+          "attempts": 1,
+          "latency_seconds": 2.094,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 740,
+            "output_tokens": 88,
+            "total_tokens": 828
+          }
+        },
+        "selector": {
+          "enabled": true,
+          "configured": true,
+          "model": "gpt-5.6-luna",
+          "selector_policy": "supported_or_unresolved",
+          "attempts": 1,
+          "latency_seconds": 0.854,
+          "usage": {
+            "calls": 1,
+            "captured_calls": 1,
+            "missing_calls": 0,
+            "input_tokens": 525,
+            "output_tokens": 17,
+            "total_tokens": 542
+          }
+        }
+      },
+      "private_trace": {
+        "path": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c/one_way_default_award_home_airport_not_return__trial-3.json",
+        "calls": 2
+      }
+    }
+  ],
+  "stage_telemetry": {
+    "pass_one": {
+      "enabled": true,
+      "configured": true,
+      "model": "gpt-5.6-luna",
+      "selector_policy": null,
+      "attempts": 54,
+      "latency_seconds": 96.076,
+      "usage": {
+        "calls": 54,
+        "captured_calls": 54,
+        "missing_calls": 0,
+        "input_tokens": 39759,
+        "output_tokens": 4688,
+        "total_tokens": 44447
+      }
+    },
+    "selector": {
+      "enabled": true,
+      "configured": true,
+      "model": "gpt-5.6-luna",
+      "selector_policy": "supported_or_unresolved",
+      "attempts": 48,
+      "latency_seconds": 56.475,
+      "usage": {
+        "calls": 48,
+        "captured_calls": 48,
+        "missing_calls": 0,
+        "input_tokens": 25311,
+        "output_tokens": 1301,
+        "total_tokens": 26612
+      }
+    }
+  },
+  "llm_trace": {
+    "mode": "all_calls",
+    "directory": "evals/intent/traces/run-2026-09-11T214948.763701-0000-b2e4f29c",
+    "case_count": 54
+  }
+}

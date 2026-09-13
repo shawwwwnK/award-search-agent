@@ -15,8 +15,13 @@ from award_agent.domain import (
     DateWindowPrecision,
     Holiday,
     IntentExtraction,
+    OneWayDateResolutionProposal,
     ParsedRequest,
     RequestContext,
+    TemporalPhrase,
+    TemporalPhraseTarget,
+    UnknownField,
+    UnknownReason,
     Weekday,
 )
 
@@ -32,6 +37,68 @@ def test_mvp_request_contracts_exclude_points_and_budget_constraints() -> None:
 
         assert "points_balances" not in properties
         assert "cash_budget_usd" not in properties
+
+
+def test_active_parsed_request_contract_is_outbound_only() -> None:
+    parsed_properties = ParsedRequest.model_json_schema()["properties"]
+    resolution_properties = OneWayDateResolutionProposal.model_json_schema()["properties"]
+
+    assert {"return_expression", "return_window", "duration"}.isdisjoint(parsed_properties)
+    assert {"return_date", "interpreted_duration"}.isdisjoint(resolution_properties)
+
+
+def test_active_parsed_request_rejects_nested_return_temporal_state() -> None:
+    with pytest.raises(ValidationError, match="cannot expose return or duration extraction"):
+        ParsedRequest(
+            raw_text="Leave October 5 and return next month.",
+            context=RequestContext(reference_date=date(2026, 8, 30), timezone="UTC"),
+            travelers=1,
+            origins=[],
+            destinations=[],
+            departure_expression=None,
+            departure_window=None,
+            cabins=[],
+            search_modes=[],
+            date_flexibility=[],
+            repositioning_allowed=None,
+            hard_constraints=[],
+            unknowns=[],
+            conflicts=[],
+            temporal_extraction=CoarseIntentExtraction(
+                temporal_phrases=[
+                    TemporalPhrase(
+                        applies_to=TemporalPhraseTarget.RETURN,
+                        raw_text="return next month",
+                    )
+                ]
+            ),
+        )
+
+
+def test_active_parsed_request_rejects_retired_return_blocker() -> None:
+    with pytest.raises(ValidationError, match="cannot expose a return or duration blocker"):
+        ParsedRequest(
+            raw_text="Travel from SFO to BKK.",
+            context=RequestContext(reference_date=date(2026, 8, 30), timezone="UTC"),
+            travelers=1,
+            origins=[],
+            destinations=[],
+            departure_expression=None,
+            departure_window=None,
+            cabins=[],
+            search_modes=[],
+            date_flexibility=[],
+            repositioning_allowed=None,
+            hard_constraints=[],
+            unknowns=[
+                UnknownField(
+                    field="return_or_duration",
+                    reason=UnknownReason.MISSING,
+                    detail="retired blocker",
+                )
+            ],
+            conflicts=[],
+        )
 
 
 def test_date_window_rejects_reverse_order() -> None:

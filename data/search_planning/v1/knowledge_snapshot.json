@@ -1,0 +1,208 @@
+{
+  "metadata": {
+    "snapshot_id": "search-planning-seed-v1",
+    "schema_version": "1.0.0",
+    "as_of": "2026-09-12",
+    "verification_date": "2026-09-12",
+    "coverage_statement": "Offline seed fixture coverage only: explicit SFO; Japan policy selection HND/NRT/KIX; and New York City policy selection JFK/EWR/LGA. The embedded references identify intended evidence sources, but this repository contains no captured source artifacts and this snapshot is not a global airport, geography, or route catalog."
+  },
+  "sources": [
+    {
+      "source_id": "iata-code-directory",
+      "title": "IATA Airline and Location Code Search",
+      "url": "https://www.iata.org/en/publications/directories/code-search/",
+      "license_note": "IATA website terms apply; retained here as a factual identifier reference, not redistributed source data.",
+      "verified_on": "2026-09-12",
+      "version_or_capture_id": "offline-seed-v1",
+      "verification_scope": "Offline planner seed fixture. The URL is retained as a source reference; no source artifact or operational verification receipt is included in this repository."
+    },
+    {
+      "source_id": "iana-time-zone-database",
+      "title": "IANA Time Zone Database",
+      "url": "https://www.iana.org/time-zones",
+      "license_note": "Public-domain IANA time-zone data.",
+      "verified_on": "2026-09-12",
+      "version_or_capture_id": "offline-seed-v1",
+      "verification_scope": "Offline planner seed fixture. The URL is retained as a source reference; no source artifact or operational verification receipt is included in this repository."
+    },
+    {
+      "source_id": "japan-mlit-airports",
+      "title": "Japan Ministry of Land, Infrastructure, Transport and Tourism airport information",
+      "url": "https://www.mlit.go.jp/en/koku/",
+      "license_note": "Government-site terms apply; retained as a factual relation reference.",
+      "verified_on": "2026-09-12",
+      "version_or_capture_id": "offline-seed-v1",
+      "verification_scope": "Offline planner seed fixture. The URL is retained as a source reference; no source artifact or operational verification receipt is included in this repository."
+    },
+    {
+      "source_id": "port-authority-airports",
+      "title": "Port Authority of New York and New Jersey airport information",
+      "url": "https://www.panynj.gov/airports/en/index.html",
+      "license_note": "Port Authority website terms apply; retained as a factual relation reference.",
+      "verified_on": "2026-09-12",
+      "version_or_capture_id": "offline-seed-v1",
+      "verification_scope": "Offline planner seed fixture. The URL is retained as a source reference; no source artifact or operational verification receipt is included in this repository."
+    },
+    {
+      "source_id": "project-policy-v1",
+      "title": "Award-search v1 airport selection policy",
+      "url": "docs/handoffs/2026-09-12-search-planning-design.md",
+      "license_note": "Project-authored policy record.",
+      "verified_on": "2026-09-12",
+      "version_or_capture_id": "offline-seed-v1",
+      "verification_scope": "Offline planner seed fixture. This project-authored policy record is represented by the cited design document; no independent external evidence receipt applies."
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "country:jp",
+      "kind": "country",
+      "label": "Japan",
+      "aliases": ["Japan", "Nippon"],
+      "source_ids": ["japan-mlit-airports"]
+    },
+    {
+      "entity_id": "country:us",
+      "kind": "country",
+      "label": "United States",
+      "aliases": ["United States", "USA", "US"],
+      "source_ids": ["iata-code-directory"]
+    },
+    {
+      "entity_id": "city:new-york-city",
+      "kind": "city",
+      "label": "New York City",
+      "aliases": ["New York City", "NYC"],
+      "source_ids": ["port-authority-airports"]
+    }
+  ],
+  "airports": [
+    {
+      "airport_id": "airport:ewr",
+      "iata": "EWR",
+      "label": "Newark Liberty International Airport",
+      "country_entity_id": "country:us",
+      "timezone": "America/New_York",
+      "aliases": ["Newark Liberty International Airport", "EWR"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    },
+    {
+      "airport_id": "airport:hnd",
+      "iata": "HND",
+      "label": "Tokyo Haneda Airport",
+      "country_entity_id": "country:jp",
+      "timezone": "Asia/Tokyo",
+      "aliases": ["Tokyo Haneda Airport", "Haneda Airport", "HND"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    },
+    {
+      "airport_id": "airport:jfk",
+      "iata": "JFK",
+      "label": "John F. Kennedy International Airport",
+      "country_entity_id": "country:us",
+      "timezone": "America/New_York",
+      "aliases": ["John F. Kennedy International Airport", "JFK"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    },
+    {
+      "airport_id": "airport:kix",
+      "iata": "KIX",
+      "label": "Kansai International Airport",
+      "country_entity_id": "country:jp",
+      "timezone": "Asia/Tokyo",
+      "aliases": ["Kansai International Airport", "KIX"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    },
+    {
+      "airport_id": "airport:lga",
+      "iata": "LGA",
+      "label": "LaGuardia Airport",
+      "country_entity_id": "country:us",
+      "timezone": "America/New_York",
+      "aliases": ["LaGuardia Airport", "LGA"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    },
+    {
+      "airport_id": "airport:nrt",
+      "iata": "NRT",
+      "label": "Narita International Airport",
+      "country_entity_id": "country:jp",
+      "timezone": "Asia/Tokyo",
+      "aliases": ["Narita International Airport", "NRT"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    },
+    {
+      "airport_id": "airport:sfo",
+      "iata": "SFO",
+      "label": "San Francisco International Airport",
+      "country_entity_id": "country:us",
+      "timezone": "America/Los_Angeles",
+      "aliases": ["San Francisco International Airport", "SFO"],
+      "source_ids": ["iata-code-directory", "iana-time-zone-database"]
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "relation:nyc-ewr-serves-city",
+      "entity_id": "city:new-york-city",
+      "airport_id": "airport:ewr",
+      "kind": "serves_city",
+      "source_ids": ["port-authority-airports"]
+    },
+    {
+      "relation_id": "relation:nyc-jfk-serves-city",
+      "entity_id": "city:new-york-city",
+      "airport_id": "airport:jfk",
+      "kind": "serves_city",
+      "source_ids": ["port-authority-airports"]
+    },
+    {
+      "relation_id": "relation:nyc-lga-serves-city",
+      "entity_id": "city:new-york-city",
+      "airport_id": "airport:lga",
+      "kind": "serves_city",
+      "source_ids": ["port-authority-airports"]
+    },
+    {
+      "relation_id": "relation:jp-hnd-within-geography",
+      "entity_id": "country:jp",
+      "airport_id": "airport:hnd",
+      "kind": "within_geography",
+      "source_ids": ["japan-mlit-airports"]
+    },
+    {
+      "relation_id": "relation:jp-kix-within-geography",
+      "entity_id": "country:jp",
+      "airport_id": "airport:kix",
+      "kind": "within_geography",
+      "source_ids": ["japan-mlit-airports"]
+    },
+    {
+      "relation_id": "relation:jp-nrt-within-geography",
+      "entity_id": "country:jp",
+      "airport_id": "airport:nrt",
+      "kind": "within_geography",
+      "source_ids": ["japan-mlit-airports"]
+    }
+  ],
+  "selection_policies": [
+    {
+      "policy_id": "policy:jp-representative-gateways-v1",
+      "entity_id": "country:jp",
+      "entity_kind": "country",
+      "airport_ids": ["airport:hnd", "airport:nrt", "airport:kix"],
+      "selection_reason": "v1 representative award-search gateways for Japan",
+      "cap": 3,
+      "source_ids": ["project-policy-v1"]
+    },
+    {
+      "policy_id": "policy:nyc-serving-airports-v1",
+      "entity_id": "city:new-york-city",
+      "entity_kind": "city",
+      "airport_ids": ["airport:jfk", "airport:ewr", "airport:lga"],
+      "selection_reason": "v1 airports selected for New York City award-search coverage",
+      "cap": 3,
+      "source_ids": ["project-policy-v1"]
+    }
+  ]
+}

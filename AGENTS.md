@@ -44,24 +44,27 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
-Implement and qualify iterative clarification continuation:
+Operational knowledge-base expansion before provider execution. The deterministic, retrieval-backed
+outbound-only `EffectiveRequest -> SearchPlan` boundary is implemented and fixture-qualified for
+its declared checked-in seed snapshot. The active cut is to grow that seed into a reviewed,
+versioned operational snapshot for an explicitly declared initial coverage—not to begin provider
+execution or claim global airport or route coverage.
 
-- issue one clarification message listing every current blocking requirement;
-- accept answers that resolve any subset, preserving turn-level provenance and recomputing every
-  remaining requirement after each response; and
-- provide a local, experimental Streamlit harness for validation only.
+The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
 
-The initial request-understanding boundary is qualified and remains frozen at:
+- require origin, destination, bounded outbound departure timing, and travelers;
+- preserve the existing outbound temporal mechanism and all provenance, grounding, validation, and
+  immutable-state guarantees;
+- treat recognized return dates and trip durations as explicit unsupported scope, with guidance to
+  submit the return as a separate one-way request; and
+- reject cash-only requests while permitting the award portion of mixed award-and-cash requests
+  without claiming cash-search coverage.
 
-`raw request -> ParsedRequest -> ClarificationDecision`
-
-The project owner approved the iterative continuation design in ADR 0011. Keep the existing
-initial parser, temporal compiler, selector, clarification policy, and ready corpus frozen; the
-new session boundary is additive. The Seats.aero feasibility spike passed; fixed search planning
-and provider integration remain deferred until clarification continuation is qualified.
-
-Implementation sequence and frozen-boundary details:
-`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`.
+The prior round-trip/cash-capable contracts, corpus, and qualification evidence are historical.
+There is no live runtime workflow switch. The owner selected knowledge-base expansion as the next
+cut on 2026-09-13. Preserve the remaining broad upstream behavioral-evidence gap as recorded, not
+silently treated as qualification. See `docs/handoffs/2026-09-12-search-planning-design.md` for
+the planner completion boundary and the knowledge-base completion map.
 
 ## Architecture boundaries
 
@@ -69,6 +72,10 @@ Implementation sequence and frozen-boundary details:
 - Deterministic code must perform date arithmetic, schema validation, conflict checks, and clarification policy.
 - Unknowns and conflicts must be preserved.
 - Hard constraints must never be silently invented.
+- Recognized return dates and trip durations must never become active one-way request/session state;
+  they require explicit separate-one-way guidance.
+- Cash-only intent must not produce a success-shaped ready result. Mixed award-and-cash intent must
+  not imply that cash prices or cash search are available.
 - A clarification answer must retain its turn-level provenance and must not silently overwrite
   unrelated hard constraints.
 - Clarification prompts must enumerate all current blockers deterministically; one user answer may
@@ -78,14 +85,14 @@ Implementation sequence and frozen-boundary details:
   of being silently accepted.
 - Do not introduce LangChain or LangGraph for this stage. Use explicit Python/Pydantic contracts
   and deterministic state reduction.
-- The intent component must not expand cities into airports.
+- The intent and clarification components must not expand cities into airports; the new planner
+  may do so only from versioned retrieval evidence and explicit planning policy.
 - The intent component must not call travel providers.
 - Model-dependent behavior must sit behind a narrow interface.
 - Tests must run without live model or provider access.
 
 ## Current non-goals
 
-- Search planning
 - Provider integrations
 - Ranking
 - RAG

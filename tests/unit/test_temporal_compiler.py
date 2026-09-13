@@ -47,6 +47,12 @@ from award_agent.intent.temporal_compiler import (
 from award_agent.intent.temporal_lexing import TemporalScan, scan_temporal_request
 from award_agent.intent.workflow import understand_request
 
+# Historical scanner/candidate/compiler qualification. ADR 0017 replaces this
+# request-understanding route with one semantic receiver plus calendar-plan tests.
+pytestmark = pytest.mark.skip(
+    reason="historical selector/scanner compiler coverage; not an active workflow contract"
+)
+
 
 class FakeHolidayProvider:
     values: ClassVar = {
@@ -298,7 +304,9 @@ def test_scanner_does_not_compile_a_point_offset_as_trip_duration() -> None:
     catalog = build_temporal_candidates(scan)
 
     assert scan.durations == ()
-    assert not any(candidate.relation is CandidateRelation.DURATION for candidate in catalog.candidates)
+    assert not any(
+        candidate.relation is CandidateRelation.DURATION for candidate in catalog.candidates
+    )
 
 
 def test_compiler_topologically_orders_reversed_selector_output_and_uses_departure_end() -> None:
@@ -622,12 +630,15 @@ class StaticNonTemporalExtractor:
     ) -> NonTemporalIntentExtraction:
         return self.extraction
 
+
 class SupportedSelector:
     """Choose the compiler-authored supported candidate from every published group."""
 
     def select_candidates(self, model_input: TemporalSelectorInput) -> TemporalSelectorOutput:
         return TemporalSelectorOutput(
-            selected_candidates=[group.candidates[0].handle for group in model_input.candidate_groups]
+            selected_candidates=[
+                group.candidates[0].handle for group in model_input.candidate_groups
+            ]
         )
 
 
@@ -671,6 +682,120 @@ def test_compiler_route_preserves_city_level_locations_without_airport_ambiguity
         unknown.field not in {"origin", "destination"} for unknown in result.parsed_request.unknowns
     )
     assert result.clarification.field == "departure"
+
+
+def test_active_workflow_defaults_unspecified_mode_to_award() -> None:
+    extraction = _non_temporal()
+    extraction = extraction.model_copy(update={"search_modes": []})
+
+    result = understand_request(
+        _request("Leave October 5."),
+        StaticNonTemporalExtractor(extraction),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.parsed_request.search_modes == [SearchMode.AWARD]
+    assert result.clarification.action.value == "none"
+
+
+def test_active_workflow_rejects_cash_only_but_allows_award_and_cash() -> None:
+    cash_only = _non_temporal()
+    cash_only = cash_only.model_copy(update={"search_modes": [SearchMode.CASH]})
+    mixed = _non_temporal()
+    mixed = mixed.model_copy(update={"search_modes": [SearchMode.AWARD, SearchMode.CASH]})
+    request = _request("Leave October 5.")
+
+    rejected = understand_request(
+        request,
+        StaticNonTemporalExtractor(cash_only),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+    accepted = understand_request(
+        request,
+        StaticNonTemporalExtractor(mixed),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert rejected.clarification.action.value == "unsupported"
+    assert rejected.clarification.reason == "cash_only_not_supported"
+    assert (
+        rejected.parsed_request.unsupported_request_parts[0].code.value == "cash_only_not_supported"
+    )
+    assert accepted.clarification.action.value == "none"
+    assert accepted.parsed_request.search_modes == [SearchMode.AWARD, SearchMode.CASH]
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Leave October 5 and return next month.",
+        "Leave October 5 and come back in 10 days.",
+        "Leave October 5 and return next spring.",
+    ],
+)
+def test_active_workflow_terminally_discloses_structured_relative_return_forms(
+    text: str,
+) -> None:
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(_non_temporal()),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.clarification.action.value == "unsupported"
+    assert result.clarification.field == "one_way_award_scope"
+    assert "separate one-way request" in (result.clarification.question or "")
+    assert [item.code.value for item in result.parsed_request.unsupported_request_parts] == [
+        "return_or_duration_not_supported"
+    ]
+    assert any(
+        TemporalEvidenceClaim.RETURN_PERIOD in evidence.claim_ids
+        for evidence in result.parsed_request.unsupported_request_parts[0].evidence
+    )
+    assert result.parsed_request.departure_window is not None
+    assert not any(
+        getattr(constraint, "target", None) is TemporalTarget.RETURN
+        or constraint.kind == "duration"
+        for constraint in result.parsed_request.temporal_relations.constraints
+    )
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "From my home airport SFO, leave October 5.",
+        "My home is San Francisco; depart October 5.",
+    ],
+)
+def test_active_workflow_does_not_treat_home_location_as_a_return_cue(text: str) -> None:
+    result = understand_request(
+        _request(text),
+        StaticNonTemporalExtractor(_non_temporal()),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.clarification.action.value == "none"
+    assert result.parsed_request.unsupported_request_parts == []
+    assert result.parsed_request.departure_window is not None
+
+
+def test_active_workflow_treats_fly_home_as_a_return_action() -> None:
+    result = understand_request(
+        _request("Fly home October 15."),
+        StaticNonTemporalExtractor(_non_temporal()),
+        SupportedSelector(),
+        holiday_provider=FakeHolidayProvider(),
+    )
+
+    assert result.clarification.action.value == "unsupported"
+    assert result.parsed_request.unsupported_request_parts[0].code.value == (
+        "return_or_duration_not_supported"
+    )
 
 
 def test_compiler_route_preserves_blocking_geographic_identity_ambiguity() -> None:
@@ -1058,7 +1183,15 @@ def test_ready_case_oracles_compile_and_flow_without_a_temporal_model(
         SupportedSelector(),
         FakeHolidayProvider(),
     )
-    assert result.clarification.field == expected_clarification, case_id
+    has_return_or_duration = any(
+        ":return:" in handle or handle.startswith("duration:") for handle in oracle_handles
+    )
+    expected_live_clarification = (
+        "one_way_award_scope"
+        if has_return_or_duration
+        else (None if expected_clarification == "return_or_duration" else expected_clarification)
+    )
+    assert result.clarification.field == expected_live_clarification, case_id
     assert (
         None
         if result.parsed_request.departure_window is None
@@ -1067,16 +1200,20 @@ def test_ready_case_oracles_compile_and_flow_without_a_temporal_model(
             result.parsed_request.departure_window.end,
         )
     ) == expected_departure, case_id
-    assert (
-        None
-        if result.parsed_request.return_window is None
-        else (result.parsed_request.return_window.start, result.parsed_request.return_window.end)
-    ) == expected_return, case_id
-    if case_id == "conflicting_dates":
-        assert [conflict.code for conflict in result.parsed_request.conflicts] == [
-            "return_before_departure"
+    assert not hasattr(result.parsed_request, "return_window")
+    assert result.parsed_request.date_resolution is not None
+    assert not hasattr(result.parsed_request.date_resolution, "interpreted_duration")
+    assert not any(
+        getattr(constraint, "target", None) is TemporalTarget.RETURN
+        or constraint.kind == "duration"
+        for constraint in result.parsed_request.temporal_relations.constraints
+    )
+    if has_return_or_duration:
+        assert result.clarification.action.value == "unsupported"
+        assert "separate one-way request" in (result.clarification.question or "")
+        assert [item.code.value for item in result.parsed_request.unsupported_request_parts] == [
+            "return_or_duration_not_supported"
         ]
-        assert compiled.endpoint_bounds[0].boundary == date(2026, 7, 8)
 
 
 @pytest.mark.parametrize(

@@ -1,31 +1,27 @@
 # Intent Evals
 
-These scenarios are the executable ready golden set for the frozen request-understanding slice.
+`one_way_award_behavior_cases_v1.yaml` is the disclosed development baseline for the active
+ADR 0017 one-receiver initial-intent boundary. Its 19 action/property scenarios cover bounded
+outbound forms, a recognizable typo, each required blocker, unbounded/ambiguous departure,
+return/duration scope, cash-only/mixed eligibility, and the home-airport false-positive guard.
+It scores observable actions, deterministic dates, mode/scope policy, grounding, and forbidden
+outcomes—not an LLM proposal shape or a selector decision. The earlier v1/v2, round-trip, and
+selector-era corpora and artifacts remain historical evidence only.
 
-Exact checks should be used for schema and deterministic behavior. Invariants should be used where multiple valid semantic representations exist.
+The runner refuses a corpus unless it has the `intent_behavior_v1` contract, exact
+root/scenario/context/oracle shape, unique IDs and coverage families, and the full 19-scenario
+behavioral denominator. Each public artifact records the exact fixture SHA-256 and scenario count.
 
-Temporal evidence is evaluated per typed claim rather than as an exact set of preferred phrases.
-Executable fixtures use `evidence_expectations` with exact allowed envelopes, required-all
-fragments, required-any groups, and optional preferred spans. Fixture strings compile to Python
-start-inclusive/end-exclusive offsets before scoring; missing or ambiguous fixture strings fail
-loading. Candidate evidence remains subject to strict exact-substring grounding, must fit one
-common envelope for its linked claim, and must cover the claim's required fragments. Preferred span
-agreement is recorded only as a prompt-quality diagnostic and does not determine case success.
-
-Location `raw_text` is verbatim evidence. Location `value` is a model-proposed normalized name
-candidate until a deterministic location resolver exists; it is not a stable identifier or an
-authoritative display name. Instead of one exact `value`, a golden may use `accepted_values` to
-enumerate semantically equivalent candidate strings. The scorer performs exact membership only and
-never fuzzy matching.
+Exact assertions are retained for deterministic dates, traveler count, and scope safety. The
+action/property envelopes intentionally do not assert a receiver AST, operation spelling, evidence
+segmentation, or generated prompt wording. Departure evidence is checked against the immutable
+request spans; location values remain resolver candidates and are never airport-expanded.
 
 Live-model evals and offline deterministic tests must be separable. Baseline results should be saved under `evals/intent/baseline/`.
 
-Temporal evaluation is split by responsibility. `temporal_relations` expectations partially match
-typed semantic invariants such as kind, target, reference, direction, ordinal, weekday, and unit;
-they intentionally ignore equivalent evidence-span segmentation and unlisted trace fields. Final
-`departure_window`, `return_window`, duration, conflict, and clarification checks score the
-deterministic evaluator and end-to-end workflow separately. Calendar arithmetic belongs in offline
-unit tests rather than live-model scoring.
+Calendar arithmetic, graph validation, repair limits, and provenance are deterministic offline
+tests. The live baseline measures the configured receiver's final action/property outcome without
+turning ordinary user-language ambiguity or a recognizable typo into an error pass.
 
 Failing cases should be preserved and investigated rather than deleted. Evaluation should drive architecture changes rather than merely produce a score.
 
@@ -36,52 +32,45 @@ Run only scenarios marked `status: ready` and save the full structured output:
 ```bash
 python -m award_agent.cli.intent_eval \
   --model gpt-5.6-luna \
-  --selector-model gpt-5.6-luna \
   --trials 3 \
-  --output evals/intent/baseline/YYYY-MM-DD-selector-only-3-trials.json
+  --output evals/intent/baseline/YYYY-MM-DD-intent-behavior-v1-3-trials.json
 ```
 
-The runner scores explicit structured expectations and keeps individual failures and errors from
-aborting the corpus. Free-text invariants are retained in the artifact for human review but are not
-included in the automatic pass rate. The OpenAI adapter records response usage when the SDK
-provides it, but the runner does not calculate cost.
+The runner scores action/property oracles and keeps individual failures and errors from aborting
+the corpus. The OpenAI adapter records response usage when the SDK provides it, but the runner does
+not calculate cost.
 
-For failure triage, the runner writes private per-case model-call sidecars by default under
+For failure triage, the runner writes private per-case model-call sidecars for every trial by default under
 `evals/intent/traces/`:
 
 ```bash
 python -m award_agent.cli.intent_eval \
   --model gpt-5.6-luna \
-  --selector-model gpt-5.6-luna \
   --trials 3 \
-  --output evals/intent/baseline/YYYY-MM-DD-selector-only-3-trials.json
+  --output evals/intent/baseline/YYYY-MM-DD-intent-behavior-v1-3-trials.json
 ```
 
-Every non-passing case gets a sidecar containing the exact model instructions, serialized input,
+Every case gets a sidecar containing the exact model instructions, serialized input,
 structured-output schema, parsed output, SDK response JSON when available, and exception details for
-the non-temporal and selector calls. The baseline JSON references each sidecar and records the trace
-directory. Use `--trace-dir PATH` to override the location, `--trace-all-calls` to capture passing
-cases too, or `--no-trace` to disable sidecars for a privacy-sensitive run. These traces may contain
+the semantic receiver and its optional repair call. The baseline JSON references each sidecar and
+records the trace directory. The public baseline is redacted: it contains only scenario/trial
+outcomes, action/check names, public failure classifications, metrics, and private-sidecar
+references—not raw requests, model output, assertion values, or error text. Use `--trace-dir PATH`
+to override the location or `--no-trace` to disable
+sidecars for a privacy-sensitive run. These traces may contain
 private travel requests and evidence quotes; keep the directory access-controlled and do not commit
 it unless that disclosure is intentional.
 
-The ready runner is selector-only. `--model` configures strict non-temporal Pass 1 and
-`--selector-model` configures the independently observed date-free selector. Every supported
-compiler interpretation competes with its explicit unresolved alternative; there is no strategy
-flag, Pass 2 model, or silent fallback. New schema-v6 artifacts report payload-free per-run and
-aggregate `stage_telemetry` only for Pass 1 and selector. `--no-trace` prevents sidecar writes but
-retains that telemetry. Historical schema-v5 two-pass and one-pass artifacts remain evidence only.
-Schema-v6 artifacts identify the fixed `architecture: selector_only`; they do not contain a
-runtime-strategy field.
+The active runner has one semantic receiver. `--model` configures that receiver; there is no
+selector-model, scanner, strategy flag, or hidden candidate fallback. Schema-v9 artifacts identify
+`architecture: one_llm_semantic_receiver` and report payload-free `semantic_receiver` telemetry.
+`--no-trace` prevents sidecar writes while retaining telemetry. A model/adapter failure must not
+pass an ordinary-language action/property case; a future typed pending result is only eligible when
+the fixture explicitly permits it.
 
-The request-understanding implementation is complete and frozen. The final qualification record
-is the three-trial Luna selector-only artifact
-`baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`: 47/48 passed
-(97.92%), with 90 calls, zero errors, and one documented clarification miss. Its 48 all-call
-trace sidecars are private/local under `evals/intent/traces/` and must not be committed or
-published. The earlier 44/48 and 40/48 selector-only artifacts are historical milestones. Do not
-change the intent runner, prompt, schema, compiler, or ready corpus without an explicit owner
-decision to reopen the slice.
+Selector-only results and earlier round-trip artifacts are historical evidence. They do not qualify
+the current one-receiver boundary. The next live record must use the behavioral v1 corpus and
+record its fixture hash; do not compare pass rates across contracts.
 
 ## Frozen selector study
 

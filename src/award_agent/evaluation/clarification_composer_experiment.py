@@ -120,7 +120,6 @@ def _quality_failures(
         "origin": ("from", "departure", "airport", "where"),
         "destination": ("destination", "go", "where"),
         "departure": ("leave", "depart", "date", "when", "timing"),
-        "return_or_duration": ("return", "trip", "long", "duration", "week", "day"),
         "travelers": ("traveler", "people", "passenger", "many"),
         "conflict": ("choose", "which", "conflict", "date"),
     }

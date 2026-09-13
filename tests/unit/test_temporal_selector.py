@@ -44,6 +44,12 @@ from award_agent.intent.temporal_selector import (
 )
 from award_agent.intent.workflow import understand_request
 
+# The selector study remains historical evidence only; the active workflow has
+# no selector boundary. Keep these cases visible but explicitly out of the live gate.
+pytestmark = pytest.mark.skip(
+    reason="historical temporal-selector coverage; no active selector workflow"
+)
+
 
 def _request(
     text: str = "Leave October 5.",
@@ -202,62 +208,62 @@ def test_selector_plan_closes_dependents_when_upstream_can_be_unresolved() -> No
             TemporalCandidate(
                 handle="upstream-one",
                 exclusive_group="upstream",
-                    covers=(clause.handle,),
+                covers=(clause.handle,),
                 requires=(),
                 produces=("slot:departure",),
                 priority=100,
                 anchor_uses=(),
-                    relation=CandidateRelation.RELATIVE_CALENDAR_PERIOD,
-                    target=TemporalTarget.DEPARTURE,
-                    clause_handle=clause.handle,
+                relation=CandidateRelation.RELATIVE_CALENDAR_PERIOD,
+                target=TemporalTarget.DEPARTURE,
+                clause_handle=clause.handle,
             ),
             TemporalCandidate(
                 handle="upstream-two",
                 exclusive_group="upstream",
-                    covers=(clause.handle,),
+                covers=(clause.handle,),
                 requires=(),
                 produces=("slot:departure",),
                 priority=100,
                 anchor_uses=(),
-                    relation=CandidateRelation.RELATIVE_CALENDAR_PERIOD,
-                    target=TemporalTarget.DEPARTURE,
-                    clause_handle=clause.handle,
+                relation=CandidateRelation.RELATIVE_CALENDAR_PERIOD,
+                target=TemporalTarget.DEPARTURE,
+                clause_handle=clause.handle,
             ),
             TemporalCandidate(
                 handle="upstream-unresolved",
                 exclusive_group="upstream",
-                    covers=(clause.handle,),
+                covers=(clause.handle,),
                 requires=(),
                 produces=(),
                 priority=0,
                 anchor_uses=(),
-                    relation=CandidateRelation.UNRESOLVED,
-                    target=TemporalTarget.DEPARTURE,
-                    clause_handle=clause.handle,
+                relation=CandidateRelation.UNRESOLVED,
+                target=TemporalTarget.DEPARTURE,
+                clause_handle=clause.handle,
             ),
             TemporalCandidate(
                 handle="dependent",
                 exclusive_group="dependent",
-                    covers=(clause.handle,),
+                covers=(clause.handle,),
                 requires=("slot:departure",),
                 produces=("slot:return",),
                 priority=100,
                 anchor_uses=(),
-                    relation=CandidateRelation.RETURN_WEEKEND_AFTER_DEPARTURE,
-                    target=TemporalTarget.RETURN,
-                    clause_handle=clause.handle,
+                relation=CandidateRelation.RETURN_WEEKEND_AFTER_DEPARTURE,
+                target=TemporalTarget.RETURN,
+                clause_handle=clause.handle,
             ),
             TemporalCandidate(
                 handle="dependent-unresolved",
                 exclusive_group="dependent",
-                    covers=(clause.handle,),
+                covers=(clause.handle,),
                 requires=(),
                 produces=(),
                 priority=0,
                 anchor_uses=(),
-                    relation=CandidateRelation.UNRESOLVED,
-                    target=TemporalTarget.RETURN,
-                    clause_handle=clause.handle,
+                relation=CandidateRelation.UNRESOLVED,
+                target=TemporalTarget.RETURN,
+                clause_handle=clause.handle,
             ),
         ),
     )
@@ -335,16 +341,18 @@ def test_selector_includes_anchor_evidence_and_uses_raw_text_source_order() -> N
 
 def test_selector_v2_uses_only_explicit_local_endpoint_tokens_for_cues() -> None:
     departure_catalog = _ambiguous_catalog(scan_temporal_request(_request("Leave October 5.")))
-    returned_catalog = _ambiguous_catalog(
-        scan_temporal_request(_request("Return October 5."))
-    )
+    returned_catalog = _ambiguous_catalog(scan_temporal_request(_request("Return October 5.")))
     unmarked_catalog = _ambiguous_catalog(scan_temporal_request(_request("October 5.")))
 
     departure = build_temporal_selector_input(
         departure_catalog, plan_temporal_selection(departure_catalog)
     )
-    returned = build_temporal_selector_input(returned_catalog, plan_temporal_selection(returned_catalog))
-    unmarked = build_temporal_selector_input(unmarked_catalog, plan_temporal_selection(unmarked_catalog))
+    returned = build_temporal_selector_input(
+        returned_catalog, plan_temporal_selection(returned_catalog)
+    )
+    unmarked = build_temporal_selector_input(
+        unmarked_catalog, plan_temporal_selection(unmarked_catalog)
+    )
 
     assert departure.ordered_evidence[0].endpoint_cue == "departure"
     assert returned.ordered_evidence[0].endpoint_cue == "return"
@@ -564,9 +572,9 @@ def test_selector_preflight_keeps_the_conservative_all_unresolved_selection_comp
     plan = plan_temporal_selection(catalog)
 
     selected = unresolved_selection(catalog, plan)
-    assert [candidate.handle for candidate in validate_candidate_selection(catalog, selected)] == list(
-        selected
-    )
+    assert [
+        candidate.handle for candidate in validate_candidate_selection(catalog, selected)
+    ] == list(selected)
 
 
 def test_selector_preflight_allows_a_same_target_availability_dependency() -> None:
@@ -582,10 +590,13 @@ def test_selector_preflight_allows_a_same_target_availability_dependency() -> No
 
     assert dependent.requires == ("slot:base-departure",)
     assert plan.selector_groups == ("manual:composition",)
-    assert [candidate.handle for candidate in validate_candidate_selection(
-        case.catalog,
-        ("manual:composition:base", dependent.handle),
-    )] == ["manual:composition:base", dependent.handle]
+    assert [
+        candidate.handle
+        for candidate in validate_candidate_selection(
+            case.catalog,
+            ("manual:composition:base", dependent.handle),
+        )
+    ] == ["manual:composition:base", dependent.handle]
 
 
 def test_generic_availability_dependency_does_not_become_a_canonical_reference() -> None:
@@ -619,7 +630,9 @@ def test_selector_preflight_rejects_an_unresolved_composition_operand() -> None:
         candidates=(*catalog.candidates[:2], invalid),
     )
 
-    with pytest.raises(TemporalSelectorValidationError, match="cannot consume, produce, or compose"):
+    with pytest.raises(
+        TemporalSelectorValidationError, match="cannot consume, produce, or compose"
+    ):
         plan_temporal_selection(invalid_catalog)
 
 
@@ -627,7 +640,11 @@ def test_selector_preflight_rejects_a_duration_on_a_non_duration_relation() -> N
     request = _request("Leave October 5 for 10 days.")
     scan = scan_temporal_request(request)
     catalog = build_temporal_candidates(scan)
-    exact = next(candidate for candidate in catalog.candidates if candidate.relation is CandidateRelation.EXACT_DATE)
+    exact = next(
+        candidate
+        for candidate in catalog.candidates
+        if candidate.relation is CandidateRelation.EXACT_DATE
+    )
     invalid_catalog = TemporalCandidateCatalog(
         scan=scan,
         candidates=tuple(
@@ -644,7 +661,10 @@ def test_selector_preflight_rejects_a_duration_on_a_non_duration_relation() -> N
     ("text", "relation"),
     [
         ("Leave two weekends after Thanksgiving.", CandidateRelation.RELATIVE_WEEKEND_AFTER_ANCHOR),
-        ("Leave Labor Day weekend and return the weekend afterwards.", CandidateRelation.RETURN_WEEKEND_AFTER_DEPARTURE),
+        (
+            "Leave Labor Day weekend and return the weekend afterwards.",
+            CandidateRelation.RETURN_WEEKEND_AFTER_DEPARTURE,
+        ),
     ],
 )
 def test_selector_preflight_rejects_non_positive_relation_ordinals(
@@ -885,7 +905,9 @@ def test_selector_is_required_before_non_temporal_pass_one() -> None:
         def __init__(self) -> None:
             self.calls = 0
 
-        def extract_non_temporal(self, _input: NonTemporalExtractionInput) -> NonTemporalIntentExtraction:
+        def extract_non_temporal(
+            self, _input: NonTemporalExtractionInput
+        ) -> NonTemporalIntentExtraction:
             self.calls += 1
             raise AssertionError("selector preflight must fail before Pass 1")
 

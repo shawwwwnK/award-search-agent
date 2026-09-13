@@ -38,6 +38,7 @@ class GroundedClause:
     start: int
     end: int
     kind: str
+    target: TemporalTarget = TemporalTarget.DEPARTURE
 
 
 @dataclass(frozen=True)
@@ -103,12 +104,26 @@ _NUMBER_WORDS = {
 
 
 def _target(text: str, start: int) -> TemporalTarget:
-    """Use nearby endpoint cues; departure is the safe default for literal anchors."""
+    """Classify an endpoint from the nearest qualified local action cue.
+
+    A location such as ``my home airport`` is not a return action.  Conversely, ``fly home``
+    is.  Including departure actions in the same local ordering prevents an earlier mention of
+    a return flight from misclassifying a nearer ``leave`` or ``depart`` date phrase.
+    """
 
     lead = text[max(0, start - 45) : start].casefold()
-    if re.search(r"\b(?:return|returning|back|come back)\b", lead):
-        return TemporalTarget.RETURN
-    return TemporalTarget.DEPARTURE
+    cues: list[tuple[int, TemporalTarget]] = []
+    for match in re.finditer(
+        (
+            r"\b(?:return(?:ing)?|come\s+back|(?:be|go|fly|head)\s+back|"
+            r"back\s+(?:on|by|before|after|in|next)|(?:go|fly|head|travel)\s+home)\b"
+        ),
+        lead,
+    ):
+        cues.append((match.end(), TemporalTarget.RETURN))
+    for match in re.finditer(r"\b(?:leave|depart(?:ing|ure)?)\b", lead):
+        cues.append((match.end(), TemporalTarget.DEPARTURE))
+    return max(cues, default=(0, TemporalTarget.DEPARTURE))[1]
 
 
 def _number(value: str) -> int:
@@ -148,8 +163,20 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
     date_anchors: list[TemporalAnchor] = []
     phrases: list[TemporalPhrase] = []
 
-    def clause(match: re.Match[str], kind: str) -> GroundedClause:
-        item = GroundedClause(f"e{len(clauses)}", match.group(0), match.start(), match.end(), kind)
+    def clause(
+        match: re.Match[str],
+        kind: str,
+        *,
+        target: TemporalTarget | None = None,
+    ) -> GroundedClause:
+        item = GroundedClause(
+            f"e{len(clauses)}",
+            match.group(0),
+            match.start(),
+            match.end(),
+            kind,
+            target or _target(text, match.start()),
+        )
         clauses.append(item)
         return item
 
@@ -158,9 +185,9 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
     for match in re.finditer(
         r"\b(?:labor\s+day|new\s+year(?:'s)?|thanksgiving|christmas)\b", text, re.IGNORECASE
     ):
-        item = clause(match, "holiday")
         holiday = _HOLIDAYS[match.group(0).casefold()]
         target = _target(text, match.start())
+        item = clause(match, "holiday", target=target)
         anchor = LiteralAnchor(f"a{len(anchors)}", item, "holiday", holiday=holiday, target=target)
         anchors.append(anchor)
         date_anchors.append(
@@ -184,10 +211,10 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
         day = int(match.group(2))
         if not 1 <= day <= 31:
             continue
-        item = clause(match, "exact_date")
         month = _MONTHS[match.group(1).casefold()]
         year = int(match.group(3)) if match.group(3) else None
         target = _target(text, match.start())
+        item = clause(match, "exact_date", target=target)
         anchor = LiteralAnchor(
             f"a{len(anchors)}", item, "exact_date", month=month, day=day, year=year, target=target
         )
@@ -207,9 +234,9 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
     for match in re.finditer(rf"\b({month_pattern})\b", text, re.IGNORECASE):
         if any(start <= match.start() < end for start, end in exact_spans):
             continue
-        item = clause(match, "month")
         month = _MONTHS[match.group(1).casefold()]
         target = _target(text, match.start())
+        item = clause(match, "month", target=target)
         anchor = LiteralAnchor(f"a{len(anchors)}", item, "month", month=month, target=target)
         anchors.append(anchor)
         date_anchors.append(
@@ -230,7 +257,7 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
     for match in duration_re.finditer(text):
         if not _is_trip_duration_context(text, match):
             continue
-        item = clause(match, "duration")
+        item = clause(match, "duration", target=TemporalTarget.RETURN)
         first = _number(match.group(2))
         second = _number(match.group(3)) if match.group(3) else first
         unit = TemporalUnit(match.group(4).casefold().rstrip("s"))
@@ -269,6 +296,14 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
             "unbounded_before",
             r"\b(?:back|return(?:ing)?)\s+before\s+[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?\b",
         ),
+        (
+            "return_relative_offset",
+            (
+                rf"\b(?:return|returning|come\s+back|(?:be|go|fly|head)\s+back|back|"
+                rf"(?:go|fly|head|travel)\s+home)\s+in\s+(?:\d+|{number_words})\s+"
+                rf"(?:days?|weeks?|months?)\b"
+            ),
+        ),
         ("next_month", r"\bnext\s+month\b"),
         ("early_month", r"\bearly\s+[A-Za-z]+\b"),
         (
@@ -288,10 +323,15 @@ def scan_temporal_request(request: RawRequest) -> TemporalScan:
         for match in re.finditer(pattern, text, re.IGNORECASE):
             if (match.start(), match.end()) in occupied:
                 continue
-            item = clause(match, kind)
+            target = (
+                TemporalTarget.RETURN
+                if kind in {"return_weekend_after", "return_relative_offset"}
+                else _target(text, match.start())
+            )
+            item = clause(match, kind, target=target)
             phrase_target = (
                 TemporalPhraseTarget.RETURN
-                if kind == "return_weekend_after"
+                if target is TemporalTarget.RETURN
                 else TemporalPhraseTarget.DEPARTURE
             )
             claim = (

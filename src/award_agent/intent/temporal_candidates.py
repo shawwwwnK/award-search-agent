@@ -161,11 +161,11 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                 exclusive_group=group,
                 covers=(clause.handle,),
                 requires=(),
-                produces=("departure",),
+                produces=(clause.target.value,),
                 priority=100,
                 anchor_uses=(AnchorUse(labor.handle, AnchorUseMode.DIRECT_WINDOW),),
                 relation=CandidateRelation.HOLIDAY_WEEKEND,
-                target=TemporalTarget.DEPARTURE,
+                target=clause.target,
                 clause_handle=clause.handle,
             )
         elif clause.kind == "christmas_period":
@@ -175,11 +175,11 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                     exclusive_group=group,
                     covers=(clause.handle,),
                     requires=(),
-                    produces=("departure",),
+                    produces=(clause.target.value,),
                     priority=100,
                     anchor_uses=(AnchorUse(christmas.handle, AnchorUseMode.DIRECT_WINDOW),),
                     relation=CandidateRelation.CHRISTMAS_PERIOD,
-                    target=TemporalTarget.DEPARTURE,
+                    target=clause.target,
                     clause_handle=clause.handle,
                 )
         elif clause.kind == "thursday_extension":
@@ -190,12 +190,12 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                 exclusive_group=group,
                 covers=(clause.handle,),
                 requires=("departure",),
-                produces=("departure",),
+                produces=(clause.target.value,),
                 priority=100,
                 anchor_uses=(),
                 relation=CandidateRelation.EXTEND_DEPARTURE_TO_THURSDAY,
                 composition=CandidateComposition.EXTEND_START,
-                target=TemporalTarget.DEPARTURE,
+                target=clause.target,
                 clause_handle=clause.handle,
             )
         elif clause.kind == "return_weekend_after":
@@ -210,6 +210,22 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                 target=TemporalTarget.RETURN,
                 clause_handle=clause.handle,
             )
+        elif clause.kind == "return_relative_offset":
+            # A return-relative offset is structured endpoint evidence, but this bounded
+            # grammar deliberately has no date arithmetic for it. Preserve it as unresolved
+            # so the active one-way policy can disclose scope rather than reinterpret it.
+            add(
+                exclusive_group=group,
+                covers=(clause.handle,),
+                requires=(),
+                produces=(),
+                priority=100,
+                anchor_uses=(),
+                relation=CandidateRelation.UNRESOLVED,
+                target=TemporalTarget.RETURN,
+                clause_handle=clause.handle,
+                reason="unsupported return-relative offset",
+            )
         elif clause.kind == "relative_weekend_after_holiday":
             thanksgiving = contained_anchor(clause.handle, holiday="thanksgiving")
             if thanksgiving:
@@ -217,11 +233,11 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                     exclusive_group=group,
                     covers=(clause.handle,),
                     requires=(),
-                    produces=("departure",),
+                    produces=(clause.target.value,),
                     priority=100,
                     anchor_uses=(AnchorUse(thanksgiving.handle, AnchorUseMode.REFERENCE_ONLY),),
                     relation=CandidateRelation.RELATIVE_WEEKEND_AFTER_ANCHOR,
-                    target=TemporalTarget.DEPARTURE,
+                    target=clause.target,
                     clause_handle=clause.handle,
                     ordinal=2,
                 )
@@ -233,11 +249,11 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                 exclusive_group=group,
                 covers=(clause.handle,),
                 requires=(),
-                produces=("departure",),
+                produces=(clause.target.value,),
                 priority=100,
                 anchor_uses=(AnchorUse(new_year.handle, AnchorUseMode.REFERENCE_ONLY),),
                 relation=CandidateRelation.UNBOUNDED_AFTER,
-                target=TemporalTarget.DEPARTURE,
+                target=clause.target,
                 clause_handle=clause.handle,
             )
         elif clause.kind == "unbounded_before":
@@ -259,11 +275,11 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                 exclusive_group=group,
                 covers=(clause.handle,),
                 requires=(),
-                produces=("departure",),
+                produces=(clause.target.value,),
                 priority=100,
                 anchor_uses=(),
                 relation=CandidateRelation.RELATIVE_CALENDAR_PERIOD,
-                target=TemporalTarget.DEPARTURE,
+                target=clause.target,
                 clause_handle=clause.handle,
             )
         elif clause.kind == "early_month":
@@ -308,7 +324,7 @@ def build_temporal_candidates(scan: TemporalScan) -> TemporalCandidateCatalog:
                 priority=100,
                 anchor_uses=uses,
                 relation=CandidateRelation.UNRESOLVED,
-                target=TemporalTarget.DEPARTURE,
+                target=clause.target,
                 clause_handle=clause.handle,
                 reason="unsupported temporal grammar",
             )

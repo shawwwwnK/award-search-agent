@@ -98,6 +98,19 @@ class ClarificationSemanticFact(SessionContractModel):
         return self
 
 
+class ClarificationOneWayScopeKind(str, Enum):
+    """Receiver-recognized request content outside the one-way release."""
+
+    RETURN_OR_DURATION = "return_or_duration"
+
+
+class ClarificationOneWayScopeNotice(SessionContractModel):
+    """A grounded semantic classification, not an accepted request value."""
+
+    kind: ClarificationOneWayScopeKind
+    span: MessageSpan
+
+
 class ClarificationUnresolvedFragment(SessionContractModel):
     span: MessageSpan
     target: SemanticTarget | None = None
@@ -108,20 +121,26 @@ class ClarificationAnswerInterpretation(SessionContractModel):
     discourse_act: ClarificationDiscourseAct = ClarificationDiscourseAct.ANSWER
     facts: tuple[ClarificationSemanticFact, ...] = ()
     unresolved_fragments: tuple[ClarificationUnresolvedFragment, ...] = ()
+    one_way_scope_notices: tuple[ClarificationOneWayScopeNotice, ...] = ()
 
     @model_validator(mode="after")
     def unique_fact_ids(self) -> ClarificationAnswerInterpretation:
         identifiers = [item.fact_id for item in self.facts]
         if len(identifiers) != len(set(identifiers)):
             raise ValueError("semantic fact IDs must be unique")
-        if self.discourse_act is not ClarificationDiscourseAct.ANSWER and self.facts:
-            raise ValueError("non-answer discourse acts cannot carry facts")
-        targets = [item.target for item in self.facts]
-        allowed_pair = {SemanticTarget.RETURN_WINDOW, SemanticTarget.DURATION}
-        if any(targets.count(target) > 1 for target in set(targets)) or (
-            len([target for target in targets if target in allowed_pair]) > 2
+        if self.discourse_act is not ClarificationDiscourseAct.ANSWER and (
+            self.facts or self.one_way_scope_notices
         ):
+            raise ValueError("non-answer discourse acts cannot carry semantic content")
+        targets = [item.target for item in self.facts]
+        if len(targets) != len(set(targets)):
             raise ValueError("semantic facts cannot write a target more than once")
+        notice_spans = [
+            (item.kind, item.span.message_id, item.span.start, item.span.end)
+            for item in self.one_way_scope_notices
+        ]
+        if len(notice_spans) != len(set(notice_spans)):
+            raise ValueError("one-way scope notices cannot repeat an answer span")
         return self
 
 
@@ -201,6 +220,8 @@ def validate_answer_interpretation(
         validate_message_span(message_id=input.message_id, text=input.text, span=fact.span)
     for fragment in interpretation.unresolved_fragments:
         validate_message_span(message_id=input.message_id, text=input.text, span=fragment.span)
+    for notice in interpretation.one_way_scope_notices:
+        validate_message_span(message_id=input.message_id, text=input.text, span=notice.span)
     return interpretation
 
 
@@ -220,6 +241,8 @@ __all__ = [
     "ClarificationDiscourseAct",
     "ClarificationInterpretationError",
     "ClarificationInterpretationUnavailable",
+    "ClarificationOneWayScopeKind",
+    "ClarificationOneWayScopeNotice",
     "ClarificationRepairBudget",
     "ClarificationSemanticFact",
     "ClarificationUnresolvedFragment",

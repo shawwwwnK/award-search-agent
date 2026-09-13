@@ -7,7 +7,25 @@ import re
 from collections.abc import Mapping, Sequence
 from hashlib import sha256
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
+
+
+def _strict_response_format_snapshot(text_format: Any) -> dict[str, Any] | None:
+    """Return the exact strict DTO conversion used by the OpenAI SDK parser."""
+    try:
+        # ``responses.parse`` delegates Pydantic response-format conversion to
+        # this SDK helper. Hashing its ``json_schema`` envelope avoids falsely
+        # binding artifacts to a raw model_json_schema that the provider never
+        # receives (strictification changes required/additionalProperties).
+        from openai.lib._parsing import type_to_response_format_param
+
+        converted = cast(Any, type_to_response_format_param(text_format))
+        strict_schema = converted.get("json_schema") if isinstance(converted, Mapping) else None
+        if isinstance(strict_schema, Mapping):
+            return cast(dict[str, Any], _json_compatible(strict_schema))
+    except Exception:  # noqa: BLE001 - tracing must not affect model behavior
+        return None
+    return None
 
 
 def _json_compatible(value: Any) -> Any:
@@ -32,6 +50,9 @@ def _json_compatible(value: Any) -> Any:
 
 
 def _schema_snapshot(text_format: Any) -> dict[str, Any]:
+    strict_snapshot = _strict_response_format_snapshot(text_format)
+    if strict_snapshot is not None:
+        return strict_snapshot
     schema = getattr(text_format, "model_json_schema", None)
     if callable(schema):
         try:
@@ -45,7 +66,7 @@ def _schema_snapshot(text_format: Any) -> dict[str, Any]:
 
 
 def response_schema_sha256(text_format: Any) -> str:
-    """Stable hash for a Structured Output DTO schema, never model output."""
+    """Hash the exact strict Structured Output schema sent by ``responses.parse``."""
 
     snapshot = _schema_snapshot(text_format)
     canonical = json.dumps(snapshot, ensure_ascii=True, sort_keys=True, separators=(",", ":"))

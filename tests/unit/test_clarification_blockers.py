@@ -71,7 +71,6 @@ def test_collects_all_blockers_in_stable_order_and_suppresses_duplicates() -> No
         "origin",
         "destination",
         "departure",
-        "return_or_duration",
         "travelers",
     ]
     assert [item.kind for item in requirements] == [
@@ -80,7 +79,6 @@ def test_collects_all_blockers_in_stable_order_and_suppresses_duplicates() -> No
         BlockingRequirementKind.ORIGIN,
         BlockingRequirementKind.DESTINATION,
         BlockingRequirementKind.DEPARTURE,
-        BlockingRequirementKind.RETURN_OR_DURATION,
         BlockingRequirementKind.TRAVELERS,
     ]
 
@@ -150,10 +148,7 @@ def test_initial_projection_preserves_unknowns_and_conflicts_for_blocker_collect
         origins=[],
         destinations=[LocationRef(kind=LocationKind.CITY, value="Tokyo", raw_text="Tokyo")],
         departure_expression=None,
-        return_expression=None,
         departure_window=None,
-        return_window=None,
-        duration=None,
         cabins=[],
         search_modes=[],
         date_flexibility=[],

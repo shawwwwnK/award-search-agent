@@ -29,11 +29,6 @@ _REQUIRED_FIELDS: tuple[tuple[str, BlockingRequirementKind, EffectiveField], ...
     ("origin", BlockingRequirementKind.ORIGIN, EffectiveField.ORIGIN),
     ("destination", BlockingRequirementKind.DESTINATION, EffectiveField.DESTINATION),
     ("departure", BlockingRequirementKind.DEPARTURE, EffectiveField.DEPARTURE),
-    (
-        "return_or_duration",
-        BlockingRequirementKind.RETURN_OR_DURATION,
-        EffectiveField.RETURN_OR_DURATION,
-    ),
     ("travelers", BlockingRequirementKind.TRAVELERS, EffectiveField.TRAVELERS),
 )
 
@@ -47,7 +42,7 @@ def collect_blocking_requirements(
 ) -> tuple[BlockingRequirement, ...]:
     """Collect the active continuation blockers in their canonical order.
 
-    Only the five required fields in the closed policy are blocking.  Other
+    Only the four required fields in the closed policy are blocking.  Other
     ``UnknownField`` entries (for example cabin, search mode, repositioning,
     or unsupported preferences) remain on the effective request for later
     policy decisions and do not produce a clarification requirement.

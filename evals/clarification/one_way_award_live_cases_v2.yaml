@@ -1,0 +1,122 @@
+contract_version: one_way_award_live_v2
+frozen: true
+scenarios:
+  - id: initial_one_way_ready
+    input: Find one award seat from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      initial: {action: none, field: null, unsupported_codes: []}
+      turns: []
+      composer_call_count: 0
+
+  - id: missing_departure_is_resolved
+    input: Find two award seats from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["October 5."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: ready, stop_reason: null, blockers: [], scope_notice_codes: [], departure_state: present, effective_request_unchanged: false}
+      composer_call_count: 1
+
+  - id: all_four_one_way_blockers_completed_in_three_turns
+    input: Find an award flight.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers:
+      - I would leave from SFO.
+      - I want to go to BKK on October 5.
+      - One traveler.
+    expected:
+      initial: {action: ask, field: origin, unsupported_codes: []}
+      turns:
+        - {status: awaiting_answer, stop_reason: null, blockers: [destination, departure, travelers], scope_notice_codes: [], departure_state: absent, effective_request_unchanged: false}
+        - {status: awaiting_answer, stop_reason: null, blockers: [travelers], scope_notice_codes: [], departure_state: present, effective_request_unchanged: false}
+        - {status: ready, stop_reason: null, blockers: [], scope_notice_codes: [], departure_state: present, effective_request_unchanged: false}
+      composer_call_count: 3
+
+  - id: return_only_answer_stops_with_scope_notice
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["I would return October 15."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: stopped, stop_reason: unsupported_request_scope, blockers: [], scope_notice_codes: [one_way.return_or_duration], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 1
+
+  - id: duration_only_answer_stops_with_scope_notice
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["For a week."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: stopped, stop_reason: unsupported_request_scope, blockers: [], scope_notice_codes: [one_way.return_or_duration], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 1
+
+  - id: departure_and_return_stops_without_partial_mutation
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["October 5, then return October 15."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: stopped, stop_reason: unsupported_request_scope, blockers: [], scope_notice_codes: [one_way.return_or_duration], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 1
+
+  - id: ambiguous_departure_retains_blocker
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["October 5 or October 10."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: awaiting_answer, stop_reason: null, blockers: [departure], scope_notice_codes: [], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 2
+
+  - id: unresolved_departure_retains_blocker
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["I have not chosen a departure date yet."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: awaiting_answer, stop_reason: null, blockers: [departure], scope_notice_codes: [], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 2
+
+  - id: cancellation_stops_session
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["Cancel this request."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: stopped, stop_reason: cancelled, blockers: [], scope_notice_codes: [], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 1
+
+  - id: no_progress_stops_after_limit
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    answers: ["I am not sure yet.", "Still not sure."]
+    expected:
+      initial: {action: ask, field: departure, unsupported_codes: []}
+      turns:
+        - {status: awaiting_answer, stop_reason: null, blockers: [departure], scope_notice_codes: [], departure_state: unchanged, effective_request_unchanged: true}
+        - {status: stopped, stop_reason: no_progress_limit, blockers: [], scope_notice_codes: [], departure_state: unchanged, effective_request_unchanged: true}
+      composer_call_count: 2
+
+  - id: cash_only_initial_request_is_unsupported
+    input: Find a cash flight from SFO to BKK on October 5 for one traveler.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      initial: {action: unsupported, field: one_way_award_scope, unsupported_codes: [cash_only_not_supported]}
+      turns: []
+      composer_call_count: 0
+
+  - id: award_and_cash_initial_request_remains_award_eligible
+    input: Find an award or cash flight from SFO to BKK on October 5 for one traveler.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected:
+      initial: {action: none, field: null, unsupported_codes: []}
+      turns: []
+      composer_call_count: 0

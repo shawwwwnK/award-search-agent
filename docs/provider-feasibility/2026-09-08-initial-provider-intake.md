@@ -70,6 +70,7 @@ monthly quota warrants a separately budgeted cash-fare feasibility test later.
 
 ## Outcome
 
-Seats.aero has passed the narrow access-and-response-shape spike and is suitable for the fixed
-one-provider vertical-slice design. The later implementation must still add offline success and
-failure fixtures, validate its narrower result contract, and surface provider failures explicitly.
+Seats.aero has passed the narrow access-and-response-shape spike and is the target request shape
+for the planning-only `EffectiveRequest -> SearchPlan` stage. A later, separate integration stage
+must still add an application adapter, offline success and failure fixtures, a narrower result
+contract, and explicit provider-failure handling.

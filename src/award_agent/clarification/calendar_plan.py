@@ -26,7 +26,6 @@ from award_agent.domain import (
     AssumptionDisclosure,
     DateWindow,
     DateWindowPrecision,
-    InterpretedDuration,
     MessageSpan,
     RequestContext,
     TemporalAnswerInterpretationProvenance,
@@ -44,8 +43,6 @@ class CalendarProposalTarget(str, Enum):
     """The temporal value a calendar proposal materializes."""
 
     DEPARTURE_WINDOW = "departure_window"
-    RETURN_WINDOW = "return_window"
-    DURATION = "duration"
 
 
 class CalendarAnchorEdge(str, Enum):
@@ -130,26 +127,10 @@ class OffsetIntervalOperation(SessionContractModel):
         return self
 
 
-class DurationOperation(SessionContractModel):
-    """A model-selected duration envelope, with an explicit approximation flag."""
-
-    kind: Literal["duration"] = "duration"
-    minimum_days: int = Field(ge=1, le=365)
-    maximum_days: int = Field(ge=1, le=365)
-    approximate: bool = False
-
-    @model_validator(mode="after")
-    def validate_duration(self) -> DurationOperation:
-        if self.maximum_days < self.minimum_days:
-            raise ValueError("duration maximum cannot precede minimum")
-        return self
-
-
 CalendarCalculationOperation = Annotated[
     LiteralIntervalOperation
     | RecurringIntervalOperation
-    | OffsetIntervalOperation
-    | DurationOperation,
+    | OffsetIntervalOperation,
     Field(discriminator="kind"),
 ]
 
@@ -165,15 +146,6 @@ class CalendarCalculationProposal(SessionContractModel):
     target: CalendarProposalTarget
     evidence: MessageSpan
     operation: CalendarCalculationOperation
-
-    @model_validator(mode="after")
-    def validate_target_shape(self) -> CalendarCalculationProposal:
-        if self.target is CalendarProposalTarget.DURATION:
-            if not isinstance(self.operation, DurationOperation):
-                raise ValueError("duration target requires a duration operation")
-        elif isinstance(self.operation, DurationOperation):
-            raise ValueError("date-window target cannot use a duration operation")
-        return self
 
 
 class CalendarCalculationReceipt(SessionContractModel):
@@ -294,8 +266,6 @@ def _evaluate_proposal(
     receipts: Mapping[str, CalendarCalculationReceipt],
 ) -> TemporalContribution:
     operation = proposal.operation
-    if isinstance(operation, DurationOperation):
-        return _duration_contribution(proposal, operation)
     if isinstance(operation, LiteralIntervalOperation):
         start, end, precision = _evaluate_literal(operation, context)
     elif isinstance(operation, RecurringIntervalOperation):
@@ -315,24 +285,6 @@ def _evaluate_proposal(
             start=start, end=end, precision=precision, raw_text=proposal.evidence.text
         ),
         interpretation_provenance=_provenance(proposal, start=start, end=end),
-    )
-
-
-def _duration_contribution(
-    proposal: CalendarCalculationProposal, operation: DurationOperation
-) -> TemporalContribution:
-    return TemporalContribution(
-        contribution_id=f"answer:{proposal.fact_id}:duration",
-        kind=TemporalContributionKind.DURATION,
-        source=AnswerMessageSource(span=proposal.evidence),
-        raw_text=proposal.evidence.text,
-        amendment_id=proposal.fact_id,
-        interpreted_duration=InterpretedDuration(
-            raw_text=proposal.evidence.text,
-            minimum_days=operation.minimum_days,
-            maximum_days=operation.maximum_days,
-        ),
-        interpretation_provenance=_provenance(proposal),
     )
 
 
@@ -425,11 +377,9 @@ def _resolve_anchor_date(
 
 
 def _contribution_kind_for_target(target: CalendarProposalTarget) -> TemporalContributionKind:
-    if target is CalendarProposalTarget.DEPARTURE_WINDOW:
-        return TemporalContributionKind.DEPARTURE_WINDOW
-    if target is CalendarProposalTarget.RETURN_WINDOW:
-        return TemporalContributionKind.RETURN_WINDOW
-    return TemporalContributionKind.DURATION
+    if target is not CalendarProposalTarget.DEPARTURE_WINDOW:  # pragma: no cover - closed enum
+        raise CalendarCalculationError("unsupported one-way calendar proposal target")
+    return TemporalContributionKind.DEPARTURE_WINDOW
 
 
 def _provenance(
@@ -440,15 +390,7 @@ def _provenance(
 ) -> TemporalAnswerInterpretationProvenance:
     operation = proposal.operation
     disclosure = None
-    if isinstance(operation, DurationOperation) and operation.approximate:
-        disclosure = AssumptionDisclosure(
-            disclosure_id=f"calendar-plan:{proposal.fact_id}:approximate-duration",
-            message=(
-                "I’ll use an approximate trip duration of "
-                f"{operation.minimum_days} to {operation.maximum_days} days."
-            ),
-        )
-    elif not isinstance(operation, DurationOperation) and operation.approximate:
+    if operation.approximate:
         assert start is not None and end is not None
         disclosure = AssumptionDisclosure(
             disclosure_id=f"calendar-plan:{proposal.fact_id}:approximate-interval",
@@ -478,7 +420,6 @@ __all__ = [
     "CalendarCalculationReceipt",
     "CalendarDay",
     "CalendarProposalTarget",
-    "DurationOperation",
     "LiteralIntervalOperation",
     "OffsetIntervalOperation",
     "PriorFactAnchor",

@@ -30,3 +30,5 @@ Expected sections:
 - [0013: Single-call clarification receiver](0013-single-call-clarification-receiver.md)
 - [0014: LLM-owned clarification semantics and composition](0014-llm-owned-clarification-semantics-and-composition.md)
 - [0015: Generic model-authored clarification calendar proposals](0015-generic-model-authored-clarification-calendar-proposals.md)
+- [0016: One-way award request boundary](0016-one-way-award-request-boundary.md)
+- [0017: LLM-owned initial intent semantics](0017-llm-owned-initial-intent-semantics.md)

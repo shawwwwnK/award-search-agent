@@ -1,0 +1,70 @@
+{
+  "schema_version": "one_way_award_live_eval_v1",
+  "generated_at": "2026-09-11T21:32:58.526138+00:00",
+  "request_scope": "one_way_award_v1",
+  "models": {
+    "pass_one": "gpt-5.6-luna",
+    "selector": "gpt-5.6-luna",
+    "composer": "gpt-5.6-luna",
+    "interpreter": "gpt-5.6-luna"
+  },
+  "fixture": "evals/clarification/one_way_award_live_cases_v1.yaml",
+  "trials": 1,
+  "records": [
+    {
+      "id": "initial_one_way_ready",
+      "trial": 1,
+      "status": "passed",
+      "checks": {
+        "initial_action": true
+      },
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "continuation": {
+        "status": null,
+        "scope_notice": false
+      },
+      "call_count": 2,
+      "latency_seconds": 5.171,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T213258.526138-0000-0266898b/initial_one_way_ready__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "initial_then_return_notice",
+      "trial": 1,
+      "status": "passed",
+      "checks": {
+        "initial_action": true,
+        "continuation_status": true,
+        "scope_notice": true
+      },
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "continuation": {
+        "status": "stopped",
+        "scope_notice": true
+      },
+      "call_count": 3,
+      "latency_seconds": 7.001,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T213258.526138-0000-0266898b/initial_then_return_notice__trial-1.json",
+        "calls": 3
+      }
+    }
+  ],
+  "summary": {
+    "runs": 2,
+    "passed": 2,
+    "failed": 0,
+    "errors": 0,
+    "mechanically_completed": true
+  }
+}

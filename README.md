@@ -4,31 +4,33 @@ Award Travel Agent is an independent portfolio project for building a narrow, me
 
 ## Current milestone
 
-Iterative clarification continuation — implementation active.
+Operational knowledge-base expansion — active, before provider execution.
 
-The current work is to add an additive session boundary after the frozen initial turn. Each
-clarification prompt will list every current blocking requirement; a user may resolve any subset,
-and the session will recompute the remaining blockers until it is ready or explicitly stopped.
-It uses a conversation-aware `EffectiveRequest` with turn-level provenance and does not mutate the
-initial `ParsedRequest`. A local Streamlit harness is allowed only for validation; it is not a
-production UI. The decision is recorded in ADR 0011.
+The current cut replaces round-trip/cash-capable live semantics with a one-way award-only request
+boundary. A ready request requires origin, destination, an outbound departure window, and traveler
+count. Return dates and durations receive visible guidance to submit a separate one-way request;
+cash-only requests are unsupported; mixed award-and-cash requests remain eligible for award search
+without implying cash pricing is available. The deterministic, retrieval-backed
+`EffectiveRequest -> SearchPlan` boundary is implemented and qualified for its declared checked-in
+fixture coverage. The active cut is to replace that fixture-only seed with a reviewed, versioned
+operational snapshot for a declared initial market: grounded geographies and aliases, airport
+metadata, factual location-to-airport relations, selection policy, and directed topology with
+source and freshness receipts. Provider execution remains later; this cut ends before a Seats.aero
+API call, provider payload mapping, result normalization, or ranking. See the
+[search-planning stage brief](docs/handoffs/2026-09-10-search-plan-design-stage.md) and
+[`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md).
 
-The implementation handoff, including step-by-step scope, invariants, code entry points, and
-acceptance gates, is
-[`docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md`](docs/handoffs/2026-09-08-clarification-continuation-implementation-plan.md).
-
-The initial request-understanding turn remains qualified and frozen:
+The initial request-understanding turn now uses the ADR 0017 semantic boundary:
 
 `raw request -> ParsedRequest -> ClarificationDecision`
 
-The sole live implementation is selector-only: Luna performs non-temporal Pass 1 and opaque
-temporal-candidate selection, while deterministic code scans, validates, compiles, evaluates, and
-clarifies temporal facts. Sequential two-pass resolution has been retired. The final qualification
-record is the traced three-trial Luna run at
-`evals/intent/baseline/2026-09-06-gpt-5.6-luna-selector-only-prompt-repair-3-trials.json`:
-47/48 records passed (97.92%), with zero errors and one documented clarification miss. The owner
-has approved the additive clarification-continuation contract in ADR 0011; the existing parser,
-selector, compiler, clarification policy, and ready corpus remain unchanged.
+One LLM receiver reads the complete request and emits grounded semantic facts plus generic
+calendar operations. Deterministic code validates source grounding, computes calendar dates,
+applies one-way/cash policy, and derives clarification. The legacy scanner/selector workflow is
+historical evidence, not a live fallback. The bounded 2026-09-11 live diagnostic is not
+qualification-ready: 46 of 57 runs became safe pending results after post-inference structured
+proposal validation failures. See [ADR 0017](docs/adr/0017-llm-owned-initial-intent-semantics.md)
+and `evals/intent/baseline/2026-09-11-intent-behavior-v1-gpt-5.6-luna-3-trials-redesign.json`.
 
 ## Intended workflow
 
@@ -145,40 +147,39 @@ Run the request-understanding workflow with an explicit temporal context:
 ```bash
 award-intent \
   --model gpt-5.6-luna \
-  --selector-model gpt-5.6-luna \
   --reference-date 2026-08-29 \
   --timezone America/Los_Angeles \
   "My boyfriend and I want to go to Thailand from SF leaving on Labor Day weekend for about 10 days."
 ```
 
-The command prints `ParsedRequest` and `ClarificationDecision` as JSON. It uses a strict
-non-temporal model boundary, deterministically scans and compiles temporal candidates, then uses
-a separately configured model to select only opaque candidate handles. There is no model-authored
-date-resolution pass or fallback. Both model responses request storage disabled; the workflow does
+The command prints the completed request result or a typed non-session pending result. One model
+receives the request language and returns grounded semantic facts plus generic calendar operations;
+deterministic code validates and calculates dates without scanning the wording. The workflow does
 not persist requests locally. Holiday anchors use the public Nager.Holidays Community API v4 for
-U.S. federal-holiday dates. Exact-date and month anchors do not make that API call. Holiday API
-failures are returned as explicit errors rather than silently replaced with locally guessed dates.
+U.S. federal-holiday dates. A provider failure becomes typed pending rather than a locally guessed
+date.
 
 Application and evaluation code select models by constructing an extractor
 configuration. This makes model candidates ordinary test data:
 
 ```python
-from award_agent.intent import OpenAIExtractorConfig, OpenAIIntentExtractor
+from award_agent.intent import OpenAISemanticIntentConfig, OpenAISemanticIntentInterpreter
 
-pass_one = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model="gpt-5.6-luna"))
-selector = OpenAIIntentExtractor(config=OpenAIExtractorConfig(model="gpt-5.6-luna"))
+interpreter = OpenAISemanticIntentInterpreter(
+    config=OpenAISemanticIntentConfig(model="gpt-5.6-luna")
+)
 ```
 
-The two configurations make the two model boundaries independently observable without changing
-process-level configuration. The selector-only decision and historical comparison evidence are
-recorded in ADR 0010.
+The receiver configuration makes the model boundary observable without process-level
+configuration. The live decision is recorded in ADR 0017; ADR 0010 is historical comparison
+evidence.
 
 ## Current non-goals
 
 - Point-balance constraints
 - Spending-budget constraints
-- Search planning
 - Provider integrations
+- Provider-result normalization and validation
 - Ranking
 - RAG
 - Production Web UI

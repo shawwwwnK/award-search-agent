@@ -38,7 +38,6 @@ def _requirement_label(requirement: BlockingRequirement) -> str:
         BlockingRequirementKind.ORIGIN: "departure location",
         BlockingRequirementKind.DESTINATION: "destination",
         BlockingRequirementKind.DEPARTURE: "departure timing",
-        BlockingRequirementKind.RETURN_OR_DURATION: "return date or trip length",
         BlockingRequirementKind.TRAVELERS: "traveler count",
         BlockingRequirementKind.CONFLICT: "conflicting travel details",
     }[requirement.kind]

@@ -2,10 +2,93 @@
 
 ## Phase
 
-Iterative clarification continuation — ADR 0015 generic calendar-proposal stage closed pending a
-future owner-approved follow-up.
+Operational knowledge-base expansion — active next cut, before provider execution. Search planning
+is implemented and fixture-qualified as a planning-only, retrieval-backed `EffectiveRequest ->
+SearchPlan` stage that follows the frozen one-way award request-understanding and clarification
+boundary. Its declared coverage remains the checked-in offline seed snapshot, not a claim of
+operational airport, route, schedule, inventory, or provider coverage.
 
 ## Current conclusion
+
+On 2026-09-13, the owner selected **operational knowledge-base expansion** as the next cut, before
+provider execution. The preceding search-planning cut is implemented and fixture-qualified for the
+declared local seed coverage. This is the planning-only boundary recorded in
+`docs/handoffs/2026-09-10-search-plan-design-stage.md`:
+
+```text
+ClarificationSession(ready).effective_request -> SearchPlan
+```
+
+The implemented planner consumes a ready outbound-only `EffectiveRequest` and produces
+inspectable, bounded, deterministic expected search items from versioned local evidence. Its
+ten-case offline golden evaluator qualifies the declared seed fixture coverage, including airport
+groups, typed failures, directional synthetic topology, dates, budgets, payment annotations,
+canonical ordering, optional-path budget degradation, and stale-plan handoff. It must not call
+Seats.aero, map provider payloads, parse provider responses, normalize results, rank
+recommendations, or mutate the source request/session. Search planning is fixture-qualified for
+this declared local coverage. The active work is to make a declared initial coverage operational
+through reviewed, versioned knowledge records and evidence; provider execution follows as a
+separate stage. The recorded broad behavioral evidence gap for the upstream one-way boundary
+remains historical evidence and is not silently promoted to qualification or used to reopen
+intent/clarification semantics.
+
+The qualification corpus pins canonical SHA-256 identities for the default knowledge snapshot,
+Cached-Search capability record and version, and default planning policy; it also validates the
+local capability-source bytes before evaluation. Its executable coverage matrix names the exact
+end-to-end fixture cases. Fine-grained tamper and forged-handoff receipt behavior is unit-only
+coverage, not a claim that the golden corpus exercises every internal branch. No provider execution
+is included in this planning qualification or the active knowledge-base cut.
+
+On 2026-09-12, local Seats.aero reference review fixed the planning capability target to Cached
+Search. Product admission remains the one-way origin, destination, traveler, bounded-window,
+award, and no-conflict boundary; a distinct provider-executability check requires resolved airport
+lists. Optional unknowns, such as cabin, remain visible planning issues. Cached Search has no
+traveler-count filter, so travelers remain a later result-validation obligation. Its reviewed
+filter enum contains only cabin availability, direct-flight availability, carrier involvement,
+redemption-program, and minimum-reported-cabin-distance filters. Current free-text hard constraints
+remain deferred post-search validation obligations until a future typed, item-grounded upstream
+contract exists; they are not silently parsed. Planning dates use the selected first actual origin
+airport's IANA timezone; later components use the explicit exploratory numeric envelope from one
+day before the supplied start through two days after its end. These decisions are recorded in
+docs/handoffs/2026-09-12-search-planning-design.md.
+
+On 2026-09-11, the owner reopened the initial intent boundary. ADR 0017 supersedes ADR 0010 and
+the scanner-owned portions of ADR 0009: one LLM semantic receiver now reads all initial-request
+language, including understandable typos and date paraphrases, and returns grounded semantic facts
+and generic calendar operations. Deterministic code validates grounding and authority, computes
+calendar dates, applies conflicts and ADR 0016 policy, and derives clarification. The scanner,
+candidate catalog, and opaque selector are not on the live path and have no runtime fallback.
+
+The initial three-trial, 19-scenario Luna diagnostic completed all 57 runs with trace
+reconciliation and public-redaction inspection passing, but only 8 behaviorally passed; 46 became
+`pending_retryable` results after post-inference structured-proposal validation failures. That
+diagnostic is historical evidence of the retired provider-contract defect, not behavioral
+qualification. The artifact is
+`evals/intent/baseline/2026-09-11-intent-behavior-v1-gpt-5.6-luna-3-trials-redesign.json`.
+
+The subsequent wire-v2/repair correction completed with 273 passing offline tests and 99
+explicitly historical skips. A narrow ten-trial Luna reliability gate for `Find two business award
+seats from SFO to BKK on October 5.` returned 10/10 exact ready results—SFO to BKK, two travelers,
+business award, and 2026-10-05—with zero repairs, pending outcomes, errors, blockers, unsupported
+parts, or active return/duration state. This establishes the direct reasonable-input promise for
+that request, but is not a replacement for a refreshed broad behavioral live matrix.
+
+The active initial-intent policy now requires ordinary reasonable input to complete as `ready`,
+`clarification`, or `unsupported` after internal normalization/repair. If an inference-reached
+model result remains unusable after the permitted repair, it completes as clarification with
+salvaged facts and explicit blockers. `pending_retryable` is reserved for genuine preflight,
+authentication/configuration, network/transport, or provider operational failure. The local
+harness keeps an operationally pending request and its deterministic context session-local, shows
+only a stable stage/code status, offers an explicit retry, and never creates a clarification session
+or displays raw provider/model/validation detail.
+
+The owner closed this intent/clarification redesign stage for now after the narrow reliability gate.
+Do not make further semantic-boundary changes or run broad live qualification without explicitly
+reopening it. The remaining broad behavioral matrix is an evidence gap, not an authorization to
+resume the stage automatically.
+
+The selector-only history below is retained as historical evidence and does not describe the
+current live initial-intent workflow.
 
 The project owner concluded the initial request-understanding implementation on 2026-09-06. The
 selector-only Luna path is the sole live path: Luna handles non-temporal Pass 1 and opaque
@@ -31,7 +114,7 @@ wording. A proposal failure receives at most one shared model-owned repair acros
 grounding, and calculation failures and otherwise becomes a visibly communicated, non-mutating
 pending/retryable outcome, not a raw user-visible exception or a user no-progress turn.
 
-The frozen initial parser remains unchanged. In particular, none of the historic
+The historical initial parser is retained as evidence only. In particular, none of the historic
 continuation-only raw-text rules for `this weekend`, weekdays, endpoint cues, numbered answers,
 or `following`/`afterwards` are current policy. Their prior qualifications and artifacts are
 historical evidence for superseded implementations, not qualification of ADR 0015.
@@ -60,6 +143,34 @@ classification issues (disclosure when no approximation was accepted, and confli
 replacement classified as partial resolution). These are diagnostic findings, not qualification or
 a direction to resume ADR 0015 work. The closeout is
 `docs/handoffs/2026-09-10-adr-0015-stage-closeout.md`.
+
+On 2026-09-10, the owner narrowed the next cut to
+`EffectiveRequest -> SearchPlan`. This is a design stage for the expected Seats.aero request
+items; implementation begins only after external high-level design review. It must not make API
+calls, normalize provider responses, or rank results. The planning boundary must resolve
+city/region/country candidates into stable airport sets and may propose connection-search legs
+using grounded retrieval data. The stage brief is
+`docs/handoffs/2026-09-10-search-plan-design-stage.md`.
+
+On 2026-09-11, the owner paused that search-plan design stage and reopened the live intent and
+clarification boundary for a one-way award-only recut (ADR 0016). The active workflow requires an
+origin, destination, bounded outbound departure window, and traveler count. Return dates and trip
+durations are out of scope: when structured intent or clarification semantics identify either,
+the system must visibly direct the user to submit a separate one-way request and must not add them
+to active request/session state. Cash-only requests are invalid. Mixed award-and-cash requests may
+continue as award requests, without any claim that cash pricing is available. The existing
+round-trip/cash-capable contracts, code paths, and evaluation artifacts remain historical evidence;
+there is one replacement live workflow, not a runtime mode switch.
+
+The ADR 0016 implementation has 334 passing offline tests and completed its architect-reviewed v2
+live matrix with Luna at every model boundary. The immutable intent fixture ran 18 scenarios for
+three trials (54 runs): 52 passed, 2 behaviorally failed, and 0 errored; 102/102 model calls and
+54/54 private run traces reconciled. The immutable clarification fixture ran 12 scenarios for three
+trials (36 sessions): 35 passed, 1 behaviorally failed, and 0 errored; 123 calls reconciled with
+36/36 private session traces. Both public artifacts carry fixture hashes and passed redaction
+inspection. This is a mechanically complete, diagnostic evaluation—not behavioral qualification:
+the remaining failures cover cash-only traveler extraction, default-award handling in the
+home-airport guard, and an ambiguous departure answer that became pending and invoked a composer.
 
 ### Superseded clarification evidence
 
@@ -90,18 +201,22 @@ Award-search agent.
 
 ## Current slice
 
-Iterative clarification continuation: turn an initial parsed snapshot plus successive user answers
-into a traceable `EffectiveRequest` that is `ready` for later planning or explicitly `stopped`.
+One-way award request understanding and clarification: turn an initial parsed snapshot plus
+successive user answers into a traceable outbound-only `EffectiveRequest` that is `ready` for later
+planning or explicitly stopped/unsupported.
 
 ## Representative request
 
-"My boyfriend and I want to go to Thailand from SF leaving on the weekend of Labor Day weekend and be back after about 10 days. Find award and cash flight options."
+"Find two business-class award seats from SFO to Bangkok leaving during Labor Day weekend."
 
 ## Intended current output
 
 An `EffectiveRequest`, full blocker-set clarification prompt, and traceable session state after
 each response, terminating at `ready`, explicit `stopped`, or non-mutating pending/retryable
-interpretation when the model contract cannot safely process a reasonable answer.
+interpretation only for a genuine preflight, authentication/configuration, network/transport, or
+provider operational failure. An inference-reached model response that remains unusable after
+repair completes as clarification with salvaged facts; reasonable user language never terminates
+in pending.
 
 ## Current technical assumptions
 
@@ -124,21 +239,29 @@ failure ownership and closeout, rather than treating the public pilot as qualifi
 the current no-raw-text-parsing boundary, one-repair/pending policy, immutable-state invariants,
 and private-trace/redacted-artifact discipline until then.
 
+The current search-planning cut is implemented and fixture-qualified for the declared checked-in
+offline seed snapshot. It consumes the frozen ADR 0016 outbound-only contract and ADR 0017
+upstream request-understanding boundary: no return date or duration can enter planning state,
+cash-only requests do not become ready, and mixed award-and-cash requests remain award-only
+without cash-search claims. This qualification is planning-only and does not claim operational
+airport, route, schedule, inventory, or provider coverage. The active next cut is reviewed,
+versioned knowledge-base expansion for a declared initial coverage; provider execution remains
+subsequent and separately scoped. Preserve the upstream evidence gap as such—do not reopen its
+semantics or call it qualified through this documentation change.
+
 The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
 clarification acceptance protocol are the current policy where they differ from ADRs 0011--0013
-or that handoff.
-
-After this design and its implementation are qualified, the following cut is a fixed-planner,
-one-provider vertical slice: `ClarificationSession(ready).effective_request -> fixed SearchPlan ->
-provider query -> traced result or explicit error`. The freeze handoff is
-`docs/handoffs/2026-09-05-intent-freeze-handoff.md`; ADR 0010 remains the current selector-only
-request-understanding decision. Earlier references to `two_pass` are historical evidence only.
+or that handoff. The freeze handoff is `docs/handoffs/2026-09-05-intent-freeze-handoff.md`; ADR
+0010 is superseded for the live initial request-understanding decision by ADR 0017. Earlier
+references to `two_pass` and selector-only extraction are historical evidence only.
 
 ## Current implementation status
 
 - Seats.aero passed one narrow cached-search access-and-response-shape spike; no application
-  adapter or provider error fixture exists yet. SerpAPI Google Flights remains a later cash-fare
-  candidate. See
+  adapter or provider error fixture exists yet. The planning-only `SearchPlan` boundary is now
+  implemented and fixture-qualified, but it does not authorize a provider adapter or any provider
+  call. The active next work is operational knowledge-base expansion; provider execution follows
+  as a separately scoped stage. SerpAPI Google Flights remains a later cash-fare candidate. See
   `docs/provider-feasibility/2026-09-08-initial-provider-intake.md`.
 - The frozen initial workflow stops after `ClarificationDecision`; the additive continuation
   boundary owns subsequent answers, deterministic reduction, a local-only Streamlit harness, and
@@ -163,15 +286,17 @@ request-understanding decision. Earlier references to `two_pass` are historical 
   action/property oracles, non-vacuous eligible metric denominators, a locked holdout, rotating
   post-freeze metamorphic challenges, and separate semantic-diagnostic, behavioral, safety, and
   operational metrics.
-- Selector-only request understanding is the sole live path (ADR 0010). It requires separately
-  configured non-temporal Pass 1 and temporal selector adapters before work begins.
-- The compiler owns all temporal facts and always uses `supported_or_unresolved`; the selector can
-  choose only opaque candidate handles, including explicit unresolved choices. There is no runtime
-  strategy switch or fallback.
-- The ready evaluator is schema v6 and records only Pass 1 and selector telemetry. Version-5 and
-  older artifacts remain historical evidence and are intentionally not rewritten.
-- The test-only catalog injection is exact-request matched and exists only in selector workflow
-  integration. It is not exposed through application or evaluator configuration.
+- One semantic receiver is the sole live initial-intent boundary (ADR 0017). Ordinary reasonable
+  language and provider-wire representation/shape noise are internally normalized/repaired into a
+  normal outcome; an inference-reached model result that remains unusable after repair completes as
+  clarification with salvaged facts and explicit blockers. Only genuine preflight,
+  authentication/configuration, network/transport, or provider operational failures are typed
+  pending outcomes and cannot start clarification. The harness preserves pending request context
+  locally and offers a generic, user-triggered retry. There is no scanner, candidate selector, or
+  runtime fallback.
+- The active intent evaluator is schema v9 and scores action/property outcomes, preserving exact
+  deterministic safety assertions. Earlier selector artifacts and fixtures are historical evidence
+  and are explicitly segregated from active coverage.
 
 ## Historical implementation and evaluation log (superseded where ADR 0010 conflicts)
 

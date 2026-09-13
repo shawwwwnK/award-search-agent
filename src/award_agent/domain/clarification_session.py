@@ -19,7 +19,6 @@ from award_agent.domain.models import (
     Conflict,
     ContractModel,
     DateWindow,
-    InterpretedDuration,
     LocationRef,
     RequestContext,
     RequestUnderstandingResult,
@@ -81,6 +80,7 @@ class ClarificationStopReason(str, Enum):
     ANSWER_TURN_LIMIT = "answer_turn_limit"
     NO_PROGRESS_LIMIT = "no_progress_limit"
     UNSUPPORTED_REQUEST_REVISION = "unsupported_request_revision"
+    UNSUPPORTED_REQUEST_SCOPE = "unsupported_request_scope"
 
 
 class ClarificationSessionLimits(SessionContractModel):
@@ -113,7 +113,6 @@ class EffectiveField(str, Enum):
     ORIGIN = "origin"
     DESTINATION = "destination"
     DEPARTURE = "departure"
-    RETURN_OR_DURATION = "return_or_duration"
     TRAVELERS = "travelers"
     CABIN = "cabin"
     SEARCH_MODE = "search_mode"
@@ -155,8 +154,6 @@ class FieldProvenance(SessionContractModel):
 
 class TemporalContributionKind(str, Enum):
     DEPARTURE_WINDOW = "departure_window"
-    RETURN_WINDOW = "return_window"
-    DURATION = "duration"
 
 
 class TemporalTemplateProvenance(SessionContractModel):
@@ -226,15 +223,13 @@ class TemporalContribution(SessionContractModel):
     # must retain it rather than rejecting an otherwise valid initial snapshot.
     raw_text: str = ""
     amendment_id: str | None = Field(default=None, min_length=1)
-    date_window: DateWindow | None = None
-    interpreted_duration: InterpretedDuration | None = None
+    date_window: DateWindow
     template_provenance: TemporalTemplateProvenance | None = None
     interpretation_provenance: TemporalAnswerInterpretationProvenance | None = None
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
         {
             "source",
             "date_window",
-            "interpreted_duration",
             "template_provenance",
             "interpretation_provenance",
         }
@@ -242,13 +237,6 @@ class TemporalContribution(SessionContractModel):
 
     @model_validator(mode="after")
     def validate_value_shape(self) -> TemporalContribution:
-        has_window = self.date_window is not None
-        has_duration = self.interpreted_duration is not None
-        if self.kind is TemporalContributionKind.DURATION:
-            if not has_duration or has_window:
-                raise ValueError("duration contributions require only an interpreted duration")
-        elif not has_window or has_duration:
-            raise ValueError("window contributions require only a date window")
         if isinstance(self.source, InitialSnapshotSource) and self.amendment_id is not None:
             raise ValueError("initial temporal contributions cannot name an amendment")
         if isinstance(self.source, AnswerMessageSource) and self.amendment_id is None:
@@ -279,8 +267,6 @@ class EffectiveRequest(SessionContractModel):
     origins: tuple[LocationRef, ...] = ()
     destinations: tuple[LocationRef, ...] = ()
     departure_window: DateWindow | None = None
-    return_window: DateWindow | None = None
-    interpreted_duration: InterpretedDuration | None = None
     cabins: tuple[CabinClass, ...] = ()
     search_modes: tuple[SearchMode, ...] = ()
     repositioning_allowed: bool | None = None
@@ -295,8 +281,6 @@ class EffectiveRequest(SessionContractModel):
             "origins",
             "destinations",
             "departure_window",
-            "return_window",
-            "interpreted_duration",
             "unknowns",
             "conflicts",
             "field_provenance",
@@ -328,7 +312,6 @@ class BlockingRequirementKind(str, Enum):
     ORIGIN = "origin"
     DESTINATION = "destination"
     DEPARTURE = "departure"
-    RETURN_OR_DURATION = "return_or_duration"
     TRAVELERS = "travelers"
 
 
@@ -350,7 +333,6 @@ class BlockingRequirement(SessionContractModel):
             BlockingRequirementKind.ORIGIN: EffectiveField.ORIGIN,
             BlockingRequirementKind.DESTINATION: EffectiveField.DESTINATION,
             BlockingRequirementKind.DEPARTURE: EffectiveField.DEPARTURE,
-            BlockingRequirementKind.RETURN_OR_DURATION: EffectiveField.RETURN_OR_DURATION,
             BlockingRequirementKind.TRAVELERS: EffectiveField.TRAVELERS,
         }
         if self.field is not expected_fields[self.kind] or self.conflict_code is not None:
@@ -390,6 +372,17 @@ class PromptCompositionSource(str, Enum):
 
     MODEL = "model"
     FALLBACK = "fallback"
+
+
+class ScopeNotice(SessionContractModel):
+    """A deterministic, user-visible disclosure about this one-way release."""
+
+    code: Literal["one_way.return_or_duration"] = "one_way.return_or_duration"
+    message: Literal[
+        "This release supports one-way award searches. Please submit your return journey as a separate one-way request."
+    ] = "This release supports one-way award searches. Please submit your return journey as a separate one-way request."
+    span: MessageSpan
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"span"})
 
 
 class ClarificationPrompt(SessionContractModel):
@@ -455,7 +448,6 @@ class AmendmentTarget(str, Enum):
     DESTINATION = "destination"
     TRAVELERS = "travelers"
     DEPARTURE = "departure"
-    RETURN_OR_DURATION = "return_or_duration"
     CONFLICTING_DATES = "conflicting_dates"
 
 
@@ -495,7 +487,6 @@ class TemporalAmendment(TypedAmendmentBase):
 
     target: Literal[
         AmendmentTarget.DEPARTURE,
-        AmendmentTarget.RETURN_OR_DURATION,
         AmendmentTarget.CONFLICTING_DATES,
     ]
     temporal_text: str = Field(min_length=1)
@@ -535,13 +526,22 @@ class ResolutionOutcome(SessionContractModel):
 
     accepted_amendments: tuple[TypedAmendment, ...] = ()
     rejected_fragments: tuple[RejectedFragment, ...] = ()
-    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"accepted_amendments"})
+    scope_notices: tuple[ScopeNotice, ...] = ()
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
+        {"accepted_amendments", "scope_notices"}
+    )
 
     @model_validator(mode="after")
     def validate_unique_acceptances(self) -> ResolutionOutcome:
         accepted_ids = self.accepted_amendment_ids
         if len(accepted_ids) != len(set(accepted_ids)):
             raise ValueError("accepted amendment IDs must be unique")
+        notice_spans = [
+            (item.code, item.span.message_id, item.span.start, item.span.end)
+            for item in self.scope_notices
+        ]
+        if len(notice_spans) != len(set(notice_spans)):
+            raise ValueError("scope notices must be unique per answer span")
         return self
 
     @property
@@ -561,6 +561,7 @@ class ClarificationSessionRevision(SessionContractModel):
     prompt: ClarificationPrompt | None = None
     status: ClarificationSessionStatus
     stop_reason: ClarificationStopReason | None = None
+    terminal_message: str | None = Field(default=None, min_length=1)
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
         {"effective_request", "answer_turn", "outcome", "prompt"}
     )
@@ -572,15 +573,28 @@ class ClarificationSessionRevision(SessionContractModel):
         if self.prompt is not None and self.prompt.revision != self.revision:
             raise ValueError("a revision prompt must carry the same revision number")
         if self.status is ClarificationSessionStatus.AWAITING_ANSWER:
-            if self.prompt is None or self.stop_reason is not None:
+            if (
+                self.prompt is None
+                or self.stop_reason is not None
+                or self.terminal_message is not None
+            ):
                 raise ValueError("awaiting-answer revisions require a prompt and no stop reason")
             if not self.prompt.requirements:
                 raise ValueError("awaiting-answer revisions require active blocking requirements")
         elif self.status is ClarificationSessionStatus.READY:
-            if self.prompt is not None or self.stop_reason is not None:
+            if (
+                self.prompt is not None
+                or self.stop_reason is not None
+                or self.terminal_message is not None
+            ):
                 raise ValueError("ready revisions cannot have a prompt or stop reason")
         elif self.prompt is not None or self.stop_reason is None:
             raise ValueError("stopped revisions require a stop reason and no prompt")
+        elif (
+            self.stop_reason is ClarificationStopReason.UNSUPPORTED_REQUEST_SCOPE
+            and self.terminal_message is None
+        ):
+            raise ValueError("unsupported-scope stops require a user-visible terminal message")
         if self.answer_turn is not None and self.outcome is not None:
             _validate_outcome_grounding(answer_turn=self.answer_turn, outcome=self.outcome)
         if self.prompt is not None:
@@ -618,7 +632,13 @@ class PendingPromptTransition(SessionContractModel):
     issues: tuple[ClarificationIssue, ...] = Field(min_length=1)
     composition_key: str = Field(pattern=r"^[a-f0-9]{64}$")
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
-        {"answer_turn", "effective_request", "outcome", "requirements", "issues"}
+        {
+            "answer_turn",
+            "effective_request",
+            "outcome",
+            "requirements",
+            "issues",
+        }
     )
 
     @model_validator(mode="after")
@@ -653,6 +673,12 @@ def _validate_outcome_grounding(
             span=fragment.span,
             answer_message=answer_turn.message,
             label="rejected fragment",
+        )
+    for notice in outcome.scope_notices:
+        _validate_answer_local_span(
+            span=notice.span,
+            answer_message=answer_turn.message,
+            label="scope notice",
         )
 
 
@@ -708,6 +734,10 @@ class ClarificationSession(SessionContractModel):
 
     @model_validator(mode="after")
     def validate_revision_ledger(self) -> ClarificationSession:
+        if self.initial_result.parsed_request is None:
+            raise ValueError(
+                "a pending request-understanding outcome cannot initialize a clarification session"
+            )
         revision_numbers = [item.revision for item in self.revisions]
         expected = list(range(len(self.revisions)))
         if revision_numbers != expected:
@@ -810,6 +840,7 @@ __all__ = [
     "RejectedFragment",
     "RejectedFragmentReason",
     "ResolutionOutcome",
+    "ScopeNotice",
     "TemporalAmendment",
     "TemporalAnswerInterpretationProvenance",
     "TemporalContribution",

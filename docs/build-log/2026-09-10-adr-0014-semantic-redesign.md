@@ -164,3 +164,14 @@
 
 - _Placeholder: record any model-selection or latency decision after reviewed experimental
   evidence exists._
+
+## Local harness import repair
+
+- A local Streamlit session raised an import error for
+  `ClarificationInterpretationPending` from the package facade. The harness now imports that
+  controller result type from its defining module while retaining all other clarification imports
+  from the public facade.
+- Verified the exact harness import with `.venv/bin/python -c "import
+  apps.clarification_harness"`; focused controller tests passed (`12 passed`), and
+  `git diff --check` passed. The local harness was restarted and returned HTTP 200 at
+  `http://127.0.0.1:8501/`.

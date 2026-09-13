@@ -28,7 +28,7 @@ class RequestContext(ContractModel):
 
 
 class RawRequest(ContractModel):
-    text: str = Field(min_length=1)
+    text: str = Field(min_length=0)
     context: RequestContext
 
 
@@ -547,12 +547,31 @@ class InterpretedDuration(ContractModel):
 
 
 class DateResolutionProposal(ContractModel):
-    """Deterministically evaluated temporal result retained for trace compatibility."""
+    """Legacy round-trip temporal result retained for historical compiler artifacts.
+
+    The active request-understanding workflow projects this internal compiler result into
+    :class:`OneWayDateResolutionProposal`.  New live callers must not use this shape to
+    represent return dates or trip durations.
+    """
 
     departure: ProposedDateWindow | None = None
     return_date: ProposedDateWindow | None = None
     interpreted_duration: InterpretedDuration | None = None
     unresolved: list[UnresolvedTemporalConstraint] = Field(default_factory=list)
+
+
+class OneWayDateResolutionProposal(ContractModel):
+    """The active, outbound-only temporal result exposed by request understanding."""
+
+    departure: ProposedDateWindow | None = None
+    unresolved: list[UnresolvedTemporalConstraint] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_one_way_unresolved(self) -> OneWayDateResolutionProposal:
+        invalid = [item.field for item in self.unresolved if item.field == "return_or_duration"]
+        if invalid:
+            raise ValueError("one-way date resolution cannot expose return or duration state")
+        return self
 
 
 class TemporalDirection(str, Enum):
@@ -855,6 +874,15 @@ class DateWindow(ContractModel):
         return self
 
 
+class CalendarOperationReceipt(ContractModel):
+    """Deterministic materialization receipt for a model-authored calendar operation."""
+
+    fact_id: str = Field(min_length=1)
+    operation: str = Field(min_length=1)
+    date_window: DateWindow
+    evidence: GroundedTemporalEvidence
+
+
 class UnknownReason(str, Enum):
     MISSING = "missing"
     AMBIGUOUS = "ambiguous"
@@ -865,6 +893,22 @@ class UnknownField(ContractModel):
     field: str
     reason: UnknownReason
     detail: str
+    raw_text: str | None = None
+    evidence: list[GroundedTemporalEvidence] = Field(default_factory=list)
+
+
+class UnsupportedRequestPartCode(str, Enum):
+    """Stable reasons an otherwise parseable request is outside the active release."""
+
+    RETURN_OR_DURATION_NOT_SUPPORTED = "return_or_duration_not_supported"
+    CASH_ONLY_NOT_SUPPORTED = "cash_only_not_supported"
+
+
+class UnsupportedRequestPart(ContractModel):
+    """Typed unsupported input retained for an explicit, traceable response."""
+
+    code: UnsupportedRequestPartCode
+    detail: str = Field(min_length=1)
     raw_text: str | None = None
     evidence: list[GroundedTemporalEvidence] = Field(default_factory=list)
 
@@ -883,10 +927,7 @@ class ParsedRequest(ContractModel):
     origins: list[LocationRef]
     destinations: list[LocationRef]
     departure_expression: DateExpression | None
-    return_expression: DateExpression | None
     departure_window: DateWindow | None
-    return_window: DateWindow | None
-    duration: DurationConstraint | None
     cabins: list[CabinClass]
     search_modes: list[SearchMode]
     date_flexibility: list[DateFlexibility]
@@ -894,16 +935,63 @@ class ParsedRequest(ContractModel):
     hard_constraints: list[str]
     unknowns: list[UnknownField]
     conflicts: list[Conflict]
+    unsupported_request_parts: list[UnsupportedRequestPart] = Field(default_factory=list)
     temporal_extraction: CoarseIntentExtraction | None = None
     temporal_evidence: list[GroundedTemporalEvidence] = Field(default_factory=list)
     resolved_date_anchors: list[ResolvedTemporalAnchor] = Field(default_factory=list)
     temporal_relations: TemporalRelationGraph | None = None
-    date_resolution: DateResolutionProposal | None = None
+    date_resolution: OneWayDateResolutionProposal | None = None
+    calendar_receipts: list[CalendarOperationReceipt] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_active_one_way_temporal_state(self) -> ParsedRequest:
+        """Reject return/duration state from the public one-way boundary.
+
+        Return-language evidence may appear only in ``unsupported_request_parts``. Keeping it
+        out of the active extraction, graph, anchor, and evidence fields prevents a downstream
+        planner or continuation reducer from treating it as an executable trip constraint.
+        """
+
+        if self.temporal_extraction is not None and (
+            any(
+                anchor.applies_to is TemporalTarget.RETURN
+                for anchor in self.temporal_extraction.date_anchors
+            )
+            or any(
+                phrase.applies_to in {TemporalPhraseTarget.RETURN, TemporalPhraseTarget.DURATION}
+                for phrase in self.temporal_extraction.temporal_phrases
+            )
+        ):
+            raise ValueError("active one-way requests cannot expose return or duration extraction")
+        if any(
+            anchor.anchor.applies_to is TemporalTarget.RETURN
+            for anchor in self.resolved_date_anchors
+        ):
+            raise ValueError("active one-way requests cannot expose resolved return anchors")
+        if self.temporal_relations is not None and any(
+            getattr(constraint, "target", None) is TemporalTarget.RETURN
+            or constraint.kind == "duration"
+            for constraint in self.temporal_relations.constraints
+        ):
+            raise ValueError("active one-way requests cannot expose return or duration relations")
+        return_claims = {
+            TemporalEvidenceClaim.RETURN_ANCHOR,
+            TemporalEvidenceClaim.RETURN_PERIOD,
+            TemporalEvidenceClaim.ALTERNATE_RETURN_DAY,
+            TemporalEvidenceClaim.DURATION,
+            TemporalEvidenceClaim.APPROXIMATE_DURATION,
+        }
+        if any(set(item.claim_ids) & return_claims for item in self.temporal_evidence):
+            raise ValueError("active one-way requests cannot expose return or duration evidence")
+        if any(item.field == "return_or_duration" for item in self.unknowns):
+            raise ValueError("active one-way requests cannot expose a return or duration blocker")
+        return self
 
 
 class ClarificationAction(str, Enum):
     ASK = "ask"
     NONE = "none"
+    UNSUPPORTED = "unsupported"
 
 
 class ClarificationDecision(ContractModel):
@@ -915,8 +1003,11 @@ class ClarificationDecision(ContractModel):
     @model_validator(mode="after")
     def validate_action(self) -> ClarificationDecision:
         has_question = self.field is not None and self.question is not None
-        if self.action is ClarificationAction.ASK and not has_question:
-            raise ValueError("ask decisions require a field and question")
+        if (
+            self.action in {ClarificationAction.ASK, ClarificationAction.UNSUPPORTED}
+            and not has_question
+        ):
+            raise ValueError("ask and unsupported decisions require a field and question")
         if self.action is ClarificationAction.NONE and any(
             value is not None for value in (self.field, self.question)
         ):
@@ -924,6 +1015,37 @@ class ClarificationDecision(ContractModel):
         return self
 
 
+class RequestUnderstandingOutcome(str, Enum):
+    COMPLETED = "completed"
+    PENDING_RETRYABLE = "pending_retryable"
+
+
 class RequestUnderstandingResult(ContractModel):
-    parsed_request: ParsedRequest
-    clarification: ClarificationDecision
+    parsed_request: ParsedRequest | None = None
+    clarification: ClarificationDecision | None = None
+    outcome: RequestUnderstandingOutcome = RequestUnderstandingOutcome.COMPLETED
+    pending_detail: str | None = None
+
+    @model_validator(mode="after")
+    def validate_outcome(self) -> RequestUnderstandingResult:
+        if (
+            self.outcome is RequestUnderstandingOutcome.PENDING_RETRYABLE
+            and not self.pending_detail
+        ):
+            raise ValueError("pending_retryable request understanding requires pending_detail")
+        if (
+            self.outcome is RequestUnderstandingOutcome.COMPLETED
+            and self.pending_detail is not None
+        ):
+            raise ValueError("completed request understanding cannot carry pending_detail")
+        if self.outcome is RequestUnderstandingOutcome.COMPLETED and (
+            self.parsed_request is None or self.clarification is None
+        ):
+            raise ValueError(
+                "completed request understanding requires parsed_request and clarification"
+            )
+        if self.outcome is RequestUnderstandingOutcome.PENDING_RETRYABLE and (
+            self.parsed_request is not None or self.clarification is not None
+        ):
+            raise ValueError("pending_retryable request understanding cannot expose session state")
+        return self

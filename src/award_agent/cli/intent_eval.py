@@ -1,4 +1,8 @@
-"""Run and score the ready live-model intent evaluation corpus."""
+"""Run the active LLM-owned initial-intent behavioral evaluation.
+
+The live route has exactly one semantic receiver. This evaluator scores observable
+action/property envelopes, not a receiver proposal or selector choice.
+"""
 
 from __future__ import annotations
 
@@ -6,7 +10,9 @@ import argparse
 import json
 import time
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from datetime import UTC, date, datetime
+from hashlib import sha256
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -14,643 +20,412 @@ from uuid import uuid4
 import yaml
 from dotenv import load_dotenv
 
-from award_agent.domain import RawRequest, RequestContext, RequestUnderstandingResult
-from award_agent.intent.evidence import (
-    TemporalEvidenceValidationError,
-    TemporalResolutionValidationError,
-)
-from award_agent.intent.evidence_eval import (
-    compile_evidence_expectations,
-    evaluate_evidence_support,
+from award_agent.domain import (
+    RawRequest,
+    RequestContext,
+    RequestUnderstandingOutcome,
+    RequestUnderstandingResult,
 )
 from award_agent.intent.holidays import NagerHolidayProvider
-from award_agent.intent.openai_extractor import (
-    NonTemporalExtractionError,
-    OpenAIExtractorConfig,
-    OpenAIIntentExtractor,
-    TemporalSelectionError,
+from award_agent.intent.openai_interpreter import (
+    OpenAISemanticIntentConfig,
+    OpenAISemanticIntentInterpreter,
+    semantic_intent_adapter_contract_metadata,
 )
-from award_agent.intent.temporal_compiler import TemporalCandidateValidationError
-from award_agent.intent.temporal_selector import TemporalSelectorValidationError
 from award_agent.intent.workflow import understand_request
 from award_agent.observability.llm_trace import write_eval_llm_trace
 
 DEFAULT_LLM_TRACE_DIR = Path("evals/intent/traces")
+DEFAULT_ONE_WAY_AWARD_CASES = Path("evals/intent/one_way_award_behavior_cases_v1.yaml")
+_CONTRACT_VERSION = "intent_behavior_v1"
+_REQUIRED_COVERAGE_FAMILIES = frozenset(
+    {
+        "ready_exact_airports",
+        "ready_whole_month",
+        "ready_early_month",
+        "ready_holiday_window",
+        "ready_relative_next_month",
+        "ready_relative_weekend",
+        "typo_recognizable_date",
+        "missing_origin",
+        "missing_destination",
+        "missing_departure",
+        "missing_travelers",
+        "unbounded_departure",
+        "ambiguous_departure",
+        "explicit_return_unsupported",
+        "duration_return_unsupported",
+        "relative_return_unsupported",
+        "cash_only_unsupported",
+        "mixed_award_cash_eligible",
+        "default_award_home_airport_not_return",
+    }
+)
+_ACTIONS = frozenset({"ready", "clarification", "unsupported", "pending_retryable"})
+
+
+@dataclass(frozen=True)
+class _PreflightedIntentCorpus:
+    contract_version: str
+    fixture_sha256: str
+    scenarios: list[dict[str, Any]]
+
+
+def _semantic_contract_metadata() -> dict[str, str]:
+    """Bind artifacts to the strict text_format used by the OpenAI adapter."""
+
+    return semantic_intent_adapter_contract_metadata()
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the selector-only ready intent evaluation.")
-    parser.add_argument("--model", required=True, help="OpenAI model ID for non-temporal Pass 1")
-    parser.add_argument(
-        "--selector-model",
-        required=True,
-        help="OpenAI model ID for the independent temporal candidate selector",
+    parser = argparse.ArgumentParser(
+        description="Run one-receiver intent action/property evaluation."
     )
-    parser.add_argument(
-        "--cases",
-        type=Path,
-        default=Path("evals/intent/cases.yaml"),
-        help="YAML scenario corpus",
-    )
-    parser.add_argument("--output", required=True, type=Path, help="Baseline JSON output path")
-    parser.add_argument("--trials", type=int, default=1, help="Runs per ready scenario")
-    parser.add_argument(
-        "--trace-dir",
-        type=Path,
-        default=DEFAULT_LLM_TRACE_DIR,
-        help=(
-            "Directory for per-case LLM call sidecars; non-passing cases are captured by default"
-        ),
-    )
-    parser.add_argument(
-        "--no-trace",
-        action="store_true",
-        help="Disable local LLM call sidecars for this eval run",
-    )
-    parser.add_argument(
-        "--trace-all-calls",
-        action="store_true",
-        help="With tracing enabled, capture calls for passing cases too",
-    )
+    parser.add_argument("--model", required=True, help="OpenAI model ID for the semantic receiver")
+    parser.add_argument("--cases", type=Path, default=DEFAULT_ONE_WAY_AWARD_CASES)
+    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--trials", type=int, default=1)
+    parser.add_argument("--trace-dir", type=Path, default=DEFAULT_LLM_TRACE_DIR)
+    parser.add_argument("--no-trace", action="store_true")
+    parser.add_argument("--trace-all-calls", action="store_true")
     return parser
 
 
-def _record_check(
-    checks: list[dict[str, Any]],
-    name: str,
-    expected: Any,
-    actual: Any,
-    passed: bool,
-    *,
-    blocking: bool = True,
-) -> None:
-    check = {"name": name, "passed": passed, "expected": expected, "actual": actual}
-    if not blocking:
-        check["blocking"] = False
-    checks.append(check)
-
-
-def _location_matches(actual: Mapping[str, Any], expected: Mapping[str, Any]) -> bool:
-    accepted_values = expected.get("accepted_values")
-    exact_fields = {key: value for key, value in expected.items() if key != "accepted_values"}
-    if not all(actual.get(key) == value for key, value in exact_fields.items()):
-        return False
-    if accepted_values is None:
-        return True
-    if (
-        not isinstance(accepted_values, list)
-        or not accepted_values
-        or not all(isinstance(value, str) and value for value in accepted_values)
-    ):
-        raise ValueError("location accepted_values must be a non-empty list of strings")
-    return actual.get("value") in accepted_values
-
-
-def _partial_mapping_matches(actual: Any, expected: Any) -> bool:
-    """Match semantic invariants without requiring evidence-span segmentation equality."""
-
-    if isinstance(expected, Mapping):
-        return isinstance(actual, Mapping) and all(
-            key in actual and _partial_mapping_matches(actual[key], value)
-            for key, value in expected.items()
+def _preflight_one_way_award_cases(path: Path) -> _PreflightedIntentCorpus:
+    """Validate the disclosed behavioral corpus before a paid model call."""
+    data = path.read_bytes()
+    payload = yaml.safe_load(data)
+    if not isinstance(payload, dict) or set(payload) != {
+        "contract_version",
+        "purpose",
+        "scenarios",
+    }:
+        raise ValueError(
+            "intent behavioral corpus must contain contract_version, purpose, and scenarios"
         )
-    if isinstance(expected, list):
-        return isinstance(actual, list) and all(
-            any(_partial_mapping_matches(candidate, wanted) for candidate in actual)
-            for wanted in expected
-        )
-    return bool(actual == expected)
-
-
-def _score_result(
-    expected: Mapping[str, Any], result: RequestUnderstandingResult
-) -> list[dict[str, Any]]:
-    parsed = result.parsed_request
-    actual = result.model_dump(mode="json")
-    parsed_actual = actual["parsed_request"]
-    checks: list[dict[str, Any]] = []
-
-    if "travelers" in expected:
-        _record_check(
-            checks,
-            "travelers",
-            expected["travelers"],
-            parsed.travelers,
-            parsed.travelers == expected["travelers"],
-        )
-
-    for singular, plural in (("origin", "origins"), ("destination", "destinations")):
-        if singular in expected:
-            expected_location = expected[singular]
-            actual_locations = parsed_actual[plural]
-            _record_check(
-                checks,
-                singular,
-                expected_location,
-                actual_locations,
-                any(_location_matches(item, expected_location) for item in actual_locations),
-            )
-
-    if "destinations" in expected:
-        expected_locations = expected["destinations"]
-        actual_locations = parsed_actual["destinations"]
-        passed = len(actual_locations) == len(expected_locations) and all(
-            any(_location_matches(item, wanted) for item in actual_locations)
-            for wanted in expected_locations
-        )
-        _record_check(checks, "destinations", expected_locations, actual_locations, passed)
-
-    if "cabin" in expected:
-        _record_check(
-            checks,
-            "cabin",
-            expected["cabin"],
-            parsed_actual["cabins"],
-            expected["cabin"] in parsed_actual["cabins"],
-        )
-
-    if "search_modes" in expected:
-        wanted_modes = sorted(expected["search_modes"])
-        actual_modes = sorted(parsed_actual["search_modes"])
-        _record_check(
-            checks, "search_modes", wanted_modes, actual_modes, wanted_modes == actual_modes
-        )
-
-    if "repositioning_allowed" in expected:
-        wanted = expected["repositioning_allowed"]
-        _record_check(
-            checks,
-            "repositioning_allowed",
-            wanted,
-            parsed.repositioning_allowed,
-            wanted == parsed.repositioning_allowed,
-        )
-
-    for expected_name, actual_name in (
-        ("departure_window", "departure_window"),
-        ("return_window", "return_window"),
-    ):
-        if expected_name not in expected:
-            continue
-        wanted = expected[expected_name]
-        window = parsed_actual[actual_name]
-        observed = None if window is None else {"start": window["start"], "end": window["end"]}
-        _record_check(checks, expected_name, wanted, observed, wanted == observed)
-
-    if "interpreted_duration" in expected:
-        resolution = parsed_actual["date_resolution"]
-        duration = None if resolution is None else resolution["interpreted_duration"]
-        observed = (
-            None
-            if duration is None
-            else {
-                "minimum_days": duration["minimum_days"],
-                "maximum_days": duration["maximum_days"],
-            }
-        )
-        wanted = expected["interpreted_duration"]
-        _record_check(checks, "interpreted_duration", wanted, observed, wanted == observed)
-
-    if "temporal_relations" in expected:
-        relations = parsed_actual.get("temporal_relations") or {"constraints": []}
-        actual_constraints = relations["constraints"]
-        wanted_constraints = expected["temporal_relations"]
-        _record_check(
-            checks,
-            "temporal_relations",
-            wanted_constraints,
-            actual_constraints,
-            _partial_mapping_matches(actual_constraints, wanted_constraints),
-        )
-
-    if "literal_duration" in expected:
-        relations = parsed_actual.get("temporal_relations") or {"constraints": []}
-        durations = [item for item in relations["constraints"] if item.get("kind") == "duration"]
-        wanted_duration = expected["literal_duration"]
-        _record_check(
-            checks,
-            "literal_duration",
-            wanted_duration,
-            durations,
-            any(_partial_mapping_matches(item, wanted_duration) for item in durations),
-        )
-
-    if "unknowns" in expected:
-        wanted_unknowns = set(expected["unknowns"])
-        actual_unknowns = {item["field"] for item in parsed_actual["unknowns"]}
-        _record_check(
-            checks,
-            "unknowns",
-            sorted(wanted_unknowns),
-            sorted(actual_unknowns),
-            wanted_unknowns <= actual_unknowns,
-        )
-
-    if "conflicts" in expected:
-        wanted_conflicts = sorted(expected["conflicts"])
-        actual_conflicts = sorted(item["code"] for item in parsed_actual["conflicts"])
-        _record_check(
-            checks,
-            "conflicts",
-            wanted_conflicts,
-            actual_conflicts,
-            wanted_conflicts == actual_conflicts,
-        )
-
-    if "clarification" in expected:
-        wanted_clarification = expected["clarification"]
-        actual_clarification = actual["clarification"]
-        passed = all(
-            actual_clarification.get(key) == value for key, value in wanted_clarification.items()
-        )
-        _record_check(
-            checks,
-            "clarification",
-            wanted_clarification,
-            actual_clarification,
-            passed,
-        )
-
-    extraction = parsed_actual["temporal_extraction"] or {}
-    if "date_anchor" in expected:
-        wanted_anchor = dict(expected["date_anchor"])
-        explicit_year = wanted_anchor.pop("explicit_year", "not_checked")
-        anchors = extraction.get("date_anchors", [])
-        matching = [item for item in anchors if _location_matches(item, wanted_anchor)]
-        passed = bool(matching)
-        if explicit_year != "not_checked":
-            passed = passed and any(item.get("year") == explicit_year for item in matching)
-        _record_check(checks, "date_anchor", expected["date_anchor"], anchors, passed)
-
-    if "forbidden_date_anchor_kinds" in expected:
-        forbidden = set(expected["forbidden_date_anchor_kinds"])
-        anchors = extraction.get("date_anchors", [])
-        forbidden_observed = sorted({item["kind"] for item in anchors if item["kind"] in forbidden})
-        _record_check(
-            checks,
-            "forbidden_date_anchor_kinds",
-            [],
-            forbidden_observed,
-            not forbidden_observed,
-        )
-
-    if "temporal_phrases" in expected:
-        raise ValueError("exact temporal_phrases scoring was removed; use evidence_expectations")
-
-    if "evidence_expectations" in expected:
-        compiled = compile_evidence_expectations(
-            parsed.raw_text,
-            expected["evidence_expectations"],
-        )
-        evidence_result = evaluate_evidence_support(
-            parsed.raw_text,
-            parsed.temporal_evidence,
-            compiled,
-        )
-        evidence_actual = evidence_result.model_dump(mode="json")
-        _record_check(
-            checks,
-            "grounding_valid",
-            True,
-            evidence_result.grounding_valid,
-            evidence_result.grounding_valid,
-        )
-        _record_check(
-            checks,
-            "evidence_support_valid",
-            True,
-            evidence_actual,
-            evidence_result.evidence_support_valid,
-        )
-        _record_check(
-            checks,
-            "preferred_boundary_exact_match",
-            True,
-            evidence_result.preferred_boundary_exact_match,
-            evidence_result.preferred_boundary_exact_match,
-            blocking=False,
-        )
-
-    if "resolved_anchor" in expected:
-        wanted_anchor = expected["resolved_anchor"]
-        resolved = parsed_actual["resolved_date_anchors"]
-        passed = any(
-            item["anchor"].get("holiday") == wanted_anchor.get("holiday")
-            and item["start"] == wanted_anchor.get("date")
-            for item in resolved
-        )
-        _record_check(checks, "resolved_anchor", wanted_anchor, resolved, passed)
-
-    return checks
+    if payload["contract_version"] != _CONTRACT_VERSION:
+        raise ValueError(f"intent eval corpus must use contract version {_CONTRACT_VERSION!r}")
+    if not isinstance(payload["purpose"], str) or not payload["purpose"].strip():
+        raise ValueError("intent eval corpus purpose must be non-empty")
+    scenarios = payload["scenarios"]
+    if not isinstance(scenarios, list) or len(scenarios) != len(_REQUIRED_COVERAGE_FAMILIES):
+        raise ValueError("intent eval corpus does not contain the complete behavioral denominator")
+    seen_ids: set[str] = set()
+    seen_families: set[str] = set()
+    for item in scenarios:
+        if not isinstance(item, dict) or set(item) != {
+            "id",
+            "coverage_family",
+            "description",
+            "input",
+            "context",
+            "oracle",
+            "status",
+        }:
+            raise ValueError("each intent behavioral scenario has an invalid shape")
+        identifier, family = item["id"], item["coverage_family"]
+        if not isinstance(identifier, str) or not identifier or identifier in seen_ids:
+            raise ValueError("intent behavioral scenario IDs must be unique and non-empty")
+        if not isinstance(family, str) or not family or family in seen_families:
+            raise ValueError("intent behavioral coverage families must be unique and non-empty")
+        seen_ids.add(identifier)
+        seen_families.add(family)
+        if (
+            item["status"] != "ready"
+            or not isinstance(item["input"], str)
+            or not item["input"].strip()
+        ):
+            raise ValueError(f"scenario {identifier!r} must be ready with input")
+        context = item["context"]
+        if not isinstance(context, dict) or set(context) != {"reference_date", "timezone"}:
+            raise ValueError(f"scenario {identifier!r} has invalid context")
+        try:
+            date.fromisoformat(context["reference_date"])
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"scenario {identifier!r} has invalid reference_date") from exc
+        if not isinstance(context["timezone"], str) or not context["timezone"]:
+            raise ValueError(f"scenario {identifier!r} has invalid timezone")
+        oracle = item["oracle"]
+        required = {
+            "acceptable_actions",
+            "must_ground",
+            "must_remain_blocked",
+            "properties",
+            "forbidden_outcomes",
+        }
+        if (
+            not isinstance(oracle, dict)
+            or not required <= set(oracle)
+            or set(oracle) - (required | {"clarification_field"})
+        ):
+            raise ValueError(f"scenario {identifier!r} has invalid action/property oracle")
+        actions = oracle["acceptable_actions"]
+        if not isinstance(actions, list) or not actions or not set(actions) <= _ACTIONS:
+            raise ValueError(f"scenario {identifier!r} has invalid acceptable_actions")
+        for key in ("must_ground", "must_remain_blocked", "forbidden_outcomes"):
+            if not isinstance(oracle[key], list) or not all(
+                isinstance(value, str) for value in oracle[key]
+            ):
+                raise ValueError(f"scenario {identifier!r} oracle {key!r} must be a string list")
+        if not isinstance(oracle["properties"], dict):
+            raise TypeError(f"scenario {identifier!r} properties must be a mapping")
+    if seen_families != _REQUIRED_COVERAGE_FAMILIES:
+        raise ValueError("intent eval corpus coverage families do not match behavioral denominator")
+    return _PreflightedIntentCorpus(_CONTRACT_VERSION, sha256(data).hexdigest(), scenarios)
 
 
 def _load_ready_scenarios(path: Path) -> list[dict[str, Any]]:
-    payload = yaml.safe_load(path.read_text())
-    scenarios = payload.get("scenarios") if isinstance(payload, dict) else None
-    if not isinstance(scenarios, list):
-        raise TypeError("eval corpus must contain a scenarios list")
-    ready = [scenario for scenario in scenarios if scenario.get("status") == "ready"]
-    for scenario in ready:
-        expected = scenario.get("expected", {})
-        if "temporal_phrases" in expected:
-            raise ValueError(
-                f"scenario {scenario.get('id')!r} uses removed temporal_phrases scoring"
-            )
-        if "evidence_expectations" in expected:
-            compile_evidence_expectations(
-                str(scenario["input"]).strip(),
-                expected["evidence_expectations"],
-            )
-        if "literal_duration" in expected:
-            literal = expected["literal_duration"]
-            required = {
-                "stated_minimum_quantity",
-                "stated_maximum_quantity",
-                "unit",
-                "modifier",
-            }
-            if not isinstance(literal, Mapping) or set(literal) != required:
-                raise ValueError(
-                    f"scenario {scenario.get('id')!r} has an invalid literal_duration contract"
-                )
-            if literal["stated_maximum_quantity"] < literal["stated_minimum_quantity"]:
-                raise ValueError(
-                    f"scenario {scenario.get('id')!r} has reversed literal duration quantities"
-                )
-        if "forbidden_date_anchor_kinds" in expected:
-            forbidden = expected["forbidden_date_anchor_kinds"]
-            allowed = {"exact_date", "month", "holiday"}
-            if (
-                not isinstance(forbidden, list)
-                or not forbidden
-                or any(kind not in allowed for kind in forbidden)
-            ):
-                raise ValueError(
-                    f"scenario {scenario.get('id')!r} has invalid forbidden anchor kinds"
-                )
-    return ready
+    return _preflight_one_way_award_cases(path).scenarios
+
+
+def _record(
+    checks: list[dict[str, Any]], name: str, passed: bool, *, blocking: bool = True
+) -> None:
+    item: dict[str, Any] = {"name": name, "passed": passed}
+    if not blocking:
+        item["blocking"] = False
+    checks.append(item)
+
+
+def _action(result: RequestUnderstandingResult) -> str:
+    # Forward-compatible with ADR 0017's future typed pending result without
+    # treating an ordinary clarification as pending today.
+    outcome = getattr(result, "outcome", None)
+    if getattr(outcome, "value", outcome) == "pending_retryable":
+        return "pending_retryable"
+    if result.clarification is None:
+        return "invalid_completed_result"
+    return {"none": "ready", "ask": "clarification", "unsupported": "unsupported"}[
+        result.clarification.action.value
+    ]
+
+
+def _location_matches(items: Sequence[Any], expected: Mapping[str, Any]) -> bool:
+    return any(
+        item.kind.value == expected.get("kind") and item.value == expected.get("value")
+        for item in items
+    )
+
+
+def _grounded(result: RequestUnderstandingResult, field: str) -> bool:
+    parsed = result.parsed_request
+    if parsed is None:
+        return False
+    if field == "departure":
+        return bool(parsed.temporal_evidence) and all(
+            evidence.span.text == parsed.raw_text[evidence.span.start : evidence.span.end]
+            for evidence in parsed.temporal_evidence
+        )
+    if field == "origin":
+        return bool(parsed.origins) and all(
+            item.raw_text and item.raw_text in parsed.raw_text for item in parsed.origins
+        )
+    if field == "destination":
+        return bool(parsed.destinations) and all(
+            item.raw_text and item.raw_text in parsed.raw_text for item in parsed.destinations
+        )
+    # Canonical non-temporal fact evidence is not public in ParsedRequest yet.
+    return field not in {"travelers", "cabin", "mode"}
+
+
+def _non_temporal_grounding_valid(result: RequestUnderstandingResult) -> bool:
+    """Check all observable non-temporal location claims against source text.
+
+    The current public result does not expose canonical evidence for traveler,
+    cabin, or mode facts. This still ensures no emitted location claim bypasses
+    exact source grounding; the offline semantic suite owns the hidden-fact
+    provenance contract.
+    """
+
+    parsed = result.parsed_request
+    if parsed is None:
+        return False
+    return all(
+        item.raw_text and item.raw_text in parsed.raw_text
+        for item in [*parsed.origins, *parsed.destinations]
+    )
+
+
+def _required_blockers(result: RequestUnderstandingResult) -> set[str]:
+    if result.parsed_request is None:
+        return set()
+    return {
+        item.field
+        for item in result.parsed_request.unknowns
+        if item.field in {"origin", "destination", "departure", "travelers"}
+    }
+
+
+def _forbidden(result: RequestUnderstandingResult, outcome: str) -> bool:
+    parsed = result.parsed_request
+    if outcome == "success_shaped_model_failure":
+        return _action(result) == "pending_retryable" and (
+            parsed is not None or result.clarification is not None
+        )
+    if parsed is None:
+        return False
+    if outcome == "return_or_duration_in_active_state":
+        extraction = parsed.temporal_extraction
+        return bool(
+            extraction
+            and any(item.applies_to.value != "departure" for item in extraction.temporal_phrases)
+        )
+    if outcome == "city_expanded_to_airports":
+        return any(
+            item.kind.value == "city" and len(item.value) == 3 and item.value.isupper()
+            for item in [*parsed.origins, *parsed.destinations]
+        )
+    if outcome == "cash_coverage_claim":
+        clarification = result.clarification
+        if clarification is None:
+            return False
+        return bool(
+            clarification.question
+            and "cash" in clarification.question.lower()
+            and _action(result) == "ready"
+        )
+    if outcome == "unbounded_departure_ready":
+        return _action(result) == "ready" and parsed.departure_window is None
+    raise ValueError(f"unknown forbidden outcome {outcome!r}")
+
+
+def _score_result(
+    oracle: Mapping[str, Any], result: RequestUnderstandingResult
+) -> list[dict[str, Any]]:
+    parsed, clarification, properties = (
+        result.parsed_request,
+        result.clarification,
+        oracle["properties"],
+    )
+    checks: list[dict[str, Any]] = []
+    _record(checks, "action", _action(result) in oracle["acceptable_actions"])
+    if _action(result) == "pending_retryable":
+        _record(
+            checks,
+            "pending_is_state_free",
+            parsed is None and clarification is None,
+        )
+        return checks
+    if parsed is None or clarification is None:
+        _record(checks, "completed_result_has_state", False)
+        return checks
+    _record(checks, "non_temporal_grounding", _non_temporal_grounding_valid(result))
+    for field in oracle["must_ground"]:
+        _record(checks, f"grounding:{field}", _grounded(result, field))
+    _record(
+        checks,
+        "required_blockers",
+        set(oracle["must_remain_blocked"]) <= _required_blockers(result),
+    )
+    _record(
+        checks,
+        "no_unexpected_required_blockers",
+        _required_blockers(result) <= set(oracle["must_remain_blocked"]),
+    )
+    if "clarification_field" in oracle:
+        _record(
+            checks,
+            "clarification_field",
+            clarification.field == oracle["clarification_field"],
+        )
+    if "travelers" in properties:
+        _record(checks, "travelers", parsed.travelers in properties["travelers"])
+    if "origin" in properties:
+        _record(checks, "origin", _location_matches(parsed.origins, properties["origin"]))
+    if "destination" in properties:
+        _record(
+            checks, "destination", _location_matches(parsed.destinations, properties["destination"])
+        )
+    if "modes" in properties:
+        _record(
+            checks,
+            "modes",
+            sorted(mode.value for mode in parsed.search_modes) == sorted(properties["modes"]),
+        )
+    if "departure_window" in properties:
+        window, expected = parsed.departure_window, properties["departure_window"]
+        matches_window = (
+            window is not None
+            and window.start.isoformat() == expected["start"]
+            and window.end.isoformat() == expected["end"]
+        )
+        _record(
+            checks,
+            "departure_window",
+            matches_window,
+        )
+    if "unsupported_codes" in properties:
+        _record(
+            checks,
+            "unsupported_codes",
+            sorted(item.code.value for item in parsed.unsupported_request_parts)
+            == sorted(properties["unsupported_codes"]),
+        )
+    for outcome in oracle["forbidden_outcomes"]:
+        _record(checks, f"forbidden:{outcome}", not _forbidden(result, outcome))
+    return checks
 
 
 def _hard_checks_pass(checks: Sequence[Mapping[str, Any]]) -> bool:
-    return all(check["passed"] or check.get("blocking") is False for check in checks)
+    return all(bool(item["passed"]) or item.get("blocking") is False for item in checks)
 
 
-def _evaluation_summary(checks: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    by_name = {str(check["name"]): check for check in checks}
-    semantic_names = {
-        "travelers",
-        "origin",
-        "destination",
-        "destinations",
-        "cabin",
-        "search_modes",
-        "repositioning_allowed",
-        "unknowns",
-        "date_anchor",
-        "forbidden_date_anchor_kinds",
-        "temporal_relations",
-        "literal_duration",
+def _public_record(record: Mapping[str, Any]) -> dict[str, Any]:
+    result = {
+        "id": record["id"],
+        "trial": record["trial"],
+        "status": record["status"],
+        "checks": [{"name": c["name"], "passed": c["passed"]} for c in record.get("checks", [])],
+        "failure_stage": record.get("failure_stage"),
+        "failure_code": record.get("failure_code"),
+        "action": record.get("action"),
+        "latency_seconds": record["latency_seconds"],
+        "usage": record.get("usage"),
+        "stage_telemetry": record["stage_telemetry"],
     }
-    deterministic_names = {
-        "departure_window",
-        "return_window",
-        "interpreted_duration",
-        "conflicts",
-        "resolved_anchor",
-    }
-
-    def category_valid(names: set[str]) -> bool:
-        selected = [check for check in checks if check["name"] in names]
-        return all(bool(check["passed"]) for check in selected)
-
-    evidence_diagnostics = by_name.get("evidence_support_valid", {}).get("actual", {})
-    return {
-        "schema_valid": True,
-        "grounding_valid": bool(by_name.get("grounding_valid", {}).get("passed", True)),
-        "semantic_fields_valid": category_valid(semantic_names),
-        "evidence_support_valid": bool(
-            by_name.get("evidence_support_valid", {}).get("passed", True)
-        ),
-        "deterministic_outputs_valid": category_valid(deterministic_names),
-        "preferred_boundary_exact_match": bool(
-            by_name.get("preferred_boundary_exact_match", {}).get("passed", True)
-        ),
-        "missing_expected_claims": evidence_diagnostics.get("missing_expected_claims", []),
-        "unsupported_claims": evidence_diagnostics.get("unsupported_claims", []),
-        "overbroad_spans": evidence_diagnostics.get("overbroad_spans", []),
-        "insufficient_spans": evidence_diagnostics.get("insufficient_spans", []),
-    }
+    if "llm_trace" in record:
+        result["private_trace"] = record["llm_trace"]
+    return result
 
 
-def _failure_flags(record: Mapping[str, Any]) -> set[str]:
-    """Classify independently useful failure dimensions without collapsing root causes."""
-
-    flags: set[str] = set()
-    stage = record.get("failure_stage")
-    if isinstance(stage, str):
-        if stage.startswith("pass_one_") or stage == "compiler_non_temporal_pass_one":
-            flags.add("pass_one_failures")
-        if stage == "temporal_candidate_selector":
-            flags.add("selector_failures")
-        if stage in {"temporal_graph_validation", "temporal_dependency_validation"}:
-            flags.add("semantic_validation_failures")
-        if stage == "deterministic_evaluation":
-            flags.add("deterministic_output_failures")
-        if stage == "pass_one_grounding":
-            flags.add("grounding_failures")
-
-    evaluation = record.get("evaluation")
-    if stage is None and isinstance(evaluation, Mapping):
-        if not bool(evaluation.get("grounding_valid", True)):
-            flags.add("grounding_failures")
-        if not bool(evaluation.get("semantic_fields_valid", True)):
-            flags.add("semantic_validation_failures")
-        if not bool(evaluation.get("deterministic_outputs_valid", True)):
-            flags.add("deterministic_output_failures")
-
-    checks = record.get("checks")
-    if isinstance(checks, Sequence) and any(
-        isinstance(check, Mapping)
-        and check.get("name") == "clarification"
-        and not bool(check.get("passed"))
-        for check in checks
-    ):
-        flags.add("clarification_failures")
-    return flags
-
-
-def _aggregate_results(results: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    """Build completion and owning-stage metrics for a selector-only run matrix."""
-
-    completed = [item for item in results if "output" in item]
-    failure_flags = [_failure_flags(item) for item in results]
-    run_count = len(results)
-    return {
-        "final_completion": {
-            "runs": len(completed),
-            "rate": len(completed) / run_count if run_count else 0.0,
-        },
-        "pass_one_failures": sum("pass_one_failures" in flags for flags in failure_flags),
-        "selector_failures": sum("selector_failures" in flags for flags in failure_flags),
-        "grounding_failures": sum("grounding_failures" in flags for flags in failure_flags),
-        "semantic_validation_failures": sum(
-            "semantic_validation_failures" in flags for flags in failure_flags
-        ),
-        "deterministic_output_failures": sum(
-            "deterministic_output_failures" in flags for flags in failure_flags
-        ),
-        "clarification_failures": sum("clarification_failures" in flags for flags in failure_flags),
-    }
-
-
-def _usage_summary(results: Sequence[Mapping[str, Any]]) -> dict[str, int] | str:
-    usage_records = [item["usage"] for item in results if item.get("usage") is not None]
-    if not usage_records:
+def _usage_summary(records: Sequence[Mapping[str, Any]]) -> dict[str, int] | str:
+    usage = [item["usage"] for item in records if item.get("usage")]
+    if not usage:
         return "unavailable: SDK responses did not provide usage"
     return {
-        "captured_runs": len(usage_records),
-        "missing_runs": len(results) - len(usage_records),
-        "input_tokens": sum(item.get("input_tokens", 0) for item in usage_records),
-        "output_tokens": sum(item.get("output_tokens", 0) for item in usage_records),
-        "total_tokens": sum(
-            item.get(
-                "total_tokens",
-                item.get("input_tokens", 0) + item.get("output_tokens", 0),
-            )
-            for item in usage_records
+        key: sum(int(item.get(key, 0)) for item in usage)
+        for key in (
+            "calls",
+            "captured_calls",
+            "missing_calls",
+            "input_tokens",
+            "output_tokens",
+            "total_tokens",
+        )
+    }
+
+
+def _fault_injection_pending_metrics() -> dict[str, int | bool]:
+    """Exercise the evaluator's state-free pending contract without a model call."""
+
+    pending = RequestUnderstandingResult(
+        outcome=RequestUnderstandingOutcome.PENDING_RETRYABLE,
+        pending_detail="injected evaluator fault",
+    )
+    return {
+        "numerator": int(
+            _action(pending) == "pending_retryable"
+            and pending.parsed_request is None
+            and pending.clarification is None
         ),
-        "calls": sum(item.get("calls", 1) for item in usage_records),
-        "captured_calls": sum(item.get("captured_calls", 1) for item in usage_records),
-        "missing_calls": sum(item.get("missing_calls", 0) for item in usage_records),
+        "denominator": 1,
     }
-
-
-def _combine_usage(*usage_records: Mapping[str, int] | None) -> dict[str, int] | None:
-    """Combine usage from split model passes for one evaluated workflow run."""
-
-    captured = [item for item in usage_records if item is not None]
-    if not captured:
-        return None
-    return {
-        "calls": sum(item.get("calls", 0) for item in captured),
-        "captured_calls": sum(item.get("captured_calls", 0) for item in captured),
-        "missing_calls": sum(item.get("missing_calls", 0) for item in captured),
-        "input_tokens": sum(item.get("input_tokens", 0) for item in captured),
-        "output_tokens": sum(item.get("output_tokens", 0) for item in captured),
-        "total_tokens": sum(item.get("total_tokens", 0) for item in captured),
-    }
-
-
-def _combine_call_traces(
-    *trace_records: Sequence[Mapping[str, Any]],
-) -> list[dict[str, Any]]:
-    """Preserve pass order while assigning one run-level call sequence."""
-
-    combined: list[dict[str, Any]] = []
-    for trace_record in trace_records:
-        combined.extend(dict(trace) for trace in trace_record)
-    for sequence, trace in enumerate(combined, start=1):
-        trace["sequence"] = sequence
-    return combined
-
-
-_STAGE_NAMES = ("pass_one", "selector")
-
-
-def _stage_configuration(
-    *, model: str, selector_model: str
-) -> dict[str, dict[str, bool | str | None]]:
-    """Describe the only two model boundaries constructed by selector-only evaluation."""
-
-    configured_models = {"pass_one": model, "selector": selector_model}
-    return {
-        stage: {
-            "enabled": configured_models[stage] is not None,
-            "configured": configured_models[stage] is not None,
-            "model": configured_models[stage],
-            "selector_policy": "supported_or_unresolved" if stage == "selector" else None,
-        }
-        for stage in _STAGE_NAMES
-    }
-
-
-def _stage_telemetry(
-    configuration: Mapping[str, Mapping[str, bool | str | None]],
-    *,
-    calls_by_stage: Mapping[str, Sequence[Mapping[str, Any]]],
-    usage_by_stage: Mapping[str, Mapping[str, int] | None],
-) -> dict[str, dict[str, Any]]:
-    """Return public stage metrics without retaining any model-facing payload."""
-
-    telemetry: dict[str, dict[str, Any]] = {}
-    for stage in _STAGE_NAMES:
-        calls = calls_by_stage.get(stage, ())
-        telemetry[stage] = {
-            **configuration[stage],
-            "attempts": len(calls),
-            "latency_seconds": round(
-                sum(float(call.get("latency_seconds", 0.0) or 0.0) for call in calls),
-                3,
-            ),
-            "usage": usage_by_stage.get(stage),
-        }
-    return telemetry
-
-
-def _aggregate_stage_telemetry(
-    results: Sequence[Mapping[str, Any]],
-    configuration: Mapping[str, Mapping[str, bool | str | None]],
-) -> dict[str, dict[str, Any]]:
-    """Aggregate per-run stage telemetry while retaining the configured model identity."""
-
-    aggregated: dict[str, dict[str, Any]] = {}
-    for stage in _STAGE_NAMES:
-        stage_records = [
-            item["stage_telemetry"][stage]
-            for item in results
-            if isinstance(item.get("stage_telemetry"), Mapping)
-            and isinstance(item["stage_telemetry"].get(stage), Mapping)
-        ]
-        aggregated[stage] = {
-            **configuration[stage],
-            "attempts": sum(int(item.get("attempts", 0)) for item in stage_records),
-            "latency_seconds": round(
-                sum(float(item.get("latency_seconds", 0.0) or 0.0) for item in stage_records),
-                3,
-            ),
-            "usage": _combine_usage(
-                *(
-                    item.get("usage")
-                    for item in stage_records
-                    if isinstance(item.get("usage"), Mapping)
-                )
-            ),
-        }
-    return aggregated
-
-
-def _partition_stage_calls(calls: Sequence[Mapping[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    """Classify private traces locally; the public artifact retains metrics only."""
-
-    stages: dict[str, list[dict[str, Any]]] = {stage: [] for stage in _STAGE_NAMES}
-    stage_names = {
-        "pass_one": {"compiler_non_temporal_pass_one"},
-        "selector": {"temporal_candidate_selector"},
-    }
-    for call in calls:
-        call_stage = call.get("stage")
-        for stage, known_stages in stage_names.items():
-            if call_stage in known_stages:
-                stages[stage].append(dict(call))
-                break
-    return stages
 
 
 def run_eval(
     model: str,
     cases_path: Path,
     trials: int,
-    selector_model: str,
     trace_dir: Path | None = DEFAULT_LLM_TRACE_DIR,
     trace_all_calls: bool = False,
 ) -> dict[str, Any]:
@@ -658,203 +433,139 @@ def run_eval(
         raise ValueError("trials must be positive")
     if trace_all_calls and trace_dir is None:
         raise ValueError("trace_all_calls requires trace_dir")
-    scenarios = _load_ready_scenarios(cases_path)
+    corpus = _preflight_one_way_award_cases(cases_path)
+    contract_metadata = _semantic_contract_metadata()
     generated_at = datetime.now(UTC).isoformat()
     trace_run_dir = (
         None
         if trace_dir is None
         else trace_dir / f"run-{generated_at.replace(':', '').replace('+', '-')}-{uuid4().hex[:8]}"
     )
-    if trace_run_dir is not None:
+    if trace_run_dir:
         trace_run_dir.mkdir(parents=True, exist_ok=True)
-    trace_count = 0
-    stage_configuration = _stage_configuration(model=model, selector_model=selector_model)
-    # Capture only in memory so --no-trace still reports attempts and latency.  Payloads are
-    # never put in the baseline artifact and no sidecar is written when trace_dir is None.
-    capture_metrics = True
-    pass_one_extractor = OpenAIIntentExtractor(
-        config=OpenAIExtractorConfig(model=model), capture_llm_io=capture_metrics
+    interpreter = OpenAISemanticIntentInterpreter(
+        OpenAISemanticIntentConfig(model=model), capture_llm_io=True
     )
-    selector_extractor = OpenAIIntentExtractor(
-        config=OpenAIExtractorConfig(model=selector_model), capture_llm_io=capture_metrics
-    )
-    holiday_provider = NagerHolidayProvider()
-    results: list[dict[str, Any]] = []
-
+    provider, private, public, trace_count = NagerHolidayProvider(), [], [], 0
     for trial in range(1, trials + 1):
-        for scenario in scenarios:
-            pass_one_extractor.reset_capture()
-            selector_extractor.reset_capture()
+        for scenario in corpus.scenarios:
+            interpreter.reset_capture()
             started = time.perf_counter()
             record: dict[str, Any] = {"id": scenario["id"], "trial": trial}
             try:
                 context = scenario["context"]
-                request = RawRequest(
-                    text=scenario["input"].strip(),
-                    context=RequestContext(
-                        reference_date=date.fromisoformat(context["reference_date"]),
-                        timezone=context["timezone"],
+                result = understand_request(
+                    RawRequest(
+                        text=scenario["input"].strip(),
+                        context=RequestContext(
+                            reference_date=date.fromisoformat(context["reference_date"]),
+                            timezone=context["timezone"],
+                        ),
                     ),
+                    interpreter,
+                    provider,
                 )
-                output = understand_request(
-                    request,
-                    pass_one_extractor,
-                    selector_extractor,
-                    holiday_provider,
-                )
-                checks = _score_result(scenario["expected"], output)
+                checks = _score_result(scenario["oracle"], result)
                 record.update(
                     {
                         "status": "passed" if _hard_checks_pass(checks) else "failed",
                         "checks": checks,
-                        "evaluation": _evaluation_summary(checks),
-                        "unscored_invariants": scenario["expected"].get("invariants", []),
-                        "output": output.model_dump(mode="json"),
-                        "usage": None,
+                        "action": _action(result),
+                        "output": result.model_dump(mode="json"),
                     }
                 )
-            except TemporalEvidenceValidationError as exc:
-                record.update(
-                    {
-                        "status": "failed",
-                        "checks": [
-                            {
-                                "name": "grounding_valid",
-                                "passed": False,
-                                "expected": True,
-                                "actual": {
-                                    "code": exc.code.value,
-                                    "claim_id": exc.claim_id,
-                                    "quote": exc.quote,
-                                    "reason": exc.reason,
-                                    "ambiguous": exc.ambiguous,
-                                },
-                            }
-                        ],
-                        "evaluation": {
-                            "schema_valid": True,
-                            "grounding_valid": False,
-                            "semantic_fields_valid": False,
-                            "evidence_support_valid": False,
-                            "deterministic_outputs_valid": False,
-                            "preferred_boundary_exact_match": False,
-                            "missing_expected_claims": [],
-                            "unsupported_claims": [],
-                            "overbroad_spans": [],
-                            "insufficient_spans": [],
-                        },
-                        "error_type": type(exc).__name__,
-                        "error": str(exc),
-                        "structured_error": exc.as_dict(),
-                        "failure_stage": exc.details.stage,
-                        "failure_code": exc.details.error_code,
-                    }
-                )
-            except TemporalResolutionValidationError as exc:
+            except Exception as exc:  # noqa: BLE001 - one case must not abort the diagnostic run
                 record.update(
                     {
                         "status": "error",
-                        "error_type": type(exc).__name__,
-                        "error": str(exc),
-                        "structured_error": exc.as_dict(),
-                        "failure_stage": exc.details.stage,
-                        "failure_code": exc.details.error_code,
+                        "failure_stage": "workflow",
+                        "failure_code": type(exc).__name__,
                     }
                 )
-            except Exception as exc:  # noqa: BLE001 - one failed case must not abort the baseline
-                failure_stage = None
-                failure_code = None
-                if isinstance(exc, NonTemporalExtractionError):
-                    failure_stage = "pass_one_model_output"
-                    failure_code = "missing_or_invalid_model_output"
-                    if isinstance(exc, NonTemporalExtractionError):
-                        failure_stage = "compiler_non_temporal_pass_one"
-                elif isinstance(exc, TemporalSelectionError):
-                    failure_stage = "temporal_candidate_selector"
-                    failure_code = "selector_model_output"
-                elif selector_extractor is not None and isinstance(
-                    exc, (TemporalSelectorValidationError, TemporalCandidateValidationError)
-                ):
-                    failure_stage = "temporal_candidate_selector"
-                    failure_code = "selector_validation"
-                record.update(
-                    {
-                        "status": "error",
-                        "error_type": type(exc).__name__,
-                        "error": (
-                            "temporal candidate selection failed"
-                            if failure_stage == "temporal_candidate_selector"
-                            else str(exc)
-                        ),
-                    }
-                )
-                if failure_stage is not None:
-                    record["failure_stage"] = failure_stage
-                    record["failure_code"] = failure_code
-            pass_one_usage = pass_one_extractor.take_usage()
-            selector_usage = selector_extractor.take_usage()
-            record["usage"] = _combine_usage(pass_one_usage, selector_usage)
-            call_traces = _combine_call_traces(
-                pass_one_extractor.take_call_traces(),
-                selector_extractor.take_call_traces(),
-            )
-            record["stage_telemetry"] = _stage_telemetry(
-                stage_configuration,
-                calls_by_stage=_partition_stage_calls(call_traces),
-                usage_by_stage={
-                    "pass_one": pass_one_usage,
-                    "selector": selector_usage,
-                },
-            )
-            record["failure_categories"] = sorted(_failure_flags(record))
-            record["latency_seconds"] = round(time.perf_counter() - started, 3)
-            if trace_run_dir is not None and (trace_all_calls or record["status"] != "passed"):
-                trace_path = write_eval_llm_trace(
-                    trace_run_dir,
-                    scenario=scenario,
-                    record=record,
-                    calls=call_traces,
-                )
-                record["llm_trace"] = {
-                    "path": str(trace_path),
-                    "calls": len(call_traces),
+            usage, calls = interpreter.take_usage(), interpreter.take_call_traces()
+            record["usage"] = usage
+            record["stage_telemetry"] = {
+                "semantic_receiver": {
+                    "enabled": True,
+                    "configured": True,
+                    "model": model,
+                    "attempts": len(calls),
+                    "latency_seconds": round(
+                        sum(float(call.get("latency_seconds", 0) or 0) for call in calls), 3
+                    ),
+                    "usage": usage,
+                    **contract_metadata,
                 }
+            }
+            record["latency_seconds"] = round(time.perf_counter() - started, 3)
+            if trace_run_dir:
+                path = write_eval_llm_trace(
+                    trace_run_dir, scenario=scenario, record=record, calls=calls
+                )
+                record["llm_trace"] = {"path": str(path), "calls": len(calls)}
                 trace_count += 1
-            results.append(record)
+            private.append(record)
+            public.append(_public_record(record))
             print(f"trial={trial} id={scenario['id']} status={record['status']}", flush=True)
-
-    passed = sum(item["status"] == "passed" for item in results)
-    failed = sum(item["status"] == "failed" for item in results)
-    errors = sum(item["status"] == "error" for item in results)
-    instrumentation = _aggregate_results(results)
+    passed, failed, errors = (
+        sum(item["status"] == status for item in public) for status in ("passed", "failed", "error")
+    )
+    stage = {
+        "semantic_receiver": {
+            "enabled": True,
+            "configured": True,
+            "model": model,
+            "attempts": sum(
+                item["stage_telemetry"]["semantic_receiver"]["attempts"] for item in private
+            ),
+            "latency_seconds": round(
+                sum(
+                    item["stage_telemetry"]["semantic_receiver"]["latency_seconds"]
+                    for item in private
+                ),
+                3,
+            ),
+            **contract_metadata,
+        }
+    }
+    ordinary_language_pending = sum(item.get("action") == "pending_retryable" for item in private)
+    pending_denominator = len(private)
+    fault_injection_metrics = _fault_injection_pending_metrics()
     artifact: dict[str, Any] = {
-        "schema_version": 6,
+        "schema_version": 9,
         "generated_at": generated_at,
         "model": model,
-        "pass_one_model": stage_configuration["pass_one"]["model"],
-        "selector_model": stage_configuration["selector"]["model"],
-        "selector_policy": "supported_or_unresolved",
-        "architecture": "selector_only",
+        "architecture": "one_llm_semantic_receiver",
+        "request_scope": "one_way_award_v1",
+        "contract_version": corpus.contract_version,
+        "semantic_contract": contract_metadata,
         "cases_path": str(cases_path),
-        "scenario_count": len(scenarios),
+        "fixture_sha256": corpus.fixture_sha256,
+        "scenario_count": len(corpus.scenarios),
         "trials": trials,
         "summary": {
-            "runs": len(results),
+            "runs": len(public),
             "passed": passed,
             "failed": failed,
             "errors": errors,
-            "pass_rate": passed / len(results) if results else 0.0,
-            **instrumentation,
-            "latency_seconds": round(sum(item["latency_seconds"] for item in results), 3),
-            "usage": _usage_summary(results),
-            "cost": "not calculated; token usage is partial when failed parses omit usage",
+            "pass_rate": passed / len(public) if public else 0.0,
+            "ordinary_language_pending": ordinary_language_pending,
+            "operational_outcomes": {
+                "ordinary_language_pending": {
+                    "numerator": ordinary_language_pending,
+                    "denominator": pending_denominator,
+                },
+                "fault_injection_pending": fault_injection_metrics,
+            },
+            "usage": _usage_summary(private),
+            "cost": "not calculated",
         },
-        "results": results,
-        "stage_telemetry": _aggregate_stage_telemetry(results, stage_configuration),
+        "results": public,
+        "stage_telemetry": stage,
     }
-    if trace_run_dir is not None:
+    if trace_run_dir:
         artifact["llm_trace"] = {
-            "mode": "all_calls" if trace_all_calls else "failed_calls",
+            "mode": "all_calls",
             "directory": str(trace_run_dir),
             "case_count": trace_count,
         }
@@ -865,17 +576,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     load_dotenv()
     args = _parser().parse_args(argv)
     artifact = run_eval(
-        model=args.model,
-        cases_path=args.cases,
-        trials=args.trials,
-        selector_model=args.selector_model,
-        trace_dir=None if args.no_trace else args.trace_dir,
-        trace_all_calls=args.trace_all_calls,
+        args.model,
+        args.cases,
+        args.trials,
+        None if args.no_trace else args.trace_dir,
+        args.trace_all_calls,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(artifact, indent=2) + "\n")
     print(json.dumps(artifact["summary"], indent=2))
-    print(f"saved={args.output}")
     return 0 if artifact["summary"]["failed"] == 0 and artifact["summary"]["errors"] == 0 else 1
 
 

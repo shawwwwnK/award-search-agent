@@ -1,0 +1,1516 @@
+{
+  "schema_version": "one_way_award_live_eval_v2",
+  "generated_at": "2026-09-11T21:52:25.697737+00:00",
+  "request_scope": "one_way_award_v1",
+  "models": {
+    "pass_one": "gpt-5.6-luna",
+    "selector": "gpt-5.6-luna",
+    "composer": "gpt-5.6-luna",
+    "interpreter": "gpt-5.6-luna"
+  },
+  "fixture": {
+    "path": "evals/clarification/one_way_award_live_cases_v2.yaml",
+    "contract_version": "one_way_award_live_v2",
+    "sha256": "1ec5cd53c17aa28884eec93b255aac3be3a6819b9d32c05ebb0356632c5aea46",
+    "scenario_count": 12
+  },
+  "trials": 3,
+  "records": [
+    {
+      "id": "initial_one_way_ready",
+      "trial": 1,
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 4.069,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/initial_one_way_ready__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "missing_departure_is_resolved",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "ready",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 7.724,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/missing_departure_is_resolved__trial-1.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "all_four_one_way_blockers_completed_in_three_turns",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "origin",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "destination",
+            "departure",
+            "travelers"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 2,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "travelers"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 3,
+          "status": "ready",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 3,
+      "status": "passed",
+      "call_count": 7,
+      "latency_seconds": 20.532,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/all_four_one_way_blockers_completed_in_three_turns__trial-1.json",
+        "calls": 7
+      }
+    },
+    {
+      "id": "return_only_answer_stops_with_scope_notice",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 8.403,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/return_only_answer_stops_with_scope_notice__trial-1.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "duration_only_answer_stops_with_scope_notice",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 5.771,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/duration_only_answer_stops_with_scope_notice__trial-1.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "departure_and_return_stops_without_partial_mutation",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 8.4,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/departure_and_return_stops_without_partial_mutation__trial-1.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "ambiguous_departure_retains_blocker",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 4,
+      "latency_seconds": 10.565,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/ambiguous_departure_retains_blocker__trial-1.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "unresolved_departure_retains_blocker",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 4,
+      "latency_seconds": 8.659,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/unresolved_departure_retains_blocker__trial-1.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "cancellation_stops_session",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "cancelled",
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 6.327,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/cancellation_stops_session__trial-1.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "no_progress_stops_after_limit",
+      "trial": 1,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 2,
+          "status": "stopped",
+          "stop_reason": "no_progress_limit",
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 5,
+      "latency_seconds": 10.359,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/no_progress_stops_after_limit__trial-1.json",
+        "calls": 5
+      }
+    },
+    {
+      "id": "cash_only_initial_request_is_unsupported",
+      "trial": 1,
+      "initial": {
+        "action": "unsupported",
+        "field": "one_way_award_scope",
+        "unsupported_codes": [
+          "cash_only_not_supported"
+        ]
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 3.608,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/cash_only_initial_request_is_unsupported__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "award_and_cash_initial_request_remains_award_eligible",
+      "trial": 1,
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 2.871,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/award_and_cash_initial_request_remains_award_eligible__trial-1.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "initial_one_way_ready",
+      "trial": 2,
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 5.405,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/initial_one_way_ready__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "missing_departure_is_resolved",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "ready",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 6.906,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/missing_departure_is_resolved__trial-2.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "all_four_one_way_blockers_completed_in_three_turns",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "origin",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "destination",
+            "departure",
+            "travelers"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 2,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "travelers"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 3,
+          "status": "ready",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 3,
+      "status": "passed",
+      "call_count": 7,
+      "latency_seconds": 18.86,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/all_four_one_way_blockers_completed_in_three_turns__trial-2.json",
+        "calls": 7
+      }
+    },
+    {
+      "id": "return_only_answer_stops_with_scope_notice",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 8.096,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/return_only_answer_stops_with_scope_notice__trial-2.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "duration_only_answer_stops_with_scope_notice",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 5.766,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/duration_only_answer_stops_with_scope_notice__trial-2.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "departure_and_return_stops_without_partial_mutation",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 7.191,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/departure_and_return_stops_without_partial_mutation__trial-2.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "ambiguous_departure_retains_blocker",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 4,
+      "latency_seconds": 13.16,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/ambiguous_departure_retains_blocker__trial-2.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "unresolved_departure_retains_blocker",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 4,
+      "latency_seconds": 10.247,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/unresolved_departure_retains_blocker__trial-2.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "cancellation_stops_session",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "cancelled",
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 5.217,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/cancellation_stops_session__trial-2.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "no_progress_stops_after_limit",
+      "trial": 2,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 2,
+          "status": "stopped",
+          "stop_reason": "no_progress_limit",
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 5,
+      "latency_seconds": 9.74,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/no_progress_stops_after_limit__trial-2.json",
+        "calls": 5
+      }
+    },
+    {
+      "id": "cash_only_initial_request_is_unsupported",
+      "trial": 2,
+      "initial": {
+        "action": "unsupported",
+        "field": "one_way_award_scope",
+        "unsupported_codes": [
+          "cash_only_not_supported"
+        ]
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 3.774,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/cash_only_initial_request_is_unsupported__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "award_and_cash_initial_request_remains_award_eligible",
+      "trial": 2,
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 2.361,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/award_and_cash_initial_request_remains_award_eligible__trial-2.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "initial_one_way_ready",
+      "trial": 3,
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 3.869,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/initial_one_way_ready__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "missing_departure_is_resolved",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "ready",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 6.677,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/missing_departure_is_resolved__trial-3.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "all_four_one_way_blockers_completed_in_three_turns",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "origin",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "destination",
+            "departure",
+            "travelers"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 2,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "travelers"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 3,
+          "status": "ready",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 3,
+      "status": "passed",
+      "call_count": 7,
+      "latency_seconds": 17.601,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/all_four_one_way_blockers_completed_in_three_turns__trial-3.json",
+        "calls": 7
+      }
+    },
+    {
+      "id": "return_only_answer_stops_with_scope_notice",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 6.463,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/return_only_answer_stops_with_scope_notice__trial-3.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "duration_only_answer_stops_with_scope_notice",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 5.792,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/duration_only_answer_stops_with_scope_notice__trial-3.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "departure_and_return_stops_without_partial_mutation",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "unsupported_request_scope",
+          "blockers": [],
+          "scope_notice_codes": [
+            "one_way.return_or_duration"
+          ],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 9.876,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/departure_and_return_stops_without_partial_mutation__trial-3.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "ambiguous_departure_retains_blocker",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "pending",
+          "stop_reason": null,
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": false,
+            "stop_reason": true,
+            "blockers": false,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": false,
+        "composer_call_count": false
+      },
+      "composer_call_count": 1,
+      "status": "failed",
+      "call_count": 4,
+      "latency_seconds": 15.4,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/ambiguous_departure_retains_blocker__trial-3.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "unresolved_departure_retains_blocker",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 4,
+      "latency_seconds": 7.746,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/unresolved_departure_retains_blocker__trial-3.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "cancellation_stops_session",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "stopped",
+          "stop_reason": "cancelled",
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 1,
+      "status": "passed",
+      "call_count": 3,
+      "latency_seconds": 5.289,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/cancellation_stops_session__trial-3.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "no_progress_stops_after_limit",
+      "trial": 3,
+      "initial": {
+        "action": "ask",
+        "field": "departure",
+        "unsupported_codes": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "status": "awaiting_answer",
+          "stop_reason": null,
+          "blockers": [
+            "departure"
+          ],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        },
+        {
+          "turn": 2,
+          "status": "stopped",
+          "stop_reason": "no_progress_limit",
+          "blockers": [],
+          "scope_notice_codes": [],
+          "checks": {
+            "status": true,
+            "stop_reason": true,
+            "blockers": true,
+            "scope_notice_codes": true,
+            "departure_state": true,
+            "effective_request_unchanged": true,
+            "one_way_state": true
+          }
+        }
+      ],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 2,
+      "status": "passed",
+      "call_count": 5,
+      "latency_seconds": 8.528,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/no_progress_stops_after_limit__trial-3.json",
+        "calls": 5
+      }
+    },
+    {
+      "id": "cash_only_initial_request_is_unsupported",
+      "trial": 3,
+      "initial": {
+        "action": "unsupported",
+        "field": "one_way_award_scope",
+        "unsupported_codes": [
+          "cash_only_not_supported"
+        ]
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 3.748,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/cash_only_initial_request_is_unsupported__trial-3.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "award_and_cash_initial_request_remains_award_eligible",
+      "trial": 3,
+      "initial": {
+        "action": "none",
+        "field": null,
+        "unsupported_codes": []
+      },
+      "turns": [],
+      "checks": {
+        "initial": true,
+        "turns": true,
+        "composer_call_count": true
+      },
+      "composer_call_count": 0,
+      "status": "passed",
+      "call_count": 2,
+      "latency_seconds": 2.627,
+      "private_trace": {
+        "path": "evals/clarification/traces-one-way-live/run-2026-09-11T215225.697737-0000-dd922239/award_and_cash_initial_request_remains_award_eligible__trial-3.json",
+        "calls": 2
+      }
+    }
+  ],
+  "summary": {
+    "runs": 36,
+    "passed": 35,
+    "failed": 1,
+    "errors": 0,
+    "mechanically_completed": true
+  }
+}

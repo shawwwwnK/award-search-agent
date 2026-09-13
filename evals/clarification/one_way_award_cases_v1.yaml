@@ -1,0 +1,26 @@
+contract_version: one_way_award_clarification_v1
+purpose: >
+  Deterministic continuation cases for the active one-way award boundary. The
+  receiver script is typed fixture input, not natural-language parsing.
+scenarios:
+  - id: return_notice_with_outbound_fact_stops_without_mutation
+    initial_unknowns: [departure]
+    answer: "October 5, then return October 15"
+    departure_quote: "October 5"
+    scope_quote: "return October 15"
+    expected:
+      status: stopped
+      blockers: []
+      departure: null
+      scope_notice: true
+      prompt_scope_notice: false
+  - id: return_notice_without_outbound_fact_stops
+    initial_unknowns: [departure]
+    answer: "I would return October 15"
+    scope_quote: "return October 15"
+    expected:
+      status: stopped
+      blockers: []
+      departure: null
+      scope_notice: true
+      prompt_scope_notice: false

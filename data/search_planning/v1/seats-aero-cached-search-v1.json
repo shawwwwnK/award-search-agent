@@ -1,0 +1,33 @@
+{
+  "capability_id": "seats_aero.cached_search.v1",
+  "capability_version": "1.0.0",
+  "provider": "seats_aero",
+  "operation": "cached_search",
+  "required_dimensions": [
+    "origin_airport_list",
+    "destination_airport_list"
+  ],
+  "supported_filters": [
+    "cabin_available_in",
+    "direct_flight_available",
+    "carrier_involvement_match",
+    "redemption_program_in",
+    "min_reported_cabin_distance_percent"
+  ],
+  "sources": [
+    {
+      "source_id": "seats-aero-cached-search-local-2026-09-08",
+      "local_path": ".provider-docs/seats-aero/cached-search.md",
+      "captured_on": "2026-09-08",
+      "reference_updated_on": "2025-04-23",
+      "content_sha256": "86cfe87ef7052dd72b356e53a09e98795de5cb47a5268338ebbd21c0345d0640"
+    }
+  ],
+  "caveats": [
+    "The source does not document date-bound inclusivity or timezone semantics.",
+    "Carrier matching is documented only as involvement; its precise matching semantics are undocumented.",
+    "Multi-cabin matching semantics are undocumented.",
+    "The source mentions an undeclared singular cabin field in addition to its documented cabin availability filter.",
+    "Cached Search has no traveler or seat-count input; traveler adequacy requires later result validation."
+  ]
+}

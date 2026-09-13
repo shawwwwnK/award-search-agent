@@ -1,0 +1,138 @@
+contract_version: intent_behavior_v1
+purpose: >
+  Disclosed development baseline for the ADR 0017 one-receiver initial-intent
+  workflow. It scores observable action/property envelopes, not model proposal shape.
+scenarios:
+  - id: ready_exact_airports
+    coverage_family: ready_exact_airports
+    description: Complete exact-date airport request.
+    input: Find two business award seats from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [2], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: []}, forbidden_outcomes: [return_or_duration_in_active_state, city_expanded_to_airports, unbounded_departure_ready]}
+    status: ready
+  - id: ready_whole_month
+    coverage_family: ready_whole_month
+    description: Bounded whole-month outbound window.
+    input: Find one award seat from SFO to BKK in May 2027.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2027-05-01", end: "2027-05-31"}, unsupported_codes: []}, forbidden_outcomes: [return_or_duration_in_active_state, unbounded_departure_ready]}
+    status: ready
+  - id: ready_early_month
+    coverage_family: ready_early_month
+    description: Existing early-month bounded policy.
+    input: Find one award seat from SFO to BKK in early May 2027.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2027-05-01", end: "2027-05-10"}, unsupported_codes: []}, forbidden_outcomes: [return_or_duration_in_active_state, unbounded_departure_ready]}
+    status: ready
+  - id: ready_holiday_window
+    coverage_family: ready_holiday_window
+    description: Grounded holiday weekend remains supported.
+    input: I need one award seat from Seattle to Tokyo over Labor Day weekend.
+    context: {reference_date: "2026-08-29", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: city, value: Seattle}, destination: {kind: city, value: Tokyo}, modes: [award], departure_window: {start: "2026-09-04", end: "2026-09-07"}, unsupported_codes: []}, forbidden_outcomes: [return_or_duration_in_active_state, city_expanded_to_airports, unbounded_departure_ready]}
+    status: ready
+  - id: ready_relative_next_month
+    coverage_family: ready_relative_next_month
+    description: Relative calendar period is executable.
+    input: Find one award seat from SFO to BKK next month.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-09-01", end: "2026-09-30"}, unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: ready_relative_weekend
+    coverage_family: ready_relative_weekend
+    description: Grounded relative holiday weekend is executable.
+    input: Find one award seat from New York to Lisbon two weekends after Thanksgiving.
+    context: {reference_date: "2026-11-20", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: city, value: New York}, destination: {kind: city, value: Lisbon}, modes: [award], departure_window: {start: "2026-12-05", end: "2026-12-06"}, unsupported_codes: []}, forbidden_outcomes: [city_expanded_to_airports, unbounded_departure_ready]}
+    status: ready
+  - id: typo_recognizable_date
+    coverage_family: typo_recognizable_date
+    description: A recognizable typo maps to the same generic calendar calculation.
+    input: Find one award seat from SFO to BKK on the Fridai after Thanskgiving.
+    context: {reference_date: "2026-11-20", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-11-27", end: "2026-11-27"}, unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready, success_shaped_model_failure]}
+    status: ready
+  - id: missing_origin
+    coverage_family: missing_origin
+    description: Required origin is absent.
+    input: Find one award seat to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [clarification], clarification_field: origin, must_ground: [destination, departure], must_remain_blocked: [origin], properties: {travelers: [1], destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: missing_destination
+    coverage_family: missing_destination
+    description: Required destination is absent.
+    input: Find one award seat from SFO on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [clarification], clarification_field: destination, must_ground: [origin, departure], must_remain_blocked: [destination], properties: {travelers: [1], origin: {kind: airport, value: SFO}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: missing_departure
+    coverage_family: missing_departure
+    description: Required bounded outbound timing is absent.
+    input: Find one award seat from SFO to BKK.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [clarification], clarification_field: departure, must_ground: [origin, destination], must_remain_blocked: [departure], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: missing_travelers
+    coverage_family: missing_travelers
+    description: Required traveler count is absent.
+    input: Find award seats from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [clarification], clarification_field: travelers, must_ground: [origin, destination, departure], must_remain_blocked: [travelers], properties: {origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: unbounded_departure
+    coverage_family: unbounded_departure
+    description: Unbounded timing must stay a deterministic blocker.
+    input: Find one award seat from SFO to BKK after New Year.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [clarification], clarification_field: departure, must_ground: [origin, destination], must_remain_blocked: [departure], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: ambiguous_departure
+    coverage_family: ambiguous_departure
+    description: Broad season must remain unresolved.
+    input: Find one award seat from SFO to BKK next spring.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [clarification], clarification_field: departure, must_ground: [origin, destination], must_remain_blocked: [departure], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], unsupported_codes: []}, forbidden_outcomes: [unbounded_departure_ready]}
+    status: ready
+  - id: explicit_return_unsupported
+    coverage_family: explicit_return_unsupported
+    description: Explicit return gets separate-one-way guidance.
+    input: Find two business award seats from Seattle to Tokyo leaving October 5 and returning October 15.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [unsupported], clarification_field: one_way_award_scope, must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [2], origin: {kind: city, value: Seattle}, destination: {kind: city, value: Tokyo}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: [return_or_duration_not_supported]}, forbidden_outcomes: [return_or_duration_in_active_state, city_expanded_to_airports]}
+    status: ready
+  - id: duration_return_unsupported
+    coverage_family: duration_return_unsupported
+    description: Duration gets separate-one-way guidance.
+    input: Find one award seat from SFO to BKK on October 5 for ten days.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [unsupported], clarification_field: one_way_award_scope, must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: [return_or_duration_not_supported]}, forbidden_outcomes: [return_or_duration_in_active_state]}
+    status: ready
+  - id: relative_return_unsupported
+    coverage_family: relative_return_unsupported
+    description: Relative return also gets separate-one-way guidance.
+    input: Find one award seat from SFO to BKK leaving October 5 and come back the weekend afterwards.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [unsupported], clarification_field: one_way_award_scope, must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: [return_or_duration_not_supported]}, forbidden_outcomes: [return_or_duration_in_active_state]}
+    status: ready
+  - id: cash_only_unsupported
+    coverage_family: cash_only_unsupported
+    description: Cash-only requests are outside the award boundary.
+    input: Find one cash flight from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [unsupported], clarification_field: one_way_award_scope, must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [cash], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: [cash_only_not_supported]}, forbidden_outcomes: [cash_coverage_claim]}
+    status: ready
+  - id: mixed_award_cash_eligible
+    coverage_family: mixed_award_cash_eligible
+    description: Mixed intent retains award eligibility without cash coverage claims.
+    input: Find one award and cash flight from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award, cash], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: []}, forbidden_outcomes: [cash_coverage_claim, unbounded_departure_ready]}
+    status: ready
+  - id: default_award_home_airport_not_return
+    coverage_family: default_award_home_airport_not_return
+    description: Default award and home-airport wording is not a return cue.
+    input: Find one business-class seat from my home airport SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    oracle: {acceptable_actions: [ready], must_ground: [origin, destination, departure], must_remain_blocked: [], properties: {travelers: [1], origin: {kind: airport, value: SFO}, destination: {kind: airport, value: BKK}, modes: [award], departure_window: {start: "2026-10-05", end: "2026-10-05"}, unsupported_codes: []}, forbidden_outcomes: [return_or_duration_in_active_state, unbounded_departure_ready]}
+    status: ready

@@ -32,6 +32,7 @@ from award_agent.clarification.interpreter import (
     ClarificationDiscourseAct,
     ClarificationInterpretationError,
     ClarificationInterpretationUnavailable,
+    ClarificationOneWayScopeNotice,
     ClarificationRepairBudget,
     ClarificationSemanticFact,
     validate_answer_interpretation,
@@ -47,6 +48,7 @@ from award_agent.domain import (
     AmendmentTarget,
     AnswerTurn,
     BlockingRequirement,
+    ClarificationAction,
     ClarificationAnswerCommand,
     ClarificationIssue,
     ClarificationPrompt,
@@ -65,8 +67,10 @@ from award_agent.domain import (
     RejectedFragment,
     RejectedFragmentReason,
     RequestContext,
+    RequestUnderstandingOutcome,
     RequestUnderstandingResult,
     ResolutionOutcome,
+    ScopeNotice,
     TemporalAmendment,
     TemporalContribution,
     TravelersAmendment,
@@ -139,8 +143,6 @@ _TARGET_REQUIREMENT_KIND = {
     SemanticTarget.DESTINATION: "destination",
     SemanticTarget.TRAVELERS: "travelers",
     SemanticTarget.DEPARTURE_WINDOW: "departure",
-    SemanticTarget.RETURN_WINDOW: "return_or_duration",
-    SemanticTarget.DURATION: "return_or_duration",
 }
 
 
@@ -208,7 +210,32 @@ def start_clarification(
 ) -> ClarificationSession:
     """Create an additive session without modifying the frozen initial result."""
 
+    if initial_result.outcome is RequestUnderstandingOutcome.PENDING_RETRYABLE:
+        raise ClarificationCommandError(
+            "cannot start clarification from a pending request-understanding outcome"
+        )
+    assert initial_result.parsed_request is not None
+    assert initial_result.clarification is not None
+
     effective = project_initial_request(initial_result.parsed_request)
+    if initial_result.clarification.action is ClarificationAction.UNSUPPORTED:
+        # The initial workflow already made a structured, grounded scope
+        # decision.  Continuation must preserve that explicit user-facing
+        # response rather than projecting the outbound fields into a
+        # misleading ready session.
+        revision = ClarificationSessionRevision(
+            revision=0,
+            effective_request=effective,
+            status=ClarificationSessionStatus.STOPPED,
+            stop_reason=ClarificationStopReason.UNSUPPORTED_REQUEST_SCOPE,
+            terminal_message=initial_result.clarification.question,
+        )
+        return ClarificationSession(
+            session_id=session_id or f"clarification-{uuid4().hex}",
+            initial_result=initial_result,
+            limits=limits or ClarificationSessionLimits(),
+            revisions=(revision,),
+        )
     requirements = collect_blocking_requirements(effective)
     prompt = _build_prompt(
         effective,
@@ -257,11 +284,15 @@ def _correction_eligible_targets(effective: EffectiveRequest) -> tuple[SemanticT
         targets.append(SemanticTarget.TRAVELERS)
     if effective.departure_window is not None:
         targets.append(SemanticTarget.DEPARTURE_WINDOW)
-    if effective.return_window is not None:
-        targets.append(SemanticTarget.RETURN_WINDOW)
-    if effective.interpreted_duration is not None:
-        targets.append(SemanticTarget.DURATION)
     return tuple(targets)
+
+
+def _one_way_scope_notices(
+    notices: tuple[ClarificationOneWayScopeNotice, ...],
+) -> tuple[ScopeNotice, ...]:
+    """Materialize policy-owned copy from receiver-owned scope classifications."""
+
+    return tuple(ScopeNotice(span=notice.span) for notice in notices)
 
 
 def _authorize_semantic_facts(
@@ -419,11 +450,7 @@ def _materialize_calendar_fact(
     assert fact.calendar_operation is not None
     amendment = TemporalAmendment(
         amendment_id=fact.fact_id,
-        target=(
-            AmendmentTarget.DEPARTURE
-            if fact.target is SemanticTarget.DEPARTURE_WINDOW
-            else AmendmentTarget.RETURN_OR_DURATION
-        ),
+        target=AmendmentTarget.DEPARTURE,
         requirement_ids=authorized_fact.requirement_ids,
         span=fact.span,
         is_correction=authorized_fact.operation is SemanticOperation.REPLACE,
@@ -558,7 +585,6 @@ def _amendment_field(amendment: TypedAmendment) -> str | None:
         "destination": "destination",
         "travelers": "travelers",
         "departure": "departure",
-        "return_or_duration": "return_or_duration",
     }.get(amendment.target.value)
 
 
@@ -572,8 +598,6 @@ def _is_supported_correction(amendment: TypedAmendment, effective: EffectiveRequ
         return effective.travelers is not None
     if field == "departure":
         return effective.departure_window is not None
-    if field == "return_or_duration":
-        return effective.return_window is not None or effective.interpreted_duration is not None
     # A date-conflict amendment is scoped by an active conflict, never used to
     # smuggle a new unconstrained field into a session.
     return bool(effective.conflicts)
@@ -611,14 +635,11 @@ def _semantic_effective_fingerprint(effective: EffectiveRequest) -> tuple[object
     def window(value: DateWindow | None) -> tuple[object, object, str] | None:
         return None if value is None else (value.start, value.end, value.precision.value)
 
-    duration = effective.interpreted_duration
     return (
         effective.travelers,
         locations(effective.origins),
         locations(effective.destinations),
         window(effective.departure_window),
-        window(effective.return_window),
-        None if duration is None else (duration.minimum_days, duration.maximum_days),
         tuple(item.value for item in effective.cabins),
         tuple(item.value for item in effective.search_modes),
         effective.repositioning_allowed,
@@ -627,12 +648,6 @@ def _semantic_effective_fingerprint(effective: EffectiveRequest) -> tuple[object
             (
                 item.kind.value,
                 window(item.date_window),
-                None
-                if item.interpreted_duration is None
-                else (
-                    item.interpreted_duration.minimum_days,
-                    item.interpreted_duration.maximum_days,
-                ),
             )
             for item in effective.temporal_contributions
         ),
@@ -797,6 +812,28 @@ def apply_clarification_answer(
         )
         return ClarificationTransition(session=next_session, revision=next_revision)
 
+    scope_notices = _one_way_scope_notices(interpretation.one_way_scope_notices)
+    if scope_notices:
+        # A structured return/duration classification is outside this release,
+        # not a partially fulfillable one-way answer. Preserve its exact span
+        # and policy-owned response, but never accept sibling facts or invoke
+        # the prompt composer for a scope-terminated turn.
+        next_revision = ClarificationSessionRevision(
+            revision=current.revision + 1,
+            effective_request=current.effective_request,
+            answer_turn=answer_turn,
+            outcome=ResolutionOutcome(scope_notices=scope_notices),
+            status=ClarificationSessionStatus.STOPPED,
+            stop_reason=ClarificationStopReason.UNSUPPORTED_REQUEST_SCOPE,
+            terminal_message=scope_notices[0].message,
+        )
+        next_session = ClarificationSession(
+            session_id=session.session_id,
+            initial_result=session.initial_result,
+            limits=session.limits,
+            revisions=session.revisions + (next_revision,),
+        )
+        return ClarificationTransition(session=next_session, revision=next_revision)
     authorized_facts, authorization_rejections = _authorize_semantic_facts(
         interpretation.facts,
         requirements=current.prompt.requirements,
@@ -865,7 +902,11 @@ def apply_clarification_answer(
             repair_attempted=True,
             answer_turn=answer_turn,
             effective_request=effective,
-            outcome=ResolutionOutcome(accepted_amendments=accepted, rejected_fragments=rejected),
+            outcome=ResolutionOutcome(
+                accepted_amendments=accepted,
+                rejected_fragments=rejected,
+                scope_notices=scope_notices,
+            ),
             requirements=pending_requirements,
             issues=pending_issues,
         )
@@ -919,7 +960,9 @@ def apply_clarification_answer(
                     answer_turn=answer_turn,
                     effective_request=effective,
                     outcome=ResolutionOutcome(
-                        accepted_amendments=accepted, rejected_fragments=rejected
+                        accepted_amendments=accepted,
+                        rejected_fragments=rejected,
+                        scope_notices=scope_notices,
                     ),
                     requirements=requirements,
                     issues=issues,
@@ -935,7 +978,11 @@ def apply_clarification_answer(
         revision=next_number,
         effective_request=effective,
         answer_turn=answer_turn,
-        outcome=ResolutionOutcome(accepted_amendments=accepted, rejected_fragments=rejected),
+        outcome=ResolutionOutcome(
+            accepted_amendments=accepted,
+            rejected_fragments=rejected,
+            scope_notices=scope_notices,
+        ),
         prompt=prompt,
         status=status,
         stop_reason=stop_reason,

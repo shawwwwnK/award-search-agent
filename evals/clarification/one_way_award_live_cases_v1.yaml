@@ -1,0 +1,11 @@
+contract_version: one_way_award_live_v1
+scenarios:
+  - id: initial_one_way_ready
+    input: Find one award seat from SFO to BKK on October 5.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected: {initial_action: none}
+  - id: initial_then_return_notice
+    input: Find one award seat from SFO to BKK.
+    answer: October 5, then return October 15.
+    context: {reference_date: "2026-08-30", timezone: "America/Los_Angeles"}
+    expected: {initial_action: ask, continuation_status: stopped, scope_notice: true}

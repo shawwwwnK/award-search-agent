@@ -2,18 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
-
 from award_agent.domain import (
     AmendmentTarget,
     AnswerMessageSource,
     BlockingRequirement,
     DateWindow,
-    DateWindowPrecision,
     EffectiveField,
     EffectiveRequest,
     FieldProvenance,
-    InterpretedDuration,
     LocationAmendment,
     TemporalAmendment,
     TemporalContribution,
@@ -22,7 +18,6 @@ from award_agent.domain import (
     TypedAmendment,
     UnknownField,
 )
-from award_agent.intent.conflicts import detect_conflicts
 
 
 def _replace_provenance(
@@ -38,20 +33,6 @@ def _replace_provenance(
     return tuple(entry for entry in entries if entry.field is not field) + (replacement,)
 
 
-def _derived_return(
-    departure: DateWindow | None,
-    duration: InterpretedDuration | None,
-) -> DateWindow | None:
-    if departure is None or duration is None:
-        return None
-    return DateWindow(
-        start=departure.start + timedelta(days=duration.minimum_days),
-        end=departure.end + timedelta(days=duration.maximum_days),
-        precision=DateWindowPrecision.DERIVED,
-        raw_text=duration.raw_text,
-    )
-
-
 def _latest_window(
     contributions: tuple[TemporalContribution, ...],
     kind: TemporalContributionKind,
@@ -59,15 +40,6 @@ def _latest_window(
     for contribution in reversed(contributions):
         if contribution.kind is kind:
             return contribution.date_window
-    return None
-
-
-def _latest_duration(
-    contributions: tuple[TemporalContribution, ...],
-) -> InterpretedDuration | None:
-    for contribution in reversed(contributions):
-        if contribution.kind is TemporalContributionKind.DURATION:
-            return contribution.interpreted_duration
     return None
 
 
@@ -140,16 +112,9 @@ def apply_amendments(
                 provenance = _replace_provenance(provenance, EffectiveField.DEPARTURE, amendment)
                 resolved_fields.add("departure")
             else:
-                provenance = _replace_provenance(
-                    provenance, EffectiveField.RETURN_OR_DURATION, amendment
-                )
-                resolved_fields.add("return_or_duration")
+                raise ValueError("one-way clarification accepts only departure contributions")
 
     departure = _latest_window(contributions, TemporalContributionKind.DEPARTURE_WINDOW)
-    explicit_return = _latest_window(contributions, TemporalContributionKind.RETURN_WINDOW)
-    duration = _latest_duration(contributions)
-    return_window = explicit_return or _derived_return(departure, duration)
-    conflicts = tuple(detect_conflicts(departure, return_window, duration))
 
     return EffectiveRequest(
         raw_text=effective.raw_text,
@@ -158,14 +123,12 @@ def apply_amendments(
         origins=origins,
         destinations=destinations,
         departure_window=departure,
-        return_window=return_window,
-        interpreted_duration=duration,
         cabins=effective.cabins,
         search_modes=effective.search_modes,
         repositioning_allowed=effective.repositioning_allowed,
         hard_constraints=effective.hard_constraints,
         unknowns=_remove_unknowns(effective.unknowns, resolved_fields),
-        conflicts=conflicts,
+        conflicts=effective.conflicts,
         field_provenance=provenance,
         temporal_contributions=contributions,
     )

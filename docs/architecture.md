@@ -6,18 +6,14 @@
 
 ## Current request-understanding boundary
 
-The current slice stops after request interpretation and clarification selection. It uses strict
-non-temporal Pass 1 plus a date-free opaque temporal selector. Deterministic code scans temporal
-wording, builds and validates candidate catalogs, resolves holiday anchors, restores only selected
-local candidates, compiles the canonical relation graph, evaluates calendar windows, and applies
-conflict and clarification policy. Sequential model-authored temporal resolution is retired by ADR
-0010.
+The current slice stops after request interpretation and clarification selection. Under ADR 0017,
+one semantic receiver reads the complete raw request and emits groundable facts plus generic
+calendar operations. Deterministic code never reparses wording: it validates exact quotes, computes
+calendar results against immutable context, applies conflicts and one-way/cash policy, and derives
+clarification. The legacy scanner, candidate catalog, and selector are historical only; there is no
+live fallback or strategy switch.
 
-The initial-turn boundary is complete and frozen. Luna is the configured model for both model boundaries in
-the qualified implementation: non-temporal Pass 1 and the opaque temporal selector. Sequential
-two-pass resolution is retired from the live code path. The final qualification record is the
-three-trial selector-only run with 47/48 passes (97.92%), zero errors, and one documented
-clarification miss. On 2026-09-08, the project owner approved the additive iterative
+ADR 0016 remains the one-way award-only policy. On 2026-09-08, the project owner approved the additive iterative
 clarification-session boundary in ADR 0011. It accepts answers to a prompt that lists all current
 blockers, applies any valid subset with turn-level provenance, and recomputes the remaining
 blockers until the session is `ready` or `stopped`. The initial-turn behavior remains frozen.
@@ -28,13 +24,13 @@ and the related `this`/`on` weekday forms is scoped to clarification answers onl
 
 | Responsibility | Current owner | Reason |
 | --- | --- | --- |
-| Coarse semantic extraction | first model pass | Natural-language interpretation is the core semantic task. |
+| Initial semantic extraction | semantic receiver | Natural-language interpretation, including typos and reasonable date paraphrases, is the core semantic task. |
 | Ambiguity identification | model | Ambiguity detection depends on language understanding and uncertainty recognition. |
 | Explicit airport-code preservation | deterministic code | A model-classified verbatim IATA code is already a stable downstream identifier. |
 | Holiday calendar dates | `HolidayDateProvider` | Nager.Holidays API v4 supplies U.S. federal-holiday anchors. |
-| Temporal candidate selection | selector model | It may select only deterministic, opaque local candidates, including explicit unresolved choices. |
-| Temporal relation construction | deterministic compiler | Candidate relations, targets, references, and composition are pre-authored and validated before compilation. |
-| Calendar evaluation | deterministic code | Holiday windows, weekends, weekdays, offsets, month portions, durations, and final ranges must be reproducible. |
+| Temporal operation proposal | semantic receiver | It proposes grounded reusable calendar operations, never resolved dates. |
+| Calendar compilation | deterministic compiler | It validates and evaluates generic operations using immutable context and providers. |
+| Calendar evaluation | deterministic code | Outbound holiday windows, weekends, weekdays, offsets, month portions, and final ranges must be reproducible. Return/duration semantics are explicitly unsupported in the active workflow. |
 | Dependency/reference validation | deterministic code | Anchor existence, request-field ordering, and cycles are exact graph invariants. |
 | Schema validation | deterministic code | Contract enforcement should not depend on model behavior. |
 | Evidence span resolution | deterministic code | Quotes must match the immutable request exactly; offsets and ambiguity handling must be reproducible. |
@@ -45,8 +41,9 @@ and the related `this`/`on` weekday forms is scoped to clarification answers onl
 | Clarification-session reduction | deterministic code | It collects every active blocker, applies typed in-scope amendments and supported explicit corrections, and atomically recomputes effective state. |
 | Clarification-answer interpretation | narrow model boundary | It may propose typed amendments for current blockers or an explicit supported correction; it cannot invent arbitrary constraints. |
 | Point balances and spending budgets | deferred | Excluded from MVP extraction, parsed output, and clarification policy. |
-| Search planning | deferred | Outside the current milestone. |
-| Travel-provider calls | deferred | Outside the current milestone. |
+| Search planning | implemented, fixture-qualified, planning-only | It deterministically compiles `EffectiveRequest -> SearchPlan` from versioned local retrieval fixtures. The golden corpus pins default knowledge/capability/policy identities; focused unit tests cover adversarial receipt and source-evidence checks. It has no provider calls, response parsing, ranking, or mutation of upstream state. |
+| Operational knowledge-base expansion | active next cut | Replace the fixture-only seed with reviewed, versioned records and a declared initial-coverage manifest for geographies, airports, relations, group policy, and directed topology. Out-of-coverage requests remain typed reduced/unsupported coverage, rather than inferred from model memory. |
+| Travel-provider calls | subsequent separate stage | Provider execution consumes a stale-checked plan only after the declared operational knowledge coverage is available; no adapter or provider call is part of the planner qualification or the current knowledge cut. |
 | Ranking | deferred | Outside the current milestone. |
 | Final explanation | deferred | Outside the current milestone. |
 

@@ -19,7 +19,6 @@ from award_agent.domain import (
     AssumptionDisclosure,
     DateWindow,
     DateWindowPrecision,
-    InterpretedDuration,
     MessageSpan,
     RequestContext,
     TemporalAnswerInterpretationProvenance,
@@ -34,8 +33,6 @@ class SemanticTarget(str, Enum):
     DESTINATION = "destination"
     TRAVELERS = "travelers"
     DEPARTURE_WINDOW = "departure_window"
-    RETURN_WINDOW = "return_window"
-    DURATION = "duration"
 
 
 class SemanticOperation(str, Enum):
@@ -49,8 +46,6 @@ class TemporalAstKind(str, Enum):
     MONTH_PORTION = "month_portion"
     RELATIVE_WEEKDAY = "relative_weekday"
     RELATIVE_WEEKEND = "relative_weekend"
-    RELATIVE_TO_PRIOR_FACT = "relative_to_prior_fact"
-    DURATION = "duration"
 
 
 WEEKDAY_ENCODING = (
@@ -161,8 +156,8 @@ class TemporalSemanticAst(SessionContractModel):
                 )
             ):
                 raise ValueError("relative_weekday requires weekday and closed relation")
-        elif self.kind is TemporalAstKind.RELATIVE_WEEKEND:
-            if self.relation not in {"this", "next"} or any(
+        elif self.kind is TemporalAstKind.RELATIVE_WEEKEND and (
+            self.relation not in {"this", "next"} or any(
                 value is not None
                 for value in (
                     self.year,
@@ -177,56 +172,11 @@ class TemporalSemanticAst(SessionContractModel):
                     self.end_day,
                     self.anchor_fact_id,
                 )
-            ):
-                raise ValueError("relative_weekend requires a closed relation")
-        elif self.kind is TemporalAstKind.RELATIVE_TO_PRIOR_FACT:
-            if (
-                self.anchor_fact_id is None
-                or self.relation != "after"
-                or self.quantity is None
-                or self.unit not in {"day", "week"}
-                or any(
-                    value is not None
-                    for value in (
-                        self.year,
-                        self.month,
-                        self.day,
-                        self.portion,
-                        self.weekday,
-                        self.end_year,
-                        self.end_month,
-                        self.end_day,
-                    )
-                )
-            ):
-                raise ValueError(
-                    "relative_to_prior_fact requires an earlier fact ID and an after day/week offset"
-                )
-        elif self.kind is TemporalAstKind.DURATION and (
-            self.quantity is None
-            or self.unit not in {"day", "week"}
-            or any(
-                value is not None
-                for value in (
-                    self.year,
-                    self.month,
-                    self.day,
-                    self.portion,
-                    self.weekday,
-                    self.relation,
-                    self.end_year,
-                    self.end_month,
-                    self.end_day,
-                    self.anchor_fact_id,
-                )
             )
         ):
-            raise ValueError("duration requires quantity and day/week unit")
-        if (
-            self.kind not in {TemporalAstKind.DURATION, TemporalAstKind.RELATIVE_TO_PRIOR_FACT}
-            and self.approximate
-        ):
-            raise ValueError("only duration and relative offsets may be approximate")
+            raise ValueError("relative_weekend requires a closed relation")
+        if self.approximate:
+            raise ValueError("one-way temporal ASTs cannot be approximate")
         return self
 
 
@@ -256,37 +206,8 @@ def compile_temporal_ast(
     prior_compiled_facts: Mapping[str, CompiledSemanticTemporalFact] | None = None,
 ) -> CompiledSemanticTemporalFact:
     """Compile receiver-selected closed semantics; never inspect ``span.text``."""
-    if target is SemanticTarget.DURATION:
-        if ast.kind is not TemporalAstKind.DURATION:
-            raise SemanticTemporalCompileError("duration target requires duration AST")
-        assert ast.quantity is not None and ast.unit is not None
-        days = ast.quantity * (7 if ast.unit == "week" else 1)
-        slack = 1 if ast.approximate else 0
-        contribution = TemporalContribution(
-            contribution_id=f"answer:{amendment_id}:duration",
-            kind=TemporalContributionKind.DURATION,
-            source=AnswerMessageSource(span=span),
-            raw_text=span.text,
-            amendment_id=amendment_id,
-            interpreted_duration=InterpretedDuration(
-                raw_text=span.text, minimum_days=max(1, days - slack), maximum_days=days + slack
-            ),
-            interpretation_provenance=(
-                _approximate_duration_provenance(
-                    amendment_id=amendment_id,
-                    span=span,
-                    minimum_days=max(1, days - slack),
-                    maximum_days=days + slack,
-                )
-                if ast.approximate
-                else None
-            ),
-        )
-        return CompiledSemanticTemporalFact(amendment_id=amendment_id, contribution=contribution)
-    if target not in {SemanticTarget.DEPARTURE_WINDOW, SemanticTarget.RETURN_WINDOW}:
-        raise SemanticTemporalCompileError("non-temporal target cannot compile temporal AST")
-    if ast.kind is TemporalAstKind.DURATION:
-        raise SemanticTemporalCompileError("date target cannot use duration AST")
+    if target is not SemanticTarget.DEPARTURE_WINDOW:
+        raise SemanticTemporalCompileError("only a departure-window target can compile temporal AST")
     if ast.kind is TemporalAstKind.CALENDAR_DATE:
         assert ast.month is not None and ast.day is not None
         year = ast.year if ast.year is not None else _future_year(context, ast.month, ast.day)
@@ -327,30 +248,6 @@ def compile_temporal_ast(
             date(year, ast.month, end_day),
             DateWindowPrecision.WINDOW,
         )
-    elif ast.kind is TemporalAstKind.RELATIVE_TO_PRIOR_FACT:
-        if target is not SemanticTarget.RETURN_WINDOW:
-            raise SemanticTemporalCompileError(
-                "relative prior-fact AST may only target return_window"
-            )
-        assert ast.anchor_fact_id is not None and ast.quantity is not None and ast.unit is not None
-        prior = (prior_compiled_facts or {}).get(ast.anchor_fact_id)
-        if prior is None:
-            raise SemanticTemporalCompileError(
-                "relative prior-fact AST requires an earlier same-answer fact"
-            )
-        anchor = prior.contribution
-        if (
-            anchor.kind is not TemporalContributionKind.DEPARTURE_WINDOW
-            or anchor.date_window is None
-        ):
-            raise SemanticTemporalCompileError(
-                "relative prior-fact AST must reference an earlier departure-window fact"
-            )
-        offset = ast.quantity * (7 if ast.unit == "week" else 1)
-        slack = 1 if ast.approximate else 0
-        start = anchor.date_window.start + timedelta(days=max(1, offset - slack))
-        end = anchor.date_window.end + timedelta(days=offset + slack)
-        precision = DateWindowPrecision.DERIVED
     elif ast.kind is TemporalAstKind.RELATIVE_WEEKDAY:
         assert ast.weekday is not None and ast.relation is not None
         delta = (ast.weekday - context.reference_date.weekday()) % 7
@@ -367,11 +264,7 @@ def compile_temporal_ast(
         end, precision = start + timedelta(days=2), DateWindowPrecision.WINDOW
     else:  # pragma: no cover - closed enum exhaustiveness
         raise SemanticTemporalCompileError("unsupported temporal AST")
-    kind = (
-        TemporalContributionKind.DEPARTURE_WINDOW
-        if target is SemanticTarget.DEPARTURE_WINDOW
-        else TemporalContributionKind.RETURN_WINDOW
-    )
+    kind = TemporalContributionKind.DEPARTURE_WINDOW
     interpretation_provenance = None
     if ast.kind is TemporalAstKind.MONTH_PORTION and ast.portion != "whole":
         assert ast.portion is not None
@@ -379,13 +272,6 @@ def compile_temporal_ast(
             amendment_id=amendment_id,
             span=span,
             portion=ast.portion,
-            start=start,
-            end=end,
-        )
-    elif ast.kind is TemporalAstKind.RELATIVE_TO_PRIOR_FACT and ast.approximate:
-        interpretation_provenance = _relative_offset_provenance(
-            amendment_id=amendment_id,
-            span=span,
             start=start,
             end=end,
         )
@@ -424,29 +310,5 @@ def _month_portion_provenance(
         message=(
             f"I’ll interpret “{span.text}” as {portion} month, "
             f"from {start.isoformat()} through {end.isoformat()}."
-        ),
-    )
-
-
-def _approximate_duration_provenance(
-    *, amendment_id: str, span: MessageSpan, minimum_days: int, maximum_days: int
-) -> TemporalAnswerInterpretationProvenance:
-    return _assumption_provenance(
-        amendment_id=amendment_id,
-        interpretation_id="approximate_duration_plus_or_minus_one_day",
-        message=(
-            f"I’ll interpret “{span.text}” as a trip of {minimum_days} to {maximum_days} days."
-        ),
-    )
-
-
-def _relative_offset_provenance(
-    *, amendment_id: str, span: MessageSpan, start: date, end: date
-) -> TemporalAnswerInterpretationProvenance:
-    return _assumption_provenance(
-        amendment_id=amendment_id,
-        interpretation_id="approximate_relative_offset_plus_or_minus_one_day",
-        message=(
-            f"I’ll interpret “{span.text}” as a return from {start.isoformat()} through {end.isoformat()}."
         ),
     )
