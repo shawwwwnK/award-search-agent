@@ -2,11 +2,11 @@
 
 ## Phase
 
-Operational knowledge-base expansion — active next cut, before provider execution. Search planning
-is implemented and fixture-qualified as a planning-only, retrieval-backed `EffectiveRequest ->
-SearchPlan` stage that follows the frozen one-way award request-understanding and clarification
-boundary. Its declared coverage remains the checked-in offline seed snapshot, not a claim of
-operational airport, route, schedule, inventory, or provider coverage.
+Milestone 1 geographic and airport-data foundation — active next cut, before provider execution.
+Search planning is implemented and fixture-qualified as a planning-only, retrieval-backed
+`EffectiveRequest -> SearchPlan` stage that follows the frozen one-way award request-understanding
+and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
+not a claim of operational airport, route, schedule, inventory, or provider coverage.
 
 ## Current conclusion
 
@@ -26,11 +26,14 @@ groups, typed failures, directional synthetic topology, dates, budgets, payment 
 canonical ordering, optional-path budget degradation, and stale-plan handoff. It must not call
 Seats.aero, map provider payloads, parse provider responses, normalize results, rank
 recommendations, or mutate the source request/session. Search planning is fixture-qualified for
-this declared local coverage. The active work is to make a declared initial coverage operational
-through reviewed, versioned knowledge records and evidence; provider execution follows as a
-separate stage. The recorded broad behavioral evidence gap for the upstream one-way boundary
-remains historical evidence and is not silently promoted to qualification or used to reopen
-intent/clarification semantics.
+this declared local coverage. The active work is **Milestone 1**, the geographic and airport-data
+foundation in `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`: import and serve
+GeoNames and OurAirports data through reviewed, versioned local knowledge records; resolve named
+region taxonomies; and publish explicit catalog/group coverage. Airport groups beyond the existing
+examples are curated iteratively. Directed connectivity, providers, and RAG are later milestones.
+The recorded broad behavioral evidence gap for the upstream one-way boundary remains historical
+evidence and is not silently promoted to qualification or used to reopen intent/clarification
+semantics.
 
 The qualification corpus pins canonical SHA-256 identities for the default knowledge snapshot,
 Cached-Search capability record and version, and default planning policy; it also validates the

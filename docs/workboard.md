@@ -5,10 +5,10 @@
 - Search planning is implemented and fixture-qualified for its explicitly narrow local snapshot.
   `award-search-planning-eval` runs the ten-case deterministic offline gate; it does not make
   provider or network calls.
-- The active next cut is operational knowledge-base expansion: establish an explicit initial
-  coverage manifest, then add reviewed, versioned geography/alias, airport, factual relation,
-  airport-group policy, and directed-topology records with source, freshness, and applicability
-  receipts. This is deliberately narrower than a global airport or route database.
+- The active next cut is **Milestone 1: geographic and airport-data foundation**. Import and serve
+  GeoNames and OurAirports data through the local snapshot/repository boundary; support named
+  region-taxonomy resolution; and publish explicit catalog/group coverage. Airport-group curation
+  expands iteratively. Directed topology is Milestone 2, not part of this first cut.
 - Typed upstream constraints before hard filters can be claimed, provider adapter semantic
   acceptance, and provider execution remain separate follow-ons. See the completion map in
   `docs/handoffs/2026-09-12-search-planning-design.md`.
@@ -16,15 +16,16 @@
   mapping, provider-result parsing, normalization, ranking, or recommendation generation.
 
 Boundary: `docs/handoffs/2026-09-10-search-plan-design-stage.md`.
-Implemented design and fixture gate:
+Implemented Milestone 0 design and fixture gate:
 `docs/handoffs/2026-09-12-search-planning-design.md`.
+Current Milestone 0–4 roadmap:
+`docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`.
 
 ## Next
 
-- Define the initial operational market and its knowledge coverage; expand the reviewed snapshot
-  and its market-specific offline evidence before provider execution.
-- Add the Seats.aero provider adapter only after that declared operational knowledge coverage is
-  in place and its boundary is evidenced.
+- Complete Milestone 1 source import, deterministic lookup, source evidence, taxonomy, and
+  coverage-manifest design before beginning connectivity.
+- Revisit raw-source-artifact retention only after imported data is available for inspection.
 
 ## Later
 

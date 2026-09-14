@@ -50,6 +50,12 @@ its declared checked-in seed snapshot. The active cut is to grow that seed into 
 versioned operational snapshot for an explicitly declared initial coverage—not to begin provider
 execution or claim global airport or route coverage.
 
+The current search-planning milestone order is recorded in
+`docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`. Milestone 1 is the active
+geographic and airport-data foundation: import and serve GeoNames and OurAirports data through the
+local snapshot boundary, including named region-taxonomy resolution. It stops before airport-group
+curation beyond the existing examples and before directed connectivity, providers, or RAG.
+
 The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
 
 - require origin, destination, bounded outbound departure timing, and travelers;

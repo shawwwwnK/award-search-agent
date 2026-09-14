@@ -12,13 +12,14 @@ count. Return dates and durations receive visible guidance to submit a separate 
 cash-only requests are unsupported; mixed award-and-cash requests remain eligible for award search
 without implying cash pricing is available. The deterministic, retrieval-backed
 `EffectiveRequest -> SearchPlan` boundary is implemented and qualified for its declared checked-in
-fixture coverage. The active cut is to replace that fixture-only seed with a reviewed, versioned
-operational snapshot for a declared initial market: grounded geographies and aliases, airport
-metadata, factual location-to-airport relations, selection policy, and directed topology with
-source and freshness receipts. Provider execution remains later; this cut ends before a Seats.aero
-API call, provider payload mapping, result normalization, or ranking. See the
+fixture coverage. The active cut is Milestone 1: import and serve GeoNames and OurAirports data as
+a reviewed, versioned geographic/airport catalog; support named region-taxonomy resolution; and
+publish explicit catalog/group coverage. Airport groups beyond the existing examples are curated
+iteratively; directed topology is Milestone 2. Provider execution remains later; this cut ends
+before a Seats.aero API call, provider payload mapping, result normalization, or ranking. See the
 [search-planning stage brief](docs/handoffs/2026-09-10-search-plan-design-stage.md) and
-[`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md).
+[`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md), plus the
+[Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md).
 
 The initial request-understanding turn now uses the ADR 0017 semantic boundary:
 

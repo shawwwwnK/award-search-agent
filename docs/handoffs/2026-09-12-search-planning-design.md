@@ -2,6 +2,9 @@
 
 - Status: Implemented and fixture-qualified for the declared local seed coverage. On 2026-09-13,
   the owner selected operational knowledge-base expansion before the later provider-execution stage.
+  The current Milestone 0–4 work order, including the Milestone 1 GeoNames/OurAirports import
+  scope and the deferral of directed connectivity, is
+  `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`.
 - Date: 2026-09-12
 - Stage boundary: [2026-09-10-search-plan-design-stage.md](2026-09-10-search-plan-design-stage.md)
 
@@ -561,6 +564,10 @@ for the documented ambiguities. The local cached page remains a versioned provis
 not evidence that its semantics are current at an uncontrolled later date.
 
 ### Owner sequencing update — 2026-09-13
+
+This initial sequencing note is superseded in work order by
+`2026-09-13-search-planning-milestone-roadmap.md`. Its description of directed physical topology
+now belongs to Milestone 2; Milestone 1 stops at the geographic and airport-data foundation.
 
 Before provider execution, the active next cut is to expand the small reviewed knowledge snapshot
 into an operational snapshot for a deliberately declared initial coverage. That work must add
