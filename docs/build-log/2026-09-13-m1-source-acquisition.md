@@ -75,7 +75,54 @@ approximately 3.0 GB.
 
 - `.gitignore` now excludes `data/source-inputs/`.
 
+## Current compact source bundle
+
+On 2026-09-14, with owner approval to retain only current, useful source
+records, the full local source files were transformed into the ignored local
+bundle `data/source-inputs/m1-current-travel-identity/` by
+`scripts/prepare_m1_source_subsets.py`. The script uses no network or model
+access, verifies its output and receipts before pruning, and is not a planner
+snapshot or an airport-group publication.
+
+The bundle occupies **148 MiB**. It replaced the approximately **2.6 GiB**
+locally extracted/acquired input directory. The deleted local inputs were the
+full GeoNames feature and alternate-name dumps, their ZIPs, hierarchy,
+timezone and language references, and source copies superseded by the compact
+tables. The original download receipts above and the bundle's input/output
+hashes remain available in `manifest.json`.
+
+| Bundle record | Count | Selection rule / role |
+| --- | ---: | --- |
+| Current countries | 252 | GeoNames `countryInfo.txt`; no historical political entities. |
+| Administrative regions | 51,458 | GeoNames current admin1/admin2 code tables, with active-feature corroboration recorded separately. |
+| Continents | 7 | GeoNames `L.CONT`. |
+| Named geographic regions | 3,621 | GeoNames `L.RGN` and `L.RGNE`; taxonomy is explicit. |
+| Cities / populated places | 224,462 | Selected current populated-place codes, population over 500, with selected administrative seats retained regardless of population. |
+| GeoNames airport candidates | 23,574 | `S.AIRP` only; reconciliation evidence, not airport publication. |
+| Current language-tagged aliases | 1,442,567 | Selected entities only; excludes historic, expired, colloquial, blank-language, and metadata aliases. |
+| GeoNames IATA cross-references | 3,230 | Retained OurAirports IATA codes and `S.AIRP` candidates only. |
+| OurAirports endpoints | 3,244 | Owner-approved `large_airport`/`medium_airport`, scheduled service, nonempty IATA subset. |
+
+The compact bundle includes source identifiers, canonical/base aliases,
+current aliases, airport reconciliation candidates, administrative
+corroboration, OurAirports country/region tables, a quarantine report, and a
+SHA-256 manifest. The recorded run found zero quarantined records. The future
+importer must canonicalize records; source ordering is not publication order.
+The bundle deliberately does not create airport-serving relationships, airport
+groups, routes, schedules, provider observations, or booking claims.
+
 ## Verification
+
+- `scripts/prepare_m1_source_subsets.py` ran successfully over the full local
+  GeoNames inputs and produced the compact bundle.
+- Its bundle verifier checked required files, manifest output receipts,
+  source/entity references, alias-filter rules, retained airport rules, unique
+  OurAirports IATA codes, and IATA cross-reference eligibility.
+- A second `--prune-raw` invocation re-verified the existing bundle before
+  removing only the explicitly superseded local source files.
+- Script syntax, Ruff lint, and Ruff formatting checks passed.
+
+## Earlier acquisition verification
 
 - Recalculated all ten SHA-256 values after moving the files into the ignored
   repository-local directory; they matched the download receipts.
