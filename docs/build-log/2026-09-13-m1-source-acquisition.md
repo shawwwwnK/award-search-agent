@@ -55,9 +55,10 @@ current checksum as its actual local input receipt.
 
 ## Local GeoNames extraction
 
-With owner approval, the three GeoNames archives were extracted into the
-ignored directory `data/source-inputs/unpacked/`, while retaining the source
-ZIP files.
+With owner approval, the three GeoNames archives were extracted directly into
+the ignored directory `data/source-inputs/`, alongside the retained source ZIP
+files. The transient `unpacked/` subdirectory used during extraction was later
+removed after its files were moved into this flat source-input directory.
 
 | Extracted file | Size | Rows |
 | --- | ---: | ---: |
@@ -66,7 +67,7 @@ ZIP files.
 | `hierarchy.txt` | 9.6 MB | 519,121 |
 | `iso-languagecodes.txt` | 135 KB | 7,930 |
 
-The unpacked directory occupies approximately 2.4 GB; the complete ignored
+The extracted files occupy approximately 2.4 GB; the complete ignored
 source-input directory, including retained compressed files, occupies
 approximately 3.0 GB.
 
