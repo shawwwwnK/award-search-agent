@@ -35,13 +35,18 @@ owner-deferred; this ignored local staging area is not that policy.
 
 With owner approval, the ignored local `data/source-inputs/airports.csv` was
 overwritten with a CSV that retains its original header and only rows whose
-OurAirports `type` is `large_airport` or `medium_airport`. The original complete
-OurAirports file is not retained locally.
+OurAirports `type` is `large_airport` or `medium_airport`, whose
+`scheduled_service` is `yes`, and whose `iata_code` is nonempty. The original
+complete OurAirports file is not retained locally.
 
-- Retained rows: 5,280 (1,174 large; 4,106 medium).
-- Retained rows with an IATA code: 4,569.
-- Filtered file SHA-256:
-  `b57ceba1a5048e93af354cf766bd67bffd723878e81173df869136d2b68d7557`.
+- Retained rows: 3,244 (1,149 large; 2,095 medium).
+- Every retained row has `scheduled_service=yes` and a nonempty, unique IATA
+  code.
+- Current filtered file SHA-256:
+  `887a25c5ba651589fa9d9ceeac6c86978d26121b9eb8acb3ae7c9e2767caafaf`.
+- The earlier type-only intermediate file had SHA-256
+  `b57ceba1a5048e93af354cf766bd67bffd723878e81173df869136d2b68d7557`
+  and is no longer retained.
 
 The `airports.csv` receipt in the preceding table is the checksum of the full
 download before this owner-approved local filtering, not the checksum of the
