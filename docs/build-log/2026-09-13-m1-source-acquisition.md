@@ -111,6 +111,13 @@ importer must canonicalize records; source ordering is not publication order.
 The bundle deliberately does not create airport-serving relationships, airport
 groups, routes, schedules, provider observations, or booking claims.
 
+For a later source refresh, download the declared inputs under the same names
+into `data/source-inputs/` and run
+`scripts/prepare_m1_source_subsets.py --replace-existing-bundle --prune-raw`.
+The script verifies the new bundle, atomically replaces the previous compact
+bundle, and only then removes the new raw inputs. It refuses to replace an
+existing bundle without the explicit replacement flag.
+
 ## Verification
 
 - `scripts/prepare_m1_source_subsets.py` ran successfully over the full local

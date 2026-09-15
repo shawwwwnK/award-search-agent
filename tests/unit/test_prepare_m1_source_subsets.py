@@ -50,3 +50,15 @@ def test_alias_filter_excludes_historic_expired_colloquial_and_metadata_tags() -
     assert not module._is_current_alias("en", "1", "", "")
     assert not module._is_current_alias("en", "", "1", "")
     assert not module._is_current_alias("en", "", "", "2020-01-01")
+
+
+def test_existing_bundle_requires_an_explicit_replacement_flag(tmp_path: Path) -> None:
+    module = _load_source_preparation_module()
+    (tmp_path / module.BUNDLE_NAME).mkdir()
+
+    try:
+        module.prepare(tmp_path, prune_raw=False)
+    except FileExistsError as error:
+        assert str(tmp_path / module.BUNDLE_NAME) in str(error)
+    else:
+        raise AssertionError("an existing bundle must not be overwritten implicitly")

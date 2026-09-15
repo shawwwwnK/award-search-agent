@@ -1,6 +1,6 @@
 # Scripts
 
-Future reproducible maintenance and evaluation commands may be added here, but no scripts are required for this scaffold task.
+Future reproducible maintenance and evaluation commands may be added here.
 ## Milestone 1 source preparation
 
 `prepare_m1_source_subsets.py` is a local, dependency-free transformation of
@@ -19,3 +19,16 @@ removes only source files that the bundle supersedes.
 
 Use it only with the documented local source acquisition from
 `docs/build-log/2026-09-13-m1-source-acquisition.md`.
+
+To refresh the data, download the current source files under their documented
+names into `data/source-inputs/` alongside the existing bundle, then run:
+
+```text
+.venv/bin/python scripts/prepare_m1_source_subsets.py \
+  --replace-existing-bundle --prune-raw
+```
+
+The new bundle is verified before it atomically replaces the previous bundle;
+the new raw files are pruned only after that replacement succeeds. Without
+`--replace-existing-bundle`, the script refuses to overwrite an existing
+bundle.

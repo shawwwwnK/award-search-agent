@@ -426,15 +426,18 @@ def _write_manifest(bundle: Path, *, counts: Counter[str], source_directory: Pat
         output_file.write("\n")
 
 
-def prepare(source_directory: Path, *, prune_raw: bool) -> Path:
+def prepare(
+    source_directory: Path, *, prune_raw: bool, replace_existing_bundle: bool = False
+) -> Path:
     source_directory = source_directory.resolve()
     final_bundle = source_directory / BUNDLE_NAME
     if final_bundle.exists():
-        if not prune_raw:
+        if not replace_existing_bundle and not prune_raw:
             raise FileExistsError(f"bundle already exists: {final_bundle}")
-        _verify_bundle(final_bundle)
-        _prune_raw_files(source_directory)
-        return final_bundle
+        if not replace_existing_bundle:
+            _verify_bundle(final_bundle)
+            _prune_raw_files(source_directory)
+            return final_bundle
 
     missing = sorted(name for name in SOURCE_FILES_READ if not (source_directory / name).is_file())
     if missing:
@@ -760,7 +763,16 @@ def prepare(source_directory: Path, *, prune_raw: bool) -> Path:
         verification = _verify_bundle(bundle)
         counts.update({f"verified_{key}": value for key, value in verification.items()})
 
-        bundle.replace(final_bundle)
+        if final_bundle.exists():
+            previous_bundle = temporary_parent / f"{BUNDLE_NAME}.previous"
+            final_bundle.replace(previous_bundle)
+            try:
+                bundle.replace(final_bundle)
+            except BaseException:
+                previous_bundle.replace(final_bundle)
+                raise
+        else:
+            bundle.replace(final_bundle)
     finally:
         if temporary_parent.exists():
             shutil.rmtree(temporary_parent)
@@ -778,8 +790,17 @@ def main() -> int:
         action="store_true",
         help="remove source files superseded by a successfully verified compact bundle",
     )
+    parser.add_argument(
+        "--replace-existing-bundle",
+        action="store_true",
+        help="atomically replace an existing compact bundle after processing a fresh source download",
+    )
     arguments = parser.parse_args()
-    bundle = prepare(arguments.source_directory, prune_raw=arguments.prune_raw)
+    bundle = prepare(
+        arguments.source_directory,
+        prune_raw=arguments.prune_raw,
+        replace_existing_bundle=arguments.replace_existing_bundle,
+    )
     print(bundle)
     return 0
 
