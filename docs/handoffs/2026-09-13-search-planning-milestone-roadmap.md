@@ -84,7 +84,9 @@ product-defined travel regions must not share an implicit meaning.
 4. **Offline serving.** Extend the existing `KnowledgeSnapshot` /
    `KnowledgeRepository` interface as needed so location lookup by narrow
    alias, explicit IATA lookup, airport metadata lookup, and region lookup are
-   deterministic, stable under record reordering, and network/model-free.
+   deterministic, stable under record reordering, and network/model-free. The
+   operational catalog artifact is SQLite with a JSON receipt/manifest under
+   ADR 0018; the current small JSON seed remains a fixture contract.
 5. **Coverage and evidence.** Publish a coverage manifest and source receipt
    sufficient to say what source inputs and entity kinds are represented. It
    must distinguish catalog recognition from reviewed airport-group coverage

@@ -32,3 +32,4 @@ Expected sections:
 - [0015: Generic model-authored clarification calendar proposals](0015-generic-model-authored-clarification-calendar-proposals.md)
 - [0016: One-way award request boundary](0016-one-way-award-request-boundary.md)
 - [0017: LLM-owned initial intent semantics](0017-llm-owned-initial-intent-semantics.md)
+- [0018: SQLite published geographic catalog with JSON receipts](0018-sqlite-geographic-catalog.md)

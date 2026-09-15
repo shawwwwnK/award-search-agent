@@ -8,6 +8,11 @@ Search planning is implemented and fixture-qualified as a planning-only, retriev
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
 not a claim of operational airport, route, schedule, inventory, or provider coverage.
 
+The operational Milestone 1 geographic/airport catalog will be a versioned local SQLite artifact
+with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains the Milestone 0
+fixture contract; Pydantic validates import/publication/query boundaries rather than materializing
+the full operational catalog in memory.
+
 ## Current conclusion
 
 On 2026-09-13, the owner selected **operational knowledge-base expansion** as the next cut, before

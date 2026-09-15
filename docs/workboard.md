@@ -8,7 +8,8 @@
 - The active next cut is **Milestone 1: geographic and airport-data foundation**. Import and serve
   GeoNames and OurAirports data through the local snapshot/repository boundary; support named
   region-taxonomy resolution; and publish explicit catalog/group coverage. Airport-group curation
-  expands iteratively. Directed topology is Milestone 2, not part of this first cut.
+  expands iteratively. The operational catalog publication will use SQLite with a JSON manifest
+  under ADR 0018. Directed topology is Milestone 2, not part of this first cut.
 - Typed upstream constraints before hard filters can be claimed, provider adapter semantic
   acceptance, and provider execution remain separate follow-ons. See the completion map in
   `docs/handoffs/2026-09-12-search-planning-design.md`.
