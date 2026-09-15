@@ -31,6 +31,23 @@ owner-deferred; this ignored local staging area is not that policy.
 | `countries.csv` | `https://davidmegginson.github.io/ourairports-data/countries.csv` | `2a9dbee691125b0cdb8ceb5fe227c48c903f99c488963b8e53e2ab366521c639` |
 | `regions.csv` | `https://davidmegginson.github.io/ourairports-data/regions.csv` | `63bc8012a4e5449867b81ab510a722f5f98cedd8ea56fe09e113c9d630cd21b4` |
 
+## Local airport-source preparation
+
+With owner approval, the ignored local `data/source-inputs/airports.csv` was
+overwritten with a CSV that retains its original header and only rows whose
+OurAirports `type` is `large_airport` or `medium_airport`. The original complete
+OurAirports file is not retained locally.
+
+- Retained rows: 5,280 (1,174 large; 4,106 medium).
+- Retained rows with an IATA code: 4,569.
+- Filtered file SHA-256:
+  `b57ceba1a5048e93af354cf766bd67bffd723878e81173df869136d2b68d7557`.
+
+The `airports.csv` receipt in the preceding table is the checksum of the full
+download before this owner-approved local filtering, not the checksum of the
+current ignored file. The future importer must treat the filtering rule and
+current checksum as its actual local input receipt.
+
 ## Files changed
 
 - `.gitignore` now excludes `data/source-inputs/`.
