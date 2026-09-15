@@ -13,6 +13,11 @@ with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains th
 fixture contract; Pydantic validates import/publication/query boundaries rather than materializing
 the full operational catalog in memory.
 
+The active internal delivery order is **Milestone 1A**, deterministic SQLite catalog publication
+from the prepared local source bundle, followed by **Milestone 1B**, read-only catalog serving and
+planner-boundary compatibility. Their components, acceptance criteria, and owner decision gates
+are recorded in the current milestone roadmap.
+
 ## Current conclusion
 
 On 2026-09-13, the owner selected **operational knowledge-base expansion** as the next cut, before

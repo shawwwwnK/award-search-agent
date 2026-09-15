@@ -24,8 +24,11 @@ Current Milestone 0–4 roadmap:
 
 ## Next
 
-- Complete Milestone 1 source import, deterministic lookup, source evidence, taxonomy, and
-  coverage-manifest design before beginning connectivity.
+- Complete **Milestone 1A** SQLite catalog publication: importer, manifest, provenance,
+  reconciliation/quarantine rules, and snapshot-retention decisions. Then complete
+  **Milestone 1B** read-only catalog retrieval, inspection, and planner-boundary compatibility
+  before beginning connectivity. The detailed acceptance criteria and decision gates are in the
+  current Milestone 0–4 roadmap.
 - Revisit raw-source-artifact retention only after imported data is available for inspection.
 
 ## Later

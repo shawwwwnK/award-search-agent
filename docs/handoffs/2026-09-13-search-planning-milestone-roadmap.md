@@ -118,6 +118,127 @@ SFO examples remain valid planner fixtures and product examples. Broader group
 curation is intentionally iterative: it is not a prerequisite to importing and
 serving the GeoNames/OurAirports catalog.
 
+### Milestone 1A — SQLite catalog publication
+
+#### Objective
+
+Convert the prepared local `m1-current-travel-identity` GeoNames/OurAirports
+bundle into a validated, versioned SQLite catalog and JSON manifest, without
+changing live planner behavior. This is the publication half of Milestone 1,
+as selected by ADR 0018.
+
+#### Dependencies and fixed boundaries
+
+- Consume only the locally prepared source bundle and its receipt manifest;
+  acquisition, live source lookup, model use, and provider calls are out of
+  scope.
+- SQLite is the embedded operational catalog and JSON is the human-readable
+  receipt/coverage artifact. Pydantic validates import, publication, manifest,
+  and query-boundary contracts; it is not the full-catalog runtime store.
+- Preserve the current small JSON `KnowledgeSnapshot` and its reviewed seed
+  groups as the Milestone 0 fixture contract.
+- Do not author new airport groups, infer airport-city service, add routes, or
+  reparse `EffectiveRequest`.
+
+#### Components
+
+- A versioned publication schema for entities, aliases, named taxonomies,
+  source records/provenance, airports, retained administrative metadata, IATA
+  reconciliation evidence, and necessary quarantine/coverage records.
+- A deterministic local importer that constructs a temporary SQLite database,
+  validates it, produces a canonical JSON manifest, and atomically publishes a
+  complete snapshot only on success.
+- Explicit reconciliation and invalid-record rules. In particular, missing or
+  conflicting identifiers/timezones must be quarantined or block publication,
+  never repaired by name, municipality, coordinate, or distance guessing.
+- Publication inspection and validation functions. A CLI is optional at this
+  increment; the library-level validator and manifest are required.
+
+#### Decisions still to resolve with the owner before implementation
+
+1. The exact snapshot directory and release-retention policy, including which
+   generated manifest/database artifacts are tracked versus locally generated.
+2. The final SQLite table/index shape and schema-version/migration policy.
+3. The precise one-to-one GeoNames/OurAirports IATA and timezone reconciliation
+   rules, including publication treatment for zero, multiple, stale, or
+   country-conflicting candidate evidence.
+4. Whether quarantine records live inside the catalog, adjacent to it, or only
+   in the manifest; their inspection behavior must remain explicit either way.
+
+#### Acceptance criteria
+
+- The same compact input bundle and declared rules produce equivalent canonical
+  catalog content and manifest receipts despite source-record reordering.
+- The published database has foreign-key/integrity checks, exact alias indexes,
+  deterministic query ordering, and a manifest SHA-256 binding.
+- Manifest coverage distinguishes recognized catalog entity kinds/taxonomies,
+  airport metadata, reviewed airport groups, and route coverage.
+- Invalid, dangling, duplicate, or uncertain records are visible as quarantine
+  outcomes or reject publication; no partial database replaces a working
+  snapshot.
+- Publication runs offline and does not modify `EffectiveRequest`, invoke a
+  model, call providers, or claim city-airport serving relationships.
+
+#### Decision gate
+
+Proceed to 1B only when the owner has reviewed a successfully validated
+catalog/manifest, its reconciliation and quarantine report, and the declared
+snapshot/retention treatment.
+
+### Milestone 1B — read-only catalog serving and planner integration
+
+#### Objective
+
+Serve a selected published catalog through the existing deterministic
+location/planner boundary, while preserving the Milestone 0 JSON fixture path
+and its reviewed airport-group policies.
+
+#### Dependencies and fixed boundaries
+
+- Requires a reviewed Milestone 1A catalog and manifest.
+- Runtime opens one selected SQLite catalog read-only and verifies the
+  corresponding manifest before retrieval.
+- `EffectiveRequest` remains immutable and is not reparsed. Lookup remains
+  narrow exact alias/identifier resolution; it has no network, model, route,
+  cash-search, or award-provider dependency.
+- A resolved entity without a reviewed group remains an explicit outcome. The
+  catalog must not create a group, nearby-airport expansion, or positioning
+  journey.
+
+#### Components
+
+- A catalog-backed repository implementation or adapter at the existing
+  `KnowledgeRepository`/location-resolution seam, with typed query results and
+  evidence receipts.
+- Read-only lookup for exact aliases, explicit IATA, entities, named region
+  taxonomies, airport metadata, and source lineage.
+- Stable ambiguity/not-found/kind-mismatch/taxonomy-mismatch/missing-metadata
+  outcomes, with deterministic ordering and evidence rather than a bare code.
+- A small inspection surface for catalog, manifest, entity, alias, airport,
+  taxonomy, and provenance checks. It must inspect only; it cannot run search
+  providers.
+- Compatibility tests proving the existing JSON seed and its Japan, New York
+  City, and explicit SFO fixture behavior remain available.
+
+#### Acceptance criteria
+
+- Read-only lookup returns the same canonical result after source-record
+  reordering and never writes the SQLite catalog.
+- Country, city, airport, and named-region lookup preserves ambiguity and
+  reports no-group/missing-metadata cases explicitly.
+- Explicit SFO remains a singleton only when its selected catalog metadata is
+  available; no fallback airport is invented.
+- Retrieved evidence identifies the published snapshot, manifest/policy, and
+  supporting source records.
+- Existing planning tests continue to pass, and catalog lookup tests require no
+  network or model access.
+
+#### Decision gate
+
+Milestone 1 is ready for its owner review only after the catalog artifact,
+retrieval behavior, declared catalog/group coverage, and inspection/evaluation
+results are reviewed. Milestone 2 connectivity remains a separate decision.
+
 ### Initial acceptance criteria
 
 - GeoNames and OurAirports inputs can be imported and their published records
