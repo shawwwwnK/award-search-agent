@@ -53,6 +53,23 @@ download before this owner-approved local filtering, not the checksum of the
 current ignored file. The future importer must treat the filtering rule and
 current checksum as its actual local input receipt.
 
+## Local GeoNames extraction
+
+With owner approval, the three GeoNames archives were extracted into the
+ignored directory `data/source-inputs/unpacked/`, while retaining the source
+ZIP files.
+
+| Extracted file | Size | Rows |
+| --- | ---: | ---: |
+| `allCountries.txt` | 1.7 GB | 13,464,129 |
+| `alternateNamesV2.txt` | 747 MB | 19,172,821 |
+| `hierarchy.txt` | 9.6 MB | 519,121 |
+| `iso-languagecodes.txt` | 135 KB | 7,930 |
+
+The unpacked directory occupies approximately 2.4 GB; the complete ignored
+source-input directory, including retained compressed files, occupies
+approximately 3.0 GB.
+
 ## Files changed
 
 - `.gitignore` now excludes `data/source-inputs/`.
