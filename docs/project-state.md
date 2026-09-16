@@ -13,10 +13,12 @@ with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains th
 fixture contract; Pydantic validates import/publication/query boundaries rather than materializing
 the full operational catalog in memory.
 
-The active internal delivery order is **Milestone 1A**, deterministic SQLite catalog publication
-from the prepared local source bundle, followed by **Milestone 1B**, read-only catalog serving and
-planner-boundary compatibility. Their components, acceptance criteria, and owner decision gates
-are recorded in the current milestone roadmap.
+Milestone 1A is complete: the owner reviewed the `m1a-06b28b323dc70ef5` local release on
+2026-09-15, including its manifest, coverage, counts, and 35 explicit reconciliation
+quarantines. The release remains local-only for now; deployment-time hosting/retention is deferred.
+The active internal delivery is **Milestone 1B**, read-only catalog serving and planner-boundary
+compatibility. Its components, acceptance criteria, and owner decision gate are recorded in the
+current milestone roadmap.
 
 ## Current conclusion
 
@@ -257,10 +259,11 @@ offline seed snapshot. It consumes the frozen ADR 0016 outbound-only contract an
 upstream request-understanding boundary: no return date or duration can enter planning state,
 cash-only requests do not become ready, and mixed award-and-cash requests remain award-only
 without cash-search claims. This qualification is planning-only and does not claim operational
-airport, route, schedule, inventory, or provider coverage. The active next cut is reviewed,
-versioned knowledge-base expansion for a declared initial coverage; provider execution remains
-subsequent and separately scoped. Preserve the upstream evidence gap as such—do not reopen its
-semantics or call it qualified through this documentation change.
+airport, route, schedule, inventory, or provider coverage. The active next cut is Milestone 1B:
+serve the owner-reviewed local SQLite catalog through the existing deterministic location/planner
+boundary while preserving the Milestone 0 JSON fixture path and its reviewed group policies.
+Provider execution remains subsequent and separately scoped. Preserve the upstream evidence gap as
+such—do not reopen its semantics or call it qualified through this documentation change.
 
 The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
 clarification acceptance protocol are the current policy where they differ from ADRs 0011--0013
