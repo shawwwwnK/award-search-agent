@@ -45,7 +45,6 @@ from award_agent.search_planning.contracts import (
     FilterObligationKind,
     FreshnessClass,
     GroundedEndpointResult,
-    KnowledgeReceipt,
     ManualCashCheckTemplate,
     ManualCashTemporalValidationKind,
     PathExplorationReceipt,
@@ -70,8 +69,8 @@ from award_agent.search_planning.knowledge import (
     DirectedRouteEdge,
     KnowledgeRepository,
     KnowledgeSnapshot,
+    PlanningKnowledgeRepository,
     RouteDateApplicability,
-    knowledge_content_digest,
 )
 from award_agent.search_planning.locations import ground_endpoint
 from award_agent.search_planning.policy import PlanningPolicy
@@ -85,8 +84,9 @@ def plan_searches(
     envelope: PlanningInputEnvelope,
     *,
     policy: PlanningPolicy,
-    snapshot: KnowledgeSnapshot,
     capability: CachedSearchCapability,
+    snapshot: KnowledgeSnapshot | None = None,
+    repository: PlanningKnowledgeRepository | None = None,
 ) -> SearchPlanningResult:
     """Compile one immutable request into endpoint-market award search items.
 
@@ -94,6 +94,9 @@ def plan_searches(
     optionally checks) the request digest but never mutates the request or
     attempts clarification.
     """
+
+    if (snapshot is None) == (repository is None):
+        raise ValueError("plan_searches requires exactly one of snapshot or repository")
 
     # ``model_copy(update=...)`` can bypass Pydantic validation.  Re-validating
     # here keeps a caller from smuggling a corrupt capability into the compiler.
@@ -113,18 +116,22 @@ def plan_searches(
             budget_receipts=_admission_budget_receipts(envelope.effective_request, policy),
         )
 
-    repository = KnowledgeRepository(snapshot)
+    if repository is not None:
+        active_repository: PlanningKnowledgeRepository = repository
+    else:
+        assert snapshot is not None
+        active_repository = KnowledgeRepository(snapshot)
     origin_results = _ground_all(
         envelope.effective_request.origins,
         "origin",
-        repository,
+        active_repository,
         policy,
         _provenance_for(envelope.effective_request, EffectiveField.ORIGIN),
     )
     destination_results = _ground_all(
         envelope.effective_request.destinations,
         "destination",
-        repository,
+        active_repository,
         policy,
         _provenance_for(envelope.effective_request, EffectiveField.DESTINATION),
     )
@@ -183,12 +190,12 @@ def plan_searches(
             ),
         )
 
-    identity = _identity(envelope, policy, snapshot, capability, digest)
+    identity = _identity(envelope, policy, active_repository, capability, digest)
     try:
         probes, endpoint_items = _build_endpoint_items(
             pairs,
             envelope.effective_request,
-            repository,
+            active_repository,
         )
         if len(endpoint_items) > policy.max_total_award_search_items:
             return SearchPlanningResult(
@@ -234,7 +241,7 @@ def plan_searches(
         ) = _build_explicit_paths(
             pairs,
             envelope.effective_request,
-            repository,
+            active_repository,
             policy,
             remaining_item_slots=policy.max_total_award_search_items - len(endpoint_items),
             remaining_date_work_days=(policy.max_date_expanded_work_days - endpoint_date_work_days),
@@ -312,7 +319,8 @@ def plan_searches_with_default_capability(
     envelope: PlanningInputEnvelope,
     *,
     policy: PlanningPolicy,
-    snapshot: KnowledgeSnapshot,
+    snapshot: KnowledgeSnapshot | None = None,
+    repository: PlanningKnowledgeRepository | None = None,
     capability_path: Path | None = None,
 ) -> SearchPlanningResult:
     """Convenience wrapper that turns local capability evidence failures into a typed outcome.
@@ -325,7 +333,13 @@ def plan_searches_with_default_capability(
         capability = load_cached_search_capability(capability_path or default_capability_path())
     except (OSError, json.JSONDecodeError, ValidationError, ValueError) as exc:
         return _capability_evidence_failure(str(exc))
-    return plan_searches(envelope, policy=policy, snapshot=snapshot, capability=capability)
+    return plan_searches(
+        envelope,
+        policy=policy,
+        snapshot=snapshot,
+        repository=repository,
+        capability=capability,
+    )
 
 
 def effective_request_digest(effective_request: EffectiveRequest) -> str:
@@ -471,7 +485,7 @@ def _canonical_locations(locations: Iterable[LocationRef]) -> tuple[LocationRef,
 def _ground_all(
     locations: Iterable[LocationRef],
     role: str,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
     policy: PlanningPolicy,
     field_provenance: FieldProvenance | None,
 ) -> tuple[GroundedEndpointResult, ...]:
@@ -486,7 +500,7 @@ def _ground_all(
 def _identity(
     envelope: PlanningInputEnvelope,
     policy: PlanningPolicy,
-    snapshot: KnowledgeSnapshot,
+    repository: PlanningKnowledgeRepository,
     capability: CachedSearchCapability,
     digest: str,
 ) -> PlanIdentity:
@@ -498,15 +512,9 @@ def _identity(
         digest_algorithm_version=_DIGEST_ALGORITHM_VERSION,
         policy_version=policy.policy_version,
         policy_digest=_canonical_digest(policy),
-        snapshot_id=snapshot.metadata.snapshot_id,
-        snapshot_as_of=snapshot.metadata.as_of,
-        knowledge_receipt=KnowledgeReceipt(
-            snapshot_id=snapshot.metadata.snapshot_id,
-            schema_version=snapshot.metadata.schema_version,
-            snapshot_as_of=snapshot.metadata.as_of,
-            content_sha256=knowledge_content_digest(snapshot),
-            source_ids=tuple(sorted(source.source_id for source in snapshot.sources)),
-        ),
+        snapshot_id=repository.snapshot_id,
+        snapshot_as_of=repository.snapshot_as_of,
+        knowledge_receipt=repository.knowledge_receipt,
         capability_receipt=CapabilityReceipt(
             capability_id=capability.capability_id,
             capability_version=capability.capability_version,
@@ -526,7 +534,7 @@ def _identity(
 def _build_endpoint_items(
     pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...],
     request: EffectiveRequest,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
 ) -> tuple[tuple[EndpointProbe, ...], tuple[AwardSearchItem, ...]]:
     assert request.departure_window is not None
     assert request.travelers is not None
@@ -601,7 +609,7 @@ def _build_endpoint_items(
 def _build_explicit_paths(
     pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...],
     request: EffectiveRequest,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
     policy: PlanningPolicy,
     *,
     remaining_item_slots: int,
@@ -942,7 +950,7 @@ def _build_explicit_paths(
 
 
 def _route_edge_is_stale(
-    edge: DirectedRouteEdge, repository: KnowledgeRepository, policy: PlanningPolicy
+    edge: DirectedRouteEdge, repository: PlanningKnowledgeRepository, policy: PlanningPolicy
 ) -> bool:
     """Evaluate only the evidence an optional topology edge actually cites."""
 

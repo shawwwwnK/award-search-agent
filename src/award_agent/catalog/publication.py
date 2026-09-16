@@ -29,8 +29,10 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from award_agent.search_planning.knowledge import normalize_location_alias
 
-CATALOG_SCHEMA_VERSION = "1"
-MANIFEST_FORMAT_VERSION = "1"
+CATALOG_SCHEMA_VERSION = "2"
+SUPPORTED_CATALOG_SCHEMA_VERSIONS = frozenset({"1", CATALOG_SCHEMA_VERSION})
+MANIFEST_FORMAT_VERSION = "2"
+SUPPORTED_MANIFEST_FORMAT_VERSIONS = frozenset({"1", MANIFEST_FORMAT_VERSION})
 DATABASE_FILENAME = "catalog.sqlite"
 MANIFEST_FILENAME = "manifest.json"
 REQUIRED_FILES = (
@@ -45,6 +47,9 @@ REQUIRED_FILES = (
     "ourairports_regions.csv",
     "quarantine.tsv",
 )
+RAW_RECORDS_FILENAME = "source_raw_records.tsv"
+SOURCE_SCHEMAS_FILENAME = "source_schemas.json"
+RAW_RECORD_HEADERS = ("source_name", "source_record_id", "values_json")
 EXPECTED_HEADERS = {
     "geonames_admin_corroboration.tsv": (
         "geoname_id",
@@ -143,6 +148,11 @@ EXPECTED_HEADERS = {
         "keywords",
     ),
     "quarantine.tsv": ("record_kind", "source_record_id", "reason_code", "detail"),
+}
+OURAIRPORTS_REQUIRED_HEADERS = {
+    "ourairports_airports.csv": EXPECTED_HEADERS["ourairports_airports.csv"],
+    "ourairports_countries.csv": EXPECTED_HEADERS["ourairports_countries.csv"],
+    "ourairports_regions.csv": EXPECTED_HEADERS["ourairports_regions.csv"],
 }
 RULE_DEFINITIONS = {
     "normalization": "NFKC, casefold, whitespace-collapse; no fuzzy matching",
@@ -428,10 +438,37 @@ def _source_key(filename: str, source_record_id: str) -> str:
     return f"{filename}:{source_record_id}"
 
 
+RAW_SOURCE_BY_PREFIX = {
+    "allCountries": "allCountries.txt",
+    "countryInfo": "countryInfo.txt",
+    "admin1CodesASCII": "admin1CodesASCII.txt",
+    "admin2Codes": "admin2Codes.txt",
+    "alternateNamesV2": "alternateNamesV2.txt",
+}
+RAW_SOURCE_BY_DERIVED_FILE = {
+    "ourairports_airports.csv": "airports.csv",
+    "ourairports_countries.csv": "countries.csv",
+    "ourairports_regions.csv": "regions.csv",
+}
+
+
+def _expected_raw_source_name(filename: str, source_record_id: str) -> str | None:
+    """Resolve a derived evidence record to its one allowed raw source file."""
+    if source_record_id.startswith("ourairports:"):
+        return RAW_SOURCE_BY_DERIVED_FILE.get(filename)
+    return RAW_SOURCE_BY_PREFIX.get(source_record_id.split(":", 1)[0])
+
+
 def _reader(path: Path) -> Iterator[dict[str, str]]:
     with path.open(encoding="utf-8", newline="") as input_file:
         reader = csv.DictReader(input_file, delimiter="\t" if path.suffix == ".tsv" else ",")
-        if tuple(reader.fieldnames or ()) != EXPECTED_HEADERS[path.name]:
+        fields = tuple(reader.fieldnames or ())
+        if path.name in OURAIRPORTS_REQUIRED_HEADERS:
+            if len(fields) != len(set(fields)) or set(
+                OURAIRPORTS_REQUIRED_HEADERS[path.name]
+            ) - set(fields):
+                raise CatalogPublicationError(f"unexpected header in {path.name}")
+        elif fields != EXPECTED_HEADERS[path.name]:
             raise CatalogPublicationError(f"unexpected header in {path.name}")
         yield from reader
 
@@ -444,9 +481,12 @@ def _ensure_bundle(bundle: Path) -> dict[str, Any]:
         parsed = BundleManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
     except (ValueError, json.JSONDecodeError) as exc:
         raise CatalogPublicationError("prepared bundle manifest is invalid JSON") from exc
-    if parsed.format_version != "1":
+    if parsed.format_version not in {"1", "2"}:
         raise CatalogPublicationError("prepared bundle manifest has unsupported identity")
-    for filename in REQUIRED_FILES:
+    required_files = REQUIRED_FILES + (
+        (RAW_RECORDS_FILENAME, SOURCE_SCHEMAS_FILENAME) if parsed.format_version == "2" else ()
+    )
+    for filename in required_files:
         receipt = parsed.outputs.get(filename)
         path = bundle / filename
         if receipt is None or not path.is_file():
@@ -461,8 +501,105 @@ def _validate_headers(bundle: Path) -> None:
         path = bundle / filename
         with path.open(encoding="utf-8", newline="") as input_file:
             reader = csv.reader(input_file, delimiter="\t" if path.suffix == ".tsv" else ",")
-            if tuple(next(reader, ())) != EXPECTED_HEADERS[filename]:
+            fields = tuple(next(reader, ()))
+            if filename in OURAIRPORTS_REQUIRED_HEADERS:
+                valid = len(fields) == len(set(fields)) and not (
+                    set(OURAIRPORTS_REQUIRED_HEADERS[filename]) - set(fields)
+                )
+            else:
+                valid = fields == EXPECTED_HEADERS[filename]
+            if not valid:
                 raise CatalogPublicationError(f"unexpected header in {filename}")
+
+
+def _load_raw_source_records(connection: sqlite3.Connection, bundle: Path) -> None:
+    """Load v2 lossless sidecars before derived evidence references them.
+
+    Values remain an ordered JSON array paired with a separately received source
+    header.  They are deliberately not query aliases or relationship evidence.
+    """
+    schemas_path = bundle / SOURCE_SCHEMAS_FILENAME
+    records_path = bundle / RAW_RECORDS_FILENAME
+    if not schemas_path.is_file() and not records_path.is_file():
+        return  # v1 fixtures remain useful publication-contract coverage.
+    if not schemas_path.is_file() or not records_path.is_file():
+        raise CatalogPublicationError("incomplete lossless source-record sidecars")
+    try:
+        schemas = json.loads(schemas_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise CatalogPublicationError("invalid source schema sidecar") from exc
+    if not isinstance(schemas, dict) or not schemas:
+        raise CatalogPublicationError("source schema sidecar is empty or malformed")
+    for source_name, headers in sorted(schemas.items()):
+        if (
+            not isinstance(source_name, str)
+            or not isinstance(headers, list)
+            or not all(isinstance(header, str) and header for header in headers)
+            or len(headers) != len(set(headers))
+        ):
+            raise CatalogPublicationError(f"invalid source schema: {source_name!r}")
+        if source_name not in {
+            "allCountries.txt",
+            "countryInfo.txt",
+            "admin1CodesASCII.txt",
+            "admin2Codes.txt",
+            "alternateNamesV2.txt",
+            "airports.csv",
+            "countries.csv",
+            "regions.csv",
+        }:
+            raise CatalogPublicationError(f"unexpected source schema: {source_name}")
+        connection.execute(
+            "INSERT INTO source_schema VALUES (?,?)", (source_name, _canonical_json(headers))
+        )
+    with records_path.open(encoding="utf-8", newline="") as input_file:
+        reader = csv.DictReader(input_file, delimiter="\t")
+        if tuple(reader.fieldnames or ()) != RAW_RECORD_HEADERS:
+            raise CatalogPublicationError("unexpected raw source-record header")
+        for raw in reader:
+            source_name = raw.get("source_name", "")
+            source_record_id = raw.get("source_record_id", "")
+            if source_name not in schemas or not source_record_id:
+                raise CatalogPublicationError("raw source-record schema or identity is invalid")
+            try:
+                values = json.loads(raw.get("values_json", ""))
+            except json.JSONDecodeError as exc:
+                raise CatalogPublicationError("raw source-record values are invalid JSON") from exc
+            if not isinstance(values, list) or not all(isinstance(value, str) for value in values):
+                raise CatalogPublicationError("raw source-record values must be a string array")
+            if len(values) != len(schemas[source_name]):
+                raise CatalogPublicationError("raw source-record value count disagrees with schema")
+            key = _source_key(source_name, source_record_id)
+            try:
+                connection.execute(
+                    "INSERT INTO source_record(source_record_key, artifact_name, source_record_id, compact_row_id, source_schema_name, raw_values_json) VALUES (?, ?, ?, ?, ?, ?)",
+                    (
+                        key,
+                        source_name,
+                        source_record_id,
+                        source_record_id,
+                        source_name,
+                        _canonical_json(values),
+                    ),
+                )
+            except sqlite3.IntegrityError as exc:
+                raise CatalogPublicationError(
+                    f"duplicate raw source record: {source_name}/{source_record_id}"
+                ) from exc
+
+
+def _create_source_record_lookup_index(connection: sqlite3.Connection) -> None:
+    """Index exact raw evidence joins before derived records are loaded."""
+    connection.execute(
+        "CREATE INDEX source_record_raw_identity_idx "
+        "ON source_record(source_schema_name, source_record_id)"
+    )
+
+
+def _create_deferred_source_record_indexes(connection: sqlite3.Connection) -> None:
+    connection.execute(
+        "CREATE INDEX source_record_artifact_idx ON source_record(artifact_name, source_record_id)"
+    )
 
 
 SCHEMA_SQL = """
@@ -471,9 +608,13 @@ CREATE TABLE catalog_metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE source_artifact (
   artifact_name TEXT PRIMARY KEY, bytes INTEGER NOT NULL, sha256 TEXT NOT NULL
 );
+CREATE TABLE source_schema (
+  source_name TEXT PRIMARY KEY, headers_json TEXT NOT NULL
+);
 CREATE TABLE source_record (
   source_record_key TEXT PRIMARY KEY, artifact_name TEXT NOT NULL REFERENCES source_artifact,
   source_record_id TEXT NOT NULL, compact_row_id TEXT NOT NULL,
+  source_schema_name TEXT REFERENCES source_schema, raw_values_json TEXT,
   UNIQUE(artifact_name, source_record_id)
 );
 CREATE TABLE taxonomy (taxonomy_id TEXT PRIMARY KEY);
@@ -541,7 +682,6 @@ CREATE INDEX entity_alias_exact_idx ON entity_alias_evidence(normalized_alias, e
 CREATE INDEX airport_alias_exact_idx ON airport_alias(normalized_alias, airport_id, alias_evidence_id);
 CREATE INDEX entity_taxonomy_idx ON entity(taxonomy_id, entity_id);
 CREATE INDEX airport_country_region_idx ON airport(iso_country, iso_region, iata_code);
-CREATE INDEX source_record_artifact_idx ON source_record(artifact_name, source_record_id);
 CREATE INDEX iata_evidence_iata_idx ON geonames_iata_evidence(iata_code, candidate_id, evidence_id);
 CREATE INDEX quarantine_reason_idx ON quarantine_record(reason_code, subject_id);
 """
@@ -555,9 +695,27 @@ def _insert_source_record(
 ) -> str:
     if not source_record_id.strip():
         raise CatalogPublicationError(f"empty source record identity in {filename}")
+    expected_source = _expected_raw_source_name(filename, source_record_id)
+    raw_match = (
+        connection.execute(
+            "SELECT source_record_key FROM source_record WHERE source_record_id = ? AND source_schema_name = ?",
+            (source_record_id, expected_source),
+        ).fetchall()
+        if expected_source is not None
+        else []
+    )
+    if len(raw_match) == 1:
+        return str(raw_match[0][0])
+    if len(raw_match) > 1:
+        raise CatalogPublicationError(f"ambiguous raw source record identity: {source_record_id}")
+    if (
+        expected_source is not None
+        and connection.execute("SELECT COUNT(*) FROM source_schema").fetchone()[0]
+    ):
+        raise CatalogPublicationError(f"missing retained raw source record: {source_record_id}")
     key = _source_key(filename, source_record_id)
     connection.execute(
-        "INSERT OR IGNORE INTO source_record(source_record_key, artifact_name, source_record_id, compact_row_id) VALUES (?, ?, ?, ?)",
+        "INSERT OR IGNORE INTO source_record(source_record_key, artifact_name, source_record_id, compact_row_id, source_schema_name, raw_values_json) VALUES (?, ?, ?, ?, NULL, NULL)",
         (key, filename, source_record_id, compact_row_id or source_record_id),
     )
     return key
@@ -565,7 +723,12 @@ def _insert_source_record(
 
 def _row(model: type[_Contract], raw: Mapping[str, str], filename: str) -> Any:
     try:
-        return model.model_validate(raw)
+        accepted = {
+            field.alias or name: raw[field.alias or name]
+            for name, field in model.model_fields.items()
+            if (field.alias or name) in raw
+        }
+        return model.model_validate(accepted)
     except Exception as exc:  # Pydantic's detailed public error is useful at the boundary.
         raise CatalogPublicationError(f"invalid {filename} row: {exc}") from exc
 
@@ -933,7 +1096,7 @@ def _load_airports_and_reconcile(
             _require_nonblank(value, label)
         _require_finite_decimal(row.latitude_deg, "airport latitude")
         _require_finite_decimal(row.longitude_deg, "airport longitude")
-        key = _source_key(filename, f"ourairports:{row.id}")
+        key = _insert_source_record(connection, filename, f"ourairports:{row.id}", row.id)
         candidates = connection.execute(
             """SELECT e.candidate_id, e.evidence_id, e.country_code, e.timezone
                FROM geonames_iata_evidence e
@@ -1070,7 +1233,7 @@ def _load_input_quarantine(
 def _logical_digest(connection: sqlite3.Connection) -> str:
     """Hash schema-independent ordered rows, not SQLite's variable byte layout."""
     digest = hashlib.sha256()
-    tables = (
+    tables: tuple[str, ...] = (
         "source_record",
         "taxonomy",
         "entity",
@@ -1086,6 +1249,10 @@ def _logical_digest(connection: sqlite3.Connection) -> str:
         "airport_reconciliation",
         "quarantine_record",
     )
+    if connection.execute(
+        "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'source_schema'"
+    ).fetchone():
+        tables = ("source_schema", *tables)
     for table in tables:
         columns = [row[1] for row in connection.execute(f"PRAGMA table_info({table})")]
         cursor = connection.execute(f"SELECT * FROM {table} ORDER BY {','.join(columns)}")
@@ -1164,20 +1331,32 @@ def _quarantine_summary(connection: sqlite3.Connection) -> dict[str, Any]:
     }
 
 
-def _source_artifact_receipts(connection: sqlite3.Connection) -> dict[str, dict[str, Any]]:
+def _source_artifact_receipts(
+    connection: sqlite3.Connection, *, artifact_names: set[str] | None = None
+) -> dict[str, dict[str, Any]]:
+    where = (
+        ""
+        if artifact_names is None
+        else " WHERE artifact_name IN ({})".format(",".join("?" for _ in artifact_names))
+    )
     return {
         row[0]: {"bytes": row[1], "sha256": row[2]}
         for row in connection.execute(
-            "SELECT artifact_name, bytes, sha256 FROM source_artifact ORDER BY artifact_name"
+            f"SELECT artifact_name, bytes, sha256 FROM source_artifact{where} ORDER BY artifact_name",
+            tuple(sorted(artifact_names or ())),
         )
     }
 
 
 def _release_identity(
-    logical_digest: str, bundle_manifest_sha256: str, context: PublicationContext
+    logical_digest: str,
+    bundle_manifest_sha256: str,
+    context: PublicationContext,
+    *,
+    catalog_schema_version: str = CATALOG_SCHEMA_VERSION,
 ) -> str:
     identity = {
-        "catalog_schema_version": CATALOG_SCHEMA_VERSION,
+        "catalog_schema_version": catalog_schema_version,
         "logical_content_sha256": logical_digest,
         "bundle_manifest_sha256": bundle_manifest_sha256,
         "publication_context": _publication_context(context),
@@ -1265,13 +1444,19 @@ def publish_catalog(
         connection = sqlite3.connect(database)
         try:
             connection.executescript(SCHEMA_SQL)
-            for filename, receipt in sorted(bundle_manifest["outputs"].items()):
+            artifacts = {
+                **bundle_manifest.get("source_files_read", {}),
+                **bundle_manifest["outputs"],
+            }
+            for filename, receipt in sorted(artifacts.items()):
                 connection.execute(
                     "INSERT INTO source_artifact VALUES (?,?,?)",
                     (filename, receipt["bytes"], receipt["sha256"]),
                 )
             connection.commit()
             connection.execute("BEGIN")
+            _load_raw_source_records(connection, bundle)
+            _create_source_record_lookup_index(connection)
             _load_entities(connection, bundle)
             _load_aliases(connection, bundle, "geonames_base_aliases.tsv")
             _load_aliases(connection, bundle, "geonames_current_aliases.tsv")
@@ -1281,6 +1466,7 @@ def publish_catalog(
             _load_iata_evidence(connection, bundle)
             _load_airports_and_reconcile(connection, bundle, context)
             _load_input_quarantine(connection, bundle, context)
+            _create_deferred_source_record_indexes(connection)
             connection.execute("COMMIT")
             _validate_connection(connection)
             logical_digest = _logical_digest(connection)
@@ -1363,8 +1549,8 @@ def validate_release(
         raise CatalogPublicationError("release manifest is unavailable or invalid") from exc
     manifest = parsed.model_dump(mode="json")
     if (
-        parsed.format_version != MANIFEST_FORMAT_VERSION
-        or parsed.catalog_schema_version != CATALOG_SCHEMA_VERSION
+        parsed.format_version not in SUPPORTED_MANIFEST_FORMAT_VERSIONS
+        or parsed.catalog_schema_version not in SUPPORTED_CATALOG_SCHEMA_VERSIONS
     ):
         raise CatalogPublicationError("unsupported catalog schema version")
     database = release / DATABASE_FILENAME
@@ -1386,7 +1572,12 @@ def validate_release(
         counts = _counts(connection)
         coverage = _coverage(connection)
         quarantine = _quarantine_summary(connection)
-        output_receipts = _source_artifact_receipts(connection)
+        output_receipts = _source_artifact_receipts(
+            connection, artifact_names=set(parsed.source_bundle.output_receipts)
+        )
+        source_input_receipts = _source_artifact_receipts(
+            connection, artifact_names=set(parsed.source_bundle.source_files_read)
+        )
         metadata = dict(connection.execute("SELECT key, value FROM catalog_metadata ORDER BY key"))
         try:
             recorded_context = json.loads(metadata["publication_context"])
@@ -1398,11 +1589,14 @@ def validate_release(
                 "catalog publication context metadata is invalid"
             ) from exc
         expected_identity = _release_identity(
-            logical_digest, metadata.get("bundle_manifest_sha256", ""), context
+            logical_digest,
+            metadata.get("bundle_manifest_sha256", ""),
+            context,
+            catalog_schema_version=parsed.catalog_schema_version,
         )
         expected_release_id = f"m1a-{expected_identity[:16]}"
         expected_metadata = {
-            "catalog_schema_version": CATALOG_SCHEMA_VERSION,
+            "catalog_schema_version": parsed.catalog_schema_version,
             "logical_content_sha256": logical_digest,
             "release_id": expected_release_id,
             "bundle_id": parsed.source_bundle.bundle_id,
@@ -1434,6 +1628,14 @@ def validate_release(
             or parsed.quarantine.model_dump(mode="json") != quarantine
             or parsed.source_bundle.output_receipts
             != {name: Receipt.model_validate(receipt) for name, receipt in output_receipts.items()}
+            or (
+                parsed.catalog_schema_version == CATALOG_SCHEMA_VERSION
+                and parsed.source_bundle.source_files_read
+                != {
+                    name: Receipt.model_validate(receipt)
+                    for name, receipt in source_input_receipts.items()
+                }
+            )
             or parsed.rules != _rule_receipts()
             or parsed.publication_context != _publication_context(context)
         ):

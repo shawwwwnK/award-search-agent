@@ -17,6 +17,7 @@ from award_agent.catalog import (
     validate_release,
 )
 from award_agent.catalog.publication import _timezone_tree_digest, timezone_validator_identity
+from award_agent.search_planning.knowledge import CatalogKnowledgeRepository
 
 CONTEXT = PublicationContext(
     source_date=date(2026, 9, 14),
@@ -309,6 +310,52 @@ def _refresh_receipts(bundle: Path) -> None:
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
 
 
+def _add_lossless_source_sidecars(bundle: Path) -> None:
+    """Upgrade the compact fixture to the v2 raw-record retention contract."""
+    schemas = {
+        "allCountries.txt": ["geonameid", "name"],
+        "countryInfo.txt": ["ISO", "Country"],
+        "admin1CodesASCII.txt": ["code", "name"],
+        "admin2Codes.txt": ["code", "name"],
+        "alternateNamesV2.txt": ["alternateNameId", "name"],
+        "airports.csv": ["id", "municipality", "keywords"],
+        "countries.csv": ["id", "keywords"],
+        "regions.csv": ["id", "keywords"],
+    }
+    (bundle / "source_schemas.json").write_text(json.dumps(schemas), encoding="utf-8")
+    records = [
+        ("countryInfo.txt", "countryInfo:US", ["US", "United States"]),
+        ("allCountries.txt", "allCountries:1", ["1", "United States"]),
+        ("allCountries.txt", "allCountries:9", ["9", "Test Airport"]),
+        # Deliberately overlap an ID across raw source files.  Publication
+        # must follow the derived-record source mapping, not ID alone.
+        ("alternateNamesV2.txt", "allCountries:9", ["allCountries:9", "wrong source"]),
+        ("alternateNamesV2.txt", "alternateNamesV2:100", ["100", "United States"]),
+        ("alternateNamesV2.txt", "alternateNamesV2:200", ["200", "TST"]),
+        ("airports.csv", "ourairports:42", ["42", "Testville", "test, TST"]),
+        ("countries.csv", "ourairports:1", ["1", "united states"]),
+        ("regions.csv", "ourairports:2", ["2", "new york"]),
+    ]
+    _write_rows(
+        bundle / "source_raw_records.tsv",
+        ["source_name", "source_record_id", "values_json"],
+        [
+            {
+                "source_name": source_name,
+                "source_record_id": source_record_id,
+                "values_json": json.dumps(values, separators=(",", ":")),
+            }
+            for source_name, source_record_id, values in records
+        ],
+    )
+    manifest_path = bundle / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["format_version"] = "2"
+    manifest["source_files_read"] = {name: {"bytes": 1, "sha256": "0" * 64} for name in schemas}
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    _refresh_receipts(bundle)
+
+
 def test_publishes_immutable_catalog_with_manifest_and_exact_name_alias(tmp_path: Path) -> None:
     result = publish_catalog(_bundle(tmp_path), tmp_path / "releases", CONTEXT)
     manifest = validate_release(result.release_path)
@@ -332,6 +379,40 @@ def test_publishes_immutable_catalog_with_manifest_and_exact_name_alias(tmp_path
         publish_catalog(_bundle(tmp_path / "other"), tmp_path / "releases", CONTEXT)
     assert _sha(result.database_path) == prior_database_sha
     assert result.manifest_path.read_bytes() == prior_manifest
+
+
+def test_lossless_source_payload_is_inspectable_but_not_an_airport_alias(tmp_path: Path) -> None:
+    bundle = _bundle(tmp_path)
+    _add_lossless_source_sidecars(bundle)
+    result = publish_catalog(bundle, tmp_path / "releases", CONTEXT)
+    with sqlite3.connect(f"file:{result.database_path}?mode=ro", uri=True) as connection:
+        record = connection.execute(
+            """SELECT schema.headers_json, source.raw_values_json
+                 FROM source_record AS source
+                 JOIN source_schema AS schema ON schema.source_name = source.source_schema_name
+                WHERE source.source_record_key = 'airports.csv:ourairports:42'"""
+        ).fetchone()
+        assert record == (
+            '["id","municipality","keywords"]',
+            '["42","Testville","test, TST"]',
+        )
+        assert (
+            connection.execute(
+                "SELECT COUNT(*) FROM airport_alias WHERE normalized_alias = 'testville'"
+            ).fetchone()[0]
+            == 0
+        )
+        query_plan = connection.execute(
+            "EXPLAIN QUERY PLAN SELECT source_record_key FROM source_record "
+            "WHERE source_schema_name = ? AND source_record_id = ?",
+            ("airports.csv", "ourairports:42"),
+        ).fetchall()
+        assert any("source_record_raw_identity_idx" in row[3] for row in query_plan)
+    with CatalogKnowledgeRepository(result.release_path) as repository:
+        source_record = repository.source_record("airports.csv:ourairports:42")
+    assert source_record is not None
+    assert source_record.source_headers == ("id", "municipality", "keywords")
+    assert source_record.raw_values == ("42", "Testville", "test, TST")
 
 
 def test_conflicts_and_ambiguity_are_quarantined_not_published(tmp_path: Path) -> None:

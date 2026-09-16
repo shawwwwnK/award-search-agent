@@ -19,7 +19,7 @@ from award_agent.search_planning.contracts import (
 from award_agent.search_planning.knowledge import (
     Airport,
     GeoEntity,
-    KnowledgeRepository,
+    PlanningKnowledgeRepository,
     normalize_location_alias,
 )
 from award_agent.search_planning.policy import PlanningPolicy
@@ -30,7 +30,7 @@ _EXPLICIT_IATA = re.compile(r"^[A-Za-z]{3}$")
 def ground_endpoint(
     location: LocationRef,
     role: str,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
     policy: PlanningPolicy,
 ) -> GroundedEndpointResult:
     """Resolve and select one endpoint without changing the source LocationRef.
@@ -88,7 +88,7 @@ def ground_endpoint(
 
 
 def _resolve_location(
-    location: LocationRef, normalized: str, repository: KnowledgeRepository
+    location: LocationRef, normalized: str, repository: PlanningKnowledgeRepository
 ) -> ResolvedLocation:
     if location.kind is LocationKind.AIRPORT:
         if _is_preserved_explicit_iata(location):
@@ -126,8 +126,14 @@ def _resolve_airport_candidates(
     location: LocationRef,
     normalized: str,
     candidates: tuple[Airport, ...],
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
 ) -> ResolvedLocation:
+    if repository.airport_metadata_missing_for_alias(normalized):
+        return ResolvedLocation(
+            location=location,
+            status=LocationResolutionStatus.EVIDENCE_FAILURE,
+            normalized_alias=normalized,
+        )
     if len(candidates) == 1:
         return _resolved_airport(location, normalized, candidates[0])
     if len(candidates) > 1:
@@ -186,7 +192,7 @@ def _is_preserved_explicit_iata(location: LocationRef) -> bool:
 def _select_geographic_group(
     role: str,
     resolution: ResolvedLocation,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
     policy: PlanningPolicy,
 ) -> GroundedEndpointResult:
     assert resolution.resolved_entity_id is not None
@@ -286,7 +292,7 @@ def _select_single_airport(airport: Airport) -> SelectedAirport:
 def _missing_airport(
     role: str,
     resolution: ResolvedLocation,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
     freshness: FreshnessClass,
 ) -> GroundedEndpointResult:
     return GroundedEndpointResult(
@@ -314,7 +320,7 @@ def _missing_airport(
 def _stale_evidence_failure(
     role: str,
     resolution: ResolvedLocation,
-    repository: KnowledgeRepository,
+    repository: PlanningKnowledgeRepository,
     freshness: FreshnessClass,
 ) -> GroundedEndpointResult:
     return GroundedEndpointResult(
@@ -340,7 +346,7 @@ def _stale_evidence_failure(
 
 
 def _issue_for_resolution(
-    resolution: ResolvedLocation, repository: KnowledgeRepository
+    resolution: ResolvedLocation, repository: PlanningKnowledgeRepository
 ) -> PlanningIssue:
     code = {
         LocationResolutionStatus.UNRESOLVED: PlanningIssueCode.UNRESOLVED_LOCATION,

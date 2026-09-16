@@ -230,7 +230,7 @@ class PlanIdentity(PlanningContractModel):
     policy_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
     snapshot_id: str = Field(min_length=1)
     snapshot_as_of: date
-    knowledge_receipt: KnowledgeReceipt
+    knowledge_receipt: KnowledgeReceipt | CatalogKnowledgeReceipt
     capability_receipt: CapabilityReceipt
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
         {"knowledge_receipt", "capability_receipt"}
@@ -252,6 +252,39 @@ class KnowledgeReceipt(PlanningContractModel):
             not source_id for source_id in self.source_ids
         ):
             raise ValueError("knowledge receipt source IDs must be sorted, unique, and nonempty")
+        return self
+
+
+class CatalogSourceArtifactReceipt(PlanningContractModel):
+    """One immutable source-artifact receipt bound into a catalog release."""
+
+    artifact_name: str = Field(min_length=1)
+    bytes: int = Field(ge=0)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class CatalogKnowledgeReceipt(PlanningContractModel):
+    """Identity of one validated, read-only SQLite knowledge release.
+
+    This intentionally is not a JSON-snapshot receipt with optional blank
+    fields.  A catalog-backed plan says which release and which immutable
+    artifacts it actually read.
+    """
+
+    release_id: str = Field(min_length=1)
+    schema_version: str = Field(min_length=1)
+    source_date: date
+    logical_content_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    manifest_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    database_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    source_bundle_manifest_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    source_artifacts: tuple[CatalogSourceArtifactReceipt, ...] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def canonical_source_artifacts(self) -> CatalogKnowledgeReceipt:
+        names = tuple(item.artifact_name for item in self.source_artifacts)
+        if names != tuple(sorted(set(names))):
+            raise ValueError("catalog source artifacts must be sorted and unique")
         return self
 
 
@@ -609,9 +642,7 @@ class PathExplorationReceipt(PlanningContractModel):
     overflow: bool = False
     available_edge_evidence: tuple[RouteEdgeEvidenceReceipt, ...] = ()
 
-    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
-        {"available_edge_evidence"}
-    )
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"available_edge_evidence"})
 
     @model_validator(mode="after")
     def validate_examined_edges(self) -> PathExplorationReceipt:
@@ -788,9 +819,7 @@ class PaymentPattern(PlanningContractModel):
 
     pattern_id: str = Field(min_length=1)
     hypothesis_id: str = Field(min_length=1)
-    component_payment_modes: tuple[ComponentPaymentMode, ...] = Field(
-        min_length=2, max_length=2
-    )
+    component_payment_modes: tuple[ComponentPaymentMode, ...] = Field(min_length=2, max_length=2)
 
     @model_validator(mode="after")
     def validate_award_backed_pattern(self) -> PaymentPattern:
@@ -877,10 +906,17 @@ class SearchPlan(PlanningContractModel):
             raise ValueError("plan capability ID must match its capability receipt")
         if self.capability_version != self.identity.capability_receipt.capability_version:
             raise ValueError("plan capability version must match its capability receipt")
-        if self.identity.snapshot_id != self.identity.knowledge_receipt.snapshot_id:
-            raise ValueError("plan snapshot ID must match its knowledge receipt")
-        if self.identity.snapshot_as_of != self.identity.knowledge_receipt.snapshot_as_of:
-            raise ValueError("plan snapshot as-of must match its knowledge receipt")
+        knowledge_receipt = self.identity.knowledge_receipt
+        if isinstance(knowledge_receipt, KnowledgeReceipt):
+            if self.identity.snapshot_id != knowledge_receipt.snapshot_id:
+                raise ValueError("plan snapshot ID must match its knowledge receipt")
+            if self.identity.snapshot_as_of != knowledge_receipt.snapshot_as_of:
+                raise ValueError("plan snapshot as-of must match its knowledge receipt")
+        else:
+            if self.identity.snapshot_id != knowledge_receipt.release_id:
+                raise ValueError("plan snapshot ID must match its catalog release receipt")
+            if self.identity.snapshot_as_of != knowledge_receipt.source_date:
+                raise ValueError("plan snapshot as-of must match its catalog source date")
         probe_ids = tuple(probe.probe_id for probe in self.endpoint_probes)
         probe_pairs = tuple(
             (probe.origin_endpoint.airport_id, probe.destination_endpoint.airport_id)
@@ -901,9 +937,7 @@ class SearchPlan(PlanningContractModel):
             or probe.traveler_count != global_traveler_count
             for probe in self.endpoint_probes
         ):
-            raise ValueError(
-                "endpoint probes must agree on requested cabins and traveler count"
-            )
+            raise ValueError("endpoint probes must agree on requested cabins and traveler count")
         if any(probe_id is None for probe_id in item_probe_ids):
             raise ValueError("endpoint award items must link to an endpoint probe")
         if len(item_probe_ids) != len(set(item_probe_ids)):
@@ -930,7 +964,10 @@ class SearchPlan(PlanningContractModel):
                 for obligation in item.result_validation_obligations
                 if obligation.kind is ResultValidationKind.MINIMUM_AWARD_SEATS
             )
-            if len(seat_obligations) != 1 or seat_obligations[0].minimum_seats != probe.traveler_count:
+            if (
+                len(seat_obligations) != 1
+                or seat_obligations[0].minimum_seats != probe.traveler_count
+            ):
                 raise ValueError(
                     "endpoint award item minimum-seat obligation must match its linked probe"
                 )
@@ -976,16 +1013,27 @@ class SearchPlan(PlanningContractModel):
             for path in self.explicit_path_hypotheses
         )
         if len(path_semantic_keys) != len(set(path_semantic_keys)):
-            raise ValueError("explicit paths must be semantically deduplicated before payment annotation")
+            raise ValueError(
+                "explicit paths must be semantically deduplicated before payment annotation"
+            )
         component_ids: list[str] = []
         item_by_id = {item.item_id: item for item in self.award_search_items}
-        knowledge_source_ids = set(self.identity.knowledge_receipt.source_ids)
+        knowledge_source_ids = (
+            set(knowledge_receipt.source_ids)
+            if isinstance(knowledge_receipt, KnowledgeReceipt)
+            else None
+        )
+        if knowledge_source_ids is None and (
+            self.explicit_path_hypotheses
+            or any(receipt.available_edge_evidence for receipt in self.path_exploration_receipts)
+        ):
+            raise ValueError("catalog knowledge receipts cannot carry route topology evidence")
         edge_evidence_by_id: dict[str, RouteEdgeEvidenceReceipt] = {}
         for receipt in self.path_exploration_receipts:
             for available_edge in receipt.available_edge_evidence:
-                if not set(available_edge.route_evidence_source_ids).issubset(
-                    knowledge_source_ids
-                ):
+                if knowledge_source_ids is None or not set(
+                    available_edge.route_evidence_source_ids
+                ).issubset(knowledge_source_ids):
                     raise ValueError(
                         "route evidence source IDs must be present in the knowledge receipt"
                     )
@@ -1016,7 +1064,9 @@ class SearchPlan(PlanningContractModel):
                     raise ValueError(
                         "component item must exactly match its physical scope and envelope"
                     )
-                if not set(component.route_evidence_source_ids).issubset(knowledge_source_ids):
+                if knowledge_source_ids is None or not set(
+                    component.route_evidence_source_ids
+                ).issubset(knowledge_source_ids):
                     raise ValueError(
                         "component route evidence source IDs must be present in the knowledge receipt"
                     )
@@ -1039,9 +1089,7 @@ class SearchPlan(PlanningContractModel):
                     != component.route_applicable_start
                     or bound_edge_evidence.route_applicable_end != component.route_applicable_end
                 ):
-                    raise ValueError(
-                        "path component must match the bound directed route evidence"
-                    )
+                    raise ValueError("path component must match the bound directed route evidence")
                 if not any(
                     filter_.kind is FilterObligationKind.DIRECT_FLIGHT_AVAILABLE
                     and filter_.origin == "planner_structure"
@@ -1111,7 +1159,9 @@ class SearchPlan(PlanningContractModel):
                 if mode is ComponentPaymentMode.MANUAL_CASH
             )
             if len(manual_indexes) != 1 or template.manual_component_index != manual_indexes[0]:
-                raise ValueError("manual cash-check template must bind the pattern's only cash component")
+                raise ValueError(
+                    "manual cash-check template must bind the pattern's only cash component"
+                )
             manual_component = components_by_id.get(template.manual_component_id)
             if (
                 manual_component is None
@@ -1148,7 +1198,9 @@ class SearchPlan(PlanningContractModel):
                     "manual cash-check template must preserve global cabin and traveler requirements"
                 )
             if template.requested_cabins != award_item.requested_cabins:
-                raise ValueError("manual cash-check template must preserve award cabin requirements")
+                raise ValueError(
+                    "manual cash-check template must preserve award cabin requirements"
+                )
             seat_obligations = tuple(
                 obligation
                 for obligation in award_item.result_validation_obligations

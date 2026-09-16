@@ -4,6 +4,20 @@
 
 Build a narrow, measurable award-search workflow that converts vague travel requests into grounded, traceable recommendations.
 
+## Development-only status
+
+This repository and every artifact it currently produces are local development
+work. Nothing is deployed, published, or used by external users. Terms such as
+"release," "snapshot," and "catalog" describe local versioned artifacts, not
+a production rollout or externally consumed service.
+
+Agents may therefore revise, rebuild, replace, or remove local development
+artifacts when that is in scope for the owner's request; do not treat a local
+artifact change as an operational-impact or deployment decision. For material
+changes, preserve traceability through receipts, tests, project-state/build-log
+updates, and explicit coverage claims. Do not invent production constraints or
+require deployment-style approval merely because an artifact is versioned.
+
 ## Living project workbook
 
 The ongoing project-design workbook lives outside this repository at:

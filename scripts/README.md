@@ -14,8 +14,10 @@ The script selects current countries; meaningful current populated places;
 explicitly named region taxonomies; airport reconciliation candidates; current
 language-tagged aliases; and the owner-approved OurAirports endpoint set. It
 records filtered records, source IDs, checksums, and quarantine reasons in the
-bundle manifest. It verifies the bundle before an optional `--prune-raw`
-removes only source files that the bundle supersedes.
+bundle manifest. For every retained source row it also preserves the complete
+original header and ordered values in lossless source-record sidecars. Those
+descriptive fields are inspection/provenance data only: they do not become
+aliases, airport-serving evidence, group policy, routes, or provider claims.
 
 Use it only with the documented local source acquisition from
 `docs/build-log/2026-09-13-m1-source-acquisition.md`.
@@ -25,10 +27,12 @@ names into `data/source-inputs/` alongside the existing bundle, then run:
 
 ```text
 .venv/bin/python scripts/prepare_m1_source_subsets.py \
-  --replace-existing-bundle --prune-raw
+  --replace-existing-bundle
 ```
 
-The new bundle is verified before it atomically replaces the previous bundle;
-the new raw files are pruned only after that replacement succeeds. Without
+The preparation command rejects `--prune-raw`: it cannot establish that a
+replacement SQLite catalog has been fully validated. Raw-source removal is a
+separate, post-validation maintenance action; it is never part of catalog
+publication or serving. Without
 `--replace-existing-bundle`, the script refuses to overwrite an existing
 bundle.

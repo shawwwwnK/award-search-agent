@@ -184,3 +184,106 @@ deployment work.
 
 Owner-approved next cut: Milestone 1B read-only catalog serving and
 planner-boundary compatibility.
+
+## Milestone 1B implementation evidence (2026-09-15)
+
+Implemented the selected-release, read-only catalog-serving boundary without
+altering the Milestone 0 JSON fixture path. `CatalogKnowledgeRepository`
+first runs the existing complete release validator, then opens only
+`catalog.sqlite` with SQLite `mode=ro` and `PRAGMA query_only=ON`. It has no
+release discovery, raw-bundle input, write method, network/model behavior,
+airport-group policy, or route data.
+
+The shared structural repository seam now permits the existing JSON
+`KnowledgeRepository` and the catalog repository to feed one planner. The
+planner requires exactly one of `snapshot=` or `repository=`. Catalog-backed
+plans carry a distinct `CatalogKnowledgeReceipt` with the release/schema/source
+date, logical catalog hash, manifest/database/source-bundle hashes, and source
+artifact receipts. Catalog query evidence remains source-record IDs; unknown
+evidence is rejected and freshness is pinned to the accepted release source
+date rather than the wall clock.
+
+Catalog entity, exact alias, explicit IATA, airport metadata, taxonomy, and
+source-lineage queries have deterministic ordering. The inspection surface also
+has a typed exact lookup result that distinguishes `resolved`, `not_found`,
+`kind_mismatch`, `taxonomy_mismatch`, `ambiguous`, and `missing_metadata`.
+`--taxonomy` on `award-catalog-inspect` is a named-region taxonomy-scoped alias
+query, rather than a bare taxonomy-existence check. Catalog geographic facts
+have no selection policies, relations, or routes, so a resolved city/country/
+region reaches the existing explicit `MISSING_SELECTION_POLICY` result rather
+than inventing airport service. The new `award-catalog-inspect` CLI only opens
+the same validated read-only repository for manifest/receipt, alias, entity,
+airport, taxonomy, and source-record inspection.
+
+Focused tests use a tiny generated publication fixture, not the ignored 1.36
+GB owner-reviewed artifact. They cover exact country/city/region/airport
+retrieval, provenance, pinned-current/unknown evidence handling, database
+write rejection, catalog receipt binding, explicit-airport planning, no-group
+planning failure, snapshot/repository exclusivity, inspector behavior, and
+tampered-manifest rejection. Follow-up adversarial coverage also confirms that
+catalog serving never preloads all source-record keys and that an airport whose
+published country has zero or multiple catalog country entities becomes an
+explicit missing-airport-evidence result rather than a fabricated or arbitrary
+country identifier. A valid projected airport includes its uniquely selected
+country entity's source-record evidence.
+
+Commands run during implementation:
+
+```text
+.venv/bin/python -m pytest tests/unit/test_catalog_serving.py \
+  tests/unit/test_search_planning_grounding.py \
+  tests/unit/test_search_planning_endpoint.py \
+  tests/unit/test_catalog_publication.py -q  # 90 passed
+.venv/bin/python -m mypy src/award_agent/search_planning \
+  src/award_agent/cli/catalog_inspect.py tests/unit/test_catalog_serving.py
+.venv/bin/python -m ruff check src/award_agent/search_planning \
+  src/award_agent/cli/catalog_inspect.py tests/unit/test_catalog_serving.py
+PYTHONPATH=src .venv/bin/python -m award_agent.cli.catalog_inspect \
+  data/search_planning/catalogs/m1a-06b28b323dc70ef5 --airport SFO
+.venv/bin/python -m pytest -q  # 406 passed, 99 skipped
+.venv/bin/python -m ruff format --check \
+  src/award_agent/search_planning/knowledge.py \
+  src/award_agent/search_planning/contracts.py \
+  src/award_agent/search_planning/locations.py \
+  src/award_agent/search_planning/planner.py \
+  src/award_agent/search_planning/__init__.py \
+  src/award_agent/cli/catalog_inspect.py \
+  tests/unit/test_catalog_serving.py
+git diff --check
+```
+
+The final inspection command validated and queried the owner-reviewed full
+local release: `SFO` resolved to `ourairports:3878`, with its accepted
+OurAirports endpoint, GeoNames airport-candidate, and GeoNames IATA-evidence
+source-record receipts. It reported the release/manifest/database/logical and
+source-bundle digests recorded above. The installed entry point is named
+`award-catalog-inspect`; this development checkout invoked the module directly
+because its existing virtual environment pre-dates the new package script.
+
+Owner interpretation and the Milestone 1 review/next-cut decision remain
+pending. This implementation does not claim route, schedule, provider, or
+airport-group coverage.
+
+## Retention correction and Milestone 1B closeout (2026-09-16)
+
+The owner corrected the earlier compact-data retention judgment: row eligibility remains
+unchanged, but every original column for every retained source row must remain available. The
+replacement local bundle therefore stores immutable source schemas and ordered raw payload values;
+the SQLite catalog exposes them through read-only source-record inspection. `municipality` and
+`keywords` are retained for inspection only and do not become aliases, selection policy, airport
+groups, route data, or planner evidence.
+
+The initial lossless publication exposed an unindexed raw-evidence lookup. A matching
+`(source_schema_name, source_record_id)` index was added before derived evidence loading and the
+nonessential artifact index was deferred until after bulk load. The validated replacement release
+is `data/search_planning/catalogs/m1a-3cb7981519612945`.
+
+Independent final qualification recorded: release digest/manifest validation, SQLite integrity and
+foreign-key checks, 1,810,402 retained raw records with schema-length agreement, 3,244 retained
+OurAirports rows with zero full-payload mismatches, and explicit New York City no-airport-expansion
+behavior. Focused catalog/preparation/serving tests passed 36 tests; planner grounding/endpoint/
+path tests passed 87 tests. The prior incomplete and column-dropping local artifacts plus expanded
+raw downloads were removed after validation; the compact bundle and validated catalog remain.
+
+On 2026-09-16, the owner approved and closed Milestone 1B. This closeout does not authorize
+Milestone 2 connectivity, providers, route inference, or airport-group expansion.

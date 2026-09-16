@@ -21,7 +21,7 @@ import shutil
 import tempfile
 import unicodedata
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -61,6 +61,68 @@ SOURCE_FILES_READ = (
     "regions.csv",
 )
 
+# The upstream GeoNames dumps are positional formats.  Keep their source
+# schemas alongside the retained rows so publication can prove exactly which
+# omitted-at-runtime descriptive fields belonged to an evidence record.
+GEONAMES_ALLCOUNTRIES_HEADERS = (
+    "geonameid",
+    "name",
+    "asciiname",
+    "alternatenames",
+    "latitude",
+    "longitude",
+    "feature_class",
+    "feature_code",
+    "country_code",
+    "cc2",
+    "admin1_code",
+    "admin2_code",
+    "admin3_code",
+    "admin4_code",
+    "population",
+    "elevation",
+    "dem",
+    "timezone",
+    "modification_date",
+)
+GEONAMES_COUNTRY_HEADERS = (
+    "ISO",
+    "ISO3",
+    "ISO-Numeric",
+    "fips",
+    "Country",
+    "Capital",
+    "Area(in sq km)",
+    "Population",
+    "Continent",
+    "tld",
+    "CurrencyCode",
+    "CurrencyName",
+    "Phone",
+    "Postal Code Format",
+    "Postal Code Regex",
+    "Languages",
+    "geonameid",
+    "neighbours",
+    "EquivalentFipsCode",
+)
+ADMIN_HEADERS = ("code", "name", "asciiname", "geonameid")
+ALTERNATE_NAME_HEADERS = (
+    "alternateNameId",
+    "geonameid",
+    "isolanguage",
+    "alternate_name",
+    "isPreferredName",
+    "isShortName",
+    "isColloquial",
+    "isHistoric",
+    "from",
+    "to",
+)
+RAW_RECORD_HEADERS = ("source_name", "source_record_id", "values_json")
+SOURCE_SCHEMAS_FILENAME = "source_schemas.json"
+RAW_RECORDS_FILENAME = "source_raw_records.tsv"
+
 
 @dataclass(frozen=True)
 class Feature:
@@ -77,6 +139,7 @@ class Feature:
     population: str
     timezone: str
     modification_date: str
+    raw_values: tuple[str, ...] = ()
 
 
 def _sha256(path: Path) -> str:
@@ -107,6 +170,7 @@ def _read_geonames_features(path: Path) -> Iterable[Feature]:
                 population=values[14],
                 timezone=values[17],
                 modification_date=values[18],
+                raw_values=tuple(values),
             )
 
 
@@ -137,19 +201,37 @@ def _write_tsv(path: Path, headers: tuple[str, ...], rows: Iterable[dict[str, st
         writer.writerows(rows)
 
 
-def _copy_csv_subset(input_path: Path, output_path: Path, fields: tuple[str, ...]) -> int:
+def _copy_csv_subset(
+    input_path: Path,
+    output_path: Path,
+    required_fields: tuple[str, ...],
+    *,
+    predicate: Callable[[dict[str, str]], bool] | None = None,
+    raw_records: dict[tuple[str, str], tuple[str, ...]] | None = None,
+    source_name: str | None = None,
+    source_record_id: Callable[[dict[str, str]], str] | None = None,
+) -> int:
     count = 0
     with (
         input_path.open("r", encoding="utf-8", newline="") as input_file,
         output_path.open("w", encoding="utf-8", newline="") as output_file,
     ):
         reader = csv.DictReader(input_file)
-        if reader.fieldnames is None or set(fields) - set(reader.fieldnames):
+        if reader.fieldnames is None or set(required_fields) - set(reader.fieldnames):
             raise ValueError(f"{input_path.name}: required CSV columns are missing")
+        # Preserve the complete observed source schema.  Required columns are
+        # checked independently so OurAirports can add descriptive columns
+        # without silently losing them during compaction.
+        fields = tuple(reader.fieldnames)
         writer = csv.DictWriter(output_file, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for row in reader:
+            if predicate is not None and not predicate(row):
+                continue
             writer.writerow({field: row[field] for field in fields})
+            if raw_records is not None and source_name is not None and source_record_id is not None:
+                native_id = source_record_id(row)
+                raw_records[(source_name, native_id)] = tuple(row[field] for field in fields)
             count += 1
     return count
 
@@ -304,6 +386,8 @@ def _verify_bundle(bundle: Path) -> dict[str, int]:
         "ourairports_countries.csv",
         "ourairports_regions.csv",
         "quarantine.tsv",
+        SOURCE_SCHEMAS_FILENAME,
+        RAW_RECORDS_FILENAME,
         "manifest.json",
     }
     missing = sorted(name for name in required if not (bundle / name).is_file())
@@ -315,6 +399,72 @@ def _verify_bundle(bundle: Path) -> dict[str, int]:
         path = bundle / filename
         if path.stat().st_size != receipt["bytes"] or _sha256(path) != receipt["sha256"]:
             raise ValueError(f"output receipt does not match local file: {filename}")
+
+    try:
+        schemas = json.loads((bundle / SOURCE_SCHEMAS_FILENAME).read_text(encoding="utf-8"))
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("lossless source schema sidecar is invalid") from exc
+    raw_ids: set[tuple[str, str]] = set()
+    with (bundle / RAW_RECORDS_FILENAME).open(encoding="utf-8", newline="") as input_file:
+        raw_reader = csv.DictReader(input_file, delimiter="\t")
+        if tuple(raw_reader.fieldnames or ()) != RAW_RECORD_HEADERS:
+            raise ValueError("unexpected raw source-record header")
+        for row in raw_reader:
+            source_name = row["source_name"]
+            source_record_id = row["source_record_id"]
+            try:
+                values = json.loads(row["values_json"])
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"invalid raw source-record JSON: {source_record_id}") from exc
+            if (
+                source_name not in schemas
+                or not isinstance(values, list)
+                or len(values) != len(schemas[source_name])
+                or not all(isinstance(value, str) for value in values)
+                or (source_name, source_record_id) in raw_ids
+            ):
+                raise ValueError(f"invalid or duplicate raw source record: {source_record_id}")
+            raw_ids.add((source_name, source_record_id))
+
+    required_raw_links: list[tuple[str, str]] = []
+    for filename in (
+        "geonames_entities.tsv",
+        "geonames_base_aliases.tsv",
+        "geonames_current_aliases.tsv",
+        "geonames_airport_candidates.tsv",
+        "geonames_iata_crossrefs.tsv",
+    ):
+        with (bundle / filename).open(encoding="utf-8", newline="") as input_file:
+            for row in csv.DictReader(input_file, delimiter="\t"):
+                source_id = row["source_record_id"]
+                source_prefixes = {
+                    "allCountries:": "allCountries.txt",
+                    "countryInfo:": "countryInfo.txt",
+                    "admin1CodesASCII:": "admin1CodesASCII.txt",
+                    "admin2Codes:": "admin2Codes.txt",
+                    "alternateNamesV2:": "alternateNamesV2.txt",
+                }
+                expected = next(
+                    (
+                        name
+                        for prefix, name in source_prefixes.items()
+                        if source_id.startswith(prefix)
+                    ),
+                    None,
+                )
+                if expected is not None:
+                    required_raw_links.append((expected, source_id))
+    for filename, source_name in (
+        ("ourairports_airports.csv", "airports.csv"),
+        ("ourairports_countries.csv", "countries.csv"),
+        ("ourairports_regions.csv", "regions.csv"),
+    ):
+        with (bundle / filename).open(encoding="utf-8", newline="") as input_file:
+            for row in csv.DictReader(input_file):
+                required_raw_links.append((source_name, f"ourairports:{row['id']}"))
+    missing_raw = sorted(set(required_raw_links) - raw_ids)
+    if missing_raw:
+        raise ValueError(f"derived evidence has no retained raw source record: {missing_raw[0]}")
 
     entities: dict[str, dict[str, str]] = {}
     with (bundle / "geonames_entities.tsv").open(encoding="utf-8", newline="") as input_file:
@@ -362,6 +512,33 @@ def _verify_bundle(bundle: Path) -> dict[str, int]:
     return {"entities": len(entities), "current_aliases": aliases, "airports": airports}
 
 
+def _write_raw_records(
+    bundle: Path,
+    *,
+    schemas: dict[str, tuple[str, ...]],
+    records: dict[tuple[str, str], tuple[str, ...]],
+) -> None:
+    (bundle / SOURCE_SCHEMAS_FILENAME).write_text(
+        json.dumps(
+            {name: list(headers) for name, headers in sorted(schemas.items())},
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    rows = (
+        {
+            "source_name": source_name,
+            "source_record_id": source_record_id,
+            "values_json": json.dumps(list(values), ensure_ascii=False, separators=(",", ":")),
+        }
+        for (source_name, source_record_id), values in sorted(records.items())
+    )
+    _write_tsv(bundle / RAW_RECORDS_FILENAME, RAW_RECORD_HEADERS, rows)
+
+
 def _prune_raw_files(source_directory: Path) -> None:
     for filename in RAW_FILES_SUPERSEDED_BY_BUNDLE:
         path = source_directory / filename
@@ -375,7 +552,7 @@ def _write_manifest(bundle: Path, *, counts: Counter[str], source_directory: Pat
     )
     document = {
         "bundle_id": BUNDLE_NAME,
-        "format_version": "1",
+        "format_version": "2",
         "purpose": "Compact current travel-identity inputs; not a published planner snapshot.",
         "filters": {
             "cities": {
@@ -418,6 +595,7 @@ def _write_manifest(bundle: Path, *, counts: Counter[str], source_directory: Pat
             "Source order is not a publication order; the future importer must canonicalize records.",
             "GeoNames airport candidates are reconciliation evidence only, not published airports.",
             "No municipality, keyword, coordinate, or distance rule creates a serving relationship.",
+            "All original columns are retained for every retained source row as canonical raw-record payloads; descriptive fields are inspection-only unless a later reviewed policy says otherwise.",
             "No airport group, route, schedule, provider, or booking claim is included.",
         ],
     }
@@ -429,6 +607,11 @@ def _write_manifest(bundle: Path, *, counts: Counter[str], source_directory: Pat
 def prepare(
     source_directory: Path, *, prune_raw: bool, replace_existing_bundle: bool = False
 ) -> Path:
+    if prune_raw:
+        raise ValueError(
+            "source preparation cannot prune raw inputs; prune only after a separately "
+            "validated replacement SQLite catalog"
+        )
     source_directory = source_directory.resolve()
     final_bundle = source_directory / BUNDLE_NAME
     if final_bundle.exists():
@@ -446,6 +629,35 @@ def prepare(
     counts: Counter[str] = Counter()
     quarantine: list[dict[str, str]] = []
     entities: dict[str, dict[str, str]] = {}
+    raw_records: dict[tuple[str, str], tuple[str, ...]] = {}
+    source_schemas: dict[str, tuple[str, ...]] = {
+        "allCountries.txt": GEONAMES_ALLCOUNTRIES_HEADERS,
+        "countryInfo.txt": GEONAMES_COUNTRY_HEADERS,
+        "admin1CodesASCII.txt": ADMIN_HEADERS,
+        "admin2Codes.txt": ADMIN_HEADERS,
+        "alternateNamesV2.txt": ALTERNATE_NAME_HEADERS,
+    }
+    # Countries and administrative rows are retained under the unchanged
+    # entity rule, including administrative rows that later receive a visible
+    # corroboration quarantine.  Keep their original positional records.
+    for filename, expected_fields, id_index in (
+        ("countryInfo.txt", 19, 0),
+        ("admin1CodesASCII.txt", 4, 0),
+        ("admin2Codes.txt", 4, 0),
+    ):
+        with (source_directory / filename).open("r", encoding="utf-8", newline="") as input_file:
+            for line_number, line in enumerate(input_file, start=1):
+                if filename == "countryInfo.txt" and (not line.strip() or line.startswith("#")):
+                    continue
+                values = tuple(line.rstrip("\r\n").split("\t"))
+                if len(values) != expected_fields:
+                    raise ValueError(f"{filename}:{line_number}: expected {expected_fields} fields")
+                source_id = (
+                    f"countryInfo:{values[id_index]}"
+                    if filename == "countryInfo.txt"
+                    else f"{Path(filename).stem}:{values[id_index]}"
+                )
+                raw_records[(filename, source_id)] = values
     for country in _read_current_countries(source_directory / "countryInfo.txt"):
         _add_entity(country, entities, quarantine)
         counts["countries"] += 1
@@ -462,6 +674,7 @@ def prepare(
     active_admin_ids: set[str] = set()
     airport_candidates: dict[str, Feature] = {}
     for feature in _read_geonames_features(source_directory / "allCountries.txt"):
+        retain_raw = False
         if _is_kept_city(feature):
             _add_entity(
                 _feature_entity(feature, taxonomy="geonames:populated_place", entity_kind="city"),
@@ -469,6 +682,7 @@ def prepare(
                 quarantine,
             )
             counts["cities"] += 1
+            retain_raw = True
         elif feature.feature_class == "L" and feature.feature_code == "CONT":
             _add_entity(
                 _feature_entity(feature, taxonomy="geonames:continent", entity_kind="region"),
@@ -476,6 +690,7 @@ def prepare(
                 quarantine,
             )
             counts["continents"] += 1
+            retain_raw = True
         elif feature.feature_class == "L" and feature.feature_code in GEOGRAPHIC_REGION_CODES:
             _add_entity(
                 _feature_entity(
@@ -485,9 +700,11 @@ def prepare(
                 quarantine,
             )
             counts["geographic_regions"] += 1
+            retain_raw = True
         elif feature.feature_class == "S" and feature.feature_code == "AIRP":
             airport_candidates[feature.geoname_id] = feature
             counts["airport_candidates"] += 1
+            retain_raw = True
 
         if (
             feature.geoname_id in admin_expected_ids
@@ -495,6 +712,11 @@ def prepare(
             and feature.feature_code == admin_expected_ids[feature.geoname_id]
         ):
             active_admin_ids.add(feature.geoname_id)
+            retain_raw = True
+        if retain_raw:
+            raw_records[("allCountries.txt", f"allCountries:{feature.geoname_id}")] = (
+                feature.raw_values
+            )
 
     for geoname_id, expected_feature_code in sorted(admin_expected_ids.items()):
         if geoname_id not in active_admin_ids:
@@ -507,7 +729,7 @@ def prepare(
                 }
             )
 
-    airport_fields = (
+    airport_required_fields = (
         "id",
         "ident",
         "type",
@@ -528,7 +750,17 @@ def prepare(
     bundle.mkdir()
     try:
         airports = _copy_csv_subset(
-            source_directory / "airports.csv", bundle / "ourairports_airports.csv", airport_fields
+            source_directory / "airports.csv",
+            bundle / "ourairports_airports.csv",
+            airport_required_fields,
+            predicate=lambda row: (
+                row["type"] in {"large_airport", "medium_airport"}
+                and row["scheduled_service"] == "yes"
+                and bool(row["iata_code"])
+            ),
+            raw_records=raw_records,
+            source_name="airports.csv",
+            source_record_id=lambda row: f"ourairports:{row['id']}",
         )
         counts["ourairports_airports"] = airports
         with (bundle / "ourairports_airports.csv").open(encoding="utf-8", newline="") as input_file:
@@ -537,6 +769,9 @@ def prepare(
             source_directory / "countries.csv",
             bundle / "ourairports_countries.csv",
             ("id", "code", "name", "continent", "wikipedia_link", "keywords"),
+            raw_records=raw_records,
+            source_name="countries.csv",
+            source_record_id=lambda row: f"ourairports:{row['id']}",
         )
         counts["ourairports_regions"] = _copy_csv_subset(
             source_directory / "regions.csv",
@@ -551,7 +786,14 @@ def prepare(
                 "wikipedia_link",
                 "keywords",
             ),
+            raw_records=raw_records,
+            source_name="regions.csv",
+            source_record_id=lambda row: f"ourairports:{row['id']}",
         )
+        for filename in ("airports.csv", "countries.csv", "regions.csv"):
+            with (source_directory / filename).open(encoding="utf-8", newline="") as source_file:
+                header = next(csv.reader(source_file))
+            source_schemas[filename] = tuple(header)
 
         entity_headers = (
             "entity_id",
@@ -579,7 +821,7 @@ def prepare(
         base_alias_rows: list[dict[str, str]] = []
         for geoname_id, entity in sorted(entities.items(), key=lambda item: int(item[0])):
             entity_rows.append({"entity_id": _entity_id(geoname_id), **entity})
-            aliases = (("name", entity["label"]),)
+            aliases: tuple[tuple[str, str], ...] = (("name", entity["label"]),)
             if _normalised_alias(entity["asciiname"]) != _normalised_alias(entity["label"]):
                 aliases += (("asciiname", entity["asciiname"]),)
             for alias_kind, alias in aliases:
@@ -660,8 +902,8 @@ def prepare(
             )
             alias_writer.writeheader()
             for line_number, line in enumerate(input_file, start=1):
-                values = line.rstrip("\r\n").split("\t")
-                if len(values) != 10:
+                alternate_values = line.rstrip("\r\n").split("\t")
+                if len(alternate_values) != 10:
                     raise ValueError(
                         f"alternateNamesV2.txt:{line_number}: expected 10 alternate-name fields"
                     )
@@ -676,7 +918,7 @@ def prepare(
                     is_historic,
                     start_date,
                     end_date,
-                ) = values
+                ) = alternate_values
                 if (
                     geoname_id in retained_entity_ids
                     and _is_current_alias(iso_language, is_historic, is_colloquial, end_date)
@@ -698,6 +940,9 @@ def prepare(
                         }
                     )
                     counts["current_aliases"] += 1
+                    raw_records[
+                        ("alternateNamesV2.txt", f"alternateNamesV2:{alternate_name_id}")
+                    ] = tuple(alternate_values)
                 if (
                     iso_language == "iata"
                     and geoname_id in airport_candidates
@@ -718,6 +963,9 @@ def prepare(
                         }
                     )
                     counts["iata_crossrefs"] += 1
+                    raw_records[
+                        ("alternateNamesV2.txt", f"alternateNamesV2:{alternate_name_id}")
+                    ] = tuple(alternate_values)
         _write_tsv(
             bundle / "geonames_iata_crossrefs.tsv",
             (
@@ -759,6 +1007,8 @@ def prepare(
         counts["entities"] = len(entities)
         counts["base_aliases"] = len(base_alias_rows)
         counts["quarantine_records"] = len(quarantine)
+        _write_raw_records(bundle, schemas=source_schemas, records=raw_records)
+        counts["raw_source_records"] = len(raw_records)
         _write_manifest(bundle, counts=counts, source_directory=source_directory)
         verification = _verify_bundle(bundle)
         counts.update({f"verified_{key}": value for key, value in verification.items()})
