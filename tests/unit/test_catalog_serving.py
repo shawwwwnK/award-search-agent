@@ -30,6 +30,7 @@ from award_agent.domain import (
     SearchMode,
 )
 from award_agent.search_planning import (
+    AirportSelectionCategory,
     CatalogKnowledgeReceipt,
     CatalogKnowledgeRepository,
     CatalogLookupStatus,
@@ -38,6 +39,7 @@ from award_agent.search_planning import (
     PlanningPolicy,
     PlanningSource,
     SearchPlanningOutcome,
+    context_for_resolved_location,
     ground_endpoint,
     load_default_cached_search_capability,
     load_default_knowledge_snapshot,
@@ -191,6 +193,20 @@ def test_catalog_repository_is_exact_read_only_and_carries_receipts(tmp_path: Pa
         assert repository.resolve_entities(LocationKind.CITY, "test") == ()
         assert repository.taxonomy_for_entity("geonames:3") == "geonames:geographic_region"
         assert repository.taxonomy_ids() == tuple(sorted(repository.taxonomy_ids()))
+        city = repository.get_entity("geonames:2")
+        assert city is not None
+        city_metadata = repository.entity_selection_metadata(city.entity_id)
+        assert city_metadata is not None
+        assert city_metadata.taxonomy_id == "geonames:populated_place"
+        assert city_metadata.feature_code == "PPL"
+        assert city_metadata.latitude == 1.0 and city_metadata.longitude == 2.0
+        city_resolution = ground_endpoint(
+            _location(LocationKind.CITY, "Test City"), "origin", repository, PlanningPolicy()
+        ).resolution
+        city_context = context_for_resolved_location(city_resolution, repository)
+        assert city_context.category is AirportSelectionCategory.CITY_METROPOLITAN
+        assert city_context.taxonomy_id == "geonames:populated_place"
+        assert set(city_resolution.evidence_source_ids) <= set(city_context.evidence_source_ids)
         region_lookup = repository.lookup_exact_location(
             LocationKind.REGION,
             "Test Region",
@@ -200,6 +216,11 @@ def test_catalog_repository_is_exact_read_only_and_carries_receipts(tmp_path: Pa
         assert region_lookup.candidates[0].candidate_id == "geonames:3"
         airport = repository.lookup_airport_iata("TST")
         assert airport is not None and airport.iata == "TST"
+        airport_metadata = repository.airport_selection_metadata(airport.airport_id)
+        assert airport_metadata is not None
+        assert airport_metadata.country_code == "US"
+        assert airport_metadata.iso_region == "US-NY"
+        assert airport_metadata.latitude is not None and airport_metadata.longitude is not None
         airport_sources = repository.source_records_for_airport(airport.airport_id)
         assert "geonames_entities.tsv:allCountries:1" in airport.source_ids
         assert "geonames_entities.tsv:allCountries:1" in {

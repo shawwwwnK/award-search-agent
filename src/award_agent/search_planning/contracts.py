@@ -60,6 +60,7 @@ class PlanningIssueCode(str, Enum):
     STALE_KNOWLEDGE = "stale_knowledge"
     MISSING_SELECTION_POLICY = "missing_selection_policy"
     SELECTION_POLICY_CAP_EXCEEDED = "selection_policy_cap_exceeded"
+    MODEL_AIRPORT_SELECTION_UNAVAILABLE = "model_airport_selection_unavailable"
 
 
 class PlanningIssueCategory(str, Enum):
@@ -98,6 +99,7 @@ class PlanningIssue(PlanningContractModel):
             PlanningIssueCode.STALE_KNOWLEDGE: PlanningIssueCategory.EVIDENCE,
             PlanningIssueCode.MISSING_SELECTION_POLICY: PlanningIssueCategory.EVIDENCE,
             PlanningIssueCode.SELECTION_POLICY_CAP_EXCEEDED: PlanningIssueCategory.EVIDENCE,
+            PlanningIssueCode.MODEL_AIRPORT_SELECTION_UNAVAILABLE: PlanningIssueCategory.EVIDENCE,
         }[self.code]
         if self.category is None:
             object.__setattr__(self, "category", expected)
@@ -144,6 +146,7 @@ class AirportSelectionKind(str, Enum):
     EXPLICIT_IATA = "explicit_iata"
     NAMED_AIRPORT = "named_airport"
     GEOGRAPHIC_GROUP = "geographic_group"
+    MODEL_PROPOSED = "model_proposed"
 
 
 class SelectedAirport(PlanningContractModel):
@@ -235,6 +238,7 @@ class PlanIdentity(PlanningContractModel):
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
         {"knowledge_receipt", "capability_receipt"}
     )
+
 
 
 class KnowledgeReceipt(PlanningContractModel):

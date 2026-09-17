@@ -22,6 +22,24 @@ from award_agent.domain import (
     LocationRef,
     SearchMode,
 )
+from award_agent.search_planning.airport_selection_policy import (
+    AirportSelectionCapPolicy,
+    airport_selection_cap_policy_digest,
+    context_for_resolved_location,
+)
+from award_agent.search_planning.airport_selector import (
+    AIRPORT_SELECTOR_ADAPTER_VERSION,
+    AIRPORT_SELECTOR_ORIGINAL_SIMPLE_PROMPT_VERSION,
+    AIRPORT_SELECTOR_PROMPT_VERSION,
+    AIRPORT_SELECTOR_RESPONSE_SCHEMA_SHA256,
+    AirportSelectionPlanningInput,
+    AirportSelectionPlanningResult,
+    AirportSelectionRecord,
+    AirportSelectionReplayReceipt,
+    airport_selection_distance_policy_digest,
+    airport_selection_record_digest,
+    validate_airport_selection_proposal,
+)
 from award_agent.search_planning.capabilities import (
     CachedSearchCapability,
     capability_content_digest,
@@ -29,6 +47,8 @@ from award_agent.search_planning.capabilities import (
     load_cached_search_capability,
 )
 from award_agent.search_planning.contracts import (
+    AirportSelection,
+    AirportSelectionKind,
     AwardSearchItem,
     BudgetKind,
     BudgetReceipt,
@@ -45,14 +65,18 @@ from award_agent.search_planning.contracts import (
     FilterObligationKind,
     FreshnessClass,
     GroundedEndpointResult,
+    LocationResolutionStatus,
     ManualCashCheckTemplate,
     ManualCashTemporalValidationKind,
     PathExplorationReceipt,
     PaymentPattern,
     PlanIdentity,
     PlanningInputEnvelope,
+    PlanningIssue,
     PlanningIssueCategory,
+    PlanningIssueCode,
     RepositioningPolicyReceipt,
+    ResolvedLocation,
     ResultValidationKind,
     ResultValidationObligation,
     RouteEdgeEvidenceReceipt,
@@ -65,6 +89,7 @@ from award_agent.search_planning.contracts import (
     SelectedAirport,
     TemporalDerivation,
 )
+from award_agent.search_planning.distance_consistency import CityAirportDistanceConsistency
 from award_agent.search_planning.knowledge import (
     DirectedRouteEdge,
     KnowledgeRepository,
@@ -87,6 +112,7 @@ def plan_searches(
     capability: CachedSearchCapability,
     snapshot: KnowledgeSnapshot | None = None,
     repository: PlanningKnowledgeRepository | None = None,
+    _grounded_endpoint_overrides: dict[tuple[str, str], GroundedEndpointResult] | None = None,
 ) -> SearchPlanningResult:
     """Compile one immutable request into endpoint-market award search items.
 
@@ -127,6 +153,7 @@ def plan_searches(
         active_repository,
         policy,
         _provenance_for(envelope.effective_request, EffectiveField.ORIGIN),
+        _grounded_endpoint_overrides,
     )
     destination_results = _ground_all(
         envelope.effective_request.destinations,
@@ -134,6 +161,7 @@ def plan_searches(
         active_repository,
         policy,
         _provenance_for(envelope.effective_request, EffectiveField.DESTINATION),
+        _grounded_endpoint_overrides,
     )
     location_results = (*origin_results, *destination_results)
     grounding_issues = tuple(
@@ -342,6 +370,221 @@ def plan_searches_with_default_capability(
     )
 
 
+def plan_searches_from_airport_selection_records(
+    selection_input: AirportSelectionPlanningInput,
+    *,
+    selection_cap_policy: AirportSelectionCapPolicy,
+    distance_policy: CityAirportDistanceConsistency,
+    policy: PlanningPolicy,
+    capability: CachedSearchCapability,
+    repository: PlanningKnowledgeRepository,
+) -> AirportSelectionPlanningResult:
+    """Replay model-selected catalog endpoints without an LLM invocation.
+
+    This is deliberately a separate planning input from the frozen Milestone 0
+    fixture path. A record supplies an exploratory model selection, while the
+    normal ``plan_searches`` path retains its reviewed JSON group behavior.
+    """
+
+    receipt = _selection_replay_receipt(selection_input, selection_cap_policy, distance_policy)
+    try:
+        overrides = _selection_record_overrides(
+            selection_input, selection_cap_policy, distance_policy, policy, repository
+        )
+    except (ValueError, ValidationError) as exc:
+        return AirportSelectionPlanningResult(
+            planning_result=_planner_contract_failure(str(exc)), replay_receipt=receipt
+        )
+    return AirportSelectionPlanningResult(
+        planning_result=plan_searches(
+            selection_input.envelope,
+            policy=policy,
+            capability=capability,
+            repository=repository,
+            _grounded_endpoint_overrides=overrides,
+        ),
+        replay_receipt=receipt,
+    )
+
+
+def _selection_replay_receipt(
+    selection_input: AirportSelectionPlanningInput,
+    selection_cap_policy: AirportSelectionCapPolicy,
+    distance_policy: CityAirportDistanceConsistency,
+) -> AirportSelectionReplayReceipt:
+    snapshots = {record.catalog_snapshot_id for record in selection_input.selection_records}
+    if len(snapshots) != 1:
+        raise ValueError("selection replay requires records from exactly one catalog snapshot")
+    return AirportSelectionReplayReceipt(
+        record_digests=tuple(
+            sorted(
+                airport_selection_record_digest(record)
+                for record in selection_input.selection_records
+            )
+        ),
+        cap_policy_version=selection_cap_policy.policy_version,
+        cap_policy_digest=airport_selection_cap_policy_digest(selection_cap_policy),
+        distance_policy_version=distance_policy.policy_version,
+        distance_policy_digest=airport_selection_distance_policy_digest(distance_policy),
+        catalog_snapshot_id=next(iter(snapshots)),
+    )
+
+
+def _selection_record_overrides(
+    selection_input: AirportSelectionPlanningInput,
+    selection_cap_policy: AirportSelectionCapPolicy,
+    distance_policy: CityAirportDistanceConsistency,
+    planning_policy: PlanningPolicy,
+    repository: PlanningKnowledgeRepository,
+) -> dict[tuple[str, str], GroundedEndpointResult]:
+    """Make validated record results available to the deterministic compiler."""
+
+    records: dict[tuple[str, str], AirportSelectionRecord] = {
+        (record.role, record.resolved_entity.entity_id): record
+        for record in selection_input.selection_records
+    }
+    used_record_keys: set[tuple[str, str]] = set()
+    overrides: dict[tuple[str, str], GroundedEndpointResult] = {}
+    for role, locations in (
+        ("origin", selection_input.envelope.effective_request.origins),
+        ("destination", selection_input.envelope.effective_request.destinations),
+    ):
+        for location in _canonical_locations(locations):
+            grounded = ground_endpoint(location, role, repository, planning_policy)
+            resolution = grounded.resolution
+            if resolution.status is not LocationResolutionStatus.RESOLVED:
+                continue
+            if resolution.resolved_entity_id is None:
+                continue  # Explicit and named airports retain their existing singleton path.
+            key = (role, resolution.resolved_entity_id)
+            record = records.get(key)
+            if record is None:
+                raise ValueError(
+                    "each resolved geographic endpoint requires a supplied airport-selection record"
+                )
+            used_record_keys.add(key)
+            overrides[(role, _location_override_key(location))] = _selection_record_result(
+                role,
+                location,
+                resolution,
+                record,
+                selection_cap_policy,
+                distance_policy,
+                repository,
+                planning_policy,
+            )
+    if set(records) != used_record_keys:
+        raise ValueError(
+            "selection records must correspond to resolved geographic request endpoints"
+        )
+    return overrides
+
+
+def _selection_record_result(
+    role: str,
+    location: LocationRef,
+    resolution: ResolvedLocation,
+    record: AirportSelectionRecord,
+    selection_cap_policy: AirportSelectionCapPolicy,
+    distance_policy: CityAirportDistanceConsistency,
+    repository: PlanningKnowledgeRepository,
+    planning_policy: PlanningPolicy,
+) -> GroundedEndpointResult:
+    context = context_for_resolved_location(resolution, repository)
+    if record.resolved_entity != context:
+        raise ValueError("selection record context does not match resolved catalog entity")
+    if (
+        record.catalog_snapshot_id != repository.snapshot_id
+        or record.catalog_receipt != repository.knowledge_receipt
+    ):
+        raise ValueError("selection record catalog identity does not match the planning repository")
+    cap = selection_cap_policy.applicable_cap_for(context)
+    if (
+        record.cap_policy_digest != airport_selection_cap_policy_digest(selection_cap_policy)
+        or record.applicable_cap != cap
+    ):
+        raise ValueError("selection record does not match the supplied selection-cap policy")
+    if record.distance_policy != distance_policy:
+        raise ValueError("selection record does not match the supplied distance policy")
+    rebuilt = validate_airport_selection_proposal(
+        role=record.role,
+        context=context,
+        cap_policy=selection_cap_policy,
+        distance_policy=distance_policy,
+        proposal=record.proposal,
+        model=record.model,
+        repository=repository,
+    )
+    if (
+        record.candidate_validations != rebuilt.candidate_validations
+        or record.accepted_airports != rebuilt.accepted_airports
+        or record.applicable_cap != rebuilt.applicable_cap
+        or record.selector_adapter_version != AIRPORT_SELECTOR_ADAPTER_VERSION
+        or record.prompt_version
+        not in {
+            AIRPORT_SELECTOR_PROMPT_VERSION,
+            AIRPORT_SELECTOR_ORIGINAL_SIMPLE_PROMPT_VERSION,
+        }
+        or record.response_schema_sha256 != AIRPORT_SELECTOR_RESPONSE_SCHEMA_SHA256
+    ):
+        raise ValueError("selection record validation does not reproduce against supplied evidence")
+    source_ids = set(resolution.evidence_source_ids)
+    for selected in record.accepted_airports:
+        airport = repository.lookup_airport_iata(selected.airport_iata)
+        if airport is None or airport.airport_id != selected.airport_id:
+            raise ValueError("selection record cites an airport absent from this catalog snapshot")
+        if airport.source_ids != selected.airport_evidence_source_ids:
+            raise ValueError(
+                "selection record airport evidence does not match this catalog snapshot"
+            )
+        source_ids.update(airport.source_ids)
+    freshness = repository.freshness_for_source_ids(
+        source_ids, max_source_evidence_age_days=planning_policy.max_source_evidence_age_days
+    )
+    if freshness is FreshnessClass.STALE:
+        return GroundedEndpointResult(
+            role=role,  # type: ignore[arg-type]
+            snapshot_id=repository.snapshot_id,
+            freshness=freshness,
+            resolution=resolution,
+            issues=(
+                PlanningIssue(
+                    code=PlanningIssueCode.STALE_KNOWLEDGE,
+                    message="airport-selection record relies on stale snapshot evidence",
+                    snapshot_id=repository.snapshot_id,
+                    location_value=location.value,
+                ),
+            ),
+        )
+    if not record.accepted_airports:
+        return GroundedEndpointResult(
+            role=role,  # type: ignore[arg-type]
+            snapshot_id=repository.snapshot_id,
+            freshness=freshness,
+            resolution=resolution,
+            issues=(
+                PlanningIssue(
+                    code=PlanningIssueCode.MODEL_AIRPORT_SELECTION_UNAVAILABLE,
+                    message="model airport selection produced no accepted exploratory endpoints",
+                    snapshot_id=repository.snapshot_id,
+                    location_value=location.value,
+                    candidate_ids=(record.resolved_entity.entity_id,),
+                ),
+            ),
+        )
+    return GroundedEndpointResult(
+        role=role,  # type: ignore[arg-type]
+        snapshot_id=repository.snapshot_id,
+        freshness=freshness,
+        resolution=resolution,
+        selection=AirportSelection(
+            kind=AirportSelectionKind.MODEL_PROPOSED,
+            resolved_location=resolution,
+            airports=record.accepted_airports,
+        ),
+    )
+
+
 def effective_request_digest(effective_request: EffectiveRequest) -> str:
     """Return a stable digest over complete JSON-mode EffectiveRequest data."""
 
@@ -488,13 +731,19 @@ def _ground_all(
     repository: PlanningKnowledgeRepository,
     policy: PlanningPolicy,
     field_provenance: FieldProvenance | None,
+    overrides: dict[tuple[str, str], GroundedEndpointResult] | None,
 ) -> tuple[GroundedEndpointResult, ...]:
     return tuple(
-        ground_endpoint(location, role, repository, policy).model_copy(
-            update={"field_provenance": field_provenance}
-        )
+        (
+            (overrides or {}).get((role, _location_override_key(location)))
+            or ground_endpoint(location, role, repository, policy)
+        ).model_copy(update={"field_provenance": field_provenance})
         for location in _canonical_locations(locations)
     )
+
+
+def _location_override_key(location: LocationRef) -> str:
+    return f"{location.kind.value}\x1f{location.value.casefold()}\x1f{location.raw_text}"
 
 
 def _identity(

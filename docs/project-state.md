@@ -2,7 +2,7 @@
 
 ## Phase
 
-Milestone 1 geographic and airport-data foundation — active next cut, before provider execution.
+Milestone 2A endpoint-airport selection evaluation — active next cut, before provider execution.
 Search planning is implemented and fixture-qualified as a planning-only, retrieval-backed
 `EffectiveRequest -> SearchPlan` stage that follows the frozen one-way award request-understanding
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
@@ -21,11 +21,24 @@ that selected release read-only through the existing planner boundary while pres
 fixture path. Its completed components and acceptance criteria remain recorded in the current
 milestone roadmap.
 
+Milestone 2A now has a narrow implementation boundary: an LLM may propose bounded individual
+endpoint-airport IATA codes for an already resolved canonical geographic entity; deterministic
+code records catalog identity/facility/supported-scope validation and replays a supplied selection
+record without another model call. It does not establish city-serving facts, regional membership
+outside country evidence, routes, schedules, award availability, provider execution, RAG, or a
+cache. The configured selector evaluator is diagnostic-only pending independent human semantic
+review; see ADR 0019 and the M2A evaluation protocol. The active cap
+policy gives the United States a country maximum of 10 for US-focused international-gateway
+coverage; the prior v2 active-policy diagnostic used US=6 and is historical evidence only, not
+validation of US=10. The active v3 diagnostic has completed and remains diagnostic evidence only.
+
 ## Current conclusion
 
 On 2026-09-13, the owner selected **operational knowledge-base expansion** as the next cut, before
-provider execution. The preceding search-planning cut is implemented and fixture-qualified for the
-declared local seed coverage. This is the planning-only boundary recorded in
+provider execution. Milestone 1 completed that foundation; the active follow-on is the narrow
+Milestone 2A endpoint-airport selector evaluation described above. The preceding search-planning
+cut is implemented and fixture-qualified for the declared local seed coverage. This is the
+planning-only boundary recorded in
 `docs/handoffs/2026-09-10-search-plan-design-stage.md`:
 
 ```text
@@ -39,11 +52,11 @@ groups, typed failures, directional synthetic topology, dates, budgets, payment 
 canonical ordering, optional-path budget degradation, and stale-plan handoff. It must not call
 Seats.aero, map provider payloads, parse provider responses, normalize results, rank
 recommendations, or mutate the source request/session. Search planning is fixture-qualified for
-this declared local coverage. The active work is **Milestone 1**, the geographic and airport-data
-foundation in `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`: import and serve
-GeoNames and OurAirports data through reviewed, versioned local knowledge records; resolve named
-region taxonomies; and publish explicit catalog/group coverage. Airport groups beyond the existing
-examples are curated iteratively. Directed connectivity, providers, and RAG are later milestones.
+this declared local coverage. Milestone 1 supplied the geographic and airport-data foundation in
+`docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`: reviewed, versioned GeoNames and
+OurAirports records, named-region taxonomies, and an explicit local catalog release. M2A evaluates
+model-proposed endpoint selection against that catalog. Airport groups beyond the existing examples
+are not a mandatory runtime whitelist. Directed connectivity, providers, and RAG are later milestones.
 The recorded broad behavioral evidence gap for the upstream one-way boundary remains historical
 evidence and is not silently promoted to qualification or used to reopen intent/clarification
 semantics.

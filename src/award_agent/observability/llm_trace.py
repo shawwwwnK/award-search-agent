@@ -168,7 +168,13 @@ def write_eval_llm_trace(
     directory.mkdir(parents=True, exist_ok=True)
     scenario_id = str(scenario["id"])
     trial = int(record["trial"])
-    path = directory / f"{_safe_filename(scenario_id)}__trial-{trial}.json"
+    prompt_arm = record.get("prompt_arm")
+    arm_suffix = (
+        ""
+        if not isinstance(prompt_arm, str) or not prompt_arm
+        else f"__arm-{_safe_filename(prompt_arm)}"
+    )
+    path = directory / f"{_safe_filename(scenario_id)}__trial-{trial}{arm_suffix}.json"
     trace = {
         "schema_version": 1,
         "scenario": _json_compatible(

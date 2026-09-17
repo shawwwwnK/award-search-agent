@@ -1,0 +1,119 @@
+# Disclosed development corpus for the active M2A endpoint-airport selector
+# cap policy. These are resolved catalog entities, not user utterances. The
+# human-authored IATA envelopes are review aids, not airport-membership lists
+# or catalog assertions of city-serving relationships.
+contract_version: airport_selector_development_v2
+development: true
+scenarios:
+  - id: paris_city_default_cap_2
+    entity_id: geonames:2988507
+    role: origin
+    expectations:
+      must_consider_any_of: [CDG, ORY]
+      acceptable: [CDG, ORY]
+      unacceptable: [JFK]
+      review_focus: ordinary city at default cap 2; fewer remains allowed
+  - id: san_francisco_city_metro_override_cap_3
+    entity_id: geonames:5391959
+    role: origin
+    expectations:
+      must_consider_any_of: [SFO]
+      acceptable: [SFO, OAK, SJC]
+      unacceptable: [JFK]
+      review_focus: approved city/metro override cap 3; review practical metro-serving usefulness, not mandatory membership
+  - id: new_york_city_metro_override_cap_3
+    entity_id: geonames:5128581
+    role: origin
+    expectations:
+      must_consider_any_of: [JFK, EWR, LGA]
+      acceptable: [JFK, EWR, LGA]
+      unacceptable: [LAX]
+      review_focus: approved city/metro override cap 3; review useful metro coverage without requiring all three
+  - id: london_city_metro_override_cap_5
+    entity_id: geonames:2643743
+    role: origin
+    expectations:
+      must_consider_any_of: [LHR, LGW]
+      acceptable: [LHR, LGW, LCY, STN, LTN]
+      unacceptable: [JFK]
+      review_focus: approved city/metro override cap 5; review whether extra endpoints add metro usefulness rather than list length
+  - id: los_angeles_city_metro_override_cap_5
+    entity_id: geonames:5368361
+    role: origin
+    expectations:
+      must_consider_any_of: [LAX]
+      acceptable: [LAX, BUR, SNA, ONT, LGB]
+      unacceptable: [JFK]
+      review_focus: approved city/metro override cap 5; review practical metro-serving usefulness, not airport membership
+  - id: california_admin1_default_cap_4
+    entity_id: geonames:5332921
+    role: destination
+    expectations:
+      must_consider_any_of: [SFO, LAX]
+      acceptable: [SFO, LAX, SAN, SJC, OAK]
+      unacceptable: [JFK]
+      review_focus: sub-country default cap 4; current catalog does not establish regional airport membership
+  - id: japan_country_default_cap_4
+    entity_id: geonames:1861060
+    role: destination
+    expectations:
+      must_consider_any_of: [HND, NRT]
+      acceptable: [HND, NRT, KIX, NGO, FUK, CTS]
+      unacceptable: [JFK]
+      review_focus: ordinary country default cap 4; human review assesses gateway usefulness
+  - id: france_country_default_cap_4
+    entity_id: geonames:3017382
+    role: destination
+    expectations:
+      must_consider_any_of: [CDG, ORY]
+      acceptable: [CDG, ORY, LYS, NCE, MRS]
+      unacceptable: [JFK]
+      review_focus: ordinary country default cap 4; country membership is catalog-checkable but gateway priority is human-scored
+  - id: united_states_country_international_gateway_override_cap_6
+    entity_id: geonames:6252001
+    role: destination
+    expectations:
+      must_consider_any_of: [JFK, LAX, ORD, DFW, ATL]
+      acceptable: [JFK, LAX, ORD, DFW, ATL, SFO, SEA, DEN, IAD, MIA, BOS]
+      unacceptable: [YYZ]
+      review_focus: approved country override cap 6 for international-gateway coverage; it does not imply city-serving or one gateway per region
+  - id: china_country_international_gateway_override_cap_6
+    entity_id: geonames:1814991
+    role: destination
+    expectations:
+      must_consider_any_of: [PEK, PKX, PVG, CAN]
+      acceptable: [PEK, PKX, PVG, CAN, SZX, CTU, XIY]
+      unacceptable: [NRT]
+      review_focus: approved country override cap 6 for international-gateway coverage; evaluate useful breadth without requiring cap fill
+  - id: india_country_international_gateway_override_cap_6
+    entity_id: geonames:1269750
+    role: destination
+    expectations:
+      must_consider_any_of: [DEL, BOM]
+      acceptable: [DEL, BOM, BLR, MAA, HYD, CCU]
+      unacceptable: [DXB]
+      review_focus: approved country override cap 6 for international-gateway coverage; gateway priority remains a human judgment
+  - id: europe_continent_cap_8
+    entity_id: geonames:6255148
+    role: destination
+    expectations:
+      must_consider_any_of: [LHR, CDG, FRA, AMS]
+      acceptable: [LHR, CDG, FRA, AMS, MAD, FCO, MUC, ZRH, IST, CPH, ARN]
+      unacceptable: [JFK]
+      review_focus: international category cap 8 is a maximum, not a coverage target
+  - id: north_america_continent_cap_8
+    entity_id: geonames:6255149
+    role: destination
+    expectations:
+      must_consider_any_of: [JFK, LAX, ORD, YYZ, MEX]
+      acceptable: [JFK, LAX, ORD, YYZ, MEX, DFW, ATL, SFO, YVR, IAH]
+      unacceptable: [LHR]
+      review_focus: international category cap 8; evaluate geographic usefulness manually
+  - id: middle_east_geographic_region_broad_fallback_cap_8
+    entity_id: geonames:6269133
+    role: destination
+    expectations:
+      must_consider_any_of: [DXB, DOH, AUH]
+      acceptable: [DXB, DOH, AUH, TLV, RUH, JED, AMM, CAI]
+      unacceptable: [JFK]
+      review_focus: unspecified geographic-region broad fallback cap 8; regional membership remains unavailable

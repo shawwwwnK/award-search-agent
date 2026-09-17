@@ -88,9 +88,29 @@ class GeoEntity(PlanningContractModel):
     label: str = Field(min_length=1)
     aliases: tuple[str, ...] = Field(min_length=1)
     source_ids: tuple[str, ...] = Field(min_length=1)
-
     _canonicalize_aliases = field_validator("aliases")(_canonical_aliases)
     _canonicalize_source_ids = field_validator("source_ids")(_canonical_source_ids)
+
+
+class GeoEntitySelectionMetadata(PlanningContractModel):
+    """Catalog-only metadata projection for deterministic selector context.
+
+    This intentionally stays separate from ``GeoEntity`` so adding catalog
+    fields cannot perturb the frozen Milestone 0 snapshot digest.
+    """
+
+    entity_id: str = Field(min_length=1)
+    taxonomy_id: str = Field(min_length=1)
+    feature_code: str | None = None
+    country_code: str | None = Field(default=None, pattern=r"^[A-Z]{2}$")
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+
+    @model_validator(mode="after")
+    def validate_coordinate_pair(self) -> GeoEntitySelectionMetadata:
+        if (self.latitude is None) != (self.longitude is None):
+            raise ValueError("entity coordinates must be present together")
+        return self
 
 
 class Airport(PlanningContractModel):
@@ -101,7 +121,6 @@ class Airport(PlanningContractModel):
     timezone: str = Field(min_length=1)
     aliases: tuple[str, ...] = Field(min_length=1)
     source_ids: tuple[str, ...] = Field(min_length=1)
-
     _canonicalize_aliases = field_validator("aliases")(_canonical_aliases)
     _canonicalize_source_ids = field_validator("source_ids")(_canonical_source_ids)
 
@@ -112,6 +131,21 @@ class Airport(PlanningContractModel):
         except ZoneInfoNotFoundError as exc:
             raise ValueError(f"unknown airport IANA timezone: {self.timezone}") from exc
         return self
+
+
+class AirportSelectionMetadata(PlanningContractModel):
+    """Catalog-only endpoint metadata for selector validation and distance checks.
+
+    This says an airport is an accepted record in this catalog release, not
+    that it currently has passenger service or serves a named city.
+    """
+
+    airport_id: str = Field(min_length=1)
+    country_code: str = Field(pattern=r"^[A-Z]{2}$")
+    iso_region: str = Field(min_length=1)
+    airport_type: str = Field(min_length=1)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
 
 
 class LocationAirportRelationKind(str, Enum):
@@ -349,6 +383,8 @@ class PlanningKnowledgeRepository(Protocol):
 
     def get_entity(self, entity_id: str) -> GeoEntity | None: ...
 
+    def entity_selection_metadata(self, entity_id: str) -> GeoEntitySelectionMetadata | None: ...
+
     def relations_for(self, entity_id: str) -> tuple[LocationAirportRelation, ...]: ...
 
     def relation_for(self, entity_id: str, airport_id: str) -> LocationAirportRelation | None: ...
@@ -356,6 +392,8 @@ class PlanningKnowledgeRepository(Protocol):
     def policy_for(self, entity_id: str, kind: LocationKind) -> AirportSelectionPolicy | None: ...
 
     def airport(self, airport_id: str) -> Airport | None: ...
+
+    def airport_selection_metadata(self, airport_id: str) -> AirportSelectionMetadata | None: ...
 
     def route_edge(
         self, origin_airport_id: str, destination_airport_id: str
@@ -479,6 +517,11 @@ class KnowledgeRepository:
     def get_entity(self, entity_id: str) -> GeoEntity | None:
         return self._entities.get(entity_id)
 
+    def entity_selection_metadata(self, entity_id: str) -> GeoEntitySelectionMetadata | None:
+        # The JSON seed remains the frozen Milestone 0 fixture and does not
+        # claim this new catalog-only metadata coverage.
+        return None
+
     def relations_for(self, entity_id: str) -> tuple[LocationAirportRelation, ...]:
         return tuple(relation for relation in self._relations if relation.entity_id == entity_id)
 
@@ -504,6 +547,10 @@ class KnowledgeRepository:
 
     def airport(self, airport_id: str) -> Airport | None:
         return self._airports.get(airport_id)
+
+    def airport_selection_metadata(self, airport_id: str) -> AirportSelectionMetadata | None:
+        # See entity_selection_metadata above: this is intentionally catalog-only.
+        return None
 
     def route_edge(
         self, origin_airport_id: str, destination_airport_id: str
@@ -822,6 +869,23 @@ class CatalogKnowledgeRepository:
         ).fetchone()
         return None if row is None else self._entity_from_row(row, ())
 
+    def entity_selection_metadata(self, entity_id: str) -> GeoEntitySelectionMetadata | None:
+        row = self._connection.execute(
+            """SELECT entity_id, taxonomy_id, feature_code, country_code, latitude, longitude
+                 FROM entity WHERE entity_id = ?""",
+            (entity_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        return GeoEntitySelectionMetadata(
+            entity_id=row["entity_id"],
+            taxonomy_id=row["taxonomy_id"],
+            feature_code=row["feature_code"] or None,
+            country_code=row["country_code"] or None,
+            latitude=float(row["latitude"]) if row["latitude"] else None,
+            longitude=float(row["longitude"]) if row["longitude"] else None,
+        )
+
     def taxonomy_for_entity(self, entity_id: str) -> str | None:
         row = self._connection.execute(
             "SELECT taxonomy_id FROM entity WHERE entity_id = ?", (entity_id,)
@@ -996,6 +1060,27 @@ class CatalogKnowledgeRepository:
 
     def airport(self, airport_id: str) -> Airport | None:
         return self._airport_by_id(airport_id)
+
+    def airport_selection_metadata(self, airport_id: str) -> AirportSelectionMetadata | None:
+        # Reuse the accepted-identity projection's reconciliation and country
+        # checks before exposing physical metadata to selector validation.
+        if self._airport_by_id(airport_id) is None:
+            return None
+        row = self._connection.execute(
+            """SELECT airport_id, iso_country, iso_region, airport_type, latitude, longitude
+                 FROM airport WHERE airport_id = ?""",
+            (airport_id,),
+        ).fetchone()
+        if row is None:  # Defensive: _airport_by_id above already found it.
+            return None
+        return AirportSelectionMetadata(
+            airport_id=row["airport_id"],
+            country_code=row["iso_country"],
+            iso_region=row["iso_region"],
+            airport_type=row["airport_type"],
+            latitude=float(row["latitude"]),
+            longitude=float(row["longitude"]),
+        )
 
     def route_edge(
         self, origin_airport_id: str, destination_airport_id: str

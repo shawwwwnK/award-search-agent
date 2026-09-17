@@ -33,3 +33,4 @@ Expected sections:
 - [0016: One-way award request boundary](0016-one-way-award-request-boundary.md)
 - [0017: LLM-owned initial intent semantics](0017-llm-owned-initial-intent-semantics.md)
 - [0018: SQLite published geographic catalog with JSON receipts](0018-sqlite-geographic-catalog.md)
+- [0019: LLM-proposed endpoint airports with bounded catalog validation](0019-llm-proposed-endpoint-airport-selection.md)
