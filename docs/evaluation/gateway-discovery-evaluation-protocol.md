@@ -10,11 +10,15 @@ route, schedule, award, connection, availability, feasibility, or bookability
 fact.
 
 The disclosed casebook is
-`evals/gateway_discovery/development_cases_v1.yaml`. It uses the pinned M1A
+`evals/gateway_discovery/development_cases_v3.yaml`. It uses the pinned M1A
 catalog and planning-market policy. The casebook's endpoint codes and expected
 gate outcomes are deterministic review context. Its candidate guidance is not
 an exact-answer oracle: plausible alternatives, omissions, and abstentions
 remain human judgments.
+
+The prior `development_cases_v1.yaml` and `development_cases_v2.yaml`
+casebooks and their checked-in live artifacts remain historical evidence for
+their then-current fixtures and hashes; they are not rewritten by v3.
 
 ## Evaluation layers
 
@@ -43,6 +47,11 @@ candidate is a good gateway or that a route exists. A candidate with a
 model-asserted market that disagrees with the deterministic policy should be
 retained when otherwise valid, with the mismatch recorded as an advisory for
 2C.
+
+The three candidate pools are independently bounded at 0–2 origin-access
+gateways, 0–2 destination-access gateways, and 0–5 intermediate hubs (nine
+candidates total). These are maxima, not targets; accepted access gateways do
+not reduce the hub cap. There is no intermediate-hub market-diversity quota.
 
 ### Human semantic layer
 
@@ -75,8 +84,10 @@ Use a 0–2 score per dimension for each case/trial:
 - **Access-role appropriateness:** 0 = an origin/destination access gateway is
   misused or unsupported; 1 = role is plausible but rationale or applicability
   is incomplete; 2 = access candidates are relative to the opposite market,
-  supported by the correct originals, and absent by default for already useful
-  gateways.
+  supported by the correct originals, and materially incremental. An
+  already-strong endpoint raises the threshold but does not prohibit an access
+  alternative; size, proximity, shared market, or geographic diversity alone
+  is not incremental value.
 - **Uncertainty honesty:** 0 = claims connectivity, schedules, awards,
   availability, or bookability; 1 = uncertainty is incomplete; 2 = material
   uncertainty is brief and explicit and all candidates remain hypotheses.
@@ -98,6 +109,10 @@ the rubric into a claim of automatic quality.
 - In `west_coast_to_paris_multi_origin`, JFK and ORD are eligible
   origin-market intermediate-hub hypotheses when their scopes are supported.
   Neither airport is required, and no exact candidate list is a pass oracle.
+- In `san_francisco_to_southeast_asia_endpoints`, SAI and KTI are the two
+  original Cambodian destination airports. Review destination-side
+  applicability across both endpoints without treating either exact candidate
+  list or a route claim as a pass oracle.
 - In `equal_but_multi_market_endpoint_sets`, equal origin and destination
   market sets still contain multiple markets; the request must not be treated
   as a same-market skip.
@@ -110,17 +125,25 @@ the rubric into a claim of automatic quality.
   universal aviation taxonomy.
 - A model/policy market mismatch is an advisory to 2C. It is not, by itself,
   a reason to remove an otherwise catalog-valid candidate.
+- Casebook v3 adds deliberate coverage of United Kingdom and Southern Europe
+  (the latter is a review label within policy market `europe`); mixed
+  US/Canada-to-Australia/New-Zealand requests; an ITO Hawaii override;
+  Europe same-market skipping; South America-to-Southern Africa, North
+  Africa-to-East Africa/Indian Ocean, and Middle East-to-Central
+  Asia/Caucasus boundaries; and broad San Francisco, New York, Los Angeles,
+  US-to-India, and US-to-South-America grouped endpoint sets. These are
+  review situations, never candidate or connectivity oracles.
 
 ## Run controls and accounting
 
-The default live configuration is `gpt-5.6-luna`, two trials, no retries, and
-no rejected-candidate refill call. Run the complete eight-case development
-book unless a smoke run is explicitly labeled with its selected cases and
-trial count.
+The current default live configuration is `gpt-5.6-luna`, prompt v6,
+casebook v3, two trials, no retries, and no rejected-candidate refill call.
+Run the complete 23-case development book unless a smoke run is explicitly
+labeled with its selected cases and trial count.
 
-There are eight scenarios and one deterministic skip. Therefore each trial
-has at most seven model calls, and two trials have an expected maximum of
-14 calls. The skip must be represented in the public artifact with a
+There are 23 scenarios and two deterministic skips. Therefore each trial
+has at most 21 model calls, and two trials have an expected maximum of
+42 calls. Each skip must be represented in the public artifact with a
 zero-call result. Reconcile:
 
 - case count and trial count;
@@ -173,8 +196,83 @@ identified bounded issues that were corrected before the final diagnostic:
 self-pair pruning in access applicability and prompt guidance now explicitly
 prohibiting such pairs. It is not the current baseline.
 
-The final public artifact is
+The historical public artifact for the v1 casebook is
 [`2026-09-19-gpt-5.6-luna-prompt-v2-development-2-trials.json`](../../evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v2-development-2-trials.json).
 It records 16 case-trials, 14 expected/attempted one-call generations, and
 reconciled private sidecars. Its mechanically completed status does not change
 this protocol's human-review or qualification rules.
+
+## 2026-09-19 prompt-v5 / casebook-v2 historical diagnostic
+
+Prompt v3 and prompt v4 are retained diagnostic iterations on the disclosed
+v2 casebook. Prompt v3 exposed saturation (58 accepted candidates, including
+34 hubs). Prompt v4 reduced that burden but regressed IPC circuitousness and
+endpoint-assessment behavior. Prompt v5 added the current marginal-distinctness,
+circuitousness, and endpoint-assessment rules without changing the response
+schema, adapter, catalog, or market-policy identity. The v2 casebook changes
+the Southeast Asia scenario to SAI and KTI only; the v1 casebook and its hash
+`9f4a1593ae7d06d132faaf5e5d3895f56823136f97a66d4bbde45292edb6789b` remain
+historical evidence.
+
+The v2 public artifact is
+[`2026-09-19-gpt-5.6-luna-prompt-v5-casebook-v2-2-trials.json`](../../evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v5-casebook-v2-2-trials.json).
+It binds prompt `gateway-generator-prompt-v5`, the unchanged response-schema
+SHA-256 `173a1d66ef5091a0f44837583579fc1616b406f440ce15976b430bae53a5a680`,
+the unchanged `planning-market-v1` policy, and v2 casebook SHA-256
+`65c455a9ca51f44ab98bd30800902271aab3077e578b2356b2bd1074e42a4b1d`.
+
+It contains 16 case-trials: 14 expected, constructed, attempted, and
+reconciled calls; 11 nonempty outcomes, 3 empty outcomes, and 2 policy skips;
+zero partial, rejected-all, or generation-failure outcomes; and 35 accepted
+candidates (7 origin access, 12 destination access, and 16 hubs) across 19
+accepted scopes. The observed maxima were 2/2/3, within the 2/2/5 limits; the
+review records 65 accepted declared relationships. There were 36,772 input
+tokens and 19,745 output tokens (56,517 total), zero rejected candidates,
+zero mismatch advisories, and endpoint assessments for all 40 original
+endpoints. No cost was estimated. Artifact-integrity and AI semantic review
+passed for owner human review; neither is human semantic qualification.
+
+## Casebook-v3 first prompt-v5 historical diagnostic
+
+Casebook v3 preserves all eight v2 scenarios and adds 15 reviewed endpoint
+sets, including a second same-market skip (`CDG → ATH`). Its pinned catalog
+metadata and `planning-market-v1` gate expectations are preflighted before a
+generator can be constructed. The first prompt-v5 run is retained as a
+diagnostic public artifact:
+[`2026-09-19-gpt-5.6-luna-prompt-v5-casebook-v3-2-trials.json`](../../evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v5-casebook-v3-2-trials.json).
+It mechanically completed all 46 case-trials, including 42 expected and
+attempted calls, but semantic review exposed relationship multiplication: a
+candidate could be applied too broadly or retained as a generic alternative
+despite marginal, overlapping, circuitous, or positioning-weak pairings.
+
+The first prompt-v5/v3 run exposed relationship multiplication: 46 records and
+42 calls produced 125 accepted candidates, 76 scopes, and 731 accepted
+relationships across 184,604 tokens. It is historical diagnostic evidence,
+not a quality qualification result.
+
+## 2026-09-19 prompt-v6 / casebook-v3 final diagnostic
+
+Prompt v6 added relationship-level uncertainty/scope reconciliation and
+same-scope candidate consolidation only. It did not change the response
+schema, adapter, catalog, market-policy identity, deterministic validator, or
+historical artifacts. The casebook-v3 SHA-256 is
+`ba3b2e0efd73a2774da6af2950ff4addaf5e7763f754b49042dd56acec3b2f06`.
+
+The public artifact is
+[`2026-09-19-gpt-5.6-luna-prompt-v6-casebook-v3-2-trials.json`](../../evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v6-casebook-v3-2-trials.json).
+It contains 46 records and 42/42 expected, constructed, attempted, and
+reconciled calls across two trials: 37 nonempty outcomes, 4 empty outcomes,
+4 policy skips, and 1 partial outcome. It accepted 82 candidates (22 origin
+access, 18 destination access, and 42 hubs), 43 scopes, and 400 declared
+relationships, with 186,549 total tokens. One PNH catalog-absence rejection
+and three model/policy market-mismatch advisories were retained. There were
+zero errors or generation failures. Artifact/privacy audit passed.
+
+Independent AI semantic review passed the artifact for owner human review,
+not human semantic qualification. The review recorded a 45.3% relationship
+reduction and 34.4% candidate reduction versus prompt-v5/v3, with no important
+omission observed. Residual notes include 65 relationships for the India case,
+55 for Los Angeles/Australia-New Zealand, 36 for New York/Japan, one IPC→PPT
+circuitous regression, trial variation, and a private control-character
+hygiene note. No prompt-v7 or deterministic semantic rejection change is
+currently recommended; 2C relationship/search-work budgeting is mandatory.

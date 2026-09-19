@@ -1,0 +1,214 @@
+# Disclosed development-only casebook for Milestone 2B grouped gateway
+# candidate generation. Endpoint codes are individual catalog airports, not
+# city or market aliases. Candidate codes are review aids, never a mechanical
+# oracle for the model response.
+contract_version: gateway_discovery_development_v2
+development_only: true
+casebook_id: m2b_gateway_discovery_development_v2
+purpose: diagnostic_semantic_review_before_2c_search_plan_compilation
+
+catalog:
+  release_id: m1a-3cb7981519612945
+  logical_content_sha256: 8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8
+  source_role: endpoint_identity_and_market_classification_only
+market_policy:
+  policy_version: planning-market-v1
+  digest: 4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a
+  source_role: deterministic_skip_or_generation_gate_only
+resolved_outbound_date_context:
+  start: "2026-10-05"
+  end: "2026-10-07"
+  timezone: America/Los_Angeles
+  effective_window_precision: day
+live_run_defaults:
+  model: gpt-5.6-luna
+  trials: 2
+  max_calls_per_trial: 7
+  max_calls_total: 14
+  retry_policy: no_retry
+  refill_policy: no_refill
+  judge_policy: human_review_only
+
+scenarios:
+  - id: west_coast_to_paris_multi_origin
+    origins: [SFO, LAX, SEA]
+    destinations: [CDG]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [us]
+      destination: [europe]
+      union: [europe, us]
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      LAX: {airport_id: ourairports:3632, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SEA: {airport_id: ourairports:3875, country_code: US, iso_region: US-WA, airport_type: large_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+    eligible_not_required_iata_codes: [JFK, ORD]
+    review_focus: >-
+      Preserve all three useful original departure gateways. JFK and ORD remain
+      eligible origin-market intermediate-hub hypotheses when scoped to the
+      original origins and CDG, but neither exact airport is required. Review
+      complementary search usefulness, narrow applicability, and uncertainty;
+      do not treat model output as route or award evidence.
+
+  - id: san_francisco_to_southeast_asia_endpoints
+    origins: [SFO]
+    destinations: [SAI, KTI]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [us]
+      destination: [southeast_asia]
+      union: [southeast_asia, us]
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SAI: {airport_id: ourairports:513482, country_code: KH, iso_region: KH-17, airport_type: large_airport}
+      KTI: {airport_id: ourairports:342098, country_code: KH, iso_region: KH-8, airport_type: large_airport}
+    review_focus: >-
+      Review destination-side applicability across the two original Cambodian
+      airports,
+      whether any access proposal is relative to SFO rather than airport size,
+      and whether hub scopes avoid unsupported all-pair implications. Preserve
+      the original destination set even when a proposed alternative is stronger.
+
+  - id: regional_california_oregon_to_paris
+    origins: [FAT, EUG]
+    destinations: [CDG]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [us]
+      destination: [europe]
+      union: [europe, us]
+    catalog_endpoints:
+      FAT: {airport_id: ourairports:3524, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      EUG: {airport_id: ourairports:3517, country_code: US, iso_region: US-OR, airport_type: medium_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+    review_focus: >-
+      Review whether any origin-access gateway is a useful alternative for the
+      regional origins toward Europe, with correct supported-origin and
+      applicable-destination references. Do not require an access gateway or
+      infer route connectivity from the proposal.
+
+  - id: equal_but_multi_market_endpoint_sets
+    origins: [SFO, CDG]
+    destinations: [LAX, CDG]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [europe, us]
+      destination: [europe, us]
+      union: [europe, us]
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+      LAX: {airport_id: ourairports:3632, country_code: US, iso_region: US-CA, airport_type: large_airport}
+    review_focus: >-
+      This is intentionally not a same-market skip: equal origin and
+      destination market sets still contain cross-market pairings. Verify one
+      grouped call, truthful per-airport market labels, preserved endpoints,
+      and scopes limited to pairings the candidate can support.
+
+  - id: hawaii_to_mainland_us_exception
+    origins: [HNL]
+    destinations: [SFO]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [pacific_islands]
+      destination: [us]
+      union: [pacific_islands, us]
+    catalog_endpoints:
+      HNL: {airport_id: ourairports:5453, country_code: US, iso_region: US-HI, airport_type: large_airport}
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+    review_focus: >-
+      Review the exact HNL airport override to Pacific Islands versus the US
+      country default. The physical catalog country remains US; the policy is
+      an overlay. Any model/policy market disagreement on a candidate is an
+      advisory passed to 2C, not a candidate rejection.
+
+  - id: hawaii_to_guam_same_market_skip
+    origins: [HNL]
+    destinations: [GUM]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: skip_single_market
+    expected_market_ids:
+      origin: [pacific_islands]
+      destination: [pacific_islands]
+      union: [pacific_islands]
+    catalog_endpoints:
+      HNL: {airport_id: ourairports:5453, country_code: US, iso_region: US-HI, airport_type: large_airport}
+      GUM: {airport_id: ourairports:5433, country_code: GU, iso_region: GU-U-A, airport_type: large_airport}
+    review_focus: >-
+      Confirm that known single-market classification skips the model call even
+      though the endpoint countries differ. This is a policy skip, not a claim
+      that the endpoints are connected or that no useful search exists.
+
+  - id: easter_island_to_chile_exception_boundary
+    origins: [IPC]
+    destinations: [SCL]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [pacific_islands]
+      destination: [south_america]
+      union: [pacific_islands, south_america]
+    catalog_endpoints:
+      IPC: {airport_id: ourairports:6026, country_code: CL, iso_region: CL-VS, airport_type: large_airport}
+      SCL: {airport_id: ourairports:6015, country_code: CL, iso_region: CL-RM, airport_type: large_airport}
+    review_focus: >-
+      Review the IPC CL-VS exact override to Pacific Islands against SCL's
+      ordinary Chile assignment to South America. The same-country boundary is
+      deliberately cross-market for this planning policy; do not rewrite either
+      airport's catalog geography.
+
+  - id: australia_new_zealand_boundary
+    origins: [SYD]
+    destinations: [AKL]
+    outbound_date:
+      start: "2026-10-05"
+      end: "2026-10-07"
+      timezone: America/Los_Angeles
+      effective_window_precision: day
+    expected_gate: generation_required
+    expected_market_ids:
+      origin: [australia]
+      destination: [new_zealand]
+      union: [australia, new_zealand]
+    catalog_endpoints:
+      SYD: {airport_id: ourairports:27145, country_code: AU, iso_region: AU-NSW, airport_type: large_airport}
+      AKL: {airport_id: ourairports:5023, country_code: NZ, iso_region: NZ-AUK, airport_type: large_airport}
+    review_focus: >-
+      Review that Australia and New Zealand remain separate planning markets in
+      v1, so this request invokes one grouped generation call. Candidate
+      suggestions must remain optional, role-appropriate, and explicitly
+      unverified.

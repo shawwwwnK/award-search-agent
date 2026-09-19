@@ -1,0 +1,398 @@
+# Disclosed development-only casebook for Milestone 2B grouped gateway
+# candidate generation. Endpoint codes are individual catalog airports, not
+# city or market aliases. Candidate codes are review aids, never a mechanical
+# oracle for the model response.
+contract_version: gateway_discovery_development_v3
+development_only: true
+casebook_id: m2b_gateway_discovery_development_v3
+purpose: diagnostic_semantic_review_before_2c_search_plan_compilation
+
+catalog:
+  release_id: m1a-3cb7981519612945
+  logical_content_sha256: 8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8
+  source_role: endpoint_identity_and_market_classification_only
+market_policy:
+  policy_version: planning-market-v1
+  digest: 4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a
+  source_role: deterministic_skip_or_generation_gate_only
+resolved_outbound_date_context: &outbound_date
+  start: "2026-10-05"
+  end: "2026-10-07"
+  timezone: America/Los_Angeles
+  effective_window_precision: day
+live_run_defaults:
+  model: gpt-5.6-luna
+  trials: 2
+  max_calls_per_trial: 21
+  max_calls_total: 42
+  retry_policy: no_retry
+  refill_policy: no_refill
+  judge_policy: human_review_only
+
+scenarios:
+  - id: west_coast_to_paris_multi_origin
+    origins: [SFO, LAX, SEA]
+    destinations: [CDG]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [europe], union: [europe, us]}
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      LAX: {airport_id: ourairports:3632, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SEA: {airport_id: ourairports:3875, country_code: US, iso_region: US-WA, airport_type: large_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+    eligible_not_required_iata_codes: [JFK, ORD]
+    review_focus: >-
+      Preserve all three useful original departure gateways. JFK and ORD remain
+      eligible origin-market intermediate-hub hypotheses when scoped to the
+      original origins and CDG, but neither exact airport is required. Review
+      complementary search usefulness, narrow applicability, and uncertainty;
+      do not treat model output as route or award evidence.
+
+  - id: san_francisco_to_southeast_asia_endpoints
+    origins: [SFO]
+    destinations: [SAI, KTI]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [southeast_asia], union: [southeast_asia, us]}
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SAI: {airport_id: ourairports:513482, country_code: KH, iso_region: KH-17, airport_type: large_airport}
+      KTI: {airport_id: ourairports:342098, country_code: KH, iso_region: KH-8, airport_type: large_airport}
+    review_focus: >-
+      Review destination-side applicability across the two original Cambodian
+      airports,
+      whether any access proposal is relative to SFO rather than airport size,
+      and whether hub scopes avoid unsupported all-pair implications. Preserve
+      the original destination set even when a proposed alternative is stronger.
+
+  - id: regional_california_oregon_to_paris
+    origins: [FAT, EUG]
+    destinations: [CDG]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [europe], union: [europe, us]}
+    catalog_endpoints:
+      FAT: {airport_id: ourairports:3524, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      EUG: {airport_id: ourairports:3517, country_code: US, iso_region: US-OR, airport_type: medium_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+    review_focus: >-
+      Review whether any origin-access gateway is a useful alternative for the
+      regional origins toward Europe, with correct supported-origin and
+      applicable-destination references. Do not require an access gateway or
+      infer route connectivity from the proposal.
+
+  - id: equal_but_multi_market_endpoint_sets
+    origins: [SFO, CDG]
+    destinations: [LAX, CDG]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [europe, us], destination: [europe, us], union: [europe, us]}
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+      LAX: {airport_id: ourairports:3632, country_code: US, iso_region: US-CA, airport_type: large_airport}
+    review_focus: >-
+      This is intentionally not a same-market skip: equal origin and
+      destination market sets still contain cross-market pairings. Verify one
+      grouped call, truthful per-airport market labels, preserved endpoints,
+      and scopes limited to pairings the candidate can support.
+
+  - id: hawaii_to_mainland_us_exception
+    origins: [HNL]
+    destinations: [SFO]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [pacific_islands], destination: [us], union: [pacific_islands, us]}
+    catalog_endpoints:
+      HNL: {airport_id: ourairports:5453, country_code: US, iso_region: US-HI, airport_type: large_airport}
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+    review_focus: >-
+      Review the exact HNL airport override to Pacific Islands versus the US
+      country default. The physical catalog country remains US; the policy is
+      an overlay. Any model/policy market disagreement on a candidate is an
+      advisory passed to 2C, not a candidate rejection.
+
+  - id: hawaii_to_guam_same_market_skip
+    origins: [HNL]
+    destinations: [GUM]
+    outbound_date: *outbound_date
+    expected_gate: skip_single_market
+    expected_market_ids: {origin: [pacific_islands], destination: [pacific_islands], union: [pacific_islands]}
+    catalog_endpoints:
+      HNL: {airport_id: ourairports:5453, country_code: US, iso_region: US-HI, airport_type: large_airport}
+      GUM: {airport_id: ourairports:5433, country_code: GU, iso_region: GU-U-A, airport_type: large_airport}
+    review_focus: >-
+      Confirm that known single-market classification skips the model call even
+      though the endpoint countries differ. This is a policy skip, not a claim
+      that the endpoints are connected or that no useful search exists.
+
+  - id: easter_island_to_chile_exception_boundary
+    origins: [IPC]
+    destinations: [SCL]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [pacific_islands], destination: [south_america], union: [pacific_islands, south_america]}
+    catalog_endpoints:
+      IPC: {airport_id: ourairports:6026, country_code: CL, iso_region: CL-VS, airport_type: large_airport}
+      SCL: {airport_id: ourairports:6015, country_code: CL, iso_region: CL-RM, airport_type: large_airport}
+    review_focus: >-
+      Review the IPC CL-VS exact override to Pacific Islands against SCL's
+      ordinary Chile assignment to South America. The same-country boundary is
+      deliberately cross-market for this planning policy; do not rewrite either
+      airport's catalog geography.
+
+  - id: australia_new_zealand_boundary
+    origins: [SYD]
+    destinations: [AKL]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [australia], destination: [new_zealand], union: [australia, new_zealand]}
+    catalog_endpoints:
+      SYD: {airport_id: ourairports:27145, country_code: AU, iso_region: AU-NSW, airport_type: large_airport}
+      AKL: {airport_id: ourairports:5023, country_code: NZ, iso_region: NZ-AUK, airport_type: large_airport}
+    review_focus: >-
+      Review that Australia and New Zealand remain separate planning markets in
+      v1, so this request invokes one grouped generation call. Candidate
+      suggestions must remain optional, role-appropriate, and explicitly
+      unverified.
+
+  - id: us_northeast_to_united_kingdom
+    origins: [JFK]
+    destinations: [LHR]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [europe], union: [europe, us]}
+    catalog_endpoints:
+      JFK: {airport_id: ourairports:3622, country_code: US, iso_region: US-NY, airport_type: large_airport}
+      LHR: {airport_id: ourairports:2434, country_code: GB, iso_region: GB-ENG, airport_type: large_airport}
+    review_focus: >-
+      Major endpoints may still receive materially complementary access or hub
+      hypotheses, but an empty result is valid when extras add little value.
+
+  - id: us_regional_origins_to_southern_europe
+    origins: [MCI, RDU]
+    destinations: [NCE, FLR]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [europe], union: [europe, us]}
+    catalog_endpoints:
+      MCI: {airport_id: ourairports:3668, country_code: US, iso_region: US-MO, airport_type: large_airport}
+      RDU: {airport_id: ourairports:3844, country_code: US, iso_region: US-NC, airport_type: large_airport}
+      NCE: {airport_id: ourairports:4156, country_code: FR, iso_region: FR-PAC, airport_type: large_airport}
+      FLR: {airport_id: ourairports:4380, country_code: IT, iso_region: IT-52, airport_type: large_airport}
+    review_focus: >-
+      Southern Europe is a review label only: both destinations are Europe in
+      the policy. Inspect support and narrow scopes across both sides.
+
+  - id: us_canada_to_australia_new_zealand
+    origins: [SFO, YVR]
+    destinations: [SYD, AKL]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [canada, us], destination: [australia, new_zealand], union: [australia, canada, new_zealand, us]}
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      YVR: {airport_id: ourairports:1941, country_code: CA, iso_region: CA-BC, airport_type: large_airport}
+      SYD: {airport_id: ourairports:27145, country_code: AU, iso_region: AU-NSW, airport_type: large_airport}
+      AKL: {airport_id: ourairports:5023, country_code: NZ, iso_region: NZ-AUK, airport_type: large_airport}
+    review_focus: >-
+      Exercise a multi-market side on both origin and destination without
+      falsely treating either side as homogeneous.
+
+  - id: hawaii_override_to_japan
+    origins: [ITO]
+    destinations: [NRT]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [pacific_islands], destination: [east_asia], union: [east_asia, pacific_islands]}
+    catalog_endpoints:
+      ITO: {airport_id: ourairports:5457, country_code: US, iso_region: US-HI, airport_type: medium_airport}
+      NRT: {airport_id: ourairports:5531, country_code: JP, iso_region: JP-12, airport_type: large_airport}
+    review_focus: >-
+      Verify the exact ITO Hawaii override takes precedence over the US
+      country default and preserves the medium-airport catalog fact.
+
+  - id: europe_same_market_skip
+    origins: [CDG]
+    destinations: [ATH]
+    outbound_date: *outbound_date
+    expected_gate: skip_single_market
+    expected_market_ids: {origin: [europe], destination: [europe], union: [europe]}
+    catalog_endpoints:
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+      ATH: {airport_id: ourairports:4251, country_code: GR, iso_region: GR-I, airport_type: large_airport}
+    review_focus: >-
+      Confirm a cross-country but fully known Europe request skips without a
+      model construction or claim about available travel.
+
+  - id: south_america_to_southern_africa
+    origins: [GRU]
+    destinations: [CPT]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [south_america], destination: [southern_africa], union: [south_america, southern_africa]}
+    catalog_endpoints:
+      GRU: {airport_id: ourairports:5910, country_code: BR, iso_region: BR-SP, airport_type: large_airport}
+      CPT: {airport_id: ourairports:2775, country_code: ZA, iso_region: ZA-WC, airport_type: large_airport}
+    review_focus: >-
+      Review bounded optional hypotheses across two distinct southern-hemisphere
+      planning markets without treating geographic plausibility as evidence.
+
+  - id: north_africa_to_east_africa_indian_ocean
+    origins: [CAI]
+    destinations: [NBO]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [north_africa], destination: [east_africa_indian_ocean], union: [east_africa_indian_ocean, north_africa]}
+    catalog_endpoints:
+      CAI: {airport_id: ourairports:3183, country_code: EG, iso_region: EG-C, airport_type: large_airport}
+      NBO: {airport_id: ourairports:3206, country_code: KE, iso_region: KE-47, airport_type: large_airport}
+    review_focus: >-
+      Exercise the policy's separate North Africa and East Africa/Indian Ocean
+      markets and inspect uncertainty discipline.
+
+  - id: middle_east_to_central_asia_caucasus
+    origins: [IST]
+    destinations: [TBS]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [middle_east], destination: [central_asia_caucasus], union: [central_asia_caucasus, middle_east]}
+    catalog_endpoints:
+      IST: {airport_id: ourairports:317457, country_code: TR, iso_region: TR-34, airport_type: large_airport}
+      TBS: {airport_id: ourairports:6453, country_code: GE, iso_region: GE-TB, airport_type: large_airport}
+    review_focus: >-
+      Exercise Turkey's Middle East assignment and Georgia's Central Asia and
+      Caucasus assignment as product policy, not universal geography.
+
+  - id: san_francisco_metro_to_europe
+    origins: [SFO, OAK, SJC]
+    destinations: [LHR, CDG, AMS, FRA]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [europe], union: [europe, us]}
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      OAK: {airport_id: ourairports:3744, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SJC: {airport_id: ourairports:3883, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      LHR: {airport_id: ourairports:2434, country_code: GB, iso_region: GB-ENG, airport_type: large_airport}
+      CDG: {airport_id: ourairports:4185, country_code: FR, iso_region: FR-IDF, airport_type: large_airport}
+      AMS: {airport_id: ourairports:2513, country_code: NL, iso_region: NL-NH, airport_type: large_airport}
+      FRA: {airport_id: ourairports:2212, country_code: DE, iso_region: DE-HE, airport_type: large_airport}
+    review_focus: >-
+      Stress grouped applicability across three original origins and four
+      destinations; avoid repeating candidates per endpoint pair.
+
+  - id: san_francisco_metro_to_southeast_asia
+    origins: [SFO, OAK, SJC]
+    destinations: [BKK, SIN, KUL, CGK]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [southeast_asia], union: [southeast_asia, us]}
+    catalog_endpoints:
+      SFO: {airport_id: ourairports:3878, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      OAK: {airport_id: ourairports:3744, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SJC: {airport_id: ourairports:3883, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      BKK: {airport_id: ourairports:28118, country_code: TH, iso_region: TH-10, airport_type: large_airport}
+      SIN: {airport_id: ourairports:26887, country_code: SG, iso_region: SG-04, airport_type: large_airport}
+      KUL: {airport_id: ourairports:26874, country_code: MY, iso_region: MY-10, airport_type: large_airport}
+      CGK: {airport_id: ourairports:26835, country_code: ID, iso_region: ID-BT, airport_type: large_airport}
+    review_focus: >-
+      Stress whether shared pools keep scopes meaningful across a broad
+      Southeast Asia endpoint set without padding.
+
+  - id: new_york_metro_to_japan
+    origins: [JFK, EWR, LGA]
+    destinations: [HND, NRT, KIX, NGO]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [east_asia], union: [east_asia, us]}
+    catalog_endpoints:
+      JFK: {airport_id: ourairports:3622, country_code: US, iso_region: US-NY, airport_type: large_airport}
+      EWR: {airport_id: ourairports:3521, country_code: US, iso_region: US-NJ, airport_type: large_airport}
+      LGA: {airport_id: ourairports:3643, country_code: US, iso_region: US-NY, airport_type: large_airport}
+      HND: {airport_id: ourairports:5627, country_code: JP, iso_region: JP-13, airport_type: large_airport}
+      NRT: {airport_id: ourairports:5531, country_code: JP, iso_region: JP-12, airport_type: large_airport}
+      KIX: {airport_id: ourairports:5536, country_code: JP, iso_region: JP-27, airport_type: large_airport}
+      NGO: {airport_id: ourairports:5576, country_code: JP, iso_region: JP-23, airport_type: large_airport}
+    review_focus: >-
+      Review multi-airport metro inputs without implying all original airport
+      combinations need every accepted candidate.
+
+  - id: new_york_metro_to_middle_east
+    origins: [JFK, EWR, LGA]
+    destinations: [DXB, DOH, AUH, TLV]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [middle_east], union: [middle_east, us]}
+    catalog_endpoints:
+      JFK: {airport_id: ourairports:3622, country_code: US, iso_region: US-NY, airport_type: large_airport}
+      EWR: {airport_id: ourairports:3521, country_code: US, iso_region: US-NJ, airport_type: large_airport}
+      LGA: {airport_id: ourairports:3643, country_code: US, iso_region: US-NY, airport_type: large_airport}
+      DXB: {airport_id: ourairports:5235, country_code: AE, iso_region: AE-DU, airport_type: large_airport}
+      DOH: {airport_id: ourairports:44686, country_code: QA, iso_region: QA-DA, airport_type: large_airport}
+      AUH: {airport_id: ourairports:5226, country_code: AE, iso_region: AE-AZ, airport_type: large_airport}
+      TLV: {airport_id: ourairports:4411, country_code: IL, iso_region: IL-M, airport_type: large_airport}
+    review_focus: >-
+      Review meaningful destination-side differences and applicability without
+      assuming a geographically broad market is homogeneous.
+
+  - id: los_angeles_metro_to_australia_new_zealand
+    origins: [LAX, BUR, SNA, ONT, LGB]
+    destinations: [SYD, MEL, AKL, WLG]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [australia, new_zealand], union: [australia, new_zealand, us]}
+    catalog_endpoints:
+      LAX: {airport_id: ourairports:3632, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      BUR: {airport_id: ourairports:3432, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SNA: {airport_id: ourairports:3894, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      ONT: {airport_id: ourairports:3752, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      LGB: {airport_id: ourairports:3644, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      SYD: {airport_id: ourairports:27145, country_code: AU, iso_region: AU-NSW, airport_type: large_airport}
+      MEL: {airport_id: ourairports:27066, country_code: AU, iso_region: AU-VIC, airport_type: large_airport}
+      AKL: {airport_id: ourairports:5023, country_code: NZ, iso_region: NZ-AUK, airport_type: large_airport}
+      WLG: {airport_id: ourairports:5063, country_code: NZ, iso_region: NZ-WGN, airport_type: large_airport}
+    review_focus: >-
+      Stress largest origin grouping and two destination markets while retaining
+      the original endpoint sets and explicit relationship scopes.
+
+  - id: major_us_gateways_to_india
+    origins: [JFK, LAX, ORD, DFW, ATL]
+    destinations: [DEL, BOM, BLR, MAA, HYD]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [south_asia], union: [south_asia, us]}
+    catalog_endpoints:
+      JFK: {airport_id: ourairports:3622, country_code: US, iso_region: US-NY, airport_type: large_airport}
+      LAX: {airport_id: ourairports:3632, country_code: US, iso_region: US-CA, airport_type: large_airport}
+      ORD: {airport_id: ourairports:3754, country_code: US, iso_region: US-IL, airport_type: large_airport}
+      DFW: {airport_id: ourairports:3488, country_code: US, iso_region: US-TX, airport_type: large_airport}
+      ATL: {airport_id: ourairports:3384, country_code: US, iso_region: US-GA, airport_type: large_airport}
+      DEL: {airport_id: ourairports:26555, country_code: IN, iso_region: IN-DL, airport_type: large_airport}
+      BOM: {airport_id: ourairports:26434, country_code: IN, iso_region: IN-MM, airport_type: large_airport}
+      BLR: {airport_id: ourairports:35145, country_code: IN, iso_region: IN-KA, airport_type: large_airport}
+      MAA: {airport_id: ourairports:26618, country_code: IN, iso_region: IN-TN, airport_type: large_airport}
+      HYD: {airport_id: ourairports:35141, country_code: IN, iso_region: IN-TG, airport_type: large_airport}
+    review_focus: >-
+      Test that many major original endpoints do not force extras, but still
+      permit useful complementary hypotheses with narrow applicability.
+
+  - id: us_south_east_to_south_america
+    origins: [MIA, DFW, IAH, ATL]
+    destinations: [BOG, LIM, GRU, SCL]
+    outbound_date: *outbound_date
+    expected_gate: generation_required
+    expected_market_ids: {origin: [us], destination: [south_america], union: [south_america, us]}
+    catalog_endpoints:
+      MIA: {airport_id: ourairports:3685, country_code: US, iso_region: US-FL, airport_type: large_airport}
+      DFW: {airport_id: ourairports:3488, country_code: US, iso_region: US-TX, airport_type: large_airport}
+      IAH: {airport_id: ourairports:3604, country_code: US, iso_region: US-TX, airport_type: large_airport}
+      ATL: {airport_id: ourairports:3384, country_code: US, iso_region: US-GA, airport_type: large_airport}
+      BOG: {airport_id: ourairports:6104, country_code: CO, iso_region: CO-DC, airport_type: large_airport}
+      LIM: {airport_id: ourairports:6217, country_code: PE, iso_region: PE-LIM, airport_type: large_airport}
+      GRU: {airport_id: ourairports:5910, country_code: BR, iso_region: BR-SP, airport_type: large_airport}
+      SCL: {airport_id: ourairports:6015, country_code: CL, iso_region: CL-RM, airport_type: large_airport}
+    review_focus: >-
+      Review grouped coverage across varied South American destinations without
+      forcing geographic quotas or broad unsupported relationships.

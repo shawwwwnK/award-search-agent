@@ -76,6 +76,8 @@ class _Repository:
             "ATL": ("US", "US-GA"),
             "DFW": ("US", "US-TX"),
             "SEA": ("US", "US-WA"),
+            "BOS": ("US", "US-MA"),
+            "IAD": ("US", "US-VA"),
             "KTI": ("ZZ", "ZZ-TEST"),
             "CDG": ("FR", "FR-IDF"),
         }
@@ -374,8 +376,8 @@ def test_generation_failure_and_forged_replay_are_explicit(repository: _Reposito
         )
 
 
-def test_accepted_access_changes_hub_cap_without_refill(repository: _Repository) -> None:
-    hub_codes = ("JFK", "ATL", "DFW", "SEA")
+def test_accepted_access_keeps_five_hub_cap_without_refill(repository: _Repository) -> None:
+    hub_codes = ("JFK", "ATL", "DFW", "SEA", "ORD", "KTI")
     proposal = _proposal(
         origin_access_gateways=[
             {
@@ -408,7 +410,7 @@ def test_accepted_access_changes_hub_cap_without_refill(repository: _Repository)
     )
     result = _discover(repository, _input(repository, ("SFO",), ("CDG",)), _Generator(proposal))
 
-    assert len(result.accepted_intermediate_hubs) == 3
+    assert len(result.accepted_intermediate_hubs) == 5
     assert result.candidate_decisions[-1].issues[0].code == "over_pool_cap"
 
 
@@ -558,6 +560,91 @@ def test_no_accepted_access_keeps_five_hub_cap_after_rejection(repository: _Repo
 
     assert len(result.accepted_intermediate_hubs) == 5
     assert result.candidate_decisions[-1].issues[0].code == "over_pool_cap"
+
+
+def test_empty_access_pools_keep_five_hub_cap(repository: _Repository) -> None:
+    hub_codes = ("JFK", "ATL", "DFW", "SEA", "LAX")
+    proposal = _proposal(
+        intermediate_hubs=[
+            {
+                "airport_iata": code,
+                "reason": "bounded",
+                "material_uncertainty": None,
+                "model_asserted_market_id": None,
+                "scopes": [
+                    {
+                        "origin_side": [{"kind": "original_origin", "airport_iata": "SFO"}],
+                        "destination_side": [
+                            {"kind": "original_destination", "airport_iata": "CDG"}
+                        ],
+                        "reason": None,
+                    }
+                ],
+            }
+            for code in hub_codes
+        ]
+    )
+
+    result = _discover(repository, _input(repository, ("SFO",), ("CDG",)), _Generator(proposal))
+
+    assert len(result.accepted_intermediate_hubs) == 5
+    assert all(item.accepted for item in result.candidate_decisions)
+
+
+def test_each_fixed_pool_accepts_its_product_maximum(repository: _Repository) -> None:
+    direct_scope = [
+        {
+            "origin_side": [{"kind": "original_origin", "airport_iata": "SFO"}],
+            "destination_side": [{"kind": "original_destination", "airport_iata": "CDG"}],
+            "reason": None,
+        }
+    ]
+    proposal = _proposal(
+        origin_access_gateways=[
+            {
+                "airport_iata": code,
+                "reason": "complementary departure alternative",
+                "material_uncertainty": None,
+                "model_asserted_market_id": None,
+                "supported_original_origin_iata_codes": ["SFO"],
+                "applicable_original_destination_iata_codes": ["CDG"],
+            }
+            for code in ("LAX", "ORD")
+        ],
+        destination_access_gateways=[
+            {
+                "airport_iata": code,
+                "reason": "complementary arrival alternative",
+                "material_uncertainty": None,
+                "model_asserted_market_id": None,
+                "supported_original_destination_iata_codes": ["CDG"],
+                "applicable_original_origin_iata_codes": ["SFO"],
+            }
+            for code in ("JFK", "ATL")
+        ],
+        intermediate_hubs=[
+            {
+                "airport_iata": code,
+                "reason": "bounded hub hypothesis",
+                "material_uncertainty": None,
+                "model_asserted_market_id": None,
+                "scopes": direct_scope,
+            }
+            for code in ("DFW", "SEA", "KTI", "BOS", "IAD")
+        ],
+    )
+
+    result = _discover(repository, _input(repository, ("SFO",), ("CDG",)), _Generator(proposal))
+
+    assert len(result.accepted_origin_access_gateways) == 2
+    assert len(result.accepted_destination_access_gateways) == 2
+    assert len(result.accepted_intermediate_hubs) == 5
+    assert (
+        len(result.accepted_origin_access_gateways)
+        + len(result.accepted_destination_access_gateways)
+        + len(result.accepted_intermediate_hubs)
+        == 9
+    )
 
 
 def test_destination_gateway_and_global_duplicate_preserve_valid_cross_product(

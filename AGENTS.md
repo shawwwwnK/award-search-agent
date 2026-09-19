@@ -74,11 +74,26 @@ otherwise make one grouped structured model proposal for bounded provider-neutra
 Candidates are unverified search hypotheses, never route or connectivity facts. An unknown endpoint
 market forces generation with an explicit mapping-gap receipt; a model/policy candidate-market
 disagreement is advisory and passes to 2C rather than rejecting an otherwise valid candidate.
-The prompt-v2 development diagnostic is mechanically complete, while independent human semantic
-review and the owner's next-cut decision remain open. Completing 2B does not close or adopt 2A;
+The prompt-v6/casebook-v3 development diagnostic is mechanically complete, while independent human semantic
+review and the owner's next-cut decision remain open. The preceding prompt-v5/casebook-v3 run exposed
+relationship multiplication; prompt-v6 adds relationship-level uncertainty/scope reconciliation and
+same-scope candidate consolidation without changing the schema, adapter, catalog, policy, or
+deterministic validator. Access gateways may be materially complementary alternatives even for
+already-strong endpoints, but require specific incremental value rather than size, proximity, shared
+market, or diversity alone. The pools are independently capped at 2 origin access, 2 destination
+access, and 5 hubs (9 candidates total); no intermediate-market diversity quota applies. Completing 2B
+does not close or adopt 2A;
 reviewed fixtures or supplied selection records may be used without promoting model output into
 geographic fact. It stops before 2C search-strategy compilation, provider execution,
 returned-itinerary claims, RAG, or persistence. See ADR 0020.
+
+The final v6 diagnostic recorded 46 case-trials and 42/42 expected calls across two trials: 37
+nonempty, 4 empty, 4 policy-skip, and 1 partial outcomes; 82 accepted candidates (22 origin access,
+18 destination access, and 42 hubs), 43 scopes, and 400 accepted relationships. It recorded 186,549
+tokens, one catalog-absence rejection for PNH, and three retained market-mismatch advisories. Artifact
+integrity and independent AI semantic review passed for owner human review; this is not human semantic
+qualification. 2C relationship/search-work budgeting remains mandatory, and no prompt-v7 or
+deterministic semantic-rejection change is currently recommended.
 
 The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
 

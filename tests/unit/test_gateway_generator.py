@@ -198,10 +198,31 @@ def test_adapter_uses_one_structured_call_with_only_resolved_context_and_trace()
     assert payload["outbound_date"]["start"] == "2026-10-05"
     assert "raw" not in payload
     assert "milestone" not in str(request["instructions"]).casefold()
-    assert GATEWAY_GENERATOR_PROMPT_VERSION == "gateway-generator-prompt-v2"
+    assert GATEWAY_GENERATOR_PROMPT_VERSION == "gateway-generator-prompt-v6"
     for required_rule in (
         "relative to the opposite market",
-        "do not omit them to unlock more hubs",
+        "materially complementary alternative departure search endpoints",
+        "materially complementary alternative arrival search endpoints",
+        "major or already-useful endpoint raises the threshold",
+        "size, proximity, sharing a market, or geographic diversity alone",
+        "do not omit a useful access alternative to make room for hubs",
+        "two origin-access gateways, two destination-access gateways, and five",
+        "regardless of whether either access pool is populated",
+        "do not pad either pool",
+        "five hubs is a safety ceiling, not a completion target",
+        "after selecting access gateways, add a hub only",
+        "materially distinct from every selected access gateway and every earlier hub",
+        "whose only distinction is another airport, geography, size",
+        "prefer the smallest complementary subset even if more valid airports exist",
+        "specific incremental value relative to the original endpoints and candidates already selected",
+        "evaluate circuitousness before marginal distinctness",
+        "different market, role, geography, or search topology alone never",
+        "substantial backtracking or positioning away from the opposite endpoint",
+        "only incremental rationale is distinctness and its positioning may be materially circuitous",
+        "omit it and allow an empty result",
+        "endpoint_market_assessments may name only the supplied original endpoints",
+        "for each candidate, put any unverified market assessment only in that candidate's",
+        "model_asserted_market_id",
         "cross-market portions",
         "third market",
         "positioning is allowed",
@@ -212,13 +233,22 @@ def test_adapter_uses_one_structured_call_with_only_resolved_context_and_trace()
         "equals any applicable opposite-side endpoint",
         "separate scope from a relationship that depends on an access gateway",
         "independent original relationship depend solely on a gateway",
-        "materially circuitous candidates",
+        "reconcile each candidate's uncertainty with every stated applicability or scope",
+        "pairing is described as marginal, overlapping, materially circuitous, or unlikely to justify",
+        "candidate reason names concrete countervailing value specific to that pairing",
+        "do not default a candidate to every endpoint solely because endpoints share a market",
+        "two candidates have the same applicability or scope and differ only by airport, geography",
+        "generic different-search-pool rationale, retain only the stronger one",
+        "positioning may be materially circuitous",
         "airport size or correct market alone is insufficient",
         "as hypotheses",
         "connection or connection quality",
         "feasibility as fact",
     ):
         assert required_rule in " ".join(str(request["instructions"]).casefold().split())
+    instructions = " ".join(str(request["instructions"]).casefold().split())
+    assert "otherwise propose at most three" not in instructions
+    assert "if both access pools are empty" not in instructions
     assert generator.take_usage() == {
         "calls": 1,
         "captured_calls": 1,

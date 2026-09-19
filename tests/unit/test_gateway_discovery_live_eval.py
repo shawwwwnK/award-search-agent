@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from datetime import date
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Self
 
@@ -132,16 +133,78 @@ class _Repository:
         return self.metadata.get(airport_id)
 
 
-def test_complete_casebook_loads_with_one_skip_and_expected_examples() -> None:
+def test_complete_casebook_loads_with_two_skips_and_expected_examples() -> None:
     cases = load_gateway_discovery_live_cases()
     assert DEFAULT_GATEWAY_DISCOVERY_LIVE_FIXTURES == Path(
-        "evals/gateway_discovery/development_cases_v1.yaml"
+        "evals/gateway_discovery/development_cases_v3.yaml"
     )
-    assert len(cases) == 8
-    assert sum(case["expected_gate"] == "skip_single_market" for case in cases) == 1
-    assert {"west_coast_to_paris_multi_origin", "san_francisco_to_southeast_asia_endpoints"} <= {
-        case["id"] for case in cases
+    assert len(cases) == 23
+    assert sum(case["expected_gate"] == "skip_single_market" for case in cases) == 2
+    assert {case["id"] for case in cases} == {
+        "west_coast_to_paris_multi_origin",
+        "san_francisco_to_southeast_asia_endpoints",
+        "regional_california_oregon_to_paris",
+        "equal_but_multi_market_endpoint_sets",
+        "hawaii_to_mainland_us_exception",
+        "hawaii_to_guam_same_market_skip",
+        "easter_island_to_chile_exception_boundary",
+        "australia_new_zealand_boundary",
+        "us_northeast_to_united_kingdom",
+        "us_regional_origins_to_southern_europe",
+        "us_canada_to_australia_new_zealand",
+        "hawaii_override_to_japan",
+        "europe_same_market_skip",
+        "south_america_to_southern_africa",
+        "north_africa_to_east_africa_indian_ocean",
+        "middle_east_to_central_asia_caucasus",
+        "san_francisco_metro_to_europe",
+        "san_francisco_metro_to_southeast_asia",
+        "new_york_metro_to_japan",
+        "new_york_metro_to_middle_east",
+        "los_angeles_metro_to_australia_new_zealand",
+        "major_us_gateways_to_india",
+        "us_south_east_to_south_america",
     }
+    cases_by_id = {case["id"]: case for case in cases}
+    assert cases_by_id["hawaii_override_to_japan"]["origins"] == ["ITO"]
+    assert cases_by_id["hawaii_override_to_japan"]["destinations"] == ["NRT"]
+    assert cases_by_id["hawaii_override_to_japan"]["catalog_endpoints"]["ITO"] == {
+        "airport_id": "ourairports:5457",
+        "country_code": "US",
+        "iso_region": "US-HI",
+        "airport_type": "medium_airport",
+    }
+    assert cases_by_id["europe_same_market_skip"]["origins"] == ["CDG"]
+    assert cases_by_id["europe_same_market_skip"]["destinations"] == ["ATH"]
+    assert cases_by_id["san_francisco_metro_to_europe"]["origins"] == ["SFO", "OAK", "SJC"]
+    assert cases_by_id["new_york_metro_to_japan"]["destinations"] == ["HND", "NRT", "KIX", "NGO"]
+    assert cases_by_id["major_us_gateways_to_india"]["destinations"] == [
+        "DEL",
+        "BOM",
+        "BLR",
+        "MAA",
+        "HYD",
+    ]
+    assert cases_by_id["us_south_east_to_south_america"]["destinations"] == [
+        "BOG",
+        "LIM",
+        "GRU",
+        "SCL",
+    ]
+    southeast_asia = next(
+        case for case in cases if case["id"] == "san_francisco_to_southeast_asia_endpoints"
+    )
+    assert southeast_asia["destinations"] == ["SAI", "KTI"]
+    assert "BKK" not in southeast_asia["catalog_endpoints"]
+    assert sha256(
+        Path("evals/gateway_discovery/development_cases_v1.yaml").read_bytes()
+    ).hexdigest() == ("9f4a1593ae7d06d132faaf5e5d3895f56823136f97a66d4bbde45292edb6789b")
+    assert sha256(
+        Path("evals/gateway_discovery/development_cases_v2.yaml").read_bytes()
+    ).hexdigest() == ("65c455a9ca51f44ab98bd30800902271aab3077e578b2356b2bd1074e42a4b1d")
+    assert sha256(DEFAULT_GATEWAY_DISCOVERY_LIVE_FIXTURES.read_bytes()).hexdigest() == (
+        "ba3b2e0efd73a2774da6af2950ff4addaf5e7763f754b49042dd56acec3b2f06"
+    )
 
 
 def test_fixture_rejects_policy_version_drift(tmp_path: Path) -> None:
@@ -161,19 +224,20 @@ def test_two_trial_fake_run_is_bounded_redacted_and_replayable(tmp_path: Path) -
     )
     public = json.dumps(artifact)
     assert artifact["summary"]["mechanically_completed"] is True
-    assert artifact["summary"]["expected_calls"] == 14
-    assert artifact["summary"]["attempted_calls"] == 14
-    assert artifact["summary"]["constructed_calls"] == 14
-    assert _Generator.calls == 14
+    assert artifact["summary"]["expected_calls"] == 42
+    assert artifact["summary"]["attempted_calls"] == 42
+    assert artifact["summary"]["constructed_calls"] == 42
+    assert _Generator.calls == 42
     assert "RAW_SENTINEL" not in public and "PRIVATE_SENTINEL" not in public
     sidecar = Path(artifact["records"][0]["private_trace"]["path"])
     assert "RAW_SENTINEL" in sidecar.read_text()
     private_record = Path(artifact["records"][0]["private_trace"]["record_path"])
     assert json.loads(private_record.read_text())["gateway_discovery_result"] is not None
-    skip = next(
+    skips = [
         record for record in artifact["records"] if record["expected_gate"] == "skip_single_market"
-    )
-    assert skip["trace_reconciliation"]["constructed"] is False
+    ]
+    assert len(skips) == 4
+    assert all(skip["trace_reconciliation"]["constructed"] is False for skip in skips)
     assert all(
         record["gate_expectation_matches"] and record["endpoint_preserved"]
         for record in artifact["records"]
@@ -241,8 +305,8 @@ def test_complete_preflight_rejects_late_fixture_drift_before_any_generator_call
 def test_preflight_gate_drift_constructs_no_generator(tmp_path: Path) -> None:
     _Generator.calls = 0
     contents = DEFAULT_GATEWAY_DISCOVERY_LIVE_FIXTURES.read_text().replace(
-        "origin: [us]\n      destination: [europe]\n      union: [europe, us]",
-        "origin: [europe]\n      destination: [europe]\n      union: [europe]",
+        "expected_market_ids: {origin: [us], destination: [europe], union: [europe, us]}",
+        "expected_market_ids: {origin: [europe], destination: [europe], union: [europe]}",
         1,
     )
     fixture = tmp_path / "gate-drift.yaml"

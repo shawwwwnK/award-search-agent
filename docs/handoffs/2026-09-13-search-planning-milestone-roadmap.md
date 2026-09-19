@@ -347,11 +347,25 @@ interface without promoting model output into fact.
 #### Implementation and review status
 
 The approved policy, one-call grouped generator, relationship-aware validator,
-immutable replay record, disclosed eight-scenario development casebook, and
-prompt-v2 diagnostic are implemented. Offline checks and trace reconciliation
-are complete. The prompt-v2 artifact remains development evidence pending
-human semantic review; 2B is not automatically qualified or adopted as a 2C
-input source.
+immutable replay record, and disclosed casebook-v3 development casebook are
+implemented. Casebook v3 preserves the eight v2 scenarios and adds 15
+catalog-pinned scenarios, for 23 cases: two policy skips and 21 generation
+cases. The prompt-v5/casebook-v2 and first prompt-v5/casebook-v3 diagnostics
+are historical evidence. The final prompt-v6/casebook-v3 two-trial live
+evaluation completed its bounded 42 calls and remains open only for
+owner/human semantic review. Access gateways may be
+materially complementary for already-strong endpoints only when they provide
+specific incremental value; size, proximity, shared market, or diversity alone
+is insufficient. The independent 2 origin-access, 2 destination-access, and 5
+hub maxima do not impose an intermediate-market diversity quota. Offline checks
+and trace reconciliation are complete. The v6 artifact records 46 case-trials,
+42/42 calls, 82 candidates, 43 scopes, and 400 accepted relationships; one PNH
+catalog-absence rejection and three market-mismatch advisories were retained.
+The artifact/privacy audit and independent AI semantic review passed for owner
+human review, not human qualification. No prompt-v7 or deterministic
+semantic-rejection change is currently recommended; 2C relationship/search-work
+budgeting remains mandatory. 2B is not automatically qualified or adopted as a
+2C input source.
 
 #### Decision gate
 
@@ -376,6 +390,9 @@ and adds bounded supplemental award-search strategies.
   explicitly rather than silently treating it as an award result.
 - Apply deterministic planning budgets, canonical ordering, and semantic
   deduplication across direct and supplemental strategies.
+- Budget compiled relationships/search items rather than raw candidate count;
+  record any budget omission without relabeling an accepted 2B candidate
+  invalid.
 - Carry candidate/selection provenance and coverage disclosures into plan
   receipts without changing request understanding or calling a provider.
 - Add offline tests proving direct coverage remains present, strategy output is

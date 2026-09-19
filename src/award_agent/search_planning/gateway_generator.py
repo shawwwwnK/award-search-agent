@@ -28,7 +28,7 @@ from award_agent.search_planning.market_policy import (
 )
 
 GATEWAY_GENERATOR_ADAPTER_VERSION = "openai_gateway_generator_v1"
-GATEWAY_GENERATOR_PROMPT_VERSION = "gateway-generator-prompt-v2"
+GATEWAY_GENERATOR_PROMPT_VERSION = "gateway-generator-prompt-v6"
 
 # These intentionally exceed the v1 product caps.  The validator, rather
 # than schema parsing, records a bad or over-cap entry without losing useful
@@ -44,13 +44,17 @@ intermediate_hubs.  Every airport code must identify one individual airport; do 
 metropolitan aggregate code.  The original endpoints are already selected and must not be removed.
 
 Origin-access gateways are alternative places from which a regional origin, or one with limited
-international usefulness toward the opposite market, can usefully begin a search.  For an origin
-already useful as a gateway, propose none by default.  Destination-access gateways use the
-corresponding arrival-side judgment.  Gateway usefulness is relative to the opposite market, not
-airport size alone.  Assess this suitability for each supported original endpoint: do not apply a
-gateway to an already-useful endpoint merely because it helps a sibling.  Do not propose an access
-gateway if it equals any applicable opposite-side endpoint, because that would create a self-pair.
-Positioning is allowed.
+international usefulness toward the opposite market, can usefully begin a search.  They may also
+be materially complementary alternative departure search endpoints for an already-strong origin
+when they offer specific incremental search value relative to the opposite market.  A major or
+already-useful endpoint raises the threshold for such an alternative but does not disqualify it.
+Destination-access gateways may likewise be materially complementary alternative arrival search
+endpoints for a regional, limited-use, or already-strong destination.  Gateway usefulness is
+relative to the opposite market, not airport size alone.  Size, proximity, sharing a market, or
+geographic diversity alone is not incremental search value.  Assess this suitability for each
+supported original endpoint: do not apply a gateway to an already-useful endpoint merely because
+it helps a sibling.  Do not propose an access gateway if it equals any applicable opposite-side
+endpoint, because that would create a self-pair.  Positioning is allowed.
 
 Intermediate hubs are optional search hypotheses with explicit origin-side and destination-side
 scopes.  A scope means all pairings between its listed sides.  References may name an original
@@ -63,23 +67,43 @@ original endpoints in a separate scope from a relationship that depends on an ac
 rejected gateway does not erase an independent original relationship.  Do not make an otherwise
 independent original relationship depend solely on a gateway.
 
-Return fewer candidates rather than padding.  Choose useful access gateways first; do not omit them
-to unlock more hubs.  Propose at most two origin-access gateways and two destination-access
-gateways.  If both access pools are empty, propose at most five intermediate hubs; otherwise
-propose at most three.  Candidates are alternatives, not itinerary legs.  Prefer complementary
-strong candidates without geographic quotas or a promise of better award availability.  The
-supplied origin or destination side can span multiple markets; use the actual labels and scope
-proposals to cross-market portions without discarding original endpoints.  Omit materially
-circuitous candidates unless their complementary search value is specific; airport size or correct
-market alone is insufficient.
+Before returning, reconcile each candidate's uncertainty with every stated applicability or scope.
+If a pairing is described as marginal, overlapping, materially circuitous, or unlikely to justify
+positioning, omit that pairing unless the candidate reason names concrete countervailing value
+specific to that pairing.  Do not default a candidate to every endpoint solely because endpoints
+share a market.
 
-Give each candidate one concise reason and any material uncertainty.  You may include your own
-market assessment for every endpoint and candidate, but it is an unverified assessment: use only
-an approved supplied market ID or null.  Do not claim routes, schedules, connections, protected
-tickets, award seats, availability, or bookability.  State reasons and uncertainty as hypotheses;
-do not assert a current facility role, route or service, connection or connection quality, schedule,
-award, or feasibility as fact.  Use general knowledge without browsing, and only the supplied
-resolved airport, market, and date context; do not reinterpret user wording."""
+Return fewer candidates rather than padding.  Access gateways and intermediate hubs serve distinct
+purposes: do not omit a useful access alternative to make room for hubs, and do not pad either
+pool.  Propose at most two origin-access gateways, two destination-access gateways, and five
+intermediate hubs regardless of whether either access pool is populated.  Candidates are
+alternatives, not itinerary legs.  Prefer complementary strong candidates without geographic quotas
+or a promise of better award availability.  The
+supplied origin or destination side can span multiple markets; use the actual labels and scope
+proposals to cross-market portions without discarding original endpoints.  Evaluate circuitousness
+before marginal distinctness.  A different market, role, geography, or search topology alone never
+justifies substantial backtracking or positioning away from the opposite endpoint.  If a candidate's
+only incremental rationale is distinctness and its positioning may be materially circuitous, omit it
+and allow an empty result.  Airport size or correct market alone is insufficient.
+
+Make a marginal selection, not an inventory.  Five hubs is a safety ceiling, not a completion
+target.  After selecting access gateways, add a hub only when its search function is materially
+distinct from every selected access gateway and every earlier hub.  Omit a candidate whose only
+distinction is another airport, geography, size, or a generic claim of a different search pool.
+Prefer the smallest complementary subset even if more valid airports exist.
+When two candidates have the same applicability or scope and differ only by airport, geography, or
+a generic different-search-pool rationale, retain only the stronger one.
+
+Give each candidate one concise reason and any material uncertainty.  Its reason must explain its
+specific incremental value relative to the original endpoints and candidates already selected, not
+only the original endpoints.  endpoint_market_assessments may name only the supplied original
+endpoints.  For each candidate, put any unverified market assessment only in that candidate's
+model_asserted_market_id; use an approved supplied market ID or null.  Do not claim routes,
+schedules, connections, protected tickets, award seats, availability, or bookability.  State
+reasons and uncertainty as hypotheses; do not assert a current facility role, route or service,
+connection or connection quality, schedule, award, or feasibility as fact.  Use general knowledge
+without browsing, and only the supplied resolved airport, market, and date context; do not
+reinterpret user wording."""
 
 
 class GatewayGeneratorPrompt(PlanningContractModel):

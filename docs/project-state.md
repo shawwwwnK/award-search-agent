@@ -2,8 +2,8 @@
 
 ## Phase
 
-Milestone 2B market-aware gateway-airport discovery — implemented; prompt-v2 diagnostic awaits
-owner and human semantic review before any successor cut.
+Milestone 2B market-aware gateway-airport discovery — implemented; the prompt-v6/casebook-v3 live
+diagnostic is mechanically complete and awaits owner/human semantic review before any successor cut.
 Search planning is implemented and fixture-qualified as a planning-only, retrieval-backed
 `EffectiveRequest -> SearchPlan` stage that follows the frozen one-way award request-understanding
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
@@ -47,9 +47,47 @@ remain permitted without promoting model proposals into geographic fact.
 
 On 2026-09-19, the small versioned market policy, grouped structured generator,
 relationship-aware validator, and immutable replay record were implemented and offline verified.
-The bounded prompt-v2 development evaluation completed mechanically: its public artifact and
-private trace sidecars reconcile all expected calls. It is development evidence only; no semantic
-qualification, connectivity claim, SearchPlan adoption, or 2C implementation follows from it.
+The prompt-v5/casebook-v2 and first prompt-v5/casebook-v3 evaluations are historical diagnostics.
+The final prompt-v6/casebook-v3 development evaluation completed mechanically: its public artifact
+and private trace sidecars reconcile all expected calls. Access gateways may be materially
+complementary departure or arrival alternatives even for already-strong endpoints, but must clear a
+higher specific incremental-value threshold; size, proximity, shared market, or geographic diversity
+alone is insufficient. Origin access (0–2), destination access (0–2), and hubs (0–5) have independent
+maximums, with no intermediate-market diversity quota. It is development evidence only; no semantic
+qualification, connectivity claim, SearchPlan adoption, or 2C implementation follows from it. The
+v6 run recorded 46 case-trials and 42/42 expected calls across two trials: 37 nonempty, 4 empty,
+4 policy-skip, and 1 partial outcomes; 82 accepted candidates (22 origin access, 18 destination
+access, and 42 hubs), 43 scopes, and 400 accepted relationships; 186,549 tokens; one PNH
+catalog-absence rejection; and three retained market-mismatch advisories. Artifact-integrity and
+independent AI semantic review passed for owner human review, not human semantic qualification.
+Relationship-level budgeting remains mandatory for 2C.
+
+## 2026-09-19 casebook-v3 live diagnostic complete
+
+The disclosed v3 casebook preserves all eight v2 scenarios and appends 15
+grounded endpoint sets across additional market boundaries, grouped metro
+inputs, and the ITO Hawaii override. It has 23 scenarios: two deterministic
+same-market skips and 21 grouped-generation cases, so the fixed two-trial
+live bound is 42 calls with no retry or refill. The v3 fixture SHA-256 is
+`ba3b2e0efd73a2774da6af2950ff4addaf5e7763f754b49042dd56acec3b2f06`.
+
+The first prompt-v5/v3 diagnostic exposed relationship multiplication: 46
+records and 42 calls produced 125 accepted candidates, 76 scopes, and 731
+accepted relationships across 184,604 tokens. Prompt-v6 added relationship-level
+uncertainty/scope reconciliation and same-scope candidate consolidation without
+changing the schema, adapter, catalog, policy, or deterministic validator. The
+final artifact is
+`evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v6-casebook-v3-2-trials.json`.
+It has 46 records and 42/42 calls: 37 nonempty, 4 empty, 4 policy skips, and
+1 partial; 82 accepted candidates, 43 scopes, 400 accepted relationships, and
+186,549 tokens. One PNH catalog-absence rejection and three market-mismatch
+advisories were retained; there were zero errors or generation failures.
+Artifact/privacy audit and independent AI semantic
+review passed for owner human review, not human qualification. Residual review
+notes include high relationship counts for India and Los Angeles/Australia-New
+Zealand cases, trial variation, one IPC→PPT circuitous regression, and a private
+trace control-character hygiene note. No prompt-v7 or deterministic semantic
+rejection change is currently recommended; 2C budgeting is mandatory.
 
 ## Current conclusion
 
@@ -301,8 +339,10 @@ deterministic location/planner boundary while preserving the Milestone 0 JSON fi
 reviewed group policies. M2A is implemented but remains diagnostic-only pending its recorded
 semantic/adoption gate. M2B implements ADR 0020's approved market policy, generation gate,
 grouped proposal, deterministic relationship validation, and replayable selection record; its
-prompt-v2 diagnostic is mechanically complete but not semantically qualified. It does not authorize
-runtime strategy compilation. Provider
+prompt-v6/casebook-v3 diagnostic is mechanically complete but not semantically qualified. It does not
+authorize runtime strategy compilation. If 2C is opened, it must preserve mandatory original endpoint
+coverage, budget compiled relationships/search items rather than raw candidate count, and record a
+budget omission without relabeling the candidate invalid. Provider
 execution remains subsequent and separately scoped. Preserve the upstream and M2A evidence gaps as
 such—do not reopen their semantics or call them qualified through this documentation change.
 

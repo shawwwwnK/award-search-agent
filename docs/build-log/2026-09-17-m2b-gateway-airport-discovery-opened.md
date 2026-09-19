@@ -111,3 +111,105 @@ open. Milestone 2C is not implemented; if opened, it must preserve mandatory
 endpoint coverage and consolidate accepted unverified hypotheses together with
 their mapping gaps and advisory evidence without converting them into
 connectivity facts.
+
+## 2026-09-19 revision: complementary access alternatives and prompt-v5 / casebook-v2
+
+The owner approved a narrow 2B revision after human review identified a
+semantic-coverage gap in the West Coast to Paris diagnostic. The change does
+not claim a route, connection, schedule, award, or feasibility fact.
+
+- Access gateways may be materially complementary departure or arrival
+  alternatives even for already-strong original endpoints. They require
+  specific incremental value relative to the opposite market and selected
+  alternatives; size, proximity, shared market, or geographic diversity alone
+  is insufficient.
+- Pool ceilings are independent: 0–2 origin access, 0–2 destination access,
+  and 0–5 hubs, for at most nine candidates. They are maxima rather than
+  targets; access candidates do not reduce the hub ceiling. There is no
+  intermediate-hub market-diversity quota.
+- 2C remains unimplemented. If opened, it must preserve mandatory original
+  endpoint coverage, budget compiled relationships/search items rather than
+  raw candidate count, and record budget omissions without calling an accepted
+  2B candidate invalid.
+
+The v2 disclosed casebook changes the Southeast Asia scenario to SAI and KTI
+only. The v1 casebook and its SHA-256
+`9f4a1593ae7d06d132faaf5e5d3895f56823136f97a66d4bbde45292edb6789b` remain
+historical evidence. Prompt-v3 and prompt-v4 public artifacts are diagnostic
+iterations: v3 exposed saturation (58 accepted candidates, including 34 hubs);
+v4 reduced burden but regressed IPC circuitousness and endpoint assessment.
+Prompt v5 addresses both with marginal-distinctness, circuitousness, and
+endpoint-assessment rules. The response schema and adapter remain unchanged.
+
+Final offline verification completed with **507 passed, 99 skipped**;
+`.venv/bin/ruff check .` and `git diff --check` were clean; targeted mypy for
+the six changed 2B files was clean.
+
+The final artifact for that revision is
+[`2026-09-19-gpt-5.6-luna-prompt-v5-casebook-v2-2-trials.json`](../../evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v5-casebook-v2-2-trials.json).
+It uses prompt `gateway-generator-prompt-v5`, the unchanged response-schema
+SHA-256 `173a1d66ef5091a0f44837583579fc1616b406f440ce15976b430bae53a5a680`,
+the unchanged `planning-market-v1` policy, and casebook-v2 SHA-256
+`65c455a9ca51f44ab98bd30800902271aab3077e578b2356b2bd1074e42a4b1d`.
+
+The bounded final run has 16 records and 14 expected, constructed, attempted,
+and reconciled calls: 11 nonempty outcomes, 3 empty outcomes, and 2 policy
+skips; zero partial, rejected-all, or generation-failure outcomes. It accepted
+35 candidates (7 origin access, 12 destination access, and 16 hubs) across 19
+scopes; observed maxima were 2/2/3 within 2/2/5. The review records 65
+accepted declared relationships, 36,772 input plus 19,745 output tokens
+(56,517 total), zero rejected candidates, zero mismatch advisories, and
+endpoint assessments for all 40 original endpoints. Cost is unestimated.
+Final artifact-integrity and AI semantic review passed for owner human review;
+this is not human semantic qualification.
+
+## 2026-09-19 casebook-v3 expansion pre-live note (historical)
+
+- Added the disclosed `development_cases_v3.yaml` without changing v1/v2
+  fixtures or their historical artifacts. It preserves v2's eight scenarios
+  and adds 15 catalog-pinned market-boundary and grouped-endpoint scenarios,
+  including ITO→NRT and CDG→ATH.
+- Updated the strict evaluator fixture contract to v3. The complete book has
+  23 scenarios, two policy skips, and 21 generation cases: the two-trial
+  bound is 42 calls, with no retry, refill, or same-model judging.
+- Offline preflight and live results are recorded separately after their runs;
+  this entry does not claim a v3 live evaluation result.
+
+## 2026-09-19 casebook-v3 prompt-v6 closeout diagnostic
+
+The casebook-v3 fixture SHA-256 is
+`ba3b2e0efd73a2774da6af2950ff4addaf5e7763f754b49042dd56acec3b2f06`. It has
+23 scenarios, two policy skips, and 21 generation cases, for 42 calls across
+two trials with no retries or refill calls.
+
+The first prompt-v5/v3 diagnostic completed mechanically but exposed
+relationship multiplication: 46 records and 42 calls produced 125 accepted
+candidates, 76 scopes, and 731 accepted relationships across 184,604 tokens.
+Prompt-v6 added relationship-level uncertainty/scope reconciliation and
+same-scope candidate consolidation. The response schema and adapter are
+unchanged, as are the catalog, market policy, and deterministic validator.
+
+The final public artifact is
+[`2026-09-19-gpt-5.6-luna-prompt-v6-casebook-v3-2-trials.json`](../../evals/gateway_discovery/baseline/2026-09-19-gpt-5.6-luna-prompt-v6-casebook-v3-2-trials.json).
+It records 46 case-trials and 42/42 expected, constructed, attempted, and
+reconciled calls: 37 nonempty, 4 empty, 4 policy skips, and 1 partial; 82
+accepted candidates (22 origin access, 18 destination access, and 42 hubs),
+43 scopes, 400 accepted relationships, and 186,549 total tokens. One PNH
+catalog-absence rejection and three model/policy market-mismatch advisories
+were retained; there were zero errors or generation failures. Artifact/privacy
+audit passed.
+
+Before the v6 live run, the offline suite was **507 passed, 99 skipped**;
+focused 2B checks (44 tests), Ruff, targeted mypy, and `git diff --check`
+passed. A repository-wide Ruff format check is not a gate and reported 47
+pre-existing unrelated files; no full-repository formatting claim is made.
+
+Independent AI semantic review passed for owner human review, not human
+qualification. It found a 45.3% relationship reduction and 34.4% candidate
+reduction versus prompt-v5/v3, with no important omission observed. Residual
+notes include 65 relationships for India, 55 for Los Angeles/Australia-New
+Zealand, 36 for New York/Japan, one IPC→PPT circuitous regression, trial
+variation, and a private control-character hygiene note. No prompt-v7 or
+deterministic semantic-rejection change is currently recommended; 2C
+relationship/search-work budgeting remains mandatory. M2A remains unadopted,
+2C remains unimplemented, and the owner decision remains open.

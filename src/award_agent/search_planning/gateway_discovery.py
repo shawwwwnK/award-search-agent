@@ -620,7 +620,11 @@ def validate_gateway_candidate_proposal(
         if accepted_destination is not None:
             accepted_destinations.append(accepted_destination)
 
-    hub_cap = 3 if accepted_origins or accepted_destinations else 5
+    # The grouped proposal has independent bounded access and hub pools.  2B
+    # deliberately does not trade one role's hypotheses against another: 2C
+    # later budgets compiled relationships while preserving this inspection
+    # record.  Rejected access candidates likewise never change hub attempts.
+    hub_cap = 5
     accepted_hubs: list[AcceptedIntermediateHub] = []
     origin_gateways = {item.airport.airport_iata: item for item in accepted_origins}
     destination_gateways = {item.airport.airport_iata: item for item in accepted_destinations}
@@ -1312,7 +1316,7 @@ def _candidate_identity(
         return issues, None, _comparison_not_evaluated(model_market_id), False, False
     global_seen.add(iata)
     if attempts >= cap:
-        issues.append(_issue(pool, index, "over_pool_cap", "candidate exceeds the shared pool cap"))
+        issues.append(_issue(pool, index, "over_pool_cap", "candidate exceeds its role pool cap"))
         return issues, None, _comparison_not_evaluated(model_market_id), False, True
     airport = repository.lookup_airport_iata(iata)
     if airport is None:

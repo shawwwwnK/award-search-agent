@@ -101,12 +101,29 @@ Gate status and market-knowledge status remain separate:
 ### Grouped proposal and validation
 
 One structured response contains shared origin-access, destination-access, and
-intermediate-hub pools with explicit applicability. Product caps, duplicate
+intermediate-hub pools with explicit applicability. The independent maxima are
+two origin-access gateways, two destination-access gateways, and five intermediate
+hubs (nine candidates total); they are ceilings, not targets, and access gateways
+do not reduce the hub ceiling. Product caps, duplicate
 handling, correct-side references, support restrictions, nonempty scopes,
 self-reference rules, and dependency integrity are enforced in deterministic
 code after schema parsing. Valid subsets remain eligible; rejected candidates or
 scopes are recorded without refill, substitution, scope broadening, or an
 automatic second model call.
+
+An access gateway may be a materially complementary departure or arrival
+alternative even when its applicable original endpoint is already a strong
+gateway. Such an endpoint raises the threshold: the model must identify
+specific incremental search value relative to the opposite market and already
+selected candidates. Airport size, proximity, shared market, or geographic
+diversity alone is not sufficient. Intermediate hubs have no market-diversity
+quota; geographic balance is not itself a selection objective.
+
+The current structured-generator prompt makes a marginal selection: it assesses
+circuitousness before marginal distinctness, requires each additional candidate
+to have a materially distinct search function relative to selected candidates,
+and limits endpoint-market assessments to supplied original endpoints. These
+prompt refinements do not change the response schema or model-adapter boundary.
 
 The proposal may include the model's market assessment for an endpoint or
 candidate. Deterministic code compares it with policy classification when one is
@@ -123,7 +140,10 @@ applicability, and dependency validation.
 Milestone 2C owns search-plan consolidation for accepted candidates carrying
 market gaps or advisory disagreements. It may use the known policy assignment
 for deterministic budgeting while retaining the model claim and issue; it may
-not silently rewrite either provenance record.
+not silently rewrite either provenance record. It must preserve mandatory
+original-endpoint coverage, budget compiled relationships/search items rather
+than raw candidate count, and record a budget omission without relabeling an
+accepted candidate invalid. It remains unimplemented in this milestone.
 
 ### Outcomes and replay
 
@@ -169,8 +189,8 @@ retain mandatory original endpoint probes.
 Offline tests must cover policy loading and catalog binding, override precedence,
 unknown mappings, all-known single-market skips, multi-market generation,
 equal-but-multi-market side sets, and preservation of endpoint inputs. Generator
-and validator tests must later cover grouped applicability, both hub-cap
-branches, invalid identities, duplicates, self-reference, dependency pruning,
+and validator tests must cover grouped applicability, independent pool
+caps, invalid identities, duplicates, self-reference, dependency pruning,
 partial acceptance, advisory market disagreements, replay, and empty or failed
 generation without live model access.
 

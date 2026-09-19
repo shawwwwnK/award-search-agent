@@ -46,25 +46,25 @@ from award_agent.search_planning.market_policy import (
     planning_market_policy_digest,
 )
 
-DEFAULT_GATEWAY_DISCOVERY_LIVE_FIXTURES = Path("evals/gateway_discovery/development_cases_v1.yaml")
+DEFAULT_GATEWAY_DISCOVERY_LIVE_FIXTURES = Path("evals/gateway_discovery/development_cases_v3.yaml")
 DEFAULT_GATEWAY_DISCOVERY_LIVE_TRACE_DIR = Path("evals/gateway_discovery/traces-live")
 DEFAULT_GATEWAY_DISCOVERY_CATALOG_RELEASE = Path(
     "data/search_planning/catalogs/m1a-3cb7981519612945"
 )
-GATEWAY_DISCOVERY_LIVE_EVALUATOR_VERSION = "gateway_discovery_live_eval_v1"
-_CONTRACT = "gateway_discovery_development_v1"
+GATEWAY_DISCOVERY_LIVE_EVALUATOR_VERSION = "gateway_discovery_live_eval_v3"
+_CONTRACT = "gateway_discovery_development_v3"
 _LIVE_DEFAULTS = {
     "model": "gpt-5.6-luna",
     "trials": 2,
-    "max_calls_per_trial": 7,
-    "max_calls_total": 14,
+    "max_calls_per_trial": 21,
+    "max_calls_total": 42,
     "retry_policy": "no_retry",
     "refill_policy": "no_refill",
     "judge_policy": "human_review_only",
 }
 _MAX_TRIALS = 2
-_MAX_CALLS_PER_TRIAL = 7
-_MAX_CALLS_TOTAL = 14
+_MAX_CALLS_PER_TRIAL = 21
+_MAX_CALLS_TOTAL = 42
 
 
 class GatewayDiscoveryLiveFixtureError(ValueError):
@@ -132,10 +132,10 @@ def _load(path: Path) -> tuple[tuple[Mapping[str, Any], ...], dict[str, Any], Ma
     if (
         top["contract_version"] != _CONTRACT
         or top["development_only"] is not True
-        or top["casebook_id"] != "m2b_gateway_discovery_development_v1"
+        or top["casebook_id"] != "m2b_gateway_discovery_development_v3"
         or top["purpose"] != "diagnostic_semantic_review_before_2c_search_plan_compilation"
     ):
-        raise GatewayDiscoveryLiveFixtureError("casebook identity is not reviewed development v1")
+        raise GatewayDiscoveryLiveFixtureError("casebook identity is not reviewed development v3")
     catalog = _mapping(
         top["catalog"],
         keys={"release_id", "logical_content_sha256", "source_role"},
@@ -160,8 +160,8 @@ def _load(path: Path) -> tuple[tuple[Mapping[str, Any], ...], dict[str, Any], Ma
     if dict(defaults) != _LIVE_DEFAULTS:
         raise GatewayDiscoveryLiveFixtureError("casebook live defaults must equal reviewed bounds")
     raw_scenarios = top["scenarios"]
-    if not isinstance(raw_scenarios, list) or len(raw_scenarios) != 8:
-        raise GatewayDiscoveryLiveFixtureError("casebook must contain its complete eight scenarios")
+    if not isinstance(raw_scenarios, list) or len(raw_scenarios) != 23:
+        raise GatewayDiscoveryLiveFixtureError("casebook must contain its complete 23 scenarios")
     required = {
         "id",
         "origins",
@@ -243,11 +243,11 @@ def _load(path: Path) -> tuple[tuple[Mapping[str, Any], ...], dict[str, Any], Ma
         identifiers.add(identifier)
         scenarios.append(scenario)
     if (
-        sum(item["expected_gate"] == "skip_single_market" for item in scenarios) != 1
-        or sum(item["expected_gate"] == "generation_required" for item in scenarios) != 7
+        sum(item["expected_gate"] == "skip_single_market" for item in scenarios) != 2
+        or sum(item["expected_gate"] == "generation_required" for item in scenarios) != 21
     ):
         raise GatewayDiscoveryLiveFixtureError(
-            "casebook must contain exactly one skip and seven generation cases"
+            "casebook must contain exactly two skips and 21 generation cases"
         )
     fixture = {
         "path": str(path),
@@ -527,12 +527,12 @@ def run_gateway_discovery_live_eval(
             sum(
                 x.gate.status is MarketGenerationGateStatus.SKIP_SINGLE_MARKET for x in all_prepared
             )
-            != 1
+            != 2
             or sum(
                 x.gate.status is MarketGenerationGateStatus.GENERATION_REQUIRED
                 for x in all_prepared
             )
-            != 7
+            != 21
         ):
             raise GatewayDiscoveryLiveFixtureError("actual preflight case composition has drifted")
         if max_cases is not None and (max_cases < 1 or max_cases > len(all_prepared)):

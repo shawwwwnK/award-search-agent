@@ -4,7 +4,8 @@ Award Travel Agent is an independent portfolio project for building a narrow, me
 
 ## Current milestone
 
-Milestone 2B gateway-airport discovery — implemented; prompt-v2 diagnostic is awaiting owner and human semantic review.
+Milestone 2B gateway-airport discovery — implemented; the prompt-v6/casebook-v3 diagnostic is mechanically
+complete and awaits owner/human semantic review and the next-cut decision.
 
 The frozen upstream boundary uses one-way award-only request semantics. A ready request requires
 origin, destination, an outbound departure window, and traveler
@@ -19,8 +20,15 @@ implemented 2B boundary uses an approved versioned global planning-market policy
 structured model proposal for bounded, explainable gateway candidates. Same-market skipping is
 allowed only when every original endpoint is known and their market union has size one; mapping
 gaps force generation, and model/policy market disagreements remain advisory for 2C. Candidates
-remain unverified search hypotheses. The bounded prompt-v2 development run is mechanically complete,
-not semantically qualified. Provider execution remains later; this cut ends before 2C
+remain unverified search hypotheses. Access gateways may be materially complementary departure or
+arrival alternatives even for already-strong endpoints, but must have specific incremental value;
+size, proximity, shared market, or diversity alone is insufficient. The independently bounded pools
+are 0–2 origin access, 0–2 destination access, and 0–5 hubs (nine total maximum), with no
+intermediate-market diversity quota. The prompt-v5/casebook-v2 and first prompt-v5/casebook-v3 runs are
+historical diagnostics, not semantic qualification. The final prompt-v6/casebook-v3 run recorded 46
+case-trials and 42/42 calls across two trials, with 82 accepted candidates, 43 scopes, and 400 accepted
+relationships; one PNH catalog-absence rejection and three market-mismatch advisories were retained.
+Provider execution remains later; this cut ends before 2C
 search-strategy compilation, a Seats.aero API call, provider payload mapping, result normalization,
 or ranking. See the
 [search-planning stage brief](docs/handoffs/2026-09-10-search-plan-design-stage.md) and
