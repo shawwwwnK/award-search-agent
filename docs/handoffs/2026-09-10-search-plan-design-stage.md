@@ -14,7 +14,14 @@ ClarificationSession(ready).effective_request -> SearchPlan
 The implemented design and fixture-qualification record is
 [`2026-09-12-search-planning-design.md`](2026-09-12-search-planning-design.md). It is the durable
 design record for the declared local seed boundary. The planner implementation is fixture-qualified;
-provider execution remains the next separately scoped stage.
+provider execution remains a later separately scoped stage after the 2B/2C
+planning increments.
+
+ADR 0020 narrowly supersedes this brief's connection-candidate source requirement for Milestone
+2B. Its grouped model-originated candidates are catalog-validated, unverified supplemental-search
+hypotheses and do not satisfy or use the legacy route-backed `ExplicitPathHypothesis` contract.
+The requirement that every physical connection/path component bind versioned route evidence remains
+in force for that legacy topology contract. Milestone 2C must keep those concepts distinct.
 
 The plan is a collection of expected Seats.aero request items. This stage ends before any
 Seats.aero API call. It does **not** add a provider adapter, provider-result contracts,

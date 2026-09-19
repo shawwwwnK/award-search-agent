@@ -51,7 +51,7 @@ This is not evidence of operational geographic, route, schedule, inventory,
 provider, or booking coverage. The default seed has no operational topology;
 unit-test route edges are explicitly synthetic.
 
-## Milestone 1 — geographic and airport-data foundation (active next cut)
+## Milestone 1 — geographic and airport-data foundation (complete)
 
 ### Objective
 
@@ -263,34 +263,132 @@ reviewed. The raw-artifact retention decision remains intentionally open unless
 the available source data demonstrates that it must be decided to reproduce or
 review the publication.
 
-## Milestone 2 — grounded connectivity and source comparison
+## Milestone 2 — endpoint and gateway strategy planning
 
 ### Objective
 
-Add reviewed, directed physical route evidence that lets the existing planner
-derive bounded O -> H -> D hypotheses from a published snapshot rather than
-synthetic test edges.
+Build the operational planning coverage that maps a supported requested
+geography to bounded airport sets, identifies useful candidate gateway
+airports, and compiles direct plus supplemental award-search strategies. The
+objective is to avoid limiting award search to the original O -> D market when
+a separate award search from a reachable gateway could be useful.
 
-### Components
+This milestone does not assume that a directed-route catalog is the mechanism
+for gateway discovery. Reviewed connectivity facts, curated gateway policies,
+and other permitted local evidence are candidates to evaluate. The award-search
+and result stage remains responsible for returned itinerary topology, award
+availability, and itinerary validation.
 
-- Compare a narrow set of official airline/airport sources and one accessible
-  route or schedule API before selecting an integration.
-- Evaluate coverage, update behavior, origin/destination-market versus physical
-  nonstop-leg meaning, operating/marketing carrier distinctions, direction,
-  seasonal/suspended service, date applicability, schedule horizon, cost,
-  access, redistribution rights, and snapshot reproducibility.
-- Extend directed-edge evidence only where needed for those source facts;
-  preserve raw/source receipts and applicability disclosure.
-- Feed reviewed edges into the existing bounded path-discovery seam while
-  preserving endpoint-market probes as required coverage.
-- Add offline tests proving no reverse-edge inference and no conversion of
-  topology evidence into schedule, transfer, availability, or booking claims.
+### Milestone 2A — endpoint airport grounding (implemented; adoption gate open)
 
-### Decision gate
 
-Advance only if a selected source can provide retainable, reviewable, directed,
-date-qualified evidence for explicitly declared markets. Missing evidence means
-unsupported by the snapshot, never proof that a flight does not exist.
+#### Objective
+
+For an explicit airport, city, area, country, named region, or other supported
+location kind, resolve the requested endpoint to a bounded, reviewed airport
+set or an explicit coverage outcome. The existing Milestone 1 catalog provides
+airport identity and geographic facts; this increment adds neither guessed
+airport service nor an implicit claim that every airport in a geography is a
+suitable search endpoint.
+
+#### Components
+
+- Declare a narrow initial geography/airport coverage set and the supported
+  location kinds within it.
+- Define location-kind-specific retrieval and airport-selection strategies.
+  Explicit airports remain singleton lookups; city, area, country, and named
+  region handling may each use distinct reviewed relationships and policies.
+- Keep factual geographic-to-airport relationships separate from the ordered,
+  capped policy that selects airports for search.
+- Return stable resolved, ambiguous, unsupported, and missing-evidence
+  outcomes with inspectable snapshot provenance. Do not substitute nearby,
+  similarly named, or popular airports.
+- Qualify ordering, caps, provenance, and no-guess behavior offline while
+  preserving the Milestone 0 JSON fixture path.
+
+#### Decision gate
+
+Advance when the declared initial locations can each produce their reviewed
+airport set or a truthful typed coverage outcome, with no fuzzy expansion or
+silent airport-service inference.
+
+### Milestone 2B — gateway-airport discovery (implemented; semantic review open)
+
+#### Objective
+
+Given selected departure and destination airport sets, provide a bounded,
+deterministic, explainable set of candidate connection/gateway airports that
+could make a supplemental award-search strategy useful.
+
+The owner approved ADR 0020 on 2026-09-18. This version uses a reviewed global
+planning-market policy, one grouped structured model proposal when generation
+is required, deterministic catalog/reference/relationship validation, and an
+immutable result. Opening and implementing it do not satisfy the still-open M2A
+adoption gate; reviewed fixtures or supplied selection records may support the
+interface without promoting model output into fact.
+
+#### Components
+
+- Apply the versioned planning-market policy with explicit airport-override,
+  country-assignment, and mapping-gap provenance. Skip only when every original
+  endpoint is known and the combined market union contains exactly one market.
+- Make exactly one grouped structured model call for every other valid input,
+  including inputs with an unknown endpoint market. Supply the mapping gap as
+  explicit context rather than treating it as shared or cross-market evidence.
+- Validate catalog identity and retained-facility eligibility, pool bounds,
+  references, applicability, duplicates, self-reference, and dependency
+  integrity without claiming connectivity.
+- Preserve a model/policy candidate-market disagreement as a nonfatal advisory
+  observation for 2C. It does not reject an otherwise valid candidate or scope.
+- Return explicit policy-skip, successful-empty, successful-nonempty, partial,
+  rejected-all, generation-failure, and system-validation-failure dispositions,
+  with market-coverage status recorded independently.
+
+#### Implementation and review status
+
+The approved policy, one-call grouped generator, relationship-aware validator,
+immutable replay record, disclosed eight-scenario development casebook, and
+prompt-v2 diagnostic are implemented. Offline checks and trace reconciliation
+are complete. The prompt-v2 artifact remains development evidence pending
+human semantic review; 2B is not automatically qualified or adopted as a 2C
+input source.
+
+#### Decision gate
+
+Advance when the approved mechanism yields useful, bounded, reviewable gateway
+candidates beyond endpoint-only searching and its relationship scopes and
+coverage limitations pass offline and human semantic review.
+
+### Milestone 2C — search-strategy compilation
+
+#### Objective
+
+Compile selected endpoint airport sets and optional gateway candidates into a
+provider-neutral `SearchPlan` that retains direct endpoint-market award searches
+and adds bounded supplemental award-search strategies.
+
+#### Components
+
+- Preserve an O -> D endpoint-market probe as required coverage for every
+  selected endpoint combination.
+- Define which supplemental award-search items each gateway candidate enables.
+  Where a strategy needs positioning from O to a gateway, represent it
+  explicitly rather than silently treating it as an award result.
+- Apply deterministic planning budgets, canonical ordering, and semantic
+  deduplication across direct and supplemental strategies.
+- Carry candidate/selection provenance and coverage disclosures into plan
+  receipts without changing request understanding or calling a provider.
+- Add offline tests proving direct coverage remains present, strategy output is
+  bounded and stable, and supplemental strategies never become claims of a
+  scheduled, feasible, protected, available, or bookable itinerary.
+
+#### Decision gate
+
+Milestone 2 is ready for owner review when the declared coverage can progress
+end-to-end from supported geography through selected endpoint airports to
+mandatory direct and optional supplemental award-search strategies, with
+bounded work, provenance, and truthful coverage outcomes. It must not call a
+provider or claim a returned itinerary, award seat, or bookable journey.
 
 ## Milestone 3 — reviewed strategy documents and RAG-assisted authoring
 

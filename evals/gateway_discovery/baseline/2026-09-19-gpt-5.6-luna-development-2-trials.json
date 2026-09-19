@@ -1,0 +1,2936 @@
+{
+  "schema_version": "gateway_discovery_live_eval_v1",
+  "diagnostic_only": true,
+  "generated_at": "2026-09-19T07:25:24.224978+00:00",
+  "models": {
+    "gateway_generator": "gpt-5.6-luna"
+  },
+  "gateway_generator_contract": {
+    "adapter_version": "openai_gateway_generator_v1",
+    "prompt_version": "gateway-generator-prompt-v1",
+    "response_schema_sha256": "173a1d66ef5091a0f44837583579fc1616b406f440ce15976b430bae53a5a680",
+    "storage": false,
+    "retry_or_refill": "none"
+  },
+  "fixture": {
+    "path": "evals/gateway_discovery/development_cases_v1.yaml",
+    "contract_version": "gateway_discovery_development_v1",
+    "sha256": "9f4a1593ae7d06d132faaf5e5d3895f56823136f97a66d4bbde45292edb6789b",
+    "scenario_count": 8,
+    "visibility": "disclosed_development"
+  },
+  "catalog": {
+    "release_path": "data/search_planning/catalogs/m1a-3cb7981519612945",
+    "knowledge_receipt": {
+      "release_id": "m1a-3cb7981519612945",
+      "schema_version": "2",
+      "source_date": "2026-09-16",
+      "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+      "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+      "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+      "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+      "source_artifacts": [
+        {
+          "artifact_name": "geonames_admin_corroboration.tsv",
+          "bytes": 929394,
+          "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+        },
+        {
+          "artifact_name": "geonames_airport_candidates.tsv",
+          "bytes": 2850011,
+          "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+        },
+        {
+          "artifact_name": "geonames_base_aliases.tsv",
+          "bytes": 21827498,
+          "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+        },
+        {
+          "artifact_name": "geonames_current_aliases.tsv",
+          "bytes": 83772542,
+          "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+        },
+        {
+          "artifact_name": "geonames_entities.tsv",
+          "bytes": 44512173,
+          "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+        },
+        {
+          "artifact_name": "geonames_iata_crossrefs.tsv",
+          "bytes": 215122,
+          "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+        },
+        {
+          "artifact_name": "ourairports_airports.csv",
+          "bytes": 671715,
+          "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+        },
+        {
+          "artifact_name": "ourairports_countries.csv",
+          "bytes": 22165,
+          "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+        },
+        {
+          "artifact_name": "ourairports_regions.csv",
+          "bytes": 433835,
+          "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+        },
+        {
+          "artifact_name": "quarantine.tsv",
+          "bytes": 48,
+          "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+        },
+        {
+          "artifact_name": "source_raw_records.tsv",
+          "bytes": 294913570,
+          "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+        },
+        {
+          "artifact_name": "source_schemas.json",
+          "bytes": 1735,
+          "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+        }
+      ]
+    }
+  },
+  "market_policy": {
+    "path": "/Users/shawnkang/bots/award-search/data/search_planning/v2/planning-market-policy-v1.json",
+    "version": "planning-market-v1",
+    "sha256": "4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a"
+  },
+  "trials": 2,
+  "full_run": true,
+  "run_kind": "full",
+  "selected_case_ids": [
+    "west_coast_to_paris_multi_origin",
+    "san_francisco_to_southeast_asia_endpoints",
+    "regional_california_oregon_to_paris",
+    "equal_but_multi_market_endpoint_sets",
+    "hawaii_to_mainland_us_exception",
+    "hawaii_to_guam_same_market_skip",
+    "easter_island_to_chile_exception_boundary",
+    "australia_new_zealand_boundary"
+  ],
+  "records": [
+    {
+      "id": "west_coast_to_paris_multi_origin",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "SFO",
+          "LAX",
+          "SEA"
+        ],
+        "destinations": [
+          "CDG"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "us"
+        ],
+        "destination": [
+          "europe"
+        ],
+        "union": [
+          "europe",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "JFK",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO",
+                  "LAX",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "LAX",
+                  "SEA",
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "IAD",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO",
+                  "LAX",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "LAX",
+                  "SEA",
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "AMS",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO",
+                  "LAX",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "LAX",
+                  "SEA",
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "JFK",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "LAX",
+                "SEA",
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "IAD",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "LAX",
+                "SEA",
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "AMS",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "LAX",
+                "SEA",
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "5c9e257cdc190ae2b91ccf4722ac6d3a0ec74da629f821ba424162356fe9b595",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 9.724,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2251,
+          "output_tokens": 948,
+          "total_tokens": 3199
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/west_coast_to_paris_multi_origin__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/west_coast_to_paris_multi_origin__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "san_francisco_to_southeast_asia_endpoints",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "SFO"
+        ],
+        "destinations": [
+          "SAI",
+          "KTI",
+          "BKK"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "us"
+        ],
+        "destination": [
+          "southeast_asia"
+        ],
+        "union": [
+          "southeast_asia",
+          "us"
+        ]
+      },
+      "outcome": "partial_acceptance",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [
+          "SIN"
+        ],
+        "intermediate_hubs": [
+          {
+            "iata": "TPE",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "SAI",
+                  "KTI",
+                  "BKK"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "BKK",
+                  "KTI",
+                  "SAI"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "HKG",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "SAI",
+                  "KTI",
+                  "BKK"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "BKK",
+                  "KTI",
+                  "SAI"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "NRT",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "SAI",
+                  "KTI",
+                  "BKK"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "BKK",
+                  "KTI",
+                  "SAI"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "destination_access_gateways",
+          "iata": "PNH",
+          "accepted": false,
+          "issue_codes": [
+            "airport_absent_from_catalog"
+          ],
+          "market_comparison": "not_evaluated",
+          "scopes": []
+        },
+        {
+          "pool": "destination_access_gateways",
+          "iata": "SIN",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "TPE",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "BKK",
+                "KTI",
+                "SAI"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "HKG",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "BKK",
+                "KTI",
+                "SAI"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "NRT",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "BKK",
+                "KTI",
+                "SAI"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "78a431c5055b8145d3025dd8ac0f254b4a86ae9d2607b1edc6d56c4c8b5df5e9",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 14.18,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2270,
+          "output_tokens": 1732,
+          "total_tokens": 4002
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/san_francisco_to_southeast_asia_endpoints__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/san_francisco_to_southeast_asia_endpoints__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "regional_california_oregon_to_paris",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "FAT",
+          "EUG"
+        ],
+        "destinations": [
+          "CDG"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "us"
+        ],
+        "destination": [
+          "europe"
+        ],
+        "union": [
+          "europe",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [
+          "SFO",
+          "SEA"
+        ],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "DEN",
+            "scopes": [
+              {
+                "origin_references": [
+                  "FAT",
+                  "EUG"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "EUG",
+                  "FAT"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "ORD",
+            "scopes": [
+              {
+                "origin_references": [
+                  "FAT",
+                  "EUG"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "EUG",
+                  "FAT"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "IAD",
+            "scopes": [
+              {
+                "origin_references": [
+                  "FAT",
+                  "EUG"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "EUG",
+                  "FAT"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "origin_access_gateways",
+          "iata": "SFO",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        },
+        {
+          "pool": "origin_access_gateways",
+          "iata": "SEA",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "DEN",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "EUG",
+                "FAT"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "ORD",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "EUG",
+                "FAT"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "IAD",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "EUG",
+                "FAT"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "35cee3aabe6dd4deede94c032d13b69c2b5360ce93d81862d44ff6d935b3715c",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 13.044,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2191,
+          "output_tokens": 1461,
+          "total_tokens": 3652
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/regional_california_oregon_to_paris__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/regional_california_oregon_to_paris__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "equal_but_multi_market_endpoint_sets",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "SFO",
+          "CDG"
+        ],
+        "destinations": [
+          "LAX",
+          "CDG"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "europe",
+          "us"
+        ],
+        "destination": [
+          "europe",
+          "us"
+        ],
+        "union": [
+          "europe",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "LHR",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "AMS",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "YUL",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "LHR",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "AMS",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "YUL",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "809033c086be506e9a92f46d42af10d4a6ebd6a821a5326834e0d02f82a66199",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 11.977,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2252,
+          "output_tokens": 1329,
+          "total_tokens": 3581
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/equal_but_multi_market_endpoint_sets__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/equal_but_multi_market_endpoint_sets__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "hawaii_to_mainland_us_exception",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "HNL"
+        ],
+        "destinations": [
+          "SFO"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "pacific_islands"
+        ],
+        "destination": [
+          "us"
+        ],
+        "union": [
+          "pacific_islands",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "LAX",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "SEA",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "DFW",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "DEN",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "LAX",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "SEA",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "DFW",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "DEN",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "5d69376fac259c83abd23b2b963f87a84d4e1b8796453c90b75e6cfab3e407a6",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 11.482,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2133,
+          "output_tokens": 959,
+          "total_tokens": 3092
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_mainland_us_exception__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_mainland_us_exception__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "hawaii_to_guam_same_market_skip",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "HNL"
+        ],
+        "destinations": [
+          "GUM"
+        ]
+      },
+      "expected_gate": "skip_single_market",
+      "expected_market_ids": {
+        "origin": [
+          "pacific_islands"
+        ],
+        "destination": [
+          "pacific_islands"
+        ],
+        "union": [
+          "pacific_islands"
+        ]
+      },
+      "outcome": "policy_skipped",
+      "generation_status": "not_attempted",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": []
+      },
+      "candidate_decisions": [],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "e6c8bbe41a44bfb84d7660bffc87a304747c969b02f54d112e068e6a344bddfa",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 1.074,
+      "trace_reconciliation": {
+        "expected_calls": 0,
+        "constructed": false,
+        "provider_attempts": 0,
+        "core_trace_count": 0,
+        "private_trace_calls": 0,
+        "usage": null,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_guam_same_market_skip__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_guam_same_market_skip__trial-1__record.json",
+        "calls": 0
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "easter_island_to_chile_exception_boundary",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "IPC"
+        ],
+        "destinations": [
+          "SCL"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "pacific_islands"
+        ],
+        "destination": [
+          "south_america"
+        ],
+        "union": [
+          "pacific_islands",
+          "south_america"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [
+          "SCL"
+        ],
+        "destination_access_gateways": [],
+        "intermediate_hubs": []
+      },
+      "candidate_decisions": [
+        {
+          "pool": "origin_access_gateways",
+          "iata": "SCL",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "99dd6785862bc5c2085e648d2c613d97028590efd7f4a01d583b54a30b64fd87",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 10.71,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2134,
+          "output_tokens": 1050,
+          "total_tokens": 3184
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/easter_island_to_chile_exception_boundary__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/easter_island_to_chile_exception_boundary__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "australia_new_zealand_boundary",
+      "trial": 1,
+      "resolved_endpoints": {
+        "origins": [
+          "SYD"
+        ],
+        "destinations": [
+          "AKL"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "australia"
+        ],
+        "destination": [
+          "new_zealand"
+        ],
+        "union": [
+          "australia",
+          "new_zealand"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "MEL",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SYD"
+                ],
+                "destination_references": [
+                  "AKL"
+                ],
+                "expanded_original_origins": [
+                  "SYD"
+                ],
+                "expanded_original_destinations": [
+                  "AKL"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "BNE",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SYD"
+                ],
+                "destination_references": [
+                  "AKL"
+                ],
+                "expanded_original_origins": [
+                  "SYD"
+                ],
+                "expanded_original_destinations": [
+                  "AKL"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "MEL",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SYD"
+              ],
+              "expanded_original_destinations": [
+                "AKL"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "BNE",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SYD"
+              ],
+              "expanded_original_destinations": [
+                "AKL"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "67a62ecdc875bf1791947c47c82e87771a51d28c9ec120b6c8f5e009b46f0e35",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 10.007,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2135,
+          "output_tokens": 1082,
+          "total_tokens": 3217
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/australia_new_zealand_boundary__trial-1.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/australia_new_zealand_boundary__trial-1__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "west_coast_to_paris_multi_origin",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "SFO",
+          "LAX",
+          "SEA"
+        ],
+        "destinations": [
+          "CDG"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "us"
+        ],
+        "destination": [
+          "europe"
+        ],
+        "union": [
+          "europe",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "JFK",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO",
+                  "LAX",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "LAX",
+                  "SEA",
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "IAD",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO",
+                  "LAX",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "LAX",
+                  "SEA",
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "ORD",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO",
+                  "LAX",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "LAX",
+                  "SEA",
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "JFK",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "LAX",
+                "SEA",
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "IAD",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "LAX",
+                "SEA",
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "ORD",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "LAX",
+                "SEA",
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "88a1e4ae2b0c72ee0f410b4c9bbff65fedf2eddac3c95e5691a238a3c8e67999",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 10.988,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2251,
+          "output_tokens": 1076,
+          "total_tokens": 3327
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/west_coast_to_paris_multi_origin__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/west_coast_to_paris_multi_origin__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "san_francisco_to_southeast_asia_endpoints",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "SFO"
+        ],
+        "destinations": [
+          "SAI",
+          "KTI",
+          "BKK"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "us"
+        ],
+        "destination": [
+          "southeast_asia"
+        ],
+        "union": [
+          "southeast_asia",
+          "us"
+        ]
+      },
+      "outcome": "rejected_all",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": []
+      },
+      "candidate_decisions": [
+        {
+          "pool": "destination_access_gateways",
+          "iata": "PNH",
+          "accepted": false,
+          "issue_codes": [
+            "airport_absent_from_catalog"
+          ],
+          "market_comparison": "not_evaluated",
+          "scopes": []
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "TPE",
+          "accepted": false,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": false,
+              "issue_codes": [
+                "rejected_or_missing_destination_gateway"
+              ],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "BKK",
+                "KTI",
+                "SAI"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "ICN",
+          "accepted": false,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": false,
+              "issue_codes": [
+                "rejected_or_missing_destination_gateway"
+              ],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "BKK",
+                "KTI",
+                "SAI"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "SIN",
+          "accepted": false,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": false,
+              "issue_codes": [
+                "rejected_or_missing_destination_gateway"
+              ],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "BKK",
+                "KTI",
+                "SAI"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "0a0956a45dd7bc232bf27cc16a32c387621050b2e6476b66b66f0b81bc02a20b",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 18.676,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2270,
+          "output_tokens": 1755,
+          "total_tokens": 4025
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/san_francisco_to_southeast_asia_endpoints__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/san_francisco_to_southeast_asia_endpoints__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "regional_california_oregon_to_paris",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "FAT",
+          "EUG"
+        ],
+        "destinations": [
+          "CDG"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "us"
+        ],
+        "destination": [
+          "europe"
+        ],
+        "union": [
+          "europe",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [
+          "SFO",
+          "SEA"
+        ],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "AMS",
+            "scopes": [
+              {
+                "origin_references": [
+                  "FAT",
+                  "EUG",
+                  "SFO",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "EUG",
+                  "FAT"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "LHR",
+            "scopes": [
+              {
+                "origin_references": [
+                  "FAT",
+                  "EUG",
+                  "SFO",
+                  "SEA"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "EUG",
+                  "FAT"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "origin_access_gateways",
+          "iata": "SFO",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        },
+        {
+          "pool": "origin_access_gateways",
+          "iata": "SEA",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "AMS",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "EUG",
+                "FAT"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "LHR",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "EUG",
+                "FAT"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "e5d6a9c46a90edac35edc8babc0e1c8c0ef679903815543534149d571c41f9f3",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 9.624,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2191,
+          "output_tokens": 1105,
+          "total_tokens": 3296
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/regional_california_oregon_to_paris__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/regional_california_oregon_to_paris__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "equal_but_multi_market_endpoint_sets",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "SFO",
+          "CDG"
+        ],
+        "destinations": [
+          "LAX",
+          "CDG"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "europe",
+          "us"
+        ],
+        "destination": [
+          "europe",
+          "us"
+        ],
+        "union": [
+          "europe",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "JFK",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "ORD",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "AMS",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "FRA",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SFO"
+                ],
+                "destination_references": [
+                  "CDG"
+                ],
+                "expanded_original_origins": [
+                  "SFO"
+                ],
+                "expanded_original_destinations": [
+                  "CDG"
+                ]
+              },
+              {
+                "origin_references": [
+                  "CDG"
+                ],
+                "destination_references": [
+                  "LAX"
+                ],
+                "expanded_original_origins": [
+                  "CDG"
+                ],
+                "expanded_original_destinations": [
+                  "LAX"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "JFK",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "ORD",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "AMS",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "FRA",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SFO"
+              ],
+              "expanded_original_destinations": [
+                "CDG"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "CDG"
+              ],
+              "expanded_original_destinations": [
+                "LAX"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "b44d3163e1bb613a78f994790bf6ce6dfe11ab80a621b26b9faffa6d5a31ddd0",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 9.885,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2252,
+          "output_tokens": 1219,
+          "total_tokens": 3471
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/equal_but_multi_market_endpoint_sets__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/equal_but_multi_market_endpoint_sets__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "hawaii_to_mainland_us_exception",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "HNL"
+        ],
+        "destinations": [
+          "SFO"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "pacific_islands"
+        ],
+        "destination": [
+          "us"
+        ],
+        "union": [
+          "pacific_islands",
+          "us"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "LAX",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "SEA",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "DEN",
+            "scopes": [
+              {
+                "origin_references": [
+                  "HNL"
+                ],
+                "destination_references": [
+                  "SFO"
+                ],
+                "expanded_original_origins": [
+                  "HNL"
+                ],
+                "expanded_original_destinations": [
+                  "SFO"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "LAX",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "SEA",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "DEN",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "HNL"
+              ],
+              "expanded_original_destinations": [
+                "SFO"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "6e4eb5c294e19ce2ecf2e257b8a33790659f244b37d54108c25c9ddb083fdc75",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 8.142,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2133,
+          "output_tokens": 809,
+          "total_tokens": 2942
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_mainland_us_exception__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_mainland_us_exception__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "hawaii_to_guam_same_market_skip",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "HNL"
+        ],
+        "destinations": [
+          "GUM"
+        ]
+      },
+      "expected_gate": "skip_single_market",
+      "expected_market_ids": {
+        "origin": [
+          "pacific_islands"
+        ],
+        "destination": [
+          "pacific_islands"
+        ],
+        "union": [
+          "pacific_islands"
+        ]
+      },
+      "outcome": "policy_skipped",
+      "generation_status": "not_attempted",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": []
+      },
+      "candidate_decisions": [],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "e6c8bbe41a44bfb84d7660bffc87a304747c969b02f54d112e068e6a344bddfa",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 1.068,
+      "trace_reconciliation": {
+        "expected_calls": 0,
+        "constructed": false,
+        "provider_attempts": 0,
+        "core_trace_count": 0,
+        "private_trace_calls": 0,
+        "usage": null,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_guam_same_market_skip__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/hawaii_to_guam_same_market_skip__trial-2__record.json",
+        "calls": 0
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "easter_island_to_chile_exception_boundary",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "IPC"
+        ],
+        "destinations": [
+          "SCL"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "pacific_islands"
+        ],
+        "destination": [
+          "south_america"
+        ],
+        "union": [
+          "pacific_islands",
+          "south_america"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [
+          "AKL"
+        ],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "LIM",
+            "scopes": [
+              {
+                "origin_references": [
+                  "IPC"
+                ],
+                "destination_references": [
+                  "SCL"
+                ],
+                "expanded_original_origins": [
+                  "IPC"
+                ],
+                "expanded_original_destinations": [
+                  "SCL"
+                ]
+              },
+              {
+                "origin_references": [
+                  "AKL"
+                ],
+                "destination_references": [
+                  "SCL"
+                ],
+                "expanded_original_origins": [
+                  "IPC"
+                ],
+                "expanded_original_destinations": [
+                  "SCL"
+                ]
+              }
+            ]
+          },
+          {
+            "iata": "EZE",
+            "scopes": [
+              {
+                "origin_references": [
+                  "IPC",
+                  "AKL"
+                ],
+                "destination_references": [
+                  "SCL"
+                ],
+                "expanded_original_origins": [
+                  "IPC"
+                ],
+                "expanded_original_destinations": [
+                  "SCL"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "origin_access_gateways",
+          "iata": "AKL",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": []
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "LIM",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "IPC"
+              ],
+              "expanded_original_destinations": [
+                "SCL"
+              ]
+            },
+            {
+              "index": 1,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "IPC"
+              ],
+              "expanded_original_destinations": [
+                "SCL"
+              ]
+            }
+          ]
+        },
+        {
+          "pool": "intermediate_hubs",
+          "iata": "EZE",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "IPC"
+              ],
+              "expanded_original_destinations": [
+                "SCL"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "5bf3e76dae14bce1f55430d986f61501d00e24d747ae89c51eceb14dbd6cd4a4",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 15.633,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2134,
+          "output_tokens": 2012,
+          "total_tokens": 4146
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/easter_island_to_chile_exception_boundary__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/easter_island_to_chile_exception_boundary__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    },
+    {
+      "id": "australia_new_zealand_boundary",
+      "trial": 2,
+      "resolved_endpoints": {
+        "origins": [
+          "SYD"
+        ],
+        "destinations": [
+          "AKL"
+        ]
+      },
+      "expected_gate": "generation_required",
+      "expected_market_ids": {
+        "origin": [
+          "australia"
+        ],
+        "destination": [
+          "new_zealand"
+        ],
+        "union": [
+          "australia",
+          "new_zealand"
+        ]
+      },
+      "outcome": "success_nonempty",
+      "generation_status": "generated",
+      "accepted": {
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [
+          {
+            "iata": "NAN",
+            "scopes": [
+              {
+                "origin_references": [
+                  "SYD"
+                ],
+                "destination_references": [
+                  "AKL"
+                ],
+                "expanded_original_origins": [
+                  "SYD"
+                ],
+                "expanded_original_destinations": [
+                  "AKL"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidate_decisions": [
+        {
+          "pool": "intermediate_hubs",
+          "iata": "NAN",
+          "accepted": true,
+          "issue_codes": [],
+          "market_comparison": "match",
+          "scopes": [
+            {
+              "index": 0,
+              "accepted": true,
+              "issue_codes": [],
+              "expanded_original_origins": [
+                "SYD"
+              ],
+              "expanded_original_destinations": [
+                "AKL"
+              ]
+            }
+          ]
+        }
+      ],
+      "market_advisories": [],
+      "issue_codes": [],
+      "result_digest": "be2b7375d2ab3b027c2a7d7178fd1339859d66e9fd947d9290594afe875caee7",
+      "gate_expectation_matches": true,
+      "endpoint_preserved": true,
+      "status": "completed",
+      "latency_seconds": 7.422,
+      "trace_reconciliation": {
+        "expected_calls": 1,
+        "constructed": true,
+        "provider_attempts": 1,
+        "core_trace_count": 1,
+        "private_trace_calls": 1,
+        "usage": {
+          "calls": 1,
+          "captured_calls": 1,
+          "missing_calls": 0,
+          "input_tokens": 2135,
+          "output_tokens": 660,
+          "total_tokens": 2795
+        },
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/australia_new_zealand_boundary__trial-2.json",
+        "record_path": "evals/gateway_discovery/traces-live/run-2026-09-19T072524.224978-0000-1e993213/australia_new_zealand_boundary__trial-2__record.json",
+        "calls": 1
+      },
+      "cost_estimate": {
+        "status": "not_estimated_no_versioned_price_card",
+        "amount_usd": null,
+        "price_card_version": null
+      }
+    }
+  ],
+  "summary": {
+    "runs": 16,
+    "expected_calls": 14,
+    "constructed_calls": 14,
+    "attempted_calls": 14,
+    "completed": 16,
+    "errors": 0,
+    "trace_reconciled": 16,
+    "generation_failures": 0,
+    "empty_results": 0,
+    "gate_expectations_matched": 16,
+    "endpoint_preservation_matched": 16,
+    "mechanically_completed": true,
+    "semantic_qualification": "not_claimed_manual_review_required"
+  }
+}

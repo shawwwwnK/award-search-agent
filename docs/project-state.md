@@ -2,13 +2,14 @@
 
 ## Phase
 
-Milestone 2A endpoint-airport selection evaluation — active next cut, before provider execution.
+Milestone 2B market-aware gateway-airport discovery — implemented; prompt-v2 diagnostic awaits
+owner and human semantic review before any successor cut.
 Search planning is implemented and fixture-qualified as a planning-only, retrieval-backed
 `EffectiveRequest -> SearchPlan` stage that follows the frozen one-way award request-understanding
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
 not a claim of operational airport, route, schedule, inventory, or provider coverage.
 
-The operational Milestone 1 geographic/airport catalog will be a versioned local SQLite artifact
+The operational Milestone 1 geographic/airport catalog is a versioned local SQLite artifact
 with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains the Milestone 0
 fixture contract; Pydantic validates import/publication/query boundaries rather than materializing
 the full operational catalog in memory.
@@ -21,24 +22,42 @@ that selected release read-only through the existing planner boundary while pres
 fixture path. Its completed components and acceptance criteria remain recorded in the current
 milestone roadmap.
 
-Milestone 2A now has a narrow implementation boundary: an LLM may propose bounded individual
+Milestone 2A has a narrow implementation boundary: an LLM may propose bounded individual
 endpoint-airport IATA codes for an already resolved canonical geographic entity; deterministic
 code records catalog identity/facility/supported-scope validation and replays a supplied selection
 record without another model call. It does not establish city-serving facts, regional membership
 outside country evidence, routes, schedules, award availability, provider execution, RAG, or a
-cache. The configured selector evaluator is diagnostic-only pending independent human semantic
-review; see ADR 0019 and the M2A evaluation protocol. The active cap
+cache. Its active-policy v3 live diagnostic completed, but the selector remains diagnostic-only
+pending independent human semantic review, preregistered holdout evidence, evidence that larger
+caps improve useful coverage relative to work, and an adoption decision; see ADR 0019 and the M2A
+evaluation protocol. The active cap
 policy gives the United States a country maximum of 10 for US-focused international-gateway
 coverage; the prior v2 active-policy diagnostic used US=6 and is historical evidence only, not
 validation of US=10. The active v3 diagnostic has completed and remains diagnostic evidence only.
 
+The owner approved the Milestone 2B direction on 2026-09-18 in ADR 0020: a versioned global
+planning-market policy deterministically classifies original endpoints and skips generation only
+when every endpoint is known and their combined market union has exactly one member. Every other
+valid input receives one grouped structured model proposal. An unknown endpoint market forces
+generation with an explicit mapping-gap receipt. A model/policy candidate-market disagreement is
+advisory and passes to 2C rather than rejecting an otherwise valid candidate. Generated candidates
+remain bounded, unverified search hypotheses, not route, schedule, connectivity, award, or booking
+facts. This decision does not close or adopt 2A: reviewed fixtures or supplied selection records
+remain permitted without promoting model proposals into geographic fact.
+
+On 2026-09-19, the small versioned market policy, grouped structured generator,
+relationship-aware validator, and immutable replay record were implemented and offline verified.
+The bounded prompt-v2 development evaluation completed mechanically: its public artifact and
+private trace sidecars reconcile all expected calls. It is development evidence only; no semantic
+qualification, connectivity claim, SearchPlan adoption, or 2C implementation follows from it.
+
 ## Current conclusion
 
-On 2026-09-13, the owner selected **operational knowledge-base expansion** as the next cut, before
-provider execution. Milestone 1 completed that foundation; the active follow-on is the narrow
-Milestone 2A endpoint-airport selector evaluation described above. The preceding search-planning
-cut is implemented and fixture-qualified for the declared local seed coverage. This is the
-planning-only boundary recorded in
+Milestone 2B implementation is ready for owner and human semantic review. Milestone 1 completed
+the local geographic/airport foundation, and Milestone 2A supplied the still-diagnostic endpoint
+selection seam described above. The preceding
+search-planning cut is implemented and fixture-qualified for the declared local seed coverage.
+This is the planning-only boundary recorded in
 `docs/handoffs/2026-09-10-search-plan-design-stage.md`:
 
 ```text
@@ -55,8 +74,11 @@ recommendations, or mutate the source request/session. Search planning is fixtur
 this declared local coverage. Milestone 1 supplied the geographic and airport-data foundation in
 `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`: reviewed, versioned GeoNames and
 OurAirports records, named-region taxonomies, and an explicit local catalog release. M2A evaluates
-model-proposed endpoint selection against that catalog. Airport groups beyond the existing examples
-are not a mandatory runtime whitelist. Directed connectivity, providers, and RAG are later milestones.
+model-proposed endpoint selection against that catalog. M2B uses the approved market policy and
+grouped model-proposal boundary to evaluate useful optional search hypotheses without assuming that
+a route catalog is the answer or claiming connectivity.
+Airport groups beyond the existing examples are not a mandatory runtime whitelist. Search-strategy
+compilation, providers, and RAG are later milestones.
 The recorded broad behavioral evidence gap for the upstream one-way boundary remains historical
 evidence and is not silently promoted to qualification or used to reopen intent/clarification
 semantics.
@@ -66,7 +88,7 @@ Cached-Search capability record and version, and default planning policy; it als
 local capability-source bytes before evaluation. Its executable coverage matrix names the exact
 end-to-end fixture cases. Fine-grained tamper and forged-handoff receipt behavior is unit-only
 coverage, not a claim that the golden corpus exercises every internal branch. No provider execution
-is included in this planning qualification or the active knowledge-base cut.
+is included in this planning qualification or the current non-provider planning work.
 
 On 2026-09-12, local Seats.aero reference review fixed the planning capability target to Cached
 Search. Product admission remains the one-way origin, destination, traveler, bounded-window,
@@ -268,7 +290,7 @@ failure ownership and closeout, rather than treating the public pilot as qualifi
 the current no-raw-text-parsing boundary, one-repair/pending policy, immutable-state invariants,
 and private-trace/redacted-artifact discipline until then.
 
-The current search-planning cut is implemented and fixture-qualified for the declared checked-in
+The current search-planning boundary is implemented and fixture-qualified for the declared checked-in
 offline seed snapshot. It consumes the frozen ADR 0016 outbound-only contract and ADR 0017
 upstream request-understanding boundary: no return date or duration can enter planning state,
 cash-only requests do not become ready, and mixed award-and-cash requests remain award-only
@@ -276,9 +298,13 @@ without cash-search claims. This qualification is planning-only and does not cla
 airport, route, schedule, inventory, or provider coverage. Milestone 1B is owner-approved and
 closed as of 2026-09-16. It serves the owner-reviewed local SQLite catalog through the existing
 deterministic location/planner boundary while preserving the Milestone 0 JSON fixture path and its
-reviewed group policies. Provider execution remains subsequent and separately scoped. Preserve the
-upstream evidence gap as such—do not reopen its semantics or call it qualified through this
-documentation change.
+reviewed group policies. M2A is implemented but remains diagnostic-only pending its recorded
+semantic/adoption gate. M2B implements ADR 0020's approved market policy, generation gate,
+grouped proposal, deterministic relationship validation, and replayable selection record; its
+prompt-v2 diagnostic is mechanically complete but not semantically qualified. It does not authorize
+runtime strategy compilation. Provider
+execution remains subsequent and separately scoped. Preserve the upstream and M2A evidence gaps as
+such—do not reopen their semantics or call them qualified through this documentation change.
 
 The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
 clarification acceptance protocol are the current policy where they differ from ADRs 0011--0013
@@ -291,8 +317,10 @@ references to `two_pass` and selector-only extraction are historical evidence on
 - Seats.aero passed one narrow cached-search access-and-response-shape spike; no application
   adapter or provider error fixture exists yet. The planning-only `SearchPlan` boundary is now
   implemented and fixture-qualified, but it does not authorize a provider adapter or any provider
-  call. The active next work is operational knowledge-base expansion; provider execution follows
-  as a separately scoped stage. SerpAPI Google Flights remains a later cash-fare candidate. See
+  call. M2B's grouped generator, relationship-aware validation, and replayable candidate record
+  are implemented. The next owner decision follows human semantic review; 2C and provider
+  execution remain separately scoped. SerpAPI Google Flights
+  remains a later cash-fare candidate. See
   `docs/provider-feasibility/2026-09-08-initial-provider-intake.md`.
 - The frozen initial workflow stops after `ClarificationDecision`; the additive continuation
   boundary owns subsequent answers, deterministic reduction, a local-only Streamlit harness, and

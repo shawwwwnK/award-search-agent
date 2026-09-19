@@ -49,8 +49,9 @@ any selector architecture change for future approved policy revisions.
 
 The v2 active-policy casebook/artifact is historical evidence for the former
 US cap of 6. It does not validate the current US cap of 10. The active
-`development_cases_v3.yaml` diagnostic is pending; it is the next empirical
-evidence needed for the US-focused policy revision.
+`development_cases_v3.yaml` diagnostic has completed and remains diagnostic
+evidence only; independent human semantic review, holdout evidence, and an
+adoption decision are still pending.
 
 ## Validation outcomes
 

@@ -5,11 +5,13 @@
 - Search planning is implemented and fixture-qualified for its explicitly narrow local snapshot.
   `award-search-planning-eval` runs the ten-case deterministic offline gate; it does not make
   provider or network calls.
-- The active next cut is **Milestone 1: geographic and airport-data foundation**. Import and serve
-  GeoNames and OurAirports data through the local snapshot/repository boundary; support named
-  region-taxonomy resolution; and publish explicit catalog/group coverage. Airport-group curation
-  expands iteratively. The operational catalog publication will use SQLite with a JSON manifest
-  under ADR 0018. Directed topology is Milestone 2, not part of this first cut.
+- Milestone 1 is complete. Milestone 2A endpoint-airport selection is implemented and has completed
+  its active-policy diagnostic, but remains diagnostic-only pending independent human semantic
+  review, holdout evidence, and an adoption decision.
+- **Milestone 2B: gateway-airport discovery** is implemented. ADR 0020's approved global
+  planning-market policy, one-call grouped generator, relationship-aware validator, and immutable
+  replay record are offline-verified. The bounded prompt-v2 diagnostic is mechanically complete;
+  independent human semantic review and the owner's next-cut decision remain open.
 - Typed upstream constraints before hard filters can be claimed, provider adapter semantic
   acceptance, and provider execution remain separate follow-ons. See the completion map in
   `docs/handoffs/2026-09-12-search-planning-design.md`.
@@ -24,15 +26,16 @@ Current Milestone 0–4 roadmap:
 
 ## Next
 
-- Complete **Milestone 1A** SQLite catalog publication: importer, manifest, provenance,
-  reconciliation/quarantine rules, and snapshot-retention decisions. Then complete
-  **Milestone 1B** read-only catalog retrieval, inspection, and planner-boundary compatibility
-  before beginning connectivity. The detailed acceptance criteria and decision gates are in the
-  current Milestone 0–4 roadmap.
-- Revisit raw-source-artifact retention only after imported data is available for inspection.
+- Review the prompt-v2 2B development artifact against the documented usefulness, scope,
+  omission, weak-extra, access-role, uncertainty, and variation rubric; do not infer quality from
+  valid IATA codes or mechanical completion.
+- Make an owner decision on the next cut after that review. 2C remains unimplemented: it would
+  preserve mandatory endpoint coverage while compiling bounded supplemental searches from accepted
+  unverified hypotheses and their issues/advisories.
 
 ## Later
 
+- Milestone 2C direct-plus-supplemental search-strategy compilation.
 - Adaptive search planning.
 - Additional providers.
 - Provider-result normalization and validation.

@@ -4,22 +4,31 @@ Award Travel Agent is an independent portfolio project for building a narrow, me
 
 ## Current milestone
 
-Operational knowledge-base expansion — active, before provider execution.
+Milestone 2B gateway-airport discovery — implemented; prompt-v2 diagnostic is awaiting owner and human semantic review.
 
-The current cut replaces round-trip/cash-capable live semantics with a one-way award-only request
-boundary. A ready request requires origin, destination, an outbound departure window, and traveler
+The frozen upstream boundary uses one-way award-only request semantics. A ready request requires
+origin, destination, an outbound departure window, and traveler
 count. Return dates and durations receive visible guidance to submit a separate one-way request;
 cash-only requests are unsupported; mixed award-and-cash requests remain eligible for award search
 without implying cash pricing is available. The deterministic, retrieval-backed
 `EffectiveRequest -> SearchPlan` boundary is implemented and qualified for its declared checked-in
-fixture coverage. The active cut is Milestone 1: import and serve GeoNames and OurAirports data as
-a reviewed, versioned geographic/airport catalog; support named region-taxonomy resolution; and
-publish explicit catalog/group coverage. Airport groups beyond the existing examples are curated
-iteratively; directed topology is Milestone 2. Provider execution remains later; this cut ends
-before a Seats.aero API call, provider payload mapping, result normalization, or ranking. See the
+fixture coverage. Milestone 1 supplied the reviewed, versioned local GeoNames/OurAirports catalog.
+Milestone 2A implemented bounded model-proposed endpoint-airport selection, but it remains
+diagnostic-only pending independent human review, holdout evidence, and an adoption decision. The
+implemented 2B boundary uses an approved versioned global planning-market policy and selects one grouped
+structured model proposal for bounded, explainable gateway candidates. Same-market skipping is
+allowed only when every original endpoint is known and their market union has size one; mapping
+gaps force generation, and model/policy market disagreements remain advisory for 2C. Candidates
+remain unverified search hypotheses. The bounded prompt-v2 development run is mechanically complete,
+not semantically qualified. Provider execution remains later; this cut ends before 2C
+search-strategy compilation, a Seats.aero API call, provider payload mapping, result normalization,
+or ranking. See the
 [search-planning stage brief](docs/handoffs/2026-09-10-search-plan-design-stage.md) and
-[`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md), plus the
-[Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md).
+[`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md),
+[`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md), plus the
+[Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) and
+[Milestone 2B implementation brief](docs/handoffs/2026-09-17-m2b-gateway-airport-discovery-opened.md), and the
+[2B evaluation protocol](docs/evaluation/gateway-discovery-evaluation-protocol.md).
 
 The initial request-understanding turn now uses the ADR 0017 semantic boundary:
 

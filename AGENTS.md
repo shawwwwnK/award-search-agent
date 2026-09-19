@@ -58,17 +58,27 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
-Operational knowledge-base expansion before provider execution. The deterministic, retrieval-backed
-outbound-only `EffectiveRequest -> SearchPlan` boundary is implemented and fixture-qualified for
-its declared checked-in seed snapshot. The active cut is to grow that seed into a reviewed,
-versioned operational snapshot for an explicitly declared initial coverage—not to begin provider
-execution or claim global airport or route coverage.
+Milestone 2B gateway-airport discovery is implemented and in owner/human review before provider execution. The deterministic,
+retrieval-backed outbound-only `EffectiveRequest -> SearchPlan` boundary is implemented and
+fixture-qualified for its declared checked-in seed snapshot. Milestone 1 supplied the reviewed,
+versioned local geographic/airport catalog. Milestone 2A implemented a bounded model-proposed
+endpoint-airport selector and completed its active-policy diagnostic, but the selector remains
+diagnostic-only pending independent human semantic review, holdout evidence, and an adoption
+decision.
 
 The current search-planning milestone order is recorded in
-`docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`. Milestone 1 is the active
-geographic and airport-data foundation: import and serve GeoNames and OurAirports data through the
-local snapshot boundary, including named region-taxonomy resolution. It stops before airport-group
-curation beyond the existing examples and before directed connectivity, providers, or RAG.
+`docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`. Milestone 2B implements the
+market-aware gateway-candidate boundary: given selected departure and destination airport sets, apply
+the approved versioned planning-market policy, skip only a fully known single-market request, and
+otherwise make one grouped structured model proposal for bounded provider-neutral candidates.
+Candidates are unverified search hypotheses, never route or connectivity facts. An unknown endpoint
+market forces generation with an explicit mapping-gap receipt; a model/policy candidate-market
+disagreement is advisory and passes to 2C rather than rejecting an otherwise valid candidate.
+The prompt-v2 development diagnostic is mechanically complete, while independent human semantic
+review and the owner's next-cut decision remain open. Completing 2B does not close or adopt 2A;
+reviewed fixtures or supplied selection records may be used without promoting model output into
+geographic fact. It stops before 2C search-strategy compilation, provider execution,
+returned-itinerary claims, RAG, or persistence. See ADR 0020.
 
 The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
 
