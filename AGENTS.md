@@ -58,7 +58,8 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
-Milestone 2B gateway-airport discovery is implemented and in owner/human review before provider execution. The deterministic,
+Milestone 2B gateway-airport discovery is owner-closed as of 2026-09-19. Milestone 2C remains
+deferred until explicitly opened. The deterministic,
 retrieval-backed outbound-only `EffectiveRequest -> SearchPlan` boundary is implemented and
 fixture-qualified for its declared checked-in seed snapshot. Milestone 1 supplied the reviewed,
 versioned local geographic/airport catalog. Milestone 2A implemented a bounded model-proposed
@@ -74,14 +75,15 @@ otherwise make one grouped structured model proposal for bounded provider-neutra
 Candidates are unverified search hypotheses, never route or connectivity facts. An unknown endpoint
 market forces generation with an explicit mapping-gap receipt; a model/policy candidate-market
 disagreement is advisory and passes to 2C rather than rejecting an otherwise valid candidate.
-The prompt-v6/casebook-v3 development diagnostic is mechanically complete, while independent human semantic
-review and the owner's next-cut decision remain open. The preceding prompt-v5/casebook-v3 run exposed
+The prompt-v6/casebook-v3 development diagnostic is mechanically complete. The owner accepted the
+implemented boundary and evidence record for stage closure; independent human semantic qualification
+was not claimed. The preceding prompt-v5/casebook-v3 run exposed
 relationship multiplication; prompt-v6 adds relationship-level uncertainty/scope reconciliation and
 same-scope candidate consolidation without changing the schema, adapter, catalog, policy, or
 deterministic validator. Access gateways may be materially complementary alternatives even for
 already-strong endpoints, but require specific incremental value rather than size, proximity, shared
 market, or diversity alone. The pools are independently capped at 2 origin access, 2 destination
-access, and 5 hubs (9 candidates total); no intermediate-market diversity quota applies. Completing 2B
+access, and 5 hubs (9 candidates total); no intermediate-market diversity quota applies. Closing 2B
 does not close or adopt 2A;
 reviewed fixtures or supplied selection records may be used without promoting model output into
 geographic fact. It stops before 2C search-strategy compilation, provider execution,
@@ -94,6 +96,9 @@ tokens, one catalog-absence rejection for PNH, and three retained market-mismatc
 integrity and independent AI semantic review passed for owner human review; this is not human semantic
 qualification. 2C relationship/search-work budgeting remains mandatory, and no prompt-v7 or
 deterministic semantic-rejection change is currently recommended.
+
+Do not reopen 2B or begin 2C implementation without an explicit owner decision. The 2B closeout is
+recorded in `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 
 The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
 

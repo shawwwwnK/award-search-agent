@@ -312,7 +312,7 @@ Advance when the declared initial locations can each produce their reviewed
 airport set or a truthful typed coverage outcome, with no fuzzy expansion or
 silent airport-service inference.
 
-### Milestone 2B — gateway-airport discovery (implemented; semantic review open)
+### Milestone 2B — gateway-airport discovery (implemented; owner-closed 2026-09-19)
 
 #### Objective
 
@@ -352,8 +352,8 @@ implemented. Casebook v3 preserves the eight v2 scenarios and adds 15
 catalog-pinned scenarios, for 23 cases: two policy skips and 21 generation
 cases. The prompt-v5/casebook-v2 and first prompt-v5/casebook-v3 diagnostics
 are historical evidence. The final prompt-v6/casebook-v3 two-trial live
-evaluation completed its bounded 42 calls and remains open only for
-owner/human semantic review. Access gateways may be
+evaluation completed its bounded 42 calls. The owner accepted the implemented boundary and evidence
+record for stage closure; independent human semantic qualification is not claimed. Access gateways may be
 materially complementary for already-strong endpoints only when they provide
 specific incremental value; size, proximity, shared market, or diversity alone
 is insufficient. The independent 2 origin-access, 2 destination-access, and 5
@@ -364,16 +364,17 @@ catalog-absence rejection and three market-mismatch advisories were retained.
 The artifact/privacy audit and independent AI semantic review passed for owner
 human review, not human qualification. No prompt-v7 or deterministic
 semantic-rejection change is currently recommended; 2C relationship/search-work
-budgeting remains mandatory. 2B is not automatically qualified or adopted as a
-2C input source.
+budgeting remains mandatory. Closure preserves these limitations and does not automatically adopt
+the diagnostic-only M2A selector. The durable closeout is
+`docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 
 #### Decision gate
 
-Advance when the approved mechanism yields useful, bounded, reviewable gateway
-candidates beyond endpoint-only searching and its relationship scopes and
-coverage limitations pass offline and human semantic review.
+Satisfied for stage closure by the approved mechanism, offline verification, bounded live
+diagnostic, artifact audit, independent AI semantic review, and the owner's explicit close decision.
+This is not a claim of verified connectivity or independent human semantic qualification.
 
-### Milestone 2C — search-strategy compilation
+### Milestone 2C — search-strategy compilation (deferred; not opened)
 
 #### Objective
 

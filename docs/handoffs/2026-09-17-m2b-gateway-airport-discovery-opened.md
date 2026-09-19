@@ -1,6 +1,6 @@
-# Milestone 2B: Gateway-airport discovery implementation and review handoff
+# Milestone 2B: Gateway-airport discovery implementation and closure handoff
 
-- Status: Implemented; prompt-v6/casebook-v3 diagnostic complete, owner/human semantic review open
+- Status: Implemented; owner-closed 2026-09-19
 - Opened: 2026-09-17; implementation/evaluation, prompt-v5/casebook-v2, casebook-v3, and prompt-v6 update: 2026-09-19
 - Boundary: Selected endpoint airport sets to a policy skip or bounded unverified candidates
 
@@ -92,7 +92,7 @@ There is no intermediate-hub market-diversity quota.
   candidate count, and record budget omissions without recasting accepted
   candidates as invalid.
 
-## Evidence and remaining gate
+## Evidence and closure
 
 The opening transition and the narrow implementation are complete. The result
 is a small versioned market policy, a single-call structured generator, a
@@ -104,13 +104,14 @@ casebook remains historical evidence. The current disclosed casebook is v3:
 it preserves v2's eight scenarios and adds 15 catalog-pinned scenarios, for
 23 total cases, two same-market skips, and 21 generation cases. Its two-trial
 live bound is 42 calls with no retry or refill. No v3 live result is claimed
-as qualification: the prompt-v6/casebook-v3 live diagnostic is complete, while
-owner and human semantic qualification remain open.
+as qualification: the prompt-v6/casebook-v3 live diagnostic is complete, and
+the owner accepted the implemented boundary and evidence record for stage closure. Independent human
+semantic qualification is not claimed.
 Its protocol is [`gateway-discovery-evaluation-protocol.md`](../evaluation/gateway-discovery-evaluation-protocol.md).
 
-This is not an adoption or semantic-qualification decision. Human review must
-still assess usefulness, scope, omissions, weak extras, access-role fit,
-uncertainty, and variation. Milestone 2C remains unimplemented and would be
+This is not a connectivity or independent human semantic-qualification claim. The owner's closure
+decision accepts the completed 2B stage with its limitations preserved. Milestone 2C remains
+unimplemented and deferred; if opened, it would be
 responsible for preserving mandatory endpoint coverage, budgeting compiled
 relationships/search items rather than raw candidate count, recording budget
 omissions without relabeling candidates invalid, and consolidating accepted
@@ -143,3 +144,6 @@ in the India and Los Angeles/Australia-New Zealand cases, New York/Japan
 volume, one IPC→PPT circuitous regression, trial variation, and a private
 control-character hygiene note. No prompt-v7 or deterministic semantic
 rejection change is currently recommended; 2C budgeting remains mandatory.
+
+The durable closeout and learning record is
+[`2026-09-19-m2b-gateway-airport-discovery-closeout.md`](2026-09-19-m2b-gateway-airport-discovery-closeout.md).

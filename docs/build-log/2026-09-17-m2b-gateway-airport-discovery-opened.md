@@ -212,4 +212,12 @@ Zealand, 36 for New York/Japan, one IPC→PPT circuitous regression, trial
 variation, and a private control-character hygiene note. No prompt-v7 or
 deterministic semantic-rejection change is currently recommended; 2C
 relationship/search-work budgeting remains mandatory. M2A remains unadopted,
-2C remains unimplemented, and the owner decision remains open.
+2C remains unimplemented.
+
+## Owner close decision (2026-09-19)
+
+The owner explicitly closed Milestone 2B and deferred consideration of Milestone 2C. Closure accepts
+the implemented ADR 0020 boundary and the prompt-v6/casebook-v3 evidence record. It does not claim
+independent human semantic qualification, verified connectivity, adoption of the diagnostic-only M2A
+selector, or authorization to begin 2C. The durable learning and handoff record is
+`docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.

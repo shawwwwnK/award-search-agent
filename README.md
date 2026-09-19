@@ -4,8 +4,9 @@ Award Travel Agent is an independent portfolio project for building a narrow, me
 
 ## Current milestone
 
-Milestone 2B gateway-airport discovery — implemented; the prompt-v6/casebook-v3 diagnostic is mechanically
-complete and awaits owner/human semantic review and the next-cut decision.
+Milestone 2B gateway-airport discovery — implemented and owner-closed on 2026-09-19. Milestone 2C
+is deferred until explicitly opened. The prompt-v6/casebook-v3 diagnostic is mechanically complete;
+independent human semantic qualification is not claimed.
 
 The frozen upstream boundary uses one-way award-only request semantics. A ready request requires
 origin, destination, an outbound departure window, and traveler
@@ -36,7 +37,9 @@ or ranking. See the
 [`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md), plus the
 [Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) and
 [Milestone 2B implementation brief](docs/handoffs/2026-09-17-m2b-gateway-airport-discovery-opened.md), and the
-[2B evaluation protocol](docs/evaluation/gateway-discovery-evaluation-protocol.md).
+[2B evaluation protocol](docs/evaluation/gateway-discovery-evaluation-protocol.md). The durable
+[Milestone 2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md) records
+the final design, evidence, limitations, and later-stage inheritances.
 
 The initial request-understanding turn now uses the ADR 0017 semantic boundary:
 

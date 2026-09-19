@@ -153,4 +153,12 @@ Zealand, New York/Japan volume, one IPC→PPT circuitous regression, trial
 variation, and a private control-character hygiene note. No prompt-v7 or
 deterministic semantic-rejection change is currently recommended; 2C
 relationship/search-work budgeting remains mandatory. M2A remains unadopted,
-2C remains unimplemented, and the owner decision remains open.
+2C remains unimplemented.
+
+## Milestone 2B owner close decision (2026-09-19)
+
+The owner explicitly closed Milestone 2B after the prompt-v6/casebook-v3 diagnostic, artifact audit,
+and independent AI semantic review. The stage is closed with residual scope-volume, circuitousness,
+trial-variation, and text-hygiene findings preserved; no independent human semantic qualification or
+connectivity claim is made. Milestone 2C is deferred until explicitly opened. See
+`docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.

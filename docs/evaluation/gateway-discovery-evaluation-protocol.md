@@ -9,6 +9,11 @@ not qualify a production behavior, adopt the 2A selector, or establish any
 route, schedule, award, connection, availability, feasibility, or bookability
 fact.
 
+The owner closed Milestone 2B on 2026-09-19 after the prompt-v6/casebook-v3 diagnostic and review.
+This protocol remains the historical evaluation contract. Closure does not convert its development
+run into independent human semantic qualification or verified route evidence, and it does not open
+Milestone 2C.
+
 The disclosed casebook is
 `evals/gateway_discovery/development_cases_v3.yaml`. It uses the pinned M1A
 catalog and planning-market policy. The casebook's endpoint codes and expected

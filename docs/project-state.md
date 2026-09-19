@@ -2,8 +2,9 @@
 
 ## Phase
 
-Milestone 2B market-aware gateway-airport discovery — implemented; the prompt-v6/casebook-v3 live
-diagnostic is mechanically complete and awaits owner/human semantic review before any successor cut.
+Milestone 2B market-aware gateway-airport discovery — implemented and owner-closed as of 2026-09-19.
+The prompt-v6/casebook-v3 live diagnostic is mechanically complete; independent human semantic
+qualification is not claimed. Milestone 2C is deferred until explicitly opened.
 Search planning is implemented and fixture-qualified as a planning-only, retrieval-backed
 `EffectiveRequest -> SearchPlan` stage that follows the frozen one-way award request-understanding
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
@@ -91,9 +92,14 @@ rejection change is currently recommended; 2C budgeting is mandatory.
 
 ## Current conclusion
 
-Milestone 2B implementation is ready for owner and human semantic review. Milestone 1 completed
-the local geographic/airport foundation, and Milestone 2A supplied the still-diagnostic endpoint
-selection seam described above. The preceding
+The owner closed Milestone 2B on 2026-09-19 after reviewing the implemented boundary, offline
+verification, prompt-v6/casebook-v3 live diagnostic, artifact audit, and independent AI semantic
+review. Closure accepts the 2B implementation and evidence record without claiming verified
+connectivity or independent human semantic qualification. Milestone 2C remains deferred.
+The durable closeout is
+`docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
+Milestone 1 completed the local geographic/airport foundation, and Milestone 2A supplied the
+still-diagnostic endpoint selection seam described above. The preceding
 search-planning cut is implemented and fixture-qualified for the declared local seed coverage.
 This is the planning-only boundary recorded in
 `docs/handoffs/2026-09-10-search-plan-design-stage.md`:
@@ -339,7 +345,8 @@ deterministic location/planner boundary while preserving the Milestone 0 JSON fi
 reviewed group policies. M2A is implemented but remains diagnostic-only pending its recorded
 semantic/adoption gate. M2B implements ADR 0020's approved market policy, generation gate,
 grouped proposal, deterministic relationship validation, and replayable selection record; its
-prompt-v6/casebook-v3 diagnostic is mechanically complete but not semantically qualified. It does not
+prompt-v6/casebook-v3 diagnostic is mechanically complete but not independently human-qualified.
+The stage is owner-closed and does not
 authorize runtime strategy compilation. If 2C is opened, it must preserve mandatory original endpoint
 coverage, budget compiled relationships/search items rather than raw candidate count, and record a
 budget omission without relabeling the candidate invalid. Provider
@@ -358,8 +365,8 @@ references to `two_pass` and selector-only extraction are historical evidence on
   adapter or provider error fixture exists yet. The planning-only `SearchPlan` boundary is now
   implemented and fixture-qualified, but it does not authorize a provider adapter or any provider
   call. M2B's grouped generator, relationship-aware validation, and replayable candidate record
-  are implemented. The next owner decision follows human semantic review; 2C and provider
-  execution remain separately scoped. SerpAPI Google Flights
+  are implemented and owner-closed. 2C is deferred until explicitly opened, and provider execution
+  remains separately scoped. SerpAPI Google Flights
   remains a later cash-fare candidate. See
   `docs/provider-feasibility/2026-09-08-initial-provider-intake.md`.
 - The frozen initial workflow stops after `ClarificationDecision`; the additive continuation
