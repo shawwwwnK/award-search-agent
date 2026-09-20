@@ -38,12 +38,8 @@ from award_agent.search_planning import (
     PlanningIssueCode,
     PlanningPolicy,
     PlanningSource,
-    SearchPlanningOutcome,
     context_for_resolved_location,
     ground_endpoint,
-    load_default_cached_search_capability,
-    load_default_knowledge_snapshot,
-    plan_searches,
 )
 
 
@@ -249,42 +245,26 @@ def test_catalog_repository_is_exact_read_only_and_carries_receipts(tmp_path: Pa
     assert database.read_bytes() == before
 
 
-def test_catalog_planning_preserves_explicit_airport_and_no_group_outcome(tmp_path: Path) -> None:
+def test_catalog_grounding_preserves_explicit_airport_and_reports_missing_group_policy(
+    tmp_path: Path,
+) -> None:
     release = _release(tmp_path)
     with CatalogKnowledgeRepository(release) as repository:
-        planned = plan_searches(
-            _ready_envelope(
-                _location(LocationKind.AIRPORT, "TST"), _location(LocationKind.AIRPORT, "TST")
-            ),
-            policy=PlanningPolicy(),
-            repository=repository,
-            capability=load_default_cached_search_capability(),
+        planned = ground_endpoint(
+            _location(LocationKind.AIRPORT, "TST"), "origin", repository, PlanningPolicy()
         )
-        assert planned.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
-        assert planned.plan is not None
-        assert isinstance(planned.plan.identity.knowledge_receipt, CatalogKnowledgeReceipt)
-        grouped = plan_searches(
-            _ready_envelope(
-                _location(LocationKind.CITY, "Test City"), _location(LocationKind.AIRPORT, "TST")
-            ),
-            policy=PlanningPolicy(),
-            repository=repository,
-            capability=load_default_cached_search_capability(),
+        assert planned.selection is not None
+        assert planned.selection.airports[0].airport_iata == "TST"
+        assert isinstance(repository.knowledge_receipt, CatalogKnowledgeReceipt)
+        grouped = ground_endpoint(
+            _location(LocationKind.CITY, "Test City"),
+            "origin",
+            repository,
+            PlanningPolicy(),
         )
-        assert grouped.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
         assert [issue.code for issue in grouped.issues] == [
             PlanningIssueCode.MISSING_SELECTION_POLICY
         ]
-        with pytest.raises(ValueError, match="exactly one"):
-            plan_searches(
-                _ready_envelope(
-                    _location(LocationKind.AIRPORT, "TST"), _location(LocationKind.AIRPORT, "TST")
-                ),
-                policy=PlanningPolicy(),
-                repository=repository,
-                snapshot=load_default_knowledge_snapshot(),
-                capability=load_default_cached_search_capability(),
-            )
 
 
 def test_catalog_open_rejects_tampering_and_inspector_is_read_only(tmp_path: Path) -> None:

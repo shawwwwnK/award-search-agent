@@ -1,766 +1,331 @@
-"""Offline path, temporal, and budget invariants for search planning.
+"""Offline supplemental-strategy compilation tests.
 
-Every route edge here is visibly synthetic test-fixture evidence.  The default
-knowledge snapshot intentionally carries no operational topology receipts.
+The old route-expansion tests intentionally disappeared with the in-place 2C
+replacement. These tests exercise the accepted 2B record as hypotheses, never
+as route evidence or completed itineraries.
 """
 
 from __future__ import annotations
 
-from datetime import date
-from typing import Any
+import hashlib
+import json
+from contextlib import nullcontext
 
 import pytest
 from pydantic import ValidationError
+from test_search_planning_endpoint import _Generator, _repository, _request
 
-from award_agent.domain import (
-    CabinClass,
-    DateWindow,
-    DateWindowPrecision,
-    EffectiveField,
-    EffectiveRequest,
-    FieldProvenance,
-    InitialSnapshotSource,
-    LocationKind,
-    LocationRef,
-    RequestContext,
-    SearchMode,
-)
 from award_agent.search_planning import (
-    BudgetKind,
-    ComponentPaymentMode,
-    FilterObligationKind,
-    KnowledgeSnapshot,
-    ManualCashTemporalValidationKind,
+    DEFAULT_GATEWAY_DISCOVERY_GENERATOR_CONFIGURATION,
+    CompiledSearchPlan,
+    DirectGroundingSource,
+    GatewayCandidateProposal,
+    GatewayDiscoveryInput,
+    GatewayDiscoveryOutcome,
+    GatewayOutboundDateContext,
     PlanningInputEnvelope,
     PlanningPolicy,
     PlanningSource,
-    SearchPlan,
+    RelationshipDispositionKind,
+    SearchPlanningInput,
     SearchPlanningOutcome,
-    SearchPlanningResult,
-    SearchScope,
+    SupplementalStrategyType,
+    discover_gateway_candidates,
+    ground_endpoint,
     load_default_cached_search_capability,
-    load_default_knowledge_snapshot,
+    load_default_planning_market_policy,
     plan_searches,
 )
 
-_CONTEXT = RequestContext(reference_date=date(2026, 9, 12), timezone="America/Los_Angeles")
+
+def _proposal(**changes: object) -> GatewayCandidateProposal:
+    payload: dict[str, object] = {
+        "endpoint_market_assessments": [],
+        "origin_access_gateways": [],
+        "destination_access_gateways": [],
+        "intermediate_hubs": [],
+    }
+    payload.update(changes)
+    return GatewayCandidateProposal.model_validate(payload)
 
 
-def _location(kind: LocationKind, value: str) -> LocationRef:
-    return LocationRef(kind=kind, value=value, raw_text=value)
-
-
-def _request(**changes: Any) -> EffectiveRequest:
-    request = EffectiveRequest(
-        raw_text="Two business award seats from SFO to Japan October 5 through 7.",
-        context=_CONTEXT,
-        travelers=2,
-        origins=(_location(LocationKind.AIRPORT, "SFO"),),
-        destinations=(_location(LocationKind.COUNTRY, "Japan"),),
-        departure_window=DateWindow(
-            start=date(2026, 10, 5),
-            end=date(2026, 10, 7),
-            precision=DateWindowPrecision.WINDOW,
-            raw_text="October 5 through 7",
-        ),
-        cabins=(CabinClass.BUSINESS,),
-        search_modes=(SearchMode.AWARD,),
-        field_provenance=(
-            FieldProvenance(
-                field=EffectiveField.CABIN,
-                source=InitialSnapshotSource(field=EffectiveField.CABIN),
+def _compile(proposal: GatewayCandidateProposal | Exception, *, repositioning: bool | None = None, policy: PlanningPolicy | None = None, origins: tuple[str, ...] = ("SFO",)):
+    request = _request(origins, ("CDG",), repositioning_allowed=repositioning)
+    policy = policy or PlanningPolicy()
+    market_policy = load_default_planning_market_policy()
+    with nullcontext(_repository()) as repository:
+        origin_selections = tuple(
+            ground_endpoint(location, "origin", repository, policy).selection
+            for location in request.origins
+        )
+        destination = ground_endpoint(request.destinations[0], "destination", repository, policy)
+        assert all(item is not None for item in origin_selections)
+        assert destination.selection is not None and request.departure_window is not None
+        discovery = discover_gateway_candidates(
+            discovery_input=GatewayDiscoveryInput(
+                origin_endpoints=tuple(
+                    airport
+                    for selection in origin_selections
+                    if selection is not None
+                    for airport in selection.airports
+                ),
+                destination_endpoints=destination.selection.airports,
+                outbound_date=GatewayOutboundDateContext(
+                    start=request.departure_window.start,
+                    end=request.departure_window.end,
+                    timezone=request.context.timezone,
+                    effective_window_precision=request.departure_window.precision.value,
+                ),
             ),
-        ),
-    )
-    return request.model_copy(update=changes)
-
-
-def _snapshot(*edges: tuple[str, str, str]) -> KnowledgeSnapshot:
-    """Return the seed snapshot with explicitly synthetic directed test edges."""
-
-    document = load_default_knowledge_snapshot().model_dump(mode="python", round_trip=True)
-    document["sources"] = [
-        *document["sources"],
-        {
-            "source_id": "synthetic-path-fixture",
-            "title": "Synthetic path fixture only",
-            "url": "https://example.test/synthetic-path-fixture",
-            "license_note": "Synthetic test fixture only; not operational route evidence.",
-            "verified_on": date(2026, 9, 12),
-            "version_or_capture_id": "test-fixture-v1",
-            "verification_scope": "Unit-test-only synthetic directed topology.",
-        },
-    ]
-    document["route_edges"] = [
-        {
-            "edge_id": edge_id,
-            "origin_airport_id": origin,
-            "destination_airport_id": destination,
-            "evidence_kind": "synthetic_test_fixture",
-            "source_ids": ["synthetic-path-fixture"],
-        }
-        for edge_id, origin, destination in edges
-    ]
-    return KnowledgeSnapshot.model_validate(document)
-
-
-def _plan(
-    snapshot: KnowledgeSnapshot, *, policy: PlanningPolicy | None = None
-) -> SearchPlanningResult:
-    return plan_searches(
-        PlanningInputEnvelope(
-            source=PlanningSource(session_id="path-session", revision=1),
-            effective_request=_request(),
-        ),
-        policy=policy or PlanningPolicy(),
-        snapshot=snapshot,
-        capability=load_default_cached_search_capability(),
-    )
-
-
-def test_directed_synthetic_edges_create_only_a_connected_two_component_path() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
+            policy=market_policy,
+            repository=repository,
+            generator_factory=lambda: _Generator(proposal),
+            generator_configuration=DEFAULT_GATEWAY_DISCOVERY_GENERATOR_CONFIGURATION,
         )
-    )
-
-    assert result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
-    assert result.plan is not None
-    assert len(result.plan.explicit_path_hypotheses) == 1
-    path = result.plan.explicit_path_hypotheses[0]
-    assert [
-        (component.origin_endpoint.airport_iata, component.destination_endpoint.airport_iata)
-        for component in path.components
-    ] == [("SFO", "JFK"), ("JFK", "HND")]
-    assert all(
-        component.route_evidence_kind == "synthetic_test_fixture" for component in path.components
-    )
-    assert all(
-        item.scope is SearchScope.EXPLICIT_PHYSICAL_COMPONENT
-        for item in result.plan.award_search_items
-        if item.item_id in {component.award_search_item_id for component in path.components}
-    )
-    for component in path.components:
-        item = next(
-            item
-            for item in result.plan.award_search_items
-            if item.item_id == component.award_search_item_id
+        result = plan_searches(
+            SearchPlanningInput(
+                envelope=PlanningInputEnvelope(
+                    source=PlanningSource(session_id="supplement-tests", revision=1),
+                    effective_request=request,
+                ),
+                endpoint_source=DirectGroundingSource(),
+                gateway_discovery_result=discovery,
+                capability=load_default_cached_search_capability(),
+            ),
+            repository=repository,
+            policy=policy,
+            market_policy=market_policy,
         )
-        assert {filter_.kind.value for filter_ in item.filter_obligations} == {
-            "cabin_available_in",
-            "direct_flight_available",
-        }
-        assert any(
-            obligation.kind.value == "exact_physical_component_structure"
-            for obligation in item.result_validation_obligations
-        )
-    assert [
-        pattern.component_payment_modes for pattern in result.plan.payment_patterns
-    ] == [(ComponentPaymentMode.AWARD, ComponentPaymentMode.AWARD)]
-    assert not result.plan.manual_cash_check_templates
+    return discovery, result
 
 
-def test_mixed_mode_reuses_path_and_award_items_with_dormant_manual_cash_templates() -> None:
-    snapshot = _snapshot(
-        ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-        ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
+def _origin_access(*origins: str) -> dict[str, object]:
+    return {
+        "airport_iata": "LAX",
+        "reason": "alternate origin gateway worth researching",
+        "material_uncertainty": "positioning remains unverified",
+        "model_asserted_market_id": "us_west",
+        "supported_original_origin_iata_codes": list(origins),
+        "applicable_original_destination_iata_codes": ["CDG"],
+    }
+
+
+def _direct_hub() -> dict[str, object]:
+    return {
+        "airport_iata": "ORD",
+        "reason": "scoped connection hypothesis",
+        "material_uncertainty": "no route evidence",
+        "model_asserted_market_id": "us_midwest",
+        "scopes": [
+            {
+                "origin_side": [{"kind": "original_origin", "airport_iata": "SFO"}],
+                "destination_side": [
+                    {"kind": "original_destination", "airport_iata": "CDG"}
+                ],
+                "reason": "research only",
+            }
+        ],
+    }
+
+
+def test_shared_access_query_is_deduplicated_with_many_to_many_provenance() -> None:
+    discovery, result = _compile(
+        _proposal(origin_access_gateways=[_origin_access("SFO", "SEA")]),
+        origins=("SFO", "SEA"),
     )
-    request = _request(search_modes=(SearchMode.AWARD, SearchMode.CASH))
-    result = plan_searches(
-        PlanningInputEnvelope(
-            source=PlanningSource(session_id="mixed-path-session", revision=1),
-            effective_request=request,
-        ),
-        policy=PlanningPolicy(),
-        snapshot=snapshot,
-        capability=load_default_cached_search_capability(),
-    )
-
+    assert discovery.outcome is GatewayDiscoveryOutcome.SUCCESS_NONEMPTY
+    assert result.outcome is SearchPlanningOutcome.PLANNED
     assert result.plan is not None
     plan = result.plan
-    path = plan.explicit_path_hypotheses[0]
-    assert len(plan.explicit_path_hypotheses) == 1
-    assert {
-        pattern.component_payment_modes for pattern in plan.payment_patterns
-    } == {
-        (ComponentPaymentMode.AWARD, ComponentPaymentMode.AWARD),
-        (ComponentPaymentMode.AWARD, ComponentPaymentMode.MANUAL_CASH),
-        (ComponentPaymentMode.MANUAL_CASH, ComponentPaymentMode.AWARD),
-    }
-    assert len(plan.manual_cash_check_templates) == 2
-    assert all(item.automated_mode == "award" for item in plan.award_search_items)
-    templates_by_index = {
-        template.manual_component_index: template for template in plan.manual_cash_check_templates
-    }
-    cash_first = templates_by_index[1]
-    assert cash_first.manual_component_id == path.components[0].component_id
-    assert cash_first.relevant_award_search_item_id == path.components[1].award_search_item_id
-    assert (
-        cash_first.temporal_validation_kind
-        is ManualCashTemporalValidationKind.FIRST_COMPONENT_WITHIN_ORIGINAL_WINDOW
-    )
-    assert cash_first.traveler_count == 2
-    assert cash_first.requested_cabins == (CabinClass.BUSINESS,)
-    assert cash_first.activation == "after_relevant_award_observation"
-    assert cash_first.automation == "manual_only"
-    assert cash_first.pricing_status == "unpriced"
-    assert cash_first.verification_status == "not_verified"
-    assert (
-        path.components[0].date_envelope.start,
-        path.components[0].date_envelope.end,
-    ) == (date(2026, 10, 5), date(2026, 10, 7))
-
-    award_first = templates_by_index[2]
-    assert award_first.manual_component_id == path.components[1].component_id
-    assert award_first.relevant_award_search_item_id == path.components[0].award_search_item_id
-    assert (
-        award_first.temporal_validation_kind
-        is ManualCashTemporalValidationKind.LATER_COMPONENT_REQUIRES_ASSEMBLED_JOURNEY_VALIDATION
-    )
+    assert len(plan.supplemental_strategies) == 2
+    assert len(plan.strategy_query_uses) == 2
+    assert plan.strategy_query_uses[0].query_id == plan.strategy_query_uses[1].query_id
+    assert len(plan.logical_queries) == 3  # two mandatory plus one shared supplemental
+    unique_budget = plan.budget_receipts[3]
+    assert unique_budget.supplemental_admitted == 1
+    assert unique_budget.shared_reused == 1
 
 
-def test_payment_contract_rejects_all_cash_and_hybrid_without_dormant_template() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
+def test_explicit_positioning_refusal_suppresses_access_without_losing_mandatory_work() -> None:
+    _, result = _compile(
+        _proposal(origin_access_gateways=[_origin_access("SFO")]),
+        repositioning=False,
     )
+    assert result.outcome is SearchPlanningOutcome.PLANNED
     assert result.plan is not None
-    all_cash = result.plan.model_dump(mode="python", round_trip=True)
-    # The award-only pattern cannot be replaced by all cash even before any
-    # provider stage exists.
-    all_cash["payment_patterns"][0]["component_payment_modes"] = [
-        ComponentPaymentMode.MANUAL_CASH,
-        ComponentPaymentMode.MANUAL_CASH,
-    ]
-    with pytest.raises(ValidationError, match="retain at least one award"):
-        SearchPlan.model_validate(all_cash)
-
-    mixed_request = _request(search_modes=(SearchMode.AWARD, SearchMode.CASH))
-    mixed_result = plan_searches(
-        PlanningInputEnvelope(
-            source=PlanningSource(session_id="mixed-template-session", revision=1),
-            effective_request=mixed_request,
-        ),
-        policy=PlanningPolicy(),
-        snapshot=_snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        ),
-        capability=load_default_cached_search_capability(),
-    )
-    assert mixed_result.plan is not None
-    missing_template = mixed_result.plan.model_dump(mode="python", round_trip=True)
-    missing_template["manual_cash_check_templates"] = []
-    with pytest.raises(ValidationError, match="hybrid payment pattern"):
-        SearchPlan.model_validate(missing_template)
+    assert len(result.plan.logical_queries) == 1
+    assert not result.plan.supplemental_strategies
+    assert result.plan.relationship_dispositions[0].disposition is RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL
+    assert result.plan.positioning_receipts[0].decision == "suppressed_explicit_refusal"
 
 
-def test_search_plan_rejects_disagreeing_probe_requirements() -> None:
-    planned = _plan(_snapshot())
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    document["endpoint_probes"][1]["traveler_count"] = 1
-
-    with pytest.raises(ValidationError, match="endpoint probes must agree"):
-        SearchPlan.model_validate(document)
-
-
-def test_search_plan_rejects_tampered_physical_item_requirements() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    component_item_id = document["explicit_path_hypotheses"][0]["components"][0][
-        "award_search_item_id"
-    ]
-    component_item = next(
-        item for item in document["award_search_items"] if item["item_id"] == component_item_id
-    )
-    component_item["result_validation_obligations"][0]["minimum_seats"] = 1
-
-    with pytest.raises(ValidationError, match="exactly one matching minimum-seat obligation"):
-        SearchPlan.model_validate(document)
-
-
-def test_search_plan_rejects_tampered_manual_template_requirements_and_optional_item_link() -> None:
-    mixed_request = _request(search_modes=(SearchMode.AWARD, SearchMode.CASH))
-    mixed_result = plan_searches(
-        PlanningInputEnvelope(
-            source=PlanningSource(session_id="template-invariant-session", revision=1),
-            effective_request=mixed_request,
-        ),
-        policy=PlanningPolicy(),
-        snapshot=_snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        ),
-        capability=load_default_cached_search_capability(),
-    )
-    assert mixed_result.plan is not None
-
-    tampered_requirements = mixed_result.plan.model_dump(mode="python", round_trip=True)
-    tampered_requirements["manual_cash_check_templates"][0]["traveler_count"] = 1
-    with pytest.raises(ValidationError, match="global cabin and traveler requirements"):
-        SearchPlan.model_validate(tampered_requirements)
-
-    tampered_link = mixed_result.plan.model_dump(mode="python", round_trip=True)
-    tampered_link["manual_cash_check_templates"][0][
-        "manual_component_award_search_item_id"
-    ] = "award:not-the-manual-component"
-    with pytest.raises(ValidationError, match="optional component item must match its path"):
-        SearchPlan.model_validate(tampered_link)
-
-
-def test_empty_cabins_are_preserved_across_paths_and_manual_cash_templates() -> None:
-    result = plan_searches(
-        PlanningInputEnvelope(
-            source=PlanningSource(session_id="empty-cabin-path-session", revision=1),
-            effective_request=_request(cabins=(), search_modes=(SearchMode.AWARD, SearchMode.CASH)),
-        ),
-        policy=PlanningPolicy(),
-        snapshot=_snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        ),
-        capability=load_default_cached_search_capability(),
-    )
-
+def test_unknown_positioning_permission_remains_conditional_and_traceable() -> None:
+    _, result = _compile(_proposal(origin_access_gateways=[_origin_access("SFO")]))
     assert result.plan is not None
-    assert all(probe.requested_cabins == () for probe in result.plan.endpoint_probes)
-    assert all(item.requested_cabins == () for item in result.plan.award_search_items)
+    strategy = result.plan.supplemental_strategies[0]
+    assert strategy.eligibility == "conditional_permission"
+    assert result.plan.positioning_dependencies[0].requested_permission is None
+    assert result.plan.positioning_receipts[0].decision == "conditional_research"
+
+
+def test_scoped_hub_is_two_queries_with_explicit_dates_and_connection_semantics() -> None:
+    _, result = _compile(_proposal(intermediate_hubs=[_direct_hub()]))
+    assert result.plan is not None
+    strategy = result.plan.supplemental_strategies[0]
+    assert strategy.strategy_type is SupplementalStrategyType.SCOPED_HUB
+    uses = [item for item in result.plan.strategy_query_uses if item.strategy_id == strategy.strategy_id]
+    assert [item.role for item in uses] == ["hub_first", "hub_second"]
+    assert len(result.plan.temporal_derivations) == 2
+    first, second = result.plan.temporal_derivations
+    assert (first.start_offset_days, first.end_offset_days) == (0, 0)
+    assert (second.start_offset_days, second.end_offset_days) == (-1, 2)
     assert all(
-        not any(
-            filter_.kind is FilterObligationKind.CABIN_AVAILABLE_IN
-            for filter_ in item.filter_obligations
-        )
-        for item in result.plan.award_search_items
-    )
-    assert all(template.requested_cabins == () for template in result.plan.manual_cash_check_templates)
-
-
-def test_reverse_and_airport_changing_edges_are_not_inferred() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:jfk-sfo", "airport:jfk", "airport:sfo"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
+        query.connection_semantics == "provider_returned_connections_allowed"
+        for query in result.plan.logical_queries
     )
 
+
+def test_hub_bundle_admission_is_atomic_under_unique_query_budget() -> None:
+    _, result = _compile(
+        _proposal(intermediate_hubs=[_direct_hub()]),
+        policy=PlanningPolicy(
+            max_mandatory_endpoint_pairs=1,
+            max_unique_logical_queries=2,
+        ),
+    )
     assert result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
     assert result.plan is not None
-    assert not result.plan.explicit_path_hypotheses
-    assert any("topology is unavailable" in item for item in result.exclusions)
+    assert len(result.plan.logical_queries) == 1
+    assert not result.plan.strategy_query_uses
+    disposition = result.plan.relationship_dispositions[0]
+    assert disposition.disposition is RelationshipDispositionKind.OMITTED_BUDGET
+    assert disposition.candidate_unique_queries == 2
+    assert disposition.marginal_unique_queries == 2
 
 
-def test_country_destination_does_not_invent_an_onward_domestic_leg() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-            ("synthetic:hnd-nrt", "airport:hnd", "airport:nrt"),
-        )
-    )
-
-    assert result.plan is not None
-    destination_airport_ids = {
-        airport.airport_id
-        for location_result in result.plan.location_results
-        if location_result.role == "destination" and location_result.selection is not None
-        for airport in location_result.selection.airports
-    }
-    assert destination_airport_ids == {"airport:hnd", "airport:nrt", "airport:kix"}
-    for hypothesis in result.plan.explicit_path_hypotheses:
-        assert hypothesis.requested_destination_endpoint.airport_id in destination_airport_ids
-        assert (
-            hypothesis.components[-1].destination_endpoint.airport_id
-            == hypothesis.requested_destination_endpoint.airport_id
-        )
-        assert len(hypothesis.components) == 2
-
-
-def test_ground_transport_edge_is_rejected_as_non_airport_topology() -> None:
-    document = _snapshot().model_dump(mode="python", round_trip=True)
-    document["route_edges"] = [
-        {
-            "edge_id": "synthetic:sfo-ground-lax",
-            "origin_airport_id": "airport:sfo",
-            "destination_airport_id": "ground:lax",
-            "evidence_kind": "synthetic_test_fixture",
-            "source_ids": ["synthetic-path-fixture"],
-        }
-    ]
-
-    with pytest.raises(ValidationError, match="unknown airport endpoint"):
-        KnowledgeSnapshot.model_validate(document)
-
-
-def test_later_component_uses_its_own_timezone_and_minus_one_plus_two_envelope() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-
-    assert result.plan is not None
-    first, later = result.plan.explicit_path_hypotheses[0].components
-    assert (first.date_envelope.start, first.date_envelope.end, first.date_envelope.timezone) == (
-        date(2026, 10, 5),
-        date(2026, 10, 7),
-        "America/Los_Angeles",
-    )
-    assert (later.date_envelope.start, later.date_envelope.end, later.date_envelope.timezone) == (
-        date(2026, 10, 4),
-        date(2026, 10, 9),
-        "America/New_York",
-    )
-    assert later.temporal_derivation.note == "not_connection_or_schedule_evidence"
-
-
-def test_path_budget_exhaustion_is_reduced_coverage_and_endpoint_probes_survive() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        ),
-        policy=PlanningPolicy(max_path_candidate_exploration=0),
-    )
-
-    assert result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
-    assert result.plan is not None
-    assert len(result.plan.endpoint_probes) == 3
-    assert not result.plan.explicit_path_hypotheses
-    assert any("candidate exploration reached" in item for item in result.exclusions)
-    receipts = {receipt.kind: receipt for receipt in result.plan.budget_receipts}
-    assert receipts[BudgetKind.PATH_CANDIDATE_COUNT].observed == 0
-
-
-def test_route_record_order_does_not_change_canonical_plan() -> None:
-    edges = (
-        ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-        ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-    )
-    one = _plan(_snapshot(*edges))
-    two = _plan(_snapshot(*reversed(edges)))
-
-    assert one.plan is not None and two.plan is not None
-    assert one.plan.model_dump(mode="json") == two.plan.model_dump(mode="json")
-
-
-def test_unknown_route_date_applicability_is_explicitly_disclosed() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-
-    assert result.plan is not None
-    assert all(
-        component.route_date_applicability == "unknown"
-        and component.date_applicability_disclosure == "date_applicability_unknown"
-        for component in result.plan.explicit_path_hypotheses[0].components
-    )
-
-
-def test_stale_and_known_inapplicable_route_evidence_are_omitted() -> None:
-    snapshot = _snapshot(
-        ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-        ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-    )
-    stale_document = snapshot.model_dump(mode="python", round_trip=True)
-    stale_document["sources"][-1]["verified_on"] = date(2020, 1, 1)
-    stale_result = _plan(KnowledgeSnapshot.model_validate(stale_document))
-
-    assert stale_result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
-    assert stale_result.plan is not None
-    assert not stale_result.plan.explicit_path_hypotheses
-    assert any("stale route evidence" in exclusion for exclusion in stale_result.exclusions)
-
-    interval_document = snapshot.model_dump(mode="python", round_trip=True)
-    for edge in interval_document["route_edges"]:
-        edge.update(
+def test_access_referenced_hub_preserves_dependency_in_synthetic_scope() -> None:
+    proposal = _proposal(
+        origin_access_gateways=[_origin_access("SFO", "SEA")],
+        intermediate_hubs=[
             {
-                "date_applicability": "known_inclusive_interval",
-                "applicable_start": date(2026, 1, 1),
-                "applicable_end": date(2026, 1, 2),
-            }
-        )
-    interval_result = _plan(KnowledgeSnapshot.model_validate(interval_document))
-
-    assert interval_result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
-    assert interval_result.plan is not None
-    assert not interval_result.plan.explicit_path_hypotheses
-    assert any("known-inapplicable" in exclusion for exclusion in interval_result.exclusions)
-
-
-def test_outgoing_route_retrieval_is_bounded_per_endpoint_pair_with_receipt() -> None:
-    routes = [
-        ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-        ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-    ]
-    # NRT and KIX are airport records in the seed fixture; their outgoing
-    # edges need not form paths to demonstrate bounded source retrieval.
-    routes.extend(
-        (f"synthetic:sfo-{iata.lower()}", "airport:sfo", f"airport:{iata.lower()}")
-        for iata in ("EWR", "LGA", "NRT", "KIX")
-    )
-    result = _plan(
-        _snapshot(*routes),
-        policy=PlanningPolicy(max_outgoing_route_edges_per_endpoint_pair=1),
-    )
-
-    assert result.plan is not None
-    receipts = result.plan.path_exploration_receipts
-    assert len(receipts) == len(result.plan.endpoint_probes)
-    assert all(receipt.outgoing_edge_limit == 1 for receipt in receipts)
-    assert all(len(receipt.examined_edge_ids) <= 1 for receipt in receipts)
-    assert any(receipt.overflow for receipt in receipts)
-    assert any("per-pair edge limit" in exclusion for exclusion in result.exclusions)
-
-
-def test_hypothesis_budget_preflight_never_commits_a_partial_path() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-            ("synthetic:sfo-ewr", "airport:sfo", "airport:ewr"),
-            ("synthetic:ewr-hnd", "airport:ewr", "airport:hnd"),
-        ),
-        # Three required endpoint items leave room for exactly one complete
-        # two-item optional hypothesis, not one-and-a-half paths.
-        policy=PlanningPolicy(max_total_award_search_items=5),
-    )
-
-    assert result.plan is not None
-    assert len(result.plan.explicit_path_hypotheses) == 1
-    component_item_ids = {
-        component.award_search_item_id
-        for path in result.plan.explicit_path_hypotheses
-        for component in path.components
-    }
-    optional_items = [
-        item
-        for item in result.plan.award_search_items
-        if item.scope is SearchScope.EXPLICIT_PHYSICAL_COMPONENT
-    ]
-    assert {item.item_id for item in optional_items} == component_item_ids
-    assert len(optional_items) == 2
-    assert any("total search-item budget" in exclusion for exclusion in result.exclusions)
-
-
-def test_shared_component_searches_are_deduplicated_across_path_hypotheses() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-            ("synthetic:jfk-nrt", "airport:jfk", "airport:nrt"),
-        )
-    )
-
-    assert result.plan is not None
-    paths = result.plan.explicit_path_hypotheses
-    assert len(paths) == 2
-    first_component_ids = {path.components[0].award_search_item_id for path in paths}
-    assert len(first_component_ids) == 1
-    optional_items = [
-        item
-        for item in result.plan.award_search_items
-        if item.scope is SearchScope.EXPLICIT_PHYSICAL_COMPONENT
-    ]
-    assert len(optional_items) == 3
-
-
-def test_search_plan_rejects_malformed_global_ids_and_component_links() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-
-    duplicate_id = planned.plan.model_dump(mode="python", round_trip=True)
-    duplicate_id["explicit_path_hypotheses"][0]["components"][0]["component_id"] = duplicate_id[
-        "endpoint_probes"
-    ][0]["probe_id"]
-    with pytest.raises(ValidationError, match="globally unique"):
-        SearchPlan.model_validate(duplicate_id)
-
-    malformed_link = planned.plan.model_dump(mode="python", round_trip=True)
-    malformed_link["explicit_path_hypotheses"][0]["components"][0]["date_envelope"]["start"] = date(
-        2026, 10, 6
-    )
-    with pytest.raises(ValidationError, match="exactly match its temporal derivation"):
-        SearchPlan.model_validate(malformed_link)
-
-
-def test_search_plan_rejects_airport_changing_transfer_between_components() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    components = document["explicit_path_hypotheses"][0]["components"]
-    second_component = components[1]
-    second_component["origin_endpoint"] = {
-        **second_component["origin_endpoint"],
-        "airport_id": "airport:ewr",
-        "airport_iata": "EWR",
-    }
-    # Keep the component internally shaped so the hypothesis-level
-    # connectivity invariant is the rejection under test.
-    second_component["temporal_derivation"]["origin_airport_fact_id"] = "airport:ewr"
-
-    assert (
-        components[0]["destination_endpoint"]["airport_iata"],
-        components[1]["origin_endpoint"]["airport_iata"],
-    ) == ("JFK", "EWR")
-    with pytest.raises(
-        ValidationError,
-        match="explicit path components must meet at the declared intermediate airport",
-    ):
-        SearchPlan.model_validate(document)
-
-
-def test_known_route_applicability_must_cover_the_component_envelope() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    component = document["explicit_path_hypotheses"][0]["components"][0]
-    edge_id = component["route_edge_id"]
-    component.update(
-        {
-            "route_date_applicability": "known_inclusive_interval",
-            "route_applicable_start": date(2026, 10, 6),
-            "route_applicable_end": date(2026, 10, 6),
-            "date_applicability_disclosure": None,
-        }
-    )
-    for receipt in document["path_exploration_receipts"]:
-        for edge in receipt["available_edge_evidence"]:
-            if edge["edge_id"] == edge_id:
-                edge.update(
+                **_direct_hub(),
+                "scopes": [
                     {
-                        "route_date_applicability": "known_inclusive_interval",
-                        "route_applicable_start": date(2026, 10, 6),
-                        "route_applicable_end": date(2026, 10, 6),
+                        "origin_side": [
+                            {"kind": "origin_access_gateway", "airport_iata": "LAX"}
+                        ],
+                        "destination_side": [
+                            {"kind": "original_destination", "airport_iata": "CDG"}
+                        ],
+                        "reason": "access-referenced synthetic scope",
                     }
-                )
-    with pytest.raises(ValidationError, match="cover the complete component date envelope"):
-        SearchPlan.model_validate(document)
-
-
-def test_path_route_evidence_must_be_canonical_and_in_knowledge_receipt() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
+                ],
+            }
+        ],
     )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    document["explicit_path_hypotheses"][0]["components"][0][
-        "route_evidence_source_ids"
-    ] = ["unknown-route-source"]
-    with pytest.raises(ValidationError, match="knowledge receipt"):
-        SearchPlan.model_validate(document)
-
-
-def test_path_route_evidence_binds_the_actual_directed_airport_pair() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    component = document["explicit_path_hypotheses"][0]["components"][0]
-    edge_id = component["route_edge_id"]
-    for receipt in document["path_exploration_receipts"]:
-        for edge in receipt["available_edge_evidence"]:
-            if edge["edge_id"] == edge_id:
-                edge["destination_airport_fact_id"] = "airport:hnd"
-    with pytest.raises(ValidationError, match="bound directed route evidence"):
-        SearchPlan.model_validate(document)
-
-
-def test_path_exploration_receipts_must_cover_exactly_the_endpoint_pairs() -> None:
-    planned = _plan(_snapshot())
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    document["path_exploration_receipts"] = list(document["path_exploration_receipts"][:-1])
-    with pytest.raises(ValidationError, match="exactly the endpoint probe airport pairs"):
-        SearchPlan.model_validate(document)
-
-
-def test_budget_receipts_must_match_plan_derived_metrics() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    for receipt in document["budget_receipts"]:
-        if receipt["kind"] == BudgetKind.PATH_CANDIDATE_COUNT.value:
-            receipt["observed"] += 1
-            break
-    with pytest.raises(ValidationError, match="plan-derived metrics"):
-        SearchPlan.model_validate(document)
-
-
-def test_physical_component_items_cannot_be_orphans() -> None:
-    planned = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        )
-    )
-    assert planned.plan is not None
-    document = planned.plan.model_dump(mode="python", round_trip=True)
-    orphan = next(
+    _, result = _compile(proposal, origins=("SFO", "SEA"))
+    assert result.plan is not None
+    hubs = [
         item
-        for item in document["award_search_items"]
-        if item["scope"] == SearchScope.EXPLICIT_PHYSICAL_COMPONENT.value
+        for item in result.plan.supplemental_strategies
+        if item.strategy_type is SupplementalStrategyType.SCOPED_HUB
+    ]
+    assert len(hubs) == 1
+    assert len(hubs[0].supported_original_endpoint_pairs) == 2
+    alternative = next(
+        item for item in result.plan.support_alternatives if item.strategy_id == hubs[0].strategy_id
     )
-    orphan = {**orphan, "item_id": "award:orphan-physical-component"}
-    document["award_search_items"] = [*document["award_search_items"], orphan]
-    with pytest.raises(ValidationError, match="linked by an explicit path component"):
-        SearchPlan.model_validate(document)
+    assert alternative.positioning_dependency_ids
+    assert any(item.source_scope is not None for item in result.plan.relationship_dispositions)
 
 
-def test_date_work_budget_rejection_does_not_commit_a_partial_hypothesis() -> None:
-    result = _plan(
-        _snapshot(
-            ("synthetic:sfo-jfk", "airport:sfo", "airport:jfk"),
-            ("synthetic:jfk-hnd", "airport:jfk", "airport:hnd"),
-        ),
-        policy=PlanningPolicy(max_date_expanded_work_days=17),
+def _rehashed(payload: dict[str, object]) -> dict[str, object]:
+    payload["plan_digest"] = hashlib.sha256(
+        json.dumps(
+            {key: value for key, value in payload.items() if key != "plan_digest"},
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+    ).hexdigest()
+    return payload
+
+
+def test_rehashed_graph_tampering_cannot_remove_hub_use_or_positioning_dependency() -> None:
+    proposal = _proposal(
+        origin_access_gateways=[_origin_access("SFO")],
+        intermediate_hubs=[
+            {
+                **_direct_hub(),
+                "scopes": [
+                    {
+                        "origin_side": [
+                            {"kind": "origin_access_gateway", "airport_iata": "LAX"}
+                        ],
+                        "destination_side": [
+                            {"kind": "original_destination", "airport_iata": "CDG"}
+                        ],
+                    }
+                ],
+            }
+        ],
     )
+    _, result = _compile(proposal)
+    assert result.plan is not None
+
+    missing_hub_use = result.plan.model_dump(mode="json", round_trip=True)
+    hub_strategy = next(
+        item for item in result.plan.supplemental_strategies
+        if item.strategy_type is SupplementalStrategyType.SCOPED_HUB
+    )
+    missing_hub_use["strategy_query_uses"] = [
+        item
+        for item in missing_hub_use["strategy_query_uses"]
+        if item["strategy_id"] != hub_strategy.strategy_id or item["sequence"] != 2
+    ]
+    with pytest.raises(ValidationError):
+        CompiledSearchPlan.model_validate(_rehashed(missing_hub_use))
+
+    missing_dependency = result.plan.model_dump(mode="json", round_trip=True)
+    missing_dependency["positioning_dependencies"] = []
+    with pytest.raises(ValidationError):
+        CompiledSearchPlan.model_validate(_rehashed(missing_dependency))
+
+
+def test_rehashed_graph_tampering_cannot_add_disposition_or_exceeded_success_budget() -> None:
+    _, result = _compile(_proposal(origin_access_gateways=[_origin_access("SFO")]))
+    assert result.plan is not None
+
+    extra_disposition = result.plan.model_dump(mode="json", round_trip=True)
+    extra = dict(extra_disposition["relationship_dispositions"][0])
+    extra["relationship_id"] = "f" * 64
+    extra_disposition["relationship_dispositions"].append(extra)
+    extra_disposition["coverage"]["accepted_relationships"] += 1
+    extra_disposition["coverage"]["admitted_relationships"] += 1
+    with pytest.raises(ValidationError):
+        CompiledSearchPlan.model_validate(_rehashed(extra_disposition))
+
+    exceeded = result.plan.model_dump(mode="json", round_trip=True)
+    exceeded["budget_receipts"][3]["limit"] = 0
+    exceeded["budget_receipts"][3]["disposition"] = "exceeded"
+    with pytest.raises(ValidationError):
+        CompiledSearchPlan.model_validate(_rehashed(exceeded))
+
+
+def test_optional_generation_failure_keeps_mandatory_plan_with_reduced_receipt() -> None:
+    discovery, result = _compile(RuntimeError("offline generator unavailable"))
+    assert discovery.outcome is GatewayDiscoveryOutcome.GENERATION_FAILURE
     assert result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
     assert result.plan is not None
-    assert not result.plan.explicit_path_hypotheses
-    assert not any(
-        item.scope is SearchScope.EXPLICIT_PHYSICAL_COMPONENT
-        for item in result.plan.award_search_items
-    )
-    assert any("date-expanded work" in item for item in result.exclusions)
+    assert result.plan.coverage.mandatory_complete
+    assert len(result.plan.logical_queries) == 1
+    assert result.issues[0].code == "gateway_generation_failure"
+
+
+def test_result_contains_no_observed_itinerary_claims() -> None:
+    _, result = _compile(_proposal(intermediate_hubs=[_direct_hub()]))
+    assert result.plan is not None
+    rendered = result.plan.model_dump_json()
+    assert "observed_itinerary" not in rendered
+    assert "research_only_pending_result_validation" in rendered
+    assert "not_schedule_or_connection_evidence" in rendered

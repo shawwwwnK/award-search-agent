@@ -1,241 +1,96 @@
 {
-  "schema_version": "search-planning-golden-v1",
+  "schema_version": "search-planning-golden-v2",
   "fixture_grade_only": true,
-  "knowledge_snapshot_id": "search-planning-seed-v1",
-  "knowledge_snapshot_sha256": "07a2fb97ced2506bd946aed35122dcbf4a4a14a462a29388a92db75f96ec0622",
+  "catalog_release_id": "m1a-3cb7981519612945",
   "capability_id": "seats_aero.cached_search.v1",
   "capability_version": "1.0.0",
   "capability_sha256": "89ecf4bb551945c6784eba9f97fdeb2423bc7ed9f43ddfc2f793047afdd8c4eb",
-  "default_policy_sha256": "982fc0ff28200eaabc96bfa319decbf0b46112cce2fd217e7da4d21e551f5645",
+  "planning_policy_sha256": "f971cee3944010e9f63650d24cc35f39121ba4d6653e01225f392e066f651157",
+  "market_policy_sha256": "4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a",
   "coverage_matrix": {
-    "japan_airport_group": ["japan_sfo_no_onward"],
-    "new_york_city_airport_group": ["nyc_group"],
-    "explicit_airport_preservation": ["japan_sfo_no_onward"],
-    "country_destination_no_onward": ["japan_sfo_no_onward"],
-    "unresolved_and_ambiguous_location": ["unsupported_location", "ambiguous_location"],
-    "knowledge_evidence_failure": ["missing_group_policy", "stale_knowledge"],
-    "directional_path_and_mixed_payment": ["synthetic_directional_path_cash_first"],
-    "deferred_constraint_and_optional_unknown": ["synthetic_directional_path_cash_first"],
-    "temporal_cash_first_boundary": ["synthetic_directional_path_cash_first"],
-    "budget_exhaustion": ["endpoint_budget_exhaustion"],
-    "optional_path_budget_degradation": ["optional_path_budget_omission"],
-    "canonical_output_determinism": ["japan_sfo_reordered"]
+    "mandatory_policy_skip": ["domestic_mandatory"],
+    "optional_empty": ["cross_market_empty"],
+    "optional_failure_degradation": ["cross_market_generation_failure"],
+    "canonical_output_determinism": ["domestic_mandatory_peer"],
+    "identity_and_budget_receipts": ["domestic_mandatory", "cross_market_empty"]
   },
   "cases": [
     {
-      "case_id": "japan_sfo_no_onward",
-      "description": "A country destination produces only selected arrival gateways, not invented domestic onward travel.",
+      "case_id": "domestic_mandatory",
+      "description": "A known single-market request compiles complete mandatory coverage without optional generation.",
+      "gateway_scenario": "policy_skip",
       "request": {
-        "raw_text": "Two business award seats from SFO to Japan October 5 through 7.",
-        "travelers": 2,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
+        "raw_text": "One award seat from SFO to LAX October 5 through 7.",
+        "origins": ["SFO"],
+        "destinations": ["LAX"],
         "departure_start": "2026-10-05",
-        "departure_end": "2026-10-07",
-        "cabins": ["business"]
+        "departure_end": "2026-10-07"
+      },
+      "expected": {
+        "outcome": "planned",
+        "result_sha256": "274d5d6383f8179417321212177ecfd0fafc32706522ba9c37faf07ac342b658",
+        "mandatory_pairs": 1,
+        "logical_queries": 1,
+        "supplemental_strategies": 0
+      }
+    },
+    {
+      "case_id": "domestic_mandatory_peer",
+      "description": "An identical frozen input compiles to identical canonical bytes.",
+      "gateway_scenario": "policy_skip",
+      "canonical_peer_case_id": "domestic_mandatory",
+      "request": {
+        "raw_text": "One award seat from SFO to LAX October 5 through 7.",
+        "origins": ["SFO"],
+        "destinations": ["LAX"],
+        "departure_start": "2026-10-05",
+        "departure_end": "2026-10-07"
+      },
+      "expected": {
+        "outcome": "planned",
+        "result_sha256": "274d5d6383f8179417321212177ecfd0fafc32706522ba9c37faf07ac342b658",
+        "mandatory_pairs": 1,
+        "logical_queries": 1,
+        "supplemental_strategies": 0
+      }
+    },
+    {
+      "case_id": "cross_market_empty",
+      "description": "Successful empty discovery leaves a valid complete mandatory plan.",
+      "gateway_scenario": "success_empty",
+      "request": {
+        "raw_text": "One award seat from SFO to CDG October 5 through 7.",
+        "origins": ["SFO"],
+        "destinations": ["CDG"],
+        "departure_start": "2026-10-05",
+        "departure_end": "2026-10-07"
+      },
+      "expected": {
+        "outcome": "planned",
+        "result_sha256": "29e36ae30a713cf2025f56ba94f78706d7a95ca2e6ce84f6e1d178b3b4207040",
+        "mandatory_pairs": 1,
+        "logical_queries": 1,
+        "supplemental_strategies": 0
+      }
+    },
+    {
+      "case_id": "cross_market_generation_failure",
+      "description": "Optional generation failure is reduced coverage with mandatory work intact.",
+      "gateway_scenario": "generation_failure",
+      "request": {
+        "raw_text": "One award seat from SFO to CDG October 5 through 7.",
+        "origins": ["SFO"],
+        "destinations": ["CDG"],
+        "departure_start": "2026-10-05",
+        "departure_end": "2026-10-07"
       },
       "expected": {
         "outcome": "reduced_coverage",
-        "result_sha256": "903f902fcafdfcec53c0a3ad8317529121e9a7d0b4d1259c1930572224d4bbd3",
-        "endpoint_pairs": ["SFO->HND", "SFO->NRT", "SFO->KIX"],
-        "selected_origin_iata": ["SFO"],
-        "selected_destination_iata": ["HND", "NRT", "KIX"],
-        "path_count": 0,
-        "deferred_constraint_count": 0,
-        "manual_cash_template_count": 0,
-        "expected_repositioning_receipt": true,
-        "no_all_cash_pattern": true
-      }
-    },
-    {
-      "case_id": "nyc_group",
-      "description": "New York City uses its reviewed serving-airport selection group.",
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "city", "value": "NYC"}],
-        "departure_start": "2026-11-01",
-        "departure_end": "2026-11-01"
-      },
-      "expected": {
-        "outcome": "reduced_coverage",
-        "result_sha256": "df2784a80eaec7f2c44cfd5cdc8b738789a8f8e48eae5f0358305d0388892c13",
-        "endpoint_pairs": ["SFO->JFK", "SFO->EWR", "SFO->LGA"],
-        "selected_origin_iata": ["SFO"],
-        "selected_destination_iata": ["JFK", "EWR", "LGA"],
-        "path_count": 0,
-        "deferred_constraint_count": 0,
-        "manual_cash_template_count": 0,
-        "expected_repositioning_receipt": true,
-        "no_all_cash_pattern": true
-      }
-    },
-    {
-      "case_id": "japan_sfo_reordered",
-      "description": "Reordered source records and independent location alternatives have identical canonical output.",
-      "snapshot_variant": "seed_reordered",
-      "canonical_peer_case_id": "japan_sfo_no_onward",
-      "request": {
-        "raw_text": "Two business award seats from SFO to Japan October 5 through 7.",
-        "travelers": 2,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-07",
-        "cabins": ["business"]
-      },
-      "expected": {
-        "outcome": "reduced_coverage",
-        "result_sha256": "903f902fcafdfcec53c0a3ad8317529121e9a7d0b4d1259c1930572224d4bbd3",
-        "endpoint_pairs": ["SFO->HND", "SFO->NRT", "SFO->KIX"],
-        "selected_origin_iata": ["SFO"],
-        "selected_destination_iata": ["HND", "NRT", "KIX"],
-        "path_count": 0,
-        "deferred_constraint_count": 0,
-        "manual_cash_template_count": 0,
-        "expected_repositioning_receipt": true,
-        "no_all_cash_pattern": true
-      }
-    },
-    {
-      "case_id": "unsupported_location",
-      "description": "Unsupported candidates are explicit unplannable grounding outcomes.",
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "city", "value": "Atlantis"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-05"
-      },
-      "expected": {
-        "outcome": "unplannable",
-        "result_sha256": "c0fce994279189fbd8dd804fde395877f39bb9b1bc9b36ba0da22dde525bfc34",
-        "issue_codes": ["unresolved_location"]
-      }
-    },
-    {
-      "case_id": "ambiguous_location",
-      "description": "Ambiguous evidence does not select an airport group.",
-      "snapshot_variant": "ambiguous_japan",
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-05"
-      },
-      "expected": {
-        "outcome": "unplannable",
-        "result_sha256": "7621fd758bef0b4a7f1843c8074cbbde66634e3508535f2e7f39172b57214ddf",
-        "issue_codes": ["ambiguous_location"]
-      }
-    },
-    {
-      "case_id": "missing_group_policy",
-      "description": "Grounded geography without reviewed selection policy is evidence failure.",
-      "snapshot_variant": "without_japan_policy",
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-05"
-      },
-      "expected": {
-        "outcome": "evidence_failure",
-        "result_sha256": "c6bd4da00afad5bcaf51c2887b490d9149ca6484aed83812c0535995bb925768",
-        "issue_codes": ["missing_selection_policy"]
-      }
-    },
-    {
-      "case_id": "stale_knowledge",
-      "description": "Stale fixture evidence produces a typed evidence failure.",
-      "snapshot_variant": "stale_seed",
-      "policy": {"max_source_evidence_age_days": 30},
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-05"
-      },
-      "expected": {
-        "outcome": "evidence_failure",
-        "result_sha256": "2369a8979445b2434459bb7c19c3d301ca78a9e2082b66b625cf2045c0ec637d",
-        "issue_codes": ["stale_knowledge", "stale_knowledge"]
-      }
-    },
-    {
-      "case_id": "synthetic_directional_path_cash_first",
-      "description": "Synthetic directed topology yields a two-component path and reuses it for award/cash annotations.",
-      "snapshot_variant": "synthetic_path",
-      "request": {
-        "travelers": 2,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-07",
-        "cabins": ["business"],
-        "search_modes": ["award", "cash"],
-        "repositioning_allowed": false,
-        "hard_constraints": ["Avoid overnight layovers"],
-        "unknown_fields": ["seat_style"]
-      },
-      "expected": {
-        "outcome": "reduced_coverage",
-        "result_sha256": "f2644ce55a83f3f4b1138383044c817d5e3921d25e5e2b0c621106fdb4261046",
-        "endpoint_pairs": ["SFO->HND", "SFO->NRT", "SFO->KIX"],
-        "selected_origin_iata": ["SFO"],
-        "selected_destination_iata": ["HND", "NRT", "KIX"],
-        "path_count": 1,
-        "deferred_constraint_count": 1,
-        "manual_cash_template_count": 2,
-        "expected_repositioning_receipt": true,
-        "no_all_cash_pattern": true
-      }
-    },
-    {
-      "case_id": "endpoint_budget_exhaustion",
-      "description": "Required endpoint scope is not silently pruned when its pair budget is exceeded.",
-      "policy": {"max_endpoint_pairs": 2},
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-05"
-      },
-      "expected": {
-        "outcome": "unplannable",
-        "result_sha256": "6f50999cbe4f2f652c32aec42c1b66480b8d3a175f2e7b1f240ae1d54c1327f0",
-        "issue_codes": ["endpoint_pair_budget_exceeded"]
-      }
-    },
-    {
-      "case_id": "optional_path_budget_omission",
-      "description": "A zero optional path budget omits path expansion while retaining all endpoint probes and budget receipts.",
-      "snapshot_variant": "synthetic_path",
-      "policy": {"max_path_candidate_exploration": 0},
-      "request": {
-        "travelers": 1,
-        "origins": [{"kind": "airport", "value": "SFO"}],
-        "destinations": [{"kind": "country", "value": "Japan"}],
-        "departure_start": "2026-10-05",
-        "departure_end": "2026-10-05"
-      },
-      "expected": {
-        "outcome": "reduced_coverage",
-        "result_sha256": "e34d8953cafc96288d43627aa4c58c871d5eb80dfb346e6c4ab581a15ee06337",
-        "endpoint_pairs": ["SFO->HND", "SFO->NRT", "SFO->KIX"],
-        "selected_origin_iata": ["SFO"],
-        "selected_destination_iata": ["HND", "NRT", "KIX"],
-        "path_count": 0,
-        "endpoint_probe_count": 3,
-        "budget_receipt_count": 6,
-        "path_candidate_budget_observed": 0,
-        "path_candidate_budget_limit": 0,
-        "expected_repositioning_receipt": true,
-        "no_all_cash_pattern": true
+        "result_sha256": "d46adc03652cbb2d17d11479a918aa14b5d73ff27419d22faed80965beed0b6d",
+        "mandatory_pairs": 1,
+        "logical_queries": 1,
+        "supplemental_strategies": 0,
+        "issue_codes": ["gateway_generation_failure"]
       }
     }
   ]

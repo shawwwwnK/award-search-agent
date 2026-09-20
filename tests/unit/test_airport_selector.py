@@ -11,11 +11,11 @@ from test_catalog_serving import _location, _ready_envelope, _release
 
 from award_agent.domain import LocationKind
 from award_agent.search_planning import (
+    DEFAULT_GATEWAY_DISCOVERY_GENERATOR_CONFIGURATION,
     ORIGINAL_SIMPLE_AIRPORT_SELECTOR_PROMPT,
     AirportCandidateDisposition,
     AirportIdentityStatus,
     AirportSelectionCapPolicy,
-    AirportSelectionPlanningInput,
     AirportSelectionProposal,
     AirportSelectionProposalOutcome,
     AirportSelectorModelInput,
@@ -23,18 +23,24 @@ from award_agent.search_planning import (
     CityAirportDistanceConsistency,
     CityAirportDistanceStatus,
     CityServingStatus,
+    GatewayDiscoveryInput,
+    GatewayOutboundDateContext,
     GeographicMembershipStatus,
+    M2ASelectionRecordSource,
     OpenAIAirportSelector,
     OpenAIAirportSelectorConfig,
     OpenAIAirportSelectorError,
     PlanningPolicy,
     ResolvedEntityContext,
+    SearchPlanningInput,
     SearchPlanningOutcome,
     airport_selection_record_digest,
     context_for_resolved_location,
+    discover_gateway_candidates,
     ground_endpoint,
     load_default_cached_search_capability,
-    plan_searches_from_airport_selection_records,
+    load_default_planning_market_policy,
+    plan_searches,
     validate_airport_selection_proposal,
 )
 
@@ -71,6 +77,60 @@ def _context(
 ) -> ResolvedEntityContext:
     result = ground_endpoint(_location(kind, value), "origin", repository, PlanningPolicy())
     return context_for_resolved_location(result.resolution, repository)
+
+
+def _plan_records(
+    *,
+    repository: CatalogKnowledgeRepository,
+    origin: object,
+    destination: object,
+    origin_record: object,
+    destination_record: object,
+    cap_policy: AirportSelectionCapPolicy,
+    distance_policy: CityAirportDistanceConsistency,
+):
+    records = (origin_record, destination_record)
+    record_digests = tuple(
+        sorted(airport_selection_record_digest(record) for record in records)
+    )
+    market_policy = load_default_planning_market_policy().model_copy(
+        update={"airport_overrides": ()}
+    )
+    envelope = _ready_envelope(origin, destination)
+    request = envelope.effective_request
+    assert request.departure_window is not None
+    discovery = discover_gateway_candidates(
+        discovery_input=GatewayDiscoveryInput(
+            origin_endpoints=origin_record.accepted_airports,
+            destination_endpoints=destination_record.accepted_airports,
+            outbound_date=GatewayOutboundDateContext(
+                start=request.departure_window.start,
+                end=request.departure_window.end,
+                timezone=request.context.timezone,
+                effective_window_precision=request.departure_window.precision.value,
+            ),
+            upstream_selection_record_digests=record_digests,
+        ),
+        policy=market_policy,
+        repository=repository,
+        generator_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("single-market replay must not generate")
+        ),
+        generator_configuration=DEFAULT_GATEWAY_DISCOVERY_GENERATOR_CONFIGURATION,
+    )
+    return plan_searches(
+        SearchPlanningInput(
+            envelope=envelope,
+            endpoint_source=M2ASelectionRecordSource(selection_records=records),
+            gateway_discovery_result=discovery,
+            capability=load_default_cached_search_capability(),
+        ),
+        selection_cap_policy=cap_policy,
+        selection_distance_policy=distance_policy,
+        policy=PlanningPolicy(max_source_evidence_age_days=3650),
+        market_policy=market_policy,
+        repository=repository,
+    )
 
 
 def test_openai_adapter_uses_structured_output_storage_off_and_private_capture() -> None:
@@ -270,40 +330,35 @@ def test_planning_replays_supplied_records_without_model_and_binds_record_identi
             model="offline-test",
             repository=repository,
         )
-        result = plan_searches_from_airport_selection_records(
-            AirportSelectionPlanningInput(
-                envelope=_ready_envelope(origin, destination),
-                selection_records=(origin_record, destination_record),
-            ),
-            selection_cap_policy=policy,
-            distance_policy=distance,
-            policy=PlanningPolicy(max_source_evidence_age_days=3650),
-            capability=load_default_cached_search_capability(),
+        result = _plan_records(
             repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=origin_record,
+            destination_record=destination_record,
+            cap_policy=policy,
+            distance_policy=distance,
         )
-        assert result.planning_result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
-        assert result.planning_result.plan is not None
+        assert result.outcome is SearchPlanningOutcome.PLANNED
+        assert result.plan is not None
         assert airport_selection_record_digest(origin_record) != airport_selection_record_digest(
             destination_record
         )
         assert {
-            item.selection.kind.value
-            for item in result.planning_result.plan.location_results
-            if item.selection
+            item.selection_kind.value
+            for item in result.plan.endpoint_selections
         } == {"model_proposed"}
 
-        stale_policy_result = plan_searches_from_airport_selection_records(
-            AirportSelectionPlanningInput(
-                envelope=_ready_envelope(origin, destination),
-                selection_records=(origin_record, destination_record),
-            ),
-            selection_cap_policy=AirportSelectionCapPolicy(policy_version="other-policy"),
-            distance_policy=distance,
-            policy=PlanningPolicy(max_source_evidence_age_days=3650),
-            capability=load_default_cached_search_capability(),
+        stale_policy_result = _plan_records(
             repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=origin_record,
+            destination_record=destination_record,
+            cap_policy=AirportSelectionCapPolicy(policy_version="other-policy"),
+            distance_policy=distance,
         )
-        assert stale_policy_result.planning_result.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
+        assert stale_policy_result.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
 
 
 def test_replay_revalidates_forged_distance_and_binds_audit_identity(tmp_path: Path) -> None:
@@ -331,34 +386,35 @@ def test_replay_revalidates_forged_distance_and_binds_audit_identity(tmp_path: P
             model="offline-test",
             repository=repository,
         )
-        valid_input = AirportSelectionPlanningInput(
-            envelope=_ready_envelope(origin, destination),
-            selection_records=(origin_record, destination_record),
-        )
-        valid = plan_searches_from_airport_selection_records(
-            valid_input,
-            selection_cap_policy=policy,
-            distance_policy=distance,
-            policy=PlanningPolicy(max_source_evidence_age_days=3650),
-            capability=load_default_cached_search_capability(),
+        valid = _plan_records(
             repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=origin_record,
+            destination_record=destination_record,
+            cap_policy=policy,
+            distance_policy=distance,
         )
         altered_record = origin_record.model_copy(
             update={
                 "model": "different-pinned-model",
             }
         )
-        altered = plan_searches_from_airport_selection_records(
-            valid_input.model_copy(
-                update={"selection_records": (altered_record, destination_record)}
-            ),
-            selection_cap_policy=policy,
-            distance_policy=distance,
-            policy=PlanningPolicy(max_source_evidence_age_days=3650),
-            capability=load_default_cached_search_capability(),
+        altered = _plan_records(
             repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=altered_record,
+            destination_record=destination_record,
+            cap_policy=policy,
+            distance_policy=distance,
         )
-        assert valid.replay_receipt.record_digests != altered.replay_receipt.record_digests
+        assert valid.plan is not None
+        assert altered.plan is not None
+        assert (
+            valid.plan.endpoint_selection_binding.record_digests
+            != altered.plan.endpoint_selection_binding.record_digests
+        )
 
         original_candidate = origin_record.candidate_validations[0]
         assert original_candidate.city_distance is not None
@@ -372,17 +428,16 @@ def test_replay_revalidates_forged_distance_and_binds_audit_identity(tmp_path: P
         forged_record = origin_record.model_copy(
             update={"candidate_validations": (forged_candidate,)}
         )
-        forged = plan_searches_from_airport_selection_records(
-            valid_input.model_copy(
-                update={"selection_records": (forged_record, destination_record)}
-            ),
-            selection_cap_policy=policy,
-            distance_policy=distance,
-            policy=PlanningPolicy(max_source_evidence_age_days=3650),
-            capability=load_default_cached_search_capability(),
+        forged = _plan_records(
             repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=forged_record,
+            destination_record=destination_record,
+            cap_policy=policy,
+            distance_policy=distance,
         )
-        assert forged.planning_result.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
+        assert forged.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
 
         destination_candidate = destination_record.candidate_validations[0].model_copy(
             update={"geographic_membership": GeographicMembershipStatus.CONTRADICTED}
@@ -390,14 +445,13 @@ def test_replay_revalidates_forged_distance_and_binds_audit_identity(tmp_path: P
         membership_forged = destination_record.model_copy(
             update={"candidate_validations": (destination_candidate,)}
         )
-        forged_membership = plan_searches_from_airport_selection_records(
-            valid_input.model_copy(
-                update={"selection_records": (origin_record, membership_forged)}
-            ),
-            selection_cap_policy=policy,
-            distance_policy=distance,
-            policy=PlanningPolicy(max_source_evidence_age_days=3650),
-            capability=load_default_cached_search_capability(),
+        forged_membership = _plan_records(
             repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=origin_record,
+            destination_record=membership_forged,
+            cap_policy=policy,
+            distance_policy=distance,
         )
-        assert forged_membership.planning_result.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
+        assert forged_membership.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE

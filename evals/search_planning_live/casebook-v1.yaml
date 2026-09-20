@@ -1,0 +1,119 @@
+contract_version: search-planning-live-casebook-v1
+development_only: true
+casebook_id: m2a_m2b_m2c_integrated_development_v1
+catalog:
+  release_id: m1a-3cb7981519612945
+  logical_content_sha256: 8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8
+airport_selection_policy:
+  version: airport-selection-cap-v1
+  digest: a3b493cc8c271e78217d99dcc89bcfa7eb8089bb7310a6f2489ae5d9cd915256
+distance_policy:
+  version: city-airport-distance-consistency-v1
+  digest: 1ac4c7c443453db2354e95d852c8c493ce0e0897873c1a4f6fd70bf3350e75c3
+market_policy:
+  version: planning-market-v1
+  digest: 4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a
+capability:
+  id: seats_aero.cached_search.v1
+  version: 1.0.0
+  digest: 89ecf4bb551945c6784eba9f97fdeb2423bc7ed9f43ddfc2f793047afdd8c4eb
+live_bounds:
+  intent_model: gpt-5.6-luna
+  clarification_model: gpt-5.6-luna
+  selector_model: gpt-5.6-luna
+  gateway_model: gpt-5.6-luna
+  max_trials: 2
+  max_calls_per_trial: 28
+  max_calls_total: 56
+cases:
+  - id: direct_sfo_to_nrt
+    review_focus: Direct grounding with a cross-market M2B proposal and M2C compilation.
+    raw_request: One traveler needs a business award seat from SFO to NRT, departing March 10 through March 12, 2027.
+    reference_date: 2026-09-19
+    clarification_answers: []
+    expected_trajectory: plan
+    origins:
+      - {kind: airport, value: SFO}
+    destinations:
+      - {kind: airport, value: NRT}
+    departure: {start: 2027-03-10, end: 2027-03-12, timezone: America/Los_Angeles}
+    travelers: 1
+    cabins: [business]
+    positioning_allowed: null
+    gateway_call_possible: true
+  - id: united_states_to_japan
+    review_focus: Complete M2A to M2B to M2C path with unknown positioning permission.
+    raw_request: Two travelers need business award seats from the United States to Japan, departing March 10 through March 12, 2027.
+    reference_date: 2026-09-19
+    clarification_answers: []
+    expected_trajectory: plan
+    origins:
+      - {kind: country, value: United States, entity_id: "geonames:6252001"}
+    destinations:
+      - {kind: country, value: Japan, entity_id: "geonames:1861060"}
+    departure: {start: 2027-03-10, end: 2027-03-12, timezone: America/Los_Angeles}
+    travelers: 2
+    cabins: [business]
+    positioning_allowed: null
+    gateway_call_possible: true
+  - id: lyon_city_to_france
+    review_focus: Same-market deterministic M2B skip and mandatory-only M2C plan.
+    raw_request: One traveler needs a business award seat from Lyon to France, departing April 5 through April 7, 2027, and refuses positioning flights.
+    reference_date: 2026-09-19
+    clarification_answers: []
+    expected_trajectory: plan
+    origins:
+      - {kind: city, value: Lyon, entity_id: "geonames:2996944"}
+    destinations:
+      - {kind: country, value: France, entity_id: "geonames:3017382"}
+    departure: {start: 2027-04-05, end: 2027-04-07, timezone: Europe/Paris}
+    travelers: 1
+    cabins: [business]
+    positioning_allowed: false
+    gateway_call_possible: false
+  - id: united_states_to_india
+    review_focus: High-fanout endpoint selection and relationship/query budgeting.
+    raw_request: Two travelers need business award seats from the United States to India, departing May 12 through May 14, 2027, and permit positioning flights.
+    reference_date: 2026-09-19
+    clarification_answers: []
+    expected_trajectory: plan
+    origins:
+      - {kind: country, value: United States, entity_id: "geonames:6252001"}
+    destinations:
+      - {kind: country, value: India, entity_id: "geonames:1269750"}
+    departure: {start: 2027-05-12, end: 2027-05-14, timezone: America/Los_Angeles}
+    travelers: 2
+    cabins: [business]
+    positioning_allowed: true
+    gateway_call_possible: true
+  - id: united_states_to_japan_clarified_date
+    review_focus: Production clarification supplies the missing outbound window before planning.
+    raw_request: Two travelers need business award seats from the United States to Japan.
+    reference_date: 2026-09-19
+    clarification_answers:
+      - March 10 through March 12, 2027.
+    expected_trajectory: plan
+    origins:
+      - {kind: country, value: United States, entity_id: "geonames:6252001"}
+    destinations:
+      - {kind: country, value: Japan, entity_id: "geonames:1861060"}
+    departure: {start: 2027-03-10, end: 2027-03-12, timezone: America/Los_Angeles}
+    travelers: 2
+    cabins: [business]
+    positioning_allowed: null
+    gateway_call_possible: true
+  - id: cash_only_scope_stop
+    review_focus: Frozen ADR 0016 cash-only scope stops before search planning.
+    raw_request: One traveler wants a cash-only seat from SFO to NRT, departing March 10 through March 12, 2027.
+    reference_date: 2026-09-19
+    clarification_answers: []
+    expected_trajectory: upstream_blocked
+    origins:
+      - {kind: airport, value: SFO}
+    destinations:
+      - {kind: airport, value: NRT}
+    departure: {start: 2027-03-10, end: 2027-03-12, timezone: America/Los_Angeles}
+    travelers: 1
+    cabins: [business]
+    positioning_allowed: null
+    gateway_call_possible: false

@@ -13,7 +13,8 @@ from enum import Enum
 from pydantic import Field, model_validator
 
 from award_agent.domain import EffectiveRequest
-from award_agent.search_planning.contracts import PlanningContractModel, SearchPlan
+from award_agent.search_planning.compilation_contracts import CompiledSearchPlan
+from award_agent.search_planning.contracts import PlanningContractModel
 from award_agent.search_planning.planner import effective_request_digest
 
 
@@ -21,6 +22,7 @@ class PlanHandoffStatus(str, Enum):
     CURRENT = "current"
     STALE_SESSION_OR_REVISION = "stale_session_or_revision"
     STALE_EFFECTIVE_REQUEST = "stale_effective_request"
+    STALE_PLANNING_BINDINGS = "stale_planning_bindings"
 
 
 class PlanHandoffCheck(PlanningContractModel):
@@ -33,6 +35,8 @@ class PlanHandoffCheck(PlanningContractModel):
     current_revision: int = Field(ge=0)
     plan_effective_request_digest: str = Field(min_length=1)
     current_effective_request_digest: str = Field(min_length=1)
+    plan_compilation_binding_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    expected_compilation_binding_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
     executable: bool | None = None
 
     @model_validator(mode="after")
@@ -52,6 +56,8 @@ class PlanHandoffCheck(PlanningContractModel):
             expected_status = PlanHandoffStatus.STALE_SESSION_OR_REVISION
         elif self.plan_effective_request_digest != self.current_effective_request_digest:
             expected_status = PlanHandoffStatus.STALE_EFFECTIVE_REQUEST
+        elif self.plan_compilation_binding_digest != self.expected_compilation_binding_digest:
+            expected_status = PlanHandoffStatus.STALE_PLANNING_BINDINGS
         else:
             expected_status = PlanHandoffStatus.CURRENT
         if self.status is not expected_status:
@@ -67,11 +73,12 @@ class PlanHandoffCheck(PlanningContractModel):
 
 
 def check_plan_handoff(
-    plan: SearchPlan,
+    plan: CompiledSearchPlan,
     *,
     current_session_id: str,
     current_revision: int,
     current_effective_request: EffectiveRequest,
+    expected_compilation_binding_digest: str,
 ) -> PlanHandoffCheck:
     """Classify plan freshness without mutating the plan or session value.
 
@@ -89,6 +96,8 @@ def check_plan_handoff(
         status = PlanHandoffStatus.STALE_SESSION_OR_REVISION
     elif identity.effective_request_digest != current_digest:
         status = PlanHandoffStatus.STALE_EFFECTIVE_REQUEST
+    elif identity.compilation_binding_digest != expected_compilation_binding_digest:
+        status = PlanHandoffStatus.STALE_PLANNING_BINDINGS
     else:
         status = PlanHandoffStatus.CURRENT
     return PlanHandoffCheck(
@@ -99,6 +108,8 @@ def check_plan_handoff(
         current_revision=current_revision,
         plan_effective_request_digest=identity.effective_request_digest,
         current_effective_request_digest=current_digest,
+        plan_compilation_binding_digest=identity.compilation_binding_digest,
+        expected_compilation_binding_digest=expected_compilation_binding_digest,
     )
 
 

@@ -2,18 +2,29 @@
 
 Award Travel Agent is an independent portfolio project for building a narrow, measurable award-search workflow that turns vague travel requests into grounded, traceable recommendations. The request-understanding slice is implemented and frozen behind explicit interfaces and evaluation cases; later work can build the downstream search workflow on that boundary.
 
+See [DEFERRED.md](DEFERRED.md) for work intentionally parked until the core workflow
+is complete, its revisit triggers, and prerequisites that must be met before
+making broader claims. The [pre-2C architecture and engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md)
+records the design input used for the implemented compiler; recommendations outside the accepted
+2C boundary remain advisory.
+For proposed goals, completion evidence, and sequencing for each remaining stage, read
+[Future stage goals](docs/reviews/2026-09-19-future-stage-goals.md). This is advisory;
+it does not open implementation work.
+
 ## Current milestone
 
-Milestone 2B gateway-airport discovery — implemented and owner-closed on 2026-09-19. Milestone 2C
-is deferred until explicitly opened. The prompt-v6/casebook-v3 diagnostic is mechanically complete;
-independent human semantic qualification is not claimed.
+Milestone 2B gateway-airport discovery is implemented and owner-closed. Milestone 2C deterministic
+search-strategy compilation is implemented in place, with no V1 compatibility path. Its integrated
+live diagnostic is model-only: the compiler itself makes no additional model call, and neither the
+compiler nor the diagnostic calls a travel provider. Independent human semantic qualification and
+provider/product qualification are not claimed.
 
 The frozen upstream boundary uses one-way award-only request semantics. A ready request requires
 origin, destination, an outbound departure window, and traveler
 count. Return dates and durations receive visible guidance to submit a separate one-way request;
 cash-only requests are unsupported; mixed award-and-cash requests remain eligible for award search
 without implying cash pricing is available. The deterministic, retrieval-backed
-`EffectiveRequest -> SearchPlan` boundary is implemented and qualified for its declared checked-in
+`EffectiveRequest -> CompiledSearchPlan` boundary is implemented and offline verified for its declared checked-in
 fixture coverage. Milestone 1 supplied the reviewed, versioned local GeoNames/OurAirports catalog.
 Milestone 2A implemented bounded model-proposed endpoint-airport selection, but it remains
 diagnostic-only pending independent human review, holdout evidence, and an adoption decision. The
@@ -29,17 +40,20 @@ intermediate-market diversity quota. The prompt-v5/casebook-v2 and first prompt-
 historical diagnostics, not semantic qualification. The final prompt-v6/casebook-v3 run recorded 46
 case-trials and 42/42 calls across two trials, with 82 accepted candidates, 43 scopes, and 400 accepted
 relationships; one PNH catalog-absence rejection and three market-mismatch advisories were retained.
-Provider execution remains later; this cut ends before 2C
-search-strategy compilation, a Seats.aero API call, provider payload mapping, result normalization,
-or ranking. See the
+The provider-neutral compiler preserves pair-level logical coverage; grouped provider requests are
+a downstream projection. Provider execution remains later, including Seats.aero API calls, provider
+payload mapping, result normalization, and ranking. See the
 [search-planning stage brief](docs/handoffs/2026-09-10-search-plan-design-stage.md) and
 [`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md),
-[`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md), plus the
+[`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md),
+[`ADR 0021`](docs/adr/0021-deterministic-search-strategy-compilation.md), plus the
 [Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) and
 [Milestone 2B implementation brief](docs/handoffs/2026-09-17-m2b-gateway-airport-discovery-opened.md), and the
 [2B evaluation protocol](docs/evaluation/gateway-discovery-evaluation-protocol.md). The durable
 [Milestone 2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md) records
-the final design, evidence, limitations, and later-stage inheritances.
+the final design, evidence, limitations, and later-stage inheritances. The
+[Milestone 2C implementation record](docs/build-log/2026-09-19-m2c-implementation.md) records the
+compiler boundary, verification, and model-only integrated diagnostic.
 
 The initial request-understanding turn now uses the ADR 0017 semantic boundary:
 

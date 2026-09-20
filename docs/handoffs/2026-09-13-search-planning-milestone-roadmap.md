@@ -22,6 +22,11 @@ knowledge snapshots. It must not reparse conversation text, alter request or
 session state, reinterpret temporal contributions, call an award or cash
 provider, or claim cash-search coverage.
 
+For a later advisory reassessment of the remaining stage goals and sequencing, see
+[Future stage goals (2026-09-19)](../reviews/2026-09-19-future-stage-goals.md).
+It proposes earlier provider/result feedback and sharper completion criteria; it does not
+supersede this roadmap or authorize implementation.
+
 ## Milestone 0 — fixture-qualified planning boundary (complete)
 
 ### Achievement
@@ -374,12 +379,21 @@ Satisfied for stage closure by the approved mechanism, offline verification, bou
 diagnostic, artifact audit, independent AI semantic review, and the owner's explicit close decision.
 This is not a claim of verified connectivity or independent human semantic qualification.
 
-### Milestone 2C — search-strategy compilation (deferred; not opened)
+### Milestone 2C — search-strategy compilation (implemented; offline verified)
+
+The owner subsequently authorized implementation of the
+[detailed plan](2026-09-19-m2c-search-strategy-compilation-plan.md), delegated the numerical
+compiler-limit decision to the parent/architect, and chose in-place planner replacement with no V1
+compatibility path. The provider-neutral deterministic compiler is implemented and offline verified.
+Its integrated live diagnostic is model-only; no travel-provider call is part of 2C. The
+[implementation record](../build-log/2026-09-19-m2c-implementation.md) preserves the verification
+and review evidence. Architecture and future-stage recommendations outside the accepted compiler
+boundary remain advisory.
 
 #### Objective
 
 Compile selected endpoint airport sets and optional gateway candidates into a
-provider-neutral `SearchPlan` that retains direct endpoint-market award searches
+provider-neutral `CompiledSearchPlan` that retains direct endpoint-market award searches
 and adds bounded supplemental award-search strategies.
 
 #### Components
@@ -402,11 +416,11 @@ and adds bounded supplemental award-search strategies.
 
 #### Decision gate
 
-Milestone 2 is ready for owner review when the declared coverage can progress
-end-to-end from supported geography through selected endpoint airports to
-mandatory direct and optional supplemental award-search strategies, with
-bounded work, provenance, and truthful coverage outcomes. It must not call a
-provider or claim a returned itinerary, award seat, or bookable journey.
+The implemented stage progresses declared coverage from supported geography through selected
+endpoint airports to mandatory direct and bounded supplemental logical queries, with provenance,
+obligations, omission receipts, and replay identity. Its offline gate and model-only integrated
+diagnostic do not qualify M2A, provider compatibility, a returned itinerary, an award seat, or a
+bookable journey. Provider request execution and result validation require a separately opened cut.
 
 ## Milestone 3 — reviewed strategy documents and RAG-assisted authoring
 

@@ -147,6 +147,7 @@ class AirportSelectionKind(str, Enum):
     NAMED_AIRPORT = "named_airport"
     GEOGRAPHIC_GROUP = "geographic_group"
     MODEL_PROPOSED = "model_proposed"
+    REVIEWED_MAPPING = "reviewed_mapping"
 
 
 class SelectedAirport(PlanningContractModel):

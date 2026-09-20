@@ -1,0 +1,1004 @@
+{
+  "schema_version": "search_planning_live_eval_v1",
+  "diagnostic_only": true,
+  "generated_at": "2026-09-20T05:25:46.416224+00:00",
+  "preflight_only": false,
+  "full_run": true,
+  "run_kind": "full",
+  "models": {
+    "intent": "gpt-5.6-luna",
+    "clarification": "gpt-5.6-luna",
+    "selector": "gpt-5.6-luna",
+    "gateway_generator": "gpt-5.6-luna"
+  },
+  "casebook": {
+    "path": "evals/search_planning_live/casebook-v1.yaml",
+    "sha256": "e2ef7a31ded08ec6d5f3fde23927e52495d25546a5b591436e09a8f6fadaa9b8",
+    "contract_version": "search-planning-live-casebook-v1",
+    "case_count": 6
+  },
+  "selected_case_ids": [
+    "direct_sfo_to_nrt",
+    "united_states_to_japan",
+    "paris_city_to_france",
+    "united_states_to_india",
+    "united_states_to_japan_clarified_date",
+    "cash_only_scope_stop"
+  ],
+  "trials": 2,
+  "call_plan": {
+    "full_casebook_per_trial": 28,
+    "selected_total": 56,
+    "maximum_total": 56
+  },
+  "catalog": {
+    "release_id": "m1a-3cb7981519612945",
+    "schema_version": "2",
+    "source_date": "2026-09-16",
+    "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+    "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+    "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+    "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+    "source_artifacts": [
+      {
+        "artifact_name": "geonames_admin_corroboration.tsv",
+        "bytes": 929394,
+        "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+      },
+      {
+        "artifact_name": "geonames_airport_candidates.tsv",
+        "bytes": 2850011,
+        "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+      },
+      {
+        "artifact_name": "geonames_base_aliases.tsv",
+        "bytes": 21827498,
+        "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+      },
+      {
+        "artifact_name": "geonames_current_aliases.tsv",
+        "bytes": 83772542,
+        "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+      },
+      {
+        "artifact_name": "geonames_entities.tsv",
+        "bytes": 44512173,
+        "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+      },
+      {
+        "artifact_name": "geonames_iata_crossrefs.tsv",
+        "bytes": 215122,
+        "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+      },
+      {
+        "artifact_name": "ourairports_airports.csv",
+        "bytes": 671715,
+        "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+      },
+      {
+        "artifact_name": "ourairports_countries.csv",
+        "bytes": 22165,
+        "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+      },
+      {
+        "artifact_name": "ourairports_regions.csv",
+        "bytes": 433835,
+        "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+      },
+      {
+        "artifact_name": "quarantine.tsv",
+        "bytes": 48,
+        "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+      },
+      {
+        "artifact_name": "source_raw_records.tsv",
+        "bytes": 294913570,
+        "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+      },
+      {
+        "artifact_name": "source_schemas.json",
+        "bytes": 1735,
+        "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+      }
+    ]
+  },
+  "identities": {
+    "airport_selection_policy": [
+      "airport-selection-cap-v1",
+      "a3b493cc8c271e78217d99dcc89bcfa7eb8089bb7310a6f2489ae5d9cd915256"
+    ],
+    "distance_policy": [
+      "city-airport-distance-consistency-v1",
+      "1ac4c7c443453db2354e95d852c8c493ce0e0897873c1a4f6fd70bf3350e75c3"
+    ],
+    "market_policy": [
+      "planning-market-v1",
+      "4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a"
+    ],
+    "capability": [
+      "seats_aero.cached_search.v1",
+      "1.0.0",
+      "89ecf4bb551945c6784eba9f97fdeb2423bc7ed9f43ddfc2f793047afdd8c4eb"
+    ]
+  },
+  "compiler_policy": {
+    "policy_version": "search-planning-compilation-v1",
+    "max_automatic_group_airports": 3,
+    "hard_max_automatic_group_airports": 5,
+    "knowledge_freshness_policy_version": "knowledge-freshness-v1",
+    "max_source_evidence_age_days": 365,
+    "max_input_window_days": 31,
+    "max_mandatory_endpoint_pairs": 100,
+    "max_supplemental_relationship_bundles": 24,
+    "max_unique_logical_queries": 128,
+    "max_query_date_days": 4000,
+    "strategy_type_priority": [
+      "origin_access",
+      "destination_access",
+      "scoped_hub"
+    ],
+    "later_component_start_offset_days": -1,
+    "later_component_end_offset_days": 2
+  },
+  "records": [
+    {
+      "id": "direct_sfo_to_nrt",
+      "trial": 1,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 0,
+        "clarification_turns": 0
+      },
+      "m2a": {
+        "record_bindings": [],
+        "accepted_endpoints": {
+          "origins": [
+            "SFO"
+          ],
+          "destinations": [
+            "NRT"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "67ce8d11f5884c46d898dec4f4e89f40e62c75d7821c2a1e49962a8ae1bf1605",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 1,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "e0bf4dfd09eeb4bb872c8377f4d0e395cb4050d7dc289851cb9eee01e6257df8",
+        "mandatory_pairs": 1,
+        "mandatory_complete": true,
+        "accepted_relationships": 1,
+        "admitted_relationships": 1,
+        "omitted_budget_relationships": 0,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 3,
+        "query_date_days": 12,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:direct_sfo_to_nrt:1",
+        "plan_revision": 0,
+        "current_session_id": "live:direct_sfo_to_nrt:1",
+        "current_revision": 0,
+        "plan_effective_request_digest": "24181054f4dfbcc91882e920a2d9d98eb4649a84d7b3db12e2f6d62fcc9f549a",
+        "current_effective_request_digest": "24181054f4dfbcc91882e920a2d9d98eb4649a84d7b3db12e2f6d62fcc9f549a",
+        "plan_compilation_binding_digest": "d4c8277a0d807305bfdfa56c3204e165e045f284743ac0202e6632f948c37ec7",
+        "expected_compilation_binding_digest": "d4c8277a0d807305bfdfa56c3204e165e045f284743ac0202e6632f948c37ec7",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/direct_sfo_to_nrt__trial-1__source-bundle.json",
+      "latency_seconds": 16.619,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 3,
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/direct_sfo_to_nrt__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/direct_sfo_to_nrt__trial-1__records.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "united_states_to_japan",
+      "trial": 1,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 0,
+        "clarification_turns": 0
+      },
+      "m2a": {
+        "record_bindings": [
+          {
+            "upstream_record_id": "m2a:united_states_to_japan:origin:geonames:6252001",
+            "record_digest": "ce4d579718a1e76107ae7413c3203836713c293f0761e3c046a11a420b60d977"
+          },
+          {
+            "upstream_record_id": "m2a:united_states_to_japan:destination:geonames:1861060",
+            "record_digest": "cd6a33fe1ae7b304f33e3397ad6cbbc625c10ad97f32f7c6bd7fd8ec24d9c519"
+          }
+        ],
+        "accepted_endpoints": {
+          "origins": [
+            "ATL",
+            "LAX",
+            "ORD",
+            "DFW",
+            "DEN",
+            "SEA",
+            "SFO",
+            "JFK",
+            "MIA",
+            "IAH"
+          ],
+          "destinations": [
+            "HND",
+            "NRT",
+            "KIX",
+            "CTS"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "338967fa66f499f9a043b02679a6b2eace8b7bfe7f09fcc47a7a83a2a42d73d1",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 80,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "reduced_coverage",
+        "plan_digest": "05bba5ecbc03a00bc96dfe6911603be9f0c6cc9742983bfc67d4f65320625be0",
+        "mandatory_pairs": 40,
+        "mandatory_complete": true,
+        "accepted_relationships": 80,
+        "admitted_relationships": 24,
+        "omitted_budget_relationships": 56,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 50,
+        "query_date_days": 162,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:united_states_to_japan:1",
+        "plan_revision": 0,
+        "current_session_id": "live:united_states_to_japan:1",
+        "current_revision": 0,
+        "plan_effective_request_digest": "dd7161b6caea52beddd8cf2a47ec476da9b36dfc3e636d09f863b793508cde6f",
+        "current_effective_request_digest": "dd7161b6caea52beddd8cf2a47ec476da9b36dfc3e636d09f863b793508cde6f",
+        "plan_compilation_binding_digest": "c4d0fd0f5750d98deecbbfa071f574d4c4ef84c81c4709a6c8986fbd62be4039",
+        "expected_compilation_binding_digest": "c4d0fd0f5750d98deecbbfa071f574d4c4ef84c81c4709a6c8986fbd62be4039",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan__trial-1__source-bundle.json",
+      "latency_seconds": 41.416,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 5,
+        "attempted_calls": 4,
+        "private_trace_calls": 4,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan__trial-1__records.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "paris_city_to_france",
+      "trial": 1,
+      "expected_trajectory": "plan",
+      "status": "error",
+      "error_type": "RuntimeError",
+      "latency_seconds": 7.831,
+      "trajectory_matches": false,
+      "trace_reconciliation": {
+        "reserved_calls": 4,
+        "attempted_calls": 3,
+        "private_trace_calls": 3,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/paris_city_to_france__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/paris_city_to_france__trial-1__records.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "united_states_to_india",
+      "trial": 1,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 0,
+        "clarification_turns": 0
+      },
+      "m2a": {
+        "record_bindings": [
+          {
+            "upstream_record_id": "m2a:united_states_to_india:origin:geonames:6252001",
+            "record_digest": "495497be609f14bd4bff67d2a2ec430546184a2730cfa37f40da8c88c79c0bb0"
+          },
+          {
+            "upstream_record_id": "m2a:united_states_to_india:destination:geonames:1269750",
+            "record_digest": "531bd9fcd6e64df39cd0920b92339fbdae7a448f1fb6ef51f15b2aec47d5ed24"
+          }
+        ],
+        "accepted_endpoints": {
+          "origins": [
+            "ATL",
+            "LAX",
+            "ORD",
+            "DFW",
+            "DEN",
+            "JFK",
+            "MIA",
+            "SEA",
+            "SFO",
+            "IAH"
+          ],
+          "destinations": [
+            "DEL",
+            "BOM",
+            "BLR",
+            "HYD",
+            "MAA",
+            "CCU"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "f74e4be4e87e01f713ba7903997598264390924d4ff7e86fac76b5fa7d12bf2d",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 54,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "reduced_coverage",
+        "plan_digest": "efb480e2b9438d3e9564672c36aa8014bae20dae636caa4f8b416f8e0fc33634",
+        "mandatory_pairs": 60,
+        "mandatory_complete": true,
+        "accepted_relationships": 54,
+        "admitted_relationships": 24,
+        "omitted_budget_relationships": 30,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 76,
+        "query_date_days": 264,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:united_states_to_india:1",
+        "plan_revision": 0,
+        "current_session_id": "live:united_states_to_india:1",
+        "current_revision": 0,
+        "plan_effective_request_digest": "eb6838857f90abefb4485dbe73776cb11ca7b25a45f15b82f01e13c43d9e18c5",
+        "current_effective_request_digest": "eb6838857f90abefb4485dbe73776cb11ca7b25a45f15b82f01e13c43d9e18c5",
+        "plan_compilation_binding_digest": "0e2f50f31e93e15a233bae103f2e0b0ba59cbc3227ade711592de5fc30b6b7cc",
+        "expected_compilation_binding_digest": "0e2f50f31e93e15a233bae103f2e0b0ba59cbc3227ade711592de5fc30b6b7cc",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_india__trial-1__source-bundle.json",
+      "latency_seconds": 43.803,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 5,
+        "attempted_calls": 4,
+        "private_trace_calls": 4,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_india__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_india__trial-1__records.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "united_states_to_japan_clarified_date",
+      "trial": 1,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 1,
+        "clarification_turns": 1
+      },
+      "m2a": {
+        "record_bindings": [
+          {
+            "upstream_record_id": "m2a:united_states_to_japan_clarified_date:origin:geonames:6252001",
+            "record_digest": "495497be609f14bd4bff67d2a2ec430546184a2730cfa37f40da8c88c79c0bb0"
+          },
+          {
+            "upstream_record_id": "m2a:united_states_to_japan_clarified_date:destination:geonames:1861060",
+            "record_digest": "a4cd61d93b55c3b99db982adf51d1b0c4d959535bce3fc8a4a89c566b01aa99f"
+          }
+        ],
+        "accepted_endpoints": {
+          "origins": [
+            "ATL",
+            "LAX",
+            "ORD",
+            "DFW",
+            "DEN",
+            "JFK",
+            "MIA",
+            "SEA",
+            "SFO",
+            "IAH"
+          ],
+          "destinations": [
+            "HND",
+            "NRT",
+            "KIX",
+            "NGO"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "7903fe6ef854eb0bd6b32e929ec7032b8c07c82fccfc2ec5cdf93a14c5b74ddd",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 40,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "reduced_coverage",
+        "plan_digest": "10a8ca3ea4ee8a0e472238a98b8ed3444185e55dc406830f27b14b581ff6e8e7",
+        "mandatory_pairs": 40,
+        "mandatory_complete": true,
+        "accepted_relationships": 40,
+        "admitted_relationships": 24,
+        "omitted_budget_relationships": 16,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 50,
+        "query_date_days": 162,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:united_states_to_japan_clarified_date:1",
+        "plan_revision": 1,
+        "current_session_id": "live:united_states_to_japan_clarified_date:1",
+        "current_revision": 1,
+        "plan_effective_request_digest": "ed093168922b4a40fb466b30e2ac5b062b53eddac79cfe2d9fbdd95d3a1a1af7",
+        "current_effective_request_digest": "ed093168922b4a40fb466b30e2ac5b062b53eddac79cfe2d9fbdd95d3a1a1af7",
+        "plan_compilation_binding_digest": "bca08649cef60b0cec0bc22d6952e14168110a16ed9b2ab798b48dfa08d40169",
+        "expected_compilation_binding_digest": "bca08649cef60b0cec0bc22d6952e14168110a16ed9b2ab798b48dfa08d40169",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan_clarified_date__trial-1__source-bundle.json",
+      "latency_seconds": 34.942,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 9,
+        "attempted_calls": 6,
+        "private_trace_calls": 6,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan_clarified_date__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan_clarified_date__trial-1__records.json",
+        "calls": 6
+      }
+    },
+    {
+      "id": "cash_only_scope_stop",
+      "trial": 1,
+      "expected_trajectory": "upstream_blocked",
+      "status": "completed",
+      "trajectory_outcome": "upstream_blocked",
+      "trajectory_matches": true,
+      "error_type": "_UpstreamBlocked",
+      "latency_seconds": 2.082,
+      "trace_reconciliation": {
+        "reserved_calls": 2,
+        "attempted_calls": 1,
+        "private_trace_calls": 1,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/cash_only_scope_stop__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/cash_only_scope_stop__trial-1__records.json",
+        "calls": 1
+      }
+    },
+    {
+      "id": "direct_sfo_to_nrt",
+      "trial": 2,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 0,
+        "clarification_turns": 0
+      },
+      "m2a": {
+        "record_bindings": [],
+        "accepted_endpoints": {
+          "origins": [
+            "SFO"
+          ],
+          "destinations": [
+            "NRT"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "191c74ed9960b110a257c1bbdf4d2f5a828ca4a13b5a77b02dc460b7a2641935",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 2,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "f7668b937f3df84a0e333eb23d9e8fa12190e8b107a56983d784765fd411581d",
+        "mandatory_pairs": 1,
+        "mandatory_complete": true,
+        "accepted_relationships": 2,
+        "admitted_relationships": 2,
+        "omitted_budget_relationships": 0,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 4,
+        "query_date_days": 18,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:direct_sfo_to_nrt:2",
+        "plan_revision": 0,
+        "current_session_id": "live:direct_sfo_to_nrt:2",
+        "current_revision": 0,
+        "plan_effective_request_digest": "24181054f4dfbcc91882e920a2d9d98eb4649a84d7b3db12e2f6d62fcc9f549a",
+        "current_effective_request_digest": "24181054f4dfbcc91882e920a2d9d98eb4649a84d7b3db12e2f6d62fcc9f549a",
+        "plan_compilation_binding_digest": "f76e876303005a82d1658d68084e237df358c8fffd953c09a6210d0826865766",
+        "expected_compilation_binding_digest": "f76e876303005a82d1658d68084e237df358c8fffd953c09a6210d0826865766",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/direct_sfo_to_nrt__trial-2__source-bundle.json",
+      "latency_seconds": 23.475,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 3,
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/direct_sfo_to_nrt__trial-2.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/direct_sfo_to_nrt__trial-2__records.json",
+        "calls": 2
+      }
+    },
+    {
+      "id": "united_states_to_japan",
+      "trial": 2,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 0,
+        "clarification_turns": 0
+      },
+      "m2a": {
+        "record_bindings": [
+          {
+            "upstream_record_id": "m2a:united_states_to_japan:origin:geonames:6252001",
+            "record_digest": "54809d527eee1c3db5bab9104e40d63b48d84cc48284ab288d884c16cb44163c"
+          },
+          {
+            "upstream_record_id": "m2a:united_states_to_japan:destination:geonames:1861060",
+            "record_digest": "16ec2a62c9135878fad0e562159c255f7a6bfd8c3e0b83d6a9fc5de76b10e6cf"
+          }
+        ],
+        "accepted_endpoints": {
+          "origins": [
+            "ATL",
+            "LAX",
+            "ORD",
+            "DFW",
+            "DEN",
+            "JFK",
+            "MIA",
+            "SFO",
+            "SEA",
+            "IAD"
+          ],
+          "destinations": [
+            "HND",
+            "KIX",
+            "FUK",
+            "CTS"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "f52ba7cd1ef6f5143f8a23dda5b1dfe0101044c63600690b63a0caa2c4ab59bc",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 12,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "e9d3909c4b32076de5f0e65c08d1f1af665ed1b2fa749cff3463ff27f6f8e8be",
+        "mandatory_pairs": 40,
+        "mandatory_complete": true,
+        "accepted_relationships": 12,
+        "admitted_relationships": 12,
+        "omitted_budget_relationships": 0,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 47,
+        "query_date_days": 153,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:united_states_to_japan:2",
+        "plan_revision": 0,
+        "current_session_id": "live:united_states_to_japan:2",
+        "current_revision": 0,
+        "plan_effective_request_digest": "a4b14f701e14e45de2d55bcfdd8cdd28f4a04345afc9e9933a7cbe3ad81feec0",
+        "current_effective_request_digest": "a4b14f701e14e45de2d55bcfdd8cdd28f4a04345afc9e9933a7cbe3ad81feec0",
+        "plan_compilation_binding_digest": "fb6f2c21051ba2841fed26ff626f5625acd77572f2a2aae82759876a2eb68f5c",
+        "expected_compilation_binding_digest": "fb6f2c21051ba2841fed26ff626f5625acd77572f2a2aae82759876a2eb68f5c",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan__trial-2__source-bundle.json",
+      "latency_seconds": 42.56,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 5,
+        "attempted_calls": 4,
+        "private_trace_calls": 4,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan__trial-2.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan__trial-2__records.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "paris_city_to_france",
+      "trial": 2,
+      "expected_trajectory": "plan",
+      "status": "error",
+      "error_type": "RuntimeError",
+      "latency_seconds": 7.666,
+      "trajectory_matches": false,
+      "trace_reconciliation": {
+        "reserved_calls": 4,
+        "attempted_calls": 3,
+        "private_trace_calls": 3,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/paris_city_to_france__trial-2.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/paris_city_to_france__trial-2__records.json",
+        "calls": 3
+      }
+    },
+    {
+      "id": "united_states_to_india",
+      "trial": 2,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 0,
+        "clarification_turns": 0
+      },
+      "m2a": {
+        "record_bindings": [
+          {
+            "upstream_record_id": "m2a:united_states_to_india:origin:geonames:6252001",
+            "record_digest": "495497be609f14bd4bff67d2a2ec430546184a2730cfa37f40da8c88c79c0bb0"
+          },
+          {
+            "upstream_record_id": "m2a:united_states_to_india:destination:geonames:1269750",
+            "record_digest": "531bd9fcd6e64df39cd0920b92339fbdae7a448f1fb6ef51f15b2aec47d5ed24"
+          }
+        ],
+        "accepted_endpoints": {
+          "origins": [
+            "ATL",
+            "LAX",
+            "ORD",
+            "DFW",
+            "DEN",
+            "JFK",
+            "MIA",
+            "SEA",
+            "SFO",
+            "IAH"
+          ],
+          "destinations": [
+            "DEL",
+            "BOM",
+            "BLR",
+            "HYD",
+            "MAA",
+            "CCU"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "61d79a166d9a1a33bcdf9967fe69829cc9ca0c01748f9e20cd329bc852f938dc",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 70,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "reduced_coverage",
+        "plan_digest": "a9805a2753dc00da7aa2a2dc988f159158d8f5dee79925f9607e7ffb8d66a657",
+        "mandatory_pairs": 60,
+        "mandatory_complete": true,
+        "accepted_relationships": 70,
+        "admitted_relationships": 24,
+        "omitted_budget_relationships": 46,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 79,
+        "query_date_days": 255,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:united_states_to_india:2",
+        "plan_revision": 0,
+        "current_session_id": "live:united_states_to_india:2",
+        "current_revision": 0,
+        "plan_effective_request_digest": "4e2afa3a7217561c753b7e6e699dc157bd2ddd0cb17081136d47364a6e2fff39",
+        "current_effective_request_digest": "4e2afa3a7217561c753b7e6e699dc157bd2ddd0cb17081136d47364a6e2fff39",
+        "plan_compilation_binding_digest": "152d109bf625f401a99a93ca7df39189e9ba5ec3d4e99cbeed5001d34aa3ba1c",
+        "expected_compilation_binding_digest": "152d109bf625f401a99a93ca7df39189e9ba5ec3d4e99cbeed5001d34aa3ba1c",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_india__trial-2__source-bundle.json",
+      "latency_seconds": 51.511,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 5,
+        "attempted_calls": 4,
+        "private_trace_calls": 4,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_india__trial-2.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_india__trial-2__records.json",
+        "calls": 4
+      }
+    },
+    {
+      "id": "united_states_to_japan_clarified_date",
+      "trial": 2,
+      "expected_trajectory": "plan",
+      "status": "completed",
+      "trajectory_outcome": "plan",
+      "upstream": {
+        "status": "ready",
+        "revision": 1,
+        "clarification_turns": 1
+      },
+      "m2a": {
+        "record_bindings": [
+          {
+            "upstream_record_id": "m2a:united_states_to_japan_clarified_date:origin:geonames:6252001",
+            "record_digest": "ad0e0a93c9fa94ffc25b01c0351a7ef52472b2bfa528283dc21f8a9d0baafac7"
+          },
+          {
+            "upstream_record_id": "m2a:united_states_to_japan_clarified_date:destination:geonames:1861060",
+            "record_digest": "042a70cf8cefa55d844466f92e8a324d0997fc2c5da6dcafc169f5466d398234"
+          }
+        ],
+        "accepted_endpoints": {
+          "origins": [
+            "ATL",
+            "LAX",
+            "ORD",
+            "DFW",
+            "DEN",
+            "JFK",
+            "SEA",
+            "MIA",
+            "IAH",
+            "SFO"
+          ],
+          "destinations": [
+            "HND",
+            "NRT",
+            "KIX",
+            "FUK"
+          ]
+        }
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "result_digest": "2f2f26d19e4ad158e658f7288e26cbb8062467057ddcb85581cd96d136983ef5",
+        "digest_verified": true,
+        "gateway_call_constructed": true,
+        "market_coverage": "complete",
+        "accepted_relationships": 32,
+        "advisory_count": 0
+      },
+      "m2c": {
+        "outcome": "reduced_coverage",
+        "plan_digest": "8186c4a3ab136b844e47c2f7cb62fc766d710499ecce7bbf0807eb0cf9e83410",
+        "mandatory_pairs": 40,
+        "mandatory_complete": true,
+        "accepted_relationships": 32,
+        "admitted_relationships": 24,
+        "omitted_budget_relationships": 8,
+        "suppressed_positioning_relationships": 0,
+        "unsupported_relationships": 0,
+        "unique_queries": 54,
+        "query_date_days": 186,
+        "unresolved_obligations": 0,
+        "mapping_gap": false
+      },
+      "same_record_replay": {
+        "equal": true,
+        "plan_digest_equal": true,
+        "source_bundle_reloaded": true
+      },
+      "handoff": {
+        "status": "current",
+        "plan_session_id": "live:united_states_to_japan_clarified_date:2",
+        "plan_revision": 1,
+        "current_session_id": "live:united_states_to_japan_clarified_date:2",
+        "current_revision": 1,
+        "plan_effective_request_digest": "5f804fbf4066d55078f6e91a36a3f4918f9c781c01a654b2ac15cf9eda55992e",
+        "current_effective_request_digest": "5f804fbf4066d55078f6e91a36a3f4918f9c781c01a654b2ac15cf9eda55992e",
+        "plan_compilation_binding_digest": "d0cbe83596f1bc1f20c075d3f2ba214912c4903e66891abe1deb5c6e7626edc0",
+        "expected_compilation_binding_digest": "d0cbe83596f1bc1f20c075d3f2ba214912c4903e66891abe1deb5c6e7626edc0",
+        "executable": true
+      },
+      "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan_clarified_date__trial-2__source-bundle.json",
+      "latency_seconds": 45.044,
+      "trajectory_matches": true,
+      "trace_reconciliation": {
+        "reserved_calls": 9,
+        "attempted_calls": 6,
+        "private_trace_calls": 6,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan_clarified_date__trial-2.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/united_states_to_japan_clarified_date__trial-2__records.json",
+        "calls": 6
+      }
+    },
+    {
+      "id": "cash_only_scope_stop",
+      "trial": 2,
+      "expected_trajectory": "upstream_blocked",
+      "status": "completed",
+      "trajectory_outcome": "upstream_blocked",
+      "trajectory_matches": true,
+      "error_type": "_UpstreamBlocked",
+      "latency_seconds": 2.128,
+      "trace_reconciliation": {
+        "reserved_calls": 2,
+        "attempted_calls": 1,
+        "private_trace_calls": 1,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/cash_only_scope_stop__trial-2.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-20T052546.416224-0000-a4da18d9/cash_only_scope_stop__trial-2__records.json",
+        "calls": 1
+      }
+    }
+  ],
+  "summary": {
+    "runs": 12,
+    "planned_calls": 56,
+    "attempted_calls": 40,
+    "completed": 10,
+    "errors": 2,
+    "trace_reconciled": 12,
+    "same_record_replays": 8,
+    "mechanically_completed": false,
+    "semantic_qualification": "not_claimed_manual_review_required"
+  }
+}

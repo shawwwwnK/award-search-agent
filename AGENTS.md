@@ -58,10 +58,19 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
-Milestone 2B gateway-airport discovery is owner-closed as of 2026-09-19. Milestone 2C remains
-deferred until explicitly opened. The deterministic,
-retrieval-backed outbound-only `EffectiveRequest -> SearchPlan` boundary is implemented and
-fixture-qualified for its declared checked-in seed snapshot. Milestone 1 supplied the reviewed,
+When scoping 2C or later stages, consult
+`docs/reviews/2026-09-19-future-stage-goals.md` for the owner's requested advisory
+synthesis of stage goals, evidence gates, and sequencing alternatives. Its recommendations
+are not approved decisions and do not override the active roadmap or open a stage.
+
+Milestone 2B gateway-airport discovery is owner-closed as of 2026-09-19. Milestone 2C deterministic
+search-strategy compilation is implemented as an in-place replacement, with no V1 compatibility
+path. See `docs/handoffs/2026-09-19-m2c-search-strategy-compilation-plan.md`, ADR 0021, and
+`docs/build-log/2026-09-19-m2c-implementation.md`. The provider-neutral compiler makes no additional
+model call and no travel-provider call; its integrated live diagnostic is model-only. Provider
+execution and product/provider qualification remain outside the completed stage. The deterministic,
+retrieval-backed outbound-only `EffectiveRequest -> CompiledSearchPlan` boundary is implemented and
+offline verified for its declared catalog, replay, and policy evidence. Milestone 1 supplied the reviewed,
 versioned local geographic/airport catalog. Milestone 2A implemented a bounded model-proposed
 endpoint-airport selector and completed its active-policy diagnostic, but the selector remains
 diagnostic-only pending independent human semantic review, holdout evidence, and an adoption
@@ -86,8 +95,8 @@ market, or diversity alone. The pools are independently capped at 2 origin acces
 access, and 5 hubs (9 candidates total); no intermediate-market diversity quota applies. Closing 2B
 does not close or adopt 2A;
 reviewed fixtures or supplied selection records may be used without promoting model output into
-geographic fact. It stops before 2C search-strategy compilation, provider execution,
-returned-itinerary claims, RAG, or persistence. See ADR 0020.
+geographic fact. The 2B boundary itself stops before strategy compilation and provider execution;
+2C now consumes its replay record without changing those claims. See ADR 0020.
 
 The final v6 diagnostic recorded 46 case-trials and 42/42 expected calls across two trials: 37
 nonempty, 4 empty, 4 policy-skip, and 1 partial outcomes; 82 accepted candidates (22 origin access,
@@ -97,8 +106,9 @@ integrity and independent AI semantic review passed for owner human review; this
 qualification. 2C relationship/search-work budgeting remains mandatory, and no prompt-v7 or
 deterministic semantic-rejection change is currently recommended.
 
-Do not reopen 2B or begin 2C implementation without an explicit owner decision. The 2B closeout is
-recorded in `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
+Do not reopen 2B or treat the implemented 2C compiler as provider execution, M2A adoption, or human
+semantic qualification. The 2B closeout is recorded in
+`docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 
 The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
 
@@ -166,6 +176,20 @@ authentication, deployment, provider calls, or workflow logic in the UI layer.
 - Never commit credentials or private travel information.
 - Do not fabricate measurements or evidence.
 - Report files changed, commands run, tests run, assumptions, and remaining failures.
+
+## Deferred-work register
+
+`DEFERRED.md` in the repository root is the living register of intentionally
+parked work and claim-specific prerequisites. Consult it when scoping a new
+stage or closing a meaningful session. When work is newly deferred, reopened,
+completed, or dropped, update the existing stable entry (or add one), its source,
+revisit trigger, and required completion evidence. Keep recommendations distinct
+from owner-approved decisions, and preserve a dated disposition history.
+
+Do not automatically implement parked work or treat explicit non-goals as
+future commitments. Required core work and safety/qualification prerequisites
+must not be mislabeled optional cleanup. The register does not override the
+source-of-truth hierarchy above.
 
 ## Build log
 

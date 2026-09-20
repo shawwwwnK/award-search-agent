@@ -1,8 +1,8 @@
-"""Deterministic endpoint-market search planning.
+"""Deterministic Milestone 2C search-strategy compiler.
 
-The module constructs provider-neutral search intent from a ready
-``EffectiveRequest``.  It does not call a provider or manufacture an
-itinerary, availability, price, or booking assertion.
+The compiler consumes frozen endpoint and gateway-discovery evidence.  It does
+not propose airports, call a model/provider, or claim that component queries
+form a bookable itinerary.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ import hashlib
 import json
 from collections.abc import Iterable
 from datetime import date, timedelta
-from pathlib import Path
+from typing import Any, Protocol, cast
 
 from pydantic import ValidationError
 
@@ -32,72 +32,86 @@ from award_agent.search_planning.airport_selector import (
     AIRPORT_SELECTOR_ORIGINAL_SIMPLE_PROMPT_VERSION,
     AIRPORT_SELECTOR_PROMPT_VERSION,
     AIRPORT_SELECTOR_RESPONSE_SCHEMA_SHA256,
-    AirportSelectionPlanningInput,
-    AirportSelectionPlanningResult,
     AirportSelectionRecord,
-    AirportSelectionReplayReceipt,
     airport_selection_distance_policy_digest,
     airport_selection_record_digest,
     validate_airport_selection_proposal,
 )
-from award_agent.search_planning.capabilities import (
-    CachedSearchCapability,
-    capability_content_digest,
-    default_capability_path,
-    load_cached_search_capability,
+from award_agent.search_planning.capabilities import capability_content_digest
+from award_agent.search_planning.compilation_contracts import (
+    CompilationBudgetKind,
+    CompilationBudgetReceipt,
+    CompilationCoverage,
+    CompiledPlanIdentity,
+    CompiledSearchPlan,
+    EndpointPair,
+    EndpointSelectionBinding,
+    EndpointSelectionProjection,
+    GatewayDiscoveryCompilationReceipt,
+    IdentifiedDeferredConstraint,
+    LogicalAwardQuery,
+    M2ASelectionRecordSource,
+    MandatoryQueryUse,
+    PlanningAirportIdentity,
+    PositioningDependency,
+    PositioningPolicyReceipt,
+    RelationshipDisposition,
+    RelationshipDispositionKind,
+    RelationshipIdentity,
+    ReviewedEndpointMappingRecord,
+    ReviewedEndpointMappingSource,
+    SearchPlanningInput,
+    SearchPlanningOutcome,
+    SearchPlanningResult,
+    SourceCandidateIdentity,
+    SourceScopeIdentity,
+    StrategyCompilationIssue,
+    StrategyCompilationIssueCode,
+    StrategyQueryUse,
+    StrategySupportAlternative,
+    SupplementalDateDerivation,
+    SupplementalStrategy,
+    SupplementalStrategyType,
+    SupplementalValidationKind,
+    SupplementalValidationObligation,
 )
 from award_agent.search_planning.contracts import (
     AirportSelection,
     AirportSelectionKind,
-    AwardSearchItem,
-    BudgetKind,
-    BudgetReceipt,
     CapabilityReceipt,
     CapabilitySourceReceipt,
-    ComponentPaymentMode,
+    CatalogKnowledgeReceipt,
     DateBasis,
     DateEnvelope,
     DeferredConstraintObligation,
     EndpointProbe,
-    ExplicitPathComponent,
-    ExplicitPathHypothesis,
     FilterObligation,
     FilterObligationKind,
     FreshnessClass,
     GroundedEndpointResult,
     LocationResolutionStatus,
-    ManualCashCheckTemplate,
-    ManualCashTemporalValidationKind,
-    PathExplorationReceipt,
-    PaymentPattern,
-    PlanIdentity,
-    PlanningInputEnvelope,
-    PlanningIssue,
-    PlanningIssueCategory,
-    PlanningIssueCode,
-    RepositioningPolicyReceipt,
     ResolvedLocation,
     ResultValidationKind,
     ResultValidationObligation,
-    RouteEdgeEvidenceReceipt,
-    SearchPlan,
-    SearchPlanningIssue,
-    SearchPlanningIssueCode,
-    SearchPlanningOutcome,
-    SearchPlanningResult,
-    SearchScope,
     SelectedAirport,
-    TemporalDerivation,
 )
 from award_agent.search_planning.distance_consistency import CityAirportDistanceConsistency
+from award_agent.search_planning.gateway_discovery import (
+    GatewayDiscoveryCatalogRepository,
+    GatewayDiscoveryOutcome,
+    GatewayDiscoveryReplayError,
+    GatewayDiscoveryResult,
+    replay_gateway_discovery_result,
+)
 from award_agent.search_planning.knowledge import (
-    DirectedRouteEdge,
-    KnowledgeRepository,
-    KnowledgeSnapshot,
+    Airport,
     PlanningKnowledgeRepository,
-    RouteDateApplicability,
 )
 from award_agent.search_planning.locations import ground_endpoint
+from award_agent.search_planning.market_policy import (
+    PlanningMarketPolicy,
+    planning_market_policy_digest,
+)
 from award_agent.search_planning.policy import PlanningPolicy
 
 _CANONICALIZATION_VERSION = "effective-request-canonical-json-v1"
@@ -105,513 +119,498 @@ _DIGEST_ALGORITHM_VERSION = "sha256-v1"
 _CORE_UNKNOWN_FIELDS = frozenset({"origin", "destination", "departure", "travelers"})
 
 
+class StrategyCompilationRepository(PlanningKnowledgeRepository, GatewayDiscoveryCatalogRepository, Protocol):
+    """Catalog repository surface required by compilation and 2B replay."""
+
+    @property
+    def knowledge_receipt(self) -> CatalogKnowledgeReceipt: ...
+
+    def airport(self, airport_id: str) -> Airport | None: ...
+
+
+class _Bundle:
+    def __init__(
+        self,
+        *,
+        relationship_id: str,
+        strategy_type: SupplementalStrategyType,
+        source_candidate: SourceCandidateIdentity,
+        source_relationship: RelationshipIdentity,
+        source_scope: SourceScopeIdentity | None,
+        pairs: tuple[EndpointPair, ...],
+        reason: str,
+        uncertainty: str | None,
+        market_comparison: Any,
+        query_specs: tuple[tuple[str, str, str, int, int], ...],
+        positioning_specs_by_pair: dict[
+            tuple[str, str], tuple[tuple[str, str, str, str], ...]
+        ],
+    ) -> None:
+        self.relationship_id = relationship_id
+        self.strategy_type = strategy_type
+        self.source_candidate = source_candidate
+        self.source_relationship = source_relationship
+        self.source_scope = source_scope
+        self.pairs = pairs
+        self.reason = reason
+        self.uncertainty = uncertainty
+        self.market_comparison = market_comparison
+        self.query_specs = query_specs
+        self.positioning_specs_by_pair = positioning_specs_by_pair
+
+    @property
+    def positioning_specs(self) -> tuple[tuple[str, str, str, str], ...]:
+        return tuple(
+            dict.fromkeys(
+                spec
+                for specs in self.positioning_specs_by_pair.values()
+                for spec in specs
+            )
+        )
+
+
 def plan_searches(
-    envelope: PlanningInputEnvelope,
+    planning_input: SearchPlanningInput,
     *,
+    repository: StrategyCompilationRepository,
     policy: PlanningPolicy,
-    capability: CachedSearchCapability,
-    snapshot: KnowledgeSnapshot | None = None,
-    repository: PlanningKnowledgeRepository | None = None,
-    _grounded_endpoint_overrides: dict[tuple[str, str], GroundedEndpointResult] | None = None,
+    market_policy: PlanningMarketPolicy,
+    selection_cap_policy: AirportSelectionCapPolicy | None = None,
+    selection_distance_policy: CityAirportDistanceConsistency | None = None,
 ) -> SearchPlanningResult:
-    """Compile one immutable request into endpoint-market award search items.
+    """Compile frozen request/evidence into a bounded provider-neutral plan."""
 
-    The caller owns session revision authority.  This boundary computes (and
-    optionally checks) the request digest but never mutates the request or
-    attempts clarification.
-    """
-
-    if (snapshot is None) == (repository is None):
-        raise ValueError("plan_searches requires exactly one of snapshot or repository")
-
-    # ``model_copy(update=...)`` can bypass Pydantic validation.  Re-validating
-    # here keeps a caller from smuggling a corrupt capability into the compiler.
     try:
-        capability = CachedSearchCapability.model_validate(
-            capability.model_dump(mode="python", round_trip=True)
+        planning_input = SearchPlanningInput.model_validate(
+            planning_input.model_dump(mode="python", round_trip=True)
         )
+        policy = PlanningPolicy.model_validate(policy.model_dump(mode="python", round_trip=True))
     except ValidationError as exc:
-        return _capability_evidence_failure(str(exc))
+        return _failure(StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE, "input", str(exc))
 
-    digest = effective_request_digest(envelope.effective_request)
-    admission_issues = _admission_issues(envelope, policy, digest)
-    if admission_issues:
-        return SearchPlanningResult(
-            outcome=SearchPlanningOutcome.UNPLANNABLE,
-            issues=tuple(admission_issues),
-            budget_receipts=_admission_budget_receipts(envelope.effective_request, policy),
+    request = planning_input.envelope.effective_request
+    digest = effective_request_digest(request)
+    admission = _admission_failure(planning_input, policy, digest)
+    if admission is not None:
+        return admission
+    if request.cabins and not planning_input.capability.supports(
+        FilterObligationKind.CABIN_AVAILABLE_IN
+    ):
+        return _failure(
+            StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE,
+            "binding",
+            "cached-search capability does not support the required cabin filter",
+        )
+    if not isinstance(repository.knowledge_receipt, CatalogKnowledgeReceipt):
+        return _failure(
+            StrategyCompilationIssueCode.UNSUPPORTED_KNOWLEDGE_SOURCE,
+            "binding",
+            "strategy compilation requires a catalog-backed knowledge receipt",
         )
 
-    if repository is not None:
-        active_repository: PlanningKnowledgeRepository = repository
-    else:
-        assert snapshot is not None
-        active_repository = KnowledgeRepository(snapshot)
-    origin_results = _ground_all(
-        envelope.effective_request.origins,
-        "origin",
-        active_repository,
-        policy,
-        _provenance_for(envelope.effective_request, EffectiveField.ORIGIN),
-        _grounded_endpoint_overrides,
-    )
-    destination_results = _ground_all(
-        envelope.effective_request.destinations,
-        "destination",
-        active_repository,
-        policy,
-        _provenance_for(envelope.effective_request, EffectiveField.DESTINATION),
-        _grounded_endpoint_overrides,
-    )
-    location_results = (*origin_results, *destination_results)
-    grounding_issues = tuple(
-        issue for result in location_results if result.selection is None for issue in result.issues
-    )
-    if grounding_issues:
-        outcome = (
-            SearchPlanningOutcome.EVIDENCE_FAILURE
-            if any(issue.category is PlanningIssueCategory.EVIDENCE for issue in grounding_issues)
-            else SearchPlanningOutcome.UNPLANNABLE
-        )
-        return SearchPlanningResult(outcome=outcome, issues=grounding_issues)
-
-    origin_airports = tuple(
-        airport
-        for result in origin_results
-        if result.selection is not None
-        for airport in result.selection.airports
-    )
-    destination_airports = tuple(
-        airport
-        for result in destination_results
-        if result.selection is not None
-        for airport in result.selection.airports
-    )
-    pairs_by_fact_ids: dict[tuple[str, str], tuple[SelectedAirport, SelectedAirport]] = {}
-    for origin_airport in origin_airports:
-        for destination_airport in destination_airports:
-            pairs_by_fact_ids.setdefault(
-                (origin_airport.airport_id, destination_airport.airport_id),
-                (origin_airport, destination_airport),
-            )
-    # The input alternatives are canonicalized, while each geographic policy's
-    # airport order is an intentional product-priority order and therefore part
-    # of the semantic plan rather than incidental fixture ordering.
-    pairs = tuple(pairs_by_fact_ids.values())
-    input_days = _inclusive_input_days(envelope.effective_request)
-    if len(pairs) > policy.max_endpoint_pairs:
-        return SearchPlanningResult(
-            outcome=SearchPlanningOutcome.UNPLANNABLE,
-            issues=(
-                SearchPlanningIssue(
-                    code=SearchPlanningIssueCode.ENDPOINT_PAIR_BUDGET_EXCEEDED,
-                    message="required endpoint airport-pair coverage exceeds the planning budget",
-                ),
-            ),
-            budget_receipts=(
-                _budget_receipt(
-                    BudgetKind.INPUT_WINDOW_DAYS, input_days, policy.max_input_window_days
-                ),
-                _budget_receipt(
-                    BudgetKind.ENDPOINT_PAIR_COUNT, len(pairs), policy.max_endpoint_pairs
-                ),
-            ),
-        )
-
-    identity = _identity(envelope, policy, active_repository, capability, digest)
     try:
-        probes, endpoint_items = _build_endpoint_items(
-            pairs,
-            envelope.effective_request,
-            active_repository,
-        )
-        if len(endpoint_items) > policy.max_total_award_search_items:
-            return SearchPlanningResult(
-                outcome=SearchPlanningOutcome.UNPLANNABLE,
-                issues=(
-                    SearchPlanningIssue(
-                        code=SearchPlanningIssueCode.TOTAL_SEARCH_ITEM_BUDGET_EXCEEDED,
-                        message="required endpoint searches exceed the total search-item budget",
-                    ),
-                ),
-                budget_receipts=(
-                    _budget_receipt(
-                        BudgetKind.TOTAL_AWARD_SEARCH_ITEM_COUNT,
-                        len(endpoint_items),
-                        policy.max_total_award_search_items,
-                    ),
-                ),
-            )
-        endpoint_date_work_days = input_days * len(endpoint_items)
-        if endpoint_date_work_days > policy.max_date_expanded_work_days:
-            return SearchPlanningResult(
-                outcome=SearchPlanningOutcome.UNPLANNABLE,
-                issues=(
-                    SearchPlanningIssue(
-                        code=SearchPlanningIssueCode.TOTAL_SEARCH_ITEM_BUDGET_EXCEEDED,
-                        message="required endpoint date-expanded work exceeds the planning budget",
-                    ),
-                ),
-                budget_receipts=(
-                    _budget_receipt(
-                        BudgetKind.DATE_EXPANDED_WORK_DAYS,
-                        endpoint_date_work_days,
-                        policy.max_date_expanded_work_days,
-                    ),
-                ),
-            )
-        (
-            path_hypotheses,
-            path_items,
-            path_exclusions,
-            path_receipts,
-            path_exploration_receipts,
-        ) = _build_explicit_paths(
-            pairs,
-            envelope.effective_request,
-            active_repository,
+        projections, binding = _resolve_endpoint_source(
+            planning_input,
+            repository,
             policy,
-            remaining_item_slots=policy.max_total_award_search_items - len(endpoint_items),
-            remaining_date_work_days=(policy.max_date_expanded_work_days - endpoint_date_work_days),
-        )
-    except ValidationError as exc:
-        return _invalid_filter_failure(str(exc))
-    except ValueError as exc:
-        return _planner_contract_failure(str(exc))
-    unsupported_kinds = tuple(
-        sorted(
-            {
-                obligation.kind.value
-                for item in (*endpoint_items, *path_items)
-                for obligation in item.filter_obligations
-                if not capability.supports(obligation.kind)
-            }
-        )
-    )
-    if unsupported_kinds:
-        return _capability_evidence_failure(
-            "capability record does not support generated filters: " + ", ".join(unsupported_kinds)
-        )
-    try:
-        manual_cash_enabled = SearchMode.CASH in envelope.effective_request.search_modes
-        payment_patterns = _payment_patterns(
-            path_hypotheses, manual_cash_enabled=manual_cash_enabled
-        )
-        plan = SearchPlan(
-            identity=identity,
-            capability_id=capability.capability_id,
-            capability_version=capability.capability_version,
-            location_results=location_results,
-            endpoint_probes=probes,
-            award_search_items=(*endpoint_items, *path_items),
-            explicit_path_hypotheses=path_hypotheses,
-            manual_cash_enabled=manual_cash_enabled,
-            payment_patterns=payment_patterns,
-            manual_cash_check_templates=_manual_cash_check_templates(
-                path_hypotheses,
-                payment_patterns=payment_patterns,
-                request=envelope.effective_request,
-            ),
-            path_exploration_receipts=path_exploration_receipts,
-            deferred_constraints=_deferred_constraints(envelope.effective_request),
-            nonblocking_issues=_nonblocking_issues(envelope.effective_request),
-            repositioning_policy_receipt=RepositioningPolicyReceipt(
-                requested_value=envelope.effective_request.repositioning_allowed,
-                field_provenance=_provenance_for(
-                    envelope.effective_request, EffectiveField.REPOSITIONING
-                ),
-            ),
-            budget_receipts=_plan_budget_receipts(
-                input_days=input_days,
-                endpoint_pair_count=len(pairs),
-                endpoint_item_count=len(endpoint_items),
-                endpoint_date_work_days=endpoint_date_work_days,
-                path_receipts=path_receipts,
-                policy=policy,
-            ),
-        )
-    except (ValidationError, ValueError) as exc:
-        return _planner_contract_failure(str(exc))
-    return SearchPlanningResult(
-        outcome=(
-            SearchPlanningOutcome.REDUCED_COVERAGE
-            if path_exclusions
-            else SearchPlanningOutcome.PLANNED
-        ),
-        plan=plan,
-        exclusions=path_exclusions,
-    )
-
-
-def plan_searches_with_default_capability(
-    envelope: PlanningInputEnvelope,
-    *,
-    policy: PlanningPolicy,
-    snapshot: KnowledgeSnapshot | None = None,
-    repository: PlanningKnowledgeRepository | None = None,
-    capability_path: Path | None = None,
-) -> SearchPlanningResult:
-    """Convenience wrapper that turns local capability evidence failures into a typed outcome.
-
-    The compiler itself deliberately requires a validated capability argument;
-    this is the only place that reads a default local record.
-    """
-
-    try:
-        capability = load_cached_search_capability(capability_path or default_capability_path())
-    except (OSError, json.JSONDecodeError, ValidationError, ValueError) as exc:
-        return _capability_evidence_failure(str(exc))
-    return plan_searches(
-        envelope,
-        policy=policy,
-        snapshot=snapshot,
-        repository=repository,
-        capability=capability,
-    )
-
-
-def plan_searches_from_airport_selection_records(
-    selection_input: AirportSelectionPlanningInput,
-    *,
-    selection_cap_policy: AirportSelectionCapPolicy,
-    distance_policy: CityAirportDistanceConsistency,
-    policy: PlanningPolicy,
-    capability: CachedSearchCapability,
-    repository: PlanningKnowledgeRepository,
-) -> AirportSelectionPlanningResult:
-    """Replay model-selected catalog endpoints without an LLM invocation.
-
-    This is deliberately a separate planning input from the frozen Milestone 0
-    fixture path. A record supplies an exploratory model selection, while the
-    normal ``plan_searches`` path retains its reviewed JSON group behavior.
-    """
-
-    receipt = _selection_replay_receipt(selection_input, selection_cap_policy, distance_policy)
-    try:
-        overrides = _selection_record_overrides(
-            selection_input, selection_cap_policy, distance_policy, policy, repository
+            selection_cap_policy,
+            selection_distance_policy,
         )
     except (ValueError, ValidationError) as exc:
-        return AirportSelectionPlanningResult(
-            planning_result=_planner_contract_failure(str(exc)), replay_receipt=receipt
+        return _failure(
+            StrategyCompilationIssueCode.ENDPOINT_SELECTION_BINDING_MISMATCH,
+            "binding",
+            str(exc),
         )
-    return AirportSelectionPlanningResult(
-        planning_result=plan_searches(
-            selection_input.envelope,
-            policy=policy,
-            capability=capability,
+
+    origins = _unique_selected(projections, "origin")
+    destinations = _unique_selected(projections, "destination")
+    pairs = tuple((origin, destination) for origin in origins for destination in destinations)
+    mandatory_pair_count = len(pairs)
+    window_days = _input_days(request)
+    if mandatory_pair_count > policy.max_mandatory_endpoint_pairs:
+        return _mandatory_budget_failure(
+            CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS,
+            mandatory_pair_count,
+            policy.max_mandatory_endpoint_pairs,
+        )
+
+    try:
+        probes, mandatory_queries, mandatory_uses = _mandatory_baseline(pairs, request, repository)
+    except (ValueError, OverflowError) as exc:
+        return _failure(
+            StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE,
+            "compilation",
+            str(exc),
+        )
+    mandatory_date_days = sum(_query_days(query) for query in mandatory_queries)
+    if len(mandatory_queries) > policy.max_unique_logical_queries:
+        return _mandatory_budget_failure(
+            CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES,
+            len(mandatory_queries),
+            policy.max_unique_logical_queries,
+        )
+    if mandatory_date_days > policy.max_query_date_days:
+        return _mandatory_budget_failure(
+            CompilationBudgetKind.QUERY_DATE_DAYS,
+            mandatory_date_days,
+            policy.max_query_date_days,
+        )
+
+    gateway = planning_input.gateway_discovery_result
+    try:
+        _validate_gateway_binding(planning_input, binding, origins, destinations, request)
+        replay_gateway_discovery_result(
+            record=gateway,
+            policy=market_policy,
             repository=repository,
-            _grounded_endpoint_overrides=overrides,
-        ),
-        replay_receipt=receipt,
-    )
+        )
+    except (ValueError, GatewayDiscoveryReplayError) as exc:
+        return _failure(
+            StrategyCompilationIssueCode.GATEWAY_REPLAY_FAILED,
+            "replay",
+            str(exc),
+        )
+    if gateway.outcome is GatewayDiscoveryOutcome.INPUT_ERROR:
+        return _failure(
+            StrategyCompilationIssueCode.GATEWAY_INPUT_BINDING_MISMATCH,
+            "replay",
+            "gateway discovery input-error evidence cannot yield a search plan",
+        )
 
+    bundles = _enumerate_bundles(gateway, origins, destinations)
+    query_map = {query.query_id: query for query in mandatory_queries}
+    query_semantics = {_query_semantic_key(query): query.query_id for query in mandatory_queries}
+    dispositions: list[RelationshipDisposition] = []
+    admitted_strategies: list[SupplementalStrategy] = []
+    strategy_uses: list[StrategyQueryUse] = []
+    alternatives: list[StrategySupportAlternative] = []
+    dependencies: list[PositioningDependency] = []
+    position_receipts: list[PositioningPolicyReceipt] = []
+    derivations: list[SupplementalDateDerivation] = []
+    admitted_relationships = 0
+    supplemental_unique = 0
+    supplemental_date_days = 0
+    reused_queries = 0
+    reused_query_days = 0
 
-def _selection_replay_receipt(
-    selection_input: AirportSelectionPlanningInput,
-    selection_cap_policy: AirportSelectionCapPolicy,
-    distance_policy: CityAirportDistanceConsistency,
-) -> AirportSelectionReplayReceipt:
-    snapshots = {record.catalog_snapshot_id for record in selection_input.selection_records}
-    if len(snapshots) != 1:
-        raise ValueError("selection replay requires records from exactly one catalog snapshot")
-    return AirportSelectionReplayReceipt(
-        record_digests=tuple(
-            sorted(
-                airport_selection_record_digest(record)
-                for record in selection_input.selection_records
+    suppressed: list[_Bundle] = []
+    eligible: list[_Bundle] = []
+    for bundle in bundles:
+        if request.repositioning_allowed is False and bundle.positioning_specs:
+            suppressed.append(bundle)
+        else:
+            eligible.append(bundle)
+    for bundle in suppressed:
+        dispositions.append(_disposition(bundle, RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL, ("positioning_explicitly_refused",)))
+        position_receipts.append(
+            PositioningPolicyReceipt(
+                relationship_id=bundle.relationship_id,
+                dependency_descriptions=tuple(f"{side}:{src}->{dst}" for side, src, dst, _ in bundle.positioning_specs),
+                requested_permission=False,
+                decision="suppressed_explicit_refusal",
             )
-        ),
-        cap_policy_version=selection_cap_policy.policy_version,
-        cap_policy_digest=airport_selection_cap_policy_digest(selection_cap_policy),
-        distance_policy_version=distance_policy.policy_version,
-        distance_policy_digest=airport_selection_distance_policy_digest(distance_policy),
-        catalog_snapshot_id=next(iter(snapshots)),
-    )
+        )
 
-
-def _selection_record_overrides(
-    selection_input: AirportSelectionPlanningInput,
-    selection_cap_policy: AirportSelectionCapPolicy,
-    distance_policy: CityAirportDistanceConsistency,
-    planning_policy: PlanningPolicy,
-    repository: PlanningKnowledgeRepository,
-) -> dict[tuple[str, str], GroundedEndpointResult]:
-    """Make validated record results available to the deterministic compiler."""
-
-    records: dict[tuple[str, str], AirportSelectionRecord] = {
-        (record.role, record.resolved_entity.entity_id): record
-        for record in selection_input.selection_records
-    }
-    used_record_keys: set[tuple[str, str]] = set()
-    overrides: dict[tuple[str, str], GroundedEndpointResult] = {}
-    for role, locations in (
-        ("origin", selection_input.envelope.effective_request.origins),
-        ("destination", selection_input.envelope.effective_request.destinations),
-    ):
-        for location in _canonical_locations(locations):
-            grounded = ground_endpoint(location, role, repository, planning_policy)
-            resolution = grounded.resolution
-            if resolution.status is not LocationResolutionStatus.RESOLVED:
-                continue
-            if resolution.resolved_entity_id is None:
-                continue  # Explicit and named airports retain their existing singleton path.
-            key = (role, resolution.resolved_entity_id)
-            record = records.get(key)
-            if record is None:
-                raise ValueError(
-                    "each resolved geographic endpoint requires a supplied airport-selection record"
+    representable: list[_Bundle] = []
+    materialized_candidates: dict[
+        str, tuple[tuple[LogicalAwardQuery, SupplementalDateDerivation], ...]
+    ] = {}
+    for bundle in eligible:
+        try:
+            candidates = tuple(
+                _supplemental_query_spec(spec, bundle, request, repository, policy)
+                for spec in bundle.query_specs
+            )
+        except OverflowError:
+            dispositions.append(
+                _disposition(
+                    bundle,
+                    RelationshipDispositionKind.UNSUPPORTED_RULE,
+                    ("supplemental_date_overflow",),
                 )
-            used_record_keys.add(key)
-            overrides[(role, _location_override_key(location))] = _selection_record_result(
-                role,
-                location,
-                resolution,
-                record,
-                selection_cap_policy,
-                distance_policy,
-                repository,
-                planning_policy,
             )
-    if set(records) != used_record_keys:
-        raise ValueError(
-            "selection records must correspond to resolved geographic request endpoints"
-        )
-    return overrides
-
-
-def _selection_record_result(
-    role: str,
-    location: LocationRef,
-    resolution: ResolvedLocation,
-    record: AirportSelectionRecord,
-    selection_cap_policy: AirportSelectionCapPolicy,
-    distance_policy: CityAirportDistanceConsistency,
-    repository: PlanningKnowledgeRepository,
-    planning_policy: PlanningPolicy,
-) -> GroundedEndpointResult:
-    context = context_for_resolved_location(resolution, repository)
-    if record.resolved_entity != context:
-        raise ValueError("selection record context does not match resolved catalog entity")
-    if (
-        record.catalog_snapshot_id != repository.snapshot_id
-        or record.catalog_receipt != repository.knowledge_receipt
-    ):
-        raise ValueError("selection record catalog identity does not match the planning repository")
-    cap = selection_cap_policy.applicable_cap_for(context)
-    if (
-        record.cap_policy_digest != airport_selection_cap_policy_digest(selection_cap_policy)
-        or record.applicable_cap != cap
-    ):
-        raise ValueError("selection record does not match the supplied selection-cap policy")
-    if record.distance_policy != distance_policy:
-        raise ValueError("selection record does not match the supplied distance policy")
-    rebuilt = validate_airport_selection_proposal(
-        role=record.role,
-        context=context,
-        cap_policy=selection_cap_policy,
-        distance_policy=distance_policy,
-        proposal=record.proposal,
-        model=record.model,
-        repository=repository,
-    )
-    if (
-        record.candidate_validations != rebuilt.candidate_validations
-        or record.accepted_airports != rebuilt.accepted_airports
-        or record.applicable_cap != rebuilt.applicable_cap
-        or record.selector_adapter_version != AIRPORT_SELECTOR_ADAPTER_VERSION
-        or record.prompt_version
-        not in {
-            AIRPORT_SELECTOR_PROMPT_VERSION,
-            AIRPORT_SELECTOR_ORIGINAL_SIMPLE_PROMPT_VERSION,
-        }
-        or record.response_schema_sha256 != AIRPORT_SELECTOR_RESPONSE_SCHEMA_SHA256
-    ):
-        raise ValueError("selection record validation does not reproduce against supplied evidence")
-    source_ids = set(resolution.evidence_source_ids)
-    for selected in record.accepted_airports:
-        airport = repository.lookup_airport_iata(selected.airport_iata)
-        if airport is None or airport.airport_id != selected.airport_id:
-            raise ValueError("selection record cites an airport absent from this catalog snapshot")
-        if airport.source_ids != selected.airport_evidence_source_ids:
-            raise ValueError(
-                "selection record airport evidence does not match this catalog snapshot"
+            continue
+        except ValueError:
+            dispositions.append(
+                _disposition(
+                    bundle,
+                    RelationshipDispositionKind.UNSUPPORTED_RULE,
+                    ("supplemental_timezone_unavailable",),
+                )
             )
-        source_ids.update(airport.source_ids)
-    freshness = repository.freshness_for_source_ids(
-        source_ids, max_source_evidence_age_days=planning_policy.max_source_evidence_age_days
-    )
-    if freshness is FreshnessClass.STALE:
-        return GroundedEndpointResult(
-            role=role,  # type: ignore[arg-type]
-            snapshot_id=repository.snapshot_id,
-            freshness=freshness,
-            resolution=resolution,
-            issues=(
-                PlanningIssue(
-                    code=PlanningIssueCode.STALE_KNOWLEDGE,
-                    message="airport-selection record relies on stale snapshot evidence",
-                    snapshot_id=repository.snapshot_id,
-                    location_value=location.value,
+            continue
+        representable.append(bundle)
+        materialized_candidates[bundle.relationship_id] = candidates
+
+    allocation_sequence = 0
+    omitted_ids: dict[CompilationBudgetKind, list[str]] = {
+        CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES: [],
+        CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES: [],
+        CompilationBudgetKind.QUERY_DATE_DAYS: [],
+    }
+    for bundle, anchor in _allocation_order(representable, pairs, policy):
+        allocation_sequence += 1
+        if admitted_relationships >= policy.max_supplemental_relationship_bundles:
+            omitted_ids[CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES].append(
+                bundle.relationship_id
+            )
+            dispositions.append(_disposition(bundle, RelationshipDispositionKind.OMITTED_BUDGET, ("relationship_budget_exhausted",), allocation_sequence, anchor))
+            continue
+        candidates = materialized_candidates[bundle.relationship_id]
+        new_queries = [query for query, _ in candidates if _query_semantic_key(query) not in query_semantics]
+        marginal_queries = len(new_queries)
+        marginal_days = sum(_query_days(query) for query in new_queries)
+        reasons: list[str] = []
+        if len(query_map) + marginal_queries > policy.max_unique_logical_queries:
+            reasons.append("unique_query_budget_exhausted")
+        if sum(_query_days(query) for query in query_map.values()) + marginal_days > policy.max_query_date_days:
+            reasons.append("query_date_budget_exhausted")
+        if reasons:
+            if "unique_query_budget_exhausted" in reasons:
+                omitted_ids[CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES].append(
+                    bundle.relationship_id
+                )
+            if "query_date_budget_exhausted" in reasons:
+                omitted_ids[CompilationBudgetKind.QUERY_DATE_DAYS].append(
+                    bundle.relationship_id
+                )
+            dispositions.append(_disposition(bundle, RelationshipDispositionKind.OMITTED_BUDGET, tuple(reasons), allocation_sequence, anchor, candidates, marginal_queries, marginal_days))
+            continue
+
+        strategy_id = "supplemental:" + _digest({"relationship_id": bundle.relationship_id, "policy": _digest(policy)})
+        support_ids: list[str] = []
+        bundle_use_ids: list[str] = []
+        role_names: list[str] = []
+        query_ids: list[str] = []
+        for sequence, ((candidate_query, derivation), spec) in enumerate(zip(candidates, bundle.query_specs, strict=True), start=1):
+            semantic = _query_semantic_key(candidate_query)
+            query_id = query_semantics.get(semantic, candidate_query.query_id)
+            if query_id not in query_map:
+                query_map[query_id] = candidate_query
+                query_semantics[semantic] = query_id
+            else:
+                reused_queries += 1
+                reused_query_days += _query_days(query_map[query_id])
+            role = "access_main" if bundle.strategy_type is not SupplementalStrategyType.SCOPED_HUB else ("hub_first" if sequence == 1 else "hub_second")
+            use_id = _digest({"strategy": strategy_id, "query": query_id, "role": role, "relationship": bundle.relationship_id})
+            strategy_uses.append(
+                StrategyQueryUse(
+                    query_use_id=use_id,
+                    strategy_id=strategy_id,
+                    query_id=query_id,
+                    role=cast(Any, role),
+                    sequence=cast(Any, sequence),
+                    source_relationship_id=bundle.relationship_id,
+                    date_derivation_id=derivation.date_derivation_id,
+                )
+            )
+            derivations.append(derivation)
+            bundle_use_ids.append(use_id)
+            query_ids.append(query_id)
+            role_names.append("access_main" if role == "access_main" else ("first_component" if role == "hub_first" else "later_component"))
+        for pair in bundle.pairs:
+            support_id = _digest({"strategy": strategy_id, "pair": pair.model_dump(mode="json")})
+            dependency_ids: list[str] = []
+            pair_positioning_specs = bundle.positioning_specs_by_pair.get(
+                (pair.origin_airport_fact_id, pair.destination_airport_fact_id), ()
+            )
+            for side, src, dst, access_relationship in pair_positioning_specs:
+                dependency_id = _digest({"support": support_id, "side": side, "from": src, "to": dst, "access": access_relationship})
+                dependencies.append(
+                    PositioningDependency(
+                        dependency_id=dependency_id,
+                        support_id=support_id,
+                        source_access_relationship_id=access_relationship,
+                        side=cast(Any, side),
+                        from_airport_fact_id=src,
+                        to_airport_fact_id=dst,
+                        requested_permission=request.repositioning_allowed,
+                        field_provenance=_provenance_for(request, EffectiveField.REPOSITIONING),
+                    )
+                )
+                dependency_ids.append(dependency_id)
+            alternatives.append(
+                StrategySupportAlternative(
+                    support_id=support_id,
+                    strategy_id=strategy_id,
+                    original_origin_airport_fact_id=pair.origin_airport_fact_id,
+                    original_destination_airport_fact_id=pair.destination_airport_fact_id,
+                    query_use_ids=tuple(bundle_use_ids),
+                    positioning_dependency_ids=tuple(dependency_ids),
+                )
+            )
+            support_ids.append(support_id)
+        validations = [
+            SupplementalValidationObligation(kind=SupplementalValidationKind.ORIGINAL_DEPARTURE_COMPLIANCE, responsible_stage="future_result_or_journey_validation"),
+            SupplementalValidationObligation(kind=SupplementalValidationKind.COMPLETE_JOURNEY_VALIDATION, responsible_stage="future_result_or_journey_validation"),
+        ]
+        if bundle.positioning_specs:
+            validations.append(
+                SupplementalValidationObligation(kind=SupplementalValidationKind.POSITIONING_FEASIBILITY, responsible_stage="future_result_or_journey_validation")
+            )
+        if bundle.strategy_type is SupplementalStrategyType.SCOPED_HUB or bundle.positioning_specs:
+            validations.append(
+                SupplementalValidationObligation(kind=SupplementalValidationKind.SEPARATE_TICKET_PERMISSION, responsible_stage="owner_review")
+            )
+        admitted_strategies.append(
+            SupplementalStrategy(
+                relationship_id=bundle.relationship_id,
+                strategy_id=strategy_id,
+                strategy_type=bundle.strategy_type,
+                eligibility="conditional_permission" if bundle.positioning_specs and request.repositioning_allowed is None else "eligible",
+                source_candidate=bundle.source_candidate,
+                source_relationship=bundle.source_relationship,
+                source_scope=bundle.source_scope,
+                supported_original_endpoint_pairs=bundle.pairs,
+                allocation_pair_lanes=bundle.pairs,
+                reason=bundle.reason,
+                material_uncertainty=bundle.uncertainty,
+                market_comparison=bundle.market_comparison,
+                query_roles=cast(Any, tuple(role_names)),
+                deferred_constraint_ids=tuple(
+                    _constraint_obligation_id(text, request)
+                    for text in request.hard_constraints
                 ),
-            ),
+                support_alternative_ids=tuple(support_ids),
+                required_validations=tuple(validations),
+            )
         )
-    if not record.accepted_airports:
-        return GroundedEndpointResult(
-            role=role,  # type: ignore[arg-type]
-            snapshot_id=repository.snapshot_id,
-            freshness=freshness,
-            resolution=resolution,
-            issues=(
-                PlanningIssue(
-                    code=PlanningIssueCode.MODEL_AIRPORT_SELECTION_UNAVAILABLE,
-                    message="model airport selection produced no accepted exploratory endpoints",
-                    snapshot_id=repository.snapshot_id,
-                    location_value=location.value,
-                    candidate_ids=(record.resolved_entity.entity_id,),
-                ),
-            ),
+        decision = "conditional_research" if bundle.positioning_specs and request.repositioning_allowed is None else ("allowed_research" if bundle.positioning_specs else "not_required")
+        position_receipts.append(
+            PositioningPolicyReceipt(
+                relationship_id=bundle.relationship_id,
+                dependency_descriptions=tuple(f"{side}:{src}->{dst}" for side, src, dst, _ in bundle.positioning_specs),
+                requested_permission=request.repositioning_allowed,
+                decision=cast(Any, decision),
+            )
         )
-    return GroundedEndpointResult(
-        role=role,  # type: ignore[arg-type]
-        snapshot_id=repository.snapshot_id,
-        freshness=freshness,
-        resolution=resolution,
-        selection=AirportSelection(
-            kind=AirportSelectionKind.MODEL_PROPOSED,
-            resolved_location=resolution,
-            airports=record.accepted_airports,
-        ),
+        dispositions.append(_disposition(bundle, RelationshipDispositionKind.ADMITTED, ("admitted",), allocation_sequence, anchor, candidates, marginal_queries, marginal_days, tuple(query_ids)))
+        admitted_relationships += 1
+        supplemental_unique += marginal_queries
+        supplemental_date_days += marginal_days
+
+    issues = _reduced_issues(gateway, dispositions)
+    outcome = SearchPlanningOutcome.REDUCED_COVERAGE if issues else SearchPlanningOutcome.PLANNED
+    obligations = _constraint_obligations(request, tuple(query_map))
+    receipts = _budget_receipts(
+        policy,
+        window_days,
+        mandatory_pair_count,
+        len(mandatory_queries),
+        mandatory_date_days,
+        admitted_relationships,
+        supplemental_unique,
+        supplemental_date_days,
+        reused_queries,
+        reused_query_days,
+        {kind: tuple(values) for kind, values in omitted_ids.items()},
     )
+    coverage = CompilationCoverage(
+        mandatory_required_pairs=mandatory_pair_count,
+        mandatory_covered_pairs=len(mandatory_uses),
+        mandatory_complete=len(mandatory_uses) == mandatory_pair_count,
+        accepted_relationships=len(bundles),
+        admitted_relationships=admitted_relationships,
+        omitted_budget_relationships=sum(item.disposition is RelationshipDispositionKind.OMITTED_BUDGET for item in dispositions),
+        suppressed_positioning_refusal_relationships=sum(item.disposition is RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL for item in dispositions),
+        unsupported_rule_relationships=sum(item.disposition is RelationshipDispositionKind.UNSUPPORTED_RULE for item in dispositions),
+        discovery_outcome=gateway.outcome,
+        market_coverage=gateway.market_coverage,
+    )
+    endpoint_binding_digest = _digest(binding)
+    policy_digest = _digest(policy)
+    capability_receipt = _capability_receipt(planning_input)
+    market_policy_digest = planning_market_policy_digest(market_policy)
+    compilation_binding_digest = _digest({
+        "compilation_binding_version": "search-strategy-compilation-binding-v1",
+        "request": digest,
+        "endpoint": endpoint_binding_digest,
+        "gateway_input": gateway.input_digest,
+        "gateway_result": gateway.result_digest,
+        "compiler_contract_version": "search-strategy-compilation-v1",
+        "canonicalization_version": _CANONICALIZATION_VERSION,
+        "digest_algorithm_version": _DIGEST_ALGORITHM_VERSION,
+        "policy": policy_digest,
+        "capability": capability_receipt,
+        "catalog": repository.knowledge_receipt,
+        "market_policy_version": market_policy.policy_version,
+        "market_policy_digest": market_policy_digest,
+        "route_topology_feature": "absent",
+    })
+    identity = CompiledPlanIdentity(
+        session_id=planning_input.envelope.source.session_id,
+        revision=planning_input.envelope.source.revision,
+        effective_request_digest=digest,
+        canonicalization_version=_CANONICALIZATION_VERSION,
+        digest_algorithm_version=_DIGEST_ALGORITHM_VERSION,
+        policy_version=policy.policy_version,
+        policy_digest=policy_digest,
+        capability_receipt=capability_receipt,
+        catalog_receipt=repository.knowledge_receipt,
+        endpoint_selection_binding=binding,
+        gateway_result_digest=gateway.result_digest,
+        gateway_input_digest=gateway.input_digest,
+        market_policy_version=market_policy.policy_version,
+        market_policy_digest=market_policy_digest,
+        compilation_binding_digest=compilation_binding_digest,
+    )
+    discovery_receipt = GatewayDiscoveryCompilationReceipt(
+        input_digest=gateway.input_digest,
+        result_digest=gateway.result_digest,
+        generation_status=gateway.generation_status,
+        outcome=gateway.outcome,
+        market_gate=gateway.market_gate,
+        market_coverage=gateway.market_coverage,
+        endpoint_assessment_decisions=gateway.endpoint_market_assessment_decisions,
+        candidate_decisions=gateway.candidate_decisions,
+        scope_decisions=tuple(scope for decision in gateway.candidate_decisions for scope in decision.scope_decisions),
+        issues=gateway.issues,
+        limitations=gateway.limitations,
+    )
+    airport_ids = {query.origin_airport_fact_id for query in query_map.values()} | {query.destination_airport_fact_id for query in query_map.values()}
+    airport_directory = tuple(_airport_identity(airport_id, repository) for airport_id in sorted(airport_ids))
+    plan_payload = {
+        "identity": identity,
+        "location_resolutions": tuple(item.resolution for item in projections),
+        "endpoint_selections": projections,
+        "endpoint_selection_binding": binding,
+        "airport_directory": airport_directory,
+        "mandatory_endpoint_probes": probes,
+        "mandatory_query_uses": mandatory_uses,
+        "supplemental_strategies": tuple(admitted_strategies),
+        "logical_queries": tuple(query_map.values()),
+        "strategy_query_uses": tuple(strategy_uses),
+        "support_alternatives": tuple(alternatives),
+        "constraint_obligations": obligations,
+        "temporal_derivations": tuple(derivations),
+        "positioning_dependencies": tuple(dependencies),
+        "positioning_receipts": tuple(position_receipts),
+        "relationship_dispositions": tuple(dispositions),
+        "discovery_receipt": discovery_receipt,
+        "coverage": coverage,
+        "budget_receipts": receipts,
+        "issues": issues,
+    }
+    try:
+        plan = CompiledSearchPlan.model_validate(
+            {**plan_payload, "plan_digest": _digest(plan_payload)}
+        )
+    except (ValidationError, ValueError) as exc:
+        return _failure(StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE, "compilation", str(exc))
+    return SearchPlanningResult(outcome=outcome, plan=plan, issues=issues, budget_receipts=receipts)
 
 
 def effective_request_digest(effective_request: EffectiveRequest) -> str:
-    """Return a stable digest over complete JSON-mode EffectiveRequest data."""
-
-    canonical = json.dumps(
-        _canonical_request_payload(effective_request),
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    )
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return _digest(_canonical_request_payload(effective_request))
 
 
-def _canonical_request_payload(effective_request: EffectiveRequest) -> dict[str, object]:
-    """Canonicalize unordered alternative sets before calculating plan identity.
-
-    Origin/destination alternatives, cabins, and modes are independent sets at
-    this boundary.  Their wire order must not manufacture a different plan.
-    """
-
-    payload = effective_request.model_dump(mode="json", round_trip=True)
+def _canonical_request_payload(request: EffectiveRequest) -> dict[str, object]:
+    payload = request.model_dump(mode="json", round_trip=True)
     for key in ("origins", "destinations"):
         values = payload.get(key)
         if isinstance(values, list):
-            payload[key] = sorted(
-                values,
-                key=lambda item: json.dumps(item, sort_keys=True, separators=(",", ":")),
-            )
+            payload[key] = sorted(values, key=lambda item: json.dumps(item, sort_keys=True, separators=(",", ":")))
     for key in ("cabins", "search_modes"):
         values = payload.get(key)
         if isinstance(values, list):
@@ -619,899 +618,565 @@ def _canonical_request_payload(effective_request: EffectiveRequest) -> dict[str,
     return payload
 
 
-def _admission_issues(
-    envelope: PlanningInputEnvelope, policy: PlanningPolicy, digest: str
-) -> list[SearchPlanningIssue]:
-    request = envelope.effective_request
-    issues: list[SearchPlanningIssue] = []
-    if envelope.source.expected_effective_request_digest not in {None, digest}:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.REQUEST_DIGEST_MISMATCH,
-                message="caller expected digest does not match the supplied EffectiveRequest",
-            )
-        )
-    if not request.origins:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.MISSING_ORIGIN,
-                message="origin is required",
-                field="origin",
-            )
-        )
-    if not request.destinations:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.MISSING_DESTINATION,
-                message="destination is required",
-                field="destination",
-            )
-        )
-    if request.travelers is None:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.MISSING_TRAVELERS,
-                message="travelers are required",
-                field="travelers",
-            )
-        )
-    if request.departure_window is None:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.MISSING_DEPARTURE_WINDOW,
-                message="a bounded departure window is required",
-                field="departure",
-            )
-        )
-    if request.departure_window is not None:
-        inclusive_days = (request.departure_window.end - request.departure_window.start).days + 1
-        if inclusive_days > policy.max_input_window_days:
-            issues.append(
-                SearchPlanningIssue(
-                    code=SearchPlanningIssueCode.INPUT_WINDOW_EXCEEDS_BUDGET,
-                    message="departure window exceeds the configured inclusive planning budget",
-                    field="departure",
-                )
-            )
-    for constraint in request.hard_constraints:
-        if not constraint.strip():
-            issues.append(
-                SearchPlanningIssue(
-                    code=SearchPlanningIssueCode.INVALID_HARD_CONSTRAINT,
-                    message="hard constraints must be nonempty when supplied",
-                    field="hard_constraints",
-                    preserved_value=constraint,
-                )
-            )
-    for unknown in request.unknowns:
-        if unknown.field in _CORE_UNKNOWN_FIELDS:
-            issues.append(
-                SearchPlanningIssue(
-                    code=SearchPlanningIssueCode.CORE_FIELD_UNKNOWN,
-                    message="a product-required field remains unknown",
-                    field=unknown.field,
-                )
-            )
-    if request.conflicts:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.ACTIVE_CONFLICT,
-                message="active EffectiveRequest conflicts prevent planning",
-            )
-        )
+def _admission_failure(inp: SearchPlanningInput, policy: PlanningPolicy, digest: str) -> SearchPlanningResult | None:
+    request = inp.envelope.effective_request
+    expected = inp.envelope.source.expected_effective_request_digest
+    if expected is not None and expected != digest:
+        return _failure("request_digest_mismatch", "input", "expected EffectiveRequest digest does not match")
+    missing = []
+    if not request.origins: missing.append("origin")
+    if not request.destinations: missing.append("destination")
+    if request.departure_window is None: missing.append("departure")
+    if request.travelers is None: missing.append("travelers")
+    if missing:
+        return _failure("required_input_missing", "input", "missing required fields: " + ", ".join(missing), "unplannable")
+    if request.conflicts or any(item.field in _CORE_UNKNOWN_FIELDS for item in request.unknowns):
+        return _failure("unresolved_request", "input", "request retains a core unknown or active conflict", "unplannable")
     if SearchMode.AWARD not in request.search_modes:
-        issues.append(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.AWARD_MODE_REQUIRED,
-                message="an award search mode is required for automated planning",
-                field="search_mode",
-            )
-        )
-    return issues
+        return _failure("award_mode_required", "input", "award search mode is required", "unplannable")
+    days = _input_days(request)
+    if days > policy.max_input_window_days:
+        return _mandatory_budget_failure(CompilationBudgetKind.INPUT_WINDOW_DAYS, days, policy.max_input_window_days)
+    return None
 
 
-def _canonical_locations(locations: Iterable[LocationRef]) -> tuple[LocationRef, ...]:
-    """Order independent alternatives without attempting semantic pairing."""
-
-    return tuple(
-        sorted(
-            locations,
-            key=lambda location: (
-                location.kind.value,
-                location.value.casefold(),
-                location.raw_text,
-            ),
-        )
-    )
-
-
-def _ground_all(
-    locations: Iterable[LocationRef],
-    role: str,
-    repository: PlanningKnowledgeRepository,
+def _resolve_endpoint_source(
+    inp: SearchPlanningInput,
+    repository: StrategyCompilationRepository,
     policy: PlanningPolicy,
-    field_provenance: FieldProvenance | None,
-    overrides: dict[tuple[str, str], GroundedEndpointResult] | None,
-) -> tuple[GroundedEndpointResult, ...]:
-    return tuple(
-        (
-            (overrides or {}).get((role, _location_override_key(location)))
-            or ground_endpoint(location, role, repository, policy)
-        ).model_copy(update={"field_provenance": field_provenance})
-        for location in _canonical_locations(locations)
-    )
-
-
-def _location_override_key(location: LocationRef) -> str:
-    return f"{location.kind.value}\x1f{location.value.casefold()}\x1f{location.raw_text}"
-
-
-def _identity(
-    envelope: PlanningInputEnvelope,
-    policy: PlanningPolicy,
-    repository: PlanningKnowledgeRepository,
-    capability: CachedSearchCapability,
-    digest: str,
-) -> PlanIdentity:
-    return PlanIdentity(
-        session_id=envelope.source.session_id,
-        revision=envelope.source.revision,
-        effective_request_digest=digest,
-        canonicalization_version=_CANONICALIZATION_VERSION,
-        digest_algorithm_version=_DIGEST_ALGORITHM_VERSION,
-        policy_version=policy.policy_version,
-        policy_digest=_canonical_digest(policy),
-        snapshot_id=repository.snapshot_id,
-        snapshot_as_of=repository.snapshot_as_of,
-        knowledge_receipt=repository.knowledge_receipt,
-        capability_receipt=CapabilityReceipt(
-            capability_id=capability.capability_id,
-            capability_version=capability.capability_version,
-            content_sha256=capability_content_digest(capability),
-            source_receipts=tuple(
-                CapabilitySourceReceipt(
-                    source_id=source.source_id,
-                    content_sha256=source.content_sha256,
+    cap_policy: AirportSelectionCapPolicy | None,
+    distance_policy: CityAirportDistanceConsistency | None,
+) -> tuple[tuple[EndpointSelectionProjection, ...], EndpointSelectionBinding]:
+    source = inp.endpoint_source
+    if isinstance(source, M2ASelectionRecordSource):
+        if cap_policy is None or distance_policy is None:
+            raise ValueError("M2A replay requires selection cap and distance policies")
+        records = {(record.role, record.resolved_entity.entity_id): record for record in source.selection_records}
+        source_kind = "m2a_replay"
+    else:
+        if cap_policy is not None or distance_policy is not None:
+            raise ValueError("selector policies are only valid for M2A replay")
+        records = {}
+        source_kind = "reviewed_mapping" if isinstance(source, ReviewedEndpointMappingSource) else "direct_grounding"
+    reviewed = {(record.role, record.resolved_entity_id): record for record in source.records} if isinstance(source, ReviewedEndpointMappingSource) else {}
+    used: set[tuple[str, str]] = set()
+    projections: list[EndpointSelectionProjection] = []
+    request = inp.envelope.effective_request
+    for role, locations, field in (("origin", request.origins, EffectiveField.ORIGIN), ("destination", request.destinations, EffectiveField.DESTINATION)):
+        for location in _canonical_locations(locations):
+            grounded = ground_endpoint(location, role, repository, policy)
+            resolution = grounded.resolution
+            selected: tuple[SelectedAirport, ...] | None = None
+            selection_kind: AirportSelectionKind | None = None
+            record_digest: str | None = None
+            projection_source_kind = "direct_grounding"
+            freshness = grounded.freshness
+            entity_id = resolution.resolved_entity_id
+            if entity_id is not None and source_kind == "reviewed_mapping":
+                reviewed_record = reviewed.get((cast(Any, role), entity_id))
+                if reviewed_record is None:
+                    raise ValueError("each geographic endpoint requires one reviewed mapping")
+                _validate_reviewed_record(
+                    reviewed_record,
+                    location,
+                    repository,
+                    max_source_evidence_age_days=policy.max_source_evidence_age_days,
                 )
-                for source in capability.sources
-            ),
-            caveats=capability.caveats,
-        ),
+                selected = reviewed_record.selected_airports
+                selection_kind = AirportSelectionKind.REVIEWED_MAPPING
+                record_digest = _reviewed_record_digest(reviewed_record)
+                projection_source_kind = "reviewed_mapping"
+                used.add((role, entity_id))
+            elif entity_id is not None and source_kind == "m2a_replay":
+                selection_record = records.get((cast(Any, role), entity_id))
+                if selection_record is None:
+                    raise ValueError("each geographic endpoint requires one M2A record")
+                assert cap_policy is not None and distance_policy is not None
+                replayed = _replay_selection_record(role, location, resolution, selection_record, cap_policy, distance_policy, repository, policy)
+                selected = replayed.selection.airports if replayed.selection else None
+                selection_kind = AirportSelectionKind.MODEL_PROPOSED
+                record_digest = airport_selection_record_digest(selection_record)
+                projection_source_kind = "m2a_replay"
+                freshness = replayed.freshness
+                used.add((role, entity_id))
+            elif grounded.selection is not None:
+                selected = grounded.selection.airports
+                selection_kind = grounded.selection.kind
+            if selected is None or selection_kind is None or resolution.status is not LocationResolutionStatus.RESOLVED:
+                raise ValueError("endpoint source did not produce a complete grounded selection")
+            projections.append(
+                EndpointSelectionProjection(
+                    role=cast(Any, role),
+                    resolution=resolution,
+                    airports=selected,
+                    source_kind=cast(Any, projection_source_kind),
+                    source_record_digest=record_digest,
+                    selection_kind=selection_kind,
+                    freshness=freshness,
+                    field_provenance=_provenance_for(request, field),
+                )
+            )
+    supplied = set(reviewed if source_kind == "reviewed_mapping" else records)
+    if supplied != used:
+        raise ValueError("endpoint records must be consumed exactly once")
+    digests = tuple(sorted(item.source_record_digest for item in projections if item.source_record_digest is not None))
+    binding = EndpointSelectionBinding(
+        source_kind=cast(Any, source_kind),
+        selected_origin_ids=tuple(item.airport_id for item in _unique_selected(tuple(projections), "origin")),
+        selected_destination_ids=tuple(item.airport_id for item in _unique_selected(tuple(projections), "destination")),
+        record_digests=digests,
+        cap_policy_version=cap_policy.policy_version if cap_policy else None,
+        cap_policy_digest=airport_selection_cap_policy_digest(cap_policy) if cap_policy else None,
+        distance_policy_version=distance_policy.policy_version if distance_policy else None,
+        distance_policy_digest=airport_selection_distance_policy_digest(distance_policy) if distance_policy else None,
+        catalog_release_identity=repository.knowledge_receipt,
+        review_status=cast(Any, {"direct_grounding": "deterministic_approved_policy", "reviewed_mapping": "reviewed_experiment", "m2a_replay": "m2a_diagnostic"}[source_kind]),
     )
+    return tuple(projections), binding
 
 
-def _build_endpoint_items(
-    pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...],
-    request: EffectiveRequest,
-    repository: PlanningKnowledgeRepository,
-) -> tuple[tuple[EndpointProbe, ...], tuple[AwardSearchItem, ...]]:
-    assert request.departure_window is not None
+def _validate_reviewed_record(
+    record: ReviewedEndpointMappingRecord,
+    location: LocationRef,
+    repository: StrategyCompilationRepository,
+    *,
+    max_source_evidence_age_days: int,
+) -> None:
+    if record.request_location != location or record.catalog_receipt != repository.knowledge_receipt:
+        raise ValueError("reviewed mapping request or catalog identity differs")
+    if record.record_digest != _reviewed_record_digest(record):
+        raise ValueError("reviewed mapping digest is forged or corrupt")
+    for selected in record.selected_airports:
+        airport = repository.airport(selected.airport_id)
+        if airport is None or airport.iata != selected.airport_iata or airport.source_ids != selected.airport_evidence_source_ids:
+            raise ValueError("reviewed mapping airport does not match the catalog")
+    source_ids = tuple(
+        dict.fromkeys(
+            source_id
+            for selected in record.selected_airports
+            for source_id in selected.airport_evidence_source_ids
+        )
+    )
+    if repository.freshness_for_source_ids(
+        source_ids,
+        max_source_evidence_age_days=max_source_evidence_age_days,
+    ) is FreshnessClass.STALE:
+        raise ValueError("reviewed mapping selected-airport evidence is stale")
+
+
+def _reviewed_record_digest(record: ReviewedEndpointMappingRecord) -> str:
+    payload = record.model_dump(mode="json", round_trip=True)
+    payload.pop("record_digest", None)
+    return _digest(payload)
+
+
+def _replay_selection_record(role: str, location: LocationRef, resolution: ResolvedLocation, record: AirportSelectionRecord, cap_policy: AirportSelectionCapPolicy, distance_policy: CityAirportDistanceConsistency, repository: StrategyCompilationRepository, policy: PlanningPolicy) -> GroundedEndpointResult:
+    context = context_for_resolved_location(resolution, repository)
+    if record.resolved_entity != context or record.catalog_receipt != repository.knowledge_receipt:
+        raise ValueError("M2A record context or catalog identity differs")
+    if record.cap_policy_digest != airport_selection_cap_policy_digest(cap_policy) or record.distance_policy != distance_policy:
+        raise ValueError("M2A selector policy identity differs")
+    rebuilt = validate_airport_selection_proposal(role=cast(Any, role), context=context, cap_policy=cap_policy, distance_policy=distance_policy, proposal=record.proposal, model=record.model, prompt_version=record.prompt_version, repository=repository)
+    if record.accepted_airports != rebuilt.accepted_airports or record.candidate_validations != rebuilt.candidate_validations or record.applicable_cap != rebuilt.applicable_cap or record.selector_adapter_version != AIRPORT_SELECTOR_ADAPTER_VERSION or record.prompt_version not in {AIRPORT_SELECTOR_PROMPT_VERSION, AIRPORT_SELECTOR_ORIGINAL_SIMPLE_PROMPT_VERSION} or record.response_schema_sha256 != AIRPORT_SELECTOR_RESPONSE_SCHEMA_SHA256:
+        raise ValueError("M2A record does not reproduce")
+    freshness = repository.freshness_for_source_ids(tuple({*resolution.evidence_source_ids, *(source for airport in record.accepted_airports for source in airport.airport_evidence_source_ids)}), max_source_evidence_age_days=policy.max_source_evidence_age_days)
+    if freshness is FreshnessClass.STALE or not record.accepted_airports:
+        raise ValueError("M2A replay is stale or empty")
+    return GroundedEndpointResult(role=cast(Any, role), snapshot_id=repository.snapshot_id, freshness=freshness, resolution=resolution, selection=AirportSelection(kind=AirportSelectionKind.MODEL_PROPOSED, resolved_location=resolution, airports=record.accepted_airports))
+
+
+def _mandatory_baseline(pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...], request: EffectiveRequest, repository: StrategyCompilationRepository) -> tuple[tuple[EndpointProbe, ...], tuple[LogicalAwardQuery, ...], tuple[MandatoryQueryUse, ...]]:
+    assert request.departure_window is not None and request.travelers is not None
+    probes: list[EndpointProbe] = []
+    queries: list[LogicalAwardQuery] = []
+    uses: list[MandatoryQueryUse] = []
+    for origin, destination in pairs:
+        envelope = _date_envelope(request, repository, origin.airport_id, 0, 0, DateBasis.FIRST_ORIGIN_AIRPORT_LOCAL)
+        query = _logical_query(origin.airport_id, destination.airport_id, envelope, request)
+        probe_id = "endpoint-market:" + _digest({"origin": origin.airport_id, "destination": destination.airport_id, "date": envelope})
+        probes.append(EndpointProbe(probe_id=probe_id, origin_endpoint=origin, destination_endpoint=destination, date_envelope=envelope, requested_cabins=query.requested_cabins, traveler_count=request.travelers))
+        queries.append(query)
+        uses.append(MandatoryQueryUse(probe_id=probe_id, query_id=query.query_id))
+    return tuple(probes), tuple(queries), tuple(uses)
+
+
+def _logical_query(origin_id: str, destination_id: str, envelope: DateEnvelope, request: EffectiveRequest) -> LogicalAwardQuery:
     assert request.travelers is not None
-    cabin_values = tuple(sorted({cabin.value for cabin in request.cabins}))
-    requested_cabins = tuple(sorted(set(request.cabins), key=lambda cabin: cabin.value))
-    cabin_provenance = _provenance_for(request, EffectiveField.CABIN)
+    validations = (ResultValidationObligation(kind=ResultValidationKind.MINIMUM_AWARD_SEATS, minimum_seats=request.travelers, field_provenance=_provenance_for(request, EffectiveField.TRAVELERS)),)
+    requested_cabins = tuple(sorted(set(request.cabins), key=lambda item: item.value))
     filters = (
         (
             FilterObligation(
                 kind=FilterObligationKind.CABIN_AVAILABLE_IN,
-                values=cabin_values,
+                values=tuple(cabin.value for cabin in requested_cabins),
                 origin="user_requirement",
-                field_provenance=cabin_provenance,
+                field_provenance=_provenance_for(request, EffectiveField.CABIN),
             ),
         )
-        if cabin_values
+        if requested_cabins
         else ()
     )
-    seat_obligation = ResultValidationObligation(
-        kind=ResultValidationKind.MINIMUM_AWARD_SEATS,
-        minimum_seats=request.travelers,
-        field_provenance=_provenance_for(request, EffectiveField.TRAVELERS),
+    query_payload = {
+        "origin_airport_fact_id": origin_id,
+        "destination_airport_fact_id": destination_id,
+        "scope": "endpoint_market",
+        "date_envelope": envelope,
+        "requested_cabins": requested_cabins,
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "filter_obligations": filters,
+        "result_validation_obligations": validations,
+    }
+    return LogicalAwardQuery(
+        query_id="logical-award:" + _digest(_query_identity_payload(query_payload)),
+        origin_airport_fact_id=origin_id,
+        destination_airport_fact_id=destination_id,
+        date_envelope=envelope,
+        requested_cabins=requested_cabins,
+        filter_obligations=filters,
+        result_validation_obligations=validations,
     )
-    probes: list[EndpointProbe] = []
-    items: list[AwardSearchItem] = []
-    for origin_airport, destination_airport in pairs:
-        origin_record = repository.airport(origin_airport.airport_id)
-        if origin_record is None:
-            raise ValueError("validated selected airport is absent from the knowledge repository")
-        date_envelope = DateEnvelope(
-            start=request.departure_window.start,
-            end=request.departure_window.end,
-            basis=DateBasis.FIRST_ORIGIN_AIRPORT_LOCAL,
-            timezone=origin_record.timezone,
-            effective_window_precision=request.departure_window.precision.value,
-            field_provenance=_provenance_for(request, EffectiveField.DEPARTURE),
-        )
-        semantic_key = {
-            "scope": "endpoint_market",
-            "origin_airport_fact_id": origin_airport.airport_id,
-            "destination_airport_fact_id": destination_airport.airport_id,
-            "date_envelope": date_envelope.model_dump(mode="json"),
-            "requested_cabins": [cabin.value for cabin in requested_cabins],
-        }
-        pair_key = _canonical_digest(semantic_key)
-        probe_id = f"endpoint-market:{pair_key}"
-        probes.append(
-            EndpointProbe(
-                probe_id=probe_id,
-                origin_endpoint=origin_airport,
-                destination_endpoint=destination_airport,
-                date_envelope=date_envelope,
-                requested_cabins=requested_cabins,
-                traveler_count=request.travelers,
-            )
-        )
-        items.append(
-            AwardSearchItem(
-                item_id=f"award:{_canonical_digest({'probe_id': probe_id, 'mode': 'award', 'filters': [item.model_dump(mode='json') for item in filters], 'validation': seat_obligation.model_dump(mode='json')})}",
-                probe_id=probe_id,
-                origin_airport_fact_id=origin_airport.airport_id,
-                destination_airport_fact_id=destination_airport.airport_id,
-                date_envelope=date_envelope,
-                requested_cabins=requested_cabins,
-                filter_obligations=filters,
-                result_validation_obligations=(seat_obligation,),
-            )
-        )
-    return tuple(probes), tuple(items)
 
 
-def _build_explicit_paths(
-    pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...],
-    request: EffectiveRequest,
-    repository: PlanningKnowledgeRepository,
-    policy: PlanningPolicy,
-    *,
-    remaining_item_slots: int,
-    remaining_date_work_days: int,
-) -> tuple[
-    tuple[ExplicitPathHypothesis, ...],
-    tuple[AwardSearchItem, ...],
-    tuple[str, ...],
-    dict[BudgetKind, tuple[int, int]],
-    tuple[PathExplorationReceipt, ...],
-]:
-    """Materialize only directed, evidence-backed two-component hypotheses.
-
-    A topology edge proves only a physical directional possibility.  Every
-    component keeps a structural direct-flight prefilter and a later exact-trip
-    validation obligation; this code never turns topology into a schedule or a
-    protected connection claim.
-    """
-
+def _validate_gateway_binding(inp: SearchPlanningInput, binding: EndpointSelectionBinding, origins: tuple[SelectedAirport, ...], destinations: tuple[SelectedAirport, ...], request: EffectiveRequest) -> None:
+    gateway_input = inp.gateway_discovery_result.input
+    if (
+        _canonical_selected_airports(gateway_input.origin_endpoints)
+        != _canonical_selected_airports(origins)
+        or _canonical_selected_airports(gateway_input.destination_endpoints)
+        != _canonical_selected_airports(destinations)
+    ):
+        raise ValueError("gateway endpoint input differs from compiled endpoint selection")
     assert request.departure_window is not None
-    assert request.travelers is not None
-    candidates: list[
-        tuple[
-            SelectedAirport,
-            SelectedAirport,
-            SelectedAirport,
-            DirectedRouteEdge,
-            DirectedRouteEdge,
-        ]
-    ] = []
-    pairs_with_topology: set[tuple[str, str]] = set()
-    candidate_limit = policy.max_path_candidate_exploration
-    candidate_overflow = False
-    exclusions: list[str] = []
-    exploration_receipts: list[PathExplorationReceipt] = []
-    # Geographic endpoint selection order is a product preference.  Within it,
-    # repository candidates are sorted, so fixture record order cannot alter
-    # the canonical output.
-    for origin, destination in pairs:
-        outgoing_edges, outgoing_overflow = repository.outgoing_route_edges(
-            origin.airport_id,
-            limit=policy.max_outgoing_route_edges_per_endpoint_pair,
-        )
-        available_edges: dict[str, DirectedRouteEdge] = {
-            edge.edge_id: edge for edge in outgoing_edges
-        }
-        pair_candidate_count = 0
-        if outgoing_overflow:
-            exclusions.append(
-                "optional explicit-path outgoing topology exceeded the per-pair edge limit for "
-                f"{origin.airport_iata}->{destination.airport_iata}"
-            )
-        for first_edge in outgoing_edges:
-            intermediate_id = first_edge.destination_airport_id
-            second_edge = repository.route_edge(intermediate_id, destination.airport_id)
-            if second_edge is not None:
-                available_edges[second_edge.edge_id] = second_edge
-            if second_edge is None:
-                continue
-            if _route_edge_is_stale(first_edge, repository, policy) or _route_edge_is_stale(
-                second_edge, repository, policy
-            ):
-                exclusions.append(
-                    "optional explicit-path topology omitted stale route evidence for "
-                    f"{origin.airport_iata}->{destination.airport_iata}"
-                )
-                continue
-            if not _route_edges_cover_path_envelopes(first_edge, second_edge, request):
-                exclusions.append(
-                    "optional explicit-path topology omitted known-inapplicable route evidence for "
-                    f"{origin.airport_iata}->{destination.airport_iata}"
-                )
-                continue
-            pairs_with_topology.add((origin.airport_id, destination.airport_id))
-            if len(candidates) >= candidate_limit:
-                candidate_overflow = True
-                continue
-            intermediate_record = repository.airport(intermediate_id)
-            if intermediate_record is None:  # KnowledgeSnapshot validation should prevent this.
-                raise ValueError("route topology cites an absent intermediate airport")
-            intermediate = SelectedAirport(
-                airport_id=intermediate_record.airport_id,
-                airport_iata=intermediate_record.iata,
-                airport_evidence_source_ids=intermediate_record.source_ids,
-            )
-            candidates.append((origin, intermediate, destination, first_edge, second_edge))
-            pair_candidate_count += 1
-        exploration_receipts.append(
-            PathExplorationReceipt(
-                origin_airport_fact_id=origin.airport_id,
-                destination_airport_fact_id=destination.airport_id,
-                examined_edge_ids=tuple(sorted(edge.edge_id for edge in outgoing_edges)),
-                candidate_count=pair_candidate_count,
-                outgoing_edge_limit=policy.max_outgoing_route_edges_per_endpoint_pair,
-                overflow=outgoing_overflow,
-                available_edge_evidence=tuple(
-                    _route_edge_evidence(available_edges[edge_id])
-                    for edge_id in sorted(available_edges)
-                ),
-            )
-        )
-
-    if not candidates:
-        exclusion = (
-            "optional explicit-path candidate exploration reached its configured limit"
-            if candidate_overflow
-            else "optional explicit-path topology is unavailable for the selected endpoint pairs"
-        )
-        return (
-            (),
-            (),
-            tuple(dict.fromkeys((*exclusions, exclusion))),
-            {
-                BudgetKind.PATH_CANDIDATE_COUNT: (0, candidate_limit),
-                BudgetKind.PATH_HYPOTHESIS_COUNT: (0, policy.max_path_hypotheses),
-                BudgetKind.TOTAL_AWARD_SEARCH_ITEM_COUNT: (0, max(0, remaining_item_slots)),
-                BudgetKind.DATE_EXPANDED_WORK_DAYS: (0, max(0, remaining_date_work_days)),
-            },
-            tuple(exploration_receipts),
-        )
-
-    missing_pairs = [
-        f"{origin.airport_iata}->{destination.airport_iata}"
-        for origin, destination in pairs
-        if (origin.airport_id, destination.airport_id) not in pairs_with_topology
-    ]
-    if missing_pairs:
-        exclusions.append(
-            "optional explicit-path topology is unavailable for endpoint pairs: "
-            + ", ".join(missing_pairs)
-        )
-    if candidate_overflow:
-        exclusions.append(
-            "optional explicit-path candidate exploration reached its configured limit"
-        )
-    requested_cabins = tuple(sorted(set(request.cabins), key=lambda cabin: cabin.value))
-    cabin_filters = _cabin_filters(request)
-    seat_obligation = ResultValidationObligation(
-        kind=ResultValidationKind.MINIMUM_AWARD_SEATS,
-        minimum_seats=request.travelers,
-        field_provenance=_provenance_for(request, EffectiveField.TRAVELERS),
+    if gateway_input.outbound_date.start != request.departure_window.start or gateway_input.outbound_date.end != request.departure_window.end or gateway_input.outbound_date.effective_window_precision != request.departure_window.precision.value or gateway_input.outbound_date.timezone != request.context.timezone:
+        raise ValueError("gateway outbound date input differs from EffectiveRequest")
+    expected_digests = tuple(sorted(binding.record_digests))
+    reviewed_without_upstream = (
+        binding.source_kind == "reviewed_mapping"
+        and not gateway_input.upstream_selection_record_ids
+        and not gateway_input.upstream_selection_record_digests
+        and not inp.upstream_selection_id_bindings
     )
-    items_by_id: dict[str, AwardSearchItem] = {}
-    hypotheses: list[ExplicitPathHypothesis] = []
-    materialized_work_days = 0
-    for origin, intermediate, destination, first_edge, second_edge in candidates:
-        if len(hypotheses) >= policy.max_path_hypotheses:
-            exclusions.append("optional explicit-path hypotheses exceeded the configured limit")
-            break
-        component_specs: list[
-            tuple[
-                int,
-                SelectedAirport,
-                SelectedAirport,
-                DirectedRouteEdge,
-                DateEnvelope,
-                TemporalDerivation,
-                AwardSearchItem,
-            ]
-        ] = []
-        for index, component_origin, component_destination, edge in (
-            (1, origin, intermediate, first_edge),
-            (2, intermediate, destination, second_edge),
-        ):
-            origin_record = repository.airport(component_origin.airport_id)
-            if origin_record is None:
-                raise ValueError("route component has an absent origin airport")
-            offsets = (0, 0) if index == 1 else (-1, 2)
-            date_envelope = DateEnvelope(
-                start=request.departure_window.start + timedelta(days=offsets[0]),
-                end=request.departure_window.end + timedelta(days=offsets[1]),
-                basis=(
-                    DateBasis.FIRST_ORIGIN_AIRPORT_LOCAL
-                    if index == 1
-                    else DateBasis.LATER_COMPONENT_ORIGIN_AIRPORT_LOCAL
-                ),
-                timezone=origin_record.timezone,
-                effective_window_precision=request.departure_window.precision.value,
-                field_provenance=_provenance_for(request, EffectiveField.DEPARTURE),
-            )
-            temporal_derivation = TemporalDerivation(
-                component_index=index,
-                origin_airport_fact_id=component_origin.airport_id,
-                basis=date_envelope.basis,
-                timezone=origin_record.timezone,
-                start_offset_days=offsets[0],
-                end_offset_days=offsets[1],
-                source_window_start=request.departure_window.start,
-                source_window_end=request.departure_window.end,
-                derived_start=date_envelope.start,
-                derived_end=date_envelope.end,
-            )
-            structure_filter = FilterObligation(
-                kind=FilterObligationKind.DIRECT_FLIGHT_AVAILABLE,
-                values=("true",),
-                origin="planner_structure",
-            )
-            structure_validation = ResultValidationObligation(
-                kind=ResultValidationKind.EXACT_PHYSICAL_COMPONENT_STRUCTURE,
-                expected_origin_airport_fact_id=component_origin.airport_id,
-                expected_destination_airport_fact_id=component_destination.airport_id,
-            )
-            filters = (*cabin_filters, structure_filter)
-            validations = (seat_obligation, structure_validation)
-            semantic_key = {
-                "scope": SearchScope.EXPLICIT_PHYSICAL_COMPONENT.value,
-                "origin_airport_fact_id": component_origin.airport_id,
-                "destination_airport_fact_id": component_destination.airport_id,
-                "date_envelope": date_envelope.model_dump(mode="json"),
-                "requested_cabins": [cabin.value for cabin in requested_cabins],
-                "filters": [item.model_dump(mode="json") for item in filters],
-                "validations": [item.model_dump(mode="json") for item in validations],
-            }
-            item_id = f"award:{_canonical_digest(semantic_key)}"
-            component_specs.append(
-                (
-                    index,
-                    component_origin,
-                    component_destination,
-                    edge,
-                    date_envelope,
-                    temporal_derivation,
-                    AwardSearchItem(
-                        item_id=item_id,
-                        scope=SearchScope.EXPLICIT_PHYSICAL_COMPONENT,
-                        origin_airport_fact_id=component_origin.airport_id,
-                        destination_airport_fact_id=component_destination.airport_id,
-                        date_envelope=date_envelope,
-                        requested_cabins=requested_cabins,
-                        filter_obligations=filters,
-                        result_validation_obligations=validations,
-                    ),
-                )
-            )
+    if (
+        gateway_input.upstream_selection_record_digests != expected_digests
+        and not reviewed_without_upstream
+    ):
+        raise ValueError("gateway upstream selection digests differ")
+    bindings = {item.upstream_record_id: item.record_digest for item in inp.upstream_selection_id_bindings}
+    if not reviewed_without_upstream and (
+        gateway_input.upstream_selection_record_ids or inp.upstream_selection_id_bindings
+    ) and (
+        tuple(gateway_input.upstream_selection_record_ids) != tuple(bindings)
+        or tuple(sorted(bindings.values())) != expected_digests
+    ):
+        raise ValueError("gateway upstream selection ID bindings differ")
 
-        # Budget the full semantic hypothesis before mutating item state.  An
-        # item already materialized for another path is deliberately free here
-        # because execution reuses it; duplicate items within this hypothesis
-        # are counted once as well.
-        prospective_items = {
-            item.item_id: item for *_, item in component_specs if item.item_id not in items_by_id
-        }
-        prospective_work_days = sum(
-            (item.date_envelope.end - item.date_envelope.start).days + 1
-            for item in prospective_items.values()
+
+def _canonical_selected_airports(
+    airports: tuple[SelectedAirport, ...],
+) -> tuple[str, ...]:
+    return tuple(
+        sorted(
+            json.dumps(
+                airport.model_dump(mode="json", round_trip=True),
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+            for airport in airports
         )
-        if len(items_by_id) + len(prospective_items) > remaining_item_slots:
-            exclusions.append(
-                "optional explicit-path searches exceeded the total search-item budget"
-            )
-            continue
-        if materialized_work_days + prospective_work_days > remaining_date_work_days:
-            exclusions.append("optional explicit-path date-expanded work exceeded its budget")
-            continue
-
-        items_by_id.update(prospective_items)
-        materialized_work_days += prospective_work_days
-        components: list[ExplicitPathComponent] = []
-        for (
-            index,
-            component_origin,
-            component_destination,
-            edge,
-            date_envelope,
-            temporal_derivation,
-            item,
-        ) in component_specs:
-            components.append(
-                ExplicitPathComponent(
-                    component_id=(
-                        "component:"
-                        + _canonical_digest(
-                            {
-                                "requested_origin": origin.airport_id,
-                                "intermediate": intermediate.airport_id,
-                                "requested_destination": destination.airport_id,
-                                "edge": edge.edge_id,
-                                "item": item.item_id,
-                            }
-                        )
-                    ),
-                    component_index=index,
-                    origin_endpoint=component_origin,
-                    destination_endpoint=component_destination,
-                    route_edge_id=edge.edge_id,
-                    route_evidence_source_ids=edge.source_ids,
-                    route_evidence_kind=edge.evidence_kind.value,
-                    route_date_applicability=edge.date_applicability.value,
-                    route_applicable_start=edge.applicable_start,
-                    route_applicable_end=edge.applicable_end,
-                    date_applicability_disclosure=(
-                        "date_applicability_unknown"
-                        if edge.date_applicability is RouteDateApplicability.UNKNOWN
-                        else None
-                    ),
-                    date_envelope=date_envelope,
-                    temporal_derivation=temporal_derivation,
-                    award_search_item_id=item.item_id,
-                )
-            )
-        hypothesis_key = {
-            "origin": origin.airport_id,
-            "intermediate": intermediate.airport_id,
-            "destination": destination.airport_id,
-            "edge_ids": [first_edge.edge_id, second_edge.edge_id],
-            "component_item_ids": [component.award_search_item_id for component in components],
-        }
-        hypotheses.append(
-            ExplicitPathHypothesis(
-                hypothesis_id=f"path:{_canonical_digest(hypothesis_key)}",
-                requested_origin_endpoint=origin,
-                requested_destination_endpoint=destination,
-                intermediate_airport_fact_id=intermediate.airport_id,
-                components=tuple(components),
-            )
-        )
-
-    if not hypotheses and not exclusions:
-        exclusions.append("optional explicit-path topology could not be materialized within policy")
-    return (
-        tuple(hypotheses),
-        tuple(items_by_id[item_id] for item_id in sorted(items_by_id)),
-        tuple(dict.fromkeys(exclusions)),
-        {
-            BudgetKind.PATH_CANDIDATE_COUNT: (len(candidates), candidate_limit),
-            BudgetKind.PATH_HYPOTHESIS_COUNT: (len(hypotheses), policy.max_path_hypotheses),
-            BudgetKind.TOTAL_AWARD_SEARCH_ITEM_COUNT: (
-                len(items_by_id),
-                max(0, remaining_item_slots),
-            ),
-            BudgetKind.DATE_EXPANDED_WORK_DAYS: (
-                materialized_work_days,
-                max(0, remaining_date_work_days),
-            ),
-        },
-        tuple(exploration_receipts),
     )
 
 
-def _route_edge_is_stale(
-    edge: DirectedRouteEdge, repository: PlanningKnowledgeRepository, policy: PlanningPolicy
-) -> bool:
-    """Evaluate only the evidence an optional topology edge actually cites."""
-
-    return (
-        repository.freshness_for_source_ids(
-            edge.source_ids,
-            max_source_evidence_age_days=policy.max_source_evidence_age_days,
-        )
-        is FreshnessClass.STALE
-    )
-
-
-def _route_edge_evidence(edge: DirectedRouteEdge) -> RouteEdgeEvidenceReceipt:
-    """Project one knowledge edge into the plan's auditable receipt."""
-
-    return RouteEdgeEvidenceReceipt(
-        edge_id=edge.edge_id,
-        origin_airport_fact_id=edge.origin_airport_id,
-        destination_airport_fact_id=edge.destination_airport_id,
-        route_evidence_source_ids=edge.source_ids,
-        route_evidence_kind=edge.evidence_kind.value,
-        route_date_applicability=edge.date_applicability.value,
-        route_applicable_start=edge.applicable_start,
-        route_applicable_end=edge.applicable_end,
-    )
-
-
-def _route_edges_cover_path_envelopes(
-    first_edge: DirectedRouteEdge,
-    second_edge: DirectedRouteEdge,
-    request: EffectiveRequest,
-) -> bool:
-    """Return whether known topology intervals cover the whole planned envelope.
-
-    Unknown applicability remains exploratory only and is disclosed on the
-    resulting component.  A known interval must cover every date placed in a
-    reusable search item; otherwise a planner would claim topology support for
-    dates outside the evidence.
-    """
-
-    assert request.departure_window is not None
-    first_start, first_end = request.departure_window.start, request.departure_window.end
-    later_start = request.departure_window.start - timedelta(days=1)
-    later_end = request.departure_window.end + timedelta(days=2)
-
-    def covers(edge: DirectedRouteEdge, start: date, end: date) -> bool:
-        if edge.date_applicability is RouteDateApplicability.UNKNOWN:
-            return True
-        assert edge.applicable_start is not None
-        assert edge.applicable_end is not None
-        return edge.applicable_start <= start and edge.applicable_end >= end
-
-    return covers(first_edge, first_start, first_end) and covers(
-        second_edge, later_start, later_end
-    )
-
-
-def _cabin_filters(request: EffectiveRequest) -> tuple[FilterObligation, ...]:
-    cabin_values = tuple(sorted({cabin.value for cabin in request.cabins}))
-    if not cabin_values:
-        return ()
-    return (
-        FilterObligation(
-            kind=FilterObligationKind.CABIN_AVAILABLE_IN,
-            values=cabin_values,
-            origin="user_requirement",
-            field_provenance=_provenance_for(request, EffectiveField.CABIN),
-        ),
-    )
-
-
-def _payment_patterns(
-    paths: tuple[ExplicitPathHypothesis, ...], *, manual_cash_enabled: bool
-) -> tuple[PaymentPattern, ...]:
-    """Annotate each materialized two-component path without duplicating it.
-
-    Endpoint-market searches are already intrinsically award-only through
-    ``AwardSearchItem.automated_mode``.  Only explicit two-component topology
-    paths get payment alternatives, and none creates an automated cash item.
-    """
-
-    mode_sets: tuple[tuple[ComponentPaymentMode, ComponentPaymentMode], ...] = (
-        (ComponentPaymentMode.AWARD, ComponentPaymentMode.AWARD),
-        *(
-            (
-                (ComponentPaymentMode.AWARD, ComponentPaymentMode.MANUAL_CASH),
-                (ComponentPaymentMode.MANUAL_CASH, ComponentPaymentMode.AWARD),
-            )
-            if manual_cash_enabled
-            else ()
-        ),
-    )
-    patterns: list[PaymentPattern] = []
-    for path in paths:
-        for modes in mode_sets:
-            patterns.append(
-                PaymentPattern(
-                    pattern_id=(
-                        "payment-pattern:"
-                        + _canonical_digest(
-                            {
-                                "hypothesis_id": path.hypothesis_id,
-                                "component_payment_modes": [mode.value for mode in modes],
-                            }
-                        )
-                    ),
-                    hypothesis_id=path.hypothesis_id,
-                    component_payment_modes=modes,
-                )
-            )
-    return tuple(patterns)
-
-
-def _manual_cash_check_templates(
-    paths: tuple[ExplicitPathHypothesis, ...],
-    *,
-    payment_patterns: tuple[PaymentPattern, ...],
-    request: EffectiveRequest,
-) -> tuple[ManualCashCheckTemplate, ...]:
-    """Create dormant dependencies for hybrid paths only.
-
-    A template references the existing evidence-backed component and the other
-    component's award item.  It is intentionally not an itinerary, price,
-    availability observation, or provider request.
-    """
-
-    assert request.travelers is not None
-    path_by_id = {path.hypothesis_id: path for path in paths}
-    requested_cabins = tuple(sorted(set(request.cabins), key=lambda cabin: cabin.value))
-    templates: list[ManualCashCheckTemplate] = []
-    for pattern in payment_patterns:
-        manual_indexes = tuple(
-            index
-            for index, mode in enumerate(pattern.component_payment_modes, start=1)
-            if mode is ComponentPaymentMode.MANUAL_CASH
-        )
-        if not manual_indexes:
-            continue
-        # SearchPlan validates this shape again; keeping the guard here makes
-        # malformed internal calls fail close before a template can be emitted.
-        if len(manual_indexes) != 1:
-            raise ValueError("a hybrid payment pattern must have exactly one manual component")
-        path = path_by_id[pattern.hypothesis_id]
-        manual_index = manual_indexes[0]
-        manual_component = path.components[manual_index - 1]
-        award_component = path.components[0 if manual_index == 2 else 1]
-        temporal_kind = (
-            ManualCashTemporalValidationKind.FIRST_COMPONENT_WITHIN_ORIGINAL_WINDOW
-            if manual_index == 1
-            else ManualCashTemporalValidationKind.LATER_COMPONENT_REQUIRES_ASSEMBLED_JOURNEY_VALIDATION
-        )
-        templates.append(
-            ManualCashCheckTemplate(
-                template_id=(
-                    "manual-cash-check:"
-                    + _canonical_digest(
-                        {
-                            "payment_pattern_id": pattern.pattern_id,
-                            "manual_component_id": manual_component.component_id,
-                            "relevant_award_search_item_id": award_component.award_search_item_id,
-                        }
+def _enumerate_bundles(gateway: GatewayDiscoveryResult, origins: tuple[SelectedAirport, ...], destinations: tuple[SelectedAirport, ...]) -> tuple[_Bundle, ...]:
+    origin_by_iata = {item.airport_iata: item for item in origins}
+    destination_by_iata = {item.airport_iata: item for item in destinations}
+    origin_access = {item.airport.airport_iata: item for item in gateway.accepted_origin_access_gateways}
+    destination_access = {item.airport.airport_iata: item for item in gateway.accepted_destination_access_gateways}
+    decision_index = {(item.pool, item.proposed_airport_iata): item.candidate_index for item in gateway.candidate_decisions if item.accepted}
+    bundles: list[_Bundle] = []
+    access_relationships: dict[tuple[str, str, str, str], str] = {}
+    for candidate in gateway.accepted_origin_access_gateways:
+        idx = decision_index[("origin_access_gateways", candidate.airport.airport_iata)]
+        source = _source_candidate(gateway, "origin_access_gateways", idx, candidate.airport)
+        for origin_iata in candidate.supported_original_origin_iata_codes:
+            for destination_iata in candidate.applicable_original_destination_iata_codes:
+                origin, destination = origin_by_iata[origin_iata], destination_by_iata[destination_iata]
+                relationship = RelationshipIdentity(relationship_type=SupplementalStrategyType.ORIGIN_ACCESS, gateway_result_digest=gateway.result_digest, pool="origin_access_gateways", candidate_index=idx, candidate_airport_fact_id=candidate.airport.airport_id, original_origin_airport_fact_id=origin.airport_id, original_destination_airport_fact_id=destination.airport_id)
+                rel_id = _digest(relationship)
+                access_relationships[
+                    ("origin", candidate.airport.airport_iata, origin_iata, destination_iata)
+                ] = rel_id
+                pair = EndpointPair(origin_airport_fact_id=origin.airport_id, destination_airport_fact_id=destination.airport_id)
+                bundles.append(_Bundle(relationship_id=rel_id, strategy_type=SupplementalStrategyType.ORIGIN_ACCESS, source_candidate=source, source_relationship=relationship, source_scope=None, pairs=(pair,), reason=candidate.reason, uncertainty=candidate.material_uncertainty, market_comparison=candidate.market_comparison, query_specs=((candidate.airport.airport_id, destination.airport_id, "access_main", -1, 2),), positioning_specs_by_pair={(origin.airport_id, destination.airport_id): (("origin", origin.airport_id, candidate.airport.airport_id, rel_id),)}))
+    for destination_candidate in gateway.accepted_destination_access_gateways:
+        idx = decision_index[("destination_access_gateways", destination_candidate.airport.airport_iata)]
+        source = _source_candidate(gateway, "destination_access_gateways", idx, destination_candidate.airport)
+        for destination_iata in destination_candidate.supported_original_destination_iata_codes:
+            for origin_iata in destination_candidate.applicable_original_origin_iata_codes:
+                origin, destination = origin_by_iata[origin_iata], destination_by_iata[destination_iata]
+                relationship = RelationshipIdentity(relationship_type=SupplementalStrategyType.DESTINATION_ACCESS, gateway_result_digest=gateway.result_digest, pool="destination_access_gateways", candidate_index=idx, candidate_airport_fact_id=destination_candidate.airport.airport_id, original_origin_airport_fact_id=origin.airport_id, original_destination_airport_fact_id=destination.airport_id)
+                rel_id = _digest(relationship)
+                access_relationships[
+                    (
+                        "destination",
+                        destination_candidate.airport.airport_iata,
+                        destination_iata,
+                        origin_iata,
                     )
-                ),
-                payment_pattern_id=pattern.pattern_id,
-                hypothesis_id=path.hypothesis_id,
-                manual_component_id=manual_component.component_id,
-                manual_component_index=manual_index,
-                relevant_award_search_item_id=award_component.award_search_item_id,
-                traveler_count=request.travelers,
-                requested_cabins=requested_cabins,
-                temporal_validation_kind=temporal_kind,
-            )
+                ] = rel_id
+                pair = EndpointPair(origin_airport_fact_id=origin.airport_id, destination_airport_fact_id=destination.airport_id)
+                bundles.append(_Bundle(relationship_id=rel_id, strategy_type=SupplementalStrategyType.DESTINATION_ACCESS, source_candidate=source, source_relationship=relationship, source_scope=None, pairs=(pair,), reason=destination_candidate.reason, uncertainty=destination_candidate.material_uncertainty, market_comparison=destination_candidate.market_comparison, query_specs=((origin.airport_id, destination_candidate.airport.airport_id, "access_main", 0, 0),), positioning_specs_by_pair={(origin.airport_id, destination.airport_id): (("destination", destination_candidate.airport.airport_id, destination.airport_id, rel_id),)}))
+    for hub_candidate in gateway.accepted_intermediate_hubs:
+        idx = decision_index[("intermediate_hubs", hub_candidate.airport.airport_iata)]
+        source = _source_candidate(gateway, "intermediate_hubs", idx, hub_candidate.airport)
+        decision = next(
+            item
+            for item in gateway.candidate_decisions
+            if item.pool == "intermediate_hubs" and item.candidate_index == idx
         )
-    return tuple(templates)
+        accepted_scope_indexes = tuple(
+            item.scope_index for item in decision.scope_decisions if item.accepted
+        )
+        if len(accepted_scope_indexes) != len(hub_candidate.scopes):
+            raise ValueError("accepted hub scopes do not align with source scope decisions")
+        for source_scope_index, scope in zip(
+            accepted_scope_indexes, hub_candidate.scopes, strict=True
+        ):
+            for origin_ref in scope.origin_side:
+                for destination_ref in scope.destination_side:
+                    origin_airport = origin_by_iata[origin_ref.airport_iata] if origin_ref.kind == "original_origin" else origin_access[origin_ref.airport_iata].airport
+                    destination_airport = destination_by_iata[destination_ref.airport_iata] if destination_ref.kind == "original_destination" else destination_access[destination_ref.airport_iata].airport
+                    supported_origins = (origin_ref.airport_iata,) if origin_ref.kind == "original_origin" else origin_access[origin_ref.airport_iata].supported_original_origin_iata_codes
+                    supported_destinations = (destination_ref.airport_iata,) if destination_ref.kind == "original_destination" else destination_access[destination_ref.airport_iata].supported_original_destination_iata_codes
+                    pairs = tuple(EndpointPair(origin_airport_fact_id=origin_by_iata[o].airport_id, destination_airport_fact_id=destination_by_iata[d].airport_id) for o in supported_origins for d in supported_destinations)
+                    relationship = RelationshipIdentity(relationship_type=SupplementalStrategyType.SCOPED_HUB, gateway_result_digest=gateway.result_digest, pool="intermediate_hubs", candidate_index=idx, candidate_airport_fact_id=hub_candidate.airport.airport_id, scope_index=source_scope_index, typed_origin_kind=origin_ref.kind, typed_origin_iata=origin_ref.airport_iata, typed_destination_kind=destination_ref.kind, typed_destination_iata=destination_ref.airport_iata)
+                    rel_id = _digest(relationship)
+                    scope_identity = SourceScopeIdentity(scope_index=source_scope_index, typed_origin_kind=origin_ref.kind, typed_origin_iata=origin_ref.airport_iata, typed_destination_kind=destination_ref.kind, typed_destination_iata=destination_ref.airport_iata)
+                    specs_by_pair: dict[tuple[str, str], tuple[tuple[str, str, str, str], ...]] = {}
+                    for original_origin in supported_origins:
+                        for original_destination in supported_destinations:
+                            pair_specs: list[tuple[str, str, str, str]] = []
+                            if origin_ref.kind == "origin_access_gateway":
+                                pair_specs.append(("origin", origin_by_iata[original_origin].airport_id, origin_airport.airport_id, access_relationships[("origin", origin_ref.airport_iata, original_origin, original_destination)]))
+                            if destination_ref.kind == "destination_access_gateway":
+                                pair_specs.append(("destination", destination_airport.airport_id, destination_by_iata[original_destination].airport_id, access_relationships[("destination", destination_ref.airport_iata, original_destination, original_origin)]))
+                            specs_by_pair[(origin_by_iata[original_origin].airport_id, destination_by_iata[original_destination].airport_id)] = tuple(pair_specs)
+                    bundles.append(_Bundle(relationship_id=rel_id, strategy_type=SupplementalStrategyType.SCOPED_HUB, source_candidate=source, source_relationship=relationship, source_scope=scope_identity, pairs=pairs, reason=scope.reason or hub_candidate.reason, uncertainty=hub_candidate.material_uncertainty, market_comparison=hub_candidate.market_comparison, query_specs=((origin_airport.airport_id, hub_candidate.airport.airport_id, "hub_first", -1 if origin_ref.kind == "origin_access_gateway" else 0, 2 if origin_ref.kind == "origin_access_gateway" else 0), (hub_candidate.airport.airport_id, destination_airport.airport_id, "hub_second", -1, 2)), positioning_specs_by_pair=specs_by_pair))
+    return tuple(bundles)
+
+
+def _source_candidate(gateway: GatewayDiscoveryResult, pool: str, index: int, airport: SelectedAirport) -> SourceCandidateIdentity:
+    return SourceCandidateIdentity(gateway_result_digest=gateway.result_digest, pool=cast(Any, pool), candidate_index=index, airport_iata=airport.airport_iata, airport_fact_id=airport.airport_id)
+
+
+def _allocation_order(bundles: list[_Bundle], pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...], policy: PlanningPolicy) -> tuple[tuple[_Bundle, EndpointPair], ...]:
+    canonical_pairs = tuple(sorted((EndpointPair(origin_airport_fact_id=o.airport_id, destination_airport_fact_id=d.airport_id) for o, d in pairs), key=lambda p: (p.origin_airport_fact_id, p.destination_airport_fact_id)))
+    by_type = {kind: [bundle for bundle in bundles if bundle.strategy_type.value == kind] for kind in policy.strategy_type_priority}
+    for values in by_type.values():
+        values.sort(key=lambda item: (item.source_candidate.airport_fact_id, item.source_relationship.typed_origin_iata or "", item.source_relationship.typed_destination_iata or "", item.relationship_id))
+    visited: set[str] = set()
+    cursors = {kind: 0 for kind in policy.strategy_type_priority}
+    ordered: list[tuple[_Bundle, EndpointPair]] = []
+    while len(visited) < len(bundles):
+        progressed = False
+        for kind in policy.strategy_type_priority:
+            values = by_type[kind]
+            chosen: tuple[_Bundle, EndpointPair, int] | None = None
+            for offset in range(len(canonical_pairs)):
+                lane_index = (cursors[kind] + offset) % len(canonical_pairs)
+                lane = canonical_pairs[lane_index]
+                candidate = next((item for item in values if item.relationship_id not in visited and lane in item.pairs), None)
+                if candidate is not None:
+                    chosen = candidate, lane, lane_index
+                    break
+            if chosen is None:
+                continue
+            bundle, lane, lane_index = chosen
+            visited.add(bundle.relationship_id)
+            ordered.append((bundle, lane))
+            cursors[kind] = (lane_index + 1) % len(canonical_pairs)
+            progressed = True
+        if not progressed:
+            break
+    return tuple(ordered)
+
+
+def _supplemental_query_spec(spec: tuple[str, str, str, int, int], bundle: _Bundle, request: EffectiveRequest, repository: StrategyCompilationRepository, policy: PlanningPolicy) -> tuple[LogicalAwardQuery, SupplementalDateDerivation]:
+    origin, destination, role, start_offset, end_offset = spec
+    basis = DateBasis.FIRST_ORIGIN_AIRPORT_LOCAL if start_offset == 0 and end_offset == 0 else DateBasis.LATER_COMPONENT_ORIGIN_AIRPORT_LOCAL
+    envelope = _date_envelope(request, repository, origin, start_offset, end_offset, basis)
+    query = _logical_query(origin, destination, envelope, request)
+    assert request.departure_window is not None
+    derivation_id = _digest({"strategy": bundle.relationship_id, "role": role, "origin": origin, "start": envelope.start, "end": envelope.end, "policy": policy.policy_version})
+    derivation = SupplementalDateDerivation(date_derivation_id=derivation_id, strategy_id="supplemental:" + _digest({"relationship_id": bundle.relationship_id, "policy": _digest(policy)}), query_role=cast(Any, role), origin_airport_fact_id=origin, source_window_start=request.departure_window.start, source_window_end=request.departure_window.end, source_window_precision=request.departure_window.precision.value, field_provenance=_provenance_for(request, EffectiveField.DEPARTURE), start_offset_days=start_offset, end_offset_days=end_offset, derived_start=envelope.start, derived_end=envelope.end, basis=basis, timezone=envelope.timezone, policy_version=policy.policy_version)
+    return query, derivation
+
+
+def _date_envelope(request: EffectiveRequest, repository: StrategyCompilationRepository, origin_id: str, start_offset: int, end_offset: int, basis: DateBasis) -> DateEnvelope:
+    assert request.departure_window is not None
+    airport = repository.airport(origin_id)
+    if airport is None or not airport.timezone:
+        raise ValueError("query origin airport has no catalog timezone")
+    return DateEnvelope(start=request.departure_window.start + timedelta(days=start_offset), end=request.departure_window.end + timedelta(days=end_offset), basis=basis, timezone=airport.timezone, effective_window_precision=request.departure_window.precision.value, field_provenance=_provenance_for(request, EffectiveField.DEPARTURE))
+
+
+def _disposition(bundle: _Bundle, kind: RelationshipDispositionKind, reasons: tuple[str, ...], sequence: int | None = None, anchor: EndpointPair | None = None, candidates: tuple[tuple[LogicalAwardQuery, SupplementalDateDerivation], ...] = (), marginal_queries: int = 0, marginal_days: int = 0, query_ids: tuple[str, ...] = ()) -> RelationshipDisposition:
+    return RelationshipDisposition(relationship_id=bundle.relationship_id, disposition=kind, source_relationship=bundle.source_relationship, source_candidate=bundle.source_candidate, source_scope=bundle.source_scope, supported_original_endpoint_pairs=bundle.pairs, reason_codes=reasons, allocation_sequence=sequence, allocation_anchor=anchor, query_ids=query_ids or tuple(query.query_id for query, _ in candidates), marginal_unique_queries=marginal_queries, marginal_query_date_days=marginal_days, candidate_unique_queries=len(candidates) if candidates else None, candidate_query_date_days=sum(_query_days(query) for query, _ in candidates) if candidates else None)
+
+
+def _constraint_obligations(request: EffectiveRequest, query_ids: tuple[str, ...]) -> tuple[IdentifiedDeferredConstraint, ...]:
+    provenance = _provenance_for(request, EffectiveField.HARD_CONSTRAINTS)
+    return tuple(IdentifiedDeferredConstraint(obligation_id=_constraint_obligation_id(text, request), obligation=DeferredConstraintObligation(text=text, field_provenance=provenance), applies_to_query_ids=query_ids) for text in request.hard_constraints)
+
+
+def _constraint_obligation_id(text: str, request: EffectiveRequest) -> str:
+    return _digest(
+        {
+            "text": text,
+            "provenance": _provenance_for(request, EffectiveField.HARD_CONSTRAINTS),
+        }
+    )
+
+
+def _budget_receipts(policy: PlanningPolicy, input_days: int, pair_count: int, mandatory_queries: int, mandatory_days: int, relationships: int, supplemental_queries: int, supplemental_days: int, reused: int, reused_days: int, omitted: dict[CompilationBudgetKind, tuple[str, ...]]) -> tuple[CompilationBudgetReceipt, ...]:
+    values = (
+        (CompilationBudgetKind.INPUT_WINDOW_DAYS, policy.max_input_window_days, input_days, 0, 0),
+        (CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS, policy.max_mandatory_endpoint_pairs, pair_count, 0, 0),
+        (CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES, policy.max_supplemental_relationship_bundles, 0, relationships, 0),
+        (CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES, policy.max_unique_logical_queries, mandatory_queries, supplemental_queries, reused),
+        (CompilationBudgetKind.QUERY_DATE_DAYS, policy.max_query_date_days, mandatory_days, supplemental_days, reused_days),
+    )
+    return tuple(CompilationBudgetReceipt(kind=kind, limit=limit, mandatory_reserved=mandatory, supplemental_admitted=supplemental, shared_reused=shared, observed=mandatory + supplemental, disposition="within_limit", omitted_bundle_ids=omitted.get(kind, ())) for kind, limit, mandatory, supplemental, shared in values)
+
+
+def _reduced_issues(gateway: GatewayDiscoveryResult, dispositions: list[RelationshipDisposition]) -> tuple[StrategyCompilationIssue, ...]:
+    issues: list[StrategyCompilationIssue] = []
+    if gateway.outcome in {GatewayDiscoveryOutcome.PARTIAL_ACCEPTANCE, GatewayDiscoveryOutcome.REJECTED_ALL, GatewayDiscoveryOutcome.GENERATION_FAILURE, GatewayDiscoveryOutcome.VALIDATION_FAILURE}:
+        issues.append(StrategyCompilationIssue(code=f"gateway_{gateway.outcome.value}", stage="compilation", severity="reduced_coverage", message=f"gateway discovery ended with {gateway.outcome.value}; mandatory coverage is retained"))
+    for item in dispositions:
+        if item.disposition in {RelationshipDispositionKind.OMITTED_BUDGET, RelationshipDispositionKind.UNSUPPORTED_RULE}:
+            issues.append(StrategyCompilationIssue(code=item.reason_codes[0], stage="budget" if item.disposition is RelationshipDispositionKind.OMITTED_BUDGET else "compilation", severity="reduced_coverage", message="accepted supplemental relationship was not materialized", source_relationship_id=item.relationship_id))
+    return tuple(issues)
+
+
+def _capability_receipt(inp: SearchPlanningInput) -> CapabilityReceipt:
+    capability = inp.capability
+    return CapabilityReceipt(capability_id=capability.capability_id, capability_version=capability.capability_version, content_sha256=capability_content_digest(capability), source_receipts=tuple(CapabilitySourceReceipt(source_id=source.source_id, content_sha256=source.content_sha256) for source in capability.sources), caveats=capability.caveats)
+
+
+def _airport_identity(airport_id: str, repository: StrategyCompilationRepository) -> PlanningAirportIdentity:
+    airport = repository.airport(airport_id)
+    if airport is None:
+        raise ValueError("logical query cites an airport absent from the catalog")
+    return PlanningAirportIdentity(airport_id=airport.airport_id, airport_iata=airport.iata, timezone=airport.timezone, evidence_source_ids=airport.source_ids)
+
+
+def _mandatory_budget_failure(kind: CompilationBudgetKind, observed: int, limit: int) -> SearchPlanningResult:
+    code = {CompilationBudgetKind.INPUT_WINDOW_DAYS: StrategyCompilationIssueCode.INPUT_WINDOW_EXCEEDS_BUDGET, CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS: StrategyCompilationIssueCode.MANDATORY_ENDPOINT_PAIR_BUDGET_EXCEEDED, CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES: StrategyCompilationIssueCode.UNIQUE_QUERY_BUDGET_EXCEEDED, CompilationBudgetKind.QUERY_DATE_DAYS: StrategyCompilationIssueCode.QUERY_DATE_BUDGET_EXCEEDED}[kind]
+    receipt = CompilationBudgetReceipt(kind=kind, limit=limit, mandatory_reserved=observed, supplemental_admitted=0, shared_reused=0, observed=observed, disposition="exceeded")
+    issue = StrategyCompilationIssue(code=code, stage="budget", severity="unplannable", message=f"mandatory {kind.value} requires {observed}, exceeding limit {limit}")
+    return SearchPlanningResult(outcome=SearchPlanningOutcome.UNPLANNABLE, issues=(issue,), budget_receipts=(receipt,))
+
+
+def _failure(code: StrategyCompilationIssueCode | str, stage: str, message: str, severity: str = "evidence_failure") -> SearchPlanningResult:
+    issue = StrategyCompilationIssue(code=code, stage=cast(Any, stage), severity=cast(Any, severity), message=message)
+    outcome = SearchPlanningOutcome.UNPLANNABLE if severity == "unplannable" else SearchPlanningOutcome.EVIDENCE_FAILURE
+    return SearchPlanningResult(outcome=outcome, issues=(issue,))
+
+
+def _unique_selected(projections: tuple[EndpointSelectionProjection, ...], role: str) -> tuple[SelectedAirport, ...]:
+    result: dict[str, SelectedAirport] = {}
+    for projection in projections:
+        if projection.role == role:
+            for airport in projection.airports:
+                result.setdefault(airport.airport_id, airport)
+    return tuple(result.values())
+
+
+def _canonical_locations(locations: Iterable[LocationRef]) -> tuple[LocationRef, ...]:
+    return tuple(sorted(locations, key=lambda item: (item.kind.value, item.value.casefold(), item.raw_text)))
 
 
 def _provenance_for(request: EffectiveRequest, field: EffectiveField) -> FieldProvenance | None:
     return next((item for item in request.field_provenance if item.field is field), None)
 
 
-def _deferred_constraints(request: EffectiveRequest) -> tuple[DeferredConstraintObligation, ...]:
-    provenance = _provenance_for(request, EffectiveField.HARD_CONSTRAINTS)
-    return tuple(
-        DeferredConstraintObligation(text=constraint, field_provenance=provenance)
-        for constraint in request.hard_constraints
-    )
-
-
-def _nonblocking_issues(request: EffectiveRequest) -> tuple[SearchPlanningIssue, ...]:
-    observations = [
-        SearchPlanningIssue(
-            code=SearchPlanningIssueCode.NONBLOCKING_UNKNOWN,
-            message=unknown.detail.strip() or "nonblocking unknown preserved without detail",
-            field=unknown.field,
-            preserved_value=unknown.detail,
-        )
-        for unknown in request.unknowns
-        if unknown.field not in _CORE_UNKNOWN_FIELDS
-    ]
-    observations.append(
-        SearchPlanningIssue(
-            code=SearchPlanningIssueCode.REPOSITIONING_POLICY_NOT_CONSUMED,
-            message="v1 policy enables repositioning research without consuming repositioning_allowed",
-            field="repositioning",
-        )
-    )
-    return tuple(observations)
-
-
-def _canonical_digest(value: object) -> str:
-    if hasattr(value, "model_dump"):
-        value = value.model_dump(mode="json", round_trip=True)
-    rendered = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    return hashlib.sha256(rendered.encode("utf-8")).hexdigest()
-
-
-def _inclusive_input_days(request: EffectiveRequest) -> int:
-    if request.departure_window is None:
-        return 0
+def _input_days(request: EffectiveRequest) -> int:
+    assert request.departure_window is not None
     return (request.departure_window.end - request.departure_window.start).days + 1
 
 
-def _budget_receipt(kind: BudgetKind, observed: int, limit: int) -> BudgetReceipt:
-    return BudgetReceipt(
-        kind=kind,
-        observed=observed,
-        limit=limit,
-        disposition="within_limit" if observed <= limit else "exceeded",
+def _query_days(query: LogicalAwardQuery) -> int:
+    return (query.date_envelope.end - query.date_envelope.start).days + 1
+
+
+def _query_semantic_key(query: LogicalAwardQuery) -> str:
+    return _digest(_query_identity_payload(query))
+
+
+def _query_identity_payload(query: LogicalAwardQuery | dict[str, Any]) -> dict[str, Any]:
+    def field(name: str) -> Any:
+        return query[name] if isinstance(query, dict) else getattr(query, name)
+
+    envelope = field("date_envelope")
+    envelope_value = (
+        envelope
+        if isinstance(envelope, dict)
+        else envelope.model_dump(mode="json", round_trip=True)
     )
+    filters = field("filter_obligations")
+    validations = field("result_validation_obligations")
 
+    def without_provenance(item: Any) -> dict[str, Any]:
+        value = (
+            dict(item)
+            if isinstance(item, dict)
+            else item.model_dump(mode="json", round_trip=True)
+        )
+        value.pop("field_provenance", None)
+        return value
 
-def _plan_budget_receipts(
-    *,
-    input_days: int,
-    endpoint_pair_count: int,
-    endpoint_item_count: int,
-    endpoint_date_work_days: int,
-    path_receipts: dict[BudgetKind, tuple[int, int]],
-    policy: PlanningPolicy,
-) -> tuple[BudgetReceipt, ...]:
-    """Return all successful-plan work receipts in a stable enum order."""
-
-    values: dict[BudgetKind, tuple[int, int]] = {
-        BudgetKind.INPUT_WINDOW_DAYS: (input_days, policy.max_input_window_days),
-        BudgetKind.ENDPOINT_PAIR_COUNT: (endpoint_pair_count, policy.max_endpoint_pairs),
-        BudgetKind.PATH_CANDIDATE_COUNT: path_receipts[BudgetKind.PATH_CANDIDATE_COUNT],
-        BudgetKind.PATH_HYPOTHESIS_COUNT: path_receipts[BudgetKind.PATH_HYPOTHESIS_COUNT],
-        BudgetKind.TOTAL_AWARD_SEARCH_ITEM_COUNT: (
-            endpoint_item_count + path_receipts[BudgetKind.TOTAL_AWARD_SEARCH_ITEM_COUNT][0],
-            policy.max_total_award_search_items,
-        ),
-        BudgetKind.DATE_EXPANDED_WORK_DAYS: (
-            endpoint_date_work_days + path_receipts[BudgetKind.DATE_EXPANDED_WORK_DAYS][0],
-            policy.max_date_expanded_work_days,
-        ),
+    return {
+        "query_identity_version": "logical-award-query-semantics-v1",
+        "origin_airport_fact_id": field("origin_airport_fact_id"),
+        "destination_airport_fact_id": field("destination_airport_fact_id"),
+        "scope": getattr(field("scope"), "value", field("scope")),
+        "date_envelope": {
+            key: envelope_value[key]
+            for key in ("start", "end", "inclusive", "basis", "timezone")
+        },
+        "requested_cabins": [
+            getattr(cabin, "value", cabin) for cabin in field("requested_cabins")
+        ],
+        "award_mode": field("award_mode"),
+        "connection_semantics": field("connection_semantics"),
+        "filter_obligations": [without_provenance(item) for item in filters],
+        "result_validation_obligations": [
+            without_provenance(item) for item in validations
+        ],
     }
-    return tuple(_budget_receipt(kind, *values[kind]) for kind in BudgetKind)
 
 
-def _admission_budget_receipts(
-    request: EffectiveRequest, policy: PlanningPolicy
-) -> tuple[BudgetReceipt, ...]:
-    """Expose an input-window overflow as structured evidence on failure."""
-
-    if request.departure_window is None:
-        return ()
-    return (
-        _budget_receipt(
-            BudgetKind.INPUT_WINDOW_DAYS,
-            _inclusive_input_days(request),
-            policy.max_input_window_days,
-        ),
+def _digest(value: Any) -> str:
+    value = _canonical_json_value(value)
+    rendered = json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
     )
+    return hashlib.sha256(rendered.encode("utf-8")).hexdigest()
 
 
-def _capability_evidence_failure(detail: str) -> SearchPlanningResult:
-    return SearchPlanningResult(
-        outcome=SearchPlanningOutcome.EVIDENCE_FAILURE,
-        issues=(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.CAPABILITY_EVIDENCE_FAILURE,
-                message="cached-search capability evidence is unavailable or invalid",
-                field="capability",
-                preserved_value=detail,
-            ),
-        ),
-    )
+def _canonical_json_value(value: Any) -> Any:
+    if hasattr(value, "model_dump"):
+        return value.model_dump(mode="json", round_trip=True)
+    if isinstance(value, dict):
+        return {str(key): _canonical_json_value(item) for key, item in value.items()}
+    if isinstance(value, (tuple, list)):
+        return [_canonical_json_value(item) for item in value]
+    if isinstance(value, (date,)):
+        return value.isoformat()
+    if hasattr(value, "value"):
+        return value.value
+    return value
 
 
-def _invalid_filter_failure(detail: str) -> SearchPlanningResult:
-    return SearchPlanningResult(
-        outcome=SearchPlanningOutcome.UNPLANNABLE,
-        issues=(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.INVALID_FILTER_OBLIGATION,
-                message="a user filter obligation could not be materialized from EffectiveRequest",
-                field="hard_constraints",
-                preserved_value=detail,
-            ),
-        ),
-    )
-
-
-def _planner_contract_failure(detail: str) -> SearchPlanningResult:
-    return SearchPlanningResult(
-        outcome=SearchPlanningOutcome.EVIDENCE_FAILURE,
-        issues=(
-            SearchPlanningIssue(
-                code=SearchPlanningIssueCode.PLANNER_CONTRACT_FAILURE,
-                message="planner could not materialize a valid typed search contract",
-                field="planner",
-                preserved_value=detail,
-            ),
-        ),
-    )
+__all__ = ["StrategyCompilationRepository", "effective_request_digest", "plan_searches"]

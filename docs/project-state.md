@@ -2,11 +2,26 @@
 
 ## Phase
 
-Milestone 2B market-aware gateway-airport discovery — implemented and owner-closed as of 2026-09-19.
-The prompt-v6/casebook-v3 live diagnostic is mechanically complete; independent human semantic
-qualification is not claimed. Milestone 2C is deferred until explicitly opened.
-Search planning is implemented and fixture-qualified as a planning-only, retrieval-backed
-`EffectiveRequest -> SearchPlan` stage that follows the frozen one-way award request-understanding
+Milestone 2B market-aware gateway-airport discovery is implemented and owner-closed as of 2026-09-19.
+Milestone 2C deterministic search-strategy compilation is implemented in place, with no V1
+compatibility path. The [planning handoff](handoffs/2026-09-19-m2c-search-strategy-compilation-plan.md)
+records the accepted design and the
+[implementation record](build-log/2026-09-19-m2c-implementation.md) records the code, independent
+review fixes, offline verification, and model-only integrated diagnostic. The provider-neutral
+compiler makes no additional model call and no provider call. Provider execution and
+provider/product qualification remain outside this stage. M2A remains diagnostic-only, 2B remains
+closed, and independent human semantic qualification is not claimed.
+The owner's subsequent Cached Search airport-list challenge is recorded in the handoff's Section G:
+retain pair-level coverage/provenance and specify grouped downstream requests. The owner delegated the
+compiler-limit decision to the parent/architect; two independent recommendations converged on 31 input days,
+100 mandatory pairs, 24 supplemental relationships, 128 total unique logical queries, and 4,000
+query-date-days. These are selected local compiler guardrails, not provider limits. The owner then
+explicitly declined V1 compatibility: 2C should replace the current planner contract, policy, handoff,
+callers, and fixtures in place. The old 25/40/1,400 limits and route-expansion runtime are not retained
+as an active compatibility path. Historical evidence remains preserved. Provider batching and live
+provider execution were not implemented by 2C.
+Search planning is implemented and offline verified as a planning-only, retrieval-backed
+`EffectiveRequest -> CompiledSearchPlan` stage that follows the frozen one-way award request-understanding
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
 not a claim of operational airport, route, schedule, inventory, or provider coverage.
 
@@ -14,6 +29,48 @@ The operational Milestone 1 geographic/airport catalog is a versioned local SQLi
 with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains the Milestone 0
 fixture contract; Pydantic validates import/publication/query boundaries rather than materializing
 the full operational catalog in memory.
+
+On 2026-09-19, the owner requested architecture and engineering review in preparation for 2C,
+including FDE recruiting evidence and a durable register of work to revisit after the core workflow.
+The advisory findings are in
+`docs/reviews/2026-09-19-search-planning-architecture-review.md`; the root `DEFERRED.md` separates
+core remaining work, claim-specific prerequisites, parked enhancements, and deliberate non-goals.
+An owner-requested fresh-context Astra challenge revised the advisory review in place: earlier
+owner/provider feedback, no automatic cross-query assembly in the first provider pilot, and
+corrected historical-versus-current evidence claims. Its record is
+`docs/build-log/2026-09-19-astra-adversarial-review.md`.
+Those records were design input; the later authorized 2C implementation is recorded separately.
+Their unadopted recommendations remain advisory, and closed stages remain closed.
+
+The owner subsequently requested a high-level reassessment of each future stage grounded in
+implemented-stage lessons and agent-system engineering. The advisory
+[future stage goals](reviews/2026-09-19-future-stage-goals.md) proposes revised objectives,
+completion evidence, an earlier provider/result/output pilot, and conditional RAG, coverage,
+and adaptive-control investments. It complements the implementation-focused review; the active
+roadmap and existing stage status remain unchanged. No proposed sequencing or policy was adopted.
+
+An owner-requested fresh Astra agent subsequently challenged that stage-goal proposal through
+back-and-forth review. The revised recommendation compares against the owner's current workflow,
+requires positive task-value evidence as well as honest failure handling, and tests reviewed search
+bundles before deciding whether full supplemental 2C automation is worthwhile. Progressive coverage
+is an explicit proposed alternative to the current all-pairs contract. These changes remain advisory;
+the [debate record](build-log/2026-09-19-future-stage-astra-challenge.md) records qualifications and
+the distinction from approved scope.
+
+The owner also requested a deferred intent/clarification improvement plan on 2026-09-19, to revisit
+after the core workflow is built. The [advisory plan](reviews/2026-09-19-intent-clarification-improvement-plan.md)
+examines contextual amendments, post-ready revision, recovery, presentation alternatives, and
+task-level evidence. It is linked from D01 in `DEFERRED.md`; G01/G03 remain claim-specific gates.
+This planning session made no upstream implementation, live evaluation, or architecture-policy
+change.
+At the owner's request, a fresh Astra challenge subsequently revised that plan through parent-agent
+debate: choose work from observed task costs, count context-induced errors, separate known-intent
+and exploratory tasks, and compare explicit outbound-scope recovery before assuming linked trips
+are necessary. These remain advisory options under D01/D04, not policy changes or reopened work.
+A subsequent use-case/FDE pass and separate fresh Astra challenge tied the plan to a justified
+traveler decision and effort versus the owner's existing workflow. D01/D14 now emphasize one actual
+task observation and personally explaining an existing AI failure before adding new mechanisms;
+these do not establish broad qualification, customer adoption, or enterprise delivery.
 
 Milestone 1 is complete. The owner reviewed the local lossless replacement release
 `m1a-3cb7981519612945` on 2026-09-16, including its manifest, coverage, counts, 35 explicit
@@ -95,7 +152,8 @@ rejection change is currently recommended; 2C budgeting is mandatory.
 The owner closed Milestone 2B on 2026-09-19 after reviewing the implemented boundary, offline
 verification, prompt-v6/casebook-v3 live diagnostic, artifact audit, and independent AI semantic
 review. Closure accepts the 2B implementation and evidence record without claiming verified
-connectivity or independent human semantic qualification. Milestone 2C remains deferred.
+connectivity or independent human semantic qualification. The later authorized Milestone 2C
+implementation consumes the closed 2B replay record without changing that closure.
 The durable closeout is
 `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 Milestone 1 completed the local geographic/airport foundation, and Milestone 2A supplied the
@@ -346,11 +404,10 @@ reviewed group policies. M2A is implemented but remains diagnostic-only pending 
 semantic/adoption gate. M2B implements ADR 0020's approved market policy, generation gate,
 grouped proposal, deterministic relationship validation, and replayable selection record; its
 prompt-v6/casebook-v3 diagnostic is mechanically complete but not independently human-qualified.
-The stage is owner-closed and does not
-authorize runtime strategy compilation. If 2C is opened, it must preserve mandatory original endpoint
-coverage, budget compiled relationships/search items rather than raw candidate count, and record a
-budget omission without relabeling the candidate invalid. Provider
-execution remains subsequent and separately scoped. Preserve the upstream and M2A evidence gaps as
+The stage is owner-closed. The implemented 2C compiler preserves mandatory original endpoint
+coverage, budgets compiled relationships and query/date work, and records omissions without
+relabeling accepted candidates invalid. Provider execution remains subsequent and separately
+scoped. Preserve the upstream and M2A evidence gaps as
 such—do not reopen their semantics or call them qualified through this documentation change.
 
 The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
@@ -362,11 +419,11 @@ references to `two_pass` and selector-only extraction are historical evidence on
 ## Current implementation status
 
 - Seats.aero passed one narrow cached-search access-and-response-shape spike; no application
-  adapter or provider error fixture exists yet. The planning-only `SearchPlan` boundary is now
-  implemented and fixture-qualified, but it does not authorize a provider adapter or any provider
+  adapter or provider error fixture exists yet. The provider-neutral `CompiledSearchPlan` boundary
+  is implemented and offline verified, but it does not authorize a provider adapter or any provider
   call. M2B's grouped generator, relationship-aware validation, and replayable candidate record
-  are implemented and owner-closed. 2C is deferred until explicitly opened, and provider execution
-  remains separately scoped. SerpAPI Google Flights
+  are implemented and owner-closed. M2C compilation is implemented; provider execution remains
+  separately scoped. SerpAPI Google Flights
   remains a later cash-fare candidate. See
   `docs/provider-feasibility/2026-09-08-initial-provider-intake.md`.
 - The frozen initial workflow stops after `ClarificationDecision`; the additive continuation
@@ -631,17 +688,14 @@ read as current runtime status; the current conclusion is recorded above.
 
 ## Explicit deferred work
 
-- point-balance constraints;
-- spending-budget constraints;
-- planning;
-- travel providers;
-- normalization;
-- ranking;
-- explanation;
-- UI;
-- persistence;
-- deployment;
-- RAG.
+The living register is [DEFERRED.md](../DEFERRED.md). It supersedes this section's
+old undifferentiated scaffold list, which incorrectly continued to call all planning
+deferred after planning milestones were implemented.
+
+The register distinguishes required work for the first complete one-way award
+workflow from post-core enhancements and prerequisites for specific claims. It
+records sources, stable IDs, revisit triggers, and closure evidence. New review
+recommendations remain proposals; the active roadmap/ADRs are unchanged.
 
 ## Living workbook
 
