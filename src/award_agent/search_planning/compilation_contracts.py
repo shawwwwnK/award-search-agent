@@ -1,6 +1,6 @@
 """Immutable contracts for Milestone 2C search-strategy compilation.
 
-This module sits above the existing grounding, selector, capability, and
+This module sits above the existing grounding, selector, and
 gateway-discovery contracts.  Keeping the aggregate here avoids an import
 cycle: those lower layers already depend on :mod:`contracts`.
 """
@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Iterable
 from datetime import date, timedelta
 from enum import Enum
 from typing import Annotated, Any, ClassVar, Literal, cast
@@ -17,10 +18,8 @@ from pydantic import Field, model_validator
 
 from award_agent.domain import CabinClass, FieldProvenance, LocationRef
 from award_agent.search_planning.airport_selector import AirportSelectionRecord
-from award_agent.search_planning.capabilities import CachedSearchCapability
 from award_agent.search_planning.contracts import (
     AirportSelectionKind,
-    CapabilityReceipt,
     CatalogKnowledgeReceipt,
     DateBasis,
     DateEnvelope,
@@ -116,7 +115,6 @@ class SearchPlanningInput(PlanningContractModel):
     endpoint_source: EndpointSource
     upstream_selection_id_bindings: tuple[SelectionRecordIdBinding, ...] = ()
     gateway_discovery_result: GatewayDiscoveryResult
-    capability: CachedSearchCapability
 
     @model_validator(mode="after")
     def unique_upstream_ids(self) -> SearchPlanningInput:
@@ -205,18 +203,19 @@ class CompiledPlanIdentity(PlanningContractModel):
     effective_request_digest: Sha256
     canonicalization_version: str = Field(min_length=1)
     digest_algorithm_version: str = Field(min_length=1)
-    compiler_contract_version: Literal["search-strategy-compilation-v1"] = (
-        "search-strategy-compilation-v1"
+    compiler_contract_version: Literal["search-strategy-compilation-v2"] = (
+        "search-strategy-compilation-v2"
     )
     policy_version: str = Field(min_length=1)
     policy_digest: Sha256
-    capability_receipt: CapabilityReceipt
     catalog_receipt: CatalogKnowledgeReceipt
     endpoint_selection_binding: EndpointSelectionBinding
     gateway_result_digest: Sha256
     gateway_input_digest: Sha256
     market_policy_version: str = Field(min_length=1)
     market_policy_digest: Sha256
+    accepted_relationship_ledger_digest: Sha256
+    relationship_disposition_digest: Sha256
     route_topology_feature: Literal["absent"] = "absent"
     compilation_binding_digest: Sha256
 
@@ -353,7 +352,6 @@ class SupplementalStrategy(PlanningContractModel):
     source_relationship: RelationshipIdentity
     source_scope: SourceScopeIdentity | None = None
     supported_original_endpoint_pairs: tuple[EndpointPair, ...] = Field(min_length=1)
-    allocation_pair_lanes: tuple[EndpointPair, ...] = Field(min_length=1)
     reason: str
     material_uncertainty: str | None = None
     market_comparison: GatewayMarketComparison
@@ -462,36 +460,26 @@ class IdentifiedDeferredConstraint(PlanningContractModel):
     applies_to_query_ids: tuple[str, ...] = Field(min_length=1)
 
 
-class CompilationBudgetKind(str, Enum):
-    INPUT_WINDOW_DAYS = "input_window_days"
-    MANDATORY_ENDPOINT_PAIRS = "mandatory_endpoint_pairs"
-    SUPPLEMENTAL_RELATIONSHIP_BUNDLES = "supplemental_relationship_bundles"
-    UNIQUE_LOGICAL_QUERIES = "unique_logical_queries"
-    QUERY_DATE_DAYS = "query_date_days"
+class CompilerStructuralLimitKind(str, Enum):
+    ENDPOINT_PAIR_CROSS_PRODUCT = "endpoint_pair_cross_product"
 
 
-class CompilationBudgetReceipt(PlanningContractModel):
-    kind: CompilationBudgetKind
+class CompilerStructuralLimitReceipt(PlanningContractModel):
+    kind: CompilerStructuralLimitKind
+    classification: Literal["compiler_structural_safety"] = "compiler_structural_safety"
     limit: int = Field(ge=0)
-    mandatory_reserved: int = Field(ge=0)
-    supplemental_admitted: int = Field(ge=0)
-    shared_reused: int = Field(ge=0)
     observed: int = Field(ge=0)
     disposition: Literal["within_limit", "exceeded"]
-    omitted_bundle_ids: tuple[Sha256, ...] = ()
 
     @model_validator(mode="after")
-    def validate_accounting(self) -> CompilationBudgetReceipt:
-        if self.observed != self.mandatory_reserved + self.supplemental_admitted:
-            raise ValueError("budget observed must equal reserved plus admitted work")
+    def validate_accounting(self) -> CompilerStructuralLimitReceipt:
         if (self.observed <= self.limit) != (self.disposition == "within_limit"):
-            raise ValueError("budget disposition must agree with observed and limit")
+            raise ValueError("structural-limit disposition must agree with observed and limit")
         return self
 
 
 class RelationshipDispositionKind(str, Enum):
-    ADMITTED = "admitted"
-    OMITTED_BUDGET = "omitted_budget"
+    COMPILED = "compiled"
     SUPPRESSED_POSITIONING_REFUSAL = "suppressed_positioning_refusal"
     UNSUPPORTED_RULE = "unsupported_rule"
 
@@ -504,13 +492,78 @@ class RelationshipDisposition(PlanningContractModel):
     source_scope: SourceScopeIdentity | None = None
     supported_original_endpoint_pairs: tuple[EndpointPair, ...] = Field(min_length=1)
     reason_codes: tuple[str, ...]
-    allocation_sequence: int | None = Field(default=None, ge=0)
-    allocation_anchor: EndpointPair | None = None
     query_ids: tuple[str, ...] = ()
-    marginal_unique_queries: int = Field(default=0, ge=0)
-    marginal_query_date_days: int = Field(default=0, ge=0)
-    candidate_unique_queries: int | None = Field(default=None, ge=0)
-    candidate_query_date_days: int | None = Field(default=None, ge=0)
+
+
+RelationshipLedgerCoordinate = tuple[
+    str,
+    RelationshipIdentity,
+    SourceCandidateIdentity,
+    SourceScopeIdentity | None,
+    tuple[EndpointPair, ...],
+]
+
+
+def accepted_relationship_ledger_digest(
+    coordinates: Iterable[RelationshipLedgerCoordinate],
+) -> str:
+    """Hash the complete canonical set of accepted 2B relationship coordinates."""
+
+    entries = tuple(
+        sorted(
+            (
+                {
+                    "relationship_id": relationship_id,
+                    "source_relationship": relationship,
+                    "source_candidate": candidate,
+                    "source_scope": scope,
+                    "supported_original_endpoint_pairs": pairs,
+                }
+                for relationship_id, relationship, candidate, scope, pairs in coordinates
+            ),
+            key=lambda item: cast(str, item["relationship_id"]),
+        )
+    )
+    relationship_ids = tuple(cast(str, item["relationship_id"]) for item in entries)
+    if len(relationship_ids) != len(set(relationship_ids)):
+        raise ValueError("accepted relationship ledger IDs must be unique")
+    return _canonical_digest(
+        {
+            "accepted_relationship_ledger_version": "accepted-relationship-ledger-v1",
+            "relationships": entries,
+        }
+    )
+
+
+def relationship_disposition_ledger_digest(
+    dispositions: Iterable[RelationshipDisposition],
+) -> str:
+    """Hash the compiler's final disposition for every accepted relationship."""
+
+    entries = tuple(
+        sorted(
+            (
+                {
+                    "relationship_id": item.relationship_id,
+                    "disposition": item.disposition,
+                    "reason_codes": item.reason_codes,
+                }
+                for item in dispositions
+            ),
+            key=lambda item: cast(str, item["relationship_id"]),
+        )
+    )
+    relationship_ids = tuple(cast(str, item["relationship_id"]) for item in entries)
+    if len(relationship_ids) != len(set(relationship_ids)):
+        raise ValueError("relationship disposition ledger IDs must be unique")
+    return _canonical_digest(
+        {
+            "relationship_disposition_ledger_version": (
+                "relationship-disposition-ledger-v1"
+            ),
+            "dispositions": entries,
+        }
+    )
 
 
 class GatewayDiscoveryCompilationReceipt(PlanningContractModel):
@@ -533,8 +586,7 @@ class CompilationCoverage(PlanningContractModel):
     mandatory_covered_pairs: int = Field(ge=0)
     mandatory_complete: bool
     accepted_relationships: int = Field(ge=0)
-    admitted_relationships: int = Field(ge=0)
-    omitted_budget_relationships: int = Field(ge=0)
+    compiled_relationships: int = Field(ge=0)
     suppressed_positioning_refusal_relationships: int = Field(ge=0)
     unsupported_rule_relationships: int = Field(ge=0)
     discovery_outcome: GatewayDiscoveryOutcome
@@ -547,8 +599,7 @@ class CompilationCoverage(PlanningContractModel):
         ):
             raise ValueError("mandatory-complete flag must agree with pair coverage")
         accounted = (
-            self.admitted_relationships
-            + self.omitted_budget_relationships
+            self.compiled_relationships
             + self.suppressed_positioning_refusal_relationships
             + self.unsupported_rule_relationships
         )
@@ -564,15 +615,12 @@ class StrategyCompilationIssueCode(str, Enum):
     GATEWAY_INPUT_BINDING_MISMATCH = "gateway_input_binding_mismatch"
     GATEWAY_REPLAY_FAILED = "gateway_replay_failed"
     COMPILER_CONTRACT_FAILURE = "compiler_contract_failure"
-    INPUT_WINDOW_EXCEEDS_BUDGET = "input_window_exceeds_budget"
-    MANDATORY_ENDPOINT_PAIR_BUDGET_EXCEEDED = "mandatory_endpoint_pair_budget_exceeded"
-    UNIQUE_QUERY_BUDGET_EXCEEDED = "unique_query_budget_exceeded"
-    QUERY_DATE_BUDGET_EXCEEDED = "query_date_budget_exceeded"
+    ENDPOINT_PAIR_STRUCTURAL_LIMIT_EXCEEDED = "endpoint_pair_structural_limit_exceeded"
 
 
 class StrategyCompilationIssue(PlanningContractModel):
     code: StrategyCompilationIssueCode | str
-    stage: Literal["input", "grounding", "binding", "replay", "compilation", "budget"]
+    stage: Literal["input", "grounding", "binding", "replay", "compilation"]
     severity: Literal["observation", "reduced_coverage", "unplannable", "evidence_failure"]
     message: str = Field(min_length=1)
     source_relationship_id: Sha256 | None = None
@@ -598,7 +646,9 @@ class CompiledSearchPlan(PlanningContractModel):
     relationship_dispositions: tuple[RelationshipDisposition, ...] = ()
     discovery_receipt: GatewayDiscoveryCompilationReceipt
     coverage: CompilationCoverage
-    budget_receipts: tuple[CompilationBudgetReceipt, ...] = Field(min_length=5, max_length=5)
+    structural_limit_receipts: tuple[CompilerStructuralLimitReceipt, ...] = Field(
+        min_length=1, max_length=1
+    )
     issues: tuple[StrategyCompilationIssue, ...] = ()
     plan_digest: Sha256
 
@@ -631,10 +681,10 @@ class CompiledSearchPlan(PlanningContractModel):
         }
         if used_queries != known_queries:
             raise ValueError("every logical query must be reachable from a plan use")
-        expected_budget_kinds = set(CompilationBudgetKind)
-        actual_budget_kinds = {receipt.kind for receipt in self.budget_receipts}
-        if actual_budget_kinds != expected_budget_kinds:
-            raise ValueError("plan requires exactly one receipt for each compilation budget")
+        expected_limit_kinds = set(CompilerStructuralLimitKind)
+        actual_limit_kinds = {receipt.kind for receipt in self.structural_limit_receipts}
+        if actual_limit_kinds != expected_limit_kinds:
+            raise ValueError("plan requires exactly one receipt for each compiler structural limit")
         if not self.coverage.mandatory_complete:
             raise ValueError("compiled plans require complete mandatory coverage")
         dispositions = tuple(item.relationship_id for item in self.relationship_dispositions)
@@ -646,10 +696,8 @@ class CompiledSearchPlan(PlanningContractModel):
             kind: sum(item.disposition is kind for item in self.relationship_dispositions)
             for kind in RelationshipDispositionKind
         }
-        if disposition_counts[RelationshipDispositionKind.ADMITTED] != (
-            self.coverage.admitted_relationships
-        ) or disposition_counts[RelationshipDispositionKind.OMITTED_BUDGET] != (
-            self.coverage.omitted_budget_relationships
+        if disposition_counts[RelationshipDispositionKind.COMPILED] != (
+            self.coverage.compiled_relationships
         ) or disposition_counts[
             RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL
         ] != self.coverage.suppressed_positioning_refusal_relationships or disposition_counts[
@@ -658,6 +706,220 @@ class CompiledSearchPlan(PlanningContractModel):
             raise ValueError("coverage disposition counts must match relationship receipts")
         _validate_compiled_plan_integrity(self)
         return self
+
+
+def _validate_relationship_disposition_sources(plan: CompiledSearchPlan) -> None:
+    expected_pool = {
+        SupplementalStrategyType.ORIGIN_ACCESS: "origin_access_gateways",
+        SupplementalStrategyType.DESTINATION_ACCESS: "destination_access_gateways",
+        SupplementalStrategyType.SCOPED_HUB: "intermediate_hubs",
+    }
+    for disposition in plan.relationship_dispositions:
+        relationship = disposition.source_relationship
+        candidate = disposition.source_candidate
+        if disposition.relationship_id != _canonical_digest(relationship):
+            raise ValueError("relationship disposition ID is forged")
+        expected_reason_codes = {
+            RelationshipDispositionKind.COMPILED: ("compiled",),
+            RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL: (
+                "positioning_explicitly_refused",
+            ),
+            RelationshipDispositionKind.UNSUPPORTED_RULE: (
+                "supplemental_date_overflow",
+            ),
+        }[disposition.disposition]
+        if disposition.reason_codes != expected_reason_codes:
+            raise ValueError(
+                "relationship disposition reason codes must match its finite outcome"
+            )
+        if disposition.disposition is RelationshipDispositionKind.COMPILED:
+            if not disposition.query_ids:
+                raise ValueError("compiled relationship disposition requires query IDs")
+        elif disposition.query_ids:
+            raise ValueError(
+                "noncompiled relationship disposition cannot claim materialized query IDs"
+            )
+        if (
+            relationship.gateway_result_digest != plan.identity.gateway_result_digest
+            or candidate.gateway_result_digest != relationship.gateway_result_digest
+            or relationship.pool != expected_pool[relationship.relationship_type]
+            or candidate.pool != relationship.pool
+            or candidate.candidate_index != relationship.candidate_index
+            or candidate.airport_fact_id != relationship.candidate_airport_fact_id
+        ):
+            raise ValueError(
+                "relationship disposition source candidate coordinates differ"
+            )
+        matching_decision = next(
+            (
+                decision
+                for decision in plan.discovery_receipt.candidate_decisions
+                if decision.accepted
+                and decision.pool == candidate.pool
+                and decision.candidate_index == candidate.candidate_index
+                and decision.proposed_airport_iata == candidate.airport_iata
+            ),
+            None,
+        )
+        if matching_decision is None:
+            raise ValueError(
+                "relationship disposition source candidate is not accepted discovery evidence"
+            )
+        if relationship.relationship_type is SupplementalStrategyType.SCOPED_HUB:
+            scope = disposition.source_scope
+            if scope is None or (
+                scope.scope_index,
+                scope.typed_origin_kind,
+                scope.typed_origin_iata,
+                scope.typed_destination_kind,
+                scope.typed_destination_iata,
+            ) != (
+                relationship.scope_index,
+                relationship.typed_origin_kind,
+                relationship.typed_origin_iata,
+                relationship.typed_destination_kind,
+                relationship.typed_destination_iata,
+            ):
+                raise ValueError(
+                    "relationship disposition source scope coordinates differ"
+                )
+            if not any(
+                item.accepted and item.scope_index == scope.scope_index
+                for item in matching_decision.scope_decisions
+            ):
+                raise ValueError(
+                    "relationship disposition scope is not accepted discovery evidence"
+                )
+        else:
+            if disposition.source_scope is not None:
+                raise ValueError("access relationship disposition cannot carry a source scope")
+            expected_pair = (
+                relationship.original_origin_airport_fact_id,
+                relationship.original_destination_airport_fact_id,
+            )
+            actual_pairs = tuple(
+                (
+                    pair.origin_airport_fact_id,
+                    pair.destination_airport_fact_id,
+                )
+                for pair in disposition.supported_original_endpoint_pairs
+            )
+            if actual_pairs != (expected_pair,):
+                raise ValueError(
+                    "access relationship disposition must preserve its original endpoint pair"
+                )
+        if (
+            disposition.disposition is RelationshipDispositionKind.UNSUPPORTED_RULE
+            and (
+                disposition.reason_codes != ("supplemental_date_overflow",)
+                or not _relationship_date_derivation_overflows(plan, disposition)
+            )
+        ):
+            raise ValueError(
+                "unsupported relationship disposition must reproduce a finite date overflow"
+            )
+
+
+def _relationship_date_derivation_overflows(
+    plan: CompiledSearchPlan,
+    disposition: RelationshipDisposition,
+) -> bool:
+    if (
+        disposition.source_relationship.relationship_type
+        is SupplementalStrategyType.DESTINATION_ACCESS
+    ):
+        return False
+    pair = disposition.supported_original_endpoint_pairs[0]
+    probe = next(
+        (
+            item
+            for item in plan.mandatory_endpoint_probes
+            if item.origin_endpoint.airport_id == pair.origin_airport_fact_id
+            and item.destination_endpoint.airport_id == pair.destination_airport_fact_id
+        ),
+        None,
+    )
+    if probe is None:
+        return False
+    try:
+        probe.date_envelope.start - timedelta(days=1)
+        probe.date_envelope.end + timedelta(days=2)
+    except OverflowError:
+        return True
+    return False
+
+
+def _suppressed_positioning_descriptions(
+    disposition: RelationshipDisposition,
+    dispositions: tuple[RelationshipDisposition, ...],
+) -> tuple[str, ...]:
+    relationship = disposition.source_relationship
+    if relationship.relationship_type is SupplementalStrategyType.ORIGIN_ACCESS:
+        return (
+            (
+                "origin:"
+                f"{relationship.original_origin_airport_fact_id}->"
+                f"{relationship.candidate_airport_fact_id}"
+            ),
+        )
+    if relationship.relationship_type is SupplementalStrategyType.DESTINATION_ACCESS:
+        return (
+            (
+                "destination:"
+                f"{relationship.candidate_airport_fact_id}->"
+                f"{relationship.original_destination_airport_fact_id}"
+            ),
+        )
+    descriptions: list[str] = []
+    for pair in disposition.supported_original_endpoint_pairs:
+        if relationship.typed_origin_kind == "origin_access_gateway":
+            access = next(
+                (
+                    item.source_relationship
+                    for item in dispositions
+                    if item.source_relationship.relationship_type
+                    is SupplementalStrategyType.ORIGIN_ACCESS
+                    and item.source_relationship.original_origin_airport_fact_id
+                    == pair.origin_airport_fact_id
+                    and item.source_relationship.original_destination_airport_fact_id
+                    == pair.destination_airport_fact_id
+                    and item.source_candidate.airport_iata
+                    == relationship.typed_origin_iata
+                ),
+                None,
+            )
+            if access is None:
+                raise ValueError(
+                    "suppressed hub positioning receipt lacks its origin access relationship"
+                )
+            descriptions.append(
+                f"origin:{pair.origin_airport_fact_id}->{access.candidate_airport_fact_id}"
+            )
+        if relationship.typed_destination_kind == "destination_access_gateway":
+            access = next(
+                (
+                    item.source_relationship
+                    for item in dispositions
+                    if item.source_relationship.relationship_type
+                    is SupplementalStrategyType.DESTINATION_ACCESS
+                    and item.source_relationship.original_origin_airport_fact_id
+                    == pair.origin_airport_fact_id
+                    and item.source_relationship.original_destination_airport_fact_id
+                    == pair.destination_airport_fact_id
+                    and item.source_candidate.airport_iata
+                    == relationship.typed_destination_iata
+                ),
+                None,
+            )
+            if access is None:
+                raise ValueError(
+                    "suppressed hub positioning receipt lacks its destination access relationship"
+                )
+            descriptions.append(
+                "destination:"
+                f"{access.candidate_airport_fact_id}->{pair.destination_airport_fact_id}"
+            )
+    return tuple(dict.fromkeys(descriptions))
 
 
 def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
@@ -670,9 +932,34 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
         or plan.identity.gateway_result_digest != plan.discovery_receipt.result_digest
     ):
         raise ValueError("plan identity gateway digests must match the discovery receipt")
+    _validate_relationship_disposition_sources(plan)
+    if plan.issues != _expected_plan_issues(plan):
+        raise ValueError(
+            "plan issues must exactly derive from discovery outcome and relationship dispositions"
+        )
+    expected_relationship_ledger_digest = accepted_relationship_ledger_digest(
+        (
+            item.relationship_id,
+            item.source_relationship,
+            item.source_candidate,
+            item.source_scope,
+            item.supported_original_endpoint_pairs,
+        )
+        for item in plan.relationship_dispositions
+    )
+    if (
+        plan.identity.accepted_relationship_ledger_digest
+        != expected_relationship_ledger_digest
+    ):
+        raise ValueError("accepted relationship ledger digest is forged")
+    expected_disposition_digest = relationship_disposition_ledger_digest(
+        plan.relationship_dispositions
+    )
+    if plan.identity.relationship_disposition_digest != expected_disposition_digest:
+        raise ValueError("relationship disposition digest is forged")
     expected_compilation_binding = _canonical_digest(
         {
-            "compilation_binding_version": "search-strategy-compilation-binding-v1",
+            "compilation_binding_version": "search-strategy-compilation-binding-v2",
             "request": plan.identity.effective_request_digest,
             "endpoint": _canonical_digest(plan.endpoint_selection_binding),
             "gateway_input": plan.identity.gateway_input_digest,
@@ -681,10 +968,13 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
             "canonicalization_version": plan.identity.canonicalization_version,
             "digest_algorithm_version": plan.identity.digest_algorithm_version,
             "policy": plan.identity.policy_digest,
-            "capability": plan.identity.capability_receipt,
             "catalog": plan.identity.catalog_receipt,
             "market_policy_version": plan.identity.market_policy_version,
             "market_policy_digest": plan.identity.market_policy_digest,
+            "accepted_relationship_ledger": (
+                plan.identity.accepted_relationship_ledger_digest
+            ),
+            "relationship_dispositions": plan.identity.relationship_disposition_digest,
             "route_topology_feature": plan.identity.route_topology_feature,
         }
     )
@@ -780,6 +1070,41 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
     positioning_receipt_by_relationship = {
         item.relationship_id: item for item in plan.positioning_receipts
     }
+    if len(positioning_receipt_by_relationship) != len(plan.positioning_receipts):
+        raise ValueError("positioning policy receipt relationship IDs must be unique")
+    expected_positioning_receipt_ids = {
+        item.relationship_id
+        for item in plan.relationship_dispositions
+        if item.disposition
+        in {
+            RelationshipDispositionKind.COMPILED,
+            RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL,
+        }
+    }
+    if set(positioning_receipt_by_relationship) != expected_positioning_receipt_ids:
+        raise ValueError(
+            "positioning policy receipts must exactly cover compiled and suppressed relationships"
+        )
+    for disposition in plan.relationship_dispositions:
+        if (
+            disposition.disposition
+            is not RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL
+        ):
+            continue
+        receipt = positioning_receipt_by_relationship[disposition.relationship_id]
+        expected_descriptions = _suppressed_positioning_descriptions(
+            disposition, plan.relationship_dispositions
+        )
+        if (
+            receipt.requested_permission is not False
+            or receipt.decision != "suppressed_explicit_refusal"
+            or len(receipt.dependency_descriptions)
+            != len(set(receipt.dependency_descriptions))
+            or set(receipt.dependency_descriptions) != set(expected_descriptions)
+        ):
+            raise ValueError(
+                "suppressed relationship positioning receipt does not match its requirements"
+            )
     derivation_by_id = {item.date_derivation_id: item for item in plan.temporal_derivations}
     if len(derivation_by_id) != len(plan.temporal_derivations):
         raise ValueError("temporal derivation IDs must be unique")
@@ -980,11 +1305,11 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
             raise ValueError("supplemental strategy validation obligations are incomplete")
         positioning_receipt = positioning_receipt_by_relationship.get(strategy.relationship_id)
         if positioning_receipt is None:
-            raise ValueError("admitted strategy requires one positioning policy receipt")
+            raise ValueError("compiled strategy requires one positioning policy receipt")
         if has_positioning:
             permissions = {item.requested_permission for item in strategy_dependencies}
             if False in permissions or len(permissions) != 1:
-                raise ValueError("admitted positioning dependencies cannot be explicitly refused")
+                raise ValueError("compiled positioning dependencies cannot be explicitly refused")
             permission = next(iter(permissions))
             expected_eligibility = "conditional_permission" if permission is None else "eligible"
             expected_decision = "conditional_research" if permission is None else "allowed_research"
@@ -996,7 +1321,20 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
                 raise ValueError("positioning eligibility and receipt must match typed permission")
         elif strategy.eligibility != "eligible" or positioning_receipt.decision != "not_required":
             raise ValueError("strategy without positioning must be eligible and marked not required")
-        admitted_disposition = next(
+        compiled_expected_descriptions = {
+            f"{item.side}:{item.from_airport_fact_id}->{item.to_airport_fact_id}"
+            for item in strategy_dependencies
+        }
+        if (
+            len(positioning_receipt.dependency_descriptions)
+            != len(set(positioning_receipt.dependency_descriptions))
+            or set(positioning_receipt.dependency_descriptions)
+            != compiled_expected_descriptions
+        ):
+            raise ValueError(
+                "compiled relationship positioning receipt does not match its dependencies"
+            )
+        compiled_disposition = next(
             (
                 item
                 for item in plan.relationship_dispositions
@@ -1005,23 +1343,25 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
             None,
         )
         if (
-            admitted_disposition is None
-            or admitted_disposition.disposition is not RelationshipDispositionKind.ADMITTED
-            or set(admitted_disposition.query_ids) != {item.query_id for item in uses}
-            or admitted_disposition.source_relationship != strategy.source_relationship
-            or admitted_disposition.source_candidate != strategy.source_candidate
-            or admitted_disposition.source_scope != strategy.source_scope
+            compiled_disposition is None
+            or compiled_disposition.disposition is not RelationshipDispositionKind.COMPILED
+            or compiled_disposition.query_ids != tuple(item.query_id for item in uses)
+            or compiled_disposition.source_relationship != strategy.source_relationship
+            or compiled_disposition.source_candidate != strategy.source_candidate
+            or compiled_disposition.source_scope != strategy.source_scope
+            or compiled_disposition.supported_original_endpoint_pairs
+            != strategy.supported_original_endpoint_pairs
         ):
-            raise ValueError("admitted strategy must match one admitted relationship disposition")
+            raise ValueError("compiled strategy must match one compiled relationship disposition")
 
     if {item.date_derivation_id for item in plan.strategy_query_uses} != set(derivation_by_id):
         raise ValueError("every temporal derivation must be reachable from exactly one query use")
     if {
         item.relationship_id
         for item in plan.relationship_dispositions
-        if item.disposition is RelationshipDispositionKind.ADMITTED
+        if item.disposition is RelationshipDispositionKind.COMPILED
     } != {item.relationship_id for item in plan.supplemental_strategies}:
-        raise ValueError("admitted dispositions and supplemental strategies must be bijective")
+        raise ValueError("compiled dispositions and supplemental strategies must be bijective")
 
     obligation_ids = {item.obligation_id for item in plan.constraint_obligations}
     if len(obligation_ids) != len(plan.constraint_obligations):
@@ -1172,82 +1512,53 @@ def _validate_compiled_plan_integrity(plan: CompiledSearchPlan) -> None:
     if linked_dependencies != set(dependency_by_id):
         raise ValueError("every positioning dependency must be linked from one support")
 
-    receipt_by_kind = {receipt.kind: receipt for receipt in plan.budget_receipts}
-    query_days = {
-        query.query_id: (query.date_envelope.end - query.date_envelope.start).days + 1
-        for query in plan.logical_queries
+    receipt_by_kind = {receipt.kind: receipt for receipt in plan.structural_limit_receipts}
+    expected_limits = {
+        CompilerStructuralLimitKind.ENDPOINT_PAIR_CROSS_PRODUCT: len(expected_pairs),
     }
-    mandatory_days = sum(query_days[query_id] for query_id in mandatory_query_ids)
-    expected_budgets = {
-        CompilationBudgetKind.INPUT_WINDOW_DAYS: (
-            next(iter(query_days[query_id] for query_id in mandatory_query_ids)),
-            0,
-        ),
-        CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS: (len(expected_pairs), 0),
-        CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES: (
-            0,
-            len(plan.supplemental_strategies),
-        ),
-        CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES: (
-            len(mandatory_query_ids),
-            len(query_by_id) - len(mandatory_query_ids),
-        ),
-        CompilationBudgetKind.QUERY_DATE_DAYS: (
-            mandatory_days,
-            sum(query_days.values()) - mandatory_days,
-        ),
-    }
-    supplemental_unique = len(query_by_id) - len(mandatory_query_ids)
-    expected_query_reuse = len(plan.strategy_query_uses) - supplemental_unique
-    expected_date_reuse = (
-        sum(query_days[item.query_id] for item in plan.strategy_query_uses)
-        - (sum(query_days.values()) - mandatory_days)
-    )
-    for kind, (mandatory, supplemental) in expected_budgets.items():
-        budget_receipt = receipt_by_kind[kind]
+    for kind, observed in expected_limits.items():
+        limit_receipt = receipt_by_kind[kind]
         if (
-            budget_receipt.mandatory_reserved != mandatory
-            or budget_receipt.supplemental_admitted != supplemental
-            or budget_receipt.observed != mandatory + supplemental
-            or budget_receipt.disposition != "within_limit"
-            or budget_receipt.observed > budget_receipt.limit
+            limit_receipt.observed != observed
+            or limit_receipt.disposition != "within_limit"
+            or limit_receipt.observed > limit_receipt.limit
         ):
-            raise ValueError(f"{kind.value} budget receipt does not recompute from plan work")
-        if kind is CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES and (
-            budget_receipt.shared_reused != expected_query_reuse
-        ):
-            raise ValueError("unique-query shared reuse does not recompute from query uses")
-        if kind is CompilationBudgetKind.QUERY_DATE_DAYS and (
-            budget_receipt.shared_reused != expected_date_reuse
-        ):
-            raise ValueError("query-date shared reuse does not recompute from query uses")
-        if kind not in {
-            CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES,
-            CompilationBudgetKind.QUERY_DATE_DAYS,
-        } and budget_receipt.shared_reused != 0:
-            raise ValueError("non-query budgets cannot claim shared reused work")
-    omitted_by_reason = {
-        CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES: {
-            item.relationship_id
-            for item in plan.relationship_dispositions
-            if "relationship_budget_exhausted" in item.reason_codes
-        },
-        CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES: {
-            item.relationship_id
-            for item in plan.relationship_dispositions
-            if "unique_query_budget_exhausted" in item.reason_codes
-        },
-        CompilationBudgetKind.QUERY_DATE_DAYS: {
-            item.relationship_id
-            for item in plan.relationship_dispositions
-            if "query_date_budget_exhausted" in item.reason_codes
-        },
-    }
-    if any(
-        set(receipt_by_kind[kind].omitted_bundle_ids) != relationship_ids
-        for kind, relationship_ids in omitted_by_reason.items()
-    ):
-        raise ValueError("budget omitted-bundle IDs must match relationship dispositions")
+            raise ValueError(f"{kind.value} structural-limit receipt does not recompute from plan input")
+
+
+def _expected_plan_issues(
+    plan: CompiledSearchPlan,
+) -> tuple[StrategyCompilationIssue, ...]:
+    issues: list[StrategyCompilationIssue] = []
+    if plan.discovery_receipt.outcome in {
+        GatewayDiscoveryOutcome.PARTIAL_ACCEPTANCE,
+        GatewayDiscoveryOutcome.REJECTED_ALL,
+        GatewayDiscoveryOutcome.GENERATION_FAILURE,
+        GatewayDiscoveryOutcome.VALIDATION_FAILURE,
+    }:
+        outcome = plan.discovery_receipt.outcome.value
+        issues.append(
+            StrategyCompilationIssue(
+                code=f"gateway_{outcome}",
+                stage="compilation",
+                severity="reduced_coverage",
+                message=(
+                    f"gateway discovery ended with {outcome}; mandatory coverage is retained"
+                ),
+            )
+        )
+    issues.extend(
+        StrategyCompilationIssue(
+            code=item.reason_codes[0],
+            stage="compilation",
+            severity="reduced_coverage",
+            message="accepted supplemental relationship was not materialized",
+            source_relationship_id=item.relationship_id,
+        )
+        for item in plan.relationship_dispositions
+        if item.disposition is RelationshipDispositionKind.UNSUPPORTED_RULE
+    )
+    return tuple(issues)
 
 
 def _canonical_digest(value: object) -> str:
@@ -1316,7 +1627,7 @@ class SearchPlanningResult(PlanningContractModel):
     outcome: SearchPlanningOutcome
     plan: CompiledSearchPlan | None = None
     issues: tuple[StrategyCompilationIssue, ...] = ()
-    budget_receipts: tuple[CompilationBudgetReceipt, ...] = ()
+    structural_limit_receipts: tuple[CompilerStructuralLimitReceipt, ...] = ()
 
     @model_validator(mode="after")
     def validate_outcome(self) -> SearchPlanningResult:
@@ -1329,10 +1640,37 @@ class SearchPlanningResult(PlanningContractModel):
             }
         ):
             raise ValueError("only planned outcomes may carry a compiled plan")
-        if self.plan is not None and self.budget_receipts != self.plan.budget_receipts:
-            raise ValueError("result and plan budget receipts must match exactly")
-        if self.outcome is SearchPlanningOutcome.PLANNED and any(
-            issue.severity == "reduced_coverage" for issue in self.issues
-        ):
-            raise ValueError("planned outcome cannot carry reduced-coverage issues")
+        if self.plan is not None:
+            if self.structural_limit_receipts != self.plan.structural_limit_receipts:
+                raise ValueError("result and plan structural-limit receipts must match exactly")
+            if self.issues != self.plan.issues:
+                raise ValueError("result issues must exactly match plan issues")
+            expected_outcome = (
+                SearchPlanningOutcome.REDUCED_COVERAGE
+                if any(issue.severity == "reduced_coverage" for issue in self.plan.issues)
+                else SearchPlanningOutcome.PLANNED
+            )
+            if self.outcome is not expected_outcome:
+                raise ValueError("plan-bearing outcome must derive from plan issues")
+        else:
+            if not self.issues:
+                raise ValueError("no-plan outcomes require at least one typed issue")
+            expected_severity = (
+                "unplannable"
+                if self.outcome is SearchPlanningOutcome.UNPLANNABLE
+                else "evidence_failure"
+            )
+            if any(issue.severity != expected_severity for issue in self.issues):
+                raise ValueError("no-plan outcome and issue severities must agree")
+            if self.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE and (
+                self.structural_limit_receipts
+            ):
+                raise ValueError("evidence failures cannot carry structural-limit receipts")
+            if any(
+                receipt.disposition != "exceeded"
+                for receipt in self.structural_limit_receipts
+            ):
+                raise ValueError(
+                    "no-plan structural-limit receipts must record exceeded boundaries"
+                )
         return self

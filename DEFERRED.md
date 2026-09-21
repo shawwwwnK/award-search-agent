@@ -1,6 +1,6 @@
 # Deferred work — finish the core workflow first
 
-Last reviewed: 2026-09-19.
+Last reviewed: 2026-09-20.
 
 This is the living register of work we are deliberately not doing now. Revisit an entry when its trigger is met; that means decide whether to build, narrow, or drop it. It does not mean automatically implement everything here.
 
@@ -8,12 +8,14 @@ For this register, **core complete** means one declared one-way award workflow r
 
 Current focus: Milestone 2C deterministic search-strategy compilation is implemented in place and
 offline verified. The [implementation record](docs/build-log/2026-09-19-m2c-implementation.md)
-captures its boundary and model-only integrated diagnostic. Provider execution remains the next
+captures its initial boundary and model-only integrated diagnostic; the
+[provider-neutral revision](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md) records the
+active contract. Provider execution remains the next
 separately scoped core cut. This register does not reopen 2B, adopt diagnostic-only M2A, or override
 active ADRs. The [project state](docs/project-state.md) and
 [milestone roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) retain their authority.
 
-**Quick cut:** now, use the bounded 2C output in one separately reviewed provider-backed scenario
+**Quick cut:** now, use the structurally bounded 2C output in one separately reviewed provider-backed scenario
 and put the validated result in front of the owner. Later, consider upstream simplification,
 component assembly, round-trip/cash, points, RAG, wider coverage, persistence, adaptive control,
 and deployment. User feedback is not postponed until everything is finished; the detailed entries
@@ -30,9 +32,11 @@ other sequencing recommendations and closed/deferred stage statuses remain uncha
 
 These are remaining core work, not optional items to postpone until after completion:
 
-- **2C compilation — completed 2026-09-19:** mandatory endpoint coverage, bounded supplemental
-  hypotheses, deterministic budgets/deduplication, replay identity, and explicit positioning and
-  separate-ticket obligations are implemented. This completion does not satisfy provider/result gates.
+- **2C compilation — completed 2026-09-19; provider-neutral revision 2026-09-20:** mandatory endpoint
+  coverage, complete replay-valid representable supplemental hypotheses, deterministic semantic
+  deduplication, replay identity, and explicit positioning and separate-ticket obligations are
+  implemented. The 100-pair structural guard is all-or-nothing; provider execution budgets are
+  downstream. This completion does not satisfy provider/result gates.
 - **One provider integration:** capability acceptance, request mapping, bounded attempts/pages/time, and truthful empty/partial/error behavior.
 - **Observed results:** validate dates, provider-returned itinerary boundaries, cabin, travelers, provenance, and supported requirements. Hub components or incomplete access journeys remain research leads; automatic cross-query assembly is D15, not a first-slice prerequisite.
 - **Useful output:** a small transparent shortlist and grounded explanation, including what could not be verified. A supported empty result must not be padded with invented options.
@@ -100,6 +104,8 @@ or automatically satisfying its revisit trigger.
 | D13 · proposed | Scale/performance and concurrency beyond one bounded workflow | Measured resource or concurrent-user demand after core completion | Representative load profile, bottleneck evidence, tested improvement with correctness preserved. No inferred enterprise scale from catalog row count. [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | D14 · proposed | Owner/user feedback, personal AI-engineering learning, then a concise evidence packet and independent handoff | Owner mock/replay walkthrough before full 2C qualification, repeated at pilot; reuse an existing failure for personal explanation; external observation when safe and available | Record the actual task/effort and a justified keep/change/drop decision; do not require a new feature or design change. Personally explain one failure/fix and assess an adjacent requirement, recording assistance and gaps. A later engineer's replay/handoff is distinct from customer adoption; self-directed work does not establish enterprise delivery. G05 applies to reproducibility claims; G07 to sharing. [FDE preparation](docs/reviews/2026-09-19-intent-clarification-improvement-plan.md#ai-engineering-and-fde-preparation), [engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | D15 · proposed | Assemble independently observed hub/access components into a complete journey | A useful pilot lead justifies the extra validation and the owner opens this scope | Choose supported topology; validate chronology, continuity, original departure constraints, seats, positioning and separate-ticket tolerance. Never sum component prices into a through-ticket claim. Until then, leads do not count as completed-option lift. [Review §5](docs/reviews/2026-09-19-search-planning-architecture-review.md#strategy-semantics). |
+| D16 · parked; ownership approved 2026-09-20 | Provider planning/execution: map pair-valued logical queries into exact rectangle-safe multi-airport batches and own finite pages, attempts, returned rows, bytes, time, result-validation, and scheduled-versus-deferred receipts | Open the first provider adapter/pilot stage | Offline capability evidence; batching fixtures proving no unauthorized cross-product pairs; pagination, duplicate, partial, empty, timeout, and error fixtures; exact resource accounting; and returned-result attribution/validation. Keep provider capability out of 2C identity. [ADR 0021 amendment](docs/adr/0021-deterministic-search-strategy-compilation.md#2026-09-20-amendment-provider-neutral-compilation-and-structural-safety), [revision record](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md). |
+| D17 · parked; ownership approved 2026-09-20 | Clean up misplaced intent/clarification artifact constraints. Request-expression constraints must be resolved upstream through omission or clarification with explicit user correction; 2C assumes the frozen request is valid | Reopen upstream intent/clarification maintenance or before claiming ownership is fully enforced across active artifacts | Audit and remove misplaced 31-day fixture/expression constraints without adding a 2C window cap; tests must prove invalid or ambiguous expressions stop or clarify upstream and valid finite windows, including more than 31 days, pass to 2C unchanged. Preserve ADR 0016/0017 state, provenance, and correction authority. [Revision record](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md). |
 
 ## Deliberate non-goals, not promises for later
 
@@ -176,3 +182,10 @@ state and current search planning without behavior changes. The one-trial diagno
 ambiguous-departure ready/plan miss. This supplies current evidence but does not satisfy G01's
 holdout or qualification requirement; no gate or parked item changed status. See the
 [evaluation record](docs/build-log/2026-09-20-intent-to-search-planning-evaluation.md).
+
+2026-09-20 — the owner approved the provider-neutral M2C correction and assigned stable ownership
+for two follow-ons. D16 places provider capability, rectangle-safe batching, execution resources,
+result validation, and scheduled-versus-deferred accounting in the later provider stage. D17 places
+request-expression validity and the cleanup of misplaced 31-day artifacts in intent/clarification;
+2C accepts a valid frozen request and imposes no window-length limit. Both remain parked until their
+stated triggers. See the [revision record](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md).

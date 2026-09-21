@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 from contextlib import nullcontext
+from datetime import date
 
 import pytest
 from pydantic import ValidationError
@@ -22,6 +23,7 @@ from award_agent.search_planning import (
     GatewayCandidateProposal,
     GatewayDiscoveryInput,
     GatewayDiscoveryOutcome,
+    GatewayDiscoveryResult,
     GatewayOutboundDateContext,
     PlanningInputEnvelope,
     PlanningPolicy,
@@ -29,10 +31,10 @@ from award_agent.search_planning import (
     RelationshipDispositionKind,
     SearchPlanningInput,
     SearchPlanningOutcome,
+    SearchPlanningResult,
     SupplementalStrategyType,
     discover_gateway_candidates,
     ground_endpoint,
-    load_default_cached_search_capability,
     load_default_planning_market_policy,
     plan_searches,
 )
@@ -49,8 +51,22 @@ def _proposal(**changes: object) -> GatewayCandidateProposal:
     return GatewayCandidateProposal.model_validate(payload)
 
 
-def _compile(proposal: GatewayCandidateProposal | Exception, *, repositioning: bool | None = None, policy: PlanningPolicy | None = None, origins: tuple[str, ...] = ("SFO",)):
-    request = _request(origins, ("CDG",), repositioning_allowed=repositioning)
+def _compile(
+    proposal: GatewayCandidateProposal | Exception,
+    *,
+    repositioning: bool | None = None,
+    policy: PlanningPolicy | None = None,
+    origins: tuple[str, ...] = ("SFO",),
+    start: date = date(2026, 10, 5),
+    end: date = date(2026, 10, 7),
+) -> tuple[GatewayDiscoveryResult, SearchPlanningResult]:
+    request = _request(
+        origins,
+        ("CDG",),
+        repositioning_allowed=repositioning,
+        start=start,
+        end=end,
+    )
     policy = policy or PlanningPolicy()
     market_policy = load_default_planning_market_policy()
     with nullcontext(_repository()) as repository:
@@ -90,7 +106,6 @@ def _compile(proposal: GatewayCandidateProposal | Exception, *, repositioning: b
                 ),
                 endpoint_source=DirectGroundingSource(),
                 gateway_discovery_result=discovery,
-                capability=load_default_cached_search_capability(),
             ),
             repository=repository,
             policy=policy,
@@ -141,9 +156,10 @@ def test_shared_access_query_is_deduplicated_with_many_to_many_provenance() -> N
     assert len(plan.strategy_query_uses) == 2
     assert plan.strategy_query_uses[0].query_id == plan.strategy_query_uses[1].query_id
     assert len(plan.logical_queries) == 3  # two mandatory plus one shared supplemental
-    unique_budget = plan.budget_receipts[3]
-    assert unique_budget.supplemental_admitted == 1
-    assert unique_budget.shared_reused == 1
+    assert all(
+        item.disposition is RelationshipDispositionKind.COMPILED
+        for item in plan.relationship_dispositions
+    )
 
 
 def test_explicit_positioning_refusal_suppresses_access_without_losing_mandatory_work() -> None:
@@ -185,22 +201,31 @@ def test_scoped_hub_is_two_queries_with_explicit_dates_and_connection_semantics(
     )
 
 
-def test_hub_bundle_admission_is_atomic_under_unique_query_budget() -> None:
+def test_hub_relationship_compiles_as_a_complete_bundle() -> None:
     _, result = _compile(
         _proposal(intermediate_hubs=[_direct_hub()]),
-        policy=PlanningPolicy(
-            max_mandatory_endpoint_pairs=1,
-            max_unique_logical_queries=2,
-        ),
+    )
+    assert result.outcome is SearchPlanningOutcome.PLANNED
+    assert result.plan is not None
+    assert len(result.plan.logical_queries) == 3
+    assert len(result.plan.strategy_query_uses) == 2
+    disposition = result.plan.relationship_dispositions[0]
+    assert disposition.disposition is RelationshipDispositionKind.COMPILED
+    assert len(disposition.query_ids) == 2
+
+
+def test_unrepresentable_date_overflow_is_an_explicit_reduced_disposition() -> None:
+    _, result = _compile(
+        _proposal(origin_access_gateways=[_origin_access("SFO")]),
+        start=date.max,
+        end=date.max,
     )
     assert result.outcome is SearchPlanningOutcome.REDUCED_COVERAGE
     assert result.plan is not None
     assert len(result.plan.logical_queries) == 1
-    assert not result.plan.strategy_query_uses
     disposition = result.plan.relationship_dispositions[0]
-    assert disposition.disposition is RelationshipDispositionKind.OMITTED_BUDGET
-    assert disposition.candidate_unique_queries == 2
-    assert disposition.marginal_unique_queries == 2
+    assert disposition.disposition is RelationshipDispositionKind.UNSUPPORTED_RULE
+    assert disposition.reason_codes == ("supplemental_date_overflow",)
 
 
 def test_access_referenced_hub_preserves_dependency_in_synthetic_scope() -> None:
@@ -292,7 +317,7 @@ def test_rehashed_graph_tampering_cannot_remove_hub_use_or_positioning_dependenc
         CompiledSearchPlan.model_validate(_rehashed(missing_dependency))
 
 
-def test_rehashed_graph_tampering_cannot_add_disposition_or_exceeded_success_budget() -> None:
+def test_rehashed_graph_tampering_cannot_add_disposition_or_exceeded_structural_limit() -> None:
     _, result = _compile(_proposal(origin_access_gateways=[_origin_access("SFO")]))
     assert result.plan is not None
 
@@ -301,15 +326,69 @@ def test_rehashed_graph_tampering_cannot_add_disposition_or_exceeded_success_bud
     extra["relationship_id"] = "f" * 64
     extra_disposition["relationship_dispositions"].append(extra)
     extra_disposition["coverage"]["accepted_relationships"] += 1
-    extra_disposition["coverage"]["admitted_relationships"] += 1
+    extra_disposition["coverage"]["compiled_relationships"] += 1
     with pytest.raises(ValidationError):
         CompiledSearchPlan.model_validate(_rehashed(extra_disposition))
 
     exceeded = result.plan.model_dump(mode="json", round_trip=True)
-    exceeded["budget_receipts"][3]["limit"] = 0
-    exceeded["budget_receipts"][3]["disposition"] = "exceeded"
+    exceeded["structural_limit_receipts"][0]["limit"] = 0
+    exceeded["structural_limit_receipts"][0]["disposition"] = "exceeded"
     with pytest.raises(ValidationError):
         CompiledSearchPlan.model_validate(_rehashed(exceeded))
+
+
+def test_rehashed_cloned_unsupported_relationship_cannot_extend_the_accepted_ledger() -> None:
+    _, result = _compile(_proposal(origin_access_gateways=[_origin_access("SFO")]))
+    assert result.plan is not None
+    forged = result.plan.model_dump(mode="json", round_trip=True)
+    cloned = dict(forged["relationship_dispositions"][0])
+    cloned["relationship_id"] = "f" * 64
+    cloned["disposition"] = "unsupported_rule"
+    cloned["reason_codes"] = ["supplemental_date_overflow"]
+    cloned["query_ids"] = []
+    forged["relationship_dispositions"].append(cloned)
+    forged["coverage"]["accepted_relationships"] += 1
+    forged["coverage"]["unsupported_rule_relationships"] += 1
+    with pytest.raises(ValidationError, match="relationship disposition ID is forged"):
+        CompiledSearchPlan.model_validate(_rehashed(forged))
+
+
+def test_positioning_receipts_cannot_be_removed_duplicated_or_reclassified() -> None:
+    _, result = _compile(
+        _proposal(origin_access_gateways=[_origin_access("SFO")]),
+        repositioning=False,
+    )
+    assert result.plan is not None
+
+    removed = result.plan.model_dump(mode="json", round_trip=True)
+    removed["positioning_receipts"] = []
+    with pytest.raises(ValidationError, match="must exactly cover"):
+        CompiledSearchPlan.model_validate(_rehashed(removed))
+
+    duplicated = result.plan.model_dump(mode="json", round_trip=True)
+    duplicated["positioning_receipts"].append(
+        dict(duplicated["positioning_receipts"][0])
+    )
+    with pytest.raises(ValidationError, match="IDs must be unique"):
+        CompiledSearchPlan.model_validate(_rehashed(duplicated))
+
+    reclassified = result.plan.model_dump(mode="json", round_trip=True)
+    reclassified["relationship_dispositions"][0]["disposition"] = "unsupported_rule"
+    reclassified["relationship_dispositions"][0]["reason_codes"] = [
+        "supplemental_date_overflow"
+    ]
+    reclassified["coverage"]["suppressed_positioning_refusal_relationships"] -= 1
+    reclassified["coverage"]["unsupported_rule_relationships"] += 1
+    reclassified["positioning_receipts"] = []
+    with pytest.raises(ValidationError):
+        CompiledSearchPlan.model_validate(_rehashed(reclassified))
+
+    dangling_query = result.plan.model_dump(mode="json", round_trip=True)
+    dangling_query["relationship_dispositions"][0]["query_ids"] = [
+        "logical-award:" + "f" * 64
+    ]
+    with pytest.raises(ValidationError, match="cannot claim materialized query IDs"):
+        CompiledSearchPlan.model_validate(_rehashed(dangling_query))
 
 
 def test_optional_generation_failure_keeps_mandatory_plan_with_reduced_receipt() -> None:
@@ -320,6 +399,22 @@ def test_optional_generation_failure_keeps_mandatory_plan_with_reduced_receipt()
     assert result.plan.coverage.mandatory_complete
     assert len(result.plan.logical_queries) == 1
     assert result.issues[0].code == "gateway_generation_failure"
+
+
+def test_reduced_plan_and_result_issues_cannot_be_removed_or_reclassified() -> None:
+    _, result = _compile(RuntimeError("offline generator unavailable"))
+    assert result.plan is not None
+
+    forged_plan = result.plan.model_dump(mode="json", round_trip=True)
+    forged_plan["issues"] = []
+    with pytest.raises(ValidationError, match="plan issues must exactly derive"):
+        CompiledSearchPlan.model_validate(_rehashed(forged_plan))
+
+    forged_result = result.model_dump(mode="json", round_trip=True)
+    forged_result["outcome"] = "planned"
+    forged_result["issues"] = []
+    with pytest.raises(ValidationError, match="result issues must exactly match"):
+        SearchPlanningResult.model_validate(forged_result)
 
 
 def test_result_contains_no_observed_itinerary_claims() -> None:

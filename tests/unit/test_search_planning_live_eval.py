@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from datetime import date
+from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Self, cast
@@ -45,6 +46,8 @@ from award_agent.search_planning.airport_selector import (
 from award_agent.search_planning.compilation_contracts import (
     SearchPlanningOutcome,
     SearchPlanningResult,
+    StrategyCompilationIssue,
+    StrategyCompilationIssueCode,
 )
 from award_agent.search_planning.contracts import (
     CatalogKnowledgeReceipt,
@@ -388,7 +391,7 @@ class _Clarifier:
 def test_casebook_has_reviewed_multi_milestone_call_bound() -> None:
     cases = load_search_planning_live_cases()
     assert DEFAULT_SEARCH_PLANNING_LIVE_CASEBOOK == Path(
-        "evals/search_planning_live/casebook-v1.yaml"
+        "evals/search_planning_live/casebook-v2.yaml"
     )
     assert [case["id"] for case in cases] == [
         "direct_sfo_to_nrt",
@@ -398,6 +401,22 @@ def test_casebook_has_reviewed_multi_milestone_call_bound() -> None:
         "united_states_to_japan_clarified_date",
         "cash_only_scope_stop",
     ]
+
+
+def test_casebook_validation_accepts_a_finite_window_longer_than_31_days(
+    tmp_path: Path,
+) -> None:
+    casebook = tmp_path / "long-window.yaml"
+    casebook.write_text(
+        DEFAULT_SEARCH_PLANNING_LIVE_CASEBOOK.read_text().replace(
+            "end: 2027-03-12", "end: 2027-05-12", 1
+        )
+    )
+
+    cases = load_search_planning_live_cases(casebook)
+
+    assert cases[0]["departure"]["start"] == date(2027, 3, 10)
+    assert cases[0]["departure"]["end"] == date(2027, 5, 12)
 
 
 def test_preflight_validates_full_call_plan_without_constructing_adapters() -> None:
@@ -457,6 +476,20 @@ def test_fake_adapters_run_m2a_m2b_m2c_and_keep_raw_io_private(tmp_path: Path) -
     assert record["handoff"]["status"] == "current"
     assert record["handoff"]["executable"] is True
     assert len(record["m2a"]["record_bindings"]) == 2
+    assert "capability" not in artifact["identities"]
+    assert set(artifact["compiler_policy"]).isdisjoint(
+        {
+            "max_supplemental_relationship_bundles",
+            "max_unique_logical_queries",
+            "max_query_date_days",
+        }
+    )
+    assert record["m2c"]["compiled_relationships"] == record["m2c"][
+        "accepted_relationships"
+    ]
+    assert "admitted_relationships" not in record["m2c"]
+    assert "omitted_budget_relationships" not in record["m2c"]
+    assert "query_date_days" not in record["m2c"]
     public_json = json.dumps(artifact)
     assert "private_selector" not in public_json
     assert "private_gateway" not in public_json
@@ -465,6 +498,64 @@ def test_fake_adapters_run_m2a_m2b_m2c_and_keep_raw_io_private(tmp_path: Path) -
     assert "private_selector" in private_trace
     assert "private_gateway" in private_trace
     assert "private_intent" in private_trace
+
+
+def test_offline_v2_recompile_evidence_preserves_history_and_compiles_every_relationship() -> None:
+    evidence_path = Path(
+        "evals/search_planning_live/recompile/"
+        "2026-09-20-united-states-japan-clarified-trial-1-m2c-v2.json"
+    )
+    evidence = json.loads(evidence_path.read_text())
+    historical = Path(evidence["source"]["historical_public_artifact"])
+
+    assert sha256(historical.read_bytes()).hexdigest() == evidence["source"][
+        "historical_public_artifact_sha256"
+    ]
+    assert evidence["execution"] == {
+        "model_calls": 0,
+        "provider_calls": 0,
+        "gateway_replay_equal": True,
+        "compile_replay_equal": True,
+        "typed_plan_reload_equal": True,
+        "handoff_status": "current",
+        "handoff_executable": True,
+    }
+    assert evidence["compiler"]["provider_capability_bound"] is False
+    result = evidence["result"]
+    assert result["outcome"] == "planned"
+    assert result["plan_digest"] == (
+        "6b6313e7d39a6fa53dc7ec84dc9d114a0ec1e3efc80c06342bc69f8b6293f840"
+    )
+    assert result["compilation_binding_digest"] == (
+        "fa91756cb1467dead136501721de76eaa583571f031faec03a6a705ba3f4cbcf"
+    )
+    assert result["accepted_relationship_ledger_digest"] == (
+        "a0891427d6f81dacac2f0fbd01b2fc49cc0ffa9f668fc133ec8cde7b12b40c78"
+    )
+    assert result["relationship_disposition_digest"] == (
+        "97f2425cbdd273628342734bfb2e3c9467a6bc966fef8a83a607cc3350504e1f"
+    )
+    assert result["mandatory_required_pairs"] == result["mandatory_covered_pairs"] == 40
+    assert result["accepted_relationships"] == result["compiled_relationships"] == 52
+    assert result["logical_queries"] == 57
+    assert result["supplemental_strategies"] == 52
+    assert result["strategy_query_uses"] == 68
+    assert result["relationship_dispositions"] == {"compiled": 52}
+    assert "omitted_budget_relationships" not in result
+
+    historical_hashes = {
+        "2026-09-19-gpt-5.6-luna-m2a-m2b-m2c-integrated-casebook-v1-2-trials.json": (
+            "c5303db7a8c6e6f9cb2eb958c548841b08d70c70011fef5dc005cd64a4daa633"
+        ),
+        "2026-09-19-gpt-5.6-luna-m2a-m2b-m2c-integrated-casebook-v1-lyon-fix-2-trials.json": (
+            "4f4956a2f6cd3acfd3fee93c93bb803962fb8a68ccacd73de805eb66aa7c821d"
+        ),
+    }
+    baseline = Path("evals/search_planning_live/baseline")
+    assert {
+        name: sha256((baseline / name).read_bytes()).hexdigest()
+        for name in historical_hashes
+    } == historical_hashes
 
 
 def test_upstream_blocked_case_never_counts_as_completed(tmp_path: Path) -> None:
@@ -485,7 +576,17 @@ def test_upstream_blocked_case_never_counts_as_completed(tmp_path: Path) -> None
 def test_no_plan_result_is_an_error_not_completed(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    failed = SearchPlanningResult(outcome=SearchPlanningOutcome.EVIDENCE_FAILURE)
+    failed = SearchPlanningResult(
+        outcome=SearchPlanningOutcome.EVIDENCE_FAILURE,
+        issues=(
+            StrategyCompilationIssue(
+                code=StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE,
+                stage="compilation",
+                severity="evidence_failure",
+                message="offline fixture compilation failure",
+            ),
+        ),
+    )
     monkeypatch.setattr(
         search_planning_live,
         "plan_searches",

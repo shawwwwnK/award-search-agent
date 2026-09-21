@@ -53,7 +53,10 @@ payload mapping, result normalization, and ranking. See the
 [Milestone 2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md) records
 the final design, evidence, limitations, and later-stage inheritances. The
 [Milestone 2C implementation record](docs/build-log/2026-09-19-m2c-implementation.md) records the
-compiler boundary, verification, and model-only integrated diagnostic.
+initial compiler boundary, verification, and model-only integrated diagnostic. The active
+[provider-neutral revision](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md) removes
+provider capability and provisional execution-shaped allocation limits from 2C, retaining only the
+all-or-nothing 100-pair compiler structural guard.
 
 The initial request-understanding turn now uses the ADR 0017 semantic boundary:
 

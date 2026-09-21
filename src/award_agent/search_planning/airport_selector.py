@@ -33,7 +33,6 @@ from award_agent.search_planning.contracts import (
     KnowledgeReceipt,
     PlanningContractModel,
     PlanningInputEnvelope,
-    SearchPlanningResult,
     SelectedAirport,
 )
 from award_agent.search_planning.distance_consistency import (
@@ -427,13 +426,6 @@ class AirportSelectionReplayReceipt(PlanningContractModel):
                 "selection replay record digests must be sorted, unique SHA-256 values"
             )
         return self
-
-
-class AirportSelectionPlanningResult(PlanningContractModel):
-    """A returned deterministic plan outcome bound to selector replay evidence."""
-
-    planning_result: SearchPlanningResult
-    replay_receipt: AirportSelectionReplayReceipt
 
 
 def airport_selection_record_digest(record: AirportSelectionRecord) -> str:

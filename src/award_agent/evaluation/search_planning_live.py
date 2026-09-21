@@ -60,12 +60,6 @@ from award_agent.search_planning.airport_selector import (
     airport_selection_record_digest,
     validate_airport_selection_proposal,
 )
-from award_agent.search_planning.capabilities import (
-    CachedSearchCapability,
-    capability_content_digest,
-    load_default_cached_search_capability,
-    verify_capability_source_artifacts,
-)
 from award_agent.search_planning.compilation_contracts import (
     DirectGroundingSource,
     M2ASelectionRecordSource,
@@ -110,11 +104,11 @@ from award_agent.search_planning.market_policy import (
 from award_agent.search_planning.planner import plan_searches
 from award_agent.search_planning.policy import PlanningPolicy
 
-DEFAULT_SEARCH_PLANNING_LIVE_CASEBOOK = Path("evals/search_planning_live/casebook-v1.yaml")
+DEFAULT_SEARCH_PLANNING_LIVE_CASEBOOK = Path("evals/search_planning_live/casebook-v2.yaml")
 DEFAULT_SEARCH_PLANNING_LIVE_TRACE_DIR = Path("evals/search_planning_live/traces-live")
 DEFAULT_SEARCH_PLANNING_LIVE_CATALOG = Path("data/search_planning/catalogs/m1a-3cb7981519612945")
-SEARCH_PLANNING_LIVE_EVALUATOR_VERSION = "search_planning_live_eval_v1"
-_CONTRACT_VERSION = "search-planning-live-casebook-v1"
+SEARCH_PLANNING_LIVE_EVALUATOR_VERSION = "search_planning_live_eval_v2"
+_CONTRACT_VERSION = "search-planning-live-casebook-v2"
 
 
 class SearchPlanningLiveFixtureError(ValueError):
@@ -146,7 +140,6 @@ def _load_casebook(path: Path) -> tuple[tuple[Mapping[str, Any], ...], Mapping[s
             "airport_selection_policy",
             "distance_policy",
             "market_policy",
-            "capability",
             "live_bounds",
             "cases",
         },
@@ -155,15 +148,14 @@ def _load_casebook(path: Path) -> tuple[tuple[Mapping[str, Any], ...], Mapping[s
     if (
         top["contract_version"] != _CONTRACT_VERSION
         or top["development_only"] is not True
-        or top["casebook_id"] != "m2a_m2b_m2c_integrated_development_v1"
+        or top["casebook_id"] != "m2a_m2b_m2c_integrated_development_v2"
     ):
-        raise SearchPlanningLiveFixtureError("casebook identity is not integrated v1")
+        raise SearchPlanningLiveFixtureError("casebook identity is not integrated v2")
     for name, keys in (
         ("catalog", {"release_id", "logical_content_sha256"}),
         ("airport_selection_policy", {"version", "digest"}),
         ("distance_policy", {"version", "digest"}),
         ("market_policy", {"version", "digest"}),
-        ("capability", {"id", "version", "digest"}),
         (
             "live_bounds",
             {
@@ -217,8 +209,8 @@ def _load_casebook(path: Path) -> tuple[tuple[Mapping[str, Any], ...], Mapping[s
             RequestContext(reference_date=date(2026, 9, 19), timezone=departure["timezone"])
         except (TypeError, ValueError) as exc:
             raise SearchPlanningLiveFixtureError("case departure is invalid") from exc
-        if end < start or (end - start).days + 1 > 31:
-            raise SearchPlanningLiveFixtureError("case departure must be a bounded 31-day window")
+        if end < start:
+            raise SearchPlanningLiveFixtureError("case departure window is reversed")
         if not isinstance(case["gateway_call_possible"], bool):
             raise SearchPlanningLiveFixtureError("gateway_call_possible must be boolean")
         if not isinstance(case["raw_request"], str) or not case["raw_request"].strip():
@@ -445,16 +437,14 @@ def _public_plan_summary(result: Any) -> dict[str, Any]:
         "mandatory_pairs": plan.coverage.mandatory_required_pairs,
         "mandatory_complete": plan.coverage.mandatory_complete,
         "accepted_relationships": plan.coverage.accepted_relationships,
-        "admitted_relationships": plan.coverage.admitted_relationships,
-        "omitted_budget_relationships": plan.coverage.omitted_budget_relationships,
+        "compiled_relationships": plan.coverage.compiled_relationships,
         "suppressed_positioning_relationships": (
             plan.coverage.suppressed_positioning_refusal_relationships
         ),
-        "unsupported_relationships": plan.coverage.unsupported_rule_relationships,
         "unique_queries": len(plan.logical_queries),
-        "query_date_days": next(
-            item.observed for item in plan.budget_receipts if item.kind.value == "query_date_days"
-        ),
+        "structural_limit_receipts": [
+            item.model_dump(mode="json") for item in plan.structural_limit_receipts
+        ],
         "unresolved_obligations": len(plan.constraint_obligations),
         "mapping_gap": "gaps" in plan.discovery_receipt.market_coverage.value,
     }
@@ -519,7 +509,6 @@ def run_search_planning_live_eval(
     cap_policy: AirportSelectionCapPolicy | None = None,
     distance_policy: CityAirportDistanceConsistency | None = None,
     market_policy: PlanningMarketPolicy | None = None,
-    capability: CachedSearchCapability | None = None,
     compiler_policy: PlanningPolicy | None = None,
 ) -> dict[str, Any]:
     """Run a bounded integrated diagnostic or only its no-adapter preflight."""
@@ -551,9 +540,7 @@ def run_search_planning_live_eval(
         policy_version="city-airport-distance-consistency-v1"
     )
     market_policy = market_policy or load_default_planning_market_policy()
-    capability = capability or load_default_cached_search_capability()
     compiler_policy = compiler_policy or PlanningPolicy()
-    verify_capability_source_artifacts(capability)
     identities = {
         "airport_selection_policy": (
             cap_policy.policy_version,
@@ -567,11 +554,6 @@ def run_search_planning_live_eval(
             market_policy.policy_version,
             planning_market_policy_digest(market_policy),
         ),
-        "capability": (
-            capability.capability_id,
-            capability.capability_version,
-            capability_content_digest(capability),
-        ),
     }
     expected_identities = {
         name: tuple(cast(Mapping[str, Any], casebook[name]).values())
@@ -579,11 +561,10 @@ def run_search_planning_live_eval(
             "airport_selection_policy",
             "distance_policy",
             "market_policy",
-            "capability",
         )
     }
     if identities != expected_identities:
-        raise SearchPlanningLiveFixtureError("casebook policy or capability identity drifted")
+        raise SearchPlanningLiveFixtureError("casebook policy identity drifted")
 
     generated_at = datetime.now(UTC).isoformat()
     run_dir = trace_dir / f"run-{generated_at.replace(':', '').replace('+', '-')}-{uuid4().hex[:8]}"
@@ -902,7 +883,6 @@ def run_search_planning_live_eval(
                         endpoint_source=endpoint_source,
                         upstream_selection_id_bindings=tuple(bindings),
                         gateway_discovery_result=gateway,
-                        capability=capability,
                     )
                     compiler_kwargs: dict[str, Any] = {
                         "policy": compiler_policy,
@@ -964,7 +944,6 @@ def run_search_planning_live_eval(
                         ),
                         upstream_selection_id_bindings=reloaded_bindings,
                         gateway_discovery_result=reloaded_gateway,
-                        capability=capability,
                     )
                     replay_result = plan_searches(reloaded_input, **compiler_kwargs)
                     if replay_result != planning_result:

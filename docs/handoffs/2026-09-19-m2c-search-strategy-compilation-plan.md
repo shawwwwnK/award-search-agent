@@ -2,10 +2,18 @@
 
 Date: 2026-09-19
 
-Status: Implementation-ready proposal for owner review. Milestone 2C planning is open. The owner
-delegated the numerical compiler-limit decision recorded in B7 and explicitly chose an in-place
-replacement rather than V1 compatibility; the remaining policy choices,
-runtime implementation, and live model/provider calls are not authorized by this document.
+Status: Historical implementation plan, implemented and subsequently amended. The owner chose an
+in-place replacement rather than V1 compatibility. The 2026-09-20 provider-neutral revision below
+supersedes only this plan's capability-binding and 31/24/128/4,000 allocation decisions. Provider
+execution and provider calls remain outside 2C.
+
+Revision note, 2026-09-20: active 2C has no provider capability in its input, plan identity, or
+trusted compilation binding. It compiles every replay-valid representable 2B relationship without
+supplemental allocation pruning. The only active compiler limit is an all-or-nothing structural
+guard at 100 selected origin × destination pairs; finite windows longer than 31 days are accepted.
+All conflicting capability, allocation, budget-omission, and reduced-coverage text below is retained
+only to explain the original 2026-09-19 proposal. See [ADR 0021's amendment](../adr/0021-deterministic-search-strategy-compilation.md#2026-09-20-amendment-provider-neutral-compilation-and-structural-safety)
+and the [revision build log](../build-log/2026-09-20-m2c-provider-neutral-revision.md).
 
 Authority: This handoff translates the owner-requested direction, the advisory architecture review,
 and current repository evidence into proposed contracts and implementation cuts. Where this document
@@ -571,6 +579,16 @@ suppression. Free-text such as “no positioning” or “nonstop only” remain
 must not be reparsed into a typed field or provider filter by 2C.
 
 ### B7. Budget units, deduplication, and atomic allocation
+
+**Active revision, 2026-09-20.** This section's original allocator and five-budget design below is
+superseded. The current policy retains only `max_structural_endpoint_pairs: 100`, classified as
+`compiler_structural_safety`. Exactly 100 mandatory pairs compile; a larger cross-product produces
+`UNPLANNABLE` with no plan. There is no 31-day compiler limit, no 24-relationship, 128-query, or
+4,000 query-date-day admission limit, no allocation scheduler, and no `omitted_budget` disposition.
+After replay and representability checks, every relationship is deterministically compiled, except
+for explicit positioning-refusal suppression or a finite `unsupported_rule` such as date overflow.
+Semantic query deduplication and complete many-to-many provenance remain required. The remainder of
+B7 records the superseded proposal and must not be used as the active contract.
 
 Replace the active `PlanningPolicy` with one current policy containing the grounding controls still
 used by the compiler plus these compilation fields:
@@ -1292,6 +1310,14 @@ synthetic offline verification, not a reason to reopen 2B or make new live calls
 | [This planning session](../build-log/2026-09-19-m2c-planning.md) | Investigation, parent corrections, baseline tests, documentation checks |
 
 ## G. Cached Search batching reconsideration
+
+**Active revision, 2026-09-20.** The grouping analysis remains useful downstream design input, but
+provider capability and batching no longer bind 2C compilation. A later provider-planning/execution
+stage owns proof of exact rectangle-safe multi-airport grouping, provider capability acceptance,
+pagination, attempts, rows, bytes, time, result validation, and scheduled-versus-deferred receipts.
+It must preserve the pair-valued logical-query ledger and may not add unauthorized cross-product
+pairs. The original numerical compiler-limit discussion later in this section is superseded by B7's
+active revision and ADR 0021's amendment.
 
 Status: planning amendment following the owner's 2026-09-19 question. The owner delegated and the
 architecture review selected B7's numerical compiler limits. No runtime policy changed, and the

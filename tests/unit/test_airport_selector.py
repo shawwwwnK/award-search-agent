@@ -9,7 +9,7 @@ from typing import cast
 from openai import OpenAI
 from test_catalog_serving import _location, _ready_envelope, _release
 
-from award_agent.domain import LocationKind
+from award_agent.domain import LocationKind, LocationRef
 from award_agent.search_planning import (
     DEFAULT_GATEWAY_DISCOVERY_GENERATOR_CONFIGURATION,
     ORIGINAL_SIMPLE_AIRPORT_SELECTOR_PROMPT,
@@ -18,6 +18,7 @@ from award_agent.search_planning import (
     AirportSelectionCapPolicy,
     AirportSelectionProposal,
     AirportSelectionProposalOutcome,
+    AirportSelectionRecord,
     AirportSelectorModelInput,
     CatalogKnowledgeRepository,
     CityAirportDistanceConsistency,
@@ -34,11 +35,11 @@ from award_agent.search_planning import (
     ResolvedEntityContext,
     SearchPlanningInput,
     SearchPlanningOutcome,
+    SearchPlanningResult,
     airport_selection_record_digest,
     context_for_resolved_location,
     discover_gateway_candidates,
     ground_endpoint,
-    load_default_cached_search_capability,
     load_default_planning_market_policy,
     plan_searches,
     validate_airport_selection_proposal,
@@ -82,13 +83,13 @@ def _context(
 def _plan_records(
     *,
     repository: CatalogKnowledgeRepository,
-    origin: object,
-    destination: object,
-    origin_record: object,
-    destination_record: object,
+    origin: LocationRef,
+    destination: LocationRef,
+    origin_record: AirportSelectionRecord,
+    destination_record: AirportSelectionRecord,
     cap_policy: AirportSelectionCapPolicy,
     distance_policy: CityAirportDistanceConsistency,
-):
+) -> SearchPlanningResult:
     records = (origin_record, destination_record)
     record_digests = tuple(
         sorted(airport_selection_record_digest(record) for record in records)
@@ -123,7 +124,6 @@ def _plan_records(
             envelope=envelope,
             endpoint_source=M2ASelectionRecordSource(selection_records=records),
             gateway_discovery_result=discovery,
-            capability=load_default_cached_search_capability(),
         ),
         selection_cap_policy=cap_policy,
         selection_distance_policy=distance_policy,

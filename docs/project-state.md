@@ -11,15 +11,27 @@ review fixes, offline verification, and model-only integrated diagnostic. The pr
 compiler makes no additional model call and no provider call. Provider execution and
 provider/product qualification remain outside this stage. M2A remains diagnostic-only, 2B remains
 closed, and independent human semantic qualification is not claimed.
-The owner's subsequent Cached Search airport-list challenge is recorded in the handoff's Section G:
-retain pair-level coverage/provenance and specify grouped downstream requests. The owner delegated the
-compiler-limit decision to the parent/architect; two independent recommendations converged on 31 input days,
-100 mandatory pairs, 24 supplemental relationships, 128 total unique logical queries, and 4,000
-query-date-days. These are selected local compiler guardrails, not provider limits. The owner then
-explicitly declined V1 compatibility: 2C should replace the current planner contract, policy, handoff,
-callers, and fixtures in place. The old 25/40/1,400 limits and route-expansion runtime are not retained
-as an active compatibility path. Historical evidence remains preserved. Provider batching and live
-provider execution were not implemented by 2C.
+On 2026-09-20 the owner amended 2C to keep compilation fully provider-neutral. Cached Search
+capability is no longer an input, identity field, or trusted compilation-binding component. The
+provisional 31-day, 24-relationship, 128-query, and 4,000 query-date-day admission limits and their
+allocator were removed. Every replay-valid representable 2B relationship now compiles
+deterministically; semantic query deduplication and exact provenance remain. The sole active
+compiler guard is an all-or-nothing structural limit of 100 selected origin × destination pairs.
+This is a quadratic materialization safety boundary, not a provider limit or an upstream endpoint
+count promise. Provider batching, execution/resource budgets, and live provider execution were not
+implemented by 2C. See the [ADR amendment](adr/0021-deterministic-search-strategy-compilation.md#2026-09-20-amendment-provider-neutral-compilation-and-structural-safety)
+and [revision record](build-log/2026-09-20-m2c-provider-neutral-revision.md).
+
+A fresh one-trial V2 integrated live verification subsequently completed all six declared
+trajectories with 20/28 reserved model calls attempted, zero errors, five equal planning replays and
+current handoffs, and the expected cash-only upstream stop. Every accepted relationship compiled,
+including 72/72 for the high-fanout United States–India case. No travel provider was called and no
+provider capability was bound into M2C. This is development evidence; semantic and provider/product
+qualification remain unclaimed. See the revision record and its linked public artifact.
+An offline zero-call replay of the saved trial-1 bundle compiled all 52 accepted relationships into
+52 strategies (36 destination access and 16 hubs), 57 logical queries, and 68 strategy uses. Two
+compiles and serialization/reload were equal, the handoff was `CURRENT`, and the outcome was
+`PLANNED`. Its 183 conceptual query-date-days are an observation, not an admission budget.
 Search planning is implemented and offline verified as a planning-only, retrieval-backed
 `EffectiveRequest -> CompiledSearchPlan` stage that follows the frozen one-way award request-understanding
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
@@ -131,7 +143,8 @@ v6 run recorded 46 case-trials and 42/42 expected calls across two trials: 37 no
 access, and 42 hubs), 43 scopes, and 400 accepted relationships; 186,549 tokens; one PNH
 catalog-absence rejection; and three retained market-mismatch advisories. Artifact-integrity and
 independent AI semantic review passed for owner human review, not human semantic qualification.
-Relationship-level budgeting remains mandatory for 2C.
+Complete relationship accounting remains mandatory for 2C; provider execution budgeting belongs to
+the later provider stage.
 
 ## 2026-09-19 casebook-v3 live diagnostic complete
 
@@ -158,7 +171,7 @@ review passed for owner human review, not human qualification. Residual review
 notes include high relationship counts for India and Los Angeles/Australia-New
 Zealand cases, trial variation, one IPC→PPT circuitous regression, and a private
 trace control-character hygiene note. No prompt-v7 or deterministic semantic
-rejection change is currently recommended; 2C budgeting is mandatory.
+rejection change is currently recommended; complete 2C relationship accounting remains mandatory.
 
 ## Current conclusion
 
@@ -170,40 +183,33 @@ implementation consumes the closed 2B replay record without changing that closur
 The durable closeout is
 `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 Milestone 1 completed the local geographic/airport foundation, and Milestone 2A supplied the
-still-diagnostic endpoint selection seam described above. The preceding
-search-planning cut is implemented and fixture-qualified for the declared local seed coverage.
-This is the planning-only boundary recorded in
-`docs/handoffs/2026-09-10-search-plan-design-stage.md`:
+still-diagnostic endpoint selection seam described above. The current planning-only boundary is:
 
 ```text
-ClarificationSession(ready).effective_request -> SearchPlan
+frozen EffectiveRequest + endpoint source + replay-bound 2B record -> CompiledSearchPlan
 ```
 
-The implemented planner consumes a ready outbound-only `EffectiveRequest` and produces
-inspectable, bounded, deterministic expected search items from versioned local evidence. Its
-ten-case offline golden evaluator qualifies the declared seed fixture coverage, including airport
-groups, typed failures, directional synthetic topology, dates, budgets, payment annotations,
-canonical ordering, optional-path budget degradation, and stale-plan handoff. It must not call
-Seats.aero, map provider payloads, parse provider responses, normalize results, rank
-recommendations, or mutate the source request/session. Search planning is fixture-qualified for
-this declared local coverage. Milestone 1 supplied the geographic and airport-data foundation in
+The compiler produces deterministic mandatory queries and supplemental hypotheses from versioned
+local evidence, with exact replay identity and stale-plan handoff. It does not call a provider, map
+provider payloads, parse provider responses, normalize results, rank recommendations, or mutate the
+source request/session. Milestone 1 supplied the geographic and airport-data foundation in
 `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`: reviewed, versioned GeoNames and
 OurAirports records, named-region taxonomies, and an explicit local catalog release. M2A evaluates
 model-proposed endpoint selection against that catalog. M2B uses the approved market policy and
 grouped model-proposal boundary to evaluate useful optional search hypotheses without assuming that
 a route catalog is the answer or claiming connectivity.
-Airport groups beyond the existing examples are not a mandatory runtime whitelist. Search-strategy
-compilation, providers, and RAG are later milestones.
+Airport groups beyond the existing examples are not a mandatory runtime whitelist. Provider
+planning/execution and RAG remain later milestones. The earlier `SearchPlan`, route-topology,
+capability-bound golden corpus, and fixed-budget descriptions are historical evidence preserved in
+their dated handoffs; they are not active 2C contracts.
 The recorded broad behavioral evidence gap for the upstream one-way boundary remains historical
 evidence and is not silently promoted to qualification or used to reopen intent/clarification
 semantics.
 
-The qualification corpus pins canonical SHA-256 identities for the default knowledge snapshot,
-Cached-Search capability record and version, and default planning policy; it also validates the
-local capability-source bytes before evaluation. Its executable coverage matrix names the exact
-end-to-end fixture cases. Fine-grained tamper and forged-handoff receipt behavior is unit-only
-coverage, not a claim that the golden corpus exercises every internal branch. No provider execution
-is included in this planning qualification or the current non-provider planning work.
+The current compiler identity pins request, endpoint source, catalog, 2B replay, market policy,
+compiler, and planning-policy evidence. Provider capability is deliberately absent. Fine-grained
+tamper and forged-handoff behavior is unit coverage, not a claim that every internal branch appears
+in an end-to-end diagnostic. No provider execution is included in current planning evidence.
 
 On 2026-09-12, local Seats.aero reference review fixed the planning capability target to Cached
 Search. Product admission remains the one-way origin, destination, traveler, bounded-window,

@@ -12,6 +12,7 @@ import json
 from collections.abc import Iterable
 from datetime import date, timedelta
 from typing import Any, Protocol, cast
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import ValidationError
 
@@ -37,13 +38,12 @@ from award_agent.search_planning.airport_selector import (
     airport_selection_record_digest,
     validate_airport_selection_proposal,
 )
-from award_agent.search_planning.capabilities import capability_content_digest
 from award_agent.search_planning.compilation_contracts import (
-    CompilationBudgetKind,
-    CompilationBudgetReceipt,
     CompilationCoverage,
     CompiledPlanIdentity,
     CompiledSearchPlan,
+    CompilerStructuralLimitKind,
+    CompilerStructuralLimitReceipt,
     EndpointPair,
     EndpointSelectionBinding,
     EndpointSelectionProjection,
@@ -74,12 +74,12 @@ from award_agent.search_planning.compilation_contracts import (
     SupplementalStrategyType,
     SupplementalValidationKind,
     SupplementalValidationObligation,
+    accepted_relationship_ledger_digest,
+    relationship_disposition_ledger_digest,
 )
 from award_agent.search_planning.contracts import (
     AirportSelection,
     AirportSelectionKind,
-    CapabilityReceipt,
-    CapabilitySourceReceipt,
     CatalogKnowledgeReceipt,
     DateBasis,
     DateEnvelope,
@@ -193,14 +193,6 @@ def plan_searches(
     admission = _admission_failure(planning_input, policy, digest)
     if admission is not None:
         return admission
-    if request.cabins and not planning_input.capability.supports(
-        FilterObligationKind.CABIN_AVAILABLE_IN
-    ):
-        return _failure(
-            StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE,
-            "binding",
-            "cached-search capability does not support the required cabin filter",
-        )
     if not isinstance(repository.knowledge_receipt, CatalogKnowledgeReceipt):
         return _failure(
             StrategyCompilationIssueCode.UNSUPPORTED_KNOWLEDGE_SOURCE,
@@ -227,12 +219,11 @@ def plan_searches(
     destinations = _unique_selected(projections, "destination")
     pairs = tuple((origin, destination) for origin in origins for destination in destinations)
     mandatory_pair_count = len(pairs)
-    window_days = _input_days(request)
-    if mandatory_pair_count > policy.max_mandatory_endpoint_pairs:
-        return _mandatory_budget_failure(
-            CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS,
+    if mandatory_pair_count > policy.max_structural_endpoint_pairs:
+        return _structural_limit_failure(
+            CompilerStructuralLimitKind.ENDPOINT_PAIR_CROSS_PRODUCT,
             mandatory_pair_count,
-            policy.max_mandatory_endpoint_pairs,
+            policy.max_structural_endpoint_pairs,
         )
 
     try:
@@ -242,19 +233,6 @@ def plan_searches(
             StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE,
             "compilation",
             str(exc),
-        )
-    mandatory_date_days = sum(_query_days(query) for query in mandatory_queries)
-    if len(mandatory_queries) > policy.max_unique_logical_queries:
-        return _mandatory_budget_failure(
-            CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES,
-            len(mandatory_queries),
-            policy.max_unique_logical_queries,
-        )
-    if mandatory_date_days > policy.max_query_date_days:
-        return _mandatory_budget_failure(
-            CompilationBudgetKind.QUERY_DATE_DAYS,
-            mandatory_date_days,
-            policy.max_query_date_days,
         )
 
     gateway = planning_input.gateway_discovery_result
@@ -279,20 +257,25 @@ def plan_searches(
         )
 
     bundles = _enumerate_bundles(gateway, origins, destinations)
+    relationship_ledger_digest = accepted_relationship_ledger_digest(
+        (
+            bundle.relationship_id,
+            bundle.source_relationship,
+            bundle.source_candidate,
+            bundle.source_scope,
+            bundle.pairs,
+        )
+        for bundle in bundles
+    )
     query_map = {query.query_id: query for query in mandatory_queries}
     query_semantics = {_query_semantic_key(query): query.query_id for query in mandatory_queries}
     dispositions: list[RelationshipDisposition] = []
-    admitted_strategies: list[SupplementalStrategy] = []
+    compiled_strategies: list[SupplementalStrategy] = []
     strategy_uses: list[StrategyQueryUse] = []
     alternatives: list[StrategySupportAlternative] = []
     dependencies: list[PositioningDependency] = []
     position_receipts: list[PositioningPolicyReceipt] = []
     derivations: list[SupplementalDateDerivation] = []
-    admitted_relationships = 0
-    supplemental_unique = 0
-    supplemental_date_days = 0
-    reused_queries = 0
-    reused_query_days = 0
 
     suppressed: list[_Bundle] = []
     eligible: list[_Bundle] = []
@@ -331,53 +314,18 @@ def plan_searches(
                 )
             )
             continue
-        except ValueError:
-            dispositions.append(
-                _disposition(
-                    bundle,
-                    RelationshipDispositionKind.UNSUPPORTED_RULE,
-                    ("supplemental_timezone_unavailable",),
-                )
+        except ValueError as exc:
+            return _failure(
+                StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE,
+                "compilation",
+                f"supplemental relationship {bundle.relationship_id} is bound to invalid "
+                f"catalog airport evidence: {exc}",
             )
-            continue
         representable.append(bundle)
         materialized_candidates[bundle.relationship_id] = candidates
 
-    allocation_sequence = 0
-    omitted_ids: dict[CompilationBudgetKind, list[str]] = {
-        CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES: [],
-        CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES: [],
-        CompilationBudgetKind.QUERY_DATE_DAYS: [],
-    }
-    for bundle, anchor in _allocation_order(representable, pairs, policy):
-        allocation_sequence += 1
-        if admitted_relationships >= policy.max_supplemental_relationship_bundles:
-            omitted_ids[CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES].append(
-                bundle.relationship_id
-            )
-            dispositions.append(_disposition(bundle, RelationshipDispositionKind.OMITTED_BUDGET, ("relationship_budget_exhausted",), allocation_sequence, anchor))
-            continue
+    for bundle in sorted(representable, key=lambda item: item.relationship_id):
         candidates = materialized_candidates[bundle.relationship_id]
-        new_queries = [query for query, _ in candidates if _query_semantic_key(query) not in query_semantics]
-        marginal_queries = len(new_queries)
-        marginal_days = sum(_query_days(query) for query in new_queries)
-        reasons: list[str] = []
-        if len(query_map) + marginal_queries > policy.max_unique_logical_queries:
-            reasons.append("unique_query_budget_exhausted")
-        if sum(_query_days(query) for query in query_map.values()) + marginal_days > policy.max_query_date_days:
-            reasons.append("query_date_budget_exhausted")
-        if reasons:
-            if "unique_query_budget_exhausted" in reasons:
-                omitted_ids[CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES].append(
-                    bundle.relationship_id
-                )
-            if "query_date_budget_exhausted" in reasons:
-                omitted_ids[CompilationBudgetKind.QUERY_DATE_DAYS].append(
-                    bundle.relationship_id
-                )
-            dispositions.append(_disposition(bundle, RelationshipDispositionKind.OMITTED_BUDGET, tuple(reasons), allocation_sequence, anchor, candidates, marginal_queries, marginal_days))
-            continue
-
         strategy_id = "supplemental:" + _digest({"relationship_id": bundle.relationship_id, "policy": _digest(policy)})
         support_ids: list[str] = []
         bundle_use_ids: list[str] = []
@@ -389,9 +337,6 @@ def plan_searches(
             if query_id not in query_map:
                 query_map[query_id] = candidate_query
                 query_semantics[semantic] = query_id
-            else:
-                reused_queries += 1
-                reused_query_days += _query_days(query_map[query_id])
             role = "access_main" if bundle.strategy_type is not SupplementalStrategyType.SCOPED_HUB else ("hub_first" if sequence == 1 else "hub_second")
             use_id = _digest({"strategy": strategy_id, "query": query_id, "role": role, "relationship": bundle.relationship_id})
             strategy_uses.append(
@@ -453,7 +398,7 @@ def plan_searches(
             validations.append(
                 SupplementalValidationObligation(kind=SupplementalValidationKind.SEPARATE_TICKET_PERMISSION, responsible_stage="owner_review")
             )
-        admitted_strategies.append(
+        compiled_strategies.append(
             SupplementalStrategy(
                 relationship_id=bundle.relationship_id,
                 strategy_id=strategy_id,
@@ -463,7 +408,6 @@ def plan_searches(
                 source_relationship=bundle.source_relationship,
                 source_scope=bundle.source_scope,
                 supported_original_endpoint_pairs=bundle.pairs,
-                allocation_pair_lanes=bundle.pairs,
                 reason=bundle.reason,
                 material_uncertainty=bundle.uncertainty,
                 market_comparison=bundle.market_comparison,
@@ -485,34 +429,29 @@ def plan_searches(
                 decision=cast(Any, decision),
             )
         )
-        dispositions.append(_disposition(bundle, RelationshipDispositionKind.ADMITTED, ("admitted",), allocation_sequence, anchor, candidates, marginal_queries, marginal_days, tuple(query_ids)))
-        admitted_relationships += 1
-        supplemental_unique += marginal_queries
-        supplemental_date_days += marginal_days
+        dispositions.append(
+            _disposition(
+                bundle,
+                RelationshipDispositionKind.COMPILED,
+                ("compiled",),
+                tuple(query_ids),
+            )
+        )
 
     issues = _reduced_issues(gateway, dispositions)
+    disposition_digest = relationship_disposition_ledger_digest(dispositions)
     outcome = SearchPlanningOutcome.REDUCED_COVERAGE if issues else SearchPlanningOutcome.PLANNED
     obligations = _constraint_obligations(request, tuple(query_map))
-    receipts = _budget_receipts(
+    receipts = _structural_limit_receipts(
         policy,
-        window_days,
         mandatory_pair_count,
-        len(mandatory_queries),
-        mandatory_date_days,
-        admitted_relationships,
-        supplemental_unique,
-        supplemental_date_days,
-        reused_queries,
-        reused_query_days,
-        {kind: tuple(values) for kind, values in omitted_ids.items()},
     )
     coverage = CompilationCoverage(
         mandatory_required_pairs=mandatory_pair_count,
         mandatory_covered_pairs=len(mandatory_uses),
         mandatory_complete=len(mandatory_uses) == mandatory_pair_count,
         accepted_relationships=len(bundles),
-        admitted_relationships=admitted_relationships,
-        omitted_budget_relationships=sum(item.disposition is RelationshipDispositionKind.OMITTED_BUDGET for item in dispositions),
+        compiled_relationships=len(compiled_strategies),
         suppressed_positioning_refusal_relationships=sum(item.disposition is RelationshipDispositionKind.SUPPRESSED_POSITIONING_REFUSAL for item in dispositions),
         unsupported_rule_relationships=sum(item.disposition is RelationshipDispositionKind.UNSUPPORTED_RULE for item in dispositions),
         discovery_outcome=gateway.outcome,
@@ -520,22 +459,22 @@ def plan_searches(
     )
     endpoint_binding_digest = _digest(binding)
     policy_digest = _digest(policy)
-    capability_receipt = _capability_receipt(planning_input)
     market_policy_digest = planning_market_policy_digest(market_policy)
     compilation_binding_digest = _digest({
-        "compilation_binding_version": "search-strategy-compilation-binding-v1",
+        "compilation_binding_version": "search-strategy-compilation-binding-v2",
         "request": digest,
         "endpoint": endpoint_binding_digest,
         "gateway_input": gateway.input_digest,
         "gateway_result": gateway.result_digest,
-        "compiler_contract_version": "search-strategy-compilation-v1",
+        "compiler_contract_version": "search-strategy-compilation-v2",
         "canonicalization_version": _CANONICALIZATION_VERSION,
         "digest_algorithm_version": _DIGEST_ALGORITHM_VERSION,
         "policy": policy_digest,
-        "capability": capability_receipt,
         "catalog": repository.knowledge_receipt,
         "market_policy_version": market_policy.policy_version,
         "market_policy_digest": market_policy_digest,
+        "accepted_relationship_ledger": relationship_ledger_digest,
+        "relationship_dispositions": disposition_digest,
         "route_topology_feature": "absent",
     })
     identity = CompiledPlanIdentity(
@@ -546,13 +485,14 @@ def plan_searches(
         digest_algorithm_version=_DIGEST_ALGORITHM_VERSION,
         policy_version=policy.policy_version,
         policy_digest=policy_digest,
-        capability_receipt=capability_receipt,
         catalog_receipt=repository.knowledge_receipt,
         endpoint_selection_binding=binding,
         gateway_result_digest=gateway.result_digest,
         gateway_input_digest=gateway.input_digest,
         market_policy_version=market_policy.policy_version,
         market_policy_digest=market_policy_digest,
+        accepted_relationship_ledger_digest=relationship_ledger_digest,
+        relationship_disposition_digest=disposition_digest,
         compilation_binding_digest=compilation_binding_digest,
     )
     discovery_receipt = GatewayDiscoveryCompilationReceipt(
@@ -578,7 +518,7 @@ def plan_searches(
         "airport_directory": airport_directory,
         "mandatory_endpoint_probes": probes,
         "mandatory_query_uses": mandatory_uses,
-        "supplemental_strategies": tuple(admitted_strategies),
+        "supplemental_strategies": tuple(compiled_strategies),
         "logical_queries": tuple(query_map.values()),
         "strategy_query_uses": tuple(strategy_uses),
         "support_alternatives": tuple(alternatives),
@@ -589,7 +529,7 @@ def plan_searches(
         "relationship_dispositions": tuple(dispositions),
         "discovery_receipt": discovery_receipt,
         "coverage": coverage,
-        "budget_receipts": receipts,
+        "structural_limit_receipts": receipts,
         "issues": issues,
     }
     try:
@@ -598,7 +538,7 @@ def plan_searches(
         )
     except (ValidationError, ValueError) as exc:
         return _failure(StrategyCompilationIssueCode.COMPILER_CONTRACT_FAILURE, "compilation", str(exc))
-    return SearchPlanningResult(outcome=outcome, plan=plan, issues=issues, budget_receipts=receipts)
+    return SearchPlanningResult(outcome=outcome, plan=plan, issues=issues, structural_limit_receipts=receipts)
 
 
 def effective_request_digest(effective_request: EffectiveRequest) -> str:
@@ -634,9 +574,6 @@ def _admission_failure(inp: SearchPlanningInput, policy: PlanningPolicy, digest:
         return _failure("unresolved_request", "input", "request retains a core unknown or active conflict", "unplannable")
     if SearchMode.AWARD not in request.search_modes:
         return _failure("award_mode_required", "input", "award search mode is required", "unplannable")
-    days = _input_days(request)
-    if days > policy.max_input_window_days:
-        return _mandatory_budget_failure(CompilationBudgetKind.INPUT_WINDOW_DAYS, days, policy.max_input_window_days)
     return None
 
 
@@ -969,38 +906,6 @@ def _source_candidate(gateway: GatewayDiscoveryResult, pool: str, index: int, ai
     return SourceCandidateIdentity(gateway_result_digest=gateway.result_digest, pool=cast(Any, pool), candidate_index=index, airport_iata=airport.airport_iata, airport_fact_id=airport.airport_id)
 
 
-def _allocation_order(bundles: list[_Bundle], pairs: tuple[tuple[SelectedAirport, SelectedAirport], ...], policy: PlanningPolicy) -> tuple[tuple[_Bundle, EndpointPair], ...]:
-    canonical_pairs = tuple(sorted((EndpointPair(origin_airport_fact_id=o.airport_id, destination_airport_fact_id=d.airport_id) for o, d in pairs), key=lambda p: (p.origin_airport_fact_id, p.destination_airport_fact_id)))
-    by_type = {kind: [bundle for bundle in bundles if bundle.strategy_type.value == kind] for kind in policy.strategy_type_priority}
-    for values in by_type.values():
-        values.sort(key=lambda item: (item.source_candidate.airport_fact_id, item.source_relationship.typed_origin_iata or "", item.source_relationship.typed_destination_iata or "", item.relationship_id))
-    visited: set[str] = set()
-    cursors = {kind: 0 for kind in policy.strategy_type_priority}
-    ordered: list[tuple[_Bundle, EndpointPair]] = []
-    while len(visited) < len(bundles):
-        progressed = False
-        for kind in policy.strategy_type_priority:
-            values = by_type[kind]
-            chosen: tuple[_Bundle, EndpointPair, int] | None = None
-            for offset in range(len(canonical_pairs)):
-                lane_index = (cursors[kind] + offset) % len(canonical_pairs)
-                lane = canonical_pairs[lane_index]
-                candidate = next((item for item in values if item.relationship_id not in visited and lane in item.pairs), None)
-                if candidate is not None:
-                    chosen = candidate, lane, lane_index
-                    break
-            if chosen is None:
-                continue
-            bundle, lane, lane_index = chosen
-            visited.add(bundle.relationship_id)
-            ordered.append((bundle, lane))
-            cursors[kind] = (lane_index + 1) % len(canonical_pairs)
-            progressed = True
-        if not progressed:
-            break
-    return tuple(ordered)
-
-
 def _supplemental_query_spec(spec: tuple[str, str, str, int, int], bundle: _Bundle, request: EffectiveRequest, repository: StrategyCompilationRepository, policy: PlanningPolicy) -> tuple[LogicalAwardQuery, SupplementalDateDerivation]:
     origin, destination, role, start_offset, end_offset = spec
     basis = DateBasis.FIRST_ORIGIN_AIRPORT_LOCAL if start_offset == 0 and end_offset == 0 else DateBasis.LATER_COMPONENT_ORIGIN_AIRPORT_LOCAL
@@ -1017,11 +922,29 @@ def _date_envelope(request: EffectiveRequest, repository: StrategyCompilationRep
     airport = repository.airport(origin_id)
     if airport is None or not airport.timezone:
         raise ValueError("query origin airport has no catalog timezone")
+    try:
+        ZoneInfo(airport.timezone)
+    except (ValueError, ZoneInfoNotFoundError) as exc:
+        raise ValueError("query origin airport has an invalid catalog timezone") from exc
     return DateEnvelope(start=request.departure_window.start + timedelta(days=start_offset), end=request.departure_window.end + timedelta(days=end_offset), basis=basis, timezone=airport.timezone, effective_window_precision=request.departure_window.precision.value, field_provenance=_provenance_for(request, EffectiveField.DEPARTURE))
 
 
-def _disposition(bundle: _Bundle, kind: RelationshipDispositionKind, reasons: tuple[str, ...], sequence: int | None = None, anchor: EndpointPair | None = None, candidates: tuple[tuple[LogicalAwardQuery, SupplementalDateDerivation], ...] = (), marginal_queries: int = 0, marginal_days: int = 0, query_ids: tuple[str, ...] = ()) -> RelationshipDisposition:
-    return RelationshipDisposition(relationship_id=bundle.relationship_id, disposition=kind, source_relationship=bundle.source_relationship, source_candidate=bundle.source_candidate, source_scope=bundle.source_scope, supported_original_endpoint_pairs=bundle.pairs, reason_codes=reasons, allocation_sequence=sequence, allocation_anchor=anchor, query_ids=query_ids or tuple(query.query_id for query, _ in candidates), marginal_unique_queries=marginal_queries, marginal_query_date_days=marginal_days, candidate_unique_queries=len(candidates) if candidates else None, candidate_query_date_days=sum(_query_days(query) for query, _ in candidates) if candidates else None)
+def _disposition(
+    bundle: _Bundle,
+    kind: RelationshipDispositionKind,
+    reasons: tuple[str, ...],
+    query_ids: tuple[str, ...] = (),
+) -> RelationshipDisposition:
+    return RelationshipDisposition(
+        relationship_id=bundle.relationship_id,
+        disposition=kind,
+        source_relationship=bundle.source_relationship,
+        source_candidate=bundle.source_candidate,
+        source_scope=bundle.source_scope,
+        supported_original_endpoint_pairs=bundle.pairs,
+        reason_codes=reasons,
+        query_ids=query_ids,
+    )
 
 
 def _constraint_obligations(request: EffectiveRequest, query_ids: tuple[str, ...]) -> tuple[IdentifiedDeferredConstraint, ...]:
@@ -1038,15 +961,27 @@ def _constraint_obligation_id(text: str, request: EffectiveRequest) -> str:
     )
 
 
-def _budget_receipts(policy: PlanningPolicy, input_days: int, pair_count: int, mandatory_queries: int, mandatory_days: int, relationships: int, supplemental_queries: int, supplemental_days: int, reused: int, reused_days: int, omitted: dict[CompilationBudgetKind, tuple[str, ...]]) -> tuple[CompilationBudgetReceipt, ...]:
+def _structural_limit_receipts(
+    policy: PlanningPolicy,
+    pair_count: int,
+) -> tuple[CompilerStructuralLimitReceipt, ...]:
     values = (
-        (CompilationBudgetKind.INPUT_WINDOW_DAYS, policy.max_input_window_days, input_days, 0, 0),
-        (CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS, policy.max_mandatory_endpoint_pairs, pair_count, 0, 0),
-        (CompilationBudgetKind.SUPPLEMENTAL_RELATIONSHIP_BUNDLES, policy.max_supplemental_relationship_bundles, 0, relationships, 0),
-        (CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES, policy.max_unique_logical_queries, mandatory_queries, supplemental_queries, reused),
-        (CompilationBudgetKind.QUERY_DATE_DAYS, policy.max_query_date_days, mandatory_days, supplemental_days, reused_days),
+        (
+            CompilerStructuralLimitKind.ENDPOINT_PAIR_CROSS_PRODUCT,
+            policy.max_structural_endpoint_pairs,
+            pair_count,
+        ),
     )
-    return tuple(CompilationBudgetReceipt(kind=kind, limit=limit, mandatory_reserved=mandatory, supplemental_admitted=supplemental, shared_reused=shared, observed=mandatory + supplemental, disposition="within_limit", omitted_bundle_ids=omitted.get(kind, ())) for kind, limit, mandatory, supplemental, shared in values)
+    return tuple(
+        CompilerStructuralLimitReceipt(
+            kind=kind,
+            classification="compiler_structural_safety",
+            limit=limit,
+            observed=observed,
+            disposition="within_limit",
+        )
+        for kind, limit, observed in values
+    )
 
 
 def _reduced_issues(gateway: GatewayDiscoveryResult, dispositions: list[RelationshipDisposition]) -> tuple[StrategyCompilationIssue, ...]:
@@ -1054,14 +989,9 @@ def _reduced_issues(gateway: GatewayDiscoveryResult, dispositions: list[Relation
     if gateway.outcome in {GatewayDiscoveryOutcome.PARTIAL_ACCEPTANCE, GatewayDiscoveryOutcome.REJECTED_ALL, GatewayDiscoveryOutcome.GENERATION_FAILURE, GatewayDiscoveryOutcome.VALIDATION_FAILURE}:
         issues.append(StrategyCompilationIssue(code=f"gateway_{gateway.outcome.value}", stage="compilation", severity="reduced_coverage", message=f"gateway discovery ended with {gateway.outcome.value}; mandatory coverage is retained"))
     for item in dispositions:
-        if item.disposition in {RelationshipDispositionKind.OMITTED_BUDGET, RelationshipDispositionKind.UNSUPPORTED_RULE}:
-            issues.append(StrategyCompilationIssue(code=item.reason_codes[0], stage="budget" if item.disposition is RelationshipDispositionKind.OMITTED_BUDGET else "compilation", severity="reduced_coverage", message="accepted supplemental relationship was not materialized", source_relationship_id=item.relationship_id))
+        if item.disposition is RelationshipDispositionKind.UNSUPPORTED_RULE:
+            issues.append(StrategyCompilationIssue(code=item.reason_codes[0], stage="compilation", severity="reduced_coverage", message="accepted supplemental relationship was not materialized", source_relationship_id=item.relationship_id))
     return tuple(issues)
-
-
-def _capability_receipt(inp: SearchPlanningInput) -> CapabilityReceipt:
-    capability = inp.capability
-    return CapabilityReceipt(capability_id=capability.capability_id, capability_version=capability.capability_version, content_sha256=capability_content_digest(capability), source_receipts=tuple(CapabilitySourceReceipt(source_id=source.source_id, content_sha256=source.content_sha256) for source in capability.sources), caveats=capability.caveats)
 
 
 def _airport_identity(airport_id: str, repository: StrategyCompilationRepository) -> PlanningAirportIdentity:
@@ -1071,11 +1001,28 @@ def _airport_identity(airport_id: str, repository: StrategyCompilationRepository
     return PlanningAirportIdentity(airport_id=airport.airport_id, airport_iata=airport.iata, timezone=airport.timezone, evidence_source_ids=airport.source_ids)
 
 
-def _mandatory_budget_failure(kind: CompilationBudgetKind, observed: int, limit: int) -> SearchPlanningResult:
-    code = {CompilationBudgetKind.INPUT_WINDOW_DAYS: StrategyCompilationIssueCode.INPUT_WINDOW_EXCEEDS_BUDGET, CompilationBudgetKind.MANDATORY_ENDPOINT_PAIRS: StrategyCompilationIssueCode.MANDATORY_ENDPOINT_PAIR_BUDGET_EXCEEDED, CompilationBudgetKind.UNIQUE_LOGICAL_QUERIES: StrategyCompilationIssueCode.UNIQUE_QUERY_BUDGET_EXCEEDED, CompilationBudgetKind.QUERY_DATE_DAYS: StrategyCompilationIssueCode.QUERY_DATE_BUDGET_EXCEEDED}[kind]
-    receipt = CompilationBudgetReceipt(kind=kind, limit=limit, mandatory_reserved=observed, supplemental_admitted=0, shared_reused=0, observed=observed, disposition="exceeded")
-    issue = StrategyCompilationIssue(code=code, stage="budget", severity="unplannable", message=f"mandatory {kind.value} requires {observed}, exceeding limit {limit}")
-    return SearchPlanningResult(outcome=SearchPlanningOutcome.UNPLANNABLE, issues=(issue,), budget_receipts=(receipt,))
+def _structural_limit_failure(kind: CompilerStructuralLimitKind, observed: int, limit: int) -> SearchPlanningResult:
+    code = {
+        CompilerStructuralLimitKind.ENDPOINT_PAIR_CROSS_PRODUCT: StrategyCompilationIssueCode.ENDPOINT_PAIR_STRUCTURAL_LIMIT_EXCEEDED,
+    }[kind]
+    receipt = CompilerStructuralLimitReceipt(
+        kind=kind,
+        classification="compiler_structural_safety",
+        limit=limit,
+        observed=observed,
+        disposition="exceeded",
+    )
+    issue = StrategyCompilationIssue(
+        code=code,
+        stage="compilation",
+        severity="unplannable",
+        message=(
+            f"{kind.value} observed {observed}, exceeding the compiler_structural_safety "
+            f"limit {limit}; "
+            "no plan was compiled"
+        ),
+    )
+    return SearchPlanningResult(outcome=SearchPlanningOutcome.UNPLANNABLE, issues=(issue,), structural_limit_receipts=(receipt,))
 
 
 def _failure(code: StrategyCompilationIssueCode | str, stage: str, message: str, severity: str = "evidence_failure") -> SearchPlanningResult:
@@ -1099,15 +1046,6 @@ def _canonical_locations(locations: Iterable[LocationRef]) -> tuple[LocationRef,
 
 def _provenance_for(request: EffectiveRequest, field: EffectiveField) -> FieldProvenance | None:
     return next((item for item in request.field_provenance if item.field is field), None)
-
-
-def _input_days(request: EffectiveRequest) -> int:
-    assert request.departure_window is not None
-    return (request.departure_window.end - request.departure_window.start).days + 1
-
-
-def _query_days(query: LogicalAwardQuery) -> int:
-    return (query.date_envelope.end - query.date_envelope.start).days + 1
 
 
 def _query_semantic_key(query: LogicalAwardQuery) -> str:

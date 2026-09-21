@@ -1,5 +1,12 @@
 # 2026-09-19: Milestone 2C deterministic search-strategy compiler
 
+> **Historical implementation record.** On 2026-09-20 the owner approved a provider-neutral
+> correction that removed capability binding and the provisional 31/24/128/4,000 allocation
+> controls. The measurements below remain accurate for the original implementation and diagnostics,
+> but their budget outcomes are not the active compiler contract. See the
+> [revision build log](2026-09-20-m2c-provider-neutral-revision.md) and
+> [ADR 0021 amendment](../adr/0021-deterministic-search-strategy-compilation.md#2026-09-20-amendment-provider-neutral-compilation-and-structural-safety).
+
 ## Authorization and boundary
 
 The owner authorized Milestone 2C implementation after reviewing the detailed

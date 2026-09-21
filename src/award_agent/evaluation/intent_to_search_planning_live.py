@@ -49,11 +49,6 @@ from award_agent.search_planning.airport_selector import (
     airport_selection_record_digest,
     validate_airport_selection_proposal,
 )
-from award_agent.search_planning.capabilities import (
-    capability_content_digest,
-    load_default_cached_search_capability,
-    verify_capability_source_artifacts,
-)
 from award_agent.search_planning.compilation_contracts import (
     DirectGroundingSource,
     M2ASelectionRecordSource,
@@ -102,7 +97,7 @@ DEFAULT_CATALOG = Path("data/search_planning/catalogs/m1a-3cb7981519612945")
 DEFAULT_PRIVATE_ROOT = Path("evals/intent_to_search_planning/traces-live")
 CORPUS_SHA256 = "52a98b9ca316b9a2744c21072d6d0d603bcf4265f45328b6358ef2f1a238607a"
 CONTRACT_VERSION = "intent_behavior_v1"
-EVALUATOR_VERSION = "intent_to_search_planning_live_v1"
+EVALUATOR_VERSION = "intent_to_search_planning_live_v2"
 PINNED_MODEL = "gpt-5.6-luna"
 MAX_TRIALS = 1
 MAX_CALLS_PER_CASE = 6  # intent repair + composer + two selectors + gateway
@@ -278,9 +273,7 @@ def run_intent_to_search_planning_live_eval(
         policy_version="city-airport-distance-consistency-v1"
     )
     market_policy = load_default_planning_market_policy()
-    capability = load_default_cached_search_capability()
     compiler_policy = PlanningPolicy()
-    verify_capability_source_artifacts(capability)
     generated_at = datetime.now(UTC).isoformat()
     run_dir = (
         private_root / f"run-{generated_at.replace(':', '').replace('+', '-')}-{uuid4().hex[:8]}"
@@ -301,11 +294,6 @@ def run_intent_to_search_planning_live_eval(
             "market_policy": [
                 market_policy.policy_version,
                 planning_market_policy_digest(market_policy),
-            ],
-            "capability": [
-                capability.capability_id,
-                capability.capability_version,
-                capability_content_digest(capability),
             ],
         }
         base = {
@@ -563,7 +551,6 @@ def run_intent_to_search_planning_live_eval(
                                 else DirectGroundingSource(),
                                 upstream_selection_id_bindings=tuple(bindings),
                                 gateway_discovery_result=gateway,
-                                capability=capability,
                             )
                             kwargs: dict[str, Any] = {
                                 "policy": compiler_policy,
@@ -628,7 +615,6 @@ def run_intent_to_search_planning_live_eval(
                                 else DirectGroundingSource(),
                                 upstream_selection_id_bindings=replay_bindings,
                                 gateway_discovery_result=replay_gateway,
-                                capability=capability,
                             )
                             replay = plan_searches(replay_input, **kwargs)
                             if replay != planning_result:

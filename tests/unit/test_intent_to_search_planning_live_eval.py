@@ -89,6 +89,14 @@ def test_preflight_binds_denominator_and_constructs_no_model_adapters() -> None:
     assert len(artifact["selected_case_ids"]) == 19
     assert artifact["call_ceiling"] == {"per_case": 6, "selected_total": 114}
     assert artifact["travel_provider_calls"] == 0
+    assert "capability" not in artifact["identities"]
+    assert set(artifact["compiler_policy"]).isdisjoint(
+        {
+            "max_supplemental_relationship_bundles",
+            "max_unique_logical_queries",
+            "max_query_date_days",
+        }
+    )
     assert artifact["summary"] == {
         "preflight_passed": True,
         "runs": 0,

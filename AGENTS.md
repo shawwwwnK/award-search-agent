@@ -66,7 +66,8 @@ are not approved decisions and do not override the active roadmap or open a stag
 Milestone 2B gateway-airport discovery is owner-closed as of 2026-09-19. Milestone 2C deterministic
 search-strategy compilation is implemented as an in-place replacement, with no V1 compatibility
 path. See `docs/handoffs/2026-09-19-m2c-search-strategy-compilation-plan.md`, ADR 0021, and
-`docs/build-log/2026-09-19-m2c-implementation.md`. The provider-neutral compiler makes no additional
+`docs/build-log/2026-09-19-m2c-implementation.md`. The active 2026-09-20 provider-neutral revision is
+recorded in `docs/build-log/2026-09-20-m2c-provider-neutral-revision.md`. The compiler makes no additional
 model call and no travel-provider call; its integrated live diagnostic is model-only. Provider
 execution and product/provider qualification remain outside the completed stage. The deterministic,
 retrieval-backed outbound-only `EffectiveRequest -> CompiledSearchPlan` boundary is implemented and
@@ -103,7 +104,8 @@ nonempty, 4 empty, 4 policy-skip, and 1 partial outcomes; 82 accepted candidates
 18 destination access, and 42 hubs), 43 scopes, and 400 accepted relationships. It recorded 186,549
 tokens, one catalog-absence rejection for PNH, and three retained market-mismatch advisories. Artifact
 integrity and independent AI semantic review passed for owner human review; this is not human semantic
-qualification. 2C relationship/search-work budgeting remains mandatory, and no prompt-v7 or
+qualification. Complete 2C relationship accounting remains mandatory; provider search-work and
+execution budgeting belongs to the later provider stage. No prompt-v7 or
 deterministic semantic-rejection change is currently recommended.
 
 Do not reopen 2B or treat the implemented 2C compiler as provider execution, M2A adoption, or human

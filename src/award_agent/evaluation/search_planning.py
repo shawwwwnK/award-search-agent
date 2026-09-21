@@ -34,15 +34,13 @@ from award_agent.search_planning import (
     SearchPlanningOutcome,
     discover_gateway_candidates,
     ground_endpoint,
-    load_default_cached_search_capability,
     load_default_planning_market_policy,
     plan_searches,
     planning_market_policy_digest,
-    verify_capability_source_artifacts,
 )
 
 DEFAULT_SEARCH_PLANNING_CASES = (
-    Path(__file__).resolve().parents[3] / "evals" / "search_planning" / "cases_v1.json"
+    Path(__file__).resolve().parents[3] / "evals" / "search_planning" / "cases_v2.json"
 )
 DEFAULT_SEARCH_PLANNING_CATALOG = Path(
     "data/search_planning/catalogs/m1a-3cb7981519612945"
@@ -83,7 +81,7 @@ class GoldenCoverageTag(str, Enum):
     OPTIONAL_EMPTY = "optional_empty"
     OPTIONAL_FAILURE_DEGRADATION = "optional_failure_degradation"
     CANONICAL_OUTPUT_DETERMINISM = "canonical_output_determinism"
-    IDENTITY_AND_BUDGET_RECEIPTS = "identity_and_budget_receipts"
+    IDENTITY_AND_STRUCTURAL_LIMIT_RECEIPTS = "identity_and_structural_limit_receipts"
 
 
 class SearchPlanningGoldenCase(_FixtureModel):
@@ -98,12 +96,9 @@ class SearchPlanningGoldenCase(_FixtureModel):
 
 
 class SearchPlanningGoldenCorpus(_FixtureModel):
-    schema_version: Literal["search-planning-golden-v2"]
+    schema_version: Literal["search-planning-golden-v3"]
     fixture_grade_only: Literal[True]
     catalog_release_id: str = Field(min_length=1)
-    capability_id: Literal["seats_aero.cached_search.v1"]
-    capability_version: str = Field(min_length=1)
-    capability_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     planning_policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     market_policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     coverage_matrix: dict[GoldenCoverageTag, tuple[str, ...]]
@@ -161,21 +156,13 @@ def preflight_search_planning_golden_corpus(
     path: Path = DEFAULT_SEARCH_PLANNING_CASES,
 ) -> SearchPlanningGoldenCorpus:
     corpus = load_search_planning_golden_corpus(path)
-    capability = load_default_cached_search_capability()
     market_policy = load_default_planning_market_policy()
     if corpus.catalog_release_id != DEFAULT_SEARCH_PLANNING_CATALOG.name:
         raise ValueError("golden corpus names a different catalog release")
-    if corpus.capability_id != capability.capability_id:
-        raise ValueError("golden corpus names a different capability record")
-    if corpus.capability_version != capability.capability_version:
-        raise ValueError("golden corpus names a different capability version")
-    if corpus.capability_sha256 != canonical_sha256(capability):
-        raise ValueError("golden corpus capability canonical SHA-256 does not match")
     if corpus.planning_policy_sha256 != canonical_sha256(PlanningPolicy()):
         raise ValueError("golden corpus planning policy canonical SHA-256 does not match")
     if corpus.market_policy_sha256 != planning_market_policy_digest(market_policy):
         raise ValueError("golden corpus market policy SHA-256 does not match")
-    verify_capability_source_artifacts(capability)
     return corpus
 
 
@@ -260,7 +247,6 @@ def _run_case(
             ),
             endpoint_source=DirectGroundingSource(),
             gateway_discovery_result=discovery,
-            capability=load_default_cached_search_capability(),
         ),
         repository=repository,
         policy=policy,
@@ -296,7 +282,9 @@ def run_search_planning_golden_eval(
                 "supplemental_strategies": actual["supplemental_strategies"] == expected.supplemental_strategies,
                 "issue_codes": actual["issue_codes"] == expected.issue_codes,
                 "identity_bound": plan is None or bool(plan.identity.compilation_binding_digest),
-                "five_budget_receipts": plan is None or len(plan.budget_receipts) == 5,
+                "one_structural_limit_receipt": (
+                    plan is None or len(plan.structural_limit_receipts) == 1
+                ),
             }
             records.append(
                 {
@@ -315,7 +303,7 @@ def run_search_planning_golden_eval(
             record["status"] = "passed" if all(record["checks"].values()) else "failed"
     passed = sum(item["status"] == "passed" for item in records)
     return {
-        "schema_version": "search-planning-golden-evaluation-v2",
+        "schema_version": "search-planning-golden-evaluation-v3",
         "fixture_grade_only": True,
         "corpus_sha256": canonical_sha256(corpus),
         "cases": records,

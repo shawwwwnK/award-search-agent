@@ -1,5 +1,41 @@
 # ADR 0021: Deterministic search-strategy compilation
 
+## 2026-09-20 amendment: provider-neutral compilation and structural safety
+
+The owner superseded only the provider-capability binding and compiler-allocation
+decisions below. The original 2026-09-19 text remains in this ADR as historical
+context for the first implementation; where it conflicts with this amendment,
+this section is the active decision.
+
+The active 2C compiler is provider-neutral. `SearchPlanningInput`, plan identity,
+the compilation binding, and handoff freshness do not contain a Cached Search or
+other provider-capability receipt. Capability acceptance and provider request
+mapping belong to the later provider-planning/execution boundary.
+
+The 31-day input-window limit and the 24 supplemental relationship, 128 unique
+query, and 4,000 query-date-day allocation limits are removed. They were
+provisional execution-shaped controls without a 2C structural basis. The
+compiler deterministically materializes every replay-valid, representable 2B
+relationship and preserves semantic query deduplication, complete provenance,
+positioning suppression/conditionality, and explicit unsupported-rule receipts.
+It does not prune supplemental work or return reduced coverage because an
+execution budget was exhausted.
+
+One provider-independent structural safety boundary remains: at most 100
+selected origin × selected destination pairs may be materialized. This is an
+all-or-nothing quadratic expansion guard, not a provider limit or an upstream
+promise that endpoint counts are capped. Exactly 100 pairs compile; an observed
+cross-product above 100 returns a typed `UNPLANNABLE` result with no plan. No
+separate relationship or logical-query cap is needed: replay-verified 2B
+candidate/scope bounds together with the 100-pair guard finitely bound the
+downstream compiler graph. Finite departure windows longer than 31 days remain
+valid 2C inputs.
+
+Provider planning later owns rectangle-safe multi-airport batching and its own
+pages, attempts, returned rows, bytes, time, result-validation, and
+scheduled-versus-deferred receipts. Conceptual query-date-days may be measured
+as an observation; they are not a 2C admission unit.
+
 ## Context
 
 The pre-2C planner creates a route-evidenced `SearchPlan` from frozen request

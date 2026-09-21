@@ -1,0 +1,67 @@
+{
+  "schema_version": "search-planning-offline-recompile-v1",
+  "development_only": true,
+  "offline_only": true,
+  "source": {
+    "historical_public_artifact": "evals/search_planning_live/baseline/2026-09-19-gpt-5.6-luna-m2a-m2b-m2c-integrated-casebook-v1-lyon-fix-2-trials.json",
+    "historical_public_artifact_sha256": "4f4956a2f6cd3acfd3fee93c93bb803962fb8a68ccacd73de805eb66aa7c821d",
+    "private_source_bundle": "evals/search_planning_live/traces-live/run-2026-09-20T054349.788810-0000-ce0b44f6/united_states_to_japan_clarified_date__trial-1__source-bundle.json",
+    "private_source_bundle_sha256": "d7d2c445e174e52780cc8715c4060efe13414ef80742c478e0eba53e7b81630d",
+    "historical_compilation_binding_digest": "8f488ed750afd1dc416eee17abf15f0d723671fa8b03d8a92b84d1290976bfe0",
+    "gateway_result_digest": "8c9676a9512d6d41f4e52dfcc8ef2a4432b45d93690dfa16edc5c299e79da9d5"
+  },
+  "execution": {
+    "model_calls": 0,
+    "provider_calls": 0,
+    "gateway_replay_equal": true,
+    "compile_replay_equal": true,
+    "typed_plan_reload_equal": true,
+    "handoff_status": "current",
+    "handoff_executable": true
+  },
+  "compiler": {
+    "compiler_contract_version": "search-strategy-compilation-v2",
+    "policy_version": "search-planning-compilation-v2",
+    "policy_digest": "57125671cddd46d4bda2805fced0847f6012bdc410e5d1815dcfcc5c98c74c91",
+    "max_structural_endpoint_pairs": 100,
+    "provider_capability_bound": false
+  },
+  "result": {
+    "outcome": "planned",
+    "plan_digest": "6b6313e7d39a6fa53dc7ec84dc9d114a0ec1e3efc80c06342bc69f8b6293f840",
+    "compilation_binding_digest": "fa91756cb1467dead136501721de76eaa583571f031faec03a6a705ba3f4cbcf",
+    "accepted_relationship_ledger_digest": "a0891427d6f81dacac2f0fbd01b2fc49cc0ffa9f668fc133ec8cde7b12b40c78",
+    "relationship_disposition_digest": "97f2425cbdd273628342734bfb2e3c9467a6bc966fef8a83a607cc3350504e1f",
+    "mandatory_required_pairs": 40,
+    "mandatory_covered_pairs": 40,
+    "mandatory_complete": true,
+    "accepted_relationships": 52,
+    "compiled_relationships": 52,
+    "suppressed_positioning_refusal_relationships": 0,
+    "unsupported_rule_relationships": 0,
+    "logical_queries": 57,
+    "conceptual_query_date_days_observation": 183,
+    "supplemental_strategies": 52,
+    "strategy_query_uses": 68,
+    "strategy_types": {
+      "destination_access": 36,
+      "scoped_hub": 16
+    },
+    "relationship_dispositions": {
+      "compiled": 52
+    },
+    "structural_limit_receipt": {
+      "kind": "endpoint_pair_cross_product",
+      "classification": "compiler_structural_safety",
+      "limit": 100,
+      "observed": 40,
+      "disposition": "within_limit"
+    },
+    "issue_codes": []
+  },
+  "limitations": [
+    "The private typed source bundle is intentionally ignored and is required to repeat this exact local recompile.",
+    "The conceptual query-date-days total is an observation, not a compiler or provider budget.",
+    "The historical V1 artifact and its trusted binding remain unchanged evidence of the original live diagnostic."
+  ]
+}

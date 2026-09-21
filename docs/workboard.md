@@ -2,8 +2,8 @@
 
 ## Now
 
-- Search planning is implemented and fixture-qualified for its explicitly narrow local snapshot.
-  `award-search-planning-eval` runs the ten-case deterministic offline gate; it does not make
+- The original snapshot-backed `SearchPlan` gate is historical. Current search planning is the
+  provider-neutral `CompiledSearchPlan` boundary described below; its offline verification makes no
   provider or network calls.
 - Milestone 1 is complete. Milestone 2A endpoint-airport selection is implemented and has completed
   its active-policy diagnostic, but remains diagnostic-only pending independent human semantic
@@ -19,18 +19,20 @@
   The owner accepted the implemented boundary and evidence record for closure; independent human
   semantic qualification is not claimed.
 - **Milestone 2C: deterministic search-strategy compilation** is implemented in place with no V1
-  compatibility path. It compiles mandatory and bounded supplemental pair-level logical queries,
-  provenance, obligations, omissions, and replay bindings without another model call or a provider
-  call. The integrated live diagnostic is model-only. See the
-  [implementation record](build-log/2026-09-19-m2c-implementation.md).
+  compatibility path. Its active provider-neutral contract compiles mandatory and every replay-valid
+  representable supplemental pair-level logical query, with semantic deduplication, provenance,
+  obligations, dispositions, and replay bindings. The only compiler limit is the all-or-nothing
+  100-pair structural guard. It makes no model or provider call. See the
+  [implementation record](build-log/2026-09-19-m2c-implementation.md) and
+  [provider-neutral revision](build-log/2026-09-20-m2c-provider-neutral-revision.md).
 - Typed upstream constraints before hard filters can be claimed, provider adapter semantic
   acceptance, and provider execution remain separate follow-ons. See the completion map in
   `docs/handoffs/2026-09-12-search-planning-design.md`.
 - Preserve the frozen ADR 0016/0017 upstream boundary. Milestone 2C has no provider calls, payload
   mapping, provider-result parsing, normalization, ranking, or recommendation generation.
 
-Boundary: `docs/handoffs/2026-09-10-search-plan-design-stage.md`.
-Implemented Milestone 0 design and fixture gate:
+Historical Milestone 0 boundary and fixture gate:
+`docs/handoffs/2026-09-10-search-plan-design-stage.md` and
 `docs/handoffs/2026-09-12-search-planning-design.md`.
 Current Milestone 0–4 roadmap:
 `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`.
@@ -38,8 +40,9 @@ Current Milestone 0–4 roadmap:
 ## Next
 
 - Open the first downstream provider/result pilot separately. It must define capability acceptance,
-  provider request projection, finite execution bounds, returned-itinerary validation, and truthful
-  empty/partial/error outcomes before making provider or product claims.
+  exact rectangle-safe request projection, finite page/attempt/row/byte/time bounds,
+  scheduled-versus-deferred receipts, returned-itinerary validation, and truthful empty/partial/error
+  outcomes before making provider or product claims.
 - Review the model-only 2C diagnostic as development evidence. It does not adopt M2A, reopen 2B, or
   establish independent human semantic qualification.
 

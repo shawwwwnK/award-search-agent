@@ -44,7 +44,6 @@ from award_agent.search_planning import (
     check_plan_handoff,
     discover_gateway_candidates,
     effective_request_digest,
-    load_default_cached_search_capability,
     load_default_planning_market_policy,
     plan_searches,
 )
@@ -108,7 +107,6 @@ def test_mandatory_only_policy_skip_compiles_complete_plan_offline() -> None:
                 envelope=envelope,
                 endpoint_source=DirectGroundingSource(),
                 gateway_discovery_result=gateway,
-                capability=load_default_cached_search_capability(),
             ),
             repository=repository,
             policy=policy,
@@ -154,21 +152,16 @@ def test_mandatory_only_policy_skip_compiles_complete_plan_offline() -> None:
     with pytest.raises(ValidationError, match="logical query ID"):
         CompiledSearchPlan.model_validate(forged_query)
 
-    forged_budget = result.plan.model_dump(mode="json", round_trip=True)
-    unique_receipt = next(
+    forged_boundary = result.plan.model_dump(mode="json", round_trip=True)
+    pair_receipt = next(
         item
-        for item in forged_budget["budget_receipts"]
-        if item["kind"] == "unique_logical_queries"
+        for item in forged_boundary["structural_limit_receipts"]
+        if item["kind"] == "endpoint_pair_cross_product"
     )
-    unique_receipt.update(
-        mandatory_reserved=0,
-        supplemental_admitted=0,
-        observed=0,
-        shared_reused=0,
-    )
-    digest_payload = dict(forged_budget)
+    pair_receipt["observed"] = 0
+    digest_payload = dict(forged_boundary)
     digest_payload.pop("plan_digest")
-    forged_budget["plan_digest"] = hashlib.sha256(
+    forged_boundary["plan_digest"] = hashlib.sha256(
         json.dumps(
             digest_payload,
             sort_keys=True,
@@ -176,28 +169,28 @@ def test_mandatory_only_policy_skip_compiles_complete_plan_offline() -> None:
             ensure_ascii=False,
         ).encode()
     ).hexdigest()
-    with pytest.raises(ValidationError, match="budget receipt does not recompute"):
-        CompiledSearchPlan.model_validate(forged_budget)
+    with pytest.raises(ValidationError, match="structural-limit receipt does not recompute"):
+        CompiledSearchPlan.model_validate(forged_boundary)
 
-    exceeded_budget = result.plan.model_dump(mode="json", round_trip=True)
+    exceeded_boundary = result.plan.model_dump(mode="json", round_trip=True)
     exceeded_receipt = next(
         item
-        for item in exceeded_budget["budget_receipts"]
-        if item["kind"] == "unique_logical_queries"
+        for item in exceeded_boundary["structural_limit_receipts"]
+        if item["kind"] == "endpoint_pair_cross_product"
     )
     exceeded_receipt["limit"] = 0
     exceeded_receipt["disposition"] = "exceeded"
-    _rehash_plan(exceeded_budget)
-    with pytest.raises(ValidationError, match="budget receipt does not recompute"):
-        CompiledSearchPlan.model_validate(exceeded_budget)
+    _rehash_plan(exceeded_boundary)
+    with pytest.raises(ValidationError, match="structural-limit receipt does not recompute"):
+        CompiledSearchPlan.model_validate(exceeded_boundary)
 
-    changed_capability = result.plan.model_dump(mode="json", round_trip=True)
-    changed_capability["identity"]["capability_receipt"]["caveats"].append(
-        "changed after compilation"
-    )
-    _rehash_plan(changed_capability)
-    with pytest.raises(ValidationError, match="compilation binding digest"):
-        CompiledSearchPlan.model_validate(changed_capability)
+    dumped_input = SearchPlanningInput(
+        envelope=envelope,
+        endpoint_source=DirectGroundingSource(),
+        gateway_discovery_result=gateway,
+    ).model_dump()
+    assert "capability" not in dumped_input
+    assert "capability_receipt" not in result.plan.identity.model_dump()
 
 
 def test_effective_request_digest_canonicalizes_location_alternative_order() -> None:
