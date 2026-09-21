@@ -46,7 +46,7 @@ These can be outside the current stage without disappearing into an indefinite b
 
 | ID | Gate | Latest safe point to resolve | Required evidence / source |
 | --- | --- | --- | --- |
-| G01 | Current supported intent/clarification behavioral qualification | Before claiming dependable conversational input; 2C can use reviewed frozen requests | Current holdout covering ambiguity, corrections, and partial answers. ADR 0015's unsafe return cases are historical, not demonstrated current supported-path defects; ADR 0016 changed that scope. [Historical closeout](docs/handoffs/2026-09-10-adr-0015-stage-closeout.md), [current intent evidence](docs/build-log/2026-09-11-initial-intent-semantic-redesign.md), [improvement-plan measurement and evidence limits](docs/reviews/2026-09-19-intent-clarification-improvement-plan.md#6-measure-the-whole-task-then-diagnose-the-boundary). The post-core redesign does not defer this claim gate. |
+| G01 | Current supported intent/clarification behavioral qualification | Before claiming dependable conversational input; 2C can use reviewed frozen requests | Current holdout covering ambiguity, corrections, and partial answers. The 2026-09-20 active-corpus end-to-end trial recorded 13/19 Intent passes, including an unsafe ambiguous-departure ready/plan result and two pending outcomes; it is diagnostic evidence, not qualification. ADR 0015's unsafe return cases are historical, not demonstrated current supported-path defects; ADR 0016 changed that scope. [Historical closeout](docs/handoffs/2026-09-10-adr-0015-stage-closeout.md), [current intent evidence](docs/build-log/2026-09-11-initial-intent-semantic-redesign.md), [end-to-end diagnostic](docs/build-log/2026-09-20-intent-to-search-planning-evaluation.md), [improvement-plan measurement and evidence limits](docs/reviews/2026-09-19-intent-clarification-improvement-plan.md#6-measure-the-whole-task-then-diagnose-the-boundary). The post-core redesign does not defer this claim gate. |
 | G02 | M2A semantic qualification and adoption | Before enabling model endpoint selection as a qualified default | Independent human review, preregistered holdout, useful coverage versus work, explicit adoption decision. [M2A handoff](docs/handoffs/2026-09-17-m2a-llm-endpoint-airport-selection.md). |
 | G03 | Typed requirements and actual constraint enforcement | Before claiming that a hard requirement filters searches or is satisfied by a recommendation | Typed value/provenance/correction contract and tested filter/validation mapping; otherwise visibly unresolved. [Planning completion map](docs/handoffs/2026-09-12-search-planning-design.md#9-what-remains-after-this-design). |
 | G04 | Provider capability semantics, freshness, and result validation | Before presenting provider observations as satisfying the supported travel request | Accepted request/response contract, success and failure fixtures, actual supported evidence, no invented availability/bookability. [Provider intake](docs/provider-feasibility/2026-09-08-initial-provider-intake.md). |
@@ -169,3 +169,10 @@ provider call. This completes the compiler item above without satisfying provide
 adopting M2A, reopening 2B, or establishing human semantic or provider/product qualification.
 [Implementation record](docs/build-log/2026-09-19-m2c-implementation.md). D02/D14 remain evidence
 work for the downstream pilot, and D15 remains deferred.
+
+2026-09-20 — the owner requested the active 19-case Intent corpus be run through clarification
+state and current search planning without behavior changes. The one-trial diagnostic recorded
+13/19 Intent passes, seven deterministic plans, two pending outcomes, and one safety-relevant
+ambiguous-departure ready/plan miss. This supplies current evidence but does not satisfy G01's
+holdout or qualification requirement; no gate or parked item changed status. See the
+[evaluation record](docs/build-log/2026-09-20-intent-to-search-planning-evaluation.md).

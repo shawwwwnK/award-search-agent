@@ -72,6 +72,26 @@ Selector-only results and earlier round-trip artifacts are historical evidence. 
 the current one-receiver boundary. The next live record must use the behavioral v1 corpus and
 record its fixture hash; do not compare pass rates across contracts.
 
+## End-to-end planning diagnostic
+
+The evaluation-only `award-intent-to-search-planning-live-eval` command projects the exact active
+19-case corpus through Intent and clarification state, then runs only genuinely ready sessions
+through the current M2A/M2B/M2C planning path. It never invents clarification answers and never
+constructs a travel-provider client. Public summaries belong under
+`evals/intent_to_search_planning/baseline/`; raw calls, full typed records, and source bundles remain
+under the ignored private trace root.
+
+```bash
+award-intent-to-search-planning-live-eval \
+  --model gpt-5.6-luna \
+  --trials 1 \
+  --output evals/intent_to_search_planning/baseline/YYYY-MM-DD-gpt-5.6-luna-active-intent-corpus-1-trial.json
+```
+
+This is a development diagnostic, not semantic or provider qualification. Awaiting clarification,
+unsupported stops, catalog/evidence limitations, and operational pending outcomes must remain
+distinct from connector errors and ordinary behavioral misses.
+
 ## Frozen selector study
 
 The date-free temporal-candidate selector has a separate frozen study. It does not run Pass 1,

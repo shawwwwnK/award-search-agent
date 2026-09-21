@@ -25,6 +25,19 @@ Search planning is implemented and offline verified as a planning-only, retrieva
 and clarification boundary. Its declared coverage remains the checked-in offline seed snapshot,
 not a claim of operational airport, route, schedule, inventory, or provider coverage.
 
+On 2026-09-20, the owner requested a one-trial end-to-end diagnostic over the active 19-case Intent
+behavioral corpus. The behavior-preserving connector projected every completed Intent result into
+clarification state without inventing answers and sent only ready sessions into current planning.
+The final artifact recorded 13/19 Intent behavioral passes, six awaiting-answer sessions, four
+correct unsupported stops, two `pending_retryable` Intent outcomes, and seven compiled plans. All
+seven plans had complete mandatory coverage, equal same-record replay, and current executable
+handoffs; 35/35 model calls reconciled to private traces, and no travel provider was called. An
+exact-date precision bug in the evaluation connector was fixed and regression-tested before the
+final run; runtime behavior was unchanged. The unsafe `ambiguous_departure` ready/plan outcome,
+holiday and typo misses, missing-destination property mismatch, and two pending outcomes preserve
+the broad upstream evidence gap. This is one development trial, not semantic qualification. See
+the [evaluation record](build-log/2026-09-20-intent-to-search-planning-evaluation.md).
+
 The operational Milestone 1 geographic/airport catalog is a versioned local SQLite artifact
 with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains the Milestone 0
 fixture contract; Pydantic validates import/publication/query boundaries rather than materializing

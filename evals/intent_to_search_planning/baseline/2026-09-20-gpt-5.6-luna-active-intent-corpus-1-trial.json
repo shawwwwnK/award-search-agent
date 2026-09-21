@@ -1,0 +1,1856 @@
+{
+  "schema_version": "intent_to_search_planning_live_v1",
+  "diagnostic_only": true,
+  "generated_at": "2026-09-20T19:20:03.510303+00:00",
+  "preflight_only": false,
+  "models": {
+    "intent": "gpt-5.6-luna",
+    "clarification_composer": "gpt-5.6-luna",
+    "m2a_selector": "gpt-5.6-luna",
+    "m2b_gateway": "gpt-5.6-luna"
+  },
+  "corpus": {
+    "path": "evals/intent/one_way_award_behavior_cases_v1.yaml",
+    "contract_version": "intent_behavior_v1",
+    "sha256": "52a98b9ca316b9a2744c21072d6d0d603bcf4265f45328b6358ef2f1a238607a",
+    "denominator": 19
+  },
+  "selected_case_ids": [
+    "ready_exact_airports",
+    "ready_whole_month",
+    "ready_early_month",
+    "ready_holiday_window",
+    "ready_relative_next_month",
+    "ready_relative_weekend",
+    "typo_recognizable_date",
+    "missing_origin",
+    "missing_destination",
+    "missing_departure",
+    "missing_travelers",
+    "unbounded_departure",
+    "ambiguous_departure",
+    "explicit_return_unsupported",
+    "duration_return_unsupported",
+    "relative_return_unsupported",
+    "cash_only_unsupported",
+    "mixed_award_cash_eligible",
+    "default_award_home_airport_not_return"
+  ],
+  "trials": 1,
+  "call_ceiling": {
+    "per_case": 6,
+    "selected_total": 114
+  },
+  "identities": {
+    "catalog": {
+      "release_id": "m1a-3cb7981519612945",
+      "schema_version": "2",
+      "source_date": "2026-09-16",
+      "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+      "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+      "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+      "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+      "source_artifacts": [
+        {
+          "artifact_name": "geonames_admin_corroboration.tsv",
+          "bytes": 929394,
+          "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+        },
+        {
+          "artifact_name": "geonames_airport_candidates.tsv",
+          "bytes": 2850011,
+          "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+        },
+        {
+          "artifact_name": "geonames_base_aliases.tsv",
+          "bytes": 21827498,
+          "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+        },
+        {
+          "artifact_name": "geonames_current_aliases.tsv",
+          "bytes": 83772542,
+          "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+        },
+        {
+          "artifact_name": "geonames_entities.tsv",
+          "bytes": 44512173,
+          "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+        },
+        {
+          "artifact_name": "geonames_iata_crossrefs.tsv",
+          "bytes": 215122,
+          "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+        },
+        {
+          "artifact_name": "ourairports_airports.csv",
+          "bytes": 671715,
+          "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+        },
+        {
+          "artifact_name": "ourairports_countries.csv",
+          "bytes": 22165,
+          "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+        },
+        {
+          "artifact_name": "ourairports_regions.csv",
+          "bytes": 433835,
+          "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+        },
+        {
+          "artifact_name": "quarantine.tsv",
+          "bytes": 48,
+          "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+        },
+        {
+          "artifact_name": "source_raw_records.tsv",
+          "bytes": 294913570,
+          "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+        },
+        {
+          "artifact_name": "source_schemas.json",
+          "bytes": 1735,
+          "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+        }
+      ]
+    },
+    "airport_selection_policy": [
+      "airport-selection-cap-v1",
+      "a3b493cc8c271e78217d99dcc89bcfa7eb8089bb7310a6f2489ae5d9cd915256"
+    ],
+    "distance_policy": [
+      "city-airport-distance-consistency-v1",
+      "1ac4c7c443453db2354e95d852c8c493ce0e0897873c1a4f6fd70bf3350e75c3"
+    ],
+    "market_policy": [
+      "planning-market-v1",
+      "4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a"
+    ],
+    "capability": [
+      "seats_aero.cached_search.v1",
+      "1.0.0",
+      "89ecf4bb551945c6784eba9f97fdeb2423bc7ed9f43ddfc2f793047afdd8c4eb"
+    ]
+  },
+  "compiler_policy": {
+    "policy_version": "search-planning-compilation-v1",
+    "max_automatic_group_airports": 3,
+    "hard_max_automatic_group_airports": 5,
+    "knowledge_freshness_policy_version": "knowledge-freshness-v1",
+    "max_source_evidence_age_days": 365,
+    "max_input_window_days": 31,
+    "max_mandatory_endpoint_pairs": 100,
+    "max_supplemental_relationship_bundles": 24,
+    "max_unique_logical_queries": 128,
+    "max_query_date_days": 4000,
+    "strategy_type_priority": [
+      "origin_access",
+      "destination_access",
+      "scoped_hub"
+    ],
+    "later_component_start_offset_days": -1,
+    "later_component_end_offset_days": 2
+  },
+  "travel_provider_calls": 0,
+  "records": [
+    {
+      "id": "ready_exact_airports",
+      "coverage_family": "ready_exact_airports",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:city_expanded_to_airports",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "0cccffc3577e90732f2ac57b34455538675d261f9ecf9ad032b2b91c5de86e98"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "81e7f9bd9424121ee6b8bb230078e10bd744b681ffbad3e6b91f3d349b7fa7cd",
+        "logical_queries": 4,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 26.008,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5073,
+        "output_tokens": 1888,
+        "total_tokens": 6961
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "ready_whole_month",
+      "coverage_family": "ready_whole_month",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "336f366c2ec0c8dcd3fd2c1ca043083c2b8eac23bd2f7d76970738320d866086"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "b63a7e18c13f488edee0b4f430303e60394756ec8da14a83a9f26dce7ec6c95b",
+        "logical_queries": 5,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 19.484,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5073,
+        "output_tokens": 1335,
+        "total_tokens": 6408
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "ready_early_month",
+      "coverage_family": "ready_early_month",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "0b32cbbc37ca1172605a532d412816f1991f435e41d8ab7045b848221c17b604"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "0d8e5c5dda5d18923b05461f57789c795161a5ca7225776abefa3c2ef3fe510a",
+        "logical_queries": 3,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 16.391,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5074,
+        "output_tokens": 992,
+        "total_tokens": 6066
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "ready_holiday_window",
+      "coverage_family": "ready_holiday_window",
+      "trial": 1,
+      "intent_action": "clarification",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": false
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": false
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": false
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:city_expanded_to_airports",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": false,
+      "clarification_status": "awaiting_answer",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "awaiting_answer",
+      "planning_eligible": false,
+      "latency_seconds": 4.751,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 2743,
+        "output_tokens": 229,
+        "total_tokens": 2972
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "ready_relative_next_month",
+      "coverage_family": "ready_relative_next_month",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "596de35f6ce6517843f252954bf872c05ae308f46e237bee916e5a02696a7e2b"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "212b97163541b46605d6e472b112b6a7398acde70a9f7ede5d333b15a473a80d",
+        "logical_queries": 4,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 21.873,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5070,
+        "output_tokens": 1539,
+        "total_tokens": 6609
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "ready_relative_weekend",
+      "coverage_family": "ready_relative_weekend",
+      "trial": 1,
+      "intent_action": "pending_retryable",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": false,
+      "outcome_class": "infrastructure_error",
+      "terminal_stage": "intent",
+      "terminal_outcome": "pending_retryable",
+      "planning_eligible": false,
+      "latency_seconds": 10.01,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5114,
+        "output_tokens": 897,
+        "total_tokens": 6011
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "typo_recognizable_date",
+      "coverage_family": "typo_recognizable_date",
+      "trial": 1,
+      "intent_action": "clarification",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": false
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": false
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": false
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        },
+        {
+          "name": "forbidden:success_shaped_model_failure",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": false,
+      "clarification_status": "awaiting_answer",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "awaiting_answer",
+      "planning_eligible": false,
+      "latency_seconds": 8.361,
+      "usage": {
+        "calls": 3,
+        "input_tokens": 5496,
+        "output_tokens": 717,
+        "total_tokens": 6213
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 3,
+        "private_trace_calls": 3,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "missing_origin",
+      "coverage_family": "missing_origin",
+      "trial": 1,
+      "intent_action": "clarification",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "awaiting_answer",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "awaiting_answer",
+      "planning_eligible": false,
+      "latency_seconds": 3.66,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 2741,
+        "output_tokens": 244,
+        "total_tokens": 2985
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "missing_destination",
+      "coverage_family": "missing_destination",
+      "trial": 1,
+      "intent_action": "clarification",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": false
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": false
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": false,
+      "clarification_status": "awaiting_answer",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "awaiting_answer",
+      "planning_eligible": false,
+      "latency_seconds": 3.316,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 2784,
+        "output_tokens": 243,
+        "total_tokens": 3027
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "missing_departure",
+      "coverage_family": "missing_departure",
+      "trial": 1,
+      "intent_action": "clarification",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "awaiting_answer",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "awaiting_answer",
+      "planning_eligible": false,
+      "latency_seconds": 3.071,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 2740,
+        "output_tokens": 231,
+        "total_tokens": 2971
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "missing_travelers",
+      "coverage_family": "missing_travelers",
+      "trial": 1,
+      "intent_action": "clarification",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "awaiting_answer",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "awaiting_answer",
+      "planning_eligible": false,
+      "latency_seconds": 3.462,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 2747,
+        "output_tokens": 249,
+        "total_tokens": 2996
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "unbounded_departure",
+      "coverage_family": "unbounded_departure",
+      "trial": 1,
+      "intent_action": "pending_retryable",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "pending_is_state_free",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": false,
+      "outcome_class": "infrastructure_error",
+      "terminal_stage": "intent",
+      "terminal_outcome": "pending_retryable",
+      "planning_eligible": false,
+      "latency_seconds": 12.631,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5089,
+        "output_tokens": 1149,
+        "total_tokens": 6238
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "ambiguous_departure",
+      "coverage_family": "ambiguous_departure",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": false
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": false
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": false
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": false,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "60db2708af5d080ddb825c309ae290552397d25db71225fb64647213f55986df"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "d9e1893c80c8fcd79f4d4f888342432a0b5889a3af353ed45584fe9786d039e7",
+        "logical_queries": 5,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 20.406,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5070,
+        "output_tokens": 1423,
+        "total_tokens": 6493
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "explicit_return_unsupported",
+      "coverage_family": "explicit_return_unsupported",
+      "trial": 1,
+      "intent_action": "unsupported",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:city_expanded_to_airports",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "stopped",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "stopped",
+      "planning_eligible": false,
+      "latency_seconds": 2.706,
+      "usage": {
+        "calls": 1,
+        "input_tokens": 2393,
+        "output_tokens": 270,
+        "total_tokens": 2663
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 1,
+        "private_trace_calls": 1,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "duration_return_unsupported",
+      "coverage_family": "duration_return_unsupported",
+      "trial": 1,
+      "intent_action": "unsupported",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "stopped",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "stopped",
+      "planning_eligible": false,
+      "latency_seconds": 2.442,
+      "usage": {
+        "calls": 1,
+        "input_tokens": 2392,
+        "output_tokens": 248,
+        "total_tokens": 2640
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 1,
+        "private_trace_calls": 1,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "relative_return_unsupported",
+      "coverage_family": "relative_return_unsupported",
+      "trial": 1,
+      "intent_action": "unsupported",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "stopped",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "stopped",
+      "planning_eligible": false,
+      "latency_seconds": 2.256,
+      "usage": {
+        "calls": 1,
+        "input_tokens": 2395,
+        "output_tokens": 248,
+        "total_tokens": 2643
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 1,
+        "private_trace_calls": 1,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "cash_only_unsupported",
+      "coverage_family": "cash_only_unsupported",
+      "trial": 1,
+      "intent_action": "unsupported",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "clarification_field",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:cash_coverage_claim",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "stopped",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "clarification",
+      "terminal_outcome": "stopped",
+      "planning_eligible": false,
+      "latency_seconds": 2.276,
+      "usage": {
+        "calls": 1,
+        "input_tokens": 2389,
+        "output_tokens": 228,
+        "total_tokens": 2617
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 1,
+        "private_trace_calls": 1,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "mixed_award_cash_eligible",
+      "coverage_family": "mixed_award_cash_eligible",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:cash_coverage_claim",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "aae101b1bb8631ba9d3ed950028a56c02250ba91b2f7b38241b08e0c125de62a"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "f253205454a47db1e7ccbdacfd95a59765cd9ad6810eaf06501f4b471579c337",
+        "logical_queries": 8,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 19.415,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5074,
+        "output_tokens": 1392,
+        "total_tokens": 6466
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    },
+    {
+      "id": "default_award_home_airport_not_return",
+      "coverage_family": "default_award_home_airport_not_return",
+      "trial": 1,
+      "intent_action": "ready",
+      "intent_checks": [
+        {
+          "name": "action",
+          "passed": true
+        },
+        {
+          "name": "non_temporal_grounding",
+          "passed": true
+        },
+        {
+          "name": "grounding:origin",
+          "passed": true
+        },
+        {
+          "name": "grounding:destination",
+          "passed": true
+        },
+        {
+          "name": "grounding:departure",
+          "passed": true
+        },
+        {
+          "name": "required_blockers",
+          "passed": true
+        },
+        {
+          "name": "no_unexpected_required_blockers",
+          "passed": true
+        },
+        {
+          "name": "travelers",
+          "passed": true
+        },
+        {
+          "name": "origin",
+          "passed": true
+        },
+        {
+          "name": "destination",
+          "passed": true
+        },
+        {
+          "name": "modes",
+          "passed": true
+        },
+        {
+          "name": "departure_window",
+          "passed": true
+        },
+        {
+          "name": "unsupported_codes",
+          "passed": true
+        },
+        {
+          "name": "forbidden:return_or_duration_in_active_state",
+          "passed": true
+        },
+        {
+          "name": "forbidden:unbounded_departure_ready",
+          "passed": true
+        }
+      ],
+      "intent_behavior_passed": true,
+      "clarification_status": "ready",
+      "outcome_class": "behavioral_outcome",
+      "terminal_stage": "m2c_handoff",
+      "terminal_outcome": "planned",
+      "planning_eligible": true,
+      "m2a": {
+        "record_count": 0,
+        "origin_airports": [
+          "SFO"
+        ],
+        "destination_airports": [
+          "BKK"
+        ]
+      },
+      "m2b": {
+        "outcome": "success_nonempty",
+        "market_coverage": "complete",
+        "result_digest": "5fb6a94b7ed4d00cc765c7f7a1fb76f00463d6d63bb160f48baabd06a65b3e16"
+      },
+      "m2c": {
+        "outcome": "planned",
+        "plan_digest": "444bda7bb4cbcadb8be211547e4c6ce60c0fa96a52ebbbb183dac99bffa6066b",
+        "logical_queries": 7,
+        "mandatory_complete": true
+      },
+      "handoff": {
+        "status": "current",
+        "executable": true
+      },
+      "latency_seconds": 19.027,
+      "usage": {
+        "calls": 2,
+        "input_tokens": 5076,
+        "output_tokens": 1250,
+        "total_tokens": 6326
+      },
+      "trace_reconciliation": {
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      }
+    }
+  ],
+  "summary": {
+    "preflight_passed": true,
+    "runs": 19,
+    "intent_behavior_passes": 13,
+    "intent_behavior_denominator": 19,
+    "behavioral_outcomes": 17,
+    "infrastructure_or_harness_errors": 2,
+    "planning_eligible": 7,
+    "trace_reconciled": 19,
+    "attempted_calls": 35,
+    "mechanically_completed": false,
+    "semantic_qualification": "not_claimed_manual_review_required"
+  }
+}
