@@ -96,7 +96,7 @@ class SearchPlanningGoldenCase(_FixtureModel):
 
 
 class SearchPlanningGoldenCorpus(_FixtureModel):
-    schema_version: Literal["search-planning-golden-v3"]
+    schema_version: Literal["search-planning-golden-v4"]
     fixture_grade_only: Literal[True]
     catalog_release_id: str = Field(min_length=1)
     planning_policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -303,7 +303,7 @@ def run_search_planning_golden_eval(
             record["status"] = "passed" if all(record["checks"].values()) else "failed"
     passed = sum(item["status"] == "passed" for item in records)
     return {
-        "schema_version": "search-planning-golden-evaluation-v3",
+        "schema_version": "search-planning-golden-evaluation-v4",
         "fixture_grade_only": True,
         "corpus_sha256": canonical_sha256(corpus),
         "cases": records,

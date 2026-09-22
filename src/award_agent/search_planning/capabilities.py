@@ -151,8 +151,7 @@ def default_capability_path() -> Path:
     return (
         Path(__file__).resolve().parents[3]
         / "data"
-        / "search_planning"
-        / "v1"
+        / "provider_capabilities"
         / "seats-aero-cached-search-v1.json"
     )
 

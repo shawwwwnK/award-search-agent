@@ -84,7 +84,21 @@ def ground_endpoint(
                 airports=(_select_single_airport(airport),),
             ),
         )
-    return _select_geographic_group(role, resolution, repository, policy)
+    return GroundedEndpointResult(
+        role=role,  # type: ignore[arg-type]
+        snapshot_id=repository.snapshot_id,
+        freshness=freshness,
+        resolution=resolution,
+        issues=(
+            PlanningIssue(
+                code=PlanningIssueCode.M2A_SELECTION_REQUIRED,
+                message="resolved geography requires the adopted M2A airport-selection workflow",
+                snapshot_id=repository.snapshot_id,
+                location_value=resolution.location.value,
+                candidate_ids=resolution.candidate_ids,
+            ),
+        ),
+    )
 
 
 def _resolve_location(
@@ -186,98 +200,6 @@ def _is_preserved_explicit_iata(location: LocationRef) -> bool:
         location.kind is LocationKind.AIRPORT
         and _EXPLICIT_IATA.fullmatch(raw_identifier) is not None
         and raw_identifier.casefold() == location.value.casefold()
-    )
-
-
-def _select_geographic_group(
-    role: str,
-    resolution: ResolvedLocation,
-    repository: PlanningKnowledgeRepository,
-    policy: PlanningPolicy,
-) -> GroundedEndpointResult:
-    assert resolution.resolved_entity_id is not None
-    entity = repository.get_entity(resolution.resolved_entity_id)
-    assert entity is not None
-    freshness = repository.freshness_for_source_ids(
-        entity.source_ids,
-        max_source_evidence_age_days=policy.max_source_evidence_age_days,
-    )
-    selection_policy = repository.policy_for(entity.entity_id, entity.kind)
-    if selection_policy is None:
-        return GroundedEndpointResult(
-            role=role,  # type: ignore[arg-type]
-            snapshot_id=repository.snapshot_id,
-            freshness=freshness,
-            resolution=resolution,
-            issues=(
-                PlanningIssue(
-                    code=PlanningIssueCode.MISSING_SELECTION_POLICY,
-                    message="grounded geography has no reviewed airport-selection policy",
-                    snapshot_id=repository.snapshot_id,
-                    location_value=resolution.location.value,
-                    candidate_ids=(entity.entity_id,),
-                ),
-            ),
-        )
-    relevant_source_ids = set(entity.source_ids) | set(selection_policy.source_ids)
-    freshness = repository.freshness_for_source_ids(
-        relevant_source_ids,
-        max_source_evidence_age_days=policy.max_source_evidence_age_days,
-    )
-    if freshness is FreshnessClass.STALE:
-        return _stale_evidence_failure(role, resolution, repository, freshness)
-    effective_cap = policy.effective_group_cap(selection_policy.cap)
-    if len(selection_policy.airport_ids) > effective_cap:
-        return GroundedEndpointResult(
-            role=role,  # type: ignore[arg-type]
-            snapshot_id=repository.snapshot_id,
-            freshness=freshness,
-            resolution=resolution,
-            issues=(
-                PlanningIssue(
-                    code=PlanningIssueCode.SELECTION_POLICY_CAP_EXCEEDED,
-                    message="selection policy exceeds the configured automatic-airport cap",
-                    snapshot_id=repository.snapshot_id,
-                    location_value=resolution.location.value,
-                    candidate_ids=(selection_policy.policy_id,),
-                ),
-            ),
-        )
-    selected: list[SelectedAirport] = []
-    for airport_id in selection_policy.airport_ids:
-        airport = repository.airport(airport_id)
-        relation = repository.relation_for(entity.entity_id, airport_id)
-        if airport is None or relation is None:  # defensive: snapshot validation rejects this.
-            return _missing_airport(role, resolution, repository, freshness)
-        relevant_source_ids.update(airport.source_ids)
-        relevant_source_ids.update(relation.source_ids)
-        selected.append(
-            SelectedAirport(
-                airport_id=airport.airport_id,
-                airport_iata=airport.iata,
-                airport_evidence_source_ids=airport.source_ids,
-                relation_id=relation.relation_id,
-                relation_evidence_source_ids=relation.source_ids,
-                selection_policy_id=selection_policy.policy_id,
-                selection_policy_evidence_source_ids=selection_policy.source_ids,
-            )
-        )
-    freshness = repository.freshness_for_source_ids(
-        relevant_source_ids,
-        max_source_evidence_age_days=policy.max_source_evidence_age_days,
-    )
-    if freshness is FreshnessClass.STALE:
-        return _stale_evidence_failure(role, resolution, repository, freshness)
-    return GroundedEndpointResult(
-        role=role,  # type: ignore[arg-type]
-        snapshot_id=repository.snapshot_id,
-        freshness=freshness,
-        resolution=resolution,
-        selection=AirportSelection(
-            kind=AirportSelectionKind.GEOGRAPHIC_GROUP,
-            resolved_location=resolution,
-            airports=tuple(selected),
-        ),
     )
 
 

@@ -30,9 +30,7 @@ from award_agent.search_planning.airport_selection_policy import (
 from award_agent.search_planning.contracts import (
     CatalogKnowledgeReceipt,
     EndpointRole,
-    KnowledgeReceipt,
     PlanningContractModel,
-    PlanningInputEnvelope,
     SelectedAirport,
 )
 from award_agent.search_planning.distance_consistency import (
@@ -352,7 +350,7 @@ class AirportSelectionRecord(PlanningContractModel):
     prompt_version: str = Field(min_length=1)
     response_schema_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     catalog_snapshot_id: str = Field(min_length=1)
-    catalog_receipt: KnowledgeReceipt | CatalogKnowledgeReceipt
+    catalog_receipt: CatalogKnowledgeReceipt
 
     @model_validator(mode="after")
     def validate_record(self) -> AirportSelectionRecord:
@@ -377,54 +375,8 @@ class AirportSelectionRecord(PlanningContractModel):
                 self.resolved_entity, candidate.identity_status
             ):
                 raise ValueError("candidate city-serving status must match its validation context")
-        receipt_snapshot = (
-            self.catalog_receipt.snapshot_id
-            if isinstance(self.catalog_receipt, KnowledgeReceipt)
-            else self.catalog_receipt.release_id
-        )
-        if receipt_snapshot != self.catalog_snapshot_id:
+        if self.catalog_receipt.release_id != self.catalog_snapshot_id:
             raise ValueError("selection record snapshot must match its catalog receipt")
-        return self
-
-
-class AirportSelectionPlanningInput(PlanningContractModel):
-    """Caller-supplied immutable records for deterministic no-model replay."""
-
-    envelope: PlanningInputEnvelope
-    selection_records: tuple[AirportSelectionRecord, ...] = Field(min_length=1)
-
-    @model_validator(mode="after")
-    def validate_record_keys(self) -> AirportSelectionPlanningInput:
-        keys = tuple(
-            (record.role, record.resolved_entity.entity_id) for record in self.selection_records
-        )
-        if len(keys) != len(set(keys)):
-            raise ValueError(
-                "selection records must be unique by endpoint role and canonical entity"
-            )
-        if len({record.catalog_snapshot_id for record in self.selection_records}) != 1:
-            raise ValueError("selection replay records must use one catalog snapshot")
-        return self
-
-
-class AirportSelectionReplayReceipt(PlanningContractModel):
-    """Identity of the immutable selector inputs used for replay planning."""
-
-    record_digests: tuple[str, ...] = Field(min_length=1)
-    cap_policy_version: str = Field(min_length=1)
-    cap_policy_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
-    distance_policy_version: str = Field(min_length=1)
-    distance_policy_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
-    catalog_snapshot_id: str = Field(min_length=1)
-
-    @model_validator(mode="after")
-    def validate_record_digests(self) -> AirportSelectionReplayReceipt:
-        if self.record_digests != tuple(sorted(set(self.record_digests))) or any(
-            not _is_sha256(digest) for digest in self.record_digests
-        ):
-            raise ValueError(
-                "selection replay record digests must be sorted, unique SHA-256 values"
-            )
         return self
 
 
@@ -650,7 +602,3 @@ def _city_serving_status(
     if identity is AirportIdentityStatus.NOT_EVALUATED:
         return CityServingStatus.NOT_EVALUATED
     return CityServingStatus.UNAVAILABLE
-
-
-def _is_sha256(value: str) -> bool:
-    return len(value) == 64 and all(character in "0123456789abcdef" for character in value)

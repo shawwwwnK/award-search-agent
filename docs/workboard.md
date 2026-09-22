@@ -5,10 +5,12 @@
 - The original snapshot-backed `SearchPlan` gate is historical. Current search planning is the
   provider-neutral `CompiledSearchPlan` boundary described below; its offline verification makes no
   provider or network calls.
-- Milestone 1 is complete. Milestone 2A endpoint-airport selection is implemented and has completed
-  its active-policy diagnostic, but remains diagnostic-only pending independent human semantic
-  review, holdout evidence, and an adoption decision.
-- **Milestone 2B: gateway-airport discovery** is implemented and owner-closed as of 2026-09-19.
+- Milestone 1 is complete and owner-qualified for its declared catalog/serving boundary. Milestone
+  2A endpoint-airport selection is implemented, owner-adopted, and owner-qualified as the official
+  geographic endpoint source as of 2026-09-21. Explicit/named airports remain direct. Selections
+  retain model-proposed provenance; independent external/holdout corroboration may inform later
+  policy revision but is not an owner-qualification prerequisite. ADR 0023 retires M0.
+- **Milestone 2B: gateway-airport discovery** is implemented and owner-qualified as of 2026-09-21.
   ADR 0020's approved global
   planning-market policy, one-call grouped generator, relationship-aware validator, and immutable
   replay record are offline-verified. The prompt-v5/casebook-v2 and first prompt-v5/casebook-v3
@@ -16,9 +18,10 @@
   for the current 23-scenario development set.
   Access alternatives may serve already-strong endpoints only for specific incremental value, and
   its independent 2/2/5 pool caps carry no intermediate-market diversity quota.
-  The owner accepted the implemented boundary and evidence record for closure; independent human
-  semantic qualification is not claimed.
-- **Milestone 2C: deterministic search-strategy compilation** is implemented in place with no V1
+  The owner monitored, reviewed, and qualified the implemented boundary and evidence record for its
+  declared gateway-hypothesis scope. Candidates remain unverified search hypotheses.
+- **Milestone 2C: deterministic search-strategy compilation** is implemented and owner-qualified
+  as of 2026-09-21, in place with no V1
   compatibility path. Its active provider-neutral contract compiles mandatory and every replay-valid
   representable supplemental pair-level logical query, with semantic deduplication, provenance,
   obligations, dispositions, and replay bindings. The only compiler limit is the all-or-nothing
@@ -48,8 +51,9 @@ Current Milestone 0–4 roadmap:
   capability contracts, execution budgets, replay fixtures, normalized observation contract,
   direct-cash non-ranking boundary, and bounded mixed-candidate validation. Start offline; authorize
   the bounded live task separately.
-- Review the model-only 2C diagnostic as development evidence. It does not adopt M2A, reopen 2B, or
-  establish independent human semantic qualification.
+- Review the model-only 2C diagnostic as development evidence. It predates the separate ADR 0023
+  adoption decision; independent external/holdout corroboration remains future policy evidence and
+  does not reopen an owner-qualified M2A or M2B boundary.
 
 ## Later
 

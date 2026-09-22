@@ -1,5 +1,9 @@
 # ADR 0021: Deterministic search-strategy compilation
 
+> Current-status note (2026-09-21): ADR 0023 adopts M2A replay as the sole geographic endpoint
+> source, retains direct airport grounding, and removes the reviewed-mapping and Milestone 0
+> compatibility alternatives. The compiler remains deterministic and provider-neutral.
+
 ## 2026-09-20 amendment: provider-neutral compilation and structural safety
 
 The owner superseded only the provider-capability binding and compiler-allocation

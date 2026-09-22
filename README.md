@@ -16,8 +16,9 @@ it does not open implementation work.
 Milestone 2B gateway-airport discovery is implemented and owner-closed. Milestone 2C deterministic
 search-strategy compilation is implemented in place, with no V1 compatibility path. Its integrated
 live diagnostic is model-only: the compiler itself makes no additional model call, and neither the
-compiler nor the diagnostic calls a travel provider. Independent human semantic qualification and
-provider/product qualification are not claimed.
+compiler nor the diagnostic calls a travel provider. The completed search-planning milestones are
+owner-monitored, owner-reviewed, and owner-qualified for their declared planning boundaries; no
+independent external/holdout, provider/product, itinerary, or recommendation qualification is claimed.
 
 The frozen upstream boundary uses one-way award-only request semantics. A ready request requires
 origin, destination, an outbound departure window, and traveler
@@ -26,8 +27,12 @@ cash-only requests are unsupported; mixed award-and-cash requests remain eligibl
 without implying cash pricing is available. The deterministic, retrieval-backed
 `EffectiveRequest -> CompiledSearchPlan` boundary is implemented and offline verified for its declared checked-in
 fixture coverage. Milestone 1 supplied the reviewed, versioned local GeoNames/OurAirports catalog.
-Milestone 2A implemented bounded model-proposed endpoint-airport selection, but it remains
-diagnostic-only pending independent human review, holdout evidence, and an adoption decision. The
+Milestone 2A's bounded model-proposed endpoint-airport selection is the owner-adopted official
+source for exactly resolved geographic entities as of 2026-09-21. Explicit and uniquely resolved
+named airports remain direct catalog singletons. The selector retains model-proposed provenance;
+independent human- or holdout corroboration is not claimed and may inform future policy revision.
+ADR 0023 also retires the executable Milestone 0 JSON
+and reviewed-group compatibility path. The
 implemented 2B boundary uses an approved versioned global planning-market policy and selects one grouped
 structured model proposal for bounded, explainable gateway candidates. Same-market skipping is
 allowed only when every original endpoint is known and their market union has size one; mapping
@@ -47,6 +52,7 @@ payload mapping, result normalization, and ranking. See the
 [`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md),
 [`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md),
 [`ADR 0021`](docs/adr/0021-deterministic-search-strategy-compilation.md), plus the
+[`ADR 0023`](docs/adr/0023-adopt-m2a-and-retire-m0-endpoint-selection.md), plus the
 [Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) and
 [Milestone 2B implementation brief](docs/handoffs/2026-09-17-m2b-gateway-airport-discovery-opened.md), and the
 [2B evaluation protocol](docs/evaluation/gateway-discovery-evaluation-protocol.md). The durable

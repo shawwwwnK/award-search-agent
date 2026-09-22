@@ -12,11 +12,11 @@ import json
 from collections.abc import Iterable
 from datetime import date, timedelta
 from enum import Enum
-from typing import Annotated, Any, ClassVar, Literal, cast
+from typing import Annotated, Any, Literal, cast
 
 from pydantic import Field, model_validator
 
-from award_agent.domain import CabinClass, FieldProvenance, LocationRef
+from award_agent.domain import CabinClass, FieldProvenance
 from award_agent.search_planning.airport_selector import AirportSelectionRecord
 from award_agent.search_planning.contracts import (
     AirportSelectionKind,
@@ -50,38 +50,11 @@ from award_agent.search_planning.market_policy import MarketGenerationGate
 
 Sha256 = Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
 EndpointRole = Literal["origin", "destination"]
-EndpointSourceKind = Literal["direct_grounding", "reviewed_mapping", "m2a_replay"]
+EndpointSourceKind = Literal["direct_grounding", "m2a_replay"]
 
 
 class DirectGroundingSource(PlanningContractModel):
     source_kind: Literal["direct_grounding"] = "direct_grounding"
-
-
-class ReviewedEndpointMappingRecord(PlanningContractModel):
-    record_version: Literal["reviewed-endpoint-mapping-v1"] = "reviewed-endpoint-mapping-v1"
-    role: EndpointRole
-    request_location: LocationRef
-    resolved_entity_id: str = Field(min_length=1)
-    selected_airports: tuple[SelectedAirport, ...] = Field(min_length=1)
-    catalog_receipt: CatalogKnowledgeReceipt
-    review_label: str = Field(min_length=1)
-    review_source_ref: str = Field(min_length=1)
-    record_digest: Sha256
-    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
-        {"request_location", "selected_airports", "catalog_receipt"}
-    )
-
-
-class ReviewedEndpointMappingSource(PlanningContractModel):
-    source_kind: Literal["reviewed_mapping"] = "reviewed_mapping"
-    records: tuple[ReviewedEndpointMappingRecord, ...] = Field(min_length=1)
-
-    @model_validator(mode="after")
-    def unique_records(self) -> ReviewedEndpointMappingSource:
-        keys = tuple((record.role, record.resolved_entity_id) for record in self.records)
-        if len(keys) != len(set(keys)):
-            raise ValueError("reviewed mappings must be unique by role and entity")
-        return self
 
 
 class M2ASelectionRecordSource(PlanningContractModel):
@@ -100,7 +73,7 @@ class M2ASelectionRecordSource(PlanningContractModel):
 
 
 EndpointSource = Annotated[
-    DirectGroundingSource | ReviewedEndpointMappingSource | M2ASelectionRecordSource,
+    DirectGroundingSource | M2ASelectionRecordSource,
     Field(discriminator="source_kind"),
 ]
 
@@ -149,15 +122,20 @@ class EndpointSelectionProjection(PlanningContractModel):
 
     @model_validator(mode="after")
     def validate_source(self) -> EndpointSelectionProjection:
-        if self.source_kind == "reviewed_mapping":
-            if self.source_record_digest is None:
-                raise ValueError("reviewed mapping requires its source-record digest")
-            if self.selection_kind is not AirportSelectionKind.REVIEWED_MAPPING:
-                raise ValueError("reviewed mapping requires reviewed-mapping selection kind")
-        elif self.source_kind == "direct_grounding" and self.source_record_digest is not None:
+        if self.source_kind == "direct_grounding" and self.source_record_digest is not None:
             raise ValueError("direct grounding cannot claim a source-record digest")
+        if self.source_kind == "direct_grounding" and self.selection_kind not in {
+            AirportSelectionKind.EXPLICIT_IATA,
+            AirportSelectionKind.NAMED_AIRPORT,
+        }:
+            raise ValueError("direct grounding is limited to explicit or uniquely named airports")
         elif self.source_kind == "m2a_replay" and self.source_record_digest is None:
             raise ValueError("M2A replay requires its source-record digest")
+        elif (
+            self.source_kind == "m2a_replay"
+            and self.selection_kind is not AirportSelectionKind.MODEL_PROPOSED
+        ):
+            raise ValueError("M2A replay requires model-proposed selection kind")
         return self
 
 
@@ -172,7 +150,7 @@ class EndpointSelectionBinding(PlanningContractModel):
     distance_policy_digest: Sha256 | None = None
     catalog_release_identity: CatalogKnowledgeReceipt
     review_status: Literal[
-        "deterministic_approved_policy", "reviewed_experiment", "m2a_diagnostic"
+        "deterministic_approved_policy", "owner_qualified_model_proposed"
     ]
 
     @model_validator(mode="after")
@@ -192,8 +170,14 @@ class EndpointSelectionBinding(PlanningContractModel):
         if self.source_kind == "m2a_replay":
             if any(value is None for value in policy_values) or not self.record_digests:
                 raise ValueError("M2A binding requires record and policy identities")
+            if self.review_status != "owner_qualified_model_proposed":
+                raise ValueError("M2A binding requires owner-qualified-model-proposed status")
         elif any(value is not None for value in policy_values):
             raise ValueError("only M2A binding may carry selector policy identities")
+        elif self.record_digests:
+            raise ValueError("direct grounding cannot carry selection-record digests")
+        elif self.review_status != "deterministic_approved_policy":
+            raise ValueError("direct grounding requires deterministic-approved-policy status")
         return self
 
 
@@ -203,8 +187,8 @@ class CompiledPlanIdentity(PlanningContractModel):
     effective_request_digest: Sha256
     canonicalization_version: str = Field(min_length=1)
     digest_algorithm_version: str = Field(min_length=1)
-    compiler_contract_version: Literal["search-strategy-compilation-v2"] = (
-        "search-strategy-compilation-v2"
+    compiler_contract_version: Literal["search-strategy-compilation-v3"] = (
+        "search-strategy-compilation-v3"
     )
     policy_version: str = Field(min_length=1)
     policy_digest: Sha256

@@ -245,7 +245,7 @@ def test_catalog_repository_is_exact_read_only_and_carries_receipts(tmp_path: Pa
     assert database.read_bytes() == before
 
 
-def test_catalog_grounding_preserves_explicit_airport_and_reports_missing_group_policy(
+def test_catalog_grounding_selects_only_explicit_or_uniquely_named_airports(
     tmp_path: Path,
 ) -> None:
     release = _release(tmp_path)
@@ -255,15 +255,27 @@ def test_catalog_grounding_preserves_explicit_airport_and_reports_missing_group_
         )
         assert planned.selection is not None
         assert planned.selection.airports[0].airport_iata == "TST"
+        assert planned.selection.kind.value == "explicit_iata"
+        named = ground_endpoint(
+            _location(LocationKind.AIRPORT, "Test Airport"),
+            "origin",
+            repository,
+            PlanningPolicy(),
+        )
+        assert named.selection is not None
+        assert named.selection.airports[0].airport_iata == "TST"
+        assert named.selection.kind.value == "named_airport"
         assert isinstance(repository.knowledge_receipt, CatalogKnowledgeReceipt)
-        grouped = ground_endpoint(
+        geography = ground_endpoint(
             _location(LocationKind.CITY, "Test City"),
             "origin",
             repository,
             PlanningPolicy(),
         )
-        assert [issue.code for issue in grouped.issues] == [
-            PlanningIssueCode.MISSING_SELECTION_POLICY
+        assert geography.resolution.resolved_entity_id == "geonames:2"
+        assert geography.selection is None
+        assert [issue.code for issue in geography.issues] == [
+            PlanningIssueCode.M2A_SELECTION_REQUIRED
         ]
 
 

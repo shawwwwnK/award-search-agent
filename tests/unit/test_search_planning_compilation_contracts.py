@@ -31,7 +31,7 @@ from award_agent.search_planning.policy import PlanningPolicy
 def test_compilation_policy_has_only_provider_neutral_all_or_nothing_guards() -> None:
     policy = PlanningPolicy()
 
-    assert policy.policy_version == "search-planning-compilation-v2"
+    assert policy.policy_version == "search-planning-compilation-v3"
     assert policy.max_structural_endpoint_pairs == 100
     dumped = policy.model_dump()
     assert "max_supported_departure_window_days" not in dumped
@@ -39,6 +39,8 @@ def test_compilation_policy_has_only_provider_neutral_all_or_nothing_guards() ->
     assert "max_unique_logical_queries" not in dumped
     assert "max_query_date_days" not in dumped
     assert "strategy_type_priority" not in dumped
+    assert "max_automatic_group_airports" not in dumped
+    assert "hard_max_automatic_group_airports" not in dumped
 
 
 def test_compilation_policy_rejects_removed_execution_budget_fields() -> None:

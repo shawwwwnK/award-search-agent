@@ -1,5 +1,15 @@
 # Milestone 2A: LLM endpoint-airport selection design
 
+## Adoption status — 2026-09-21
+
+The owner adopted the current selector and policy as the official source for exactly resolved
+geographic endpoints in ADR 0023. The owner monitored, reviewed, and qualified the completed
+search-planning M1, M2A, M2B, and M2C boundaries on 2026-09-21. Explicit IATA and uniquely resolved
+named airports remain direct catalog singletons. The old Milestone 0 JSON/group fallback and the
+reviewed-mapping alternative are retired. The selector remains model-proposed rather than catalog
+fact; independent human review, holdout, and useful-coverage-versus-work corroboration are future
+policy-revision evidence, not owner-qualification prerequisites.
+
 ## Scope
 
 M2A adds a narrow selector seam after a location has already been resolved.
@@ -49,9 +59,10 @@ any selector architecture change for future approved policy revisions.
 
 The v2 active-policy casebook/artifact is historical evidence for the former
 US cap of 6. It does not validate the current US cap of 10. The active
-`development_cases_v3.yaml` diagnostic has completed and remains diagnostic
-evidence only; independent human semantic review, holdout evidence, and an
-adoption decision are still pending.
+`development_cases_v3.yaml` diagnostic has completed and remains development
+evidence. Adoption and owner qualification are complete by owner decision; independent human
+semantic review, holdout evidence, and useful-coverage evidence are unclaimed corroboration that
+may trigger policy revision.
 
 ## Validation outcomes
 

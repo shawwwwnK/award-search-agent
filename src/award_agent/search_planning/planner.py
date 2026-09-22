@@ -58,8 +58,6 @@ from award_agent.search_planning.compilation_contracts import (
     RelationshipDisposition,
     RelationshipDispositionKind,
     RelationshipIdentity,
-    ReviewedEndpointMappingRecord,
-    ReviewedEndpointMappingSource,
     SearchPlanningInput,
     SearchPlanningOutcome,
     SearchPlanningResult,
@@ -466,7 +464,7 @@ def plan_searches(
         "endpoint": endpoint_binding_digest,
         "gateway_input": gateway.input_digest,
         "gateway_result": gateway.result_digest,
-        "compiler_contract_version": "search-strategy-compilation-v2",
+        "compiler_contract_version": "search-strategy-compilation-v3",
         "canonicalization_version": _CANONICALIZATION_VERSION,
         "digest_algorithm_version": _DIGEST_ALGORITHM_VERSION,
         "policy": policy_digest,
@@ -594,8 +592,7 @@ def _resolve_endpoint_source(
         if cap_policy is not None or distance_policy is not None:
             raise ValueError("selector policies are only valid for M2A replay")
         records = {}
-        source_kind = "reviewed_mapping" if isinstance(source, ReviewedEndpointMappingSource) else "direct_grounding"
-    reviewed = {(record.role, record.resolved_entity_id): record for record in source.records} if isinstance(source, ReviewedEndpointMappingSource) else {}
+        source_kind = "direct_grounding"
     used: set[tuple[str, str]] = set()
     projections: list[EndpointSelectionProjection] = []
     request = inp.envelope.effective_request
@@ -609,22 +606,7 @@ def _resolve_endpoint_source(
             projection_source_kind = "direct_grounding"
             freshness = grounded.freshness
             entity_id = resolution.resolved_entity_id
-            if entity_id is not None and source_kind == "reviewed_mapping":
-                reviewed_record = reviewed.get((cast(Any, role), entity_id))
-                if reviewed_record is None:
-                    raise ValueError("each geographic endpoint requires one reviewed mapping")
-                _validate_reviewed_record(
-                    reviewed_record,
-                    location,
-                    repository,
-                    max_source_evidence_age_days=policy.max_source_evidence_age_days,
-                )
-                selected = reviewed_record.selected_airports
-                selection_kind = AirportSelectionKind.REVIEWED_MAPPING
-                record_digest = _reviewed_record_digest(reviewed_record)
-                projection_source_kind = "reviewed_mapping"
-                used.add((role, entity_id))
-            elif entity_id is not None and source_kind == "m2a_replay":
+            if entity_id is not None and source_kind == "m2a_replay":
                 selection_record = records.get((cast(Any, role), entity_id))
                 if selection_record is None:
                     raise ValueError("each geographic endpoint requires one M2A record")
@@ -653,7 +635,7 @@ def _resolve_endpoint_source(
                     field_provenance=_provenance_for(request, field),
                 )
             )
-    supplied = set(reviewed if source_kind == "reviewed_mapping" else records)
+    supplied = set(records)
     if supplied != used:
         raise ValueError("endpoint records must be consumed exactly once")
     digests = tuple(sorted(item.source_record_digest for item in projections if item.source_record_digest is not None))
@@ -667,44 +649,9 @@ def _resolve_endpoint_source(
         distance_policy_version=distance_policy.policy_version if distance_policy else None,
         distance_policy_digest=airport_selection_distance_policy_digest(distance_policy) if distance_policy else None,
         catalog_release_identity=repository.knowledge_receipt,
-        review_status=cast(Any, {"direct_grounding": "deterministic_approved_policy", "reviewed_mapping": "reviewed_experiment", "m2a_replay": "m2a_diagnostic"}[source_kind]),
+        review_status=cast(Any, {"direct_grounding": "deterministic_approved_policy", "m2a_replay": "owner_qualified_model_proposed"}[source_kind]),
     )
     return tuple(projections), binding
-
-
-def _validate_reviewed_record(
-    record: ReviewedEndpointMappingRecord,
-    location: LocationRef,
-    repository: StrategyCompilationRepository,
-    *,
-    max_source_evidence_age_days: int,
-) -> None:
-    if record.request_location != location or record.catalog_receipt != repository.knowledge_receipt:
-        raise ValueError("reviewed mapping request or catalog identity differs")
-    if record.record_digest != _reviewed_record_digest(record):
-        raise ValueError("reviewed mapping digest is forged or corrupt")
-    for selected in record.selected_airports:
-        airport = repository.airport(selected.airport_id)
-        if airport is None or airport.iata != selected.airport_iata or airport.source_ids != selected.airport_evidence_source_ids:
-            raise ValueError("reviewed mapping airport does not match the catalog")
-    source_ids = tuple(
-        dict.fromkeys(
-            source_id
-            for selected in record.selected_airports
-            for source_id in selected.airport_evidence_source_ids
-        )
-    )
-    if repository.freshness_for_source_ids(
-        source_ids,
-        max_source_evidence_age_days=max_source_evidence_age_days,
-    ) is FreshnessClass.STALE:
-        raise ValueError("reviewed mapping selected-airport evidence is stale")
-
-
-def _reviewed_record_digest(record: ReviewedEndpointMappingRecord) -> str:
-    payload = record.model_dump(mode="json", round_trip=True)
-    payload.pop("record_digest", None)
-    return _digest(payload)
 
 
 def _replay_selection_record(role: str, location: LocationRef, resolution: ResolvedLocation, record: AirportSelectionRecord, cap_policy: AirportSelectionCapPolicy, distance_policy: CityAirportDistanceConsistency, repository: StrategyCompilationRepository, policy: PlanningPolicy) -> GroundedEndpointResult:
@@ -788,19 +735,10 @@ def _validate_gateway_binding(inp: SearchPlanningInput, binding: EndpointSelecti
     if gateway_input.outbound_date.start != request.departure_window.start or gateway_input.outbound_date.end != request.departure_window.end or gateway_input.outbound_date.effective_window_precision != request.departure_window.precision.value or gateway_input.outbound_date.timezone != request.context.timezone:
         raise ValueError("gateway outbound date input differs from EffectiveRequest")
     expected_digests = tuple(sorted(binding.record_digests))
-    reviewed_without_upstream = (
-        binding.source_kind == "reviewed_mapping"
-        and not gateway_input.upstream_selection_record_ids
-        and not gateway_input.upstream_selection_record_digests
-        and not inp.upstream_selection_id_bindings
-    )
-    if (
-        gateway_input.upstream_selection_record_digests != expected_digests
-        and not reviewed_without_upstream
-    ):
+    if gateway_input.upstream_selection_record_digests != expected_digests:
         raise ValueError("gateway upstream selection digests differ")
     bindings = {item.upstream_record_id: item.record_digest for item in inp.upstream_selection_id_bindings}
-    if not reviewed_without_upstream and (
+    if (
         gateway_input.upstream_selection_record_ids or inp.upstream_selection_id_bindings
     ) and (
         tuple(gateway_input.upstream_selection_record_ids) != tuple(bindings)

@@ -2,7 +2,7 @@
 
 - Status: Active planning record
 - Date: 2026-09-13
-- Scope: The search-planning stage after the completed fixture-qualified boundary
+- Scope: Historical-to-current search-planning milestone record
 
 ## Purpose and authority
 
@@ -11,14 +11,15 @@ stage. It supersedes the earlier *work ordering* in the 2026-09-12 planning
 handoff where they differ. It does not change the frozen one-way request
 boundary, authorize provider execution, or make an operational coverage claim.
 
-The implemented planner boundary remains:
+The active planner boundary is:
 
 ```text
-ClarificationSession(ready).effective_request -> SearchPlan
+frozen EffectiveRequest + official endpoint source + replay-bound 2B record
+  -> CompiledSearchPlan
 ```
 
-The planner consumes immutable `EffectiveRequest` values and immutable local
-knowledge snapshots. It must not reparse conversation text, alter request or
+The planner consumes immutable `EffectiveRequest` values and the published SQLite catalog. It must
+not reparse conversation text, alter request or
 session state, reinterpret temporal contributions, call an award or cash
 provider, or claim cash-search coverage.
 
@@ -27,36 +28,17 @@ For a later advisory reassessment of the remaining stage goals and sequencing, s
 It proposes earlier provider/result feedback and sharper completion criteria; it does not
 supersede this roadmap or authorize implementation.
 
-## Milestone 0 — fixture-qualified planning boundary (complete)
+## Milestone 0 — historical fixture boundary (retired 2026-09-21)
 
-### Achievement
+Milestone 0 established the first deterministic planning seam and remains documented in git
+history, dated handoffs, and build logs. ADR 0023 removes its executable JSON knowledge snapshot,
+reviewed group fallback, route/path compatibility contracts, and V1 corpus now that the SQLite
+catalog and M2A/M2B/M2C stages are implemented. It is not an active compatibility path.
 
-The repository has a deterministic, planning-only `EffectiveRequest ->
-SearchPlan` compiler qualified for its declared checked-in seed fixture. The
-seed demonstrates Japan and New York City group selection, explicit SFO
-preservation, typed grounding failures, synthetic route topology, deterministic
-ordering, bounded planning, and stale-plan handoff.
+The separately reviewed Seats.aero capability research is retained under downstream provider-
+capability ownership; it is not an active Milestone 0 planner input.
 
-### Existing components
-
-- `search_planning.knowledge`: validated local snapshot and deterministic
-  repository retrieval.
-- `search_planning.locations`: narrow alias grounding and singleton/group
-  airport selection.
-- `search_planning.planner`: endpoint probes, bounded optional paths, planning
-  receipts, and provider-neutral award search items.
-- `search_planning.handoff`: caller-side stale-session/request check.
-- `data/search_planning/v1/`: the fixture-only seed and reviewed Cached Search
-  capability record.
-- `award-search-planning-eval`: ten-case offline fixture gate.
-
-### Boundary
-
-This is not evidence of operational geographic, route, schedule, inventory,
-provider, or booking coverage. The default seed has no operational topology;
-unit-test route edges are explicitly synthetic.
-
-## Milestone 1 — geographic and airport-data foundation (complete)
+## Milestone 1 — geographic and airport-data foundation (complete; owner-qualified 2026-09-21)
 
 ### Objective
 
@@ -140,8 +122,7 @@ as selected by ADR 0018.
 - SQLite is the embedded operational catalog and JSON is the human-readable
   receipt/coverage artifact. Pydantic validates import, publication, manifest,
   and query-boundary contracts; it is not the full-catalog runtime store.
-- Preserve the current small JSON `KnowledgeSnapshot` and its reviewed seed
-  groups as the Milestone 0 fixture contract.
+- Do not create a second full-catalog in-memory runtime representation.
 - Do not author new airport groups, infer airport-city service, add routes, or
   reparse `EffectiveRequest`.
 
@@ -194,9 +175,8 @@ snapshot/retention treatment.
 
 #### Objective
 
-Serve a selected published catalog through the existing deterministic
-location/planner boundary, while preserving the Milestone 0 JSON fixture path
-and its reviewed airport-group policies.
+Serve a selected published catalog through the deterministic location/planner boundary. ADR 0023
+later retired the temporary Milestone 0 JSON compatibility path and reviewed-group policies.
 
 #### Dependencies and fixed boundaries
 
@@ -284,40 +264,36 @@ and other permitted local evidence are candidates to evaluate. The award-search
 and result stage remains responsible for returned itinerary topology, award
 availability, and itinerary validation.
 
-### Milestone 2A — endpoint airport grounding (implemented; adoption gate open)
+### Milestone 2A — endpoint airport grounding (implemented; owner-adopted 2026-09-21)
 
 
 #### Objective
 
-For an explicit airport, city, area, country, named region, or other supported
-location kind, resolve the requested endpoint to a bounded, reviewed airport
-set or an explicit coverage outcome. The existing Milestone 1 catalog provides
-airport identity and geographic facts; this increment adds neither guessed
-airport service nor an implicit claim that every airport in a geography is a
-suitable search endpoint.
+For an explicit or uniquely resolved named airport, preserve one direct catalog singleton. For an
+exactly resolved city, area, country, named region, or other supported geographic kind, use the
+bounded M2A proposal, deterministic validation, immutable record, and M2C replay. The existing
+Milestone 1 catalog provides airport identity and geographic facts; adoption adds neither catalog
+serving relationships nor a claim that every selected airport is suitable.
 
 #### Components
 
-- Declare a narrow initial geography/airport coverage set and the supported
-  location kinds within it.
-- Define location-kind-specific retrieval and airport-selection strategies.
-  Explicit airports remain singleton lookups; city, area, country, and named
-  region handling may each use distinct reviewed relationships and policies.
-- Keep factual geographic-to-airport relationships separate from the ordered,
-  capped policy that selects airports for search.
+- Explicit and uniquely resolved named airports remain singleton lookups.
+- Exactly resolved geographic entities use the current versioned M2A cap and validation policies.
+- Keep catalog facts separate from model-proposed, ordered, capped endpoint selections.
 - Return stable resolved, ambiguous, unsupported, and missing-evidence
   outcomes with inspectable snapshot provenance. Do not substitute nearby,
   similarly named, or popular airports.
-- Qualify ordering, caps, provenance, and no-guess behavior offline while
-  preserving the Milestone 0 JSON fixture path.
+- Preserve selection provenance and fail visibly on ambiguity, abstention, empty accepted output,
+  stale evidence, or replay mismatch; there is no Milestone 0 fallback.
 
 #### Decision gate
 
-Advance when the declared initial locations can each produce their reviewed
-airport set or a truthful typed coverage outcome, with no fuzzy expansion or
-silent airport-service inference.
+The owner adopted and qualified the implemented selector and policy through ADR 0023 after
+monitoring and reviewing its build and results. Independent external review, preregistered holdout,
+and useful-coverage-versus-work corroboration remain unclaimed and may justify later policy revision;
+they are not prerequisites to that owner qualification. Selections retain model-proposed provenance.
 
-### Milestone 2B — gateway-airport discovery (implemented; owner-closed 2026-09-19)
+### Milestone 2B — gateway-airport discovery (implemented; owner-closed 2026-09-19; owner-qualified 2026-09-21)
 
 #### Objective
 
@@ -328,9 +304,8 @@ could make a supplemental award-search strategy useful.
 The owner approved ADR 0020 on 2026-09-18. This version uses a reviewed global
 planning-market policy, one grouped structured model proposal when generation
 is required, deterministic catalog/reference/relationship validation, and an
-immutable result. Opening and implementing it do not satisfy the still-open M2A
-adoption gate; reviewed fixtures or supplied selection records may support the
-interface without promoting model output into fact.
+immutable result. At the time, opening and implementing 2B did not adopt M2A. The later owner
+adoption is recorded separately in ADR 0023 and still does not promote model output into fact.
 
 #### Components
 
@@ -358,7 +333,8 @@ catalog-pinned scenarios, for 23 cases: two policy skips and 21 generation
 cases. The prompt-v5/casebook-v2 and first prompt-v5/casebook-v3 diagnostics
 are historical evidence. The final prompt-v6/casebook-v3 two-trial live
 evaluation completed its bounded 42 calls. The owner accepted the implemented boundary and evidence
-record for stage closure; independent human semantic qualification is not claimed. Access gateways may be
+record for stage closure and, on 2026-09-21, qualified it for its declared gateway-hypothesis boundary.
+Access gateways may be
 materially complementary for already-strong endpoints only when they provide
 specific incremental value; size, proximity, shared market, or diversity alone
 is insufficient. The independent 2 origin-access, 2 destination-access, and 5
@@ -369,22 +345,24 @@ catalog-absence rejection and three market-mismatch advisories were retained.
 The artifact/privacy audit and independent AI semantic review passed for owner
 human review, not human qualification. No prompt-v7 or deterministic
 semantic-rejection change is currently recommended; 2C relationship/search-work
-budgeting remains mandatory. Closure preserves these limitations and does not automatically adopt
-the diagnostic-only M2A selector. The durable closeout is
+budgeting remains mandatory. Closure preserved these limitations and did not itself adopt M2A; the
+later separate adoption decision is ADR 0023. The durable closeout is
 `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 
 #### Decision gate
 
 Satisfied for stage closure by the approved mechanism, offline verification, bounded live
 diagnostic, artifact audit, independent AI semantic review, and the owner's explicit close decision.
-This is not a claim of verified connectivity or independent human semantic qualification.
+This is not a claim of verified connectivity, availability, bookable itineraries, provider execution,
+product behavior, or recommendations.
 
-### Milestone 2C — search-strategy compilation (implemented; offline verified)
+### Milestone 2C — search-strategy compilation (implemented; offline verified; owner-qualified 2026-09-21)
 
 The owner subsequently authorized implementation of the
 [detailed plan](2026-09-19-m2c-search-strategy-compilation-plan.md), delegated the numerical
 compiler-limit decision to the parent/architect, and chose in-place planner replacement with no V1
-compatibility path. The provider-neutral deterministic compiler is implemented and offline verified.
+compatibility path. The provider-neutral deterministic compiler is implemented, offline verified,
+and owner-qualified for its declared planning boundary.
 Its integrated live diagnostic is model-only; no travel-provider call is part of 2C. The
 [implementation record](../build-log/2026-09-19-m2c-implementation.md) preserves the verification
 and review evidence. Architecture and future-stage recommendations outside the accepted compiler
@@ -419,7 +397,7 @@ and adds bounded supplemental award-search strategies.
 The implemented stage progresses declared coverage from supported geography through selected
 endpoint airports to mandatory direct and bounded supplemental logical queries, with provenance,
 obligations, omission receipts, and replay identity. Its offline gate and model-only integrated
-diagnostic do not qualify M2A, provider compatibility, a returned itinerary, an award seat, or a
+diagnostic do not independently qualify M2A, provider compatibility, a returned itinerary, an award seat, or a
 bookable journey. Provider request execution and result validation require a separately opened cut.
 
 ## Next provider/result stage — award-first observations and cash positioning (goal approved; implementation pending)

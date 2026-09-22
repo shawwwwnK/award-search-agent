@@ -6,7 +6,9 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import cast
 
+import pytest
 from openai import OpenAI
+from pydantic import ValidationError
 from test_catalog_serving import _location, _ready_envelope, _release
 
 from award_agent.domain import LocationKind, LocationRef
@@ -24,6 +26,7 @@ from award_agent.search_planning import (
     CityAirportDistanceConsistency,
     CityAirportDistanceStatus,
     CityServingStatus,
+    DirectGroundingSource,
     GatewayDiscoveryInput,
     GatewayOutboundDateContext,
     GeographicMembershipStatus,
@@ -89,10 +92,15 @@ def _plan_records(
     destination_record: AirportSelectionRecord,
     cap_policy: AirportSelectionCapPolicy,
     distance_policy: CityAirportDistanceConsistency,
+    source_records: tuple[AirportSelectionRecord, ...] | None = None,
+    direct_source: bool = False,
 ) -> SearchPlanningResult:
     records = (origin_record, destination_record)
+    replay_records = source_records if source_records is not None else records
     record_digests = tuple(
-        sorted(airport_selection_record_digest(record) for record in records)
+        sorted(airport_selection_record_digest(record) for record in replay_records)
+        if not direct_source
+        else ()
     )
     market_policy = load_default_planning_market_policy().model_copy(
         update={"airport_overrides": ()}
@@ -122,11 +130,17 @@ def _plan_records(
     return plan_searches(
         SearchPlanningInput(
             envelope=envelope,
-            endpoint_source=M2ASelectionRecordSource(selection_records=records),
+            endpoint_source=(
+                DirectGroundingSource()
+                if direct_source
+                else M2ASelectionRecordSource(
+                    selection_records=replay_records
+                )
+            ),
             gateway_discovery_result=discovery,
         ),
-        selection_cap_policy=cap_policy,
-        selection_distance_policy=distance_policy,
+        selection_cap_policy=None if direct_source else cap_policy,
+        selection_distance_policy=None if direct_source else distance_policy,
         policy=PlanningPolicy(max_source_evidence_age_days=3650),
         market_policy=market_policy,
         repository=repository,
@@ -341,6 +355,9 @@ def test_planning_replays_supplied_records_without_model_and_binds_record_identi
         )
         assert result.outcome is SearchPlanningOutcome.PLANNED
         assert result.plan is not None
+        assert result.plan.endpoint_selection_binding.review_status == (
+            "owner_qualified_model_proposed"
+        )
         assert airport_selection_record_digest(origin_record) != airport_selection_record_digest(
             destination_record
         )
@@ -359,6 +376,103 @@ def test_planning_replays_supplied_records_without_model_and_binds_record_identi
             distance_policy=distance,
         )
         assert stale_policy_result.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
+
+
+def test_adopted_m2a_replay_requires_exact_complete_record_set(tmp_path: Path) -> None:
+    release = _release(tmp_path)
+    policy = AirportSelectionCapPolicy(policy_version="test-cap-v1")
+    distance = CityAirportDistanceConsistency(policy_version="distance-v1")
+    with CatalogKnowledgeRepository(release) as repository:
+        origin = _location(LocationKind.CITY, "Test City")
+        destination = _location(LocationKind.COUNTRY, "United States")
+        origin_record = validate_airport_selection_proposal(
+            role="origin",
+            context=_context(repository, LocationKind.CITY, "Test City"),
+            cap_policy=policy,
+            distance_policy=distance,
+            proposal=_proposal("TST"),
+            model="offline-test",
+            repository=repository,
+        )
+        destination_record = validate_airport_selection_proposal(
+            role="destination",
+            context=_context(repository, LocationKind.COUNTRY, "United States"),
+            cap_policy=policy,
+            distance_policy=distance,
+            proposal=_proposal("TST"),
+            model="offline-test",
+            repository=repository,
+        )
+
+        def replay(source_records: tuple[AirportSelectionRecord, ...]) -> SearchPlanningOutcome:
+            return _plan_records(
+                repository=repository,
+                origin=origin,
+                destination=destination,
+                origin_record=origin_record,
+                destination_record=destination_record,
+                cap_policy=policy,
+                distance_policy=distance,
+                source_records=source_records,
+            ).outcome
+
+        assert replay((origin_record,)) is SearchPlanningOutcome.EVIDENCE_FAILURE
+        with pytest.raises(ValidationError, match="unique by role and resolved entity"):
+            M2ASelectionRecordSource(
+                selection_records=(origin_record, destination_record, origin_record)
+            )
+        wrong_role = destination_record.model_copy(update={"role": "origin"})
+        assert replay((origin_record, wrong_role)) is SearchPlanningOutcome.EVIDENCE_FAILURE
+        wrong_entity = validate_airport_selection_proposal(
+            role="destination",
+            context=origin_record.resolved_entity,
+            cap_policy=policy,
+            distance_policy=distance,
+            proposal=_proposal("TST"),
+            model="offline-test",
+            repository=repository,
+        )
+        assert replay((origin_record, wrong_entity)) is SearchPlanningOutcome.EVIDENCE_FAILURE
+        empty_record = origin_record.model_copy(
+            update={
+                "proposal": AirportSelectionProposal(
+                    outcome=AirportSelectionProposalOutcome.INSUFFICIENT_KNOWLEDGE,
+                    airport_iata_codes=(),
+                ),
+                "candidate_validations": (),
+                "accepted_airports": (),
+            }
+        )
+        assert replay((empty_record, destination_record)) is SearchPlanningOutcome.EVIDENCE_FAILURE
+
+        direct_geography = _plan_records(
+            repository=repository,
+            origin=origin,
+            destination=destination,
+            origin_record=origin_record,
+            destination_record=destination_record,
+            cap_policy=policy,
+            distance_policy=distance,
+            direct_source=True,
+        )
+        assert direct_geography.outcome is SearchPlanningOutcome.EVIDENCE_FAILURE
+
+        mixed = _plan_records(
+            repository=repository,
+            origin=_location(LocationKind.AIRPORT, "TST"),
+            destination=destination,
+            origin_record=origin_record,
+            destination_record=destination_record,
+            cap_policy=policy,
+            distance_policy=distance,
+            source_records=(destination_record,),
+        )
+        assert mixed.outcome is SearchPlanningOutcome.PLANNED
+        assert mixed.plan is not None
+        assert {item.source_kind for item in mixed.plan.endpoint_selections} == {
+            "direct_grounding",
+            "m2a_replay",
+        }
 
 
 def test_replay_revalidates_forged_distance_and_binds_audit_identity(tmp_path: Path) -> None:

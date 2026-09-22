@@ -1,5 +1,9 @@
 # ADR 0019: LLM-proposed endpoint airports with bounded catalog validation
 
+> Current-status note (2026-09-21): ADR 0023 records the owner's adoption of this selector as the
+> official source for exactly resolved geographic endpoints. Explicit and uniquely resolved named
+> airports remain direct catalog singletons. Independent semantic qualification remains unclaimed.
+
 ## Context
 
 Milestone 1 provides a local, versioned catalog of geographic entities and

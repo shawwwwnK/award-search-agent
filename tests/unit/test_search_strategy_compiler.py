@@ -116,6 +116,10 @@ def test_mandatory_only_policy_skip_compiles_complete_plan_offline() -> None:
     assert result.outcome is SearchPlanningOutcome.PLANNED
     assert result.plan is not None
     assert result.plan.coverage.mandatory_complete
+    assert result.plan.endpoint_selection_binding.source_kind == "direct_grounding"
+    assert result.plan.endpoint_selection_binding.review_status == (
+        "deterministic_approved_policy"
+    )
     assert result.plan.coverage.mandatory_required_pairs == 1
     assert len(result.plan.logical_queries) == 1
     assert not result.plan.supplemental_strategies

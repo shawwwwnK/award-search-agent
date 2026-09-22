@@ -1,5 +1,10 @@
 # Stage Takeaways: Milestone 2B market-aware gateway-airport discovery
 
+> Current status (2026-09-21): the owner subsequently monitored, reviewed, and qualified M2B for
+> its declared gateway-hypothesis boundary, alongside completed M1, M2A, and M2C. This historical
+> closeout still does not claim connectivity, availability, provider execution, itineraries, product
+> behavior, or recommendations; candidates remain unverified search hypotheses.
+
 ## 1. Stage Context
 
 Milestone 2B turns already selected origin and destination airport sets into a policy skip or a

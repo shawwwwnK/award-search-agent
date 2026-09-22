@@ -1,5 +1,9 @@
 # 0018: SQLite published geographic catalog with JSON receipts
 
+> Current-status note (2026-09-21): ADR 0023 supersedes this ADR's requirement to preserve and
+> test the Milestone 0 JSON repository as an active compatibility path. The SQLite catalog,
+> publication, provenance, and read-only serving decisions remain active.
+
 - Status: Accepted
 - Date: 2026-09-15
 

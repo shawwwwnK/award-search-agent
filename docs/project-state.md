@@ -22,8 +22,12 @@ records the accepted design and the
 [implementation record](build-log/2026-09-19-m2c-implementation.md) records the code, independent
 review fixes, offline verification, and model-only integrated diagnostic. The provider-neutral
 compiler makes no additional model call and no provider call. Provider execution and
-provider/product qualification remain outside this stage. M2A remains diagnostic-only, 2B remains
-closed, and independent human semantic qualification is not claimed.
+provider/product qualification remain outside this stage. On 2026-09-21 the owner monitored,
+reviewed, and qualified M1, M2A, M2B, and M2C for their declared planning boundaries, and adopted
+M2A as the official airport source for exactly resolved geographic endpoints; explicit and uniquely
+resolved named airports remain direct catalog singletons. M2A selections retain model-proposed
+provenance. Independent external/holdout corroboration is unclaimed and may inform later policy
+revision. M2B remains closed.
 On 2026-09-20 the owner amended 2C to keep compilation fully provider-neutral. Cached Search
 capability is no longer an input, identity field, or trusted compilation-binding component. The
 provisional 31-day, 24-relationship, 128-query, and 4,000 query-date-day admission limits and their
@@ -64,9 +68,10 @@ the broad upstream evidence gap. This is one development trial, not semantic qua
 the [evaluation record](build-log/2026-09-20-intent-to-search-planning-evaluation.md).
 
 The operational Milestone 1 geographic/airport catalog is a versioned local SQLite artifact
-with a JSON receipt/manifest (ADR 0018). The small Pydantic/JSON seed remains the Milestone 0
-fixture contract; Pydantic validates import/publication/query boundaries rather than materializing
-the full operational catalog in memory.
+with a JSON receipt/manifest (ADR 0018). ADR 0023 retires the executable Milestone 0 JSON
+knowledge/group compatibility path; historical records remain in git history. Pydantic validates
+the active import/publication/query boundaries rather than materializing the full operational
+catalog in memory.
 
 On 2026-09-19, the owner requested architecture and engineering review in preparation for 2C,
 including FDE recruiting evidence and a durable register of work to revisit after the core workflow.
@@ -123,13 +128,18 @@ endpoint-airport IATA codes for an already resolved canonical geographic entity;
 code records catalog identity/facility/supported-scope validation and replays a supplied selection
 record without another model call. It does not establish city-serving facts, regional membership
 outside country evidence, routes, schedules, award availability, provider execution, RAG, or a
-cache. Its active-policy v3 live diagnostic completed, but the selector remains diagnostic-only
-pending independent human semantic review, preregistered holdout evidence, evidence that larger
-caps improve useful coverage relative to work, and an adoption decision; see ADR 0019 and the M2A
-evaluation protocol. The active cap
+cache. Its active-policy v3 live diagnostic completed. On 2026-09-21 the owner adopted the current
+selector and policy as the official source for exactly resolved geographic endpoints and qualified
+the completed M1, M2A, M2B, and M2C boundaries after monitoring and reviewing their builds and
+results. Explicit and uniquely resolved named airports remain direct catalog singletons. Independent
+external review, preregistered holdout evidence, and useful-coverage-versus-work corroboration are
+not claimed; they may inform future policy revision rather than qualifying the owner decision. See ADR 0023,
+ADR 0019, and the M2A evaluation protocol. The active cap
 policy gives the United States a country maximum of 10 for US-focused international-gateway
 coverage; the prior v2 active-policy diagnostic used US=6 and is historical evidence only, not
-validation of US=10. The active v3 diagnostic has completed and remains diagnostic evidence only.
+validation of US=10. The active v3 diagnostic remains development evidence supporting the
+owner-qualified selector; its selections retain model-proposed provenance rather than becoming
+catalog facts.
 
 The owner approved the Milestone 2B direction on 2026-09-18 in ADR 0020: a versioned global
 planning-market policy deterministically classifies original endpoints and skips generation only
@@ -138,8 +148,8 @@ valid input receives one grouped structured model proposal. An unknown endpoint 
 generation with an explicit mapping-gap receipt. A model/policy candidate-market disagreement is
 advisory and passes to 2C rather than rejecting an otherwise valid candidate. Generated candidates
 remain bounded, unverified search hypotheses, not route, schedule, connectivity, award, or booking
-facts. This decision does not close or adopt 2A: reviewed fixtures or supplied selection records
-remain permitted without promoting model proposals into geographic fact.
+facts. The 2B decision did not itself close or adopt 2A. The later owner adoption is recorded
+separately in ADR 0023 and still does not promote model proposals into geographic fact.
 
 On 2026-09-19, the small versioned market policy, grouped structured generator,
 relationship-aware validator, and immutable replay record were implemented and offline verified.
@@ -190,13 +200,14 @@ rejection change is currently recommended; complete 2C relationship accounting r
 
 The owner closed Milestone 2B on 2026-09-19 after reviewing the implemented boundary, offline
 verification, prompt-v6/casebook-v3 live diagnostic, artifact audit, and independent AI semantic
-review. Closure accepts the 2B implementation and evidence record without claiming verified
-connectivity or independent human semantic qualification. The later authorized Milestone 2C
+review. On 2026-09-21 the owner qualified M2B for its declared gateway-hypothesis boundary.
+Neither decision claims verified connectivity, availability, or bookable itineraries. The later authorized Milestone 2C
 implementation consumes the closed 2B replay record without changing that closure.
 The durable closeout is
 `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
-Milestone 1 completed the local geographic/airport foundation, and Milestone 2A supplied the
-still-diagnostic endpoint selection seam described above. The current planning-only boundary is:
+Milestone 1 completed the local geographic/airport foundation, and Milestone 2A supplies the
+owner-adopted, owner-qualified endpoint-selection seam described above. The current planning-only
+boundary is:
 
 ```text
 frozen EffectiveRequest + endpoint source + replay-bound 2B record -> CompiledSearchPlan
@@ -424,23 +435,24 @@ failure ownership and closeout, rather than treating the public pilot as qualifi
 the current no-raw-text-parsing boundary, one-repair/pending policy, immutable-state invariants,
 and private-trace/redacted-artifact discipline until then.
 
-The current search-planning boundary is implemented and fixture-qualified for the declared checked-in
-offline seed snapshot. It consumes the frozen ADR 0016 outbound-only contract and ADR 0017
+The current search-planning boundary is implemented and offline-verified against the published
+SQLite catalog and active replay fixtures. It consumes the frozen ADR 0016 outbound-only contract and ADR 0017
 upstream request-understanding boundary: no return date or duration can enter planning state,
 cash-only requests do not become ready, and mixed award-and-cash requests remain award-only
 without cash-search claims. This qualification is planning-only and does not claim operational
 airport, route, schedule, inventory, or provider coverage. Milestone 1B is owner-approved and
 closed as of 2026-09-16. It serves the owner-reviewed local SQLite catalog through the existing
-deterministic location/planner boundary while preserving the Milestone 0 JSON fixture path and its
-reviewed group policies. M2A is implemented but remains diagnostic-only pending its recorded
-semantic/adoption gate. M2B implements ADR 0020's approved market policy, generation gate,
-grouped proposal, deterministic relationship validation, and replayable selection record; its
-prompt-v6/casebook-v3 diagnostic is mechanically complete but not independently human-qualified.
-The stage is owner-closed. The implemented 2C compiler preserves mandatory original endpoint
+deterministic location/planner boundary. ADR 0023 removes the Milestone 0 JSON and reviewed-group
+compatibility path. M2A is the owner-adopted, owner-qualified official geographic endpoint source,
+while selections retain model-proposed provenance. M2B implements ADR 0020's approved market policy,
+generation gate, grouped proposal, deterministic relationship validation, and replayable selection
+record; its candidates remain unverified search hypotheses. The stage is owner-qualified for that
+boundary. The implemented 2C compiler preserves mandatory original endpoint
 coverage, budgets compiled relationships and query/date work, and records omissions without
 relabeling accepted candidates invalid. Provider execution remains subsequent and separately
-scoped. Preserve the upstream and M2A evidence gaps as
-such—do not reopen their semantics or call them qualified through this documentation change.
+scoped. The completed M1, M2A, M2B, and M2C qualifications are owner qualifications for their
+declared boundaries, not independent external/holdout corroboration or provider, itinerary,
+product, or recommendation qualification.
 
 The prior implementation handoff remains historical context. ADRs 0014 and 0015 plus the v3
 clarification acceptance protocol are the current policy where they differ from ADRs 0011--0013
@@ -454,7 +466,8 @@ references to `two_pass` and selector-only extraction are historical evidence on
   adapter or provider error fixture exists yet. The provider-neutral `CompiledSearchPlan` boundary
   is implemented and offline verified, but it does not authorize a provider adapter or any provider
   call. M2B's grouped generator, relationship-aware validation, and replayable candidate record
-  are implemented and owner-closed. M2C compilation is implemented; provider execution remains
+  are implemented and owner-qualified for their declared planning boundaries. M2C compilation is
+  owner-qualified; provider execution remains
   separately scoped. SerpAPI Google Flights
   remains a later cash-fare candidate. See
   `docs/provider-feasibility/2026-09-08-initial-provider-intake.md`.

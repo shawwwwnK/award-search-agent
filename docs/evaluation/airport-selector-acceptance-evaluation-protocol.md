@@ -9,8 +9,9 @@ model proposes an endpoint set only after deterministic resolution has fixed a
 canonical entity and category. Deterministic code validates bounded response
 shape and only catalog-supported metadata.
 
-The first live run is a diagnostic, not a qualification or adoption claim.
-It must be described that way even when all mechanical checks pass.
+The first live run is a diagnostic, not a standalone qualification claim. The owner separately
+adopted and qualified the selector boundary on 2026-09-21 through ADR 0023; that decision does not
+retroactively turn this individual run into independent corroboration.
 
 ## Corpus and splits
 
@@ -39,7 +40,7 @@ exactly-at-cap acceptance, over-cap rejection, duplicates, invalid/absent
 identities, country contradiction, missing metadata, and the city-distance
 policy. Those cases are not semantic evidence about a live model.
 
-Before adoption evaluation, an independent evaluator should prepare an external
+For independent qualification and future policy review, an evaluator should prepare an external
 holdout (suggested eight cases) and retain it outside this workspace. It should
 contain different entities in the same families, ambiguous/weak-metadata
 contexts, and plausible-but-inappropriate valid IATA choices. Do not invent a
@@ -91,14 +92,16 @@ The same model must not judge its own suggestions. Human review assesses useful
 coverage and city-serving appropriateness; a result with provider availability
 does not retroactively validate an incorrect geographic endpoint.
 
-## Decision gate
+## Independent corroboration and policy-revision gate
 
-Do not adopt the selector merely because a development prompt looks plausible.
-The next gate requires: all offline structural checks; no unresolved trace or
-privacy failure; documented human review on the active development corpus; a
-preregistered independent holdout; comparison of category defaults against the
-approved exception caps; and evidence that extra airports improve useful
-coverage more than they increase planner work. Any unsafe catalog contradiction,
-repeated inappropriate endpoint, systematic important omission, or budget
-pressure is a reason to revise policy/prompt or defer adoption rather than add
-unreviewed hardcoded airports.
+ADR 0023 records the owner's adoption and qualification of M2A for its declared boundary after
+monitoring and reviewing the completed work. No independent external qualification is claimed.
+Before claiming independent corroboration—or retaining the policy unchanged in the face of material
+downstream cost—the evidence gate requires: all offline structural checks; no unresolved trace or
+privacy failure; documented human review on the active development corpus; a preregistered
+independent holdout; comparison of category defaults against the approved exception caps; and
+evidence that extra airports improve useful coverage more than they increase planner work. Any
+unsafe catalog contradiction, repeated inappropriate endpoint, systematic important omission, or
+budget pressure is a reason to revise, restrict, or replace the policy rather than add unreviewed
+hardcoded airports. The selector remains model-proposed and never becomes catalog fact merely by
+owner qualification.

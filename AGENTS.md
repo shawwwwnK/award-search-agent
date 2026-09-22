@@ -72,10 +72,14 @@ model call and no travel-provider call; its integrated live diagnostic is model-
 execution and product/provider qualification remain outside the completed stage. The deterministic,
 retrieval-backed outbound-only `EffectiveRequest -> CompiledSearchPlan` boundary is implemented and
 offline verified for its declared catalog, replay, and policy evidence. Milestone 1 supplied the reviewed,
-versioned local geographic/airport catalog. Milestone 2A implemented a bounded model-proposed
-endpoint-airport selector and completed its active-policy diagnostic, but the selector remains
-diagnostic-only pending independent human semantic review, holdout evidence, and an adoption
-decision.
+versioned local geographic/airport catalog. On 2026-09-21 the owner adopted and qualified Milestone 2A as the
+official endpoint-airport source for exactly resolved geographic entities. Explicit and uniquely
+resolved named airports remain direct catalog singletons; geographic endpoints use the bounded
+model proposal, deterministic validation, immutable record, and M2C replay. The completed
+search-planning milestones M1, M2A, M2B, and M2C are owner-monitored, owner-reviewed, and
+owner-qualified for their declared boundaries. Independent external or holdout corroboration remains
+unclaimed and may inform later policy revision. ADR 0023 retires
+the executable Milestone 0 JSON/group compatibility path.
 
 The current search-planning milestone order is recorded in
 `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`. Milestone 2B implements the
@@ -86,8 +90,7 @@ Candidates are unverified search hypotheses, never route or connectivity facts. 
 market forces generation with an explicit mapping-gap receipt; a model/policy candidate-market
 disagreement is advisory and passes to 2C rather than rejecting an otherwise valid candidate.
 The prompt-v6/casebook-v3 development diagnostic is mechanically complete. The owner accepted the
-implemented boundary and evidence record for stage closure; independent human semantic qualification
-was not claimed. The preceding prompt-v5/casebook-v3 run exposed
+implemented boundary and evidence record for its declared stage scope. The preceding prompt-v5/casebook-v3 run exposed
 relationship multiplication; prompt-v6 adds relationship-level uncertainty/scope reconciliation and
 same-scope candidate consolidation without changing the schema, adapter, catalog, policy, or
 deterministic validator. Access gateways may be materially complementary alternatives even for
@@ -119,8 +122,9 @@ opened for that narrow slice; cash-only product scope, pure-cash ranking, genera
 assembly, round trips, and provider qualification remain outside it. Implementation has not
 started, so ADR 0016 still governs active runtime behavior.
 
-Do not reopen 2B or treat the implemented 2C compiler as provider execution, M2A adoption, or human
-semantic qualification. The 2B closeout is recorded in
+Do not reopen 2B or treat the implemented 2C compiler as provider execution, availability, itinerary,
+product, or recommendation qualification. M2A adoption and owner qualification are recorded in ADR 0023.
+The 2B closeout is recorded in
 `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.
 
 The upstream one-way award-only boundary in ADR 0016 is frozen for this stage:
