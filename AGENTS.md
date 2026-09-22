@@ -58,6 +58,11 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+The search-planning stage is owner-complete as of 2026-09-21. Milestones 1, 2A, 2B, and 2C are
+implemented and owner-qualified for their declared planning boundaries, and Milestone 0 is retired.
+The next separately scoped stage is provider/result execution under ADR 0022; it consumes the frozen
+`CompiledSearchPlan` boundary and must not be described as additional search planning.
+
 When scoping 2C or later stages, consult
 `docs/reviews/2026-09-19-future-stage-goals.md` for the owner's requested advisory
 synthesis of stage goals, evidence gates, and sequencing alternatives. Its recommendations
@@ -81,7 +86,7 @@ owner-qualified for their declared boundaries. Independent external or holdout c
 unclaimed and may inform later policy revision. ADR 0023 retires
 the executable Milestone 0 JSON/group compatibility path.
 
-The current search-planning milestone order is recorded in
+The completed search-planning milestone record is preserved in
 `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`. Milestone 2B implements the
 market-aware gateway-candidate boundary: given selected departure and destination airport sets, apply
 the approved versioned planning-market policy, skip only a fully known single-market request, and

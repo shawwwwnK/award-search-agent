@@ -2,6 +2,14 @@
 
 ## Phase
 
+The search-planning stage is owner-complete as of 2026-09-21. Its active result is the frozen,
+provider-neutral `EffectiveRequest -> CompiledSearchPlan` boundary. Milestones 1, 2A, 2B, and 2C
+are implemented and owner-qualified for their declared planning scopes; Milestone 0 is retired.
+The stage closeout is recorded in
+[the search-planning closeout](handoffs/2026-09-21-search-planning-stage-closeout.md). Subsequent
+provider execution, observations, normalization, ranking, and recommendations are downstream work,
+not unfinished search planning.
+
 On 2026-09-21, the owner approved the next provider/result-stage goal: consume M2C's complete
 search graph without modifying it, execute its work with an award provider, add a brief direct
 origin -> destination cash benchmark, and
@@ -435,7 +443,7 @@ failure ownership and closeout, rather than treating the public pilot as qualifi
 the current no-raw-text-parsing boundary, one-repair/pending policy, immutable-state invariants,
 and private-trace/redacted-artifact discipline until then.
 
-The current search-planning boundary is implemented and offline-verified against the published
+The completed search-planning boundary is implemented and offline-verified against the published
 SQLite catalog and active replay fixtures. It consumes the frozen ADR 0016 outbound-only contract and ADR 0017
 upstream request-understanding boundary: no return date or duration can enter planning state,
 cash-only requests do not become ready, and mixed award-and-cash requests remain award-only

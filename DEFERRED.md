@@ -17,15 +17,15 @@ request, RAG, a cash-only product, or a public service. This owner-approved cut 
 [ADR 0022](docs/adr/0022-award-first-cash-observations.md); its positive-task discipline was refined
 by the [fresh Astra challenge](docs/build-log/2026-09-19-future-stage-astra-challenge.md).
 
-Current focus: Milestone 2C deterministic search-strategy compilation is implemented in place and
-offline verified. The [implementation record](docs/build-log/2026-09-19-m2c-implementation.md)
+Current focus: the search-planning stage is owner-complete as of 2026-09-21. Milestone 2C is
+implemented in place and offline verified. The [implementation record](docs/build-log/2026-09-19-m2c-implementation.md)
 captures its initial boundary and model-only integrated diagnostic; the
 [provider-neutral revision](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md) records the
-active contract. Provider execution remains the next
+active contract. Provider execution is the next
 separately scoped core cut. ADR 0023 now adopts and owner-qualifies M2A with the completed M1,
 M2B, and M2C planning boundaries; independent corroboration remains future policy evidence. This
 register does not reopen 2B or override active ADRs. The [project state](docs/project-state.md) and
-[milestone roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) retain their authority.
+[completed milestone record](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) retain their authority.
 
 **Quick cut:** execute the structurally bounded M2C output in the approved award-first
 provider/result slice: award observations, a brief direct endpoint cash anchor, and bounded cash

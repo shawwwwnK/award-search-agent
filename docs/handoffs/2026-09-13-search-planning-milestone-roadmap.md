@@ -1,15 +1,20 @@
 # Search-planning milestone roadmap
 
-- Status: Active planning record
+- Status: Completed planning-stage record; owner-closed 2026-09-21
 - Date: 2026-09-13
 - Scope: Historical-to-current search-planning milestone record
 
 ## Purpose and authority
 
-This document gives later agents one current roadmap for the search-planning
-stage. It supersedes the earlier *work ordering* in the 2026-09-12 planning
+This document gives later agents the durable milestone record for the completed search-planning
+stage. It superseded the earlier *work ordering* in the 2026-09-12 planning
 handoff where they differ. It does not change the frozen one-way request
 boundary, authorize provider execution, or make an operational coverage claim.
+
+The owner marked the search-planning stage complete on 2026-09-21. Milestones 1, 2A, 2B, and 2C
+are implemented and owner-qualified for their declared boundaries; Milestone 0 is retired. This
+file is now the durable completed-stage record. Provider/result execution below is a separately
+scoped downstream stage, not another incomplete planning milestone.
 
 The active planner boundary is:
 
@@ -452,7 +457,13 @@ mixed-candidate path. At least one supported award or award-led option must enab
 action with less owner effort than the current workaround. One success does not establish broad
 provider reliability or product qualification.
 
-## Milestone 3 — reviewed strategy documents and RAG-assisted authoring
+## Historical optional follow-ons outside the completed stage
+
+The former Milestones 3 and 4 below were roadmap possibilities, not prerequisites to the completed
+M1–M2C boundary. They are not active milestones or implicit commitments. Revisit them only through
+the deferred-work register and an explicit owner decision.
+
+### Former Milestone 3 — reviewed strategy documents and RAG-assisted authoring
 
 ### Objective
 
@@ -478,7 +489,7 @@ Proceed only if the experiment improves reviewed knowledge authoring or
 explanation without weakening provenance or allowing retrieval to invent
 physical connectivity.
 
-## Milestone 4 — evidence-driven coverage expansion
+### Former Milestone 4 — evidence-driven coverage expansion
 
 ### Objective
 
@@ -504,9 +515,10 @@ shows that structured snapshots and offline validation are no longer adequate.
 
 ## Documentation map
 
-- This document is the current milestone order and scope.
+- This document is the completed search-planning milestone record and historical scope.
 - `docs/handoffs/2026-09-12-search-planning-design.md` remains the implemented
   Milestone 0 design and fixture qualification record.
-- `docs/project-state.md` and `docs/workboard.md` summarize this active cut.
+- `docs/project-state.md` and `docs/workboard.md` summarize the completed boundary and active
+  downstream cut.
 - Any durable choice of region taxonomy, source reconciliation authority, or
   raw-artifact retention model should receive a focused ADR after owner review.

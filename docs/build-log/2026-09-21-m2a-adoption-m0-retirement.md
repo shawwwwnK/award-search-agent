@@ -64,5 +64,6 @@ clarification-stage errors outside this change; the scoped 16-file type check pa
 
 ## Follow-up
 
-The next separately authorized work remains the award-first provider/result stage. It is not opened,
-implemented, or qualified by this session.
+With the owner marking search planning complete, the next separately authorized work remains the
+award-first provider/result stage. Its goal is approved under ADR 0022, but its implementation and
+qualification are not supplied by this session.

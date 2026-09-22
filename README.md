@@ -13,6 +13,11 @@ it does not open implementation work.
 
 ## Current milestone
 
+The search-planning stage is complete and owner-closed as of 2026-09-21. Milestones 1, 2A, 2B, and
+2C are implemented and owner-qualified for their declared planning boundaries; Milestone 0 is
+retired. The next separately scoped work is provider/result execution under ADR 0022, which consumes
+the frozen `CompiledSearchPlan` rather than extending planning.
+
 Milestone 2B gateway-airport discovery is implemented and owner-closed. Milestone 2C deterministic
 search-strategy compilation is implemented in place, with no V1 compatibility path. Its integrated
 live diagnostic is model-only: the compiler itself makes no additional model call, and neither the
@@ -53,7 +58,7 @@ payload mapping, result normalization, and ranking. See the
 [`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md),
 [`ADR 0021`](docs/adr/0021-deterministic-search-strategy-compilation.md), plus the
 [`ADR 0023`](docs/adr/0023-adopt-m2a-and-retire-m0-endpoint-selection.md), plus the
-[Milestone 0–4 roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) and
+[completed search-planning milestone record](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) and
 [Milestone 2B implementation brief](docs/handoffs/2026-09-17-m2b-gateway-airport-discovery-opened.md), and the
 [2B evaluation protocol](docs/evaluation/gateway-discovery-evaluation-protocol.md). The durable
 [Milestone 2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md) records

@@ -2,6 +2,11 @@
 
 ## Now
 
+- **Search planning is complete and owner-closed as of 2026-09-21.** Milestones 1, 2A, 2B, and 2C
+  are implemented and owner-qualified for their declared planning boundaries; M0 is retired. The
+  frozen output is the provider-neutral `CompiledSearchPlan`. Provider/result execution is a new
+  downstream stage, not remaining search-planning work. See the
+  [stage closeout](handoffs/2026-09-21-search-planning-stage-closeout.md).
 - The original snapshot-backed `SearchPlan` gate is historical. Current search planning is the
   provider-neutral `CompiledSearchPlan` boundary described below; its offline verification makes no
   provider or network calls.
@@ -42,7 +47,7 @@
 Historical Milestone 0 boundary and fixture gate:
 `docs/handoffs/2026-09-10-search-plan-design-stage.md` and
 `docs/handoffs/2026-09-12-search-planning-design.md`.
-Current Milestone 0–4 roadmap:
+Completed Milestone 0–4 record:
 `docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md`.
 
 ## Next
