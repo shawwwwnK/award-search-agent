@@ -30,6 +30,11 @@
   `docs/handoffs/2026-09-12-search-planning-design.md`.
 - Preserve the frozen ADR 0016/0017 upstream boundary. Milestone 2C has no provider calls, payload
   mapping, provider-result parsing, normalization, ranking, or recommendation generation.
+- **The next provider/result stage: award-first observations and cash positioning** has an
+  owner-approved goal and no implementation yet. It executes M2C output rather than adding another
+  planning milestone. ADR 0022 keeps pure-cash endpoint observations outside the ranked award list,
+  while permitting a validated cash access or egress component inside an award-led recommendation.
+  The active runtime remains unchanged until this stage is implemented and accepted.
 
 Historical Milestone 0 boundary and fixture gate:
 `docs/handoffs/2026-09-10-search-plan-design-stage.md` and
@@ -39,10 +44,10 @@ Current Milestone 0–4 roadmap:
 
 ## Next
 
-- Open the first downstream provider/result pilot separately. It must define capability acceptance,
-  exact rectangle-safe request projection, finite page/attempt/row/byte/time bounds,
-  scheduled-versus-deferred receipts, returned-itinerary validation, and truthful empty/partial/error
-  outcomes before making provider or product claims.
+- Implement the separately approved provider/result plan only after reviewing its award and cash
+  capability contracts, execution budgets, replay fixtures, normalized observation contract,
+  direct-cash non-ranking boundary, and bounded mixed-candidate validation. Start offline; authorize
+  the bounded live task separately.
 - Review the model-only 2C diagnostic as development evidence. It does not adopt M2A, reopen 2B, or
   establish independent human semantic qualification.
 

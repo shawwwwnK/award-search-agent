@@ -2,6 +2,19 @@
 
 ## Phase
 
+On 2026-09-21, the owner approved the next provider/result-stage goal: consume M2C's complete
+search graph without modifying it, execute its work with an award provider, add a brief direct
+origin -> destination cash benchmark, and
+use bounded cash positioning around observed award itineraries. This is downstream execution of
+M2C's already complete provider-neutral options, not a new planning milestone. Pure-cash
+observations remain outside the ranked award shortlist; a cash access or egress component may enter
+ranking only inside a deterministically validated award-led journey. The decision is recorded in
+[ADR 0022](adr/0022-award-first-cash-observations.md), the
+[`gfly` feasibility intake](provider-feasibility/2026-09-21-gfly-cash-search-intake.md), and the
+[provider-stage handoff](handoffs/2026-09-21-award-first-provider-results-plan.md). No provider
+adapter, cash execution, result normalization, ranking, or runtime policy change has been
+implemented. ADR 0016 continues to govern the active runtime until that work is accepted.
+
 Milestone 2B market-aware gateway-airport discovery is implemented and owner-closed as of 2026-09-19.
 Milestone 2C deterministic search-strategy compilation is implemented in place, with no V1
 compatibility path. The [planning handoff](handoffs/2026-09-19-m2c-search-strategy-compilation-plan.md)

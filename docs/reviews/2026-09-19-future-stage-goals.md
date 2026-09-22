@@ -2,6 +2,14 @@
 
 Date: 2026-09-19. Status: **advisory proposal requested by the owner; no stage is opened or policy adopted.**
 
+Owner disposition, 2026-09-21: the later [ADR 0022](../adr/0022-award-first-cash-observations.md)
+and [provider-stage handoff](../handoffs/2026-09-21-award-first-provider-results-plan.md) approve an
+award-first provider/result stage with a separate direct-cash value anchor and bounded cash
+positioning. This executes M2C's existing complete search graph; it does not add a new planning
+milestone. Those newer decisions supersede this review where it describes the next provider slice
+as single-provider or all cash/component work as deferred. The remaining stage principles and
+evidence cautions stay advisory.
+
 Revised after an owner-requested fresh-context Astra challenge and substantive back-and-forth.
 The [debate record](../build-log/2026-09-19-future-stage-astra-challenge.md) identifies accepted
 challenges, qualified disagreements, and the resulting changes.

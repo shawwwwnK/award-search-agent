@@ -1,10 +1,21 @@
 # Deferred work — finish the core workflow first
 
-Last reviewed: 2026-09-20.
+Last reviewed: 2026-09-21.
 
 This is the living register of work we are deliberately not doing now. Revisit an entry when its trigger is met; that means decide whether to build, narrow, or drop it. It does not mean automatically implement everything here.
 
-For this register, **core complete** means one declared one-way award workflow reaches real provider observations, validates them, and returns a source-linked shortlist under a bounded search budget, with correct empty/partial behavior as well. The revised advisory completion criterion requires at least one predeclared owner-relevant task yielding a supported actionable option with less total owner effort than the current workaround; only producing caveats or empty/partial outcomes is insufficient. Report all pilot tasks, and do not treat one positive example as reliability qualification. It does not require worldwide coverage, every possible request, RAG, multiple providers, or a public service. This is a working organizational cut line, refined by the [fresh Astra challenge](docs/build-log/2026-09-19-future-stage-astra-challenge.md), not an owner-approved new runtime gate or a completion claim.
+For this register, **core complete** means one declared one-way award workflow reaches real award
+observations, validates them, adds a bounded direct-cash value anchor, and returns a
+source-attributed award shortlist under a bounded search budget, with correct empty/partial behavior
+as well. A validated award-led cash-positioning option may appear when the evidence supports it; a
+pure-cash itinerary is not part of the ranked award list. The completion criterion requires at
+least one predeclared owner-relevant task yielding a supported actionable award or award-led option
+with less total owner effort than the current workaround; only producing cash anchors, caveats, or
+empty/partial outcomes is insufficient. Report all pilot tasks, and do not treat one positive
+example as reliability qualification. It does not require worldwide coverage, every possible
+request, RAG, a cash-only product, or a public service. This owner-approved cut is recorded in
+[ADR 0022](docs/adr/0022-award-first-cash-observations.md); its positive-task discipline was refined
+by the [fresh Astra challenge](docs/build-log/2026-09-19-future-stage-astra-challenge.md).
 
 Current focus: Milestone 2C deterministic search-strategy compilation is implemented in place and
 offline verified. The [implementation record](docs/build-log/2026-09-19-m2c-implementation.md)
@@ -15,11 +26,13 @@ separately scoped core cut. This register does not reopen 2B, adopt diagnostic-o
 active ADRs. The [project state](docs/project-state.md) and
 [milestone roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md) retain their authority.
 
-**Quick cut:** now, use the structurally bounded 2C output in one separately reviewed provider-backed scenario
-and put the validated result in front of the owner. Later, consider upstream simplification,
-component assembly, round-trip/cash, points, RAG, wider coverage, persistence, adaptive control,
-and deployment. User feedback is not postponed until everything is finished; the detailed entries
-below preserve the conditions and evidence.
+**Quick cut:** execute the structurally bounded M2C output in the approved award-first
+provider/result slice: award observations, a brief direct endpoint cash anchor, and bounded cash
+access/egress assembly when relevant evidence exists. Put the validated result in front of the
+owner. Later, consider upstream simplification, general component assembly, round trips, cash-only
+product scope, points, RAG, wider coverage, persistence, adaptive control, and deployment. User
+feedback is not postponed until everything is finished; the detailed entries below preserve the
+conditions and evidence.
 
 **Sequencing recommendation disposition:** the revised [future-stage review](docs/reviews/2026-09-19-future-stage-goals.md)
 proposes comparing a narrow baseline pilot against the current workaround, then testing frozen
@@ -37,9 +50,15 @@ These are remaining core work, not optional items to postpone until after comple
   deduplication, replay identity, and explicit positioning and separate-ticket obligations are
   implemented. The 100-pair structural guard is all-or-nothing; provider execution budgets are
   downstream. This completion does not satisfy provider/result gates.
-- **One provider integration:** capability acceptance, request mapping, bounded attempts/pages/time, and truthful empty/partial/error behavior.
-- **Observed results:** validate dates, provider-returned itinerary boundaries, cabin, travelers, provenance, and supported requirements. Hub components or incomplete access journeys remain research leads; automatic cross-query assembly is D15, not a first-slice prerequisite.
-- **Useful output:** a small transparent shortlist and grounded explanation, including what could not be verified. A supported empty result must not be padded with invented options.
+- **Two narrow provider adapters:** one accepted award operation plus pinned `gfly` cash behavior,
+  each with request mapping, bounded attempts/pages/time, and truthful empty/partial/error behavior.
+- **Observed results:** validate dates, provider-returned itinerary boundaries, cabin, travelers,
+  provenance, and supported requirements. Direct cash is a non-ranked anchor. Only the narrow opened
+  access/egress portion of D15 may become a completed mixed candidate; hub components and incomplete
+  access journeys remain research leads.
+- **Useful output:** a small transparent ranked award shortlist, a brief separate cash benchmark,
+  and grounded explanation including what could not be verified. A supported empty result must not
+  be padded with invented options.
 - **Early feedback:** an owner walkthrough can start with labeled mock/replay output before full 2C qualification, then repeat with real pilot evidence. Record usefulness and remaining work. External observation requires consent and safe evidence.
 
 Sources: [planning completion map](docs/handoffs/2026-09-12-search-planning-design.md#9-what-remains-after-this-design), [2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md), [architecture recommendations](docs/reviews/2026-09-19-search-planning-architecture-review.md#9-recommended-sequence). Earlier provider feedback is advisory. The existing roadmap already makes RAG and coverage evidence-driven.
@@ -93,7 +112,7 @@ or automatically satisfying its revisit trigger.
 | D02 · proposed | Measure whether gateway supplements and larger endpoint selections earn their cost; restrict/remove them if not | First provider pilot for observation yield; completed-journey comparison only when that journey type is supported | Same maximum budget, useful evidence/work, duplicates, latency, and human review. Hub component hits are not validated shortlist lift. Keep M2A adoption G02 separate. [Review §8](docs/reviews/2026-09-19-search-planning-architecture-review.md#8-experiments-that-would-change-the-design). |
 | D03 · parked | Reopen 2B semantic/prompt/market policy only for demonstrated failure patterns, including same-market missed value and circuitousness | Downstream results or human review reveal material errors; explicit owner reopening | Targeted cases plus an independent review/holdout and a before/after result comparison. Do not start prompt-v7 simply because residual notes exist. [2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md). |
 | D04 · proposed | Scope recovery for trip-shaped input; linked one-way trips only if separately justified | Core complete and observed exclusion/re-entry cost establishes value; explicit ADR 0016 decision before a policy change | Compare current guidance with a reviewed mock offering explicit acceptance of a fresh outbound-only request. A displayed draft is nonexecuting; dependent facts require validation; measure remaining return work and reduced-scope recovery separately from original-task fulfillment. Linked trips additionally require parent-trip semantics, linked constraints, and independent one-way validation. [Scope-recovery option](docs/reviews/2026-09-19-intent-clarification-improvement-plan.md#scope-recovery-can-be-smaller-than-linked-trip-planning), [ADR 0016](docs/adr/0016-one-way-award-request-boundary.md). Neither option silently activates return state. |
-| D05 · parked | Cash search/comparison and additional inventory providers | Core complete; a documented blind spot or comparison need justifies another provider | Access/quota/permission feasibility, error fixtures, normalized results, measured incremental value. Current cash-only scope remains unsupported. [Provider intake](docs/provider-feasibility/2026-09-08-initial-provider-intake.md), [ADR 0016](docs/adr/0016-one-way-award-request-boundary.md). |
+| D05 · partially opened 2026-09-21 | Direct cash benchmark and cash access/egress observations are in the next provider stage; a cash-only product and broader cash/provider expansion remain parked | Opened slice: implement the approved provider/result plan. Remaining scope: observed user need after that stage | Opened slice needs pinned capability, failure fixtures, normalized source-attributed results, strict budgets, and measured value. Pure-cash observations stay outside ranking. [ADR 0022](docs/adr/0022-award-first-cash-observations.md), [`gfly` intake](docs/provider-feasibility/2026-09-21-gfly-cash-search-intake.md), [provider-stage handoff](docs/handoffs/2026-09-21-award-first-provider-results-plan.md). |
 | D06 · parked | Point balances, spending budgets, program access, and narrow transfer feasibility | Core complete and a real shortlisted option cannot be judged useful without these facts | Typed user inputs, sourced eligibility/ratio rules, deterministic arithmetic, explicit unknowns; no invented cross-program value. Add minimal eligibility earlier only if the core claim requires it. [Original deferral](docs/build-log/2026-08-30-defer-points-budgets.md), [review §7](docs/reviews/2026-09-19-search-planning-architecture-review.md#7-database-retrieval-and-eventual-agent-workflow). |
 | D07 · parked; sequencing change proposed | Reviewed strategy-document authoring; separately consider runtime loyalty-rule retrieval | A result or explanation exposes a source-knowledge gap | Permissioned dated sources; structured/lexical comparison; citations and review. M3 is human-reviewed authoring and already has a usefulness gate; earlier provider feedback is the proposed change. [Roadmap](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md#milestone-3--reviewed-strategy-documents-and-rag-assisted-authoring). |
 | D08 · parked | Broader geography, airport-group/strategy coverage, richer lookup, catalog refresh/hosting | Core complete and unsupported demand or refresh cost demonstrates the need | Named gaps, reviewed new evidence, coverage/receipt diffs, regression tests, refresh/retention decision. Local source preservation is already resolved; remote hosting remains deferred. [ADR 0018](docs/adr/0018-sqlite-geographic-catalog.md), [M1 closeout record](docs/build-log/2026-09-15-m1a-catalog-publication.md#retention-correction-and-milestone-1b-closeout-2026-09-16). |
@@ -103,8 +122,8 @@ or automatically satisfying its revisit trigger.
 | D12 · proposed | Broad historical-code retirement and contract simplification | Core complete and active entry points/tests are clearly identified | Active import/command map, preserved tagged historical artifacts, migration/regression evidence, passing active quality gate. Fix G05's declared gate earlier; avoid a wholesale refactor now. [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | D13 · proposed | Scale/performance and concurrency beyond one bounded workflow | Measured resource or concurrent-user demand after core completion | Representative load profile, bottleneck evidence, tested improvement with correctness preserved. No inferred enterprise scale from catalog row count. [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | D14 · proposed | Owner/user feedback, personal AI-engineering learning, then a concise evidence packet and independent handoff | Owner mock/replay walkthrough before full 2C qualification, repeated at pilot; reuse an existing failure for personal explanation; external observation when safe and available | Record the actual task/effort and a justified keep/change/drop decision; do not require a new feature or design change. Personally explain one failure/fix and assess an adjacent requirement, recording assistance and gaps. A later engineer's replay/handoff is distinct from customer adoption; self-directed work does not establish enterprise delivery. G05 applies to reproducibility claims; G07 to sharing. [FDE preparation](docs/reviews/2026-09-19-intent-clarification-improvement-plan.md#ai-engineering-and-fde-preparation), [engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
-| D15 · proposed | Assemble independently observed hub/access components into a complete journey | A useful pilot lead justifies the extra validation and the owner opens this scope | Choose supported topology; validate chronology, continuity, original departure constraints, seats, positioning and separate-ticket tolerance. Never sum component prices into a through-ticket claim. Until then, leads do not count as completed-option lift. [Review §5](docs/reviews/2026-09-19-search-planning-architecture-review.md#strategy-semantics). |
-| D16 · parked; ownership approved 2026-09-20 | Provider planning/execution: map pair-valued logical queries into exact rectangle-safe multi-airport batches and own finite pages, attempts, returned rows, bytes, time, result-validation, and scheduled-versus-deferred receipts | Open the first provider adapter/pilot stage | Offline capability evidence; batching fixtures proving no unauthorized cross-product pairs; pagination, duplicate, partial, empty, timeout, and error fixtures; exact resource accounting; and returned-result attribution/validation. Keep provider capability out of 2C identity. [ADR 0021 amendment](docs/adr/0021-deterministic-search-strategy-compilation.md#2026-09-20-amendment-provider-neutral-compilation-and-structural-safety), [revision record](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md). |
+| D15 · partially opened 2026-09-21 | The provider stage may assemble one cash access + award or award + cash egress journey; hub substitution, more components, airport changes, and general assembly remain parked | Opened slice: implement the approved provider/result plan. Remaining scope: an observed task demonstrates value and the owner opens a wider topology | Validate chronology, continuity, original departure, traveler/cabin treatment, positioning, self-transfer buffer, and separate-ticket obligations. Never present component prices as a protected through-ticket claim. [ADR 0022](docs/adr/0022-award-first-cash-observations.md), [provider-stage handoff](docs/handoffs/2026-09-21-award-first-provider-results-plan.md), [Review §5](docs/reviews/2026-09-19-search-planning-architecture-review.md#strategy-semantics). |
+| D16 · opened for provider-stage design 2026-09-21 | Provider planning/execution: map M2C logical award queries into exact rectangle-safe award batches, schedule direct endpoint and positioning cash pair/date queries, and own finite pages, attempts, returned rows, bytes, time, result-validation, and scheduled-versus-omitted receipts | Implement the approved provider/result plan | Offline capability evidence; batching fixtures proving no unauthorized cross-product pairs; cash scheduling and hard-stop fixtures; pagination, duplicate, partial, empty, timeout, block/rate-limit, malformed, and schema-drift outcomes as applicable; exact resource accounting; and returned-result attribution/validation. Keep provider capability out of 2C identity. [ADR 0021 amendment](docs/adr/0021-deterministic-search-strategy-compilation.md#2026-09-20-amendment-provider-neutral-compilation-and-structural-safety), [ADR 0022](docs/adr/0022-award-first-cash-observations.md), [provider-stage handoff](docs/handoffs/2026-09-21-award-first-provider-results-plan.md). |
 | D17 · parked; ownership approved 2026-09-20 | Clean up misplaced intent/clarification artifact constraints. Request-expression constraints must be resolved upstream through omission or clarification with explicit user correction; 2C assumes the frozen request is valid | Reopen upstream intent/clarification maintenance or before claiming ownership is fully enforced across active artifacts | Audit and remove misplaced 31-day fixture/expression constraints without adding a 2C window cap; tests must prove invalid or ambiguous expressions stop or clarify upstream and valid finite windows, including more than 31 days, pass to 2C unchanged. Preserve ADR 0016/0017 state, provenance, and correction authority. [Revision record](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md). |
 
 ## Deliberate non-goals, not promises for later
@@ -189,3 +208,14 @@ result validation, and scheduled-versus-deferred accounting in the later provide
 request-expression validity and the cleanup of misplaced 31-day artifacts in intent/clarification;
 2C accepts a valid frozen request and imposes no window-length limit. Both remain parked until their
 stated triggers. See the [revision record](docs/build-log/2026-09-20-m2c-provider-neutral-revision.md).
+
+2026-09-21 — after a read-only cash-source investigation and one isolated successful `gfly` smoke,
+the owner approved the next award-first provider/result direction. D05 is open only for a brief
+direct endpoint cash anchor and cash access/egress observations; a cash-only product remains parked.
+D15 is open only for one cash access + award or award + cash egress journey; general assembly
+remains parked. D16 is open for the capability-bound two-adapter execution design. This work
+executes M2C's already complete search graph rather than adding a new planning milestone. Pure-cash
+itineraries remain outside the ranked award list, and the active runtime is unchanged pending
+implementation. See [ADR 0022](docs/adr/0022-award-first-cash-observations.md), the
+[`gfly` intake](docs/provider-feasibility/2026-09-21-gfly-cash-search-intake.md), and the
+[provider-stage handoff](docs/handoffs/2026-09-21-award-first-provider-results-plan.md).

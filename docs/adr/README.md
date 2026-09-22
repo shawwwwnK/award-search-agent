@@ -35,3 +35,5 @@ Expected sections:
 - [0018: SQLite published geographic catalog with JSON receipts](0018-sqlite-geographic-catalog.md)
 - [0019: LLM-proposed endpoint airports with bounded catalog validation](0019-llm-proposed-endpoint-airport-selection.md)
 - [0020: Market-aware model-proposed gateway candidates](0020-market-aware-model-proposed-gateway-candidates.md)
+- [0021: Deterministic search-strategy compilation](0021-deterministic-search-strategy-compilation.md)
+- [0022: Award-first cash observations and positioning components](0022-award-first-cash-observations.md)

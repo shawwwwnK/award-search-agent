@@ -3,6 +3,14 @@
 - Status: Accepted
 - Date: 2026-09-11
 
+## 2026-09-21 successor decision
+
+[ADR 0022](0022-award-first-cash-observations.md) approves downstream direct-cash benchmarks and
+bounded cash positioning in the next provider/result stage. It consumes M2C's existing endpoint
+probes and positioning dependencies rather than reopening search-strategy compilation. Cash-only
+user requests remain unsupported, and this ADR continues to govern active runtime behavior until
+the successor decision is implemented and accepted.
+
 ## Context
 
 The prior live request boundary required origin, destination, departure, return-or-duration, and

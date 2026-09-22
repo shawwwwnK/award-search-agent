@@ -108,6 +108,17 @@ qualification. Complete 2C relationship accounting remains mandatory; provider s
 execution budgeting belongs to the later provider stage. No prompt-v7 or
 deterministic semantic-rejection change is currently recommended.
 
+On 2026-09-21 the owner approved the next provider/result-stage goal. It executes M2C's already
+complete, untrimmed provider-neutral search graph rather than adding another planning milestone.
+The workflow remains award-first: acquire a brief direct origin-to-destination cash benchmark
+outside the ranked award recommendations, and allow one cash access or egress component to enter
+ranking only inside a deterministically validated award-led journey. The decision and implementation
+boundary are in ADR 0022 and
+`docs/handoffs/2026-09-21-award-first-provider-results-plan.md`. D05 and D15 are only partially
+opened for that narrow slice; cash-only product scope, pure-cash ranking, general hub/component
+assembly, round trips, and provider qualification remain outside it. Implementation has not
+started, so ADR 0016 still governs active runtime behavior.
+
 Do not reopen 2B or treat the implemented 2C compiler as provider execution, M2A adoption, or human
 semantic qualification. The 2B closeout is recorded in
 `docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md`.

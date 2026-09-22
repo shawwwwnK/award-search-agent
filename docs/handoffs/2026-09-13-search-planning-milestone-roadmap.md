@@ -422,6 +422,58 @@ obligations, omission receipts, and replay identity. Its offline gate and model-
 diagnostic do not qualify M2A, provider compatibility, a returned itinerary, an award seat, or a
 bookable journey. Provider request execution and result validation require a separately opened cut.
 
+## Next provider/result stage — award-first observations and cash positioning (goal approved; implementation pending)
+
+On 2026-09-21, the owner approved an award-first two-source direction after a narrow `gfly`
+feasibility investigation. This is the provider execution and result-validation stage downstream
+of M2C, not a new search-planning milestone. The detailed boundary is recorded in
+[ADR 0022](../adr/0022-award-first-cash-observations.md) and the
+[provider-stage handoff](2026-09-21-award-first-provider-results-plan.md).
+
+### Objective
+
+Consume the complete M2C search graph without changing or trimming it, execute work under explicit
+provider budgets with any unscheduled work preserved in receipts, acquire a brief direct origin ->
+destination cash benchmark, and produce ranked intact award itineraries plus any
+validated award-led journey containing one cash access or egress component.
+
+M2C already supplies the untrimmed provider-neutral strategy and logical-query graph. Award
+execution maps its logical queries to the award provider. Direct cash benchmarks project its
+mandatory endpoint probes, and cash positioning resolves its recorded positioning dependency
+around an observed award itinerary. No second compiler or gateway-selection stage is added.
+
+The product remains award-first. Pure-cash itineraries anchor award value and appear outside the
+ranked shortlist. A cash component becomes rankable only after deterministic mixed-journey
+validation. Cash-only requests, round trips, official fare verification, booking, and general
+component assembly remain outside this stage.
+
+### Components
+
+- Accept explicit provider capability contracts for one award operation and pinned `gfly` cash
+  behavior without binding either capability into the M2C plan identity.
+- Build a downstream execution plan with separate award/cash budgets, exact scheduled/attempted/
+  completed/failed/omitted accounting, finite attempts/pages/results/time, and stale-handoff checks.
+- Normalize source-attributed itinerary observations while preserving award-specific points,
+  taxes, cabin and seat evidence and cash-specific amount, currency and traveler-price scope.
+- Search direct cash only across original selected endpoint pairs for the benchmark; do not mirror
+  all compiled award query-date-days.
+- Activate cash positioning only for origin access or destination egress around a relevant observed
+  award itinerary. Validate chronology, continuity, original departure, traveler/cabin treatment,
+  self-transfer buffer, and separate-ticket obligations before candidate admission.
+- Rank intact award and validated award-led mixed candidates with transparent features. Show direct
+  cash observations briefly and separately; never allow them to displace award recommendations.
+- Compare the bounded output with the owner's current manual workflow and report remaining checks.
+
+### Decision gate
+
+Advance only after accepted success/failure fixtures for both providers, offline request/result and
+mixed-candidate validation, exact resource/coverage receipts, a replayable owner preview, and one
+separately authorized bounded live task. The live task must produce award observations and a direct
+cash anchor; when the evidence contains an eligible positioning case, it must also exercise the
+mixed-candidate path. At least one supported award or award-led option must enable a concrete next
+action with less owner effort than the current workaround. One success does not establish broad
+provider reliability or product qualification.
+
 ## Milestone 3 — reviewed strategy documents and RAG-assisted authoring
 
 ### Objective
