@@ -60,8 +60,12 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 The search-planning stage is owner-complete as of 2026-09-21. Milestones 1, 2A, 2B, and 2C are
 implemented and owner-qualified for their declared planning boundaries, and Milestone 0 is retired.
-The next separately scoped stage is provider/result execution under ADR 0022; it consumes the frozen
-`CompiledSearchPlan` boundary and must not be described as additional search planning.
+Provider Stage under amended ADR 0022 is owner-complete as of 2026-09-23 for its declared
+typed, replayable `ProviderResultSet` boundary. It consumes the frozen `CompiledSearchPlan`
+and must not be described as additional search planning. Ranking Stage M1 matching was opened
+and locally implemented on 2026-09-25, with owner qualification pending. M2 heuristic scoring
+and the model-driven Output Stage remain unimplemented; no M2 weights are approved. See
+`docs/build-log/2026-09-25-ranking-m1-matching.md` and its saved plan-linked outputs.
 
 When scoping 2C or later stages, consult
 `docs/reviews/2026-09-19-future-stage-goals.md` for the owner's requested advisory
@@ -116,16 +120,30 @@ qualification. Complete 2C relationship accounting remains mandatory; provider s
 execution budgeting belongs to the later provider stage. No prompt-v7 or
 deterministic semantic-rejection change is currently recommended.
 
-On 2026-09-21 the owner approved the next provider/result-stage goal. It executes M2C's already
+On 2026-09-21 the owner approved the next provider/result-stage goal. On 2026-09-22 the owner named
+it Provider Stage and narrowed its boundary to a typed, replayable `ProviderResultSet`. It executes M2C's already
 complete, untrimmed provider-neutral search graph rather than adding another planning milestone.
 The workflow remains award-first: acquire a brief direct origin-to-destination cash benchmark
 outside the ranked award recommendations, and allow one cash access or egress component to enter
-ranking only inside a deterministically validated award-led journey. The decision and implementation
+ranking only inside a deterministically validated award-led journey in the later ranking/output stage. Provider Stage
+executes bounded Seats.aero and `gfly` calls, captures, parses, normalizes, conservatively
+deduplicates, and attributes observations with validation and coverage receipts. It does not
+assemble mixed journeys, rank, calculate value, explain, or generate recommendations. The decision and implementation
 boundary are in ADR 0022 and
 `docs/handoffs/2026-09-21-award-first-provider-results-plan.md`. D05 and D15 are only partially
-opened for that narrow slice; cash-only product scope, pure-cash ranking, general hub/component
-assembly, round trips, and provider qualification remain outside it. Implementation has not
-started, so ADR 0016 still governs active runtime behavior.
+opened for narrow cash acquisition and later mixed assembly respectively; cash-only product scope, pure-cash ranking, general hub/component
+assembly, round trips, and provider qualification remain outside it. Provider Stage implementation
+started on 2026-09-22 behind a separate explicit CLI/API. The bounded cash contrasts and combined live/replay gate
+passed on 2026-09-23 after a reviewed narrow gfly parser fix. The owner accepted the stage
+on 2026-09-23 for its declared boundary after reviewing the output structure and combined
+example. See `docs/handoffs/2026-09-23-provider-stage-closeout.md` and
+`docs/build-log/2026-09-23-gfly-investigation-and-live-gates.md`.
+ADR 0016 still governs upstream request/session behavior.
+The canonical reusable Provider Stage corpus is `evidence/provider-stage/saved-searches/`;
+start with its README and index. Historical campaign folders were removed on 2026-09-23 at the
+owner's request. Use `data/provider_capabilities/provider-stage-current.json` for new work;
+preserve embedded original settings when replaying saved executions. Saved planning inputs do
+not imply that their entire graphs have live provider coverage.
 
 Do not reopen 2B or treat the implemented 2C compiler as provider execution, availability, itinerary,
 product, or recommendation qualification. M2A adoption and owner qualification are recorded in ADR 0023.
@@ -175,8 +193,8 @@ the planner completion boundary and the knowledge-base completion map.
 
 ## Current non-goals
 
-- Provider integrations
-- Ranking
+- Provider integrations outside the opened Provider Stage Seats.aero and `gfly` slice
+- Ranking M2 heuristic scoring and model-driven Output Stage
 - RAG
 - Production Web UI
 - Authentication

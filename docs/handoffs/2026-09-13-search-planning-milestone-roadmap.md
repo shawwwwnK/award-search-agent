@@ -405,7 +405,7 @@ obligations, omission receipts, and replay identity. Its offline gate and model-
 diagnostic do not independently qualify M2A, provider compatibility, a returned itinerary, an award seat, or a
 bookable journey. Provider request execution and result validation require a separately opened cut.
 
-## Next provider/result stage — award-first observations and cash positioning (goal approved; implementation pending)
+## Provider Stage — execution and structured results (boundary revised 2026-09-22; implementation pending)
 
 On 2026-09-21, the owner approved an award-first two-source direction after a narrow `gfly`
 feasibility investigation. This is the provider execution and result-validation stage downstream
@@ -415,47 +415,50 @@ of M2C, not a new search-planning milestone. The detailed boundary is recorded i
 
 ### Objective
 
-Consume the complete M2C search graph without changing or trimming it, execute work under explicit
-provider budgets with any unscheduled work preserved in receipts, acquire a brief direct origin ->
-destination cash benchmark, and produce ranked intact award itineraries plus any
-validated award-led journey containing one cash access or egress component.
+Consume the complete M2C search graph without changing or trimming it, execute Seats.aero and
+`gfly` work under explicit separate provider budgets, and return a typed, replayable
+`ProviderResultSet` containing normalized, conservatively deduplicated award and cash observations,
+validation findings, provenance, and complete execution/omission receipts. Direct endpoint cash
+and relevant access/egress cash observations are in scope.
 
 M2C already supplies the untrimmed provider-neutral strategy and logical-query graph. Award
 execution maps its logical queries to the award provider. Direct cash benchmarks project its
 mandatory endpoint probes, and cash positioning resolves its recorded positioning dependency
 around an observed award itinerary. No second compiler or gateway-selection stage is added.
 
-The product remains award-first. Pure-cash itineraries anchor award value and appear outside the
-ranked shortlist. A cash component becomes rankable only after deterministic mixed-journey
-validation. Cash-only requests, round trips, official fare verification, booking, and general
-component assembly remain outside this stage.
+The product remains award-first. Mixed-journey assembly, candidate admission, ranking, cash
+benchmark presentation, explanation, and recommendations belong to the later ranking and output
+generation stage. Cash-only requests, round trips, official fare verification, and booking remain
+outside the current product boundary.
 
 ### Components
 
 - Accept explicit provider capability contracts for one award operation and pinned `gfly` cash
   behavior without binding either capability into the M2C plan identity.
-- Build a downstream execution plan with separate award/cash budgets, exact scheduled/attempted/
-  completed/failed/omitted accounting, finite attempts/pages/results/time, and stale-handoff checks.
+- Build a downstream execution plan with separate award/cash budgets, mandatory-first and fair
+  progressive supplemental activation, exact scheduled/attempted/completed/failed/omitted
+  accounting, finite attempts/pages/results/time, and stale-handoff checks. Batch Seats.aero
+  multiple-airport queries as exact rectangles only after a 2 × 2-versus-singletons check.
 - Normalize source-attributed itinerary observations while preserving award-specific points,
   taxes, cabin and seat evidence and cash-specific amount, currency and traveler-price scope.
 - Search direct cash only across original selected endpoint pairs for the benchmark; do not mirror
   all compiled award query-date-days.
 - Activate cash positioning only for origin access or destination egress around a relevant observed
-  award itinerary. Validate chronology, continuity, original departure, traveler/cabin treatment,
-  self-transfer buffer, and separate-ticket obligations before candidate admission.
-- Rank intact award and validated award-led mixed candidates with transparent features. Show direct
-  cash observations briefly and separately; never allow them to displace award recommendations.
-- Compare the bounded output with the owner's current manual workflow and report remaining checks.
+  award itinerary and existing M2C dependency. Keep component observations separate for later
+  deterministic journey validation.
+- Build complete sanitized replay fixtures from actual Intent-to-Search-Plan traces, including
+  exact, whole-month, high-fanout, and Qatar/DOH missing-tax cases, plus controlled provider edge
+  cases. Use these captures to review numerical execution budgets and detail retrieval strategy.
 
 ### Decision gate
 
-Advance only after accepted success/failure fixtures for both providers, offline request/result and
-mixed-candidate validation, exact resource/coverage receipts, a replayable owner preview, and one
-separately authorized bounded live task. The live task must produce award observations and a direct
-cash anchor; when the evidence contains an eligible positioning case, it must also exercise the
-mixed-candidate path. At least one supported award or award-led option must enable a concrete next
-action with less owner effort than the current workaround. One success does not establish broad
-provider reliability or product qualification.
+Advance only after accepted success/failure fixtures for both providers, offline request/result
+validation and deduplication, exact resource/coverage receipts, a replayable `ProviderResultSet`,
+and one bounded owner-relevant live task reaching award and direct cash observations. A positive
+actionable recommendation and comparison with the owner's workflow are later ranking/output and
+overall-core gates. One success does not establish broad provider reliability or product
+qualification. The [revised handoff](2026-09-21-award-first-provider-results-plan.md) governs
+the current stage boundary over this roadmap's original 2026-09-21 formulation.
 
 ## Historical optional follow-ons outside the completed stage
 

@@ -2,6 +2,54 @@
 
 ## Phase
 
+Ranking Stage opened on 2026-09-25. Milestone 1 deterministic matching/validation of award
+itineraries with at most one cash access or egress flight is now locally implemented and
+independently reviewed; owner qualification remains pending. Milestone 2 transparent
+deterministic heuristic ranking has no approved weights or implementation yet.
+The subsequent model-driven Output Stage is separate and not yet opened. The owner wants
+all meaningful cash-flight alternatives retained and grouped under their award option;
+unknown price or traveler evidence must remain visible rather than causing silent omission.
+Cash positioning acquisition stays on its current same-local-date sample for now.
+At the separate-ticket boundary, the owner's timing rule is at least two elapsed hours and an
+onward departure on the transfer airport's local arrival date or the following date. This
+replaces the earlier two-night proposal.
+Cash access on both ends and expanded acquisition dates are recorded in
+[D15 and D18](../DEFERRED.md). The stage's proposed contract, current evidence limits, and
+remaining policy decisions are in the
+[Ranking Stage design record](handoffs/2026-09-25-ranking-stage-design.md).
+The [M1 build log](build-log/2026-09-25-ranking-m1-matching.md) and
+[saved matching outputs](../evidence/ranking-stage/m1/README.md) show the complete plan-linked
+pairing accounting and explicit conditional results. Cash cabin scope remains a provisional
+award-only interpretation pending owner direction.
+
+Provider Stage is owner-complete as of 2026-09-23 for its declared typed, replayable
+`ProviderResultSet` boundary. Its local implementation completed bounded capture and live/replay
+engineering gates: bounded Seats.aero and gfly calls, deterministic accounting, normalization,
+and exact offline replay. This is owner acceptance of the Provider Stage boundary, not provider
+reliability, bookability, product, or recommendation qualification. Provider Stage does not
+perform the later M1 assembly, M2 scoring, or Output Stage generation. See the
+[Provider Stage closeout](handoffs/2026-09-23-provider-stage-closeout.md).
+
+The single reusable saved-search collection is
+[`evidence/provider-stage/saved-searches/`](../evidence/provider-stage/saved-searches/README.md).
+Its index binds two bounded live results to their frozen plans, provider bundles, acquisition
+tapes, and response bodies. Five frozen planning inputs remain for plan inspection and tests.
+The earlier standalone captures and combined result were retired at the owner's request;
+historical build logs describe their original execution, not active paths.
+The active development capability and budget settings are
+`data/provider_capabilities/provider-stage-current.json`. Each saved run retains its embedded
+settings to preserve byte-identical replay.
+
+The 2026-09-25 mixed-access live run returned 212 award summaries, 23 timed awards, four direct
+cash observations, and 76 positioning cash observations. The exact-business run returned 41
+award summaries, six timed awards, six direct cash observations, and 66 positioning cash
+observations. Both results are partial and replay exactly. They demonstrate plan-linked award
+and cash acquisition, not validated mixed journeys or full execution of every saved plan.
+See the [refresh record](build-log/2026-09-25-plan-linked-provider-corpus.md),
+[consolidation record](build-log/2026-09-23-saved-searches-consolidation.md),
+[implementation record](build-log/2026-09-22-provider-stage-implementation.md), and
+[live-gate evidence](build-log/2026-09-23-gfly-investigation-and-live-gates.md).
+
 The search-planning stage is owner-complete as of 2026-09-21. Its active result is the frozen,
 provider-neutral `EffectiveRequest -> CompiledSearchPlan` boundary. Milestones 1, 2A, 2B, and 2C
 are implemented and owner-qualified for their declared planning scopes; Milestone 0 is retired.
@@ -10,13 +58,27 @@ The stage closeout is recorded in
 provider execution, observations, normalization, ranking, and recommendations are downstream work,
 not unfinished search planning.
 
+On 2026-09-22, the owner named the next cut **Provider Stage** and narrowed its completion
+boundary to a typed, replayable `ProviderResultSet`. It will execute capability-aware, budgeted
+Seats.aero and `gfly` searches against the frozen request and complete M2C plan, then capture,
+parse, normalize, conservatively deduplicate, and attribute the observations with validation and
+coverage receipts. Direct endpoint cash and relevant access/egress cash acquisition remain in this
+stage. Mixed-journey assembly, ranking, value calculations, explanation, and recommendation output
+belong to a later ranking and output generation stage. The owner accepted deterministic mandatory-
+first/progressive execution, exact rectangle batching gated by comparison evidence, conservative
+deduplication, and fixture-based selection of numerical provider budgets. Representative provider
+captures will draw from active end-to-end traces, including Qatar/DOH missing-tax behavior. See
+[ADR 0022's amendment](adr/0022-award-first-cash-observations.md#2026-09-22-amendment--provider-stage-boundary)
+and the [revised handoff](handoffs/2026-09-21-award-first-provider-results-plan.md). Planning and
+runtime code remain unchanged.
+
 On 2026-09-21, the owner approved the next provider/result-stage goal: consume M2C's complete
 search graph without modifying it, execute its work with an award provider, add a brief direct
 origin -> destination cash benchmark, and
 use bounded cash positioning around observed award itineraries. This is downstream execution of
 M2C's already complete provider-neutral options, not a new planning milestone. Pure-cash
 observations remain outside the ranked award shortlist; a cash access or egress component may enter
-ranking only inside a deterministically validated award-led journey. The decision is recorded in
+ranking only inside a deterministically validated award-led journey in the later ranking/output stage. The decision is recorded in
 [ADR 0022](adr/0022-award-first-cash-observations.md), the
 [`gfly` feasibility intake](provider-feasibility/2026-09-21-gfly-cash-search-intake.md), and the
 [provider-stage handoff](handoffs/2026-09-21-award-first-provider-results-plan.md). No provider

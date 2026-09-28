@@ -1,176 +1,143 @@
-# Next provider stage: award-first observations and cash positioning
+# Provider Stage: execution and structured results
 
-Date: 2026-09-21. Status: **stage goal approved; implementation not started.**
+Date: 2026-09-21. Revised: 2026-09-23. Status: **owner-complete for the declared ProviderResultSet boundary on 2026-09-23.**
 
-## Objective
+The [Provider Stage closeout](2026-09-23-provider-stage-closeout.md) records the accepted
+boundary, evidence, and remaining limits.
 
-Turn a frozen supported one-way award request and its provider-neutral compiled plan into a small,
-traceable recommendation output containing:
+Implementation and verification evidence is tracked in the
+[2026-09-22 build log](../build-log/2026-09-22-provider-stage-implementation.md) and
+[2026-09-23 follow-up](../build-log/2026-09-23-gfly-investigation-and-live-gates.md).
 
-- normalized award observations;
-- a brief direct origin -> destination cash benchmark outside the ranked award list;
-- ranked intact award itineraries; and
-- when evidence permits, ranked award-led journeys with one validated cash access or egress
-  component.
+## Objective and boundary
 
-The stage should reduce the owner's manual provider-switching and spreadsheet work. It does not
-promise comprehensive inventory, official fare verification, bookability, or a cash-only product.
-
-## Governing decisions
-
-- [ADR 0016](../adr/0016-one-way-award-request-boundary.md) continues to govern active upstream
-  behavior until implementation changes are accepted.
-- [ADR 0021](../adr/0021-deterministic-search-strategy-compilation.md) keeps M2C provider-neutral.
-- [ADR 0022](../adr/0022-award-first-cash-observations.md) governs this stage's award-first cash
-  roles, candidate admission, and ranking boundary.
-- The [`gfly` intake](../provider-feasibility/2026-09-21-gfly-cash-search-intake.md) is feasibility
-  evidence, not provider qualification.
-
-## Stage boundary
+Consume the current frozen `EffectiveRequest` and complete `CompiledSearchPlan`; execute bounded
+Seats.aero award and `gfly` cash searches; capture, parse, normalize, and conservatively deduplicate
+the results into a typed, replayable `ProviderResultSet` that a later ranking and output generation
+stage can use directly.
 
 ```text
 frozen EffectiveRequest + current CompiledSearchPlan
-    -> capability-bound ProviderExecutionPlan
-    -> award and cash ProviderObservations
-    -> normalized ObservedItineraries
-    -> intact award candidates + bounded mixed candidates
-    -> ranked award recommendations + separate cash benchmark summary
+    -> capability-aware ProviderExecutionPlan and deterministic activation
+    -> Seats.aero and gfly requests with captured responses
+    -> source-attributed parsed and normalized observations
+    -> conservative deduplication, validation findings, and coverage receipts
+    -> typed replayable ProviderResultSet
+    -> later ranking and output generation stage
 ```
 
-This provider stage does not mutate request/session state, change M2C identity, reinterpret free-text constraints,
-or convert provider observations into catalog or route facts.
+The `ProviderResultSet` binds request, plan, provider capability, execution policy, and run
+identities. It retains award availability summaries and, where details support them, provider-returned
+itineraries; direct endpoint cash observations and relevant access/egress cash observations; distinct
+offers and raw/sanitized evidence references; exact transport-to-logical-query/strategy attribution;
+field-level unknowns; validation findings; and scheduled, attempted, completed, empty, partial,
+failed, omitted, and coverage state. An absent pair in an interrupted page stream is not an empty
+result. Stale request or plan identity prevents execution and attachment.
 
-M2C already supplies the complete provider-neutral search work; this stage does not add another
-strategy compiler or trim that graph. Award execution maps its logical queries to the accepted
-award provider. Direct cash benchmarks derive from the mandatory endpoint probes, while cash access
-or egress resolves an existing M2C positioning dependency around a returned award itinerary.
-These are provider-execution projections and observations, not new gateway proposals or M2C search
-options.
+This stage does not modify request/session state, M2C identity, or the full compiled graph. It does
+not reinterpret free text, infer provider routes or bookability, assemble mixed journeys, rank,
+calculate redemption value, explain options, or generate user-facing recommendations. The later
+stage owns intact-award candidate admission, bounded cash-access/award and award/cash-egress
+assembly, ranking, direct-cash presentation, and output generation under ADR 0022's award-first
+product policy. ADR 0016 still governs the active runtime.
 
-## Work packages
+## Capability, budgeting, and activation
 
-### P1 — capability and execution contracts
+Accept a reviewed Seats.aero operation and pinned `gfly` behavior with request, response, freshness,
+error, and evidence semantics before implementation. Keep provider capabilities and resource limits
+downstream from M2C. The M2C 100 selected-origin × destination-pair guard is structural, not a
+provider budget. Its retired 31-day, 24-relationship, 128-query, and 4,000 query-date-day limits
+must not return as execution admission rules.
 
-Accept one reviewed Seats.aero operation for awards and pinned `gfly` behavior for cash. Define
-provider-specific request, response, error, freshness, and evidence contracts before application
-orchestration.
+Define adjustable, separate award and cash budgets for requests, attempts, pages, detail calls,
+returned rows, bytes, and elapsed time. Choose numerical values from representative captures and
+owner account limits rather than inheriting planning limits. Preserve the entire M2C graph and
+account for every unexecuted logical unit. A simple list-prefix cut is not an execution policy.
 
-The execution plan records logical work separately from transport work and owns:
+Run mandatory endpoint award work first, then a bounded direct endpoint cash sample, then fair
+progressive supplemental award work. Deterministic selection uses shared-query reuse, marginal
+endpoint/strategy coverage, completion of atomic strategy bundles, provider cost, and fair rotation
+across endpoint pairs. Relevant cash access or egress queries may activate only when an observed
+award result and an existing M2C positioning dependency justify them. `repositioning_allowed=false`
+excludes dependent positioning work. No model chooses provider actions. Hard stops cover stale
+handoff, exhausted budget, provider block/rate limit, and schema drift; failures produce explicit
+partial/omitted receipts. Do not evade blocking or retry without bound.
 
-- provider and operation identity;
-- scheduled, attempted, completed, empty, partial, failed, and omitted work;
-- finite requests, attempts, pages/details, returned rows, bytes, and elapsed time;
-- exact source-query attribution; and
-- hard stops for stale handoff, cash blocking/rate limit, schema drift, and exhausted budgets.
+Seats.aero accepts multiple origins and destinations per request, so exact airport rectangles can
+save calls. A rectangle is eligible only if every cross-product pair is authorized by the compiled
+work and shares compatible dates, filters, cabin, and activation scope. Gate batching on a complete
+2 × 2-versus-four-singletons acceptance experiment that checks attribution and pair coverage; the
+provider does not promise that an unreturned pair was exhaustively evaluated. Capture all pages to
+claim a completed stream; track duplicate IDs across pages. Compare inline `include_trips` with
+summary plus bounded `Get Trips` before fixing detail retrieval. Keep availability summaries and
+complete itineraries as separate evidence levels.
 
-Seats.aero may use exact rectangle-safe airport-list batching only after fixtures prove result
-attribution and no unauthorized cross-product pairs. `gfly` cash queries remain individual airport
-pair/date searches in the first slice.
+`gfly` remains one pair/date per acquisition in the first slice. Its local `--limit` truncates
+displayed results after fetching and is not an upstream work budget. Capture the complete response
+once per selected pair/date, with no automatic retry on blocking or schema drift. Direct cash
+queries derive from original endpoint probes; do not mirror every award query-date-day into cash.
 
-### P2 — deterministic activation policy
+## Observation contract
 
-Use separate award and cash budgets. The initial order is:
+Record source/backend/version, exact query and logical uses, airport sequence, local times and
+catalog-derived timezone instants, carriers, duration/stops where supplied, requested traveler and
+cabin scope, retrieval time, immutable sanitized evidence digest, and raw field state. Award records
+retain program, points, taxes/fees, cabin, and seats independently. Cash records retain amount,
+currency, and per-traveler/party/unknown price scope. A requested traveler count or cabin is not
+proof of returned scope; zero, absent, null, and unknown stay distinct. In particular, Qatar
+Seats.aero results may omit taxes/fees and seat evidence; never convert absence to zero.
 
-1. execute mandatory award endpoint work;
-2. acquire a bounded direct cash benchmark over original selected endpoint pairs;
-3. normalize and validate intact results;
-4. activate award supplemental work under the accepted award-provider budget;
-5. activate cash access or egress only when an observed award itinerary and a compiled access
-   relationship make that component relevant; and
-6. stop when the next action cannot improve a supported output within the remaining budget.
+Deduplicate exact transport repeats conservatively while preserving distinct programs, cabins,
+points, fees, seats, price scopes, observation times, and evidence. Validation checks parseability,
+chronology, airport attribution, request scope, and supported fields, and records unresolved facts.
+It does not turn a multi-component search hypothesis into a validated journey.
 
-This is a deterministic controller. No new model call chooses provider work. Direct cash is never
-run for hubs or used to create a cash-only alternative network. Cash positioning is limited to
-`O -> G + G -> D award` and `O -> A award + A -> D`.
+## Pre-implementation capture campaign
 
-Unknown repositioning permission may authorize bounded read-only research but cannot make a mixed
-candidate rankable. `repositioning_allowed=false` excludes dependent cash work. A true value does
-not establish separate-ticket tolerance or connection feasibility.
+Use actual airports and dates from active Intent-to-Search-Plan end-to-end traces to select common
+cases, then add controlled provider edge cases. Predeclare the queries, fixed provider versions,
+limits, stop conditions, and expected evidence before calls. Preserve complete sanitized responses,
+metadata, pagination, errors, and per-call receipts as immutable replay fixtures; avoid deliberate
+blocking. Live captures are development evidence, not provider qualification.
 
-### V — observation normalization and validation
+The core trace-derived set includes `ready_exact_airports` (SFO–BKK, exact outbound date, business,
+two travelers), `mixed_award_cash_eligible` (SFO–BKK, exact outbound date), `ready_whole_month`
+(SFO–BKK, May 2027), and the high-fanout `united_states_to_japan` planning trace. Use the actual
+compiled airport sets, dates, and logical uses from each saved trace for Seats.aero; project
+corresponding selected endpoint pair/dates into `gfly` under its separate budget. These cases cover
+ordinary exact searches, mixed intent, a wide date window, and multiple selected airports. Record
+which trace supplied every capture so convenient hand-picked pairs cannot replace the actual
+upstream distribution.
 
-Use a common itinerary core without erasing provider-specific meaning. Required common evidence
-includes source, query, airport sequence, local times, timezone-normalized instants, duration,
-stops, displayed carriers, traveler count/scope, observation/retrieval time, and raw/sanitized
-evidence digest.
+Add a Qatar-source/DOH branch from `united_states_to_india`: JFK–DOH on May 12–14, 2027 and
+DOH–BOM on May 11–16, 2027, business, source `qatar`. Capture the provider's actual tax and seat
+field states, including absent/unknown values. Do not label these as confirmed flights or assume
+that Seats.aero will return inventory on those dates.
 
-Cash observations retain amount, currency, and whether the amount is per traveler, party total, or
-unknown. Award observations retain points, taxes/fees, program, cabin and seat evidence where
-available. Missing and zero remain distinct.
+For Seats.aero, also compare a complete compatible 2 × 2 rectangle with four singletons; test a
+dense multi-airport/multi-day paginated search, an apparently absent batched pair against a
+singleton, detail retrieval modes, program differences, missing taxes/seats/trips, and date-line or
+window-boundary behavior. For `gfly`, add a small independent contrast set for dense domestic,
+international/date-line, one-versus-two travelers, complex connection, and sparse/non-US behavior
+after the trace-derived captures. One full JSON capture per pair/date, default backend and throttle,
+fixed currency, and no automatic retry. Use synthetic offline fixtures for failures that should
+not be induced live.
 
-An intact provider-returned itinerary can become a candidate after its applicable request checks.
-A two-component mixed journey additionally requires:
+## Completion evidence and sequence
 
-- endpoint continuity and no unsupported airport change;
-- timezone-aware chronology and a versioned self-transfer buffer;
-- first-departure compliance with the original request;
-- traveler and cabin treatment;
-- separate-ticket labeling; and
-- explicit unresolved baggage, check-in, terminal, visa, and protection obligations.
+1. Record reviewed provider capability contracts and representative immutable sanitized success,
+   empty/partial, failure, pagination, and schema-drift fixtures for both adapters as applicable.
+2. Offline tests prove request mapping, rectangle safety, pagination accounting, attribution,
+   normalization, conservative deduplication, price scope, timezones, traveler/cabin treatment,
+   stale-identity blocking, and finite resource/coverage accounting.
+3. Replay the trace-derived and edge-case fixture campaign through the typed `ProviderResultSet`;
+   independently review whether every executed and omitted M2C logical unit is accounted for.
+4. Run a bounded owner-relevant live task that reaches award observations and a direct cash
+   observation, with truthful empty/partial behavior and explicit unsupported evidence. Compare
+   provider effort, coverage, and data quality with the planned budget. One task is development
+   evidence, not broad provider reliability or product qualification.
 
-Failed validation produces a rejected candidate or research lead, never a success-shaped journey.
-
-### U — award-first shortlist and cash anchor
-
-The main ranked list contains intact award candidates and validated award-led mixed candidates. It
-does not contain pure-cash itineraries.
-
-The cash benchmark is a brief adjacent summary: representative direct cash observations, their
-route/date/cabin/traveler comparison scope, retrieval time, and limitations. It may support a
-clearly labeled redemption-value calculation only when the compared evidence is sufficiently
-aligned and the valuation policy is explicit.
-
-Ranking applies feasibility and hard requirements before transparent preference features such as
-departure fit, cabin, duration, stops, points, award taxes/fees, cash positioning outlay,
-self-transfer burden, and unresolved checks. Points are not silently converted to currency.
-
-Explanation may use a model only over validated structured records. Templates are the initial
-baseline. Every factual statement must trace to an observation or deterministic derivation.
-
-## Explicit non-goals
-
-- Cash-only request support or ranking pure-cash itineraries with award candidates.
-- Round-trip pairing.
-- Official fare verification, booking links, booking action, or availability guarantee.
-- General award/cash hub substitution or more than two provider-returned components.
-- Airport-changing ground transfers.
-- Automatic points valuation, personal wallet/profile, transfer execution, RAG, persistence,
-  deployment, monitoring, or product multi-agent orchestration.
-- Reopening M2A, M2B, or the M2C compiler.
-
-## Completion evidence
-
-The stage is complete only when all of the following are true:
-
-1. Provider capability records and immutable sanitized fixtures cover declared success and failure
-   outcomes for both adapters.
-2. Offline tests prove request mapping, rectangle safety where batching is used, exact attribution,
-   normalization, deduplication, price scope, timezones, traveler/cabin treatment, and finite
-   resource accounting.
-3. Direct cash observations cannot enter the ranked award list by construction and test.
-4. Mixed-candidate tests cover cash-first access, award-first egress, buffer failure, overnight and
-   date-line chronology, airport discontinuity, unknown positioning, and unresolved self-transfer
-   obligations.
-5. Stale request/plan identity prevents execution or result attachment.
-6. One bounded live owner-relevant task reaches award observations and a cash benchmark; if the
-   evidence contains an eligible positioning case, it also exercises the mixed-candidate path.
-7. The final output reports searched, omitted, empty, partial, and failed scope and is compared with
-   the owner's current workflow for time, manual checks, and usefulness.
-8. At least one supported award or award-led mixed option enables a concrete owner next action with
-   less total effort than the current workaround. Honest empty/partial behavior is also required but
-   is not a substitute for this positive capability evidence.
-
-One successful live task is development evidence, not broad provider reliability or product
-qualification.
-
-## Implementation sequence
-
-1. Freeze capability records, observation contracts, budgets, and replay fixtures.
-2. Implement provider adapters and execution accounting behind fake transports.
-3. Implement normalization and intact award-candidate validation.
-4. Implement direct cash benchmark acquisition and non-ranking output.
-5. Implement the bounded cash-access/award and award/cash-egress candidate assembler.
-6. Add transparent ranking and explanation from validated records.
-7. Run offline gates, a replayable owner preview, then the separately authorized bounded live task.
-
-Do not begin with a broad live run or feed all compiled query-date-days into `gfly`.
+First capture and review representative responses; choose budget numbers and detail strategy from
+that evidence; implement adapters and deterministic scheduling behind fake transports; then run
+offline and bounded live gates. Ranking/output usefulness and a positive actionable recommendation
+are completion gates for the later stage and overall workflow, not this `ProviderResultSet` stage.

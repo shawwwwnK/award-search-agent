@@ -15,8 +15,10 @@ it does not open implementation work.
 
 The search-planning stage is complete and owner-closed as of 2026-09-21. Milestones 1, 2A, 2B, and
 2C are implemented and owner-qualified for their declared planning boundaries; Milestone 0 is
-retired. The next separately scoped work is provider/result execution under ADR 0022, which consumes
-the frozen `CompiledSearchPlan` rather than extending planning.
+retired. Provider Stage under ADR 0022 is owner-complete as of 2026-09-23 for its declared
+`ProviderResultSet` boundary: typed observations, bounded execution, evidence, and replay from
+the frozen `CompiledSearchPlan`. The bounded capture and combined live/replay engineering gates
+passed. See the [stage closeout](docs/handoffs/2026-09-23-provider-stage-closeout.md).
 
 Milestone 2B gateway-airport discovery is implemented and owner-closed. Milestone 2C deterministic
 search-strategy compilation is implemented in place, with no V1 compatibility path. Its integrated
@@ -51,8 +53,8 @@ historical diagnostics, not semantic qualification. The final prompt-v6/casebook
 case-trials and 42/42 calls across two trials, with 82 accepted candidates, 43 scopes, and 400 accepted
 relationships; one PNH catalog-absence rejection and three market-mismatch advisories were retained.
 The provider-neutral compiler preserves pair-level logical coverage; grouped provider requests are
-a downstream projection. Provider execution remains later, including Seats.aero API calls, provider
-payload mapping, result normalization, and ranking. See the
+a downstream projection. Provider Stage implements execution and normalization downstream;
+ranking remains later work. See the
 [search-planning stage brief](docs/handoffs/2026-09-10-search-plan-design-stage.md) and
 [`ADR 0016`](docs/adr/0016-one-way-award-request-boundary.md),
 [`ADR 0020`](docs/adr/0020-market-aware-model-proposed-gateway-candidates.md),
@@ -227,8 +229,7 @@ evidence.
 
 - Point-balance constraints
 - Spending-budget constraints
-- Provider integrations
-- Provider-result normalization and validation
+- Provider integrations beyond the opened Seats.aero/`gfly` slice
 - Ranking
 - RAG
 - Production Web UI
@@ -237,8 +238,40 @@ evidence.
 - Multi-agent orchestration
 - Deployment infrastructure
 
-Travel-provider integrations have not yet been implemented. Nager.Holidays is used only for
-holiday-calendar support inside request understanding. Measured results will be recorded only after
-real runs, not inferred from scaffold-only setup.
+Provider Stage has isolated Seats.aero/`gfly` adapters, deterministic execution, and a typed
+`ProviderResultSet`; its bounded live/replay gates passed and the owner accepted the declared stage boundary. Nager.Holidays is used only for
+holiday-calendar support inside request understanding.
+
+### Local Provider Stage command
+
+`PYTHONPATH=src .venv/bin/python -m award_agent.cli.provider_results --help` describes the
+explicit `plan`, `replay`, and `live` modes. The default `plan` mode makes no provider calls.
+Supply a JSON `ProviderInputBundle` with the current compiled plan, separate caller authority,
+explicit resource policy, and evidence-bound capabilities. Replay additionally requires an exact
+acquisition tape. Live mode requires reviewed capabilities, `SEATS_AERO_API_KEY`, pinned `gfly
+0.3.0`, and a new `--record-tape` output. Existing output files are never overwritten.
+
+The [saved-search collection](evidence/provider-stage/saved-searches/README.md) is the single
+entry point for reusable plan-linked live results, coverage, and offline replay. Its index binds
+two current results to frozen planning inputs, provider bundles, tapes, and captured bodies.
+The earlier standalone contrast collection has been retired.
+
+Use `data/provider_capabilities/provider-stage-current.json` for active development settings.
+Saved execution bundles retain their own original policy snapshots for exact replay. The local
+cash adapter uses `--gfly-executable /private/tmp/gfly-live-py312/bin/python
+--gfly-wrapper scripts/gfly_compat.py`; see the
+[compatibility record](docs/provider-feasibility/2026-09-23-gfly-compatibility.md).
+Use `--catalog` with the matching catalog release for connection-airport timezones.
+Provider qualification is unclaimed. Provider Stage itself stops before journey assembly.
+
+### Local Ranking M1 command
+
+`PYTHONPATH=src .venv/bin/python -m award_agent.cli.ranking_match --help` describes the
+offline matching command. Supply one frozen Provider Stage bundle and its attached result;
+the command writes a new `MatchedJourneySet` JSON file with every plan-authorized one-cash
+pairing, validation reasons, grouping IDs, direct-cash benchmarks, and original evidence.
+It makes no provider or model calls. The two plan-linked examples and M1 validation evidence
+are described in [the M1 build log](docs/build-log/2026-09-25-ranking-m1-matching.md).
+Heuristic scoring and model-written output belong to later milestones.
 
 The living design workbook is at `/Users/shawnkang/bots/workbook_formatted.md`. It is a design aid for broader product context; repository docs and ADRs capture implementation-specific decisions and superseding boundaries.
