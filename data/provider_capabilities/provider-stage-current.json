@@ -1,0 +1,79 @@
+{
+  "award_capability": {
+    "backend": "partnerapi",
+    "caveats": [
+      "Runtime uses singleton pairs; comparison evidence does not enable unimplemented batching.",
+      "Requested traveler count is not proof of sufficient returned seats.",
+      "Qatar fee fields may be unavailable despite returned numeric zero.",
+      "Qatar seat counts are documented unsupported even when raw positive numbers are returned.",
+      "Account-specific remaining quota was not observed.",
+      "Reviewed development captures do not establish provider qualification."
+    ],
+    "detail_strategy": "get_trips",
+    "evidence_digests": [
+      "48a7f27f7c60528e86563f54b1e1995cc20354555120d70d62c2237bbc1ac127",
+      "ceab73e6c6d622f0160be0ce7cb387f3bc9b761c3b05466121a6b9e08e7910ea",
+      "296dcdb4b9954071dae5b1c873685b8344378712ebb795739e6012cb7973abbe"
+    ],
+    "operation": "cached_search",
+    "provider": "seats_aero",
+    "rectangle_acceptance_evidence": [],
+    "rectangle_batching_accepted": false,
+    "reviewed": true,
+    "version": "cached-search-v1"
+  },
+  "cash_capability": {
+    "backend": "google",
+    "caveats": [
+      "Cash price scope and returned traveler/cabin adequacy remain unknown.",
+      "Default backend and persistent throttle must remain enabled.",
+      "Indicative observations are not bookability or provider qualification.",
+      "Repository compatibility launcher maps only observed empty price vector to null; all itineraries are retained.",
+      "Pinned gfly 0.3.0 and fast-flights 3.1.0 source integrity is checked before the in-memory compatibility change."
+    ],
+    "detail_strategy": "none",
+    "evidence_digests": [
+      "6f435ad676c1f55e73e87d8b2fbdd43750a97f1659932ae78913c7f37a47626a",
+      "20a1fb350742e0c10002913354bee72f49050b9307031195d59d0c40352b65b1"
+    ],
+    "operation": "search",
+    "provider": "gfly",
+    "rectangle_acceptance_evidence": [],
+    "rectangle_batching_accepted": false,
+    "reviewed": true,
+    "version": "0.3.0+award-search-unpriced-v1"
+  },
+  "policy": {
+    "award_budget": {
+      "attempts": 24,
+      "bytes": 4194304,
+      "detail_calls": 2,
+      "elapsed_seconds": 90.0,
+      "pages": 22,
+      "requests": 12,
+      "rows": 1000
+    },
+    "budget_evidence": [
+      "docs/provider-feasibility/2026-09-22-provider-capabilities.md",
+      "evidence/provider-stage/saved-searches/index.json",
+      "Conservative development policy from plan-linked captures; account remaining quota unknown.",
+      "docs/build-log/2026-09-25-plan-linked-provider-corpus.md"
+    ],
+    "cash_budget": {
+      "attempts": 3,
+      "bytes": 2097152,
+      "detail_calls": 0,
+      "elapsed_seconds": 90.0,
+      "pages": 3,
+      "requests": 3,
+      "rows": 250
+    },
+    "currency": "USD",
+    "direct_cash_samples": 1,
+    "page_size": 100,
+    "positioning_cash_samples": 2,
+    "request_timeout_seconds": 30.0,
+    "retries": 0,
+    "version": "provider-development-v4-access-detail-priority"
+  }
+}

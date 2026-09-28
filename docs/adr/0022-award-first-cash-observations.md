@@ -1,6 +1,12 @@
 # ADR 0022: Award-first cash observations and positioning components
 
-Date: 2026-09-21. Status: accepted for the next-stage design; runtime implementation pending.
+Date: 2026-09-21. Status: accepted; Provider Stage owner-complete for its declared boundary on 2026-09-23.
+
+Implementation evidence (2026-09-22/23) is in the
+[Provider Stage build log](../build-log/2026-09-22-provider-stage-implementation.md).
+The [Provider Stage closeout](../handoffs/2026-09-23-provider-stage-closeout.md) records the
+owner's acceptance. Provider qualification and ranking/output work remain unclaimed.
+The separate provider API/CLI does not alter the frozen upstream ADR 0016 request/session policy.
 
 ## Context
 
@@ -144,3 +150,27 @@ Revisit the asymmetric treatment if users need a cash-only product, if direct ca
 prove important enough to enter the main ranking, if observed tasks justify broader mixed-mode hub
 assembly, or if `gfly` reliability or use constraints make it unsuitable. Any broader topology or
 ranking change requires new evidence and a versioned policy decision.
+
+## 2026-09-22 amendment — Provider Stage boundary
+
+The owner named the next stage **Provider Stage** and narrowed its deliverable to a typed,
+replayable `ProviderResultSet`. This amendment supersedes the earlier assignment of mixed-candidate
+assembly, ranking, direct-cash presentation, and explanation to the immediate provider stage; the
+award-first product policy and two authorized cash observation roles above remain accepted.
+
+Provider Stage consumes the frozen `EffectiveRequest` and complete `CompiledSearchPlan`, executes
+bounded Seats.aero award and `gfly` cash calls, and captures, parses, normalizes, conservatively
+deduplicates, and attributes their results. It acquires selected direct endpoint cash observations
+and relevant cash access/egress observations when an observed award result and M2C dependency
+justify them. It preserves field-level unknowns, validation findings, immutable evidence references,
+and exact execution/omission coverage receipts. It neither assembles mixed journeys nor admits or
+ranks candidates. Those activities, and final output, belong to a later ranking and output
+generation stage. D15's bounded mixed-journey opening is therefore assigned to that later stage.
+
+The execution policy preserves the entire M2C graph. Mandatory award work precedes bounded direct
+cash work; supplemental work is selected progressively using query reuse, marginal coverage,
+dependencies, atomic bundle completion, provider cost, and fair endpoint rotation. Seats.aero
+multi-origin/multi-destination rectangle batching requires a complete 2 × 2-versus-singleton
+acceptance check. Provider budgets are separate from M2C's structural 100-pair guard and will be
+numerically set after representative trace-derived provider captures. The [revised handoff](../handoffs/2026-09-21-award-first-provider-results-plan.md)
+specifies those cases, including Qatar/DOH missing-tax evidence. No runtime policy changed.

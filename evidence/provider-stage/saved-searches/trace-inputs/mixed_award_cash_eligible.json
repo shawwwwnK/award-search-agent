@@ -1,0 +1,2155 @@
+{
+  "current_effective_request": {
+    "cabins": [],
+    "conflicts": [],
+    "context": {
+      "reference_date": "2026-08-30",
+      "timezone": "America/Los_Angeles"
+    },
+    "departure_window": {
+      "end": "2026-10-05",
+      "precision": "exact",
+      "raw_text": "October 5",
+      "start": "2026-10-05"
+    },
+    "destinations": [
+      {
+        "kind": "airport",
+        "raw_text": "BKK",
+        "value": "BKK"
+      }
+    ],
+    "field_provenance": [
+      {
+        "amendment_id": null,
+        "field": "travelers",
+        "source": {
+          "field": "travelers",
+          "kind": "initial_snapshot"
+        }
+      },
+      {
+        "amendment_id": null,
+        "field": "origin",
+        "source": {
+          "field": "origin",
+          "kind": "initial_snapshot"
+        }
+      },
+      {
+        "amendment_id": null,
+        "field": "destination",
+        "source": {
+          "field": "destination",
+          "kind": "initial_snapshot"
+        }
+      },
+      {
+        "amendment_id": null,
+        "field": "search_mode",
+        "source": {
+          "field": "search_mode",
+          "kind": "initial_snapshot"
+        }
+      },
+      {
+        "amendment_id": null,
+        "field": "departure",
+        "source": {
+          "field": "departure",
+          "kind": "initial_snapshot"
+        }
+      }
+    ],
+    "hard_constraints": [],
+    "origins": [
+      {
+        "kind": "airport",
+        "raw_text": "SFO",
+        "value": "SFO"
+      }
+    ],
+    "raw_text": "Find one award and cash flight from SFO to BKK on October 5.",
+    "repositioning_allowed": null,
+    "search_modes": [
+      "award",
+      "cash"
+    ],
+    "temporal_contributions": [
+      {
+        "amendment_id": null,
+        "contribution_id": "initial:departure_window",
+        "date_window": {
+          "end": "2026-10-05",
+          "precision": "exact",
+          "raw_text": "October 5",
+          "start": "2026-10-05"
+        },
+        "interpretation_provenance": null,
+        "kind": "departure_window",
+        "raw_text": "October 5",
+        "source": {
+          "field": "departure",
+          "kind": "initial_snapshot"
+        },
+        "template_provenance": null
+      }
+    ],
+    "travelers": 1,
+    "unknowns": [
+      {
+        "detail": "No cabin preference was stated.",
+        "evidence": [],
+        "field": "cabin",
+        "raw_text": null,
+        "reason": "missing"
+      }
+    ]
+  },
+  "current_revision": 0,
+  "current_session_id": "intent-e2e:mixed_award_cash_eligible:1",
+  "expected_compilation_binding_digest": "b6aa5cd8c5155a466f0aa3cdba661faf47d91d93ba8b0b0670e96da0590c69cc",
+  "plan": {
+    "airport_directory": [
+      {
+        "airport_iata": "HKG",
+        "airport_id": "ourairports:26535",
+        "evidence_source_ids": [
+          "airports.csv:ourairports:26535",
+          "allCountries.txt:allCountries:6301089",
+          "alternateNamesV2.txt:alternateNamesV2:1890186",
+          "countryInfo.txt:countryInfo:HK"
+        ],
+        "timezone": "Asia/Hong_Kong"
+      },
+      {
+        "airport_iata": "BKK",
+        "airport_id": "ourairports:28118",
+        "evidence_source_ids": [
+          "airports.csv:ourairports:28118",
+          "allCountries.txt:allCountries:6301137",
+          "alternateNamesV2.txt:alternateNamesV2:1890224",
+          "countryInfo.txt:countryInfo:TH"
+        ],
+        "timezone": "Asia/Bangkok"
+      },
+      {
+        "airport_iata": "LAX",
+        "airport_id": "ourairports:3632",
+        "evidence_source_ids": [
+          "airports.csv:ourairports:3632",
+          "allCountries.txt:allCountries:5368418",
+          "alternateNamesV2.txt:alternateNamesV2:1891838",
+          "countryInfo.txt:countryInfo:US"
+        ],
+        "timezone": "America/Los_Angeles"
+      },
+      {
+        "airport_iata": "SFO",
+        "airport_id": "ourairports:3878",
+        "evidence_source_ids": [
+          "airports.csv:ourairports:3878",
+          "allCountries.txt:allCountries:5391989",
+          "alternateNamesV2.txt:alternateNamesV2:1892298",
+          "countryInfo.txt:countryInfo:US"
+        ],
+        "timezone": "America/Los_Angeles"
+      },
+      {
+        "airport_iata": "TPE",
+        "airport_id": "ourairports:5528",
+        "evidence_source_ids": [
+          "airports.csv:ourairports:5528",
+          "allCountries.txt:allCountries:1980018",
+          "alternateNamesV2.txt:alternateNamesV2:1889591",
+          "countryInfo.txt:countryInfo:TW"
+        ],
+        "timezone": "Asia/Taipei"
+      },
+      {
+        "airport_iata": "ICN",
+        "airport_id": "ourairports:5653",
+        "evidence_source_ids": [
+          "airports.csv:ourairports:5653",
+          "allCountries.txt:allCountries:6300433",
+          "alternateNamesV2.txt:alternateNamesV2:8545520",
+          "countryInfo.txt:countryInfo:KR"
+        ],
+        "timezone": "Asia/Seoul"
+      }
+    ],
+    "constraint_obligations": [],
+    "coverage": {
+      "accepted_relationships": 4,
+      "compiled_relationships": 4,
+      "discovery_outcome": "success_nonempty",
+      "mandatory_complete": true,
+      "mandatory_covered_pairs": 1,
+      "mandatory_required_pairs": 1,
+      "market_coverage": "complete",
+      "suppressed_positioning_refusal_relationships": 0,
+      "unsupported_rule_relationships": 0
+    },
+    "discovery_receipt": {
+      "candidate_decisions": [
+        {
+          "accepted": true,
+          "candidate_index": 0,
+          "issues": [],
+          "market_comparison": {
+            "advisory": false,
+            "message": "model market assertion matches deterministic planning-market policy",
+            "model_asserted_market_id": "us",
+            "policy_market_id": "us",
+            "status": "match"
+          },
+          "pool": "origin_access_gateways",
+          "proposed_airport_iata": "LAX",
+          "relationship_pruned": false,
+          "scope_decisions": []
+        },
+        {
+          "accepted": true,
+          "candidate_index": 0,
+          "issues": [],
+          "market_comparison": {
+            "advisory": false,
+            "message": "model market assertion matches deterministic planning-market policy",
+            "model_asserted_market_id": "east_asia",
+            "policy_market_id": "east_asia",
+            "status": "match"
+          },
+          "pool": "intermediate_hubs",
+          "proposed_airport_iata": "TPE",
+          "relationship_pruned": false,
+          "scope_decisions": [
+            {
+              "accepted": true,
+              "expanded_original_destination_iata_codes": [
+                "BKK"
+              ],
+              "expanded_original_origin_iata_codes": [
+                "SFO"
+              ],
+              "issues": [],
+              "scope_index": 0
+            }
+          ]
+        },
+        {
+          "accepted": true,
+          "candidate_index": 1,
+          "issues": [],
+          "market_comparison": {
+            "advisory": false,
+            "message": "model market assertion matches deterministic planning-market policy",
+            "model_asserted_market_id": "east_asia",
+            "policy_market_id": "east_asia",
+            "status": "match"
+          },
+          "pool": "intermediate_hubs",
+          "proposed_airport_iata": "HKG",
+          "relationship_pruned": false,
+          "scope_decisions": [
+            {
+              "accepted": true,
+              "expanded_original_destination_iata_codes": [
+                "BKK"
+              ],
+              "expanded_original_origin_iata_codes": [
+                "SFO"
+              ],
+              "issues": [],
+              "scope_index": 0
+            }
+          ]
+        },
+        {
+          "accepted": true,
+          "candidate_index": 2,
+          "issues": [],
+          "market_comparison": {
+            "advisory": false,
+            "message": "model market assertion matches deterministic planning-market policy",
+            "model_asserted_market_id": "east_asia",
+            "policy_market_id": "east_asia",
+            "status": "match"
+          },
+          "pool": "intermediate_hubs",
+          "proposed_airport_iata": "ICN",
+          "relationship_pruned": false,
+          "scope_decisions": [
+            {
+              "accepted": true,
+              "expanded_original_destination_iata_codes": [
+                "BKK"
+              ],
+              "expanded_original_origin_iata_codes": [
+                "SFO"
+              ],
+              "issues": [],
+              "scope_index": 0
+            }
+          ]
+        }
+      ],
+      "endpoint_assessment_decisions": [
+        {
+          "assessment": {
+            "airport_iata": "SFO",
+            "airport_id": "ourairports:3878",
+            "model_asserted_market_id": "us",
+            "role": "origin"
+          },
+          "comparison": {
+            "advisory": false,
+            "message": "model market assertion matches deterministic planning-market policy",
+            "model_asserted_market_id": "us",
+            "policy_market_id": "us",
+            "status": "match"
+          }
+        },
+        {
+          "assessment": {
+            "airport_iata": "BKK",
+            "airport_id": "ourairports:28118",
+            "model_asserted_market_id": "southeast_asia",
+            "role": "destination"
+          },
+          "comparison": {
+            "advisory": false,
+            "message": "model market assertion matches deterministic planning-market policy",
+            "model_asserted_market_id": "southeast_asia",
+            "policy_market_id": "southeast_asia",
+            "status": "match"
+          }
+        }
+      ],
+      "generation_status": "generated",
+      "input_digest": "e73112a83afe2b4c05277fa12561d8512ab4290e9901435a4a21a547d96a7c63",
+      "issues": [],
+      "limitations": [
+        "Accepted candidates are unverified hypotheses; catalog validation does not verify connectivity.",
+        "Schedules, award availability, protected connections, feasibility, and bookability are unverified.",
+        "No route, itinerary, provider payload, or SearchPlan is produced by this record."
+      ],
+      "market_coverage": "complete",
+      "market_gate": {
+        "assignments": [
+          {
+            "catalog_country_code": "US",
+            "catalog_iso_region": "US-CA",
+            "endpoint": {
+              "airport_evidence_source_ids": [
+                "airports.csv:ourairports:3878",
+                "allCountries.txt:allCountries:5391989",
+                "alternateNamesV2.txt:alternateNamesV2:1892298",
+                "countryInfo.txt:countryInfo:US"
+              ],
+              "airport_iata": "SFO",
+              "airport_id": "ourairports:3878"
+            },
+            "mapping_gap": false,
+            "market_id": "us",
+            "role": "origin",
+            "source": "country_assignment"
+          },
+          {
+            "catalog_country_code": "TH",
+            "catalog_iso_region": "TH-10",
+            "endpoint": {
+              "airport_evidence_source_ids": [
+                "airports.csv:ourairports:28118",
+                "allCountries.txt:allCountries:6301137",
+                "alternateNamesV2.txt:alternateNamesV2:1890224",
+                "countryInfo.txt:countryInfo:TH"
+              ],
+              "airport_iata": "BKK",
+              "airport_id": "ourairports:28118"
+            },
+            "mapping_gap": false,
+            "market_id": "southeast_asia",
+            "role": "destination",
+            "source": "country_assignment"
+          }
+        ],
+        "compatibility": {
+          "authoring_identity_matches_runtime": true,
+          "authoring_logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+          "authoring_release_id": "m1a-3cb7981519612945",
+          "override_metadata_validated": true,
+          "runtime_catalog_receipt": {
+            "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+            "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+            "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+            "release_id": "m1a-3cb7981519612945",
+            "schema_version": "2",
+            "source_artifacts": [
+              {
+                "artifact_name": "geonames_admin_corroboration.tsv",
+                "bytes": 929394,
+                "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+              },
+              {
+                "artifact_name": "geonames_airport_candidates.tsv",
+                "bytes": 2850011,
+                "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+              },
+              {
+                "artifact_name": "geonames_base_aliases.tsv",
+                "bytes": 21827498,
+                "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+              },
+              {
+                "artifact_name": "geonames_current_aliases.tsv",
+                "bytes": 83772542,
+                "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+              },
+              {
+                "artifact_name": "geonames_entities.tsv",
+                "bytes": 44512173,
+                "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+              },
+              {
+                "artifact_name": "geonames_iata_crossrefs.tsv",
+                "bytes": 215122,
+                "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+              },
+              {
+                "artifact_name": "ourairports_airports.csv",
+                "bytes": 671715,
+                "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+              },
+              {
+                "artifact_name": "ourairports_countries.csv",
+                "bytes": 22165,
+                "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+              },
+              {
+                "artifact_name": "ourairports_regions.csv",
+                "bytes": 433835,
+                "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+              },
+              {
+                "artifact_name": "quarantine.tsv",
+                "bytes": 48,
+                "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+              },
+              {
+                "artifact_name": "source_raw_records.tsv",
+                "bytes": 294913570,
+                "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+              },
+              {
+                "artifact_name": "source_schemas.json",
+                "bytes": 1735,
+                "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+              }
+            ],
+            "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+            "source_date": "2026-09-16"
+          }
+        },
+        "destination_endpoints": [
+          {
+            "airport_evidence_source_ids": [
+              "airports.csv:ourairports:28118",
+              "allCountries.txt:allCountries:6301137",
+              "alternateNamesV2.txt:alternateNamesV2:1890224",
+              "countryInfo.txt:countryInfo:TH"
+            ],
+            "airport_iata": "BKK",
+            "airport_id": "ourairports:28118"
+          }
+        ],
+        "issues": [],
+        "known_market_ids": [
+          "southeast_asia",
+          "us"
+        ],
+        "origin_endpoints": [
+          {
+            "airport_evidence_source_ids": [
+              "airports.csv:ourairports:3878",
+              "allCountries.txt:allCountries:5391989",
+              "alternateNamesV2.txt:alternateNamesV2:1892298",
+              "countryInfo.txt:countryInfo:US"
+            ],
+            "airport_iata": "SFO",
+            "airport_id": "ourairports:3878"
+          }
+        ],
+        "status": "generation_required"
+      },
+      "outcome": "success_nonempty",
+      "replay_status": "verified",
+      "result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+      "scope_decisions": [
+        {
+          "accepted": true,
+          "expanded_original_destination_iata_codes": [
+            "BKK"
+          ],
+          "expanded_original_origin_iata_codes": [
+            "SFO"
+          ],
+          "issues": [],
+          "scope_index": 0
+        },
+        {
+          "accepted": true,
+          "expanded_original_destination_iata_codes": [
+            "BKK"
+          ],
+          "expanded_original_origin_iata_codes": [
+            "SFO"
+          ],
+          "issues": [],
+          "scope_index": 0
+        },
+        {
+          "accepted": true,
+          "expanded_original_destination_iata_codes": [
+            "BKK"
+          ],
+          "expanded_original_origin_iata_codes": [
+            "SFO"
+          ],
+          "issues": [],
+          "scope_index": 0
+        }
+      ]
+    },
+    "endpoint_selection_binding": {
+      "cap_policy_digest": null,
+      "cap_policy_version": null,
+      "catalog_release_identity": {
+        "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+        "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+        "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+        "release_id": "m1a-3cb7981519612945",
+        "schema_version": "2",
+        "source_artifacts": [
+          {
+            "artifact_name": "geonames_admin_corroboration.tsv",
+            "bytes": 929394,
+            "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+          },
+          {
+            "artifact_name": "geonames_airport_candidates.tsv",
+            "bytes": 2850011,
+            "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+          },
+          {
+            "artifact_name": "geonames_base_aliases.tsv",
+            "bytes": 21827498,
+            "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+          },
+          {
+            "artifact_name": "geonames_current_aliases.tsv",
+            "bytes": 83772542,
+            "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+          },
+          {
+            "artifact_name": "geonames_entities.tsv",
+            "bytes": 44512173,
+            "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+          },
+          {
+            "artifact_name": "geonames_iata_crossrefs.tsv",
+            "bytes": 215122,
+            "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+          },
+          {
+            "artifact_name": "ourairports_airports.csv",
+            "bytes": 671715,
+            "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+          },
+          {
+            "artifact_name": "ourairports_countries.csv",
+            "bytes": 22165,
+            "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+          },
+          {
+            "artifact_name": "ourairports_regions.csv",
+            "bytes": 433835,
+            "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+          },
+          {
+            "artifact_name": "quarantine.tsv",
+            "bytes": 48,
+            "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+          },
+          {
+            "artifact_name": "source_raw_records.tsv",
+            "bytes": 294913570,
+            "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+          },
+          {
+            "artifact_name": "source_schemas.json",
+            "bytes": 1735,
+            "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+          }
+        ],
+        "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+        "source_date": "2026-09-16"
+      },
+      "distance_policy_digest": null,
+      "distance_policy_version": null,
+      "record_digests": [],
+      "review_status": "deterministic_approved_policy",
+      "selected_destination_ids": [
+        "ourairports:28118"
+      ],
+      "selected_origin_ids": [
+        "ourairports:3878"
+      ],
+      "source_kind": "direct_grounding"
+    },
+    "endpoint_selections": [
+      {
+        "airports": [
+          {
+            "airport_evidence_source_ids": [
+              "airports.csv:ourairports:3878",
+              "allCountries.txt:allCountries:5391989",
+              "alternateNamesV2.txt:alternateNamesV2:1892298",
+              "countryInfo.txt:countryInfo:US"
+            ],
+            "airport_iata": "SFO",
+            "airport_id": "ourairports:3878"
+          }
+        ],
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "origin",
+          "source": {
+            "field": "origin",
+            "kind": "initial_snapshot"
+          }
+        },
+        "freshness": "current",
+        "resolution": {
+          "candidate_ids": [
+            "ourairports:3878"
+          ],
+          "evidence_source_ids": [
+            "airports.csv:ourairports:3878",
+            "allCountries.txt:allCountries:5391989",
+            "alternateNamesV2.txt:alternateNamesV2:1892298",
+            "countryInfo.txt:countryInfo:US"
+          ],
+          "location": {
+            "kind": "airport",
+            "raw_text": "SFO",
+            "value": "SFO"
+          },
+          "normalized_alias": "sfo",
+          "resolved_airport_id": "ourairports:3878",
+          "resolved_entity_id": null,
+          "status": "resolved"
+        },
+        "role": "origin",
+        "selection_kind": "explicit_iata",
+        "source_kind": "direct_grounding",
+        "source_record_digest": null
+      },
+      {
+        "airports": [
+          {
+            "airport_evidence_source_ids": [
+              "airports.csv:ourairports:28118",
+              "allCountries.txt:allCountries:6301137",
+              "alternateNamesV2.txt:alternateNamesV2:1890224",
+              "countryInfo.txt:countryInfo:TH"
+            ],
+            "airport_iata": "BKK",
+            "airport_id": "ourairports:28118"
+          }
+        ],
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "destination",
+          "source": {
+            "field": "destination",
+            "kind": "initial_snapshot"
+          }
+        },
+        "freshness": "current",
+        "resolution": {
+          "candidate_ids": [
+            "ourairports:28118"
+          ],
+          "evidence_source_ids": [
+            "airports.csv:ourairports:28118",
+            "allCountries.txt:allCountries:6301137",
+            "alternateNamesV2.txt:alternateNamesV2:1890224",
+            "countryInfo.txt:countryInfo:TH"
+          ],
+          "location": {
+            "kind": "airport",
+            "raw_text": "BKK",
+            "value": "BKK"
+          },
+          "normalized_alias": "bkk",
+          "resolved_airport_id": "ourairports:28118",
+          "resolved_entity_id": null,
+          "status": "resolved"
+        },
+        "role": "destination",
+        "selection_kind": "explicit_iata",
+        "source_kind": "direct_grounding",
+        "source_record_digest": null
+      }
+    ],
+    "identity": {
+      "accepted_relationship_ledger_digest": "30e54e6762ef3f9f8b6bf06ce0611926b5eee1338882abe6c48237fa09aa5077",
+      "canonicalization_version": "effective-request-canonical-json-v1",
+      "catalog_receipt": {
+        "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+        "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+        "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+        "release_id": "m1a-3cb7981519612945",
+        "schema_version": "2",
+        "source_artifacts": [
+          {
+            "artifact_name": "geonames_admin_corroboration.tsv",
+            "bytes": 929394,
+            "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+          },
+          {
+            "artifact_name": "geonames_airport_candidates.tsv",
+            "bytes": 2850011,
+            "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+          },
+          {
+            "artifact_name": "geonames_base_aliases.tsv",
+            "bytes": 21827498,
+            "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+          },
+          {
+            "artifact_name": "geonames_current_aliases.tsv",
+            "bytes": 83772542,
+            "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+          },
+          {
+            "artifact_name": "geonames_entities.tsv",
+            "bytes": 44512173,
+            "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+          },
+          {
+            "artifact_name": "geonames_iata_crossrefs.tsv",
+            "bytes": 215122,
+            "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+          },
+          {
+            "artifact_name": "ourairports_airports.csv",
+            "bytes": 671715,
+            "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+          },
+          {
+            "artifact_name": "ourairports_countries.csv",
+            "bytes": 22165,
+            "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+          },
+          {
+            "artifact_name": "ourairports_regions.csv",
+            "bytes": 433835,
+            "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+          },
+          {
+            "artifact_name": "quarantine.tsv",
+            "bytes": 48,
+            "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+          },
+          {
+            "artifact_name": "source_raw_records.tsv",
+            "bytes": 294913570,
+            "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+          },
+          {
+            "artifact_name": "source_schemas.json",
+            "bytes": 1735,
+            "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+          }
+        ],
+        "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+        "source_date": "2026-09-16"
+      },
+      "compilation_binding_digest": "b6aa5cd8c5155a466f0aa3cdba661faf47d91d93ba8b0b0670e96da0590c69cc",
+      "compiler_contract_version": "search-strategy-compilation-v3",
+      "digest_algorithm_version": "sha256-v1",
+      "effective_request_digest": "5a4094a08802c2996107bde18d8d6309dc3663f73da71d7cce828bf725ac5d8b",
+      "endpoint_selection_binding": {
+        "cap_policy_digest": null,
+        "cap_policy_version": null,
+        "catalog_release_identity": {
+          "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+          "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+          "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+          "release_id": "m1a-3cb7981519612945",
+          "schema_version": "2",
+          "source_artifacts": [
+            {
+              "artifact_name": "geonames_admin_corroboration.tsv",
+              "bytes": 929394,
+              "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+            },
+            {
+              "artifact_name": "geonames_airport_candidates.tsv",
+              "bytes": 2850011,
+              "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+            },
+            {
+              "artifact_name": "geonames_base_aliases.tsv",
+              "bytes": 21827498,
+              "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+            },
+            {
+              "artifact_name": "geonames_current_aliases.tsv",
+              "bytes": 83772542,
+              "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+            },
+            {
+              "artifact_name": "geonames_entities.tsv",
+              "bytes": 44512173,
+              "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+            },
+            {
+              "artifact_name": "geonames_iata_crossrefs.tsv",
+              "bytes": 215122,
+              "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+            },
+            {
+              "artifact_name": "ourairports_airports.csv",
+              "bytes": 671715,
+              "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+            },
+            {
+              "artifact_name": "ourairports_countries.csv",
+              "bytes": 22165,
+              "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+            },
+            {
+              "artifact_name": "ourairports_regions.csv",
+              "bytes": 433835,
+              "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+            },
+            {
+              "artifact_name": "quarantine.tsv",
+              "bytes": 48,
+              "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+            },
+            {
+              "artifact_name": "source_raw_records.tsv",
+              "bytes": 294913570,
+              "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+            },
+            {
+              "artifact_name": "source_schemas.json",
+              "bytes": 1735,
+              "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+            }
+          ],
+          "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+          "source_date": "2026-09-16"
+        },
+        "distance_policy_digest": null,
+        "distance_policy_version": null,
+        "record_digests": [],
+        "review_status": "deterministic_approved_policy",
+        "selected_destination_ids": [
+          "ourairports:28118"
+        ],
+        "selected_origin_ids": [
+          "ourairports:3878"
+        ],
+        "source_kind": "direct_grounding"
+      },
+      "gateway_input_digest": "e73112a83afe2b4c05277fa12561d8512ab4290e9901435a4a21a547d96a7c63",
+      "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+      "market_policy_digest": "4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a",
+      "market_policy_version": "planning-market-v1",
+      "policy_digest": "35883c14c86af2ac44ec3097aef5aee8688c3566922f53e9f5d89b3c49c0408f",
+      "policy_version": "search-planning-compilation-v3",
+      "relationship_disposition_digest": "302318084d9b75e13a8e74c11c3f4e8d49a3cff9927ddb0fe24792cc0235ad86",
+      "revision": 0,
+      "route_topology_feature": "absent",
+      "session_id": "intent-e2e:mixed_award_cash_eligible:1"
+    },
+    "issues": [],
+    "location_resolutions": [
+      {
+        "candidate_ids": [
+          "ourairports:3878"
+        ],
+        "evidence_source_ids": [
+          "airports.csv:ourairports:3878",
+          "allCountries.txt:allCountries:5391989",
+          "alternateNamesV2.txt:alternateNamesV2:1892298",
+          "countryInfo.txt:countryInfo:US"
+        ],
+        "location": {
+          "kind": "airport",
+          "raw_text": "SFO",
+          "value": "SFO"
+        },
+        "normalized_alias": "sfo",
+        "resolved_airport_id": "ourairports:3878",
+        "resolved_entity_id": null,
+        "status": "resolved"
+      },
+      {
+        "candidate_ids": [
+          "ourairports:28118"
+        ],
+        "evidence_source_ids": [
+          "airports.csv:ourairports:28118",
+          "allCountries.txt:allCountries:6301137",
+          "alternateNamesV2.txt:alternateNamesV2:1890224",
+          "countryInfo.txt:countryInfo:TH"
+        ],
+        "location": {
+          "kind": "airport",
+          "raw_text": "BKK",
+          "value": "BKK"
+        },
+        "normalized_alias": "bkk",
+        "resolved_airport_id": "ourairports:28118",
+        "resolved_entity_id": null,
+        "status": "resolved"
+      }
+    ],
+    "logical_queries": [
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "first_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-05",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-05",
+          "timezone": "America/Los_Angeles"
+        },
+        "destination_airport_fact_id": "ourairports:28118",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:3878",
+        "query_id": "logical-award:08fb0646fe7cb4a536d22ba253787873736b33e5dae3194522de88fbe3f03b1c",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "first_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-05",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-05",
+          "timezone": "America/Los_Angeles"
+        },
+        "destination_airport_fact_id": "ourairports:5528",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:3878",
+        "query_id": "logical-award:d7a862beab9788a626c2bb6a41a5681f9ddf7e83e2b33bee0cede7fcbd879672",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "later_component_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-07",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-04",
+          "timezone": "Asia/Taipei"
+        },
+        "destination_airport_fact_id": "ourairports:28118",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:5528",
+        "query_id": "logical-award:b5cbe4e8dbd2e1aaf80e6119c25b7d99528a81f513e0a3469fb8f843c19a6fc1",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "first_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-05",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-05",
+          "timezone": "America/Los_Angeles"
+        },
+        "destination_airport_fact_id": "ourairports:26535",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:3878",
+        "query_id": "logical-award:ea3c74fcc6cd3713fbc9953901581d8947201de6c203c6b067f70ad5ac83baa0",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "later_component_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-07",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-04",
+          "timezone": "Asia/Hong_Kong"
+        },
+        "destination_airport_fact_id": "ourairports:28118",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:26535",
+        "query_id": "logical-award:e99640436e129d25104ac117c2fb4e8ba0b3e2ba0d899f9f0987d2fecccc5987",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "first_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-05",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-05",
+          "timezone": "America/Los_Angeles"
+        },
+        "destination_airport_fact_id": "ourairports:5653",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:3878",
+        "query_id": "logical-award:8f8e5faf7d55d2693df8ef79d12553721b2a4db9bdafeaf2dbd653fbad612434",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "later_component_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-07",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-04",
+          "timezone": "Asia/Seoul"
+        },
+        "destination_airport_fact_id": "ourairports:28118",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:5653",
+        "query_id": "logical-award:3b9451a58f46a0d6c4f2fc53825ff73b6e60216091c4bd2440f284f57bceded6",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      },
+      {
+        "award_mode": "award",
+        "connection_semantics": "provider_returned_connections_allowed",
+        "date_envelope": {
+          "basis": "later_component_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-07",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-04",
+          "timezone": "America/Los_Angeles"
+        },
+        "destination_airport_fact_id": "ourairports:28118",
+        "filter_obligations": [],
+        "origin_airport_fact_id": "ourairports:3632",
+        "query_id": "logical-award:ff47172b682787328add463dce34177100e267c1668f5d824789485fcbb741ad",
+        "requested_cabins": [],
+        "result_validation_obligations": [
+          {
+            "disposition": "not_verified",
+            "expected_destination_airport_fact_id": null,
+            "expected_origin_airport_fact_id": null,
+            "field_provenance": {
+              "amendment_id": null,
+              "field": "travelers",
+              "source": {
+                "field": "travelers",
+                "kind": "initial_snapshot"
+              }
+            },
+            "kind": "minimum_award_seats",
+            "minimum_seats": 1,
+            "responsible_stage": "provider_result_validation"
+          }
+        ],
+        "scope": "endpoint_market"
+      }
+    ],
+    "mandatory_endpoint_probes": [
+      {
+        "date_envelope": {
+          "basis": "first_origin_airport_local",
+          "effective_window_precision": "exact",
+          "end": "2026-10-05",
+          "field_provenance": {
+            "amendment_id": null,
+            "field": "departure",
+            "source": {
+              "field": "departure",
+              "kind": "initial_snapshot"
+            }
+          },
+          "inclusive": true,
+          "start": "2026-10-05",
+          "timezone": "America/Los_Angeles"
+        },
+        "destination_endpoint": {
+          "airport_evidence_source_ids": [
+            "airports.csv:ourairports:28118",
+            "allCountries.txt:allCountries:6301137",
+            "alternateNamesV2.txt:alternateNamesV2:1890224",
+            "countryInfo.txt:countryInfo:TH"
+          ],
+          "airport_iata": "BKK",
+          "airport_id": "ourairports:28118"
+        },
+        "origin_endpoint": {
+          "airport_evidence_source_ids": [
+            "airports.csv:ourairports:3878",
+            "allCountries.txt:allCountries:5391989",
+            "alternateNamesV2.txt:alternateNamesV2:1892298",
+            "countryInfo.txt:countryInfo:US"
+          ],
+          "airport_iata": "SFO",
+          "airport_id": "ourairports:3878"
+        },
+        "probe_id": "endpoint-market:51af140fe46ab850315b0bf25cf265ac3920a5ff11f2b202d3628b99b8dc3578",
+        "requested_cabins": [],
+        "scope": "endpoint_market",
+        "traveler_count": 1
+      }
+    ],
+    "mandatory_query_uses": [
+      {
+        "probe_id": "endpoint-market:51af140fe46ab850315b0bf25cf265ac3920a5ff11f2b202d3628b99b8dc3578",
+        "query_id": "logical-award:08fb0646fe7cb4a536d22ba253787873736b33e5dae3194522de88fbe3f03b1c",
+        "role": "mandatory_endpoint"
+      }
+    ],
+    "plan_digest": "e24336800ac928ac5935ed33d281591c5abf1f5700b2b14a574aee42f94d46ab",
+    "positioning_dependencies": [
+      {
+        "dependency_id": "761d4b85463f02afa0051f775346e8fe51b1428425768a83a114ef0c1d35f9cf",
+        "feasibility": "not_verified",
+        "field_provenance": null,
+        "from_airport_fact_id": "ourairports:3878",
+        "payment_mode": "unknown",
+        "requested_permission": null,
+        "side": "origin",
+        "source_access_relationship_id": "9a8dde773b2b8cf368a53d624eca73263533bee65bcf4d963eb4c54f883eaf84",
+        "support_id": "75ce0ff1ea4a7d49795e681f013e7529b0d6590f11819ecf43b5914d6375d9f0",
+        "to_airport_fact_id": "ourairports:3632",
+        "transport_mode": "unknown"
+      }
+    ],
+    "positioning_receipts": [
+      {
+        "decision": "not_required",
+        "dependency_descriptions": [],
+        "relationship_id": "68f4d6b65e202ddfa4a2893b1a0333e10875abb2c298fce3ef41be5c39c238d7",
+        "requested_permission": null
+      },
+      {
+        "decision": "not_required",
+        "dependency_descriptions": [],
+        "relationship_id": "70018564d63b907ed83337b87bccfe0ff8651bde8277306bb776dd9652622135",
+        "requested_permission": null
+      },
+      {
+        "decision": "not_required",
+        "dependency_descriptions": [],
+        "relationship_id": "9845de11c308a26d347281a22a93c3c339c7392e3fb2648f3311c3348f6dfc51",
+        "requested_permission": null
+      },
+      {
+        "decision": "conditional_research",
+        "dependency_descriptions": [
+          "origin:ourairports:3878->ourairports:3632"
+        ],
+        "relationship_id": "9a8dde773b2b8cf368a53d624eca73263533bee65bcf4d963eb4c54f883eaf84",
+        "requested_permission": null
+      }
+    ],
+    "relationship_dispositions": [
+      {
+        "disposition": "compiled",
+        "query_ids": [
+          "logical-award:d7a862beab9788a626c2bb6a41a5681f9ddf7e83e2b33bee0cede7fcbd879672",
+          "logical-award:b5cbe4e8dbd2e1aaf80e6119c25b7d99528a81f513e0a3469fb8f843c19a6fc1"
+        ],
+        "reason_codes": [
+          "compiled"
+        ],
+        "relationship_id": "68f4d6b65e202ddfa4a2893b1a0333e10875abb2c298fce3ef41be5c39c238d7",
+        "source_candidate": {
+          "airport_fact_id": "ourairports:5528",
+          "airport_iata": "TPE",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "intermediate_hubs"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:5528",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": null,
+          "original_origin_airport_fact_id": null,
+          "pool": "intermediate_hubs",
+          "relationship_type": "scoped_hub",
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "source_scope": {
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      },
+      {
+        "disposition": "compiled",
+        "query_ids": [
+          "logical-award:ea3c74fcc6cd3713fbc9953901581d8947201de6c203c6b067f70ad5ac83baa0",
+          "logical-award:e99640436e129d25104ac117c2fb4e8ba0b3e2ba0d899f9f0987d2fecccc5987"
+        ],
+        "reason_codes": [
+          "compiled"
+        ],
+        "relationship_id": "70018564d63b907ed83337b87bccfe0ff8651bde8277306bb776dd9652622135",
+        "source_candidate": {
+          "airport_fact_id": "ourairports:26535",
+          "airport_iata": "HKG",
+          "candidate_index": 1,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "intermediate_hubs"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:26535",
+          "candidate_index": 1,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": null,
+          "original_origin_airport_fact_id": null,
+          "pool": "intermediate_hubs",
+          "relationship_type": "scoped_hub",
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "source_scope": {
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      },
+      {
+        "disposition": "compiled",
+        "query_ids": [
+          "logical-award:8f8e5faf7d55d2693df8ef79d12553721b2a4db9bdafeaf2dbd653fbad612434",
+          "logical-award:3b9451a58f46a0d6c4f2fc53825ff73b6e60216091c4bd2440f284f57bceded6"
+        ],
+        "reason_codes": [
+          "compiled"
+        ],
+        "relationship_id": "9845de11c308a26d347281a22a93c3c339c7392e3fb2648f3311c3348f6dfc51",
+        "source_candidate": {
+          "airport_fact_id": "ourairports:5653",
+          "airport_iata": "ICN",
+          "candidate_index": 2,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "intermediate_hubs"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:5653",
+          "candidate_index": 2,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": null,
+          "original_origin_airport_fact_id": null,
+          "pool": "intermediate_hubs",
+          "relationship_type": "scoped_hub",
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "source_scope": {
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      },
+      {
+        "disposition": "compiled",
+        "query_ids": [
+          "logical-award:ff47172b682787328add463dce34177100e267c1668f5d824789485fcbb741ad"
+        ],
+        "reason_codes": [
+          "compiled"
+        ],
+        "relationship_id": "9a8dde773b2b8cf368a53d624eca73263533bee65bcf4d963eb4c54f883eaf84",
+        "source_candidate": {
+          "airport_fact_id": "ourairports:3632",
+          "airport_iata": "LAX",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "origin_access_gateways"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:3632",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": "ourairports:28118",
+          "original_origin_airport_fact_id": "ourairports:3878",
+          "pool": "origin_access_gateways",
+          "relationship_type": "origin_access",
+          "scope_index": null,
+          "typed_destination_iata": null,
+          "typed_destination_kind": null,
+          "typed_origin_iata": null,
+          "typed_origin_kind": null
+        },
+        "source_scope": null,
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      }
+    ],
+    "strategy_query_uses": [
+      {
+        "date_derivation_id": "5e4859e7f0ca06beac89d8ff7a4d228ec908c0df19e49ebb9c220e0cb184af93",
+        "query_id": "logical-award:d7a862beab9788a626c2bb6a41a5681f9ddf7e83e2b33bee0cede7fcbd879672",
+        "query_use_id": "e96f6bc41b08e4e84df91014d2cc53f601444cb30b69d2036dd4cf5cc9b38877",
+        "role": "hub_first",
+        "sequence": 1,
+        "source_relationship_id": "68f4d6b65e202ddfa4a2893b1a0333e10875abb2c298fce3ef41be5c39c238d7",
+        "strategy_id": "supplemental:9bdf4b8cbfb1ce9fc22bf6315d10b8cd0a089f6fab7c04cc31885a9244a08d9c"
+      },
+      {
+        "date_derivation_id": "e138fe50341cb00953269a1338935e23bd56ad4a56513eb4797ec43ae87d3bf5",
+        "query_id": "logical-award:b5cbe4e8dbd2e1aaf80e6119c25b7d99528a81f513e0a3469fb8f843c19a6fc1",
+        "query_use_id": "6f5e0dbb89698a7d2125d656c53f5e7fee9996b3cb6b57322be2f16661440d87",
+        "role": "hub_second",
+        "sequence": 2,
+        "source_relationship_id": "68f4d6b65e202ddfa4a2893b1a0333e10875abb2c298fce3ef41be5c39c238d7",
+        "strategy_id": "supplemental:9bdf4b8cbfb1ce9fc22bf6315d10b8cd0a089f6fab7c04cc31885a9244a08d9c"
+      },
+      {
+        "date_derivation_id": "110fc8187e153bb4556b8026ec02be584dd5789a0b4b091064fae144c9654448",
+        "query_id": "logical-award:ea3c74fcc6cd3713fbc9953901581d8947201de6c203c6b067f70ad5ac83baa0",
+        "query_use_id": "17b6c3b60e689ebf8a856df3a285f577a2d7e02d9a644a16eaa82fb3671dc8d4",
+        "role": "hub_first",
+        "sequence": 1,
+        "source_relationship_id": "70018564d63b907ed83337b87bccfe0ff8651bde8277306bb776dd9652622135",
+        "strategy_id": "supplemental:764eafc4630cb89ac6895acc64e5ccdca10a3663e16e7d791e0099a8bf2a4414"
+      },
+      {
+        "date_derivation_id": "5582c5c9f68be31920937bc940e23c69065c8c8c45e439721b56c64c5ffbcb4f",
+        "query_id": "logical-award:e99640436e129d25104ac117c2fb4e8ba0b3e2ba0d899f9f0987d2fecccc5987",
+        "query_use_id": "46d67f462d537feca3606cdf82871a821842452e0b937f0b50b1ee483b51f739",
+        "role": "hub_second",
+        "sequence": 2,
+        "source_relationship_id": "70018564d63b907ed83337b87bccfe0ff8651bde8277306bb776dd9652622135",
+        "strategy_id": "supplemental:764eafc4630cb89ac6895acc64e5ccdca10a3663e16e7d791e0099a8bf2a4414"
+      },
+      {
+        "date_derivation_id": "597007886a2d0ffb972e2196d6b9ac284c2a40bbb4b87273aa003756472e5924",
+        "query_id": "logical-award:8f8e5faf7d55d2693df8ef79d12553721b2a4db9bdafeaf2dbd653fbad612434",
+        "query_use_id": "c27b5629e0fa526e78ab0b2a95be191a8761da8cbd646d0e86d54de7bceeaedd",
+        "role": "hub_first",
+        "sequence": 1,
+        "source_relationship_id": "9845de11c308a26d347281a22a93c3c339c7392e3fb2648f3311c3348f6dfc51",
+        "strategy_id": "supplemental:e445c0cff42eeb179b7327a00aea79d18ce65978a98466483fa49320446e5c1e"
+      },
+      {
+        "date_derivation_id": "c5c68efcf41018791ab2f5b8383fe59d5de828a90b3eacf6df10fedddb5e035b",
+        "query_id": "logical-award:3b9451a58f46a0d6c4f2fc53825ff73b6e60216091c4bd2440f284f57bceded6",
+        "query_use_id": "bec809e29a0bb76d7786496894b15b97b5c1bfd05e5db7286100fb7737d40cea",
+        "role": "hub_second",
+        "sequence": 2,
+        "source_relationship_id": "9845de11c308a26d347281a22a93c3c339c7392e3fb2648f3311c3348f6dfc51",
+        "strategy_id": "supplemental:e445c0cff42eeb179b7327a00aea79d18ce65978a98466483fa49320446e5c1e"
+      },
+      {
+        "date_derivation_id": "626f966f9e39b49c05d5d8eff7955697a1f9703b0d4d350133b369b3913d7a4f",
+        "query_id": "logical-award:ff47172b682787328add463dce34177100e267c1668f5d824789485fcbb741ad",
+        "query_use_id": "40cf348e2e1a2240655365d94f220ab8f77cd0e84770db124a463677ad807369",
+        "role": "access_main",
+        "sequence": 1,
+        "source_relationship_id": "9a8dde773b2b8cf368a53d624eca73263533bee65bcf4d963eb4c54f883eaf84",
+        "strategy_id": "supplemental:0da0ad708a61d1a9253527efdc46b71b19befd26fad3638036a3893f54be5079"
+      }
+    ],
+    "structural_limit_receipts": [
+      {
+        "classification": "compiler_structural_safety",
+        "disposition": "within_limit",
+        "kind": "endpoint_pair_cross_product",
+        "limit": 100,
+        "observed": 1
+      }
+    ],
+    "supplemental_strategies": [
+      {
+        "deferred_constraint_ids": [],
+        "eligibility": "eligible",
+        "market_comparison": {
+          "advisory": false,
+          "message": "model market assertion matches deterministic planning-market policy",
+          "model_asserted_market_id": "east_asia",
+          "policy_market_id": "east_asia",
+          "status": "match"
+        },
+        "material_uncertainty": "Useful award patterns and onward feasibility are unverified; searching through TPE may add complexity relative to other hubs.",
+        "phase": "supplemental",
+        "query_roles": [
+          "first_component",
+          "later_component"
+        ],
+        "reason": "Directly supports the supplied SFO\u0013BKK pairing.",
+        "relationship_id": "68f4d6b65e202ddfa4a2893b1a0333e10875abb2c298fce3ef41be5c39c238d7",
+        "required_validations": [
+          {
+            "disposition": "not_verified",
+            "kind": "original_departure_compliance",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "complete_journey_validation",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "separate_ticket_permission",
+            "responsible_stage": "owner_review"
+          }
+        ],
+        "source_candidate": {
+          "airport_fact_id": "ourairports:5528",
+          "airport_iata": "TPE",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "intermediate_hubs"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:5528",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": null,
+          "original_origin_airport_fact_id": null,
+          "pool": "intermediate_hubs",
+          "relationship_type": "scoped_hub",
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "source_scope": {
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "strategy_id": "supplemental:9bdf4b8cbfb1ce9fc22bf6315d10b8cd0a089f6fab7c04cc31885a9244a08d9c",
+        "strategy_type": "scoped_hub",
+        "support_alternative_ids": [
+          "6f14009ef7f78e8fb8f2f56311b86380a7d6590af354d6995744f2a896d2be12"
+        ],
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      },
+      {
+        "deferred_constraint_ids": [],
+        "eligibility": "eligible",
+        "market_comparison": {
+          "advisory": false,
+          "message": "model market assertion matches deterministic planning-market policy",
+          "model_asserted_market_id": "east_asia",
+          "policy_market_id": "east_asia",
+          "status": "match"
+        },
+        "material_uncertainty": "The additional routing distance and onward feasibility are unverified, so its value may be marginal on some searches.",
+        "phase": "supplemental",
+        "query_roles": [
+          "first_component",
+          "later_component"
+        ],
+        "reason": "Directly supports the supplied SFO\u0013BKK pairing.",
+        "relationship_id": "70018564d63b907ed83337b87bccfe0ff8651bde8277306bb776dd9652622135",
+        "required_validations": [
+          {
+            "disposition": "not_verified",
+            "kind": "original_departure_compliance",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "complete_journey_validation",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "separate_ticket_permission",
+            "responsible_stage": "owner_review"
+          }
+        ],
+        "source_candidate": {
+          "airport_fact_id": "ourairports:26535",
+          "airport_iata": "HKG",
+          "candidate_index": 1,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "intermediate_hubs"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:26535",
+          "candidate_index": 1,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": null,
+          "original_origin_airport_fact_id": null,
+          "pool": "intermediate_hubs",
+          "relationship_type": "scoped_hub",
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "source_scope": {
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "strategy_id": "supplemental:764eafc4630cb89ac6895acc64e5ccdca10a3663e16e7d791e0099a8bf2a4414",
+        "strategy_type": "scoped_hub",
+        "support_alternative_ids": [
+          "12c6486393ab57075dc1af7ead451d2449ea4828d05f430b7f4d021500b682d6"
+        ],
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      },
+      {
+        "deferred_constraint_ids": [],
+        "eligibility": "eligible",
+        "market_comparison": {
+          "advisory": false,
+          "message": "model market assertion matches deterministic planning-market policy",
+          "model_asserted_market_id": "east_asia",
+          "policy_market_id": "east_asia",
+          "status": "match"
+        },
+        "material_uncertainty": "Its northern geography may make some SFO\u0013BKK searches circuitous, and any incremental value is unverified.",
+        "phase": "supplemental",
+        "query_roles": [
+          "first_component",
+          "later_component"
+        ],
+        "reason": "Directly supports the supplied SFO\u0013BKK pairing.",
+        "relationship_id": "9845de11c308a26d347281a22a93c3c339c7392e3fb2648f3311c3348f6dfc51",
+        "required_validations": [
+          {
+            "disposition": "not_verified",
+            "kind": "original_departure_compliance",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "complete_journey_validation",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "separate_ticket_permission",
+            "responsible_stage": "owner_review"
+          }
+        ],
+        "source_candidate": {
+          "airport_fact_id": "ourairports:5653",
+          "airport_iata": "ICN",
+          "candidate_index": 2,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "intermediate_hubs"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:5653",
+          "candidate_index": 2,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": null,
+          "original_origin_airport_fact_id": null,
+          "pool": "intermediate_hubs",
+          "relationship_type": "scoped_hub",
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "source_scope": {
+          "scope_index": 0,
+          "typed_destination_iata": "BKK",
+          "typed_destination_kind": "original_destination",
+          "typed_origin_iata": "SFO",
+          "typed_origin_kind": "original_origin"
+        },
+        "strategy_id": "supplemental:e445c0cff42eeb179b7327a00aea79d18ce65978a98466483fa49320446e5c1e",
+        "strategy_type": "scoped_hub",
+        "support_alternative_ids": [
+          "e876e45a8c3ee07da75592d30d468197f7af26d59a73ab0623266df948d8a07f"
+        ],
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      },
+      {
+        "deferred_constraint_ids": [],
+        "eligibility": "conditional_permission",
+        "market_comparison": {
+          "advisory": false,
+          "message": "model market assertion matches deterministic planning-market policy",
+          "model_asserted_market_id": "us",
+          "policy_market_id": "us",
+          "status": "match"
+        },
+        "material_uncertainty": "Positioning from the Bay Area may be unattractive for some dates, and incremental value over SFO is unverified.",
+        "phase": "supplemental",
+        "query_roles": [
+          "access_main"
+        ],
+        "reason": "Optional alternative U.S. departure search endpoint for SFO\u0013BKK: its larger long-haul search ecosystem may provide materially different award-search opportunities while remaining a plausible positioning alternative from the Bay Area.",
+        "relationship_id": "9a8dde773b2b8cf368a53d624eca73263533bee65bcf4d963eb4c54f883eaf84",
+        "required_validations": [
+          {
+            "disposition": "not_verified",
+            "kind": "original_departure_compliance",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "complete_journey_validation",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "positioning_feasibility",
+            "responsible_stage": "future_result_or_journey_validation"
+          },
+          {
+            "disposition": "not_verified",
+            "kind": "separate_ticket_permission",
+            "responsible_stage": "owner_review"
+          }
+        ],
+        "source_candidate": {
+          "airport_fact_id": "ourairports:3632",
+          "airport_iata": "LAX",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "pool": "origin_access_gateways"
+        },
+        "source_relationship": {
+          "candidate_airport_fact_id": "ourairports:3632",
+          "candidate_index": 0,
+          "gateway_result_digest": "24044d059e554d356e94b8244dac3aa39f3840a8f267010c073d9bf2578bdf7b",
+          "original_destination_airport_fact_id": "ourairports:28118",
+          "original_origin_airport_fact_id": "ourairports:3878",
+          "pool": "origin_access_gateways",
+          "relationship_type": "origin_access",
+          "scope_index": null,
+          "typed_destination_iata": null,
+          "typed_destination_kind": null,
+          "typed_origin_iata": null,
+          "typed_origin_kind": null
+        },
+        "source_scope": null,
+        "strategy_id": "supplemental:0da0ad708a61d1a9253527efdc46b71b19befd26fad3638036a3893f54be5079",
+        "strategy_type": "origin_access",
+        "support_alternative_ids": [
+          "75ce0ff1ea4a7d49795e681f013e7529b0d6590f11819ecf43b5914d6375d9f0"
+        ],
+        "supported_original_endpoint_pairs": [
+          {
+            "destination_airport_fact_id": "ourairports:28118",
+            "origin_airport_fact_id": "ourairports:3878"
+          }
+        ]
+      }
+    ],
+    "support_alternatives": [
+      {
+        "original_destination_airport_fact_id": "ourairports:28118",
+        "original_origin_airport_fact_id": "ourairports:3878",
+        "positioning_dependency_ids": [],
+        "query_use_ids": [
+          "e96f6bc41b08e4e84df91014d2cc53f601444cb30b69d2036dd4cf5cc9b38877",
+          "6f5e0dbb89698a7d2125d656c53f5e7fee9996b3cb6b57322be2f16661440d87"
+        ],
+        "result_status": "research_only_pending_result_validation",
+        "separate_ticket_tolerance": "unknown",
+        "strategy_id": "supplemental:9bdf4b8cbfb1ce9fc22bf6315d10b8cd0a089f6fab7c04cc31885a9244a08d9c",
+        "support_id": "6f14009ef7f78e8fb8f2f56311b86380a7d6590af354d6995744f2a896d2be12"
+      },
+      {
+        "original_destination_airport_fact_id": "ourairports:28118",
+        "original_origin_airport_fact_id": "ourairports:3878",
+        "positioning_dependency_ids": [],
+        "query_use_ids": [
+          "17b6c3b60e689ebf8a856df3a285f577a2d7e02d9a644a16eaa82fb3671dc8d4",
+          "46d67f462d537feca3606cdf82871a821842452e0b937f0b50b1ee483b51f739"
+        ],
+        "result_status": "research_only_pending_result_validation",
+        "separate_ticket_tolerance": "unknown",
+        "strategy_id": "supplemental:764eafc4630cb89ac6895acc64e5ccdca10a3663e16e7d791e0099a8bf2a4414",
+        "support_id": "12c6486393ab57075dc1af7ead451d2449ea4828d05f430b7f4d021500b682d6"
+      },
+      {
+        "original_destination_airport_fact_id": "ourairports:28118",
+        "original_origin_airport_fact_id": "ourairports:3878",
+        "positioning_dependency_ids": [],
+        "query_use_ids": [
+          "c27b5629e0fa526e78ab0b2a95be191a8761da8cbd646d0e86d54de7bceeaedd",
+          "bec809e29a0bb76d7786496894b15b97b5c1bfd05e5db7286100fb7737d40cea"
+        ],
+        "result_status": "research_only_pending_result_validation",
+        "separate_ticket_tolerance": "unknown",
+        "strategy_id": "supplemental:e445c0cff42eeb179b7327a00aea79d18ce65978a98466483fa49320446e5c1e",
+        "support_id": "e876e45a8c3ee07da75592d30d468197f7af26d59a73ab0623266df948d8a07f"
+      },
+      {
+        "original_destination_airport_fact_id": "ourairports:28118",
+        "original_origin_airport_fact_id": "ourairports:3878",
+        "positioning_dependency_ids": [
+          "761d4b85463f02afa0051f775346e8fe51b1428425768a83a114ef0c1d35f9cf"
+        ],
+        "query_use_ids": [
+          "40cf348e2e1a2240655365d94f220ab8f77cd0e84770db124a463677ad807369"
+        ],
+        "result_status": "research_only_pending_result_validation",
+        "separate_ticket_tolerance": "unknown",
+        "strategy_id": "supplemental:0da0ad708a61d1a9253527efdc46b71b19befd26fad3638036a3893f54be5079",
+        "support_id": "75ce0ff1ea4a7d49795e681f013e7529b0d6590f11819ecf43b5914d6375d9f0"
+      }
+    ],
+    "temporal_derivations": [
+      {
+        "basis": "first_origin_airport_local",
+        "date_derivation_id": "5e4859e7f0ca06beac89d8ff7a4d228ec908c0df19e49ebb9c220e0cb184af93",
+        "derived_end": "2026-10-05",
+        "derived_start": "2026-10-05",
+        "end_offset_days": 0,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:3878",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "hub_first",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": 0,
+        "strategy_id": "supplemental:9bdf4b8cbfb1ce9fc22bf6315d10b8cd0a089f6fab7c04cc31885a9244a08d9c",
+        "timezone": "America/Los_Angeles"
+      },
+      {
+        "basis": "later_component_origin_airport_local",
+        "date_derivation_id": "e138fe50341cb00953269a1338935e23bd56ad4a56513eb4797ec43ae87d3bf5",
+        "derived_end": "2026-10-07",
+        "derived_start": "2026-10-04",
+        "end_offset_days": 2,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:5528",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "hub_second",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": -1,
+        "strategy_id": "supplemental:9bdf4b8cbfb1ce9fc22bf6315d10b8cd0a089f6fab7c04cc31885a9244a08d9c",
+        "timezone": "Asia/Taipei"
+      },
+      {
+        "basis": "first_origin_airport_local",
+        "date_derivation_id": "110fc8187e153bb4556b8026ec02be584dd5789a0b4b091064fae144c9654448",
+        "derived_end": "2026-10-05",
+        "derived_start": "2026-10-05",
+        "end_offset_days": 0,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:3878",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "hub_first",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": 0,
+        "strategy_id": "supplemental:764eafc4630cb89ac6895acc64e5ccdca10a3663e16e7d791e0099a8bf2a4414",
+        "timezone": "America/Los_Angeles"
+      },
+      {
+        "basis": "later_component_origin_airport_local",
+        "date_derivation_id": "5582c5c9f68be31920937bc940e23c69065c8c8c45e439721b56c64c5ffbcb4f",
+        "derived_end": "2026-10-07",
+        "derived_start": "2026-10-04",
+        "end_offset_days": 2,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:26535",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "hub_second",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": -1,
+        "strategy_id": "supplemental:764eafc4630cb89ac6895acc64e5ccdca10a3663e16e7d791e0099a8bf2a4414",
+        "timezone": "Asia/Hong_Kong"
+      },
+      {
+        "basis": "first_origin_airport_local",
+        "date_derivation_id": "597007886a2d0ffb972e2196d6b9ac284c2a40bbb4b87273aa003756472e5924",
+        "derived_end": "2026-10-05",
+        "derived_start": "2026-10-05",
+        "end_offset_days": 0,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:3878",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "hub_first",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": 0,
+        "strategy_id": "supplemental:e445c0cff42eeb179b7327a00aea79d18ce65978a98466483fa49320446e5c1e",
+        "timezone": "America/Los_Angeles"
+      },
+      {
+        "basis": "later_component_origin_airport_local",
+        "date_derivation_id": "c5c68efcf41018791ab2f5b8383fe59d5de828a90b3eacf6df10fedddb5e035b",
+        "derived_end": "2026-10-07",
+        "derived_start": "2026-10-04",
+        "end_offset_days": 2,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:5653",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "hub_second",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": -1,
+        "strategy_id": "supplemental:e445c0cff42eeb179b7327a00aea79d18ce65978a98466483fa49320446e5c1e",
+        "timezone": "Asia/Seoul"
+      },
+      {
+        "basis": "later_component_origin_airport_local",
+        "date_derivation_id": "626f966f9e39b49c05d5d8eff7955697a1f9703b0d4d350133b369b3913d7a4f",
+        "derived_end": "2026-10-07",
+        "derived_start": "2026-10-04",
+        "end_offset_days": 2,
+        "field_provenance": {
+          "amendment_id": null,
+          "field": "departure",
+          "source": {
+            "field": "departure",
+            "kind": "initial_snapshot"
+          }
+        },
+        "note": "not_schedule_or_connection_evidence",
+        "origin_airport_fact_id": "ourairports:3632",
+        "policy_version": "search-planning-compilation-v3",
+        "query_role": "access_main",
+        "source_window_end": "2026-10-05",
+        "source_window_precision": "exact",
+        "source_window_start": "2026-10-05",
+        "start_offset_days": -1,
+        "strategy_id": "supplemental:0da0ad708a61d1a9253527efdc46b71b19befd26fad3638036a3893f54be5079",
+        "timezone": "America/Los_Angeles"
+      }
+    ]
+  },
+  "run_id": "provider-stage-current-mixed_award_cash_eligible-1"
+}
