@@ -312,6 +312,52 @@ class _CashOnlyIntent(_DirectIntent):
         return proposal.model_copy(update={"facts": facts})
 
 
+class _ExactDayDirectIntent(_DirectIntent):
+    def interpret(self, _input: object) -> SemanticIntentProposal:
+        self.calls += 1
+        return SemanticIntentProposal(
+            facts=(
+                SemanticFact(
+                    target=SemanticFactTarget.ORIGIN,
+                    quote="SFO",
+                    location_kind=LocationKind.AIRPORT,
+                    location_value="SFO",
+                ),
+                SemanticFact(
+                    target=SemanticFactTarget.DESTINATION,
+                    quote="NRT",
+                    location_kind=LocationKind.AIRPORT,
+                    location_value="NRT",
+                ),
+                SemanticFact(target=SemanticFactTarget.TRAVELERS, quote="One", travelers=1),
+                SemanticFact(
+                    target=SemanticFactTarget.CABIN,
+                    quote="business",
+                    cabin=CabinClass.BUSINESS,
+                ),
+                SemanticFact(
+                    target=SemanticFactTarget.SEARCH_MODE,
+                    quote="award",
+                    search_mode=SearchMode.AWARD,
+                ),
+            ),
+            temporal_facts=(
+                SemanticTemporalFact(
+                    fact_id="departure",
+                    target=SemanticTemporalTarget.DEPARTURE,
+                    quote="March 10, 2027",
+                    operation=CalendarOperationKind.LITERAL_INTERVAL,
+                    start_year=2027,
+                    start_month=3,
+                    start_day=10,
+                    end_year=2027,
+                    end_month=3,
+                    end_day=10,
+                ),
+            ),
+        )
+
+
 class _Composer:
     def __init__(self, _config: object) -> None:
         self.calls = 0
@@ -571,6 +617,41 @@ def test_upstream_blocked_case_never_counts_as_completed(tmp_path: Path) -> None
     assert artifact["summary"]["completed"] == 0
     assert artifact["summary"]["errors"] == 1
     assert artifact["summary"]["mechanically_completed"] is False
+
+
+def test_exact_single_day_case_compiles_through_gateway_replay(tmp_path: Path) -> None:
+    casebook = tmp_path / "exact-day.yaml"
+    casebook.write_text(
+        DEFAULT_SEARCH_PLANNING_LIVE_CASEBOOK.read_text()
+        .replace(
+            "departing March 10 through March 12, 2027.",
+            "departing March 10, 2027.",
+            1,
+        )
+        .replace(
+            "start: 2027-03-10, end: 2027-03-12",
+            "start: 2027-03-10, end: 2027-03-10",
+            1,
+        )
+    )
+
+    artifact = run_search_planning_live_eval(
+        trials=1,
+        casebook_path=casebook,
+        case_ids=("direct_sfo_to_nrt",),
+        trace_dir=tmp_path,
+        intent_factory=_ExactDayDirectIntent,
+        gateway_factory=_Gateway,
+    )
+
+    record = artifact["records"][0]
+    assert record["status"] == "completed"
+    assert record["handoff"]["executable"] is True
+    records = json.loads(Path(record["private_trace"]["record_path"]).read_text())
+    outbound = records["gateway_discovery_result"]["input"]["outbound_date"]
+    assert outbound["start"] == "2027-03-10"
+    assert outbound["end"] == "2027-03-10"
+    assert outbound["effective_window_precision"] == "exact"
 
 
 def test_no_plan_result_is_an_error_not_completed(

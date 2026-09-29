@@ -821,14 +821,18 @@ def run_search_planning_live_eval(
                                 )
                             )
                     binding_digests = tuple(sorted(item.record_digest for item in bindings))
+                    # Project the gateway outbound date from the validated ready request
+                    # instead of assuming a window, so exact single-day requests replay
+                    # through the same binding identity the M2C compiler enforces.
+                    assert request.departure_window is not None
                     discovery_input = GatewayDiscoveryInput(
                         origin_endpoints=tuple(origins),
                         destination_endpoints=tuple(destinations),
                         outbound_date=GatewayOutboundDateContext(
-                            start=cast(Mapping[str, Any], case["departure"])["start"],
-                            end=cast(Mapping[str, Any], case["departure"])["end"],
-                            timezone=cast(Mapping[str, Any], case["departure"])["timezone"],
-                            effective_window_precision="window",
+                            start=request.departure_window.start,
+                            end=request.departure_window.end,
+                            timezone=request.context.timezone,
+                            effective_window_precision=request.departure_window.precision.value,
                         ),
                         upstream_selection_record_ids=tuple(
                             item.upstream_record_id for item in bindings
