@@ -3,10 +3,17 @@
 ## Phase
 
 Ranking Stage opened on 2026-09-25. Milestone 1 deterministic matching/validation of award
-itineraries with at most one cash access or egress flight is now locally implemented and
-independently reviewed; owner qualification remains pending. Milestone 2 transparent
-deterministic heuristic ranking has no approved weights or implementation yet.
-The subsequent model-driven Output Stage is separate and not yet opened. The owner wants
+itineraries with at most one cash access or egress flight is locally implemented and
+independently reviewed; owner qualification remains pending. On 2026-09-27 the owner decided
+matching policy m1-v2: a confirmed, matching journey-level award cabin is accepted when award
+legs do not report their own cabin (unreported legs stay visible as non-blocking reasons; an
+affirmative out-of-request leg cabin still rejects). The gfly provider-returned party echo is
+recorded as returned-traveler evidence under cash capability v2. One new plan-linked live run
+(`sfo_to_bkk_positioning`) contributes the first five admitted mixed journeys
+(award-cash egress); Turkish seat/traveler unknowns keep the origin-side journeys conditional.
+Milestone 2 transparent deterministic heuristic ranking has no approved weights or
+implementation yet. The subsequent model-driven Output Stage is separate and not yet opened.
+The owner wants
 all meaningful cash-flight alternatives retained and grouped under their award option;
 unknown price or traveler evidence must remain visible rather than causing silent omission.
 Cash positioning acquisition stays on its current same-local-date sample for now.
@@ -14,13 +21,16 @@ At the separate-ticket boundary, the owner's timing rule is at least two elapsed
 onward departure on the transfer airport's local arrival date or the following date. This
 replaces the earlier two-night proposal.
 Cash access on both ends and expanded acquisition dates are recorded in
-[D15 and D18](../DEFERRED.md). The stage's proposed contract, current evidence limits, and
+[D15 and D18](../DEFERRED.md). The stage's contract, current evidence limits, and
 remaining policy decisions are in the
-[Ranking Stage design record](handoffs/2026-09-25-ranking-stage-design.md).
-The [M1 build log](build-log/2026-09-25-ranking-m1-matching.md) and
-[saved matching outputs](../evidence/ranking-stage/m1/README.md) show the complete plan-linked
-pairing accounting and explicit conditional results. Cash cabin scope remains a provisional
-award-only interpretation pending owner direction.
+[Ranking Stage design record](handoffs/2026-09-25-ranking-stage-design.md), whose
+2026-09-27 amendment records the m1-v2 decision and the live evidence run. The
+[M1 build log](build-log/2026-09-25-ranking-m1-matching.md), the
+[evidence-run build log](build-log/2026-09-27-ranking-m1-live-evidence-run.md), and
+[saved matching outputs](../evidence/ranking-stage/m1/README.md) show the complete
+plan-linked pairing accounting and explicit conditional results. Cash cabin scope for the
+separately booked positioning flight remains a provisional award-only interpretation
+pending owner direction.
 
 Provider Stage is owner-complete as of 2026-09-23 for its declared typed, replayable
 `ProviderResultSet` boundary. Its local implementation completed bounded capture and live/replay

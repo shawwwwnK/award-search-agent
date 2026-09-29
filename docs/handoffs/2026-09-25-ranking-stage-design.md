@@ -156,3 +156,27 @@ not establish product value.
 
 This is a design record of the owner's 2026-09-25 direction and the proposed contract shape.
 Unsettled choices above are not silently approved policies.
+
+## 2026-09-27 amendment — m1-v2 cabin rule and first live admitted mixed journeys
+
+The owner decided the award-cabin treatment that item 2 above left open: a confirmed,
+matching **journey-level** award cabin is accepted when the award's legs do not report their
+own cabin. This is matching policy **m1-v2**. Unreported leg cabins stay visible as
+non-blocking `cabin`-dimension reasons rather than silent omissions, and a leg that does
+report a cabin outside the requested set still rejects the journey. The Seats.aero adapter is
+unchanged (its cached-search-v1 capability does not map the per-segment `Cabin` field the
+detail source returns); no provider-capability change was approved or made. The prior
+`m1-v1` outputs remain valid historical records of the earlier rule.
+
+With the owner-approved gfly party echo recorded as returned-traveler evidence, one new
+bounded live run closes the record's evidence gap. The `sfo_to_bkk_positioning` run (frozen
+planning input from casebook session `live:sfo_to_bkk_positioning_permitted:2`, provider run
+`ranking-stage-2026-09-27-positioning-permitted-v2`) contributes five **admitted**
+`award_cash_egress` journeys — the first live admitted mixed journeys — joining the two-seat
+aeroplan SFO→TPE→SIN economy award to SIN→BKK cash positioning with resolved positioning
+permission, recorded party echo, and 230–535-minute transfers passing the separate-ticket
+rules. Turkish seat/traveler unknowns still keep the origin-side journeys conditional, price
+scope remains incomplete, and admission still claims no bookability. The full run record,
+including the two-trial gateway sampling decision and the casebook-harness exact-day fix it
+surfaced, is in the
+[2026-09-27 build log](../build-log/2026-09-27-ranking-m1-live-evidence-run.md).

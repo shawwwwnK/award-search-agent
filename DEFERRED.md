@@ -59,7 +59,9 @@ These are remaining core work, not optional items to postpone until after comple
   cabin, travelers, provenance, and supported requirements before admitting recommendations.
   Direct cash stays a separate benchmark. Access/egress observations remain separate until the
   Ranking Stage handles the opened one-cash portion of D15; hub components and incomplete
-  access journeys remain research leads.
+  access journeys remain research leads. M1 now has one live positive case — the five admitted
+  `award_cash_egress` journeys of the 2026-09-27 positioning-permitted run — which is
+  evidence, not owner qualification.
 - **Ranking Stage M2 and later Output Stage:** rank comparable award-led options using transparent
   deterministic features, then provide a small shortlist, a brief separate cash benchmark, and
   grounded explanation including what could not be verified. A supported empty result must not
@@ -307,3 +309,17 @@ plan-backed matching, validation receipts, and offline saved outputs from the tw
 provider runs. Owner qualification and full-workflow usefulness are not yet claimed. The
 broader cash-on-both-ends and hub topologies remain parked in D15; D18's expanded acquisition
 dates remain parked. See the [M1 build log](docs/build-log/2026-09-25-ranking-m1-matching.md).
+
+2026-09-27 — the owner approved recording the gfly provider-returned `adults` query echo as
+returned-traveler evidence (cash capability v2; v1 replays preserved) and ran the approved
+full bounded live pipeline: a new positioning-permitted upstream case compiled through the
+casebook harness (after fixing that harness's exact-single-day gateway precision defect),
+bounded Seats.aero + pinned gfly execution, and M1 matching. The owner also decided the m1-v2
+award-cabin rule: a confirmed matching journey-level cabin is accepted when award legs do not
+report their own cabin, keeping the Seats.aero adapter unchanged. The new
+`sfo_to_bkk_positioning` corpus run contributes the first live admitted mixed journeys
+(five award-cash egress candidates). D15's one-cash slice now has positive journey evidence;
+owner qualification, usefulness, M2, and the Output Stage remain unclaimed, and D18's
+same-local-date acquisition boundary is unchanged. See the
+[evidence run build log](docs/build-log/2026-09-27-ranking-m1-live-evidence-run.md) and the
+[design record amendment](docs/handoffs/2026-09-25-ranking-stage-design.md#2026-09-27-amendment--m1-v2-cabin-rule-and-first-live-admitted-mixed-journeys).
