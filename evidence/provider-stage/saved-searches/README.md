@@ -11,6 +11,7 @@ source-plan inspection and offline tests; they are plans, not additional provide
 | --- | --- | --- |
 | [Mixed access](runs/mixed_access/result.json) | SFO→BKK, October 5, 2026, one traveler. 212 award summaries, 23 timed award itineraries, four direct cash observations, and 76 SFO→LAX cash-access observations. The plan's LAX→BKK access award and SFO→LAX dependency activated under the versioned two-detail-call priority policy. | Partial: 154 coverage units, 13 transport calls. Cash flights have unknown returned traveler/cabin and price scope; timed combinations still require Ranking M1 validation. |
 | [Exact business](runs/exact_business/result.json) | SFO→BKK, October 5, 2026, two travelers, business class. 41 award summaries, six timed LAX→BKK award itineraries, six direct cash observations, and 66 SFO→LAX cash-access observations. | Partial: 55 coverage units, nine transport calls. Returned seats and cash traveler/price scope remain unknown where providers did not establish them. |
+| [SFO→BKK positioning permitted](runs/sfo_to_bkk_positioning/result.json) | SFO→BKK, October 5, 2026, one traveler, economy, award-and-cash intent with explicit positioning permission. 54 award summaries, four timed award itineraries (three Turkish LAX→BKK and one two-seat aeroplan SFO→TPE→SIN), eight direct cash observations, 37 SFO→LAX origin-access cash observations, and 12 SIN→BKK destination-access cash observations. Every cash observation records the provider-returned query echo as returned-traveler evidence under the v2 cash capability; both positioning dependencies carry resolved permission. | Partial: 73 coverage units, ten transport calls. Cash price scope, per-leg award cabins, and Turkish seats remain unknown where providers did not establish them. |
 
 These runs prove that the existing search-planning graph can lead to both award and cash searches:
 M2C supplies award queries, original endpoint probes, and positioning dependencies; Provider Stage
@@ -40,10 +41,14 @@ result whose replay, attachment, evidence, or hashes do not match.
 
 ## Scope and provenance
 
-Both live runs were captured on 2026-09-25 from current frozen planning inputs, with the reviewed
-Seats.aero and pinned `gfly` adapters. The mixed run uses the original one-traveler mixed-intent
-plan; the exact run uses the original two-traveler business plan. Their embedded provider policy
-and capability snapshots are immutable replay inputs. The active development configuration lives
+The two September 25 runs were captured from the original frozen planning inputs, and the
+September 27 positioning-permitted run was captured from a new frozen planning input compiled
+live through the integrated casebook harness (session `live:sfo_to_bkk_positioning_permitted:2`).
+All three used the reviewed Seats.aero and pinned `gfly` adapters. The mixed run uses the original
+one-traveler mixed-intent plan; the exact run uses the original two-traveler business plan; the
+positioning run uses the economy positioning-permitted plan and embeds the v2 cash capability
+that records the provider-returned party echo. Their embedded provider policy and capability
+snapshots are immutable replay inputs. The active development configuration lives
 at `data/provider_capabilities/provider-stage-current.json` and may evolve independently.
 
 The prior standalone contrast collection was retired at the owner's request because some pairs

@@ -1,0 +1,156 @@
+{
+  "schema_version": "search_planning_live_eval_v2",
+  "diagnostic_only": true,
+  "generated_at": "2026-09-28T05:22:04.603899+00:00",
+  "preflight_only": false,
+  "full_run": true,
+  "run_kind": "full",
+  "models": {
+    "intent": "gpt-5.6-luna",
+    "clarification": "gpt-5.6-luna",
+    "selector": "gpt-5.6-luna",
+    "gateway_generator": "gpt-5.6-luna"
+  },
+  "casebook": {
+    "path": "evals/search_planning_live/casebook-ranking-m1-evidence.yaml",
+    "sha256": "8802dc0b07d69984fcd81e28792a4131b26f19b347be4eb570b4026efd9f5d6d",
+    "contract_version": "search-planning-live-casebook-v2",
+    "case_count": 1
+  },
+  "selected_case_ids": [
+    "sfo_to_bkk_positioning_permitted"
+  ],
+  "trials": 1,
+  "call_plan": {
+    "full_casebook_per_trial": 3,
+    "selected_total": 3,
+    "maximum_total": 56
+  },
+  "catalog": {
+    "release_id": "m1a-3cb7981519612945",
+    "schema_version": "2",
+    "source_date": "2026-09-16",
+    "logical_content_sha256": "8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8",
+    "manifest_sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+    "database_sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+    "source_bundle_manifest_sha256": "d80c54a9e97726750f1b5fe4fc57399f1ec334cc3bc524f5898af4789c3debc6",
+    "source_artifacts": [
+      {
+        "artifact_name": "geonames_admin_corroboration.tsv",
+        "bytes": 929394,
+        "sha256": "9558395e301f1b2756b9aad607ccb43fa81edc17d20b5d845804c685e3da8ade"
+      },
+      {
+        "artifact_name": "geonames_airport_candidates.tsv",
+        "bytes": 2850011,
+        "sha256": "c94016f8537e770a1123f48353d6436db1660ebe2aefad00b7d0fe48131e79a1"
+      },
+      {
+        "artifact_name": "geonames_base_aliases.tsv",
+        "bytes": 21827498,
+        "sha256": "bbee3277f1ddbd4e89cc153fde93439b7ae8544add9ef5219d09bf435ca436a2"
+      },
+      {
+        "artifact_name": "geonames_current_aliases.tsv",
+        "bytes": 83772542,
+        "sha256": "a1ef6f4b9ac00b0f54a0bbd02f165407be3c49185d35126d2c966e5a7eb370e2"
+      },
+      {
+        "artifact_name": "geonames_entities.tsv",
+        "bytes": 44512173,
+        "sha256": "fb344817ca078f0b51328458258297499237a914c2891af78671dcef3c2574bf"
+      },
+      {
+        "artifact_name": "geonames_iata_crossrefs.tsv",
+        "bytes": 215122,
+        "sha256": "fbb7ac159679a3771f81f592d0405b293983d1b6a858f59ed6167130dece0c9b"
+      },
+      {
+        "artifact_name": "ourairports_airports.csv",
+        "bytes": 671715,
+        "sha256": "756ea19e30dcce33f524391e1e5fe1b6c0c247d924728736aa4e8a458d38576b"
+      },
+      {
+        "artifact_name": "ourairports_countries.csv",
+        "bytes": 22165,
+        "sha256": "6663f4b7ec0680691d78cb1d30d23a4da882e5c3258042a7d7beaf6a65ab01af"
+      },
+      {
+        "artifact_name": "ourairports_regions.csv",
+        "bytes": 433835,
+        "sha256": "842d67818fef8479dc22e1905d66dfed1655184d9f3e2c98c2a3f0ac69ef90aa"
+      },
+      {
+        "artifact_name": "quarantine.tsv",
+        "bytes": 48,
+        "sha256": "ba827ff5514579f151e23352b24164c1ec91d0503fe2ef316f32141f7fcf6eeb"
+      },
+      {
+        "artifact_name": "source_raw_records.tsv",
+        "bytes": 294913570,
+        "sha256": "58e08ce742e827a0eccee105b6bfcc96582f36a57bdb27845ce563be1c65915f"
+      },
+      {
+        "artifact_name": "source_schemas.json",
+        "bytes": 1735,
+        "sha256": "011fe6497609ffaea61724f8d8907eaaebc728a0f9946da660943b23b35f31c7"
+      }
+    ]
+  },
+  "identities": {
+    "airport_selection_policy": [
+      "airport-selection-cap-v1",
+      "a3b493cc8c271e78217d99dcc89bcfa7eb8089bb7310a6f2489ae5d9cd915256"
+    ],
+    "distance_policy": [
+      "city-airport-distance-consistency-v1",
+      "1ac4c7c443453db2354e95d852c8c493ce0e0897873c1a4f6fd70bf3350e75c3"
+    ],
+    "market_policy": [
+      "planning-market-v1",
+      "4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a"
+    ]
+  },
+  "compiler_policy": {
+    "policy_version": "search-planning-compilation-v3",
+    "knowledge_freshness_policy_version": "knowledge-freshness-v1",
+    "max_source_evidence_age_days": 365,
+    "max_structural_endpoint_pairs": 100,
+    "later_component_start_offset_days": -1,
+    "later_component_end_offset_days": 2
+  },
+  "records": [
+    {
+      "id": "sfo_to_bkk_positioning_permitted",
+      "trial": 1,
+      "expected_trajectory": "plan",
+      "status": "error",
+      "error_type": "RuntimeError",
+      "latency_seconds": 42.43,
+      "trajectory_matches": false,
+      "trace_reconciliation": {
+        "reserved_calls": 3,
+        "attempted_calls": 2,
+        "private_trace_calls": 2,
+        "within_ceiling": true,
+        "reconciled": true
+      },
+      "private_trace": {
+        "path": "evals/search_planning_live/traces-live/run-2026-09-28T052204.603899-0000-88cace6f/sfo_to_bkk_positioning_permitted__trial-1.json",
+        "record_path": "evals/search_planning_live/traces-live/run-2026-09-28T052204.603899-0000-88cace6f/sfo_to_bkk_positioning_permitted__trial-1__records.json",
+        "calls": 2
+      }
+    }
+  ],
+  "summary": {
+    "runs": 1,
+    "planned_calls": 3,
+    "attempted_calls": 2,
+    "completed": 0,
+    "errors": 1,
+    "trace_reconciled": 1,
+    "same_record_replays": 0,
+    "mechanically_completed": false,
+    "semantic_qualification": "not_claimed_manual_review_required"
+  }
+}

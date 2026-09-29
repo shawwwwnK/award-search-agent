@@ -1,0 +1,39 @@
+contract_version: search-planning-live-casebook-v2
+development_only: true
+casebook_id: m2a_m2b_m2c_integrated_development_v2
+catalog:
+  release_id: m1a-3cb7981519612945
+  logical_content_sha256: 8066652e581947400badef958916dad9dd641de1a0d423a1a601e0e91bcff1d8
+airport_selection_policy:
+  version: airport-selection-cap-v1
+  digest: a3b493cc8c271e78217d99dcc89bcfa7eb8089bb7310a6f2489ae5d9cd915256
+distance_policy:
+  version: city-airport-distance-consistency-v1
+  digest: 1ac4c7c443453db2354e95d852c8c493ce0e0897873c1a4f6fd70bf3350e75c3
+market_policy:
+  version: planning-market-v1
+  digest: 4e2d9436659b4123f340b2619a4620f843a53ae198469fe9cde5e312e965285a
+live_bounds:
+  intent_model: gpt-5.6-luna
+  clarification_model: gpt-5.6-luna
+  selector_model: gpt-5.6-luna
+  gateway_model: gpt-5.6-luna
+  max_trials: 2
+  max_calls_per_trial: 28
+  max_calls_total: 56
+cases:
+  - id: sfo_to_bkk_positioning_permitted
+    review_focus: Resolved positioning permission on a single-day explicit-airport mixed request; source plan for the Ranking M1 positive-case evidence run.
+    raw_request: One traveler needs an economy award and cash flight from SFO to BKK on October 5, 2026, and permits positioning flights.
+    reference_date: 2026-09-19
+    clarification_answers: []
+    expected_trajectory: plan
+    origins:
+      - {kind: airport, value: SFO}
+    destinations:
+      - {kind: airport, value: BKK}
+    departure: {start: 2026-10-05, end: 2026-10-05, timezone: America/Los_Angeles}
+    travelers: 1
+    cabins: [economy]
+    positioning_allowed: true
+    gateway_call_possible: true
