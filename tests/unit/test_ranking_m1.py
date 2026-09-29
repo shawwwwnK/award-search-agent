@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 from award_agent.cli.provider_results import ProviderInputBundle
+from award_agent.domain import CabinClass
 from award_agent.providers.contracts import ProviderResultSet, RawField
 from award_agent.ranking import MatchedJourneySet, assemble_matched_journeys
 from award_agent.ranking.matching import _build_candidate, _local_date, _price_completeness
@@ -58,15 +59,26 @@ def test_saved_plan_enumerates_all_access_pairs_and_separates_benchmark() -> Non
 
 def test_exact_business_preserves_unknown_party_and_award_leg_cabin() -> None:
     matched = _match("exact_business")
+    assert matched.matching_policy_version == "m1-v2"
     assert matched.accounting.cash_positioning_observations == 66
     assert matched.accounting.direct_cash_observations == 6
     assert matched.accounting.scoped_pairs == 396
     assert any(j.status == "conditional" and
                {r.code for r in j.reasons} >= {
-                   "award_travelers_unknown", "cash_travelers_unknown", "award_leg_cabin_unknown"
+                   "award_travelers_unknown", "cash_travelers_unknown",
+                   "award_leg_cabin_unreported",
                } for j in matched.journeys)
     assert any("transfer_negative" in {r.code for r in j.reasons}
                for j in matched.journeys)
+    # The confirmed journey-level cabin keeps unreported leg cabins from blocking
+    # admission, but it does not fabricate per-leg proof: the reason stays unknown.
+    for j in matched.journeys:
+        leg_cabin = [r for r in j.reasons if r.code == "award_leg_cabin_unreported"]
+        if leg_cabin:
+            assert all(r.dimension == "cabin" and r.state == "unknown"
+                       for r in leg_cabin)
+            assert not any(r.code == "award_leg_cabin_unknown"
+                           for r in j.reasons)
 
 
 def test_fanout_and_stale_authority_fail_closed() -> None:
@@ -80,7 +92,8 @@ def _synthetic_candidate(*, minutes: int = 180, seconds: int = 0,
                          day_shift: int = 0, cash_stops: RawField | None = None,
                          cash_change: dict[str, object] | None = None,
                          award_change: dict[str, object] | None = None,
-                         permission_known: bool = False):
+                         permission_known: bool = False,
+                         request_change: dict[str, object] | None = None):
     bundle, result = _sources("mixed_access")
     queries = {q.query_id: q for q in result.execution_plan.queries}
     award = next(o for o in result.observations if o.kind == "award_itinerary"
@@ -112,8 +125,13 @@ def _synthetic_candidate(*, minutes: int = 180, seconds: int = 0,
                 "start": request.departure_window.start - timedelta(days=3),
             }),
         })
+    request_updates: dict[str, object] = {}
     if permission_known:
-        request = request.model_copy(update={"repositioning_allowed": True})
+        request_updates["repositioning_allowed"] = True
+    if request_change:
+        request_updates.update(request_change)
+    if request_updates:
+        request = request.model_copy(update=request_updates)
     return _build_candidate(
         award=award, cash=cash, cash_query=queries[cash.query_id],
         topology="cash_access_award", request=request,
@@ -170,6 +188,46 @@ def test_fully_evidenced_access_schedule_can_be_admitted() -> None:
     assert candidate.status == "admitted", [r.code for r in candidate.reasons]
     assert candidate.price_completeness != "known"
     assert candidate.booking_obligation == "separate_tickets_unverified"
+
+
+def test_journey_level_cabin_accepts_unreported_leg_cabins() -> None:
+    known = RawField(state="value", value=1)
+    candidate = _synthetic_candidate(
+        award_change={"returned_travelers": known, "seats": known, "findings": ()},
+        cash_change={"returned_travelers": known}, permission_known=True,
+        request_change={"cabins": (CabinClass.ECONOMY,)},
+    )
+    # A requested cabin plus a confirmed journey-level cabin admits even though
+    # the provider did not report per-leg cabins; the unreported legs stay visible
+    # as non-blocking cabin-dimension unknowns instead of blocking admission.
+    assert candidate.status == "admitted", [r.code for r in candidate.reasons]
+    codes = {r.code for r in candidate.reasons}
+    assert "award_cabin_supported" in codes
+    assert "award_leg_cabin_unreported" in codes
+    assert "award_leg_cabin_unknown" not in codes
+    unreported = [r for r in candidate.reasons if r.code == "award_leg_cabin_unreported"]
+    assert all(r.dimension == "cabin" and r.state == "unknown" for r in unreported)
+
+
+def test_reported_leg_cabin_outside_request_still_rejects() -> None:
+    bundle, result = _sources("mixed_access")
+    award = next(o for o in result.observations if o.kind == "award_itinerary"
+                 and o.origin == "LAX")
+    known = RawField(state="value", value=1)
+    business_legs = tuple(
+        leg.model_copy(update={"cabin": RawField(state="value", value="business")})
+        for leg in award.legs
+    )
+    candidate = _synthetic_candidate(
+        award_change={"returned_travelers": known, "seats": known, "findings": (),
+                      "legs": business_legs},
+        cash_change={"returned_travelers": known}, permission_known=True,
+        request_change={"cabins": (CabinClass.ECONOMY,)},
+    )
+    # A leg that does report a cabin outside the requested set is affirmative
+    # evidence of a mismatch and must still reject the journey.
+    assert candidate.status == "rejected"
+    assert "award_leg_cabin_mismatch" in {r.code for r in candidate.reasons}
 
 
 def test_egress_uses_award_arrival_then_cash_departure() -> None:

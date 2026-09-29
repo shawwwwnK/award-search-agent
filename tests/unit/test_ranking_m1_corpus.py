@@ -41,6 +41,7 @@ def _assemble(bundle: ProviderInputBundle, result: ProviderResultSet):
     [
         ("mixed_access", 23, 76, 4, 456),
         ("exact_business", 6, 66, 6, 396),
+        ("sfo_to_bkk_positioning", 4, 49, 8, 123),
     ],
 )
 def test_plan_linked_matching_accounts_for_every_observed_component(

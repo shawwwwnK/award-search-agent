@@ -254,10 +254,22 @@ def _requirements(
         else:
             reasons.append(_reason("award_cabin_supported", "requirement", "passed",
                                    "Award result cabin matches the requested cabin."))
+        # Owner decision 2026-09-27: a confirmed, matching journey-level cabin is
+        # accepted when a leg does not report its own cabin. The unreported leg
+        # cabin stays visible as a non-blocking cabin-dimension reason; a leg that
+        # does report an out-of-request cabin still fails the journey.
+        journey_cabin_confirmed = (
+            award.cabin.state == "value" and award.cabin.value in requested_cabins
+        )
         for leg in award.legs:
             if leg.cabin.state != "value":
-                reasons.append(_reason("award_leg_cabin_unknown", "requirement", "unknown",
-                                       "An award leg does not confirm its cabin."))
+                if journey_cabin_confirmed:
+                    reasons.append(_reason("award_leg_cabin_unreported", "cabin", "unknown",
+                                           "Award leg does not report a cabin; the confirmed "
+                                           "journey-level cabin is accepted under this policy."))
+                else:
+                    reasons.append(_reason("award_leg_cabin_unknown", "requirement", "unknown",
+                                           "An award leg does not confirm its cabin."))
             elif leg.cabin.value not in requested_cabins:
                 reasons.append(_reason("award_leg_cabin_mismatch", "requirement", "failed",
                                        "An award leg has a cabin outside the requested cabins."))

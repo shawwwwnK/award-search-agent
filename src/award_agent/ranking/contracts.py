@@ -16,7 +16,9 @@ from award_agent.search_planning.planner import effective_request_digest
 
 class MatchReason(PlanningContractModel):
     code: str = Field(min_length=1)
-    dimension: Literal["scope", "route", "schedule", "requirement", "price", "booking", "evidence"]
+    dimension: Literal[
+        "scope", "route", "schedule", "requirement", "price", "booking", "evidence", "cabin"
+    ]
     state: Literal["passed", "failed", "unknown"]
     detail: str = Field(min_length=1)
 
@@ -124,7 +126,7 @@ class PairingReceipt(PlanningContractModel):
 
 class MatchedJourneySet(PlanningContractModel):
     contract_version: Literal["matched-journey-set-v1"] = "matched-journey-set-v1"
-    matching_policy_version: Literal["m1-v1"] = "m1-v1"
+    matching_policy_version: Literal["m1-v1", "m1-v2"] = "m1-v2"
     current_session_id: str
     current_revision: int = Field(ge=0)
     effective_request_digest: Sha256
