@@ -105,7 +105,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         if not api_key:
             parser.error("set SEATS_AERO_API_KEY in the environment for live execution")
         expected_cash_version = (
-            "0.3.0+award-search-unpriced-v1" if args.gfly_wrapper is not None else "0.3.0"
+            "0.3.0+award-search-unpriced-party-echo-v2" if args.gfly_wrapper is not None
+            else "0.3.0"
         )
         if bundle.award_capability.version != "cached-search-v1" or (
             bundle.cash_capability.version != expected_cash_version

@@ -35,6 +35,15 @@ from award_agent.providers.transport import (
     TransportLimitError,
 )
 
+# Owner-approved policy (2026-09-27): the provider-returned query echo
+# (body["query"]["adults"]) is validated page-level against the requested party
+# before any itinerary row parses, so for these capability versions that validated
+# echo is recorded as returned-traveler evidence: the provider returned these
+# itineraries as the results of an N-adult search. Itinerary party bookability,
+# cabin adequacy, and price scope remain unknown. Older embedded capability
+# versions keep returned_travelers absent so saved replays stay byte-identical.
+_PARTY_ECHO_VERSIONS = frozenset({"0.3.0+award-search-unpriced-party-echo-v2"})
+
 _EXIT_STATUS = {
     0: "completed",
     1: "failed",
@@ -389,6 +398,11 @@ class GflyAdapter:
                     field="cash_amount",
                 )
             )
+        returned_travelers = (
+            RawField(state="value", value=query.travelers, source_field="query.adults")
+            if self._version in _PARTY_ECHO_VERSIONS
+            else RawField()
+        )
         return ProviderObservation(
             observation_id=content_digest(
                 {
@@ -419,6 +433,7 @@ class GflyAdapter:
             retrieved_at=capture.evidence.retrieved_at,
             requested_travelers=query.travelers,
             requested_cabins=query.cabins,
+            returned_travelers=returned_travelers,
             cash_amount=raw_price,
             cash_currency=_raw(row, "currency"),
             price_scope="unknown",

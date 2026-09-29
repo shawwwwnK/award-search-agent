@@ -4,6 +4,12 @@ The Google response can contain an itinerary whose price vector is ``[]``.
 fast-flights 3.1.0 raises while parsing that row, losing every itinerary in the
 response. This launcher preserves that row with an unknown price. It keeps the
 installed packages, gfly CLI, Google backend, and persistent throttle intact.
+
+Effective version v2 (2026-09-27) keeps this launcher's behavior unchanged and
+adds the award-search adapter's party-echo mapping: the adapter records the
+provider-returned query echo ``adults`` value, already validated against the
+requested party, as returned-traveler evidence for completed searches. Saved
+executions that embed the v1 capability keep their original replay bytes.
 """
 
 from __future__ import annotations
@@ -21,7 +27,7 @@ EXPECTED_HASHES = {
     "gfly/backend.py": "954c81e009c4441c61692c06655222024ab1c2be235c8f51057ada01c1500cb5",
     "fast_flights/parser.py": "fd9034aea2066e0b4c96e79668f3b39cb7b94e2ce93509011d79d2cdea39c972",
 }
-PATCH_VERSION = "0.3.0+award-search-unpriced-v1"
+PATCH_VERSION = "0.3.0+award-search-unpriced-party-echo-v2"
 ORIGINAL = "        price = k[1][0][1]\n"
 REPLACEMENT = "        price = _award_search_price(k[1][0])\n"
 

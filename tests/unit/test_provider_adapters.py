@@ -6,7 +6,12 @@ from typing import Any, cast
 
 from pydantic import JsonValue
 
-from award_agent.providers.contracts import CapturedResponse, EvidenceRef, ProviderQuery
+from award_agent.providers.contracts import (
+    CapturedResponse,
+    EvidenceRef,
+    ProviderQuery,
+    RawField,
+)
 from award_agent.providers.evidence import evidence_sha256
 from award_agent.providers.gfly import GflyAdapter
 from award_agent.providers.seats_aero import SeatsAeroAdapter
@@ -270,6 +275,78 @@ def test_gfly_preserves_unknown_price_scope_and_detects_truncation(tmp_path: Pat
     )
     assert partial.status == "partial"
     assert not partial.pair_coverage_exhaustive
+
+
+def test_gfly_party_echo_version_records_returned_travelers(tmp_path: Path) -> None:
+    body = {
+        "schemaVersion": "1",
+        "backend": "google",
+        "currency": "USD",
+        "count": 1,
+        "offset": 0,
+        "nextCursor": None,
+        "query": {
+            "from": "SFO",
+            "to": "BKK",
+            "depart": "2027-05-12",
+            "adults": 2,
+            "cabin": "business",
+        },
+        "itineraries": [
+            {
+                "origin": "SFO",
+                "destination": "BKK",
+                "departure": "2027-05-12T13:30:00",
+                "arrival": "2027-05-14T05:45:00",
+                "price": 7667,
+                "currency": "USD",
+                "stops": 1,
+                "layovers": [{"airport": "NRT", "minutes": 530}],
+                "airlines": ["JAL"],
+            }
+        ],
+    }
+    query = _cash_query()
+    zones = {"SFO": "America/Los_Angeles", "BKK": "Asia/Bangkok"}
+
+    def parse_with(version: str, payload: dict[str, Any]) -> Any:
+        evidence = EvidenceRef(
+            sha256=evidence_sha256(payload),
+            relative_path="party-echo.json",
+            retrieved_at=datetime.now(UTC),
+        )
+        return GflyAdapter(evidence_root=tmp_path, provider_version=version).parse(
+            query,
+            CapturedResponse(
+                query_id=query.query_id,
+                provider="gfly",
+                status="completed",
+                evidence=evidence,
+                body=cast(JsonValue, payload),
+                elapsed_seconds=0.1,
+                byte_count=64,
+            ),
+            airport_timezones=zones,
+        )
+
+    party_echo = parse_with("0.3.0+award-search-unpriced-party-echo-v2", body)
+    assert party_echo.status == "completed"
+    assert party_echo.observations[0].returned_travelers == RawField(
+        state="value", value=2, source_field="query.adults"
+    )
+    # Older embedded capability versions keep the original absent field so
+    # saved replays stay byte-identical.
+    legacy = parse_with("0.3.0+award-search-unpriced-v1", body)
+    assert legacy.status == "completed"
+    assert legacy.observations[0].returned_travelers.state == "absent"
+    assert legacy.observations[0].returned_travelers.source_field is None
+    # An echo that contradicts the requested party fails the whole page before
+    # any returned-traveler evidence can be recorded.
+    mismatch = json.loads(json.dumps(body))
+    mismatch["query"]["adults"] = 1
+    drift = parse_with("0.3.0+award-search-unpriced-party-echo-v2", mismatch)
+    assert drift.status == "schema_drift"
+    assert not drift.observations
 
 
 def test_gfly_compatibility_launcher_is_in_command_prefix(tmp_path: Path) -> None:
