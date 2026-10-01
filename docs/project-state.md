@@ -4,7 +4,8 @@
 
 Ranking Stage opened on 2026-09-25. Milestone 1 deterministic matching/validation of award
 itineraries with at most one cash access or egress flight is locally implemented and
-independently reviewed; owner qualification remains pending. On 2026-09-27 the owner decided
+independently reviewed, and owner-qualified and closed on 2026-09-30 for its declared
+`MatchedJourneySet` boundary. See the [M1 closeout](handoffs/2026-09-30-ranking-m1-closeout.md). On 2026-09-27 the owner decided
 matching policy m1-v2: a confirmed, matching journey-level award cabin is accepted when award
 legs do not report their own cabin (unreported legs stay visible as non-blocking reasons; an
 affirmative out-of-request leg cabin still rejects). The gfly provider-returned party echo is
@@ -29,8 +30,9 @@ remaining policy decisions are in the
 [evidence-run build log](build-log/2026-09-27-ranking-m1-live-evidence-run.md), and
 [saved matching outputs](../evidence/ranking-stage/m1/README.md) show the complete
 plan-linked pairing accounting and explicit conditional results. Cash cabin scope for the
-separately booked positioning flight remains a provisional award-only interpretation
-pending owner direction.
+separately booked positioning flight uses the current award-only interpretation within the
+accepted M1 boundary; cash cabin evidence remains visible. A broader cash-cabin requirement
+would need an explicit policy revision.
 
 Provider Stage is owner-complete as of 2026-09-23 for its declared typed, replayable
 `ProviderResultSet` boundary. Its local implementation completed bounded capture and live/replay

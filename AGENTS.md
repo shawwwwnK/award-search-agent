@@ -63,7 +63,8 @@ implemented and owner-qualified for their declared planning boundaries, and Mile
 Provider Stage under amended ADR 0022 is owner-complete as of 2026-09-23 for its declared
 typed, replayable `ProviderResultSet` boundary. It consumes the frozen `CompiledSearchPlan`
 and must not be described as additional search planning. Ranking Stage M1 matching was opened
-and locally implemented on 2026-09-25, with owner qualification pending. On 2026-09-27 the
+and locally implemented on 2026-09-25, and owner-qualified and closed on 2026-09-30 for its
+declared matching/validation boundary. See `docs/handoffs/2026-09-30-ranking-m1-closeout.md`. On 2026-09-27 the
 owner adopted matching policy m1-v2 (journey-level award cabin accepted when legs are
 unreported) and approved recording the gfly provider-returned party echo as returned-traveler
 evidence; the 2026-09-27 positioning-permitted live run then produced the first five admitted

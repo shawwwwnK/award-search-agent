@@ -1,6 +1,6 @@
 # Ranking Stage: design opening
 
-Date: 2026-09-25. Status: **M1 locally implemented and independently reviewed; owner qualification pending; no M2 scoring weights approved**.
+Date: 2026-09-25. Status: **M1 owner-qualified and closed 2026-09-30 for its declared boundary; no M2 scoring weights approved**.
 
 ## Owner goal and stage boundary
 
@@ -180,3 +180,12 @@ scope remains incomplete, and admission still claims no bookability. The full ru
 including the two-trial gateway sampling decision and the casebook-harness exact-day fix it
 surfaced, is in the
 [2026-09-27 build log](../build-log/2026-09-27-ranking-m1-live-evidence-run.md).
+
+## 2026-09-30 amendment — owner closeout
+
+The owner explicitly instructed “Close M1” after the evidence review. M1 is owner-qualified
+and closed for its declared matching/validation boundary, including the current award-only
+cabin interpretation for separate cash positioning. This supersedes the pending-qualification
+status and provisional cash-cabin policy question above for the accepted scope. The
+[closeout record](2026-09-30-ranking-m1-closeout.md) records verification and limits.
+No M2 weights or Output Stage opening were approved by this closeout.

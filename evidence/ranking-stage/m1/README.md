@@ -50,3 +50,6 @@ The saved output SHA-256 digests are:
 The cash egress and next-day boundary tests use synthetic fixtures; the saved live runs cover
 access positioning (September 25) and destination-side egress positioning (September 27). M1
 does not rank these candidates or produce user-facing recommendations.
+
+Ranking M1 was owner-qualified and closed on 2026-09-30 for this declared matching/validation
+boundary. See the [closeout record](../../../docs/handoffs/2026-09-30-ranking-m1-closeout.md).
