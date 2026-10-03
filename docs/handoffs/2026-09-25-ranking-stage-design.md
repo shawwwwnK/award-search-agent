@@ -1,6 +1,9 @@
 # Ranking Stage: design opening
 
-Date: 2026-09-25. Status: **M1 owner-qualified and closed 2026-09-30 for its declared boundary; no M2 scoring weights approved**.
+Date: 2026-09-25. Status: **Ranking Stage owner-closed 2026-10-02 for the declared M1 matching/validation and M2 solution-style boundaries**.
+
+The [2026-10-01 M2 policy and draft contract](2026-10-01-ranking-m2-styles-contract.md)
+supersede the unsettled M2 ordering, valuation, and conditional-handling proposals below.
 
 ## Owner goal and stage boundary
 
@@ -189,3 +192,32 @@ cabin interpretation for separate cash positioning. This supersedes the pending-
 status and provisional cash-cabin policy question above for the accepted scope. The
 [closeout record](2026-09-30-ranking-m1-closeout.md) records verification and limits.
 No M2 weights or Output Stage opening were approved by this closeout.
+
+## 2026-10-01 amendment — M2 solution-style policy
+
+The owner opened M2 and selected overlapping solution styles rather than precise overall ranking.
+Complete pure-award and one-cash-component journeys share one admitted/conditional comparison
+pool across each request's allowed dates and cabins; original validation status remains visible.
+Time-focused uses 120% of the shortest whole-journey duration. Cost-focused uses 200% of the
+lowest sufficiently complete observed/estimated heuristic cost, with 100 points = USD 1,
+USD 150 per-traveler unknown-tax estimates, versioned USD conversion, and explicitly provisional
+handling of other missing cost evidence. Premium-focused uses the business/first award component
+as the major component, with premium-economy add-ons. Simplicity-focused is removed. Two or more
+full styles earn highlights, and all variants remain retained for later model-driven presentation.
+The [new policy and implemented contract](2026-10-01-ranking-m2-styles-contract.md) distinguish owner
+decisions from engineering mechanics. M1 is unchanged. The offline M2 API/CLI, versioned USD/CAD
+snapshot, tests, and saved-corpus projections are implemented; see the
+[implementation log](../build-log/2026-10-01-ranking-m2-implementation.md). Broader provider,
+observed-cost style usefulness, full-workflow qualification, and Output Stage work remain unclaimed.
+
+## 2026-10-02 amendment — stage closeout
+
+The owner explicitly instructed: “Ok let's for now mark ranking stage closed. commit and push the
+code”. Ranking Stage is recorded owner-closed for the declared M1 matching/validation boundary and
+M2 solution-style boundary. This closeout records the stage disposition; it does not add broader
+provider, bookability, observed-cost-coverage, or full-workflow-usefulness qualification. Unknown
+price scope still prevents a complete cost reference in all three saved requests, and source
+unknowns and conditional status remain visible. The model-driven Output Stage remains unopened;
+cash on both ends and expanded acquisition dates remain parked under D15 and D18. See the
+[stage closeout](2026-10-02-ranking-stage-closeout.md) and
+[dated closeout log](../build-log/2026-10-02-ranking-stage-closeout.md).

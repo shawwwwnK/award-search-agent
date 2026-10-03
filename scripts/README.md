@@ -36,3 +36,18 @@ separate, post-validation maintenance action; it is never part of catalog
 publication or serving. Without
 `--replace-existing-bundle`, the script refuses to overwrite an existing
 bundle.
+
+## Ranking M2 saved-corpus projection
+
+`ranking_style_corpus.py` generates or verifies typed solution-style results from saved M1
+outputs and an explicit currency snapshot. It makes no model/provider calls. Generation requires
+a new output directory; `--verify` recomputes artifacts in temporary paths and checks saved bytes,
+SHA-256 receipts, source retention, and independently derived raw-component UTC timing/styles.
+
+```sh
+PYTHONPATH=src .venv/bin/python scripts/ranking_style_corpus.py \
+  --fx-snapshot data/ranking/m2/fx-2026-09-29.json \
+  --output-dir evidence/ranking-stage/m2/styled --verify
+```
+
+See [saved results and evidence limits](../evidence/ranking-stage/m2/README.md).

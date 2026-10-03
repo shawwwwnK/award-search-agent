@@ -1,6 +1,6 @@
 # Deferred work — finish the core workflow first
 
-Last reviewed: 2026-09-30.
+Last reviewed: 2026-10-02.
 
 This is the living register of work we are deliberately not doing now. Revisit an entry when its trigger is met; that means decide whether to build, narrow, or drop it. It does not mean automatically implement everything here.
 
@@ -17,20 +17,20 @@ request, RAG, a cash-only product, or a public service. This owner-approved cut 
 [ADR 0022](docs/adr/0022-award-first-cash-observations.md); its positive-task discipline was refined
 by the [fresh Astra challenge](docs/build-log/2026-09-19-future-stage-astra-challenge.md).
 
-Current focus: search planning is owner-complete as of 2026-09-21, and Provider Stage is
-owner-complete as of 2026-09-23 for its typed, replayable `ProviderResultSet` boundary. The
-[Provider Stage closeout](docs/handoffs/2026-09-23-provider-stage-closeout.md) records the
-accepted scope and limits. The owner opened Ranking Stage for design on 2026-09-25, with
-Milestone 1 for result matching and Milestone 2 for deterministic ranking. The model-driven
-Output Stage remains later work. ADR 0023 adopts and owner-qualifies M2A with the completed M1,
+Current focus: search planning is owner-complete as of 2026-09-21, Provider Stage is
+owner-complete as of 2026-09-23 for its typed, replayable `ProviderResultSet` boundary, and
+Ranking Stage M1/M2 is owner-closed as of 2026-10-02 for its declared matching/validation and
+solution-style boundaries. The [Provider Stage closeout](docs/handoffs/2026-09-23-provider-stage-closeout.md)
+and [Ranking Stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md) record their
+accepted scopes and limits. The model-driven Output Stage remains later work. ADR 0023 adopts and owner-qualifies M2A with the completed M1,
 M2B, and M2C planning boundaries; independent corroboration remains future policy evidence.
 This register does not reopen 2B or override active ADRs. The [project state](docs/project-state.md)
 and [completed milestone record](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md)
 retain their authority.
 
-**Quick cut:** Provider Stage now returns a replayable `ProviderResultSet` with bounded award and
-cash observations. Ranking Stage will assemble bounded award-led journeys and rank them with
-deterministic features; a later Output Stage will present the results. Later, consider upstream
+**Quick cut:** Provider Stage returns a replayable `ProviderResultSet` with bounded award and
+cash observations. The closed Ranking Stage assembles bounded award-led journeys and organizes
+them into deterministic solution styles; a later Output Stage remains unopened. Later, consider upstream
 simplification, general component assembly, round trips, cash-only
 product scope, points, RAG, wider coverage, persistence, adaptive control, and deployment. User
 feedback is not postponed until everything is finished; the detailed entries below preserve the
@@ -62,10 +62,14 @@ These are remaining core work, not optional items to postpone until after comple
   positive case. Owner qualification applies to this boundary; broader provider reliability,
   bookability, and full-workflow usefulness remain unclaimed. See the
   [M1 closeout](docs/handoffs/2026-09-30-ranking-m1-closeout.md).
-- **Ranking Stage M2 and later Output Stage:** rank comparable award-led options using transparent
-  deterministic features, then provide a small shortlist, a brief separate cash benchmark, and
-  grounded explanation including what could not be verified. A supported empty result must not
-  be padded with invented options.
+- **Ranking Stage M2 and later Output Stage:** M2 solution-style policy was owner-approved on
+  2026-10-01 and locally implemented with offline saved-corpus replay. The owner closed Ranking
+  Stage on 2026-10-02 for its declared M1 matching/validation and M2 solution-style boundaries;
+  the closeout does not establish broader provider, bookability, observed-cost, or full-workflow
+  qualification. The later Output Stage may choose presentation breadth with a separate cash
+  baseline; a supported empty result must not be padded with invented options. See the
+  [M2 policy and draft contract](docs/handoffs/2026-10-01-ranking-m2-styles-contract.md) and
+  [stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md).
 - **Early feedback:** an owner walkthrough can start with labeled mock/replay output before full 2C qualification, then repeat with real pilot evidence. Record usefulness and remaining work. External observation requires consent and safe evidence.
 
 Sources: [planning completion map](docs/handoffs/2026-09-12-search-planning-design.md#9-what-remains-after-this-design), [2B closeout](docs/handoffs/2026-09-19-m2b-gateway-airport-discovery-closeout.md), [architecture recommendations](docs/reviews/2026-09-19-search-planning-architecture-review.md#9-recommended-sequence). Earlier provider feedback is advisory. The existing roadmap already makes RAG and coverage evidence-driven.
@@ -79,7 +83,7 @@ These can be outside the current stage without disappearing into an indefinite b
 | G01 | Current supported intent/clarification behavioral qualification | Before claiming dependable conversational input; 2C can use reviewed frozen requests | Current holdout covering ambiguity, corrections, and partial answers. The 2026-09-20 active-corpus end-to-end trial recorded 13/19 Intent passes, including an unsafe ambiguous-departure ready/plan result and two pending outcomes; it is diagnostic evidence, not qualification. ADR 0015's unsafe return cases are historical, not demonstrated current supported-path defects; ADR 0016 changed that scope. [Historical closeout](docs/handoffs/2026-09-10-adr-0015-stage-closeout.md), [current intent evidence](docs/build-log/2026-09-11-initial-intent-semantic-redesign.md), [end-to-end diagnostic](docs/build-log/2026-09-20-intent-to-search-planning-evaluation.md), [improvement-plan measurement and evidence limits](docs/reviews/2026-09-19-intent-clarification-improvement-plan.md#6-measure-the-whole-task-then-diagnose-the-boundary). The post-core redesign does not defer this claim gate. |
 | G02 · completed 2026-09-21 | M2A owner qualification | Completed when the owner monitors and reviews the M2A build and results for its declared endpoint-selection boundary | The owner explicitly adopted and qualified M2A on 2026-09-21, alongside the completed M1, M2B, and M2C planning boundaries. Selection provenance remains model-proposed, not catalog fact. Independent external review, a preregistered holdout, and useful-coverage-versus-work comparison are unclaimed corroboration for future policy revision, not prerequisites to this completed owner qualification. [ADR 0023](docs/adr/0023-adopt-m2a-and-retire-m0-endpoint-selection.md), [M2A handoff](docs/handoffs/2026-09-17-m2a-llm-endpoint-airport-selection.md). |
 | G03 | Typed requirements and actual constraint enforcement | Before claiming that a hard requirement filters searches or is satisfied by a recommendation | Typed value/provenance/correction contract and tested filter/validation mapping; otherwise visibly unresolved. [Planning completion map](docs/handoffs/2026-09-12-search-planning-design.md#9-what-remains-after-this-design). |
-| G04 | Provider capability semantics, freshness, and result validation | Before presenting provider observations as satisfying the supported travel request | Accepted request/response contract, success and failure fixtures, actual supported evidence, no invented availability/bookability. [Provider intake](docs/provider-feasibility/2026-09-08-initial-provider-intake.md). |
+| G04 | Provider capability semantics, freshness, and result validation | Before presenting provider observations as satisfying the supported travel request or supporting observed-cost comparison claims | Accepted request/response contract, success and failure fixtures, actual supported evidence, no invented availability/bookability. Observed M2 cost comparison additionally needs supported traveler price scope, units/currencies, and a sufficiently complete reference; all three saved runs currently lack that reference. This does not block their declared schedule/cabin style assignments or turn tax estimates into source evidence. [Provider intake](docs/provider-feasibility/2026-09-08-initial-provider-intake.md), [M2 evidence limits](evidence/ranking-stage/m2/README.md). |
 | G05 | Reproducible reviewer verification and truthful quality gates | Before claiming a clean-checkout handoff or reproducible evaluation, not every local preview | Reproduce the declared command with exact permitted artifacts/dependencies and a passing scoped gate. The exported golden CLI and mypy currently fail; whole-repo cleanup/CI are not prerequisites for a narrower disclosed demo. [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | G06 | Operational attempt/deadline bounds and safe partial outcomes | Explicit finite retry/timeout/page policy for live integration; composed deadlines before an end-to-end bound claim | Distinguish SDK invocations, repairs, HTTP attempts, and pages; test exhaustion and partial results. One offline SDK invocation made three HTTP attempts: initial plus two retries. [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | G07 | Privacy-safe evidence and honest demonstration | Before sharing traces or opening a recruiter-facing demo | Sanitized/synthetic public replay, no credentials/private travel, declared live-versus-replay mode, source permission check, clear current limitations. [Evidence rules](evidence/README.md), [trace implementation](src/award_agent/observability/llm_trace.py). |
@@ -331,3 +335,28 @@ current award-only cabin interpretation for separate cash positioning. D15’s w
 and D18 remain parked; M2 has no approved scoring weights or implementation, Output Stage
 remains unopened, and full-workflow usefulness and provider reliability remain unclaimed.
 See the [M1 closeout](docs/handoffs/2026-09-30-ranking-m1-closeout.md).
+
+2026-10-01 — the owner opened M2 for deterministic overlapping solution styles and adopted
+time/cost/premium policies, unified admitted/conditional comparison, explicit cost valuation
+and estimates, provisional unknown-cost treatment, and two-or-more-style highlights. The
+[policy and contract draft](docs/handoffs/2026-10-01-ranking-m2-styles-contract.md) preserve all
+alternatives and pure cash as a separate presentation baseline. M2 core implementation remains
+required, not deferred cleanup. No M2 qualification, Output Stage opening, or change to parked
+D15/D18 scope follows. Earlier unapproved M2 directions remain historical.
+
+2026-10-01 — at the owner's implementation request, M2 was locally implemented with independent
+review/iteration, offline CLI, versioned USD/CAD input, source-preserving saved projections, and
+replay receipts. G04 now explicitly records the observed-cost comparison evidence gap: unknown
+price scope prevents a complete cost reference in all three saved requests. Synthetic tests cover
+cost mechanics but do not supply live-cost evidence. M2 owner qualification, full-workflow
+usefulness, and Output Stage completion remain unclaimed; no parked D15/D18 scope changed.
+See the [implementation log](docs/build-log/2026-10-01-ranking-m2-implementation.md).
+
+2026-10-02 — the owner explicitly instructed that Ranking Stage be marked closed. M1 remains
+owner-qualified for its declared matching/validation boundary, and the stage is owner-closed for
+that boundary plus the implemented M2 solution-style boundary. This does not add broader provider,
+bookability, observed-cost-coverage, or full-workflow-usefulness claims. Unknown price scope still
+prevents a complete cost reference in all three saved requests; source unknowns and conditional
+status remain explicit. Output Stage remains unopened, and D15/D18 scope remains parked. See the
+[Ranking Stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md) and
+[dated closeout log](docs/build-log/2026-10-02-ranking-stage-closeout.md).

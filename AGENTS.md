@@ -68,8 +68,19 @@ declared matching/validation boundary. See `docs/handoffs/2026-09-30-ranking-m1-
 owner adopted matching policy m1-v2 (journey-level award cabin accepted when legs are
 unreported) and approved recording the gfly provider-returned party echo as returned-traveler
 evidence; the 2026-09-27 positioning-permitted live run then produced the first five admitted
-mixed journeys. M2 heuristic scoring and the model-driven Output Stage remain unimplemented;
-no M2 weights are approved. See `docs/build-log/2026-09-25-ranking-m1-matching.md`,
+mixed journeys. M2 was opened for solution-style design on 2026-10-01; the owner approved
+time/cost/premium styles, unified admitted/conditional comparison, explicit heuristic valuation,
+and two-or-more-style highlights. Its approved policy and draft contract are in
+`docs/handoffs/2026-10-01-ranking-m2-styles-contract.md`. The owner closed Ranking Stage on
+2026-10-02 for its declared M1 matching/validation and M2 solution-style boundaries. This
+closeout does not establish broader product or provider qualification. Unknown price scope
+prevents a complete cost reference in all three saved requests. See
+`docs/handoffs/2026-10-02-ranking-stage-closeout.md`,
+`docs/build-log/2026-10-02-ranking-stage-closeout.md`,
+`docs/build-log/2026-10-01-ranking-m2-implementation.md`, and
+`evidence/ranking-stage/m2/README.md`. Weighted overall scoring is not required, and the
+model-driven Output Stage remains unopened.
+See `docs/build-log/2026-09-25-ranking-m1-matching.md`,
 `docs/build-log/2026-09-27-ranking-m1-live-evidence-run.md`, and the saved plan-linked
 matching outputs under `evidence/ranking-stage/m1/`.
 
@@ -200,7 +211,7 @@ the planner completion boundary and the knowledge-base completion map.
 ## Current non-goals
 
 - Provider integrations outside the opened Provider Stage Seats.aero and `gfly` slice
-- Ranking M2 heuristic scoring and model-driven Output Stage
+- Weighted overall ranking and model-driven Output Stage; M2 solution styles are locally implemented
 - RAG
 - Production Web UI
 - Authentication

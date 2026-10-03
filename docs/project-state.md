@@ -12,8 +12,25 @@ affirmative out-of-request leg cabin still rejects). The gfly provider-returned 
 recorded as returned-traveler evidence under cash capability v2. One new plan-linked live run
 (`sfo_to_bkk_positioning`) contributes the first five admitted mixed journeys
 (award-cash egress); Turkish seat/traveler unknowns keep the origin-side journeys conditional.
-Milestone 2 transparent deterministic heuristic ranking has no approved weights or
-implementation yet. The subsequent model-driven Output Stage is separate and not yet opened.
+Milestone 2 opened for solution-style design on 2026-10-01. The owner approved a unified
+admitted/conditional pool for complete pure-award and one-cash-component journeys: time-focused
+within 120% of minimum elapsed time, cost-focused within 200% of a sufficiently complete
+heuristic-cost minimum, and premium-focused business/first award components with premium-economy
+add-ons. Cost uses 100 points = USD 1, a USD 150 per-traveler unknown-tax estimate, and versioned
+currency conversion; partial costs remain explicitly provisional. Two or more full styles earn
+multi-style highlights. All alternatives remain retained. See the
+[approved policy and draft contract](handoffs/2026-10-01-ranking-m2-styles-contract.md).
+M2 is locally implemented behind an offline API/CLI with versioned policy/FX attachments,
+exact cost/time comparisons, evidence-preserving assessments, and complete saved-corpus replay.
+On 2026-10-02, the owner closed Ranking Stage for the declared M1 matching/validation and M2
+solution-style boundaries. This is the requested stage closeout, not a new claim of broader
+provider, product, or recommendation qualification. Weighted overall scoring is not required.
+See the [stage closeout](handoffs/2026-10-02-ranking-stage-closeout.md),
+[implementation/review evidence](build-log/2026-10-01-ranking-m2-implementation.md), and
+[saved style results](../evidence/ranking-stage/m2/README.md). All three saved requests lack a
+sufficiently complete cost reference because price scope is unknown; observed-cost style usefulness
+is unclaimed. The subsequent model-driven Output Stage is separate and not yet opened; pure cash
+remains its separate baseline.
 The owner wants
 all meaningful cash-flight alternatives retained and grouped under their award option;
 unknown price or traveler evidence must remain visible rather than causing silent omission.

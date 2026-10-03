@@ -20,6 +20,13 @@ retired. Provider Stage under ADR 0022 is owner-complete as of 2026-09-23 for it
 the frozen `CompiledSearchPlan`. The bounded capture and combined live/replay engineering gates
 passed. See the [stage closeout](docs/handoffs/2026-09-23-provider-stage-closeout.md).
 
+Ranking Stage M1 matching/validation and M2 solution styles are owner-closed as of 2026-10-02
+for their declared boundaries. This closeout does not establish provider reliability, bookability,
+observed-cost coverage, or full-workflow usefulness. See the
+[stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md),
+[M2 policy and contract](docs/handoffs/2026-10-01-ranking-m2-styles-contract.md), and
+[saved style results](evidence/ranking-stage/m2/README.md). Model-driven Output Stage is unopened.
+
 Milestone 2B gateway-airport discovery is implemented and owner-closed. Milestone 2C deterministic
 search-strategy compilation is implemented in place, with no V1 compatibility path. Its integrated
 live diagnostic is model-only: the compiler itself makes no additional model call, and neither the
@@ -272,6 +279,23 @@ the command writes a new `MatchedJourneySet` JSON file with every plan-authorize
 pairing, validation reasons, grouping IDs, direct-cash benchmarks, and original evidence.
 It makes no provider or model calls. The two plan-linked examples and M1 validation evidence
 are described in [the M1 build log](docs/build-log/2026-09-25-ranking-m1-matching.md).
-Heuristic scoring and model-written output belong to later milestones.
+M2 styles are a separate offline projection; model-written output belongs to the later Output Stage.
+
+### Local Ranking M2 command
+
+```sh
+PYTHONPATH=src .venv/bin/python -m award_agent.cli.ranking_styles \
+  --matched evidence/ranking-stage/m1/sfo_to_bkk_positioning.json \
+  --fx-snapshot data/ranking/m2/fx-2026-09-29.json \
+  --output /private/tmp/positioning-styles.json
+```
+
+The output path must be new. Optional `--policy` supplies a versioned policy JSON; defaults use
+the owner-approved time/cost/premium rubric. The command preserves every original journey and
+its evidence, pools admitted and conditional options for style assignment, retains premium-economy
+add-ons, and carries direct cash only as a separate presentation baseline. It does not call providers
+or models, decide bookability, or select a final presentation shortlist. Unknown scope prevents a
+complete cost reference in the current saved corpus; see the
+[results and replay instructions](evidence/ranking-stage/m2/README.md).
 
 The living design workbook is at `/Users/shawnkang/bots/workbook_formatted.md`. It is a design aid for broader product context; repository docs and ADRs capture implementation-specific decisions and superseding boundaries.
