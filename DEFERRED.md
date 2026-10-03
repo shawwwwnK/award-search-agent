@@ -22,7 +22,8 @@ owner-complete as of 2026-09-23 for its typed, replayable `ProviderResultSet` bo
 Ranking Stage M1/M2 is owner-closed as of 2026-10-02 for its declared matching/validation and
 solution-style boundaries. The [Provider Stage closeout](docs/handoffs/2026-09-23-provider-stage-closeout.md)
 and [Ranking Stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md) record their
-accepted scopes and limits. The model-driven Output Stage remains later work. ADR 0023 adopts and owner-qualifies M2A with the completed M1,
+accepted scopes and limits. Results Stage (previously Output Stage) is owner-opened for design on 2026-10-02; see the
+[opening record](docs/handoffs/2026-10-02-results-stage-opening.md). ADR 0023 adopts and owner-qualifies M2A with the completed M1,
 M2B, and M2C planning boundaries; independent corroboration remains future policy evidence.
 This register does not reopen 2B or override active ADRs. The [project state](docs/project-state.md)
 and [completed milestone record](docs/handoffs/2026-09-13-search-planning-milestone-roadmap.md)
@@ -30,7 +31,7 @@ retain their authority.
 
 **Quick cut:** Provider Stage returns a replayable `ProviderResultSet` with bounded award and
 cash observations. The closed Ranking Stage assembles bounded award-led journeys and organizes
-them into deterministic solution styles; a later Output Stage remains unopened. Later, consider upstream
+them into deterministic solution styles; Results Stage is now open for user-facing presentation/explanation design. Later, consider upstream
 simplification, general component assembly, round trips, cash-only
 product scope, points, RAG, wider coverage, persistence, adaptive control, and deployment. User
 feedback is not postponed until everything is finished; the detailed entries below preserve the
@@ -62,12 +63,14 @@ These are remaining core work, not optional items to postpone until after comple
   positive case. Owner qualification applies to this boundary; broader provider reliability,
   bookability, and full-workflow usefulness remain unclaimed. See the
   [M1 closeout](docs/handoffs/2026-09-30-ranking-m1-closeout.md).
-- **Ranking Stage M2 and later Output Stage:** M2 solution-style policy was owner-approved on
+- **Ranking Stage M2 and Results Stage:** M2 solution-style policy was owner-approved on
   2026-10-01 and locally implemented with offline saved-corpus replay. The owner closed Ranking
   Stage on 2026-10-02 for its declared M1 matching/validation and M2 solution-style boundaries;
   the closeout does not establish broader provider, bookability, observed-cost, or full-workflow
-  qualification. The later Output Stage may choose presentation breadth with a separate cash
+  qualification. Results Stage is owner-opened for design on 2026-10-02 and may choose presentation breadth with a separate cash
   baseline; a supported empty result must not be padded with invented options. See the
+  [Results v1 discussion draft](docs/handoffs/2026-10-02-results-stage-v1-design.md), which
+  records the owner's high-level direction and unapproved engineering choices, the
   [M2 policy and draft contract](docs/handoffs/2026-10-01-ranking-m2-styles-contract.md) and
   [stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md).
 - **Early feedback:** an owner walkthrough can start with labeled mock/replay output before full 2C qualification, then repeat with real pilot evidence. Record usefulness and remaining work. External observation requires consent and safe evidence.
@@ -360,3 +363,48 @@ prevents a complete cost reference in all three saved requests; source unknowns 
 status remain explicit. Output Stage remains unopened, and D15/D18 scope remains parked. See the
 [Ranking Stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md) and
 [dated closeout log](docs/build-log/2026-10-02-ranking-stage-closeout.md).
+
+2026-10-02 — the owner instructed “Now we’re opening the results stage”. Results Stage is
+open for design as the downstream user-facing stage previously called Output Stage. Its
+detailed contract, presentation policy, and completion gates remain unsettled. Ranking stays
+closed; G04’s price-scope gap and parked D06/D15/D18 scope carry forward. No implementation,
+live evaluation, or full-workflow usefulness claim follows from opening the stage. See the
+[opening record](docs/handoffs/2026-10-02-results-stage-opening.md).
+
+2026-10-02 — the owner supplied high-level Results v1 direction and requested orchestrated
+verification, investigation, and detailed architecture design. The
+[discussion draft](docs/handoffs/2026-10-02-results-stage-v1-design.md) records source-field
+mapping, missing cash cabin/leg evidence and endpoint rationale, grouping/variant safeguards,
+fallback/input limits, and evaluation recommendations. All three saved M2 cases passed their
+documented verification. Engineering choices remain proposals for discussion, not approved
+implementation or new deferrals. Results core work remains required; G04 and parked D06/D15/D18
+retain their current triggers and evidence requirements. See the
+[design log](docs/build-log/2026-10-02-results-stage-v1-design.md).
+
+2026-10-02 — following review, the owner accepted LLM editorial writing with code-filled data,
+award grouping/conservative duplicate cleanup, and five displayed complete journeys including
+alternates. Clear airline programs replace traveler-facing source presentation for current v1.
+The owner expects cleaned input to fit and did not adopt a separate input cap. The owner
+requested milestones and an additional LLM evaluation milestone; the
+[milestone proposal](docs/handoffs/2026-10-02-results-stage-milestones.md) sequences cleaned
+input, generated explanation/factual rendering, and calibrated LLM-assisted evaluation.
+Failure/retry behavior and milestone details remain to be settled. Results core work remains
+required; no implementation, qualification, new parked feature, or change to G04/D06/D15/D18
+follows from these design decisions.
+
+2026-10-02 — the owner requested further orchestrated investigation and detailed architecture
+planning before Results implementation. The
+[execution proposal](docs/handoffs/2026-10-02-results-stage-implementation-plan.md) specifies
+M1/M2/M3 slices, compact/input-audit separation, same-observation duplicate rules, factual
+rendering regressions, and a proposed calibrated LLM evaluation workload. Cleanup byte
+measurements are incomplete exploratory prototypes, not context-fit or sufficient-input claims.
+New engineering choices remain proposals; no Results runtime, qualification, input cap, or
+new parked feature was added. Current G04 and D06/D15/D18 dispositions remain unchanged.
+See the [planning log](docs/build-log/2026-10-02-results-stage-detailed-plan.md).
+
+2026-10-03 — the owner clarified that Results output structure and prose must be LLM-authored,
+with code filling factual blanks. The
+[template refinement](docs/handoffs/2026-10-03-results-stage-authored-template.md) supersedes
+the earlier assembled-answer interpretation. Tool submission versus structured output remains
+a proposal. M1 preparation and M3 evaluation remain applicable; no runtime, new deferral, or
+change to existing G04/D06/D15/D18 scope follows.

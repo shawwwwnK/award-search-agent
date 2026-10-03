@@ -2,6 +2,46 @@
 
 ## Phase
 
+Results Stage is owner-opened for design as of 2026-10-02, following Ranking Stage closeout.
+This is the user-facing presentation/explanation stage previously called Output Stage. It
+consumes the frozen `RankedJourneySet`; its detailed output contract and presentation policy
+remain to be settled. See the [opening record](handoffs/2026-10-02-results-stage-opening.md).
+No Results Stage implementation or qualification is claimed.
+
+On 2026-10-03, the owner clarified that the LLM should author the main output and structure,
+with code filling factual blanks. The [template refinement](handoffs/2026-10-03-results-stage-authored-template.md)
+records this correction to the earlier assembled-answer proposal and recommends scoped factual
+placeholders within model-authored Markdown. A submission tool versus structured output remains
+under discussion; no tool/runtime implementation is claimed.
+
+On 2026-10-02, the owner supplied a high-level Results Stage v1 proposal and requested
+orchestrated verification, investigation, and detailed architecture design. The
+[detailed discussion draft](handoffs/2026-10-02-results-stage-v1-design.md) maps existing
+fields, records current evidence limits, and recommends an evidence brief, structured model
+selection/editorial writing, and deterministic factual rendering. Engineering and presentation
+choices were initially proposals; no runtime changes or new model/provider calls were made. All three
+saved M2 results passed the documented corpus verification. See the
+[design investigation log](build-log/2026-10-02-results-stage-v1-design.md).
+
+In the subsequent review, the owner accepted LLM editorial writing with code-filled facts,
+award grouping and conservative duplicate cleanup, and five displayed complete journeys
+including alternates. The owner requested clear airline programs without traveler-facing
+source citations, expects cleanup to keep the input manageable rather than adding an input
+cap, and requested proper milestones including LLM evaluation. The
+[milestone proposal](handoffs/2026-10-02-results-stage-milestones.md) sequences M1 cleaned
+input, M2 selection/explanation and factual rendering, and M3 LLM-assisted evaluation.
+Exact generation-failure handling, retry policy, and milestone details remain to be settled;
+no milestone is implemented or qualified by this design discussion.
+
+The owner then requested further orchestrated investigation and architecture planning before
+implementation. The [detailed execution plan](handoffs/2026-10-02-results-stage-implementation-plan.md)
+defines slices within M1/M2/M3, compact versus audit contracts, conservative identity rules,
+writer/renderer/judge responsibilities, actual saved regression examples, exploratory input
+sizes, and a proposed 12-case repeated diagnostic. The architect reviewed the integrated plan;
+new engineering choices remain proposals. See the
+[detailed-planning log](build-log/2026-10-02-results-stage-detailed-plan.md). No Results runtime
+implementation, live calls, or stage qualification follows.
+
 Ranking Stage opened on 2026-09-25. Milestone 1 deterministic matching/validation of award
 itineraries with at most one cash access or egress flight is locally implemented and
 independently reviewed, and owner-qualified and closed on 2026-09-30 for its declared
@@ -29,7 +69,7 @@ See the [stage closeout](handoffs/2026-10-02-ranking-stage-closeout.md),
 [implementation/review evidence](build-log/2026-10-01-ranking-m2-implementation.md), and
 [saved style results](../evidence/ranking-stage/m2/README.md). All three saved requests lack a
 sufficiently complete cost reference because price scope is unknown; observed-cost style usefulness
-is unclaimed. The subsequent model-driven Output Stage is separate and not yet opened; pure cash
+is unclaimed. The downstream Results Stage (previously Output Stage) is now open for design; pure cash
 remains its separate baseline.
 The owner wants
 all meaningful cash-flight alternatives retained and grouped under their award option;

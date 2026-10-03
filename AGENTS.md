@@ -79,7 +79,9 @@ prevents a complete cost reference in all three saved requests. See
 `docs/build-log/2026-10-02-ranking-stage-closeout.md`,
 `docs/build-log/2026-10-01-ranking-m2-implementation.md`, and
 `evidence/ranking-stage/m2/README.md`. Weighted overall scoring is not required, and the
-model-driven Output Stage remains unopened.
+Results Stage (previously Output Stage) is owner-opened for design as of 2026-10-02.
+See `docs/handoffs/2026-10-02-results-stage-opening.md`; its detailed output contract and
+presentation policy remain unsettled, with no implementation or qualification claimed.
 See `docs/build-log/2026-09-25-ranking-m1-matching.md`,
 `docs/build-log/2026-09-27-ranking-m1-live-evidence-run.md`, and the saved plan-linked
 matching outputs under `evidence/ranking-stage/m1/`.
@@ -211,7 +213,7 @@ the planner completion boundary and the knowledge-base completion map.
 ## Current non-goals
 
 - Provider integrations outside the opened Provider Stage Seats.aero and `gfly` slice
-- Weighted overall ranking and model-driven Output Stage; M2 solution styles are locally implemented
+- Weighted overall ranking; M2 solution styles are locally implemented
 - RAG
 - Production Web UI
 - Authentication

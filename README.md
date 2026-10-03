@@ -25,7 +25,9 @@ for their declared boundaries. This closeout does not establish provider reliabi
 observed-cost coverage, or full-workflow usefulness. See the
 [stage closeout](docs/handoffs/2026-10-02-ranking-stage-closeout.md),
 [M2 policy and contract](docs/handoffs/2026-10-01-ranking-m2-styles-contract.md), and
-[saved style results](evidence/ranking-stage/m2/README.md). Model-driven Output Stage is unopened.
+[saved style results](evidence/ranking-stage/m2/README.md). Results Stage (previously Output Stage) is open for design as of 2026-10-02. It will consume
+`RankedJourneySet` for user-facing presentation and explanation; the detailed contract remains
+unsettled. See the [opening record](docs/handoffs/2026-10-02-results-stage-opening.md).
 
 Milestone 2B gateway-airport discovery is implemented and owner-closed. Milestone 2C deterministic
 search-strategy compilation is implemented in place, with no V1 compatibility path. Its integrated
@@ -279,7 +281,7 @@ the command writes a new `MatchedJourneySet` JSON file with every plan-authorize
 pairing, validation reasons, grouping IDs, direct-cash benchmarks, and original evidence.
 It makes no provider or model calls. The two plan-linked examples and M1 validation evidence
 are described in [the M1 build log](docs/build-log/2026-09-25-ranking-m1-matching.md).
-M2 styles are a separate offline projection; model-written output belongs to the later Output Stage.
+M2 styles are a separate offline projection; model-written output belongs to the newly opened Results Stage.
 
 ### Local Ranking M2 command
 
