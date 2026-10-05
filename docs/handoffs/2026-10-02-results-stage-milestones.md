@@ -1,141 +1,171 @@
 # Results Stage execution milestones
 
-Date: 2026-10-02. Status: **proposed milestone breakdown following owner decisions**.
+Date: 2026-10-02; revised 2026-10-04. Status: **reviewed milestone proposal; no milestone implemented or qualified**.
 
-The owner requested proper milestones and a separate milestone for LLM-based evaluation.
-The milestone boundaries and completion evidence below are proposals, not implementation
-authorization or owner qualification. The accepted product choices are recorded in the
-[v1 design](2026-10-02-results-stage-v1-design.md).
+The owner requested a thorough design/milestone review with subagent verification and current
+LLM-call guidance, and reaffirmed that **the LLM controls the output structure**. The sequence
+remains M1 cleaned evidence, M2 model-authored answer, M3 LLM-assisted evaluation. This revision
+makes the gates concrete; it does not claim owner acceptance of unimplemented engineering choices.
 
-The investigation-backed [detailed execution plan](2026-10-02-results-stage-implementation-plan.md)
-specifies implementation slices, brief/writer/judge contracts, concrete saved regressions,
-exploratory cleanup measurements, proposed file seams, and a bounded evaluation workload.
+Use the [v1 design](2026-10-02-results-stage-v1-design.md) for product authority, the
+[authored-document contract](2026-10-03-results-stage-authored-template.md) for structure/scopes,
+and the [execution plan](2026-10-02-results-stage-implementation-plan.md) for exact proposed mechanics.
 
-## Agreed stage direction
+## Rules across all milestones
 
-The LLM selects journeys and writes editorial explanations; code fills factual data. Preserve
-award groups and individual cash alternatives; consolidate only genuine duplicates. Usually
-show three choices, at most five complete journeys including alternates. Make award programs
-clear. Retain internal evidence links without requiring traveler-facing citations.
+The LLM selects useful complete journeys and authors headings, order, grouping, prose, lists,
+tables and emphasis. Code fills scoped factual placeholders and checks content; it never imposes
+a normal-answer skeleton or appends omitted conditions. Internal scope parts can repeat and
+interleave. Required facts constrain content, not layout.
 
-Clean the input by removing irrelevant mechanics, factoring shared details, and consolidating
-duplicates. Preserve every distinct complete alternative and its relationships. No additional
-input cap, overflow mechanism, or multi-pass selection architecture is adopted now.
+Retain every distinct complete input alternative with conservative same-observation duplicate
+rules. Usually display three complete choices; at most five including alternates. Preserve
+programs, conditional requirements, scoped quotes, unknowns, separate bookings, component timing
+and actual coverage. Cash remains a separate anchor. No input selection cap, new provider calls,
+upstream policy reinterpretation, production UI or workflow framework is part of these milestones.
 
-The sequence is **M1 cleaned evidence -> M2 traveler answer -> M3 LLM-assisted evaluation**.
-Owner review and stage closeout follow the milestone evidence; they are not a fourth feature.
-No milestone reopens request, planning, provider, matching, or style policy.
+## M1 — Establish trustworthy, coherent input
 
-## M1 — Prepare coherent results for the LLM
+**Deliverable:** deterministic `ResultsBrief`, internal `ProjectionReceipt`, and versioned factual
+slot/obligation catalog from one frozen `RankedJourneySet`.
 
-**Goal:** turn one frozen `RankedJourneySet` into a concise, sufficient `ResultsBrief`.
+**M1.1: authority and exact projection.** Specify the import authority before treating status as
+trusted. General imports need the proposed matching-owned policy-versioned requirement verifier;
+current schema/hash checks alone do not catch seeded missing blockers. A limited independently
+pinned fixture prototype must explicitly declare that narrower boundary. Do not duplicate matching
+policy in Results or silently repair a source artifact.
 
-Scope:
+Join exact candidate/component/support IDs; preserve whole variants, statuses, style states,
+price scopes, missing costs, conditional reasons and nonblocking booking obligations. Factor shared
+award/cash/condition records, group by award identity and endpoints, and account for every input
+record/alias. Derive price limitations from component evidence, not only convenience summaries.
+Separate complete alternatives, direct cash, supported incomplete observations and rejected conclusions.
 
-- Define the brief and presentation IDs, award groups, and exact duplicate equivalence.
-- Join each complete alternative to its own route, times, cabin evidence, program, scoped
-  prices, styles, unresolved requirements, booking checks, and observations.
-- Factor shared award information without losing the complete identity of any cash variant.
-- Summarize supported request flexibility, recorded planning explanations, and meaningful
-  coverage gaps/failures. Keep planning hypotheses distinct from observed flights.
-- Include separate cash observations, supported incomplete possibilities, and useful rejection
-  conclusions at the appropriate granularity. Remove successful validation mechanics.
-- Preserve original IDs/evidence internally and account for all original records. Measure
-  cleaned sizes for the three saved cases; do not preemptively cap the input.
+**M1.2: independent preservation evidence.** Project all three saved cases without model/provider
+calls. Review source-backed variant examples and expected facts independently of the projector.
+Measure complete serialized prompt/schema size, actual token counts where supported (label estimates),
+and group/variant counts. Earlier incomplete probe sizes do not establish fit. Supply meaningful
+coverage summaries without treating overlapping graph units as a search completion percentage.
 
-Completion evidence:
+Exit evidence:
 
-- All three saved M2 inputs project reproducibly without model/provider calls, with complete
-  record accounting and no mixed variant facts.
-- Offline tests cover distinct variants versus duplicates, differing status/styles/scopes,
-  missing cash cabin/legs, unknown prices, mandatory booking checks, conditional causes,
-  partial/empty/failed coverage, and incomplete/rejected separation.
-- Reviewed input examples show that a reader can reconstruct each whole alternative from the
-  brief and understand which facts are unknown. Record before/after sizes without claiming
-  that a particular cleanup ratio is inherently good.
+- All three saved cases preserve 257/106/64 eligible variants before any justified aliases,
+  23/3/4 award groups, all unknown cost scopes and complete record accounting.
+- Source-condition mutation/valid controls demonstrate missing seat/party/cabin evidence handling;
+  historical unsupported policy is explicitly rejected. Independent source facts catch projection
+  mistakes rather than agreeing with the same helper's output.
+- Offline tests cover same-observation equivalence and conflicting near-duplicates, status/styles,
+  missing versus zero fees, component-cost-summary inconsistencies, missing cabin/legs, positive
+  mixed-cabin evidence, actual coverage, empty/failure/incomplete/rejected separation.
+- A walkthrough reconstructs the Aeroplan USD 196 / 29h50 and USD 290 / 27h30 variants, conditional
+  fastest versus admitted egress, and SFO local-time/UTC difference without invented facts.
+- No input is silently dropped to fit context. Any measured fit problem is reported as evidence.
 
-**Review checkpoint:** inspect one grouped award with multiple cash alternatives and one
-conditional complete journey. Resolve projection gaps before implementing LLM selection.
+**Checkpoint:** review the accepted source boundary, one multi-cash award group, one conditional
+complete journey and the complete compact inputs. Resolve preservation gaps before model selection.
 
-## M2 — Select, explain, and render the traveler answer
+## M2 — Let the LLM author the answer and fill its facts
 
-**Goal:** produce a self-contained `ResultsArtifact` from the M1 brief.
+**Deliverable:** `ResultsDocument -> ResultsArtifact`, with a narrow authoring call and exact
+saved-document replay. No code-owned visible layout.
 
-2026-10-03 owner clarification: the LLM authors the main answer's layout and text; code fills
-the factual blanks. Follow the [authored-template refinement](2026-10-03-results-stage-authored-template.md)
-instead of the earlier assembled-answer interpretation. M2 first builds placeholder substitution
-and required-slot checks, then adds LLM-authored documents. Tool submission is a proposed option.
+**M2.1: document rendering without a model.** Implement the strict manifest/scoped-parts contract,
+slot lookup, literal substitution, Markdown parsing and visible-content receipts. Code concatenates
+model-written strings exactly. Build hand-authored prose and comparison-table examples, with the
+same journey referenced in multiple parts. Validate the final concatenated document so syntax
+spanning parts cannot hide slots. Escape untrusted values; prohibit recursive interpolation.
 
-Scope:
+Require one to five unique complete selections when the complete pool is nonempty (zero otherwise),
+including alternates; enforce one primary/optional alternate
+per group, same-variant facts, scoped visible conditions, unchanged memberships, qualified comparison
+slots and separate benchmark treatment. The model determines where these facts appear. A required
+condition's presence does not prove that surrounding prose is true; preserve that limitation.
 
-- Define the structured generation response: selected IDs, optional alternate IDs, opening,
-  reasons to investigate, tradeoffs, editorial premium-price judgments, and shared explanation.
-- Implement the narrow LLM interface and versioned prompt. The LLM does not return authoritative
-  factual itinerary fields or alter eligibility/styles.
-- Code fills the selected journeys' factual details and required conditions; make the redemption
-  program clear and distinguish it from operating airlines when reported.
-- Enforce valid IDs, award-group/alternate limits, five complete journeys in total, original
-  style labels, and specific conditions. Support qualified fastest/heuristic-cost statements
-  only through supplied comparisons; free prose still needs semantic evaluation.
-- Handle useful separate cash comparison, no-complete-journey possibilities, and no useful
-  results without padding or promoting rejected trips.
-- Specify generation-failure behavior before wiring it. The original proposal calls for a
-  short factual summary; precise breadth and retry policy remain unsettled after the owner's
-  clarification questions. A failed LLM response is different from a valid no-flights answer.
-- Record prompt/model settings, usage, attempts, raw response, selected IDs, and checks for replay.
+**M2.2: authoring adapter and failure/replay.** Recommend one strict Responses structured output
+containing the freely authored document. Configure `store=False`, one invocation, `max_retries=0`,
+no repair, explicit finite timeout/output/cancellation settings and no automatic truncation. Select
+numeric budgets/model settings before live calls. Validate refusal/incomplete/status/schema and all
+document checks before exposing an answer. Transport choice is an engineering recommendation.
 
-Completion evidence:
+Keep source, search, generation and delivery outcomes separate. Source corruption stops generation.
+Genuine empty results are valid evidence. Malformed/truncated/invalid authoring returns explicit
+failure evidence; settle whether to add the proposed separately labeled factual-summary fallback
+before accepting delivery behavior. That choice does not move normal-answer structure into code.
 
-- Fake-writer offline tests exercise valid selection and invalid IDs, spliced variant attempts,
-  wrong labels, alternate-limit violations, missing conditions, and model-call/schema errors.
-- Saved-result examples and synthetic cases render complete, readable factual summaries with
-  no assumed price scope. Cost cases use explicitly synthetic supported scopes.
-- Run a bounded generation diagnostic on frozen inputs and preserve its actual outputs for M3.
-  No new provider searches are needed. Demonstrate the settled failure behavior.
-- Owner walkthrough confirms the intended answer shape: fuzzy explanations from the LLM,
-  accurate data from code, understandable programs, and essential conditions in the answer.
+Save the accepted document, source/brief/version hashes, inserted-fact map, settings and attempt
+receipts. Exact replay substitutes the saved document without a model; regeneration is a new run.
 
-**Review checkpoint:** assess actual answers before adding the LLM judge. M2 tests can establish
-structural correctness; they do not qualify editorial judgment or arbitrary prose.
+**M2.3: actual document diagnostic.** Run a small declared writer diagnostic only after offline
+checks and numerical budgets are settled. Preserve the completed visible answers for M3. Review
+how the LLM's actual organization helps a reader compare journeys and locate conditions, including
+a table-led and prose-led layout if produced. Required content takes priority over a word target.
 
-## M3 — Evaluate results with an LLM and reviewed evidence
+Exit evidence:
 
-**Goal:** obtain repeatable evidence about factual faithfulness and traveler usefulness,
-including evidence about the evaluator's own limitations.
+- Fake-writer tests cover invalid/missing IDs, spliced lookup attempts, alternate cycles/group
+  violations, six selections, missing/hidden/cross-part slots, untrusted markup/instructions,
+  unsupported comparisons, refusal, truncation, context failure and transport/deadline paths.
+- Correct prose/table layouts and valid alternative wording pass; a reject-everything validator
+  cannot satisfy the gate. No code inserts a heading, card, note or section order on success.
+- All selected facts/conditions remain bound and visible; exact offline replay matches final bytes.
+  Invalid source makes zero calls. Attempt/timeout assertions match the configured client behavior.
+- Actual saved/synthetic answers, failures, usage and limitations are available for owner review.
+  Known complete-cost examples are synthetic until provider scope supports observed comparisons.
+- Owner walkthrough assesses structural control, useful distinct choices, clear programs, remaining
+  checks and settled delivery-failure behavior. Mechanical passes are not semantic qualification.
 
-Scope:
+## M3 — Evaluate completed answers and the evaluator
 
-- Define criterion-level evaluation for invented facts, combined variants, wrong price scope,
-  changed eligibility/styles, hidden conditions, unsupported comparisons, exhaustive-search
-  or guaranteed-bookability claims, and promotion of rejected combinations.
-- Evaluate useful distinct selection, meaningful tradeoffs, restrained premium-price judgment,
-  concise natural language, and usefulness without opening another view.
-- Give the evaluator the M1 brief, rendered answer, and deterministic checks. Require specific
-  passages, fact IDs, and reasons for each failure rather than one unsupported overall score.
-- Build reviewed calibration examples containing correct answers and deliberately planted
-  failures; compare judge findings with known labels and inspect false alarms/missed failures.
-- Repeat generation on cases with overlapping styles, a prominent conditional option, cash
-  variants, unknown taxes/scope, mixed cabins, premium economy, partial failures, incomplete-only
-  and empty results. Three generation runs per case is an initial diagnostic proposal.
-- Report per-case/run failures, selection variation, evaluator disagreements, and usage. Keep
-  selection variation distinct from factual violations. Judge output is advisory evaluation
-  evidence; it is not a runtime approval gate or automatic repair step.
+**Deliverable:** versioned casebook/rubric, saved writer outputs, calibrated advisory judge findings
+and adjudicated report. Define the rubric/fixtures while M1/M2 proceed; repeated judging follows
+stable M2 outputs. No runtime judge, self-approval or automatic repair loop is introduced.
 
-Completion evidence:
+**M3.1: calibration and independent checks.** Use an ordinary separate structured judge call with
+frozen brief, fact index, filled visible answer and slot map. Grade criterion-level truth and
+usefulness, including misleading headings/table associations beside correct inserted facts.
+Apply the writer's explicit storage, timeout/retry/output and refusal/incomplete-response discipline
+to the judge, with its own configuration and error counts. Keep deterministic verdicts separate
+where practical to reduce anchoring. Require passages,
+affected IDs and supporting facts; invalid judge output counts as evaluator error.
 
-- Versioned fixture set, generator/evaluator prompts/settings, saved answers and judge reports,
-  calibration labels, and deterministic check results can be reproduced for the declared scope.
-- Report observed judge accuracy on the labeled examples without claiming general reliability.
-  Explicitly review hard failures and unresolved disagreements rather than hiding them in averages.
-- Owner reviews representative good answers and failure cases, decides whether the answers are
-  useful, and records accepted limitations or required revisions.
+Build the proposed initial two correct/nine deliberately flawed seeds. Include valid layouts and
+benign alternative wording as controls. Freeze the rubric after tuning, then use separately labeled
+held-out examples before claiming judge accuracy. Record misses, false alarms, uncertainty and
+harness errors. Prefer an independently evaluated model, while acknowledging shared blind spots.
 
-## Stage closeout
+**M3.2: repeated diagnostic and adjudication.** Retain the proposed 12 cases × 3 trials: 36 writer
+outputs and 36 judge calls, plus 11 calibration judge calls = 83 application calls if each completes
+once. Additional held-out/calibration/model-comparison work has a separately declared finite budget;
+83 is not the whole expanded evaluation budget. No calls are authorized merely by this arithmetic.
+Reuse M2 outputs only with matching frozen hashes, without double-counting attempts.
 
-Closeout summarizes M1 preservation, M2 behavior, and M3 quality evidence; records the owner's
-acceptance and remaining limits; and updates project state, build log, and the deferred register.
-Current unknown price scope still prevents observed-cost claims. Personal redeemability, provider
-reliability, bookability, and broader workflow qualification are not established by an LLM judge.
+Require actual exercised predicates for saved mixed/exact/positioning cases and synthetic complete
+costs, opposing variants, fee/cabin uncertainty, premium economy, failed coverage, incomplete-only,
+empty and conflicting near-duplicate cases. Preserve writer failures in the denominator. Separate
+legitimate selection/layout variation from factual violations and poor selection usefulness.
 
-The immediate next cut is M1's cleaned-input contract and saved-example walkthrough. M2 failure
-handling can be settled while M1 proceeds; it does not require an input-cap design now.
+Exit evidence:
+
+- Versioned source/oracle manifest, all planned case families actually exercised, independent valid
+  controls/planted faults, frozen prompts/settings and all output/error receipts.
+- Final-document hard violations reported per case/trial: invention, splicing, scope/status/style
+  changes, hidden/misassociated conditions, false comparisons/exhaustiveness/bookability and rejected
+  promotion. No unresolved hard violation in the declared passing slice is hidden by average scores.
+- Judge calibration and held-out results distinguished; failures/uncertainty are not converted to
+  passes. Human adjudication covers hard flags/disagreements and a predeclared clean-output sample.
+- Owner reviews whether the answer supports choosing what to investigate, identifying the program,
+  understanding the tradeoff/conditions and knowing the next manual check. Useful omission/selection
+  concerns are recorded, not reduced to style diversity or word-count scores.
+
+Three trials are development evidence, not statistical reliability or a user-benefit study.
+
+## Closeout and immediate next cut
+
+Summarize M1 preservation/authority, M2 structural authorship/failure/replay, and M3 observed quality
+with exact scope, versions, failures and limits. Update state/build log/deferred entries and record
+explicit owner acceptance before claiming stage closeout. Observed cost usefulness, bookability,
+personal redeemability, provider reliability and full-workflow benefit remain separate claims.
+
+Start with M1.1 plus independent saved examples. Fallback breadth and numeric LLM settings can be
+settled before their dependent M2 work. No provider acquisition or parked scope must be opened to
+complete this design. No implementation or qualification is claimed by this milestone revision.

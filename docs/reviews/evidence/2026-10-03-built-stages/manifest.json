@@ -1,0 +1,144 @@
+{
+  "baseline_head": "8ef1d6a6ca7a09f86b6d3a97cad261146e0350fe",
+  "scope": "Offline reproduction evidence for seeded evaluator faults, synthetic cabin contrasts, and saved workload projections. No runtime, source, tests, corpus, or provider data were changed.",
+  "offline_constraints": {
+    "synthetic_or_seeded": true,
+    "normal_runtime_failure_claim": false,
+    "network_model_provider_or_credential_calls": false,
+    "temporary_mutations": "evaluation_oracles uses in-memory copies and temporary directories under /private/tmp; cabin probes use FakeHttp and temporary evidence directories under /private/tmp.",
+    "persistent_writes": "Captured stdout files in this evidence directory only."
+  },
+  "commands": [
+    "PYTHONPATH=src .venv/bin/python -B docs/reviews/evidence/2026-10-03-built-stages/evaluation_oracles.py > docs/reviews/evidence/2026-10-03-built-stages/evaluation_oracles.json",
+    "PYTHONPATH=src .venv/bin/python -B docs/reviews/evidence/2026-10-03-built-stages/cabin_contracts.py > docs/reviews/evidence/2026-10-03-built-stages/cabin_contracts.txt",
+    "PYTHONPATH=src .venv/bin/python -B docs/reviews/evidence/2026-10-03-built-stages/premium_style_contrast.py > docs/reviews/evidence/2026-10-03-built-stages/premium_style_contrast.txt",
+    "PYTHONPATH=src .venv/bin/python -B docs/reviews/evidence/2026-10-03-built-stages/saved_workload.py > docs/reviews/evidence/2026-10-03-built-stages/saved_workload.json"
+  ],
+  "reproduction_inputs": [
+    {
+      "path": "evidence/ranking-stage/m1/sfo_to_bkk_positioning.json",
+      "sha256": "7e4f2501f41fe724aee6724a9e5060670c7afdd2f1f02a5bf49f0b542e260c50",
+      "used_by": "evaluation_oracles.py"
+    },
+    {
+      "path": "evidence/ranking-stage/m1/mixed_access.json",
+      "sha256": "074229e8bf20615e2bfeb2f96cbbc33e8716265dc4adf6f266317240f2dfa5b0",
+      "used_by": "cabin_contracts.py"
+    },
+    {
+      "path": "data/ranking/m2/fx-2026-09-29.json",
+      "sha256": "d90c0dc03f9478ec7b4827e54f0260a4181816cbe8ab789294847163c9463c39",
+      "used_by": "evaluation_oracles.py"
+    },
+    {
+      "path": "evals/search_planning/cases_v2.json",
+      "sha256": "66e3a2acb2e953b3bfd80da675f97e667fda8c2c5a92d1bb400bf5cd240c2115",
+      "used_by": "evaluation_oracles.py; the probe writes a one-case copy only in a temporary directory"
+    },
+    {
+      "path": "data/search_planning/catalogs/m1a-3cb7981519612945/manifest.json",
+      "sha256": "7c6350044315aa919ff401832e5f339f553687fa7aaa425bba779451ebd99dae",
+      "used_by": "evaluation_oracles.py and premium_style_contrast.py"
+    },
+    {
+      "path": "data/search_planning/catalogs/m1a-3cb7981519612945/catalog.sqlite",
+      "sha256": "fc2eec688d74e7dbfcf4de293e984d5c43bbecd1c3943945ae6ef9100c42ffc7",
+      "used_by": "evaluation_oracles.py and premium_style_contrast.py"
+    },
+    {
+      "path": "scripts/ranking_style_corpus.py",
+      "sha256": "3707a9560a7fb871affacd34cca18c7d61dccbb11c0faccb197f79b17f7b77fa",
+      "used_by": "evaluation_oracles.py"
+    },
+    {
+      "path": "scripts/provider_plan_corpus.py",
+      "sha256": "f5fec138b2c2aca40b6c927ec7669a64624c941ec763e93a73626aafa5dfcd0e",
+      "used_by": "evaluation_oracles.py"
+    },
+    {
+      "path": "tests/unit/test_ranking_m2.py",
+      "sha256": "f2b70b4bcf524c34101b769acaeb9c8194a3927fdda0035acae49dff768d2f5b",
+      "used_by": "premium_style_contrast.py"
+    },
+    {
+      "path": "tests/unit/test_ranking_m2_corpus.py",
+      "sha256": "79e5cbd7a214fc01c2d0fbde3bd7f1b025e5efb2ff66a943e6af40804fd9e4e9",
+      "used_by": "evaluation_oracles.py"
+    },
+    {
+      "path": "evals/intent_to_search_planning/baseline/2026-09-20-gpt-5.6-luna-active-intent-corpus-1-trial.json",
+      "sha256": "d3d3c1392e7385c63be2ca138d0567e6c3db6709409ce65e993bee88c4361d53",
+      "used_by": "saved_workload.py"
+    },
+    {
+      "path": "evidence/provider-stage/saved-searches/runs/mixed_access/result.json",
+      "sha256": "c921858e68be774f670b797d749a9e9a661863b21a9dd874d5f012f2be19f1fc",
+      "used_by": "premium_style_contrast.py and saved_workload.py"
+    },
+    {
+      "path": "evidence/provider-stage/saved-searches/runs/exact_business/result.json",
+      "sha256": "4e11f0a15e38ae95b619a55659987e5e0286b57697f58d706d589cc6704240c1",
+      "used_by": "saved_workload.py"
+    },
+    {
+      "path": "evidence/provider-stage/saved-searches/runs/sfo_to_bkk_positioning/result.json",
+      "sha256": "0b34da1374ab9dc484a36054da5502624f99a23163ef049cac479225d5bb354b",
+      "used_by": "saved_workload.py"
+    }
+  ],
+  "temporary_source_material": [
+    {
+      "path": "/private/tmp/award_eval_adversary_probe.py",
+      "sha256": "e78b67ba438c7407f0291afc61013323ccb87591da8028966c2b474d90defa5e"
+    },
+    {
+      "path": "/private/tmp/award_eval_adversary_probe.json",
+      "sha256": "bac31ef51806c90b2275b3ba0782db6ca02dbf5a80952dc5c8c5432ea3a067ce"
+    },
+    {
+      "path": "/private/tmp/award-review2-cabins.py",
+      "sha256": "cfb7b21521c959c950b1a204de1ccd83e2681346e958f66821fc251c3cfb9b3b"
+    },
+    {
+      "path": "/private/tmp/award-review2-cabins-output.txt",
+      "sha256": "b7627e9b19d6e689066d0a57d3eb0e6bf363e1b48851f53edf4ff4d462c09aa0"
+    },
+    {
+      "path": "/private/tmp/award-review2-style-cabin.py",
+      "sha256": "bfc96e7cc91c07010b5542042cc4bbdfdbebdc8535f26c3a3878aa295e070899"
+    },
+    {
+      "path": "/private/tmp/award-review2-style-cabin-output.txt",
+      "sha256": "64ef65c3fc7fba99d2a1c65656e041de381ea355788d58595a012f1c5c2f8ad8"
+    },
+    {
+      "path": "/private/tmp/award-review2-cross-stage.md",
+      "sha256": "5e160e5694944e55faac30e1eacb782de3a36886d1bc664ff23631da1cf12e92"
+    },
+    {
+      "path": "/private/tmp/award-review2-eval-adversary.md",
+      "sha256": "a263bb3aa4405f120538e348c71b20a9144f38358df6f02da9c2736136cd78e4"
+    }
+  ],
+  "adaptations": [
+    "evaluation_oracles.py now emits JSON only to stdout; its temporary corpus edits remain confined to TemporaryDirectory.",
+    "Each probe has a docstring stating the offline, synthetic or seeded scope and limiting claims about normal runtime.",
+    "saved_workload.py is an optional strict projection of existing intent and provider evidence; it does not rerun a benchmark and fails when required metric keys are absent."
+  ],
+  "artifact_sha256": {
+    "evaluation_oracles.py": "c77e9da9a5f212f323bc747bafe2a64064dbfbbe8c4a0795025050293237f549",
+    "evaluation_oracles.json": "bac31ef51806c90b2275b3ba0782db6ca02dbf5a80952dc5c8c5432ea3a067ce",
+    "cabin_contracts.py": "08a5ce095a1c61258e55c468b46f2e885f78161f74ed793667b264e81d146be9",
+    "cabin_contracts.txt": "b7627e9b19d6e689066d0a57d3eb0e6bf363e1b48851f53edf4ff4d462c09aa0",
+    "premium_style_contrast.py": "a3c5ee38c2e25ecbc7c90cc3709c1e9a121514727742a0d3da673da7a5c51cd2",
+    "premium_style_contrast.txt": "64ef65c3fc7fba99d2a1c65656e041de381ea355788d58595a012f1c5c2f8ad8",
+    "saved_workload.py": "0690634baa3a21080cfbfc0877070596b71406c0267c4b1cd42cc5492fe810f8",
+    "saved_workload.json": "ac7d6d41b72e62fb1b80dc8d03d0ad24c54eca69eadb92a994ce64b3e2f812a7"
+  },
+  "captured_outputs": {
+    "evaluation_oracles.json": "matches /private/tmp/award_eval_adversary_probe.json byte-for-byte",
+    "cabin_contracts.txt": "matches /private/tmp/award-review2-cabins-output.txt byte-for-byte",
+    "premium_style_contrast.txt": "matches /private/tmp/award-review2-style-cabin-output.txt byte-for-byte",
+    "saved_workload.json": "projected recorded metrics; 19 intent records, 7 planning-eligible records, and 3 saved provider runs"
+  }
+}

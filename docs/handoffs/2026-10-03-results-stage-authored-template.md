@@ -1,106 +1,115 @@
-# Results Stage: LLM-authored answer with factual placeholders
+# Results Stage: LLM-authored structure with bound factual placeholders
 
-Date: 2026-10-03. Status: **owner clarification recorded; template/tool mechanics proposed**.
+Date: 2026-10-03; revised 2026-10-04 after independent review and renewed owner direction.
+Status: **LLM structural control is owner-required; wire and validation mechanics are the revised engineering proposal**.
 
-## Owner clarification and superseded interpretation
+## Ownership
 
-The owner clarified that the LLM should produce the main output and its structure for natural
-writing, leaving factual blanks for code to fill. The owner asked whether a tool call makes sense.
-This supersedes the earlier M2 proposal in which code assembled the answer from an opening and
-per-journey explanations, with code-owned summaries/shared-note layout.
+The LLM controls the answer's headings, ordering, grouping, paragraphs, lists, tables, emphasis,
+and explanatory prose. Code fills factual placeholders and validates the authored document.
+There is no code-owned answer skeleton, card layout, section order, automatic note insertion,
+or second LLM pass over the filled answer. Required information is a content obligation, not a
+layout prescription. The owner explicitly reaffirmed structural control on 2026-10-04.
 
-M1 input preparation and M3 evaluation remain applicable. M2's output boundary changes: the
-LLM authors the answer's order, headings, paragraphs, emphasis, and explanations. Code resolves
-factual references and checks required information, without constructing a separate fixed answer.
+This replaces the earlier opening/per-journey editorial-fields design. The current
+[v1 design](2026-10-02-results-stage-v1-design.md),
+[execution plan](2026-10-02-results-stage-implementation-plan.md), and
+[milestones](2026-10-02-results-stage-milestones.md) use the following boundary throughout.
 
-## Proposed output contract
+## Proposed document contract
 
-Use an LLM-authored Markdown document with explicit typed placeholders rather than literal
-empty strings. Blanks need an identity so code can fill the correct journey's fact.
-
-One practical representation is an ordered array of authored blocks:
+Use one model-authored document with an explicit selection manifest and an ordered list of
+**invisible factual scopes**. These parts are serialization units; they are not visible cards,
+sections, or imposed blocks. Repeating a scope allows one journey to appear in a comparison
+row and later receive its explanation or conditions elsewhere in the same document.
 
 ```text
 ResultsDocument
-  blocks[]:
-    TextBlock {markdown_template}
-    JourneyBlock {alternative_id, alternate_of | null, markdown_template}
-    CashBenchmarkBlock {benchmark_id, markdown_template}
-    IncompleteBlock {possibility_id, markdown_template}
+  selections[]: {alternative_id, alternate_of: alternative_id | null}
+  benchmark_id: benchmark_id | null
+  incomplete_ids[]
+  parts[]:
+    scope_kind: shared | journey | benchmark | incomplete
+    scope_id: string | null
+    markdown_template: string
 ```
 
-Block boundaries bind references to the correct alternative; they do not prescribe cards,
-headings, paragraph order, or a fixed visible layout. The model writes all Markdown and chooses
-the ordering. A journey block can contain a heading, prose, bullets, or another permitted
-Markdown form. Journey placeholders are resolved within that block's alternative ID, so the
-model cannot ask for a different variant's fare inside it.
+The LLM writes all separators and whitespace. Code concatenates the parts in the supplied order
+without adding headings, paragraphs, or punctuation. The model may use prose, a table, or a mix;
+no scope order or journey contiguity is required. Scope metadata never appears automatically
+in the traveler answer. Selection counting uses unique manifest IDs, not the number of parts. Successful authorship
+selects one to five complete journeys when the complete pool is nonempty, and zero otherwise.
 
-Illustrative journey template (not an actual generated answer):
+In a journey scope, `{{route}}`, `{{schedule}}`, `{{award_quote}}`, and other allowed slots resolve
+only from that scope's complete alternative. Cross-journey slot lookup is invalid. Each placeholder token must be wholly within one part;
+a token split across parts has no valid scope and is rejected. Shared parts
+may use shared slots and supplied `{{comparison:ID}}` slots; they cannot look up journey facts.
+Benchmark/incomplete scopes use their own catalog. A scope ID must occur in the appropriate
+selection manifest. The service stamps the brief digest after receipt; the model does not echo it.
 
-```markdown
-### A shorter journey with an award to investigate
+For example, one author may put explanations first and facts below; another may begin with a
+comparison table whose rows are separately scoped parts. Both must be accepted when their
+facts, conditions, and associations are valid. M2.1 tests both layouts and multiple parts for
+one journey. There is no preferred template enforced by code.
 
-{{route}} — {{schedule}}. {{cabins}}, taking {{total_duration}}.
+This uses a small strict object schema with required fields, explicit nulls, enums, and no
+additional properties. The Markdown strings remain freeform within the supported syntax.
+JSON structure does not prescribe the answer's visible structure.
 
-This deserves a look if the schedule matters more to you than a premium cabin.
-{{award_quote}}; {{cash_quote}}.
+## Factual slots and visible obligations
 
-{{styles}}
-{{requirements}} {{booking_checks}}
-{{observation_timing}}
-```
+Prefer coherent slots: `award_quote` includes the redemption program, points, fees, quote scope,
+and missing-cost limitations; `cash_quote` includes the actual component and its scope. A bare
+number can lose its meaning. Local schedules retain dates and timezone context. Requirements,
+separate-ticket checks, and observation timing retain the selected variant's evidence.
 
-The text, heading, and placement are model-written. Code fills the route, local schedule, cabin
-evidence, complete duration, program/award quote, cash quote, style labels, checks, and timing.
-This is an example, not a mandatory layout. The model can write a different natural arrangement.
+Projection creates a versioned obligation manifest for each selectable alternative and for
+shared request/coverage facts. Selection activates those obligations. Applicable heuristic
+comparisons activate their assumptions. Each selected journey must disclose its route, schedule,
+cabin evidence, duration/waits, scoped prices/program, status and concrete unresolved requirements,
+booking obligations, and component observation timing. Nonapplicable facts need no empty slot.
+A condition may be placed anywhere the model chooses if its association with the affected
+journey remains clear; a generic global warning cannot discharge a specific journey's condition.
 
-Prefer coherent factual slots such as `award_quote` over an isolated points number: the slot
-includes the redemption program and applicable quote scope/fee limitations. Likewise, `cash_quote`
-includes scope and covered component. This prevents a bare amount from losing its meaning.
-The model still receives facts in the brief for selection and explanation; the placeholders
-keep final factual displays bound to those facts.
+Code checks the following, without inventing missing text:
 
-Shared request facts, coverage, assumptions, and common checks have scoped shared placeholders
-that the model places where they fit. An alternate uses its own bound journey block. Explicit
-comparison slots remain authorized only by existing supplied comparison facts.
+1. Manifest IDs, original eligibility, group/alternate relationships, and the five-journey limit.
+2. Exact allowed placeholder syntax and scope, unknown slots, and required slot coverage.
+3. The **final concatenated Markdown**, including constructs spanning part boundaries. Permit
+   tested headings, paragraphs, lists, emphasis, and tables. Reject raw HTML/comments, images,
+   links, and code constructs in v1; they are unnecessary for this local citation-free answer.
+   Link syntax can be reconsidered with an explicit destination policy if a booking-link feature
+   is opened. Facts and conditions must occur in visible text, not parser metadata.
+4. Single substitution using literal escaped text nodes; provider/user strings cannot introduce
+   markup, executable content, or a second placeholder expansion. Never use a general template
+   engine capable of expressions, evaluation, filesystem access, or recursive interpolation.
+5. Final parsed visible content and source maps connecting every inserted span to its slot,
+   scope, and source fact. Preserve tables and line breaks without letting a slot break syntax. Test part boundaries
+   inside Markdown constructs/table cells, and reject a placeholder split across scopes.
 
-## Validation responsibilities
+A missing mandatory fact or condition makes the authored draft invalid. Code does not append
+a corrective section or rearrange it. A separately labeled failure outcome follows the call
+policy; a fallback is not a successful model-authored answer.
 
-Code checks references, group/alternate rules, five complete alternatives total, rejected versus
-incomplete boundaries, applicable comparison slots, and presence of required factual/condition
-slots. Required information may be shared when valid for the whole answer, but journey-specific
-requirements must appear within that journey's block.
+These checks bind inserted facts and visible disclosure. They cannot prove that a heading,
+pronoun, comparison, or juxtaposition accurately describes those facts. “Per person,” “all
+business,” or “protected connection” can still be false beside valid slots. M3 evaluates the
+fully filled answer, including its structure and implications. This limitation is explicit,
+not a reason to transfer structural control to code.
 
-Code substitutes slots without asking the model to rewrite the filled result. It must not silently
-repair an omitted material condition by assembling a different fixed-layout answer. Missing
-required slots are an invalid generation result; handling follows the settled failure policy.
+## Call transport
 
-This binds factual inserts and their selected alternative. It does not prove that surrounding
-prose is accurate: “per person,” “guaranteed,” or “all business” in model-written text could
-contradict the inserted facts. M3 evaluates the fully filled document, including framing and
-implications. The existing observed-scope/cabin/timezone limits still apply.
+Recommend one Responses Structured Outputs call. A strict response envelope is sufficient to
+return this document; a submission function is unnecessary for the current single authoring
+operation. OpenAI distinguishes structured response formatting from function calls that connect
+a model to application functionality. [Official Structured Outputs guidance](https://developers.openai.com/api/docs/guides/structured-outputs).
 
-## Tool-call recommendation
+No fact lookup loop is needed while the complete brief is sufficient. If a submission-tool
+transport is later chosen, it must submit the same contract once, validate/fill it, and return
+that artifact directly without a subsequent model rewrite. Tool use does not strengthen factual
+truth or grant upstream authority. This transport recommendation is engineering judgment, not
+an owner requirement to use or avoid tools.
 
-Two different tool designs should not be confused:
-
-- A fact lookup tool, such as `get_journey_details(id)`, could help if the model needs details
-  beyond its compact brief. Current M1 already supplies the relevant information; lookup is
-  not necessary initially. Tool-returned facts can still be misquoted in subsequent model prose.
-- A submission tool, such as `submit_results(document)`, accepts the authored template, validates
-  references and required slots, and fills it. Its resulting artifact is the final traveler
-  output. The model does not rewrite that artifact afterward.
-
-Recommendation: adopt the authored-template boundary now; structured output and a submission
-tool are alternative ways to deliver that same document. A submission tool is a reasonable fit
-if explicit tool orchestration is desired. It is not a flight-search/booking tool or authority
-to change upstream assessments. The choice of transport remains proposed, not owner-decided.
-
-## Milestone changes
-
-M2.1 builds the placeholder catalog, substitution, and validation using hand-authored templates.
-M2.2 adds LLM document authorship and either structured submission or the submission-tool adapter.
-M2.3 reviews naturalness of actual completed documents, plus generation failure behavior.
-M3 tests factual correctness and whether the model-owned structure is useful and self-contained.
-Include missing slots, wrong block reference, conflicting surrounding scope/cabin prose, and
-an alternate drawing facts from its own variant in offline/evaluation cases.
+Use explicit timeout/retry/output configuration, handle refusal and incomplete output, and
+retain replay evidence as specified in the [execution plan](2026-10-02-results-stage-implementation-plan.md).
+No Results implementation or model evaluation is claimed by this design revision.

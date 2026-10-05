@@ -3,44 +3,35 @@
 ## Phase
 
 Results Stage is owner-opened for design as of 2026-10-02, following Ranking Stage closeout.
-This is the user-facing presentation/explanation stage previously called Output Stage. It
-consumes the frozen `RankedJourneySet`; its detailed output contract and presentation policy
-remain to be settled. See the [opening record](handoffs/2026-10-02-results-stage-opening.md).
-No Results Stage implementation or qualification is claimed.
+It consumes the frozen `RankedJourneySet` and is the presentation/explanation stage previously
+called Output Stage. No Results implementation, live evaluation or qualification is claimed.
 
-On 2026-10-03, the owner clarified that the LLM should author the main output and structure,
-with code filling factual blanks. The [template refinement](handoffs/2026-10-03-results-stage-authored-template.md)
-records this correction to the earlier assembled-answer proposal and recommends scoped factual
-placeholders within model-authored Markdown. A submission tool versus structured output remains
-under discussion; no tool/runtime implementation is claimed.
+On 2026-10-04 the owner requested thorough design/milestone review, subagent verification and
+current LLM-call guidance, and reaffirmed: **the LLM controls the output structure**. The updated
+[v1 design](handoffs/2026-10-02-results-stage-v1-design.md),
+[authored-document contract](handoffs/2026-10-03-results-stage-authored-template.md),
+[milestones](handoffs/2026-10-02-results-stage-milestones.md) and
+[execution plan](handoffs/2026-10-02-results-stage-implementation-plan.md) now consistently give
+the model headings, order, grouping, prose, tables and emphasis, with code-filled facts and
+visible-content checks. Internal factual scopes may repeat/interleave and impose no cards,
+section order or normal-answer skeleton. Earlier code-assembled editorial-plan sections have
+been replaced. The original [opening record](handoffs/2026-10-02-results-stage-opening.md) and
+[initial design log](build-log/2026-10-02-results-stage-v1-design.md) retain their historical scope.
 
-On 2026-10-02, the owner supplied a high-level Results Stage v1 proposal and requested
-orchestrated verification, investigation, and detailed architecture design. The
-[detailed discussion draft](handoffs/2026-10-02-results-stage-v1-design.md) maps existing
-fields, records current evidence limits, and recommends an evidence brief, structured model
-selection/editorial writing, and deterministic factual rendering. Engineering and presentation
-choices were initially proposals; no runtime changes or new model/provider calls were made. All three
-saved M2 results passed the documented corpus verification. See the
-[design investigation log](build-log/2026-10-02-results-stage-v1-design.md).
+Accepted presentation direction remains usually three choices, at most five complete journeys
+including alternates, clear award programs, conservative duplicate cleanup and full distinct
+input retention without an added selection cap. The revision recommends a strict structured
+response, a narrow matching-owned imported-requirement verifier, independent source assertions,
+visible scoped placeholders, exact document replay and calibrated advisory evaluation. These
+engineering proposals are not owner qualification or changed upstream policy. Exact generation
+fallback breadth, writer/judge models and numerical live-call budgets remain open.
 
-In the subsequent review, the owner accepted LLM editorial writing with code-filled facts,
-award grouping and conservative duplicate cleanup, and five displayed complete journeys
-including alternates. The owner requested clear airline programs without traveler-facing
-source citations, expects cleanup to keep the input manageable rather than adding an input
-cap, and requested proper milestones including LLM evaluation. The
-[milestone proposal](handoffs/2026-10-02-results-stage-milestones.md) sequences M1 cleaned
-input, M2 selection/explanation and factual rendering, and M3 LLM-assisted evaluation.
-Exact generation-failure handling, retry policy, and milestone details remain to be settled;
-no milestone is implemented or qualified by this design discussion.
-
-The owner then requested further orchestrated investigation and architecture planning before
-implementation. The [detailed execution plan](handoffs/2026-10-02-results-stage-implementation-plan.md)
-defines slices within M1/M2/M3, compact versus audit contracts, conservative identity rules,
-writer/renderer/judge responsibilities, actual saved regression examples, exploratory input
-sizes, and a proposed 12-case repeated diagnostic. The architect reviewed the integrated plan;
-new engineering choices remain proposals. See the
-[detailed-planning log](build-log/2026-10-02-results-stage-detailed-plan.md). No Results runtime
-implementation, live calls, or stage qualification follows.
+Three specialist reviews informed the revision. Fresh saved-corpus verification passed all three
+M2 cases; 50 focused ranking tests passed. All saved cost references remain absent and provider
+coverage partial. Recorded seeded missing-condition/cost-summary faults motivate explicit gates;
+this does not claim normal producers failed. No Results code or model/provider calls were added.
+See the [review](reviews/2026-10-04-results-stage-design-review.md) and
+[build log](build-log/2026-10-04-results-stage-design-review.md).
 
 Ranking Stage opened on 2026-09-25. Milestone 1 deterministic matching/validation of award
 itineraries with at most one cash access or egress flight is locally implemented and

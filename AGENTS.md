@@ -81,7 +81,13 @@ prevents a complete cost reference in all three saved requests. See
 `evidence/ranking-stage/m2/README.md`. Weighted overall scoring is not required, and the
 Results Stage (previously Output Stage) is owner-opened for design as of 2026-10-02.
 See `docs/handoffs/2026-10-02-results-stage-opening.md`; its detailed output contract and
-presentation policy remain unsettled, with no implementation or qualification claimed.
+presentation policy remain unsettled, with no implementation or qualification claimed. The owner reaffirmed on
+2026-10-04 that the LLM controls answer structure. The updated
+`docs/handoffs/2026-10-02-results-stage-v1-design.md`, milestone/execution plans, and
+`docs/handoffs/2026-10-03-results-stage-authored-template.md` replace the earlier code-assembled
+answer proposal. Code fills factual slots and checks visible content without imposing layout.
+The review is `docs/reviews/2026-10-04-results-stage-design-review.md`; engineering proposals
+remain unimplemented, and no upstream stage is reopened.
 See `docs/build-log/2026-09-25-ranking-m1-matching.md`,
 `docs/build-log/2026-09-27-ranking-m1-live-evidence-run.md`, and the saved plan-linked
 matching outputs under `evidence/ranking-stage/m1/`.

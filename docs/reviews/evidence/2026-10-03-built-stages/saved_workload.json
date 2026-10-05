@@ -1,0 +1,91 @@
+{
+  "scope": "recorded per-stage metrics; no benchmark rerun",
+  "intent_source": "evals/intent_to_search_planning/baseline/2026-09-20-gpt-5.6-luna-active-intent-corpus-1-trial.json",
+  "intent": {
+    "all": {
+      "n": 19,
+      "intent_behavior_passed": 13,
+      "latency_seconds": {
+        "sum": 201.546,
+        "median": 8.361
+      },
+      "usage": {
+        "calls": 35,
+        "input_tokens": 74533,
+        "output_tokens": 14772,
+        "total_tokens": 89305
+      }
+    },
+    "planning_eligible": {
+      "n": 7,
+      "intent_behavior_passed": 6,
+      "latency_seconds": {
+        "sum": 142.604,
+        "median": 19.484
+      },
+      "usage": {
+        "calls": 14,
+        "input_tokens": 35510,
+        "output_tokens": 9819,
+        "total_tokens": 45329
+      }
+    },
+    "not_planning_eligible": {
+      "n": 12,
+      "intent_behavior_passed": 7,
+      "latency_seconds": {
+        "sum": 58.942,
+        "median": 3.389
+      },
+      "usage": {
+        "calls": 21,
+        "input_tokens": 39023,
+        "output_tokens": 4953,
+        "total_tokens": 43976
+      }
+    }
+  },
+  "provider_source_root": "evidence/provider-stage/saved-searches/runs",
+  "provider_runs": {
+    "mixed_access": {
+      "source": "evidence/provider-stage/saved-searches/runs/mixed_access/result.json",
+      "award_usage": {
+        "requests": 10,
+        "elapsed_seconds": 2.3199887122027576
+      },
+      "cash_usage": {
+        "requests": 3,
+        "elapsed_seconds": 22.31819341587834
+      },
+      "transport_receipt_count": 13,
+      "transport_receipt_elapsed_seconds_sum": 24.638
+    },
+    "exact_business": {
+      "source": "evidence/provider-stage/saved-searches/runs/exact_business/result.json",
+      "award_usage": {
+        "requests": 6,
+        "elapsed_seconds": 0.9313579590525478
+      },
+      "cash_usage": {
+        "requests": 3,
+        "elapsed_seconds": 24.070742125157267
+      },
+      "transport_receipt_count": 9,
+      "transport_receipt_elapsed_seconds_sum": 25.002
+    },
+    "sfo_to_bkk_positioning": {
+      "source": "evidence/provider-stage/saved-searches/runs/sfo_to_bkk_positioning/result.json",
+      "award_usage": {
+        "requests": 7,
+        "elapsed_seconds": 1.0153935421258211
+      },
+      "cash_usage": {
+        "requests": 3,
+        "elapsed_seconds": 24.195672457804903
+      },
+      "transport_receipt_count": 10,
+      "transport_receipt_elapsed_seconds_sum": 25.211
+    }
+  },
+  "interpretation": "Intent and provider observations are different workloads. Do not sum them as composed-app latency or dollar costs. Provider transport receipt elapsed totals are recorded acquisition durations and are not a measured user-facing end-to-end latency."
+}
