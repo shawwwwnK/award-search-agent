@@ -4,38 +4,18 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import tempfile
 from collections.abc import Sequence
 from pathlib import Path
 
 from pydantic import BaseModel
 
+from award_agent.cli._atomic_output import write_new_atomic as _write_new_atomic
 from award_agent.ranking.contracts import MatchedJourneySet
 from award_agent.ranking.style_contracts import (
     CurrencyConversionSnapshot,
     RankingStylePolicy,
 )
 from award_agent.ranking.styles import assign_journey_styles
-
-
-def _write_new_atomic(path: Path, rendered: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary: Path | None = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", dir=path.parent,
-            prefix=f".{path.name}.", suffix=".tmp", delete=False,
-        ) as stream:
-            temporary = Path(stream.name)
-            stream.write(rendered)
-            stream.write("\n")
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.link(temporary, path)
-    finally:
-        if temporary is not None:
-            temporary.unlink(missing_ok=True)
 
 
 def _read_json_model[ModelType: BaseModel](

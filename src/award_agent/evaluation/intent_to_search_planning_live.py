@@ -27,6 +27,7 @@ from award_agent.domain import (
     RequestContext,
     RequestUnderstandingOutcome,
 )
+from award_agent.evaluation._gateway_trace_tee import GatewayTraceTee as _GatewayTraceTee
 from award_agent.intent import (
     OpenAISemanticIntentConfig,
     OpenAISemanticIntentInterpreter,
@@ -153,22 +154,6 @@ def _drain(adapter: Any, usages: list[dict[str, int]], calls: list[dict[str, Any
     if usage is not None:
         usages.append(cast(dict[str, int], usage))
     calls.extend(cast(list[dict[str, Any]], adapter.take_call_traces()))
-
-
-class _GatewayTraceTee:
-    def __init__(self, inner: Any, calls: list[dict[str, Any]]) -> None:
-        self.inner, self.calls = inner, calls
-
-    def propose(self, model_input: Any) -> Any:
-        return self.inner.propose(model_input)
-
-    def take_usage(self) -> dict[str, int] | None:
-        return cast(dict[str, int] | None, self.inner.take_usage())
-
-    def take_call_traces(self) -> list[dict[str, Any]]:
-        calls = cast(list[dict[str, Any]], self.inner.take_call_traces())
-        self.calls.extend(calls)
-        return calls
 
 
 def _direct(repository: Any, iata: str) -> SelectedAirport | None:

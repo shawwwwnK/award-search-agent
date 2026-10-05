@@ -38,6 +38,7 @@ from award_agent.domain import (
     RequestContext,
     SearchMode,
 )
+from award_agent.evaluation._gateway_trace_tee import GatewayTraceTee as _GatewayTraceTee
 from award_agent.intent import (
     OpenAISemanticIntentConfig,
     OpenAISemanticIntentInterpreter,
@@ -265,23 +266,6 @@ def load_search_planning_live_cases(
     """Validate and return public case definitions without constructing adapters."""
 
     return _load_casebook(path)[0]
-
-
-class _GatewayTraceTee:
-    def __init__(self, inner: Any, holder: list[dict[str, Any]]) -> None:
-        self._inner = inner
-        self._holder = holder
-
-    def propose(self, model_input: Any) -> Any:
-        return self._inner.propose(model_input)
-
-    def take_usage(self) -> dict[str, int] | None:
-        return cast(dict[str, int] | None, self._inner.take_usage())
-
-    def take_call_traces(self) -> list[dict[str, Any]]:
-        calls = cast(list[dict[str, Any]], self._inner.take_call_traces())
-        self._holder.extend(calls)
-        return calls
 
 
 def _default_selector_factory(config: OpenAIAirportSelectorConfig) -> OpenAIAirportSelector:

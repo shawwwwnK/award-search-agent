@@ -19,6 +19,7 @@ from uuid import uuid4
 
 import yaml
 
+from award_agent.evaluation._gateway_trace_tee import GatewayTraceTee as _TraceTee
 from award_agent.observability.llm_trace import write_eval_llm_trace
 from award_agent.search_planning.contracts import SelectedAirport
 from award_agent.search_planning.gateway_discovery import (
@@ -264,22 +265,6 @@ def load_gateway_discovery_live_cases(
 ) -> tuple[Mapping[str, Any], ...]:
     """Load and structurally validate the corpus without catalog or model access."""
     return _load(path)[0]
-
-
-class _TraceTee:
-    def __init__(self, inner: Any, holder: list[dict[str, Any]]) -> None:
-        self._inner, self._holder = inner, holder
-
-    def propose(self, model_input: Any) -> Any:
-        return self._inner.propose(model_input)
-
-    def take_usage(self) -> dict[str, int] | None:
-        return cast(dict[str, int] | None, self._inner.take_usage())
-
-    def take_call_traces(self) -> list[dict[str, Any]]:
-        calls = cast(list[dict[str, Any]], self._inner.take_call_traces())
-        self._holder.extend(calls)
-        return calls
 
 
 def _default_generator_factory(config: OpenAIGatewayGeneratorConfig) -> OpenAIGatewayGenerator:

@@ -23,6 +23,7 @@ from award_agent.clarification.composer import (
     validate_prompt_composition,
 )
 from award_agent.observability.llm_trace import LLMCallTraceCollector, response_schema_sha256
+from award_agent.observability.usage import aggregate_usage, token_record
 
 DEFAULT_CLARIFICATION_COMPOSER_MODEL = "gpt-5.6-luna"
 GPT_4O_MINI_CLARIFICATION_COMPOSER_MODEL = "gpt-4o-mini"
@@ -128,14 +129,7 @@ class OpenAIClarificationPromptComposer:
         # than making the evaluator mistake it for no call at all.
         if not calls:
             return None
-        return {
-            "calls": calls,
-            "captured_calls": len(records),
-            "missing_calls": calls - len(records),
-            "input_tokens": sum(item["input_tokens"] for item in records),
-            "output_tokens": sum(item["output_tokens"] for item in records),
-            "total_tokens": sum(item["total_tokens"] for item in records),
-        }
+        return aggregate_usage(records, calls)
 
     def _capture_usage(self, response: Any) -> None:
         usage = getattr(response, "usage", None)
@@ -146,19 +140,9 @@ class OpenAIClarificationPromptComposer:
         else:
             dump = getattr(usage, "model_dump", None)
             payload = dump(mode="json") if callable(dump) else {}
-        input_tokens, output_tokens = payload.get("input_tokens"), payload.get("output_tokens")
-        if not isinstance(input_tokens, int) or not isinstance(output_tokens, int):
-            return
-        total_tokens = payload.get("total_tokens")
-        self._usage_records.append(
-            {
-                "input_tokens": input_tokens,
-                "output_tokens": output_tokens,
-                "total_tokens": total_tokens
-                if isinstance(total_tokens, int)
-                else input_tokens + output_tokens,
-            }
-        )
+        record = token_record(payload)
+        if record is not None:
+            self._usage_records.append(record)
 
     def compose(self, input: ClarificationPromptComposerInput) -> ClarificationPromptComposition:
         payload = json.dumps(input.model_input(), ensure_ascii=False, separators=(",", ":"))

@@ -37,6 +37,7 @@ from award_agent.clarification.semantic import (
 )
 from award_agent.domain import LocationKind, MessageSpan
 from award_agent.observability.llm_trace import LLMCallTraceCollector, response_schema_sha256
+from award_agent.observability.usage import aggregate_usage, token_record
 
 OPENAI_CLARIFICATION_INTERPRETER_ADAPTER_VERSION = "openai_clarification_interpreter_flat_v4"
 
@@ -384,19 +385,9 @@ class OpenAIClarificationAnswerInterpreter:
         else:
             dump = getattr(usage, "model_dump", None)
             payload = dump(mode="json") if callable(dump) else {}
-        input_tokens, output_tokens = payload.get("input_tokens"), payload.get("output_tokens")
-        if not isinstance(input_tokens, int) or not isinstance(output_tokens, int):
-            return
-        total_tokens = payload.get("total_tokens")
-        self._usage_records.append(
-            {
-                "input_tokens": input_tokens,
-                "output_tokens": output_tokens,
-                "total_tokens": (
-                    total_tokens if isinstance(total_tokens, int) else input_tokens + output_tokens
-                ),
-            }
-        )
+        record = token_record(payload)
+        if record is not None:
+            self._usage_records.append(record)
 
     def interpret(
         self, input: ClarificationAnswerInterpreterInput
@@ -636,14 +627,7 @@ class OpenAIClarificationAnswerInterpreter:
         self.reset_usage()
         if not calls:
             return None
-        return {
-            "calls": calls,
-            "captured_calls": len(records),
-            "missing_calls": calls - len(records),
-            "input_tokens": sum(item["input_tokens"] for item in records),
-            "output_tokens": sum(item["output_tokens"] for item in records),
-            "total_tokens": sum(item["total_tokens"] for item in records),
-        }
+        return aggregate_usage(records, calls)
 
     def take_call_traces(self) -> list[dict[str, object]]:
         return self._traces.take()
