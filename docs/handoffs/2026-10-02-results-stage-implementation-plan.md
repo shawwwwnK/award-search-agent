@@ -2,6 +2,21 @@
 
 Date: 2026-10-02; revised 2026-10-04. Status: **reviewed engineering design; not implemented or qualified**.
 
+## Active responsibility allocation — 2026-10-04
+
+Ranking including its factual export is owner-closed; Results M2 is now owner-opened. The
+[opening handoff](2026-10-04-results-m2-opening.md) makes offline M2.1 preparation/rendering the
+first slice. This session opens the milestone without implementing Results runtime.
+
+The owner approved moving reusable M1 factual projection into the
+[Ranking M2 solution-export extension](2026-10-04-ranking-m2-solution-export.md). That contract
+supersedes the M1 ownership/file proposals below: Ranking exports one compact view and receipt,
+reusing existing assessments; Results consumes it directly. Slot formatting, presentation groups,
+short handles, activated disclosure obligations and prompt preparation remain in Results M2.
+Do not implement an equivalent `ResultsBrief` projection or a standalone Results M1 pipeline.
+The M1 preservation requirements below apply to the Ranking export; later authoring/evaluation
+mechanics retain their scope. Models, live budgets and fallback policy remain M2/M3 decisions.
+
 The owner requested this design update and reaffirmed that the LLM controls the output structure.
 The [v1 design](2026-10-02-results-stage-v1-design.md) records the product boundary;
 [authored-template contract](2026-10-03-results-stage-authored-template.md) defines the model's
@@ -12,8 +27,8 @@ not invented owner acceptance or authorization to run a live evaluation.
 
 | Slice | Work product | Gate before the next slice |
 | --- | --- | --- |
-| M1.1 | Input authority, typed brief/receipt, grouping and slot obligations | Source-required conditions, exact variant/price linkage, complete record accounting. |
-| M1.2 | Complete factored inputs and independent source oracles | All three saved cases preserve distinct options; measured prompt sizes and source-backed walkthrough. |
+| Ranking M2 export | Trusted upstream input, factored solution view and source receipt | Preserved supplied conditions, exact variant/price linkage, complete record accounting and saved-case size measurements. |
+| Results M2 preparation (next step) | Directly consume Ranking view; define display groups, handles, slots and activated disclosures | Authoring contract references exact exported facts without rebuilding another brief. |
 | M2.1 | Substitute/validate hand-authored documents with different structures | Prose and comparison-table layouts pass; no code-owned skeleton; cross-part hidden slots fail. |
 | M2.2 | Strict document-authoring adapter, outcomes and replay | Fake refusal/incomplete/error paths, explicit call budgets, saved-document replay pass. |
 | M2.3 | Small generation diagnostic on frozen inputs | Actual filled answers reviewed for structural freedom, faithful conditions and usefulness. |
@@ -58,39 +73,21 @@ original IDs internally; repeated projection must give the same IDs and content.
 
 ### Input authority and independent preservation checks
 
-Schema parsing, content hashes and M2 derivation checks do not prove that all M1 source-required
-conditions are present. The October 3 seeded probe removed `award_travelers_unknown` and
-`result_validation_minimum_award_seats`, changed one conditional journey to admitted, and passed
-current M1 parsing/M2 checks. This is an import acceptance gap, not an observed normal-producer
-failure. A separate seeded probe removed cost `validation_needs` while underlying missing parts
-remained. [Recorded probes](../reviews/evidence/2026-10-03-built-stages/evaluation_oracles.json).
+Owner decision, 2026-10-04: trust verified upstream output from this project. Results does not
+add a matching-owned requirement verifier, restrict the workflow to pinned fixtures, or rederive
+upstream eligibility and policy. Earlier verifier proposals are superseded by this decision.
 
-Recommended M1.1 prerequisite for a general saved-input CLI: call a **Ranking M1-owned, versioned
-requirement verifier** over attached request, plan, provider observations and each candidate.
-Independently recompute the declared requirement/obligation subset and compare its reason
-multiset, component identity and multiplicity with the corresponding imported reasons. Then run
-the existing full-reason/status consistency checks. Route, timing and other reasons also affect
-status; this narrow verifier does not independently certify complete eligibility or every status
-derivation. Reject missing/contradictory blockers
-as `source_invalid` before writer invocation. Implement the check at the matching boundary;
-Results must not copy matching policy or silently repair/reclassify the artifact. This narrow
-acceptance extension preserves the closed matching policy; it does not claim complete revalidation
-of all historical matching semantics. Dispatch the actual recorded policy. Initial v1 can
-explicitly reject unsupported `m1-v1` imports rather than apply current `m1-v2` retrospectively.
+Use the existing `RankedJourneySet` typed contract and resolve component/support references needed
+for projection. Preserve supplied statuses, styles, requirements, booking obligations, component
+cost completeness and unknowns. Keep source IDs and versions in the receipt. Malformed input or
+unresolvable references produce an explicit source error.
 
-A reviewed corpus manifest pinned independently of the input can support a narrower trusted-fixture
-prototype while that gate is built. Label it as such; a digest supplied by the file itself is not
-an independent trust source, and the prototype cannot claim general imported-artifact acceptance.
-
-Retain current RankedJourneySet validation as well. Derive visible price limitations from canonical
-component completeness/missing parts, with consistency checks on convenience summaries; never
-trust `validation_needs` alone. Source-required conditions and price unknowns are different concepts.
-
-Independent expected facts must come from original evidence/manual assertions, not the same
-projection function used to generate the brief. Pair seeded missing seat/party/cabin conditions
-with valid controls; check status-causing versus nonblocking obligations under m1-v2. Add exact
-variant/quote, timezone, zero-versus-missing-fee, and source-cost-limitation controls. A writer and
-judge sharing one brief cannot discover facts that projection wrongly discarded.
+Independent expected facts are manually asserted from the trusted input, without using the
+production projector. Tests check that Results preserves supplied seat/party/cabin conditions,
+exact variant/quote linkage, timezone displays, zero versus missing fees and cost limitations.
+Pair deliberately faulty Results projections with valid controls. These tests target Results
+omissions and alterations; they do not revalidate upstream matching decisions. A writer and judge
+sharing one brief cannot discover facts that projection wrongly discarded.
 
 ### Exploratory cleanup measurement
 
@@ -116,8 +113,8 @@ temporary probe paths are not required implementation artifacts or clean-checkou
 
 ### Grouping and duplicate algorithm
 
-1. Apply the input-authority gate above and validate the original `RankedJourneySet`, including
-   its existing derivation/source binding. Record the verifier scope and policy version.
+1. Load the trusted upstream `RankedJourneySet` through its existing typed contract and record
+   source identity and versions. Do not add a second upstream requirement verifier.
 2. Resolve each candidate through its original award, optional cash, support/dependency, and
    assessment references. Missing/inconsistent references are source errors, not empty results.
 3. Group initially by exact award observation identity and original endpoint pair. Preserve
@@ -295,7 +292,7 @@ even if partly parseable, never becomes a traveler answer. Do not rewrite the fi
 
 | Outcome dimension | Recorded meaning and behavior |
 | --- | --- |
-| Source | Valid under declared verifier scope, or explicit `source_invalid`/unsupported policy. Invalid source stops before generation and cannot support a factual fallback. |
+| Source | Trusted upstream input loaded and references resolved, or explicit `source_invalid`. Malformed/unresolvable input stops before generation and cannot support a factual fallback. |
 | Search evidence | Complete alternatives / incomplete only / no useful observations, plus independent provider coverage state. Empty completed searches differ from failed or omitted work. |
 | Generation | `completed`, `refused`, `incomplete`, `transport_error`, `invalid_document`, or `context_limit`; retain precise cause and attempt evidence. |
 | Delivery | Model-authored filled answer, optional labeled factual fallback, or explicit failure. A fallback is never recorded as successful authorship. |
@@ -319,7 +316,7 @@ cached tokens if reported. No custom cache infrastructure or saving claim is req
 ### Replay and observability
 
 A `ResultsArtifact` binds the source and brief digests, projection/slot/Markdown-render versions,
-input-verifier policy/scope, accepted typed document, selections, final Markdown and digest,
+upstream source versions, accepted typed document, selections, final Markdown and digest,
 visible slot-to-fact map, validation receipt, and outcome dimensions. Freeze display time and
 source timezone data used in substitution. Keep raw prompts/responses in private traces and
 publish only sanitized evidence. `store=False` does not mean local traces are absent or establish
@@ -411,19 +408,21 @@ LLM judge scores alone do not establish task benefit, observed-cost coverage, or
 
 | Files to add | Responsibility |
 | --- | --- |
-| Matching-owned verifier API and scoped ranking tests (exact seam chosen in M1.1) | Recompute declared source requirement/obligation subset under recorded policy; keep full-reason/status consistency and limited authority claim explicit. |
-| `src/award_agent/results/contracts.py`, `projection.py` | Brief, internal receipt, joins/grouping/factoring/conditions/coverage. |
+| `src/award_agent/ranking/projection_contracts.py`, `project_solutions.py` | Compact factual view, receipt, reference joins/factoring/conditions/coverage; implemented by the Ranking extension. |
+| `src/award_agent/results/contracts.py` | Future authored-document/slot/disclosure contracts; directly consume the Ranking factual view. |
 | `src/award_agent/results/rendering.py`, `validation.py` | Scoped slot parsing/substitution, visible obligations, model-authored document checks. |
 | `src/award_agent/results/writer.py`, `openai_writer.py`, `pipeline.py` | Narrow writer protocol, adapter, orchestration and explicit outcomes. |
 | `src/award_agent/cli/results.py` | Explicit saved-ranked-input CLI; new immutable output paths; no provider execution. |
-| `tests/unit/test_results_projection.py`, `test_results_rendering.py`, `test_results_generation.py`, `test_results_cli.py` | Offline invariant, regression, fake-writer and CLI tests. |
+| `tests/unit/test_ranking_solution_projection.py` | Implemented Ranking-owned factual preservation tests; do not duplicate their arithmetic/source projection in Results. |
+| `tests/unit/test_results_rendering.py`, `test_results_generation.py`, `test_results_cli.py` | Future Results slot/disclosure, fake-writer, replay and CLI tests. |
 | `src/award_agent/evaluation/results_stage.py`, `src/award_agent/cli/results_stage_eval.py` | Case runner, advisory judge and evaluation receipts. |
 | `evals/results_stage/`, `tests/unit/test_results_stage_eval.py` | Versioned casebooks/calibration and offline runner/judge contract tests. |
 | `docs/evaluation/results-stage-protocol.md`, `evidence/results-stage/` | Protocol, reviewed examples and public/sanitized evidence indexes; raw private traces stay ignored. |
 
 Reuse frozen ranking/provider/planning contracts, existing Pydantic base conventions,
-`LLMCallTraceCollector`, and current immutable-output conventions. The narrow M1-owned import
-verifier is an explicit prerequisite; broad upstream refactoring remains outside this design. Entry points and package exports are added only as implemented.
+`LLMCallTraceCollector`, and current immutable-output conventions. Verified upstream output is
+trusted under the owner's decision; no additional upstream verifier is required. Entry points
+and package exports are added only as implemented.
 
 After implementation, run the scoped tests above, applicable lint checks, saved brief/renderer
 replay checks, and the existing ranking corpus verification to confirm no upstream change.
@@ -431,9 +430,10 @@ These proposed files/commands do not exist yet; no clean-checkout Results execut
 
 ## Remaining choices and first cut
 
-Start with M1.1 authority/schema/condition mapping and M1.2 saved examples. Implementing the
-proposed narrow matching-owned import verifier requires explicit scoped work, not a claim that
-current validation already provides it. All source-policy decisions remain unchanged.
+The Ranking M2 factual export is implemented and independently reviewed. Start Results M2 with
+slot/disclosure preparation directly on `SolutionView`, then hand-authored rendering examples.
+The owner accepted the factual preparation direction and settled the upstream trust boundary.
+Authoring prompt/schema size and fit are measured during Results work, separately from export bytes.
 
 Before M2 acceptance settle factual-fallback breadth versus explicit failure. Before live calls,
 record writer/judge choices and finite numerical timeout/output/campaign budgets. Model selection

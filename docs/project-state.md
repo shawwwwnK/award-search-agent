@@ -2,9 +2,42 @@
 
 ## Phase
 
+On 2026-10-04 the owner explicitly **closed Ranking Stage including the M2 factual-export
+extension** and **opened Results M2 — model-authored answer with bound facts**. Results M2 is
+the active milestone; start with offline slot/disclosure preparation and rendering on Ranking's
+`SolutionView`. Results runtime remains unimplemented; M3 evaluation remains planned. See the
+[closeout/opening handoff](handoffs/2026-10-04-results-m2-opening.md).
+
+On 2026-10-04 the owner approved absorbing Results M1's reusable factual projection into a
+**Ranking M2 compact solution-export extension** and requested implementation with subagents and
+reviews. Ranking implementation is now complete with matching, styles and the factual export;
+28 new tests and 62 existing Ranking tests passed, scoped lint/type checks passed, and all three
+saved exports replayed exactly in the current environment. No material review findings remain.
+Results retains slot/prompt/display/disclosure preparation within
+its authoring milestone (existing M2), followed by evaluation (M3). No equivalent second brief
+transformation is planned. Existing upstream qualification applies to its original scope; the
+extension has separate preservation evidence and owner review. The owner explicitly requested
+finishing Ranking Stage with this included; Results Stage M2 is now owner-opened and is
+unimplemented. Compact views measure 2,011,912 / 1,302,037 / 654,408 bytes; authoring-context fit
+and cross-host timezone regeneration are unqualified. See the
+[active contract](handoffs/2026-10-04-ranking-m2-solution-export.md),
+[build log](build-log/2026-10-04-ranking-m2-solution-export.md) and
+[export evidence](../evidence/ranking-stage/m2/solutions/README.md).
+
 Results Stage is owner-opened for design as of 2026-10-02, following Ranking Stage closeout.
 It consumes the frozen `RankedJourneySet` and is the presentation/explanation stage previously
 called Output Stage. No Results implementation, live evaluation or qualification is claimed.
+
+Earlier on 2026-10-04 the owner opened **Results M1 — trustworthy, coherent input** and requested a
+design/unresolved-decisions walkthrough. That allocation is superseded by the extension above;
+Results M2 is now open and M3 remains planned. Its original scope was the
+deterministic `ResultsBrief`, internal `ProjectionReceipt`, factual slots/obligations, and independent
+preservation evidence over frozen ranked inputs. The owner subsequently settled input authority:
+trust verified upstream output within this project, with no additional requirement verifier or
+upstream-policy recomputation. The suggested brief/condition/coverage direction is accepted;
+Results tests verify faithful transformation of that trusted input. Implementation and qualification
+remain unclaimed.
+See the [M1 opening log](build-log/2026-10-04-results-m1-opening.md).
 
 On 2026-10-04 the owner requested thorough design/milestone review, subagent verification and
 current LLM-call guidance, and reaffirmed: **the LLM controls the output structure**. The updated
@@ -21,15 +54,16 @@ been replaced. The original [opening record](handoffs/2026-10-02-results-stage-o
 Accepted presentation direction remains usually three choices, at most five complete journeys
 including alternates, clear award programs, conservative duplicate cleanup and full distinct
 input retention without an added selection cap. The revision recommends a strict structured
-response, a narrow matching-owned imported-requirement verifier, independent source assertions,
+response, independent projection-preservation assertions,
 visible scoped placeholders, exact document replay and calibrated advisory evaluation. These
 engineering proposals are not owner qualification or changed upstream policy. Exact generation
 fallback breadth, writer/judge models and numerical live-call budgets remain open.
 
 Three specialist reviews informed the revision. Fresh saved-corpus verification passed all three
 M2 cases; 50 focused ranking tests passed. All saved cost references remain absent and provider
-coverage partial. Recorded seeded missing-condition/cost-summary faults motivate explicit gates;
-this does not claim normal producers failed. No Results code or model/provider calls were added.
+coverage partial. The earlier review proposed a duplicate upstream verifier based on seeded faults;
+the owner's subsequent trust decision supersedes that proposal. The recorded probes remain
+historical evidence. No Results code or model/provider calls were added.
 See the [review](reviews/2026-10-04-results-stage-design-review.md) and
 [build log](build-log/2026-10-04-results-stage-design-review.md).
 

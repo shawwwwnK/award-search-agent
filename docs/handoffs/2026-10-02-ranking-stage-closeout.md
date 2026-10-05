@@ -1,5 +1,25 @@
 # Ranking Stage closeout
 
+## October 4 extension
+
+**Owner closeout, 2026-10-04:** after reviewing the expanded scope, the owner explicitly instructed
+marking Ranking closed and opening the next Results milestone. Ranking is owner-closed including
+matching, styles and the factual export; Results M2 is owner-opened. See the
+[handoff](2026-10-04-results-m2-opening.md). The evidence/limits below retain their declared scopes.
+
+The owner subsequently instructed that Ranking Stage be finished with the reusable factual
+preparation formerly planned as Results M1 included in Ranking M2. See the
+[extension contract](2026-10-04-ranking-m2-solution-export.md). The original closeout evidence
+below applies to matching and solution styles; the export gets separate implementation and
+preservation evidence. Results M2 remains the next step. This amendment changes responsibility
+allocation without altering matching/style policy or the original saved ranked artifacts.
+
+The extension is now implemented, offline verified and independently reviewed. The final
+checks passed 28 export tests and 62 existing Ranking tests; all three saved exports replayed
+exactly in the current environment. Ranking implementation is complete with this included; Results
+M2 remains next. The [build log](../build-log/2026-10-04-ranking-m2-solution-export.md) and
+[evidence](../../evidence/ranking-stage/m2/solutions/README.md) record the exact scope and limits.
+
 Date: 2026-10-02. Status: **owner-closed for the declared M1 matching/validation and M2 solution-style boundaries**.
 
 ## Owner disposition

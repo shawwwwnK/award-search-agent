@@ -1,10 +1,20 @@
 # Results Stage execution milestones
 
-Date: 2026-10-02; revised 2026-10-04. Status: **reviewed milestone proposal; no milestone implemented or qualified**.
+Date: 2026-10-02; revised 2026-10-04. Status: **Ranking owner-closed with M1 preparation absorbed; Results M2 owner-opened, M3 planned; no Results implementation or qualification**.
+
+## Active boundary revision — 2026-10-04
+
+The owner approved the [Ranking M2 solution-export extension](2026-10-04-ranking-m2-solution-export.md).
+Reusable factual projection and its preservation tests belong to Ranking. Results consumes that
+view directly and retains presentation grouping, handles, slots, activated disclosures and prompt
+preparation in M2. There is no standalone Results M1 or second equivalent brief projection. The M1
+section below records the original work requirements; use the extension contract for current
+ownership. M2/M3 identifiers are retained for continuity.
 
 The owner requested a thorough design/milestone review with subagent verification and current
 LLM-call guidance, and reaffirmed that **the LLM controls the output structure**. The sequence
-remains M1 cleaned evidence, M2 model-authored answer, M3 LLM-assisted evaluation. This revision
+is now completed Ranking M2 factual export, then Results M2 model-authored answer and M3
+LLM-assisted evaluation. This revision
 makes the gates concrete; it does not claim owner acceptance of unimplemented engineering choices.
 
 Use the [v1 design](2026-10-02-results-stage-v1-design.md) for product authority, the
@@ -24,16 +34,20 @@ programs, conditional requirements, scoped quotes, unknowns, separate bookings, 
 and actual coverage. Cash remains a separate anchor. No input selection cap, new provider calls,
 upstream policy reinterpretation, production UI or workflow framework is part of these milestones.
 
-## M1 — Establish trustworthy, coherent input
+## Original M1 — requirements now owned by Ranking M2 export
+
+**Status:** original Results allocation superseded on 2026-10-04. It was owner-opened earlier
+that day for the design and unresolved-decisions walkthrough.
+The owner subsequently confirmed that verified same-project upstream output is trusted and
+accepted the suggested brief/condition/coverage design direction. See the
+[opening log](../build-log/2026-10-04-results-m1-opening.md).
 
 **Deliverable:** deterministic `ResultsBrief`, internal `ProjectionReceipt`, and versioned factual
 slot/obligation catalog from one frozen `RankedJourneySet`.
 
-**M1.1: authority and exact projection.** Specify the import authority before treating status as
-trusted. General imports need the proposed matching-owned policy-versioned requirement verifier;
-current schema/hash checks alone do not catch seeded missing blockers. A limited independently
-pinned fixture prototype must explicitly declare that narrower boundary. Do not duplicate matching
-policy in Results or silently repair a source artifact.
+**M1.1: exact projection of trusted upstream output.** Consume the verified same-project
+`RankedJourneySet` using its existing typed contract. Preserve upstream decisions and conditions;
+no additional requirement verifier or upstream-policy recomputation is part of Results.
 
 Join exact candidate/component/support IDs; preserve whole variants, statuses, style states,
 price scopes, missing costs, conditional reasons and nonblocking booking obligations. Factor shared
@@ -51,9 +65,9 @@ Exit evidence:
 
 - All three saved cases preserve 257/106/64 eligible variants before any justified aliases,
   23/3/4 award groups, all unknown cost scopes and complete record accounting.
-- Source-condition mutation/valid controls demonstrate missing seat/party/cabin evidence handling;
-  historical unsupported policy is explicitly rejected. Independent source facts catch projection
-  mistakes rather than agreeing with the same helper's output.
+- Projection fault/valid controls demonstrate preservation of supplied seat/party/cabin conditions
+  and cost limitations. Independent expected facts catch Results omissions or altered associations
+  rather than agreeing with the same projector's output; upstream eligibility is trusted.
 - Offline tests cover same-observation equivalence and conflicting near-duplicates, status/styles,
   missing versus zero fees, component-cost-summary inconsistencies, missing cabin/legs, positive
   mixed-cabin evidence, actual coverage, empty/failure/incomplete/rejected separation.
@@ -61,10 +75,14 @@ Exit evidence:
   fastest versus admitted egress, and SFO local-time/UTC difference without invented facts.
 - No input is silently dropped to fit context. Any measured fit problem is reported as evidence.
 
-**Checkpoint:** review the accepted source boundary, one multi-cash award group, one conditional
+**Checkpoint:** review one multi-cash award group, one conditional
 complete journey and the complete compact inputs. Resolve preservation gaps before model selection.
 
 ## M2 — Let the LLM author the answer and fill its facts
+
+**Status:** owner-opened on 2026-10-04 after Ranking's expanded closeout. See the
+[opening handoff](2026-10-04-results-m2-opening.md). Start with M2.1 offline preparation/rendering;
+model/fallback/live-budget decisions belong to dependent M2 work. M3 remains planned.
 
 **Deliverable:** `ResultsDocument -> ResultsArtifact`, with a narrow authoring call and exact
 saved-document replay. No code-owned visible layout.
@@ -166,6 +184,8 @@ with exact scope, versions, failures and limits. Update state/build log/deferred
 explicit owner acceptance before claiming stage closeout. Observed cost usefulness, bookability,
 personal redeemability, provider reliability and full-workflow benefit remain separate claims.
 
-Start with M1.1 plus independent saved examples. Fallback breadth and numeric LLM settings can be
+The Ranking M2 export and its saved-example preservation checks are complete. Start Results M2.
+Fallback breadth and numeric LLM settings can be
 settled before their dependent M2 work. No provider acquisition or parked scope must be opened to
-complete this design. No implementation or qualification is claimed by this milestone revision.
+complete this design. Results M2/M3 remain unimplemented and unqualified; the Ranking export's
+completed engineering evidence is recorded separately in its contract/build log.

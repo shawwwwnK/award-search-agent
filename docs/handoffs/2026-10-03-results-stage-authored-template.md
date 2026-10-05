@@ -1,5 +1,9 @@
 # Results Stage: LLM-authored structure with bound factual placeholders
 
+**Boundary update, 2026-10-04:** the factual model view is supplied directly by the
+[Ranking M2 export](2026-10-04-ranking-m2-solution-export.md). Results owns the scoped placeholder,
+disclosure and authorship rules in this document; it does not duplicate that factual projection.
+
 Date: 2026-10-03; revised 2026-10-04 after independent review and renewed owner direction.
 Status: **LLM structural control is owner-required; wire and validation mechanics are the revised engineering proposal**.
 

@@ -1,5 +1,9 @@
 # Ranking M2 saved solution-style results
 
+On 2026-10-04 Ranking M2 also gained a separate compact factual export. See
+[solution exports](solutions/README.md) for its saved artifacts, preservation tests, measurements
+and replay command. The styled inputs in this directory remain unchanged. Results M2 is next.
+
 These are offline local-development projections of the three unchanged
 [M1 matching outputs](../m1/README.md), using the owner-approved
 [M2 style policy](../../../docs/handoffs/2026-10-01-ranking-m2-styles-contract.md) and the

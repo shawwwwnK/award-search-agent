@@ -58,6 +58,28 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+The owner closed Ranking Stage including its M2 factual export and opened **Results M2** on
+2026-10-04. The active handoff is `docs/handoffs/2026-10-04-results-m2-opening.md`. Begin with
+offline authoring preparation/rendering directly on Ranking's `SolutionView`; Results runtime is
+unimplemented and M3 evaluation remains planned. Prior references below to Results M2 as the
+next step now mean the owner-opened active milestone. No broader provider/bookability/task-benefit
+claim follows from this closeout.
+
+On 2026-10-04 the owner approved absorbing Results M1's reusable factual projection into
+Ranking Stage M2 and instructed that Ranking Stage be finished with this export included.
+The active extension contract is `docs/handoffs/2026-10-04-ranking-m2-solution-export.md`.
+Ranking owns the compact factored solution view and source receipt, separate from style arithmetic;
+Results Stage M2 remains the next step and owns authoring/slots/display/disclosure preparation.
+No Results runtime is authorized by this Ranking extension. Verified same-project upstream input
+is trusted; no additional matching requirement verifier is required. Earlier Results M1 boundary
+proposals below are superseded by this allocation. The extension's evidence is distinct from the
+original September/October Ranking closeout evidence.
+The October 4 extension is implemented and independently reviewed: 28 export tests and 62 existing
+Ranking tests passed, with three saved exports replayed in the current environment. See
+`docs/build-log/2026-10-04-ranking-m2-solution-export.md` and
+`evidence/ranking-stage/m2/solutions/README.md`. Results M2 remains next and unimplemented;
+export byte measurements do not establish model-context fit or broader qualification.
+
 The search-planning stage is owner-complete as of 2026-09-21. Milestones 1, 2A, 2B, and 2C are
 implemented and owner-qualified for their declared planning boundaries, and Milestone 0 is retired.
 Provider Stage under amended ADR 0022 is owner-complete as of 2026-09-23 for its declared

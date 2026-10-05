@@ -1,5 +1,11 @@
 # Results Stage v1: model-authored answer with grounded facts
 
+**Owner-approved boundary revision, 2026-10-04:** reusable factual projection now belongs to the
+[Ranking M2 export extension](2026-10-04-ranking-m2-solution-export.md). Results directly consumes
+its compact view and owns presentation grouping, factual slots/disclosures, model-input formatting
+and authored answers. Earlier `ResultsBrief`/M1 projection references below describe the factual
+content required, not a second Results-owned transformation or standalone milestone.
+
 Date: 2026-10-02; revised 2026-10-04. Status: **owner direction recorded; reviewed engineering design, not implemented or qualified**.
 
 The LLM controls the answer's structure and prose. Code binds and fills facts and checks the
@@ -17,8 +23,9 @@ their original status; they are not competing active contracts.
 ## Traveler decision and owner direction
 
 Help a traveler decide which observed award-led journeys to investigate next, understand their
-tradeoffs, and identify the remaining manual checks. Consume one frozen `RankedJourneySet` with
-its evidence. No new searches, transfer research, bookings, upstream corrections or ranking-policy
+tradeoffs, and identify the remaining manual checks. Consume the factual solution view exported
+from one frozen `RankedJourneySet`, with its source receipt retained internally. No new searches,
+transfer research, bookings, upstream corrections or ranking-policy
 changes belong to Results.
 
 The accepted direction is:
@@ -48,14 +55,16 @@ reinterpret a failure fallback as permission for code to structure successful an
 
 The older workbook's 5–10 choices, source-link feature, weighted ranking, round trips and symmetric
 cash scope are historical broader thinking. Newer owner decisions/ADRs govern this narrower stage;
-no workbook edit or reopening follows. Ranking remains closed for its declared boundary.
+no workbook edit or reopening follows. Ranking's original closeout remains evidence for its
+declared boundary; the October 4 export extension adds the factual handoff described above.
 
 ## Authority and flow
 
 ```text
 Frozen RankedJourneySet + source evidence
-  -> input-authority checks
-  -> ResultsBrief + private ProjectionReceipt + slot obligations
+  -> Ranking M2 project_solutions()
+  -> SolutionView + private ProjectionReceipt
+  -> Results M2 slot/disclosure preparation on that same view
   -> one LLM-authored ResultsDocument
   -> document/slot/visible-content checks and literal factual substitution
   -> ResultsArtifact
@@ -75,30 +84,27 @@ The first implementation is a narrow local API/CLI; broader workflow integration
 
 ## Input trust and information preservation
 
-Current schema/hash/M2 replay checks establish substantial integrity but do not rederive all M1
-source-required reasons. A recorded seeded omission of seat/party blockers passed those checks.
-For general imported files, the design therefore calls for a narrow **matching-owned, versioned
-requirement verifier**, invoked before Results projection. Missing/contradictory source-required
-conditions cause an explicit source error; Results does not duplicate matching policy or patch
-status. Unsupported historical policies fail explicitly rather than being reinterpreted. The verifier
-independently checks its declared requirement/obligation subset; existing full-reason/status
-consistency still runs. It does not independently certify all route/timing/eligibility semantics.
+On 2026-10-04 the owner settled input authority: Results trusts the verified upstream output
+produced within this project. The proposed additional matching-owned requirement verifier and
+pinned-fixture alternative are dropped from Results scope. Results preserves upstream statuses,
+styles, conditions and cost limitations without rederiving matching or ranking policy.
 
-A prototype limited to independently pinned reviewed fixtures can use that narrower authority
-while the verifier is built, with its limited claim visible in the receipt. Source hashes alone
-are not producer authority. Price limitations must also be derived from canonical cost components
-or checked against them; a convenient summary may omit a limitation. See the
-[import gate](2026-10-02-results-stage-implementation-plan.md#input-authority-and-independent-preservation-checks).
+Use the existing typed input contract and resolve the references needed for projection; malformed
+input or unresolved references remain explicit errors. Record source identity and versions for
+traceability. See the
+[preservation contract](2026-10-02-results-stage-implementation-plan.md#input-authority-and-independent-preservation-checks).
 
 Independent source-backed assertions test quotes, variants, local dates, unknowns and required
 conditions. A writer and judge that share the same incorrect projection can otherwise agree.
-This is an explicit prerequisite, not a claim that existing upstream production outputs failed.
+These assertions verify the Results transformation against the trusted input; they do not add a
+second verification of upstream eligibility.
 
 ## Verified preservation and current evidence limits
 
 Two read-only investigations and an architecture review examined the actual contracts and all
 three saved result shapes. M2 corpus verification passed on 2026-10-02 and was rerun successfully on 2026-10-04 for all
-three cases; 50 focused M1/M2/corpus tests also passed. These checks do not close the import gap above. The evidence chain is:
+three cases; 50 focused M1/M2/corpus tests also passed. Results uses those upstream outputs as
+trusted inputs under the owner's decision above. The evidence chain is:
 
 | Needed information | Existing source | Results work or limitation |
 | --- | --- | --- |
@@ -149,8 +155,8 @@ not yet evidence that an LLM selects or explains them well.
 
 | Contract | Responsibility |
 | --- | --- |
-| `ResultsBrief` | Compact full model view: request, factored award/cash components, every distinct eligible complete alternative, groups, conditions, comparisons, separate cash, incomplete/rejected conclusions and real coverage. |
-| `ProjectionReceipt` | Source/brief digests, accepted authority/version, original IDs/evidence, complete dispositions, aliases and source-backed summary mappings. Kept outside model context. |
+| Ranking `SolutionView` | Compact factual view: request, shared components/costs/reasons/styles, all complete and excluded alternatives, comparisons, separate cash, incomplete observations and coverage. Consumed directly by Results. |
+| Ranking `ProjectionReceipt` | Source/view digests and versions, original candidate/observation links, technical provenance, raw local strings and coverage mappings. Kept outside model context; v1 retains every candidate without aliasing. |
 | Slot catalog/obligations | Versioned coherent facts and the information each selected scope must visibly disclose, including price limitations and practical booking checks. |
 | `ResultsDocument` | Model-selected manifest and ordered scoped Markdown parts. All headings, prose, order, grouping and separators are authored by the model. |
 | `ResultsArtifact` | Filled answer, accepted document, selections, source/slot map, validation and independent source/search/generation/delivery outcomes, versions/digests and replay evidence. |
@@ -229,7 +235,7 @@ report fit failures before revising the approach.
 
 ## Milestones and evidence
 
-**M1** establishes accepted source authority, complete coherent input and independent fact checks.
+**Ranking M2 export** produces complete coherent input from trusted upstream output and checks projection preservation.
 **M2** implements the LLM-authored document/factual-substitution boundary and demonstrates actual
 answers and explicit failure handling. **M3** calibrates an advisory LLM judge and evaluates
 repeated filled answers with human review. Fixtures and semantic criteria start during M1/M2;

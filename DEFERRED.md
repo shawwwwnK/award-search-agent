@@ -2,6 +2,18 @@
 
 Last reviewed: 2026-10-04.
 
+**Owner disposition, 2026-10-04:** Ranking Stage is closed including the factual-export extension.
+Results M2 is owner-opened; M3 remains planned. See the
+[handoff](docs/handoffs/2026-10-04-results-m2-opening.md). Existing broader gates/deferrals retain
+their scope; no Results implementation or unspecified live campaign follows from the opening.
+
+**Active boundary decision, 2026-10-04:** the owner approved moving Results M1 factual preparation
+into Ranking M2 and requested finishing Ranking Stage with that export included. The export is
+implemented and offline verified core work, not deferred scope. Results M2 remains the next step; its authoring-specific slots,
+display grouping, disclosures and prompt work are not implemented with this export. See the
+[extension contract](docs/handoffs/2026-10-04-ranking-m2-solution-export.md). Existing qualification
+records retain their original scopes; projection preservation has its own checks and review.
+
 This is the living register of work we are deliberately not doing now. Revisit an entry when its trigger is met; that means decide whether to build, narrow, or drop it. It does not mean automatically implement everything here.
 
 For this register, **core complete** means one declared one-way award workflow reaches real award
@@ -450,3 +462,41 @@ Fallback breadth, model choices and numerical live budgets remain open. No new p
 upstream policy reopening, runtime implementation or change to G04/D06/D15/D18 follows.
 Fresh three-case M2 corpus verification and 50 focused tests passed; no Results/provider/model
 evaluation ran. See the [build log](docs/build-log/2026-10-04-results-stage-design-review.md).
+
+2026-10-04 — the owner opened Results M1 and requested its design and unresolved decisions.
+M1's evidence preparation is active core work, not a new deferred feature. G03/G05 remain open:
+before general imported Results acceptance, resolve the matching-owned verifier versus explicitly
+narrow pinned-fixture boundary, and demonstrate independent missing-condition/valid controls,
+exact variant preservation and complete input accounting. M2/M3 remain planned; no upstream
+policy reopening, implementation, live call or qualification is claimed. See the
+[M1 opening log](docs/build-log/2026-10-04-results-m1-opening.md).
+
+2026-10-04 — subsequent owner decision: Results trusts the already verified upstream output
+from this project. Drop the proposed additional matching-owned requirement verifier, its API/policy
+dispatch work, and pinned-fixture alternative from Results M1. This supersedes the earlier
+general-import prerequisite in the review/opening disposition; historical probes and recommendations
+remain recorded. G03/G05 are not globally closed: Results still needs evidence that its own
+projection preserves trusted upstream variants, conditions, quote scopes and coverage. The owner
+accepted the suggested brief/condition/coverage design direction. Revisit upstream trust only if
+the input boundary changes or the owner explicitly reopens it; no additional verifier completion
+evidence is required for the current boundary. No runtime implementation or qualification is claimed.
+
+2026-10-04 — the owner approved the Ranking/Results boundary change and instructed finishing
+Ranking Stage with reusable factual preparation included in M2. The export is now implemented,
+independently reviewed and offline verified: 28 export tests and 62 existing Ranking tests passed;
+all three saved exports retain 992 candidate dispositions/427 eligible alternatives and replay
+exactly in the current environment. This supplies the Results-projection preservation evidence
+under G03/G05 for the declared boundary, without closing those broader gates or rechecking upstream
+policy. No deferred feature was opened. Results M2 is the next step; fallback/models/live budgets
+belong to M2/M3. Compact views remain 2,011,912 / 1,302,037 / 654,408 bytes; authoring-context fit
+and cross-host timezone regeneration are unqualified. See the
+[build log](docs/build-log/2026-10-04-ranking-m2-solution-export.md) and
+[export evidence](evidence/ranking-stage/m2/solutions/README.md).
+
+2026-10-04 — after reviewing Ranking's export and preservation boundary, the owner explicitly
+instructed closing Ranking Stage, opening the next Results milestone, and committing/pushing.
+Ranking is closed including matching, styles and the factual export. Results M2 is active and
+unimplemented; start with offline authoring preparation/rendering, using the exported view directly.
+M3 remains planned. Model/fallback/live-budget choices remain within M2/M3; no parked feature or
+broader provider/bookability/task-benefit claim was adopted. See the
+[closeout/opening handoff](docs/handoffs/2026-10-04-results-m2-opening.md).

@@ -1,5 +1,14 @@
 # Ranking M2: solution styles and draft contract
 
+**Owner closeout, 2026-10-04:** Ranking Stage is closed including the completed factual-export
+extension. Results M2 is owner-opened; see the [handoff](2026-10-04-results-m2-opening.md).
+
+**Owner-approved extension, 2026-10-04:** Ranking M2 now also owns the
+[compact factual solution export](2026-10-04-ranking-m2-solution-export.md) formerly proposed as
+Results M1. This extension is separate from style calculation; it reuses existing assessments
+and leaves the original completed boundary and saved ranked contract unchanged. Results retains
+answer-specific formatting, selection, slots and disclosure validation.
+
 Date: 2026-10-01. Status: **owner-approved product policy and locally implemented contract; Ranking Stage owner-closed 2026-10-02 for its declared solution-style boundary**.
 
 ## Purpose and unchanged boundaries
