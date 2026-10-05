@@ -1,5 +1,7 @@
 # Ranking Stage: design opening
 
+Decision records: [ADR 0024](../adr/0024-deterministic-award-led-journey-matching.md), [ADR 0025](../adr/0025-deterministic-overlapping-solution-styles.md).
+
 Date: 2026-09-25. Status: **Ranking Stage owner-closed 2026-10-02 for the declared M1 matching/validation and M2 solution-style boundaries**.
 
 The [2026-10-01 M2 policy and draft contract](2026-10-01-ranking-m2-styles-contract.md)

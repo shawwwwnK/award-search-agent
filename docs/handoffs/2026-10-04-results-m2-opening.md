@@ -1,5 +1,7 @@
 # Results M2 opening and Ranking closeout
 
+Decision records: [ADR 0026](../adr/0026-model-authored-results-with-bound-facts.md), [ADR 0027](../adr/0027-ranking-owned-solution-export-and-upstream-trust.md).
+
 Date: 2026-10-04. Status: **Ranking owner-closed including its M2 factual export; Results M2 owner-opened, unimplemented**.
 
 ## Owner disposition

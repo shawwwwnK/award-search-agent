@@ -1,5 +1,7 @@
 # Ranking M2 extension: compact factual solution export
 
+Decision record: [ADR 0027](../adr/0027-ranking-owned-solution-export-and-upstream-trust.md).
+
 Date: 2026-10-04. Status: **owner-closed with Ranking Stage; export implemented, offline verified and independently reviewed**.
 
 The completed export API, CLI and saved evidence are documented in the

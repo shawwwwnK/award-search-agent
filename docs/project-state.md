@@ -1,5 +1,17 @@
 # Project State
 
+## Decision-record maintenance
+
+On 2026-10-04 the owner requested ADR backfills and guidance changes to prevent further drift.
+The existing Ranking matching, solution-style, Results authorship and export/trust decisions are
+now indexed as [ADR 0024](adr/0024-deterministic-award-led-journey-matching.md),
+[ADR 0025](adr/0025-deterministic-overlapping-solution-styles.md),
+[ADR 0026](adr/0026-model-authored-results-with-bound-facts.md) and
+[ADR 0027](adr/0027-ranking-owned-solution-export-and-upstream-trust.md).
+These records preserve original decision dates and claim limits; they introduce no runtime
+policy, stage reopening or qualification. `AGENTS.md` and the ADR/build-log guidance require
+an explicit ADR disposition for consequential decision sessions.
+
 ## Phase
 
 On 2026-10-04 the owner explicitly **closed Ranking Stage including the M2 factual-export

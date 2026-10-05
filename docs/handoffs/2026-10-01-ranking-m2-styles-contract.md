@@ -1,5 +1,7 @@
 # Ranking M2: solution styles and draft contract
 
+Decision record: [ADR 0025](../adr/0025-deterministic-overlapping-solution-styles.md).
+
 **Owner closeout, 2026-10-04:** Ranking Stage is closed including the completed factual-export
 extension. Results M2 is owner-opened; see the [handoff](2026-10-04-results-m2-opening.md).
 

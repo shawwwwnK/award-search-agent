@@ -1,5 +1,7 @@
 # Results Stage: LLM-authored structure with bound factual placeholders
 
+Decision record: [ADR 0026](../adr/0026-model-authored-results-with-bound-facts.md).
+
 **Boundary update, 2026-10-04:** the factual model view is supplied directly by the
 [Ranking M2 export](2026-10-04-ranking-m2-solution-export.md). Results owns the scoped placeholder,
 disclosure and authorship rules in this document; it does not duplicate that factual projection.

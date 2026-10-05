@@ -4,6 +4,26 @@ An architecture decision record documents a consequential technical decision, th
 
 Create an ADR when a decision changes workflow boundaries, trust guarantees, evaluation strategy, state management, or another choice that will matter later when behavior is reviewed or revised. ADRs should capture consequential, defensible decisions rather than every library choice.
 
+## Decision-record workflow
+
+- At design opening and before changing a consequential boundary, inspect existing ADRs and
+  decide whether to add a record or amend one. Triggers include stage ownership, input trust,
+  model/code responsibility, eligibility/evidence policy, ranking/valuation, state and evaluation
+  guarantees. Routine implementation details need no ADR.
+- Record accepted decisions in the same session as their contract/implementation changes, before
+  closeout or commit. A handoff, plan, build log or project-state entry does not replace an ADR.
+- Use explicit status and dates. Proposed options remain proposed; accepted product policy must
+  be distinguished from engineering proposals and implementation/qualification status. An ADR
+  records authorization already given; it does not create another approval gate.
+- For backfills, retain the original decision dates, add the recording date, and cite original
+  sources. Do not invent alternatives, owner rationale or retrospective measurements. Label
+  inferred tradeoffs as analysis rather than owner conclusions.
+- Link affected contracts/current state to the ADR and update this index. State what earlier
+  decision is superseded and its exact scope. Preserve historical evidence; use a dated amendment
+  or a new superseding ADR for material changes instead of silently rewriting prior decisions.
+- Session closeout records the ADR added/amended, or a brief reason none was needed. Reconcile
+  conflicting current documents and update deferred entries only when their disposition changes.
+
 Expected sections:
 
 - Context
@@ -37,3 +57,9 @@ Expected sections:
 - [0020: Market-aware model-proposed gateway candidates](0020-market-aware-model-proposed-gateway-candidates.md)
 - [0021: Deterministic search-strategy compilation](0021-deterministic-search-strategy-compilation.md)
 - [0022: Award-first cash observations and positioning components](0022-award-first-cash-observations.md)
+
+- [0023: Adopt M2A and retire Milestone 0 compatibility](0023-adopt-m2a-and-retire-m0-endpoint-selection.md)
+- [0024: Deterministic award-led journey matching](0024-deterministic-award-led-journey-matching.md)
+- [0025: Deterministic overlapping solution styles](0025-deterministic-overlapping-solution-styles.md)
+- [0026: Model-authored Results structure with bound facts](0026-model-authored-results-with-bound-facts.md)
+- [0027: Ranking-owned factual export and trusted upstream Results input](0027-ranking-owned-solution-export-and-upstream-trust.md)

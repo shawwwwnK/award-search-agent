@@ -264,6 +264,25 @@ authentication, deployment, provider calls, or workflow logic in the UI layer.
 - Do not fabricate measurements or evidence.
 - Report files changed, commands run, tests run, assumptions, and remaining failures.
 
+## Architecture decision records
+
+Follow `docs/adr/README.md` at design opening, when consequential decisions change, and at
+session closeout. Create or amend an ADR in the same session for accepted changes to workflow
+or stage ownership, trust/evidence guarantees, model/code responsibility, eligibility,
+ranking/valuation, state management or evaluation strategy. Reading an existing ADR alone
+is insufficient when the decision changes. Handoffs and contracts describe execution; build
+logs record evidence; neither substitutes for an ADR's options, decision and consequences.
+
+Use explicit proposed/accepted status, decision and recording dates, source links, evidence
+limits and revisit triggers. Separate accepted policy from unsettled engineering proposals.
+Record already-authorized decisions without asking for duplicate approval. Backfills must cite
+original decisions and must not invent owner rationale or claim historical tests were rerun.
+
+Before closeout or commit, update the ADR index, link affected current contracts/project state,
+state supersession scope and check for conflicts. Record the ADR disposition in the build log
+(IDs added/amended, or a brief reason no ADR was needed). Routine implementation details do
+not require an ADR. This rule preserves the source-of-truth hierarchy above.
+
 ## Deferred-work register
 
 `DEFERRED.md` in the repository root is the living register of intentionally
