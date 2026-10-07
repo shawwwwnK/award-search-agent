@@ -1,5 +1,17 @@
 # ADR 0026: Model-authored Results structure with bound facts
 
+## 2026-10-07 implementation disposition
+
+The owner invoked implementation of the October 7 Results M2 spec. The local API now implements
+that spec's selected checks, bounded correction and annotated delivery. See the
+[implementation log](../build-log/2026-10-07-results-m2-implementation.md) and
+[usage](../results-m2.md). Numerical model/live settings remain explicit, unselected inputs;
+UTF-8 input measurements do not qualify context fit. This records implementation status and
+routine engineering mechanics, not a new product-policy decision or owner qualification.
+Historical unimplemented/unsettled statements below retain their original dates; the
+[October 7 execution contract](../handoffs/2026-10-07-results-m2-validation-and-delivery-contract.md)
+identifies policy supersession. Ranking ownership and upstream trust remain under ADR 0027.
+
 - Status: Accepted ownership boundary; detailed engineering mechanics remain proposed
 - Decision dates: 2026-10-02 Results design opening; structural control reaffirmed 2026-10-04
 - Recorded: 2026-10-04 (backfill; Results runtime remains unimplemented)

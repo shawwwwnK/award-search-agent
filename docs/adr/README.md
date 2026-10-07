@@ -1,5 +1,9 @@
 # ADRs
 
+2026-10-07 implementation status: ADR 0026's existing Results M2 policy now has a local
+implementation; see its dated disposition and the [build log](../build-log/2026-10-07-results-m2-implementation.md).
+No new eligibility, valuation, upstream-verification or evaluation policy was adopted.
+
 An architecture decision record documents a consequential technical decision, the alternatives considered, and the reasons the project chose one path over another.
 
 Create an ADR when a decision changes workflow boundaries, trust guarantees, evaluation strategy, state management, or another choice that will matter later when behavior is reviewed or revised. ADRs should capture consequential, defensible decisions rather than every library choice.

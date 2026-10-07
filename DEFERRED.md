@@ -1,5 +1,14 @@
 # Deferred work — finish the core workflow first
 
+**2026-10-07 implementation disposition (G03/G05/G06; Results core):** Results M2 has a local
+API, source-bound rendering, selected checks, bounded correction, notices, explicit configuration,
+CLI and replay. Offline implementation evidence is recorded in the
+[build log](docs/build-log/2026-10-07-results-m2-implementation.md). This narrows the Results-local
+preservation and attempt-bound prerequisites; it does not close broader G03/G05/G06 gates.
+Revisit model settings/context fit before actual authoring; require measured complete input,
+declared settings and live budget. M3 calibration and traveler-task benefit retain their existing
+completion evidence requirements. No parked feature or upstream stage was reopened.
+
 Last reviewed: 2026-10-04.
 
 **Owner disposition, 2026-10-04:** Ranking Stage is closed including the factual-export extension.

@@ -1,5 +1,16 @@
 # Project State
 
+## 2026-10-07 Results M2 implementation
+
+Results M2 now has a local public API, scoped authoring/rendering/checks, at-most-two-invocation
+recovery, annotated delivery, a writer adapter, CLI, and offline exact replay. This implementation
+follows the [October 7 spec](handoffs/2026-10-07-results-m2-implementation-spec.md) and
+[ADR 0026](adr/0026-model-authored-results-with-bound-facts.md), without reopening Ranking.
+The [implementation log](build-log/2026-10-07-results-m2-implementation.md) records verification
+and limits; [local usage](results-m2.md) describes explicit configuration. Earlier statements
+below that Results is unimplemented are historical. Owner qualification, actual model context fit,
+model/live settings and M3 evaluation remain unclaimed. No live calls ran.
+
 ## Decision-record maintenance
 
 On 2026-10-04 the owner requested ADR backfills and guidance changes to prevent further drift.

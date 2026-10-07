@@ -58,6 +58,14 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+On 2026-10-07 the owner invoked implementation of
+`docs/handoffs/2026-10-07-results-m2-implementation-spec.md`. Results M2 now has a local
+API, scoped authoring/rendering/checks, bounded correction, annotated delivery, writer adapter,
+CLI and exact replay. See `docs/build-log/2026-10-07-results-m2-implementation.md` and
+`docs/results-m2.md` for verification and explicit settings. Earlier unimplemented statements
+below are historical. Model-specific context fit, actual authoring settings/live budgets,
+owner qualification and M3 evaluation remain unclaimed; no upstream stage is reopened.
+
 The owner closed Ranking Stage including its M2 factual export and opened **Results M2** on
 2026-10-04. The active handoff is `docs/handoffs/2026-10-04-results-m2-opening.md`. Begin with
 offline authoring preparation/rendering directly on Ranking's `SolutionView`; Results runtime is

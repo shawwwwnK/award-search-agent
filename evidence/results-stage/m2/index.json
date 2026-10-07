@@ -1,0 +1,123 @@
+{
+  "annotated_fixture": {
+    "artifact_bytes": 2659062,
+    "artifact_file": "sfo_to_bkk_positioning.annotated.artifact.json",
+    "artifact_sha256": "26100656259724042df5290d743eb1601d75636a430b686635f9c29c83efc923",
+    "attempts": [
+      {
+        "estimated_total_tokens": 611236,
+        "failed_findings": 1,
+        "finding_count": 1,
+        "input_bytes": 601136,
+        "outcome": "recoverable",
+        "phase": "initial",
+        "prompt_digest": "c7835646d56f96cf876cffc6e041ea99722d4b137f34956b0f4b41064e8efb24",
+        "schema_digest": "e03e827838a5b97dda9f9a0cacf20d0c76830c98422bdfe3a941446adedd1dc5"
+      },
+      {
+        "estimated_total_tokens": 614114,
+        "failed_findings": 2,
+        "finding_count": 2,
+        "input_bytes": 604014,
+        "outcome": "recoverable",
+        "phase": "correction",
+        "prompt_digest": "91856e9a2f1a1dd5da80de25d51529bf2f20c25b5fddd9f5f4050d7e3fc602e5",
+        "schema_digest": "e03e827838a5b97dda9f9a0cacf20d0c76830c98422bdfe3a941446adedd1dc5"
+      }
+    ],
+    "complete_prepared_slot_coverage": true,
+    "delivery_outcome": "delivered",
+    "generation_outcome": "success",
+    "inserted_fact_count": 37,
+    "notice_count": 1,
+    "prepared_selected_journey_slot_count": 33,
+    "prepared_shared_slot_count": 4,
+    "replay_bytes": 4291,
+    "replay_file": "sfo_to_bkk_positioning.annotated.md",
+    "replay_sha256": "19867135dffc366886e3bdae951f27ee33d0761626d67a3959100cf0ff365e45",
+    "selected_attempt": 0,
+    "selection_reason": "initial_fewer_failures",
+    "validation_outcome": "annotated"
+  },
+  "artifact_files": [
+    {
+      "file": "sfo_to_bkk_positioning.annotated.initial.draft.json",
+      "sha256": "339c3e023ff16063eca0ffa15bf3eb67fcb873c1f1fdbeafcd13c588c0d68ac5"
+    },
+    {
+      "file": "sfo_to_bkk_positioning.annotated.correction.draft.json",
+      "sha256": "ec3e278d0263433610146ca14e0c9f3a27f795b4a633a646e6d293f1ba23ed6e"
+    }
+  ],
+  "clean_fixture": {
+    "artifact_bytes": 2652575,
+    "artifact_file": "sfo_to_bkk_positioning.clean.artifact.json",
+    "artifact_sha256": "5e34bd4f802ee810f0a9383d83387d6463adeb4ba2045fc8290459be397e4505",
+    "attempts": [
+      {
+        "estimated_total_tokens": 611236,
+        "failed_findings": 0,
+        "finding_count": 0,
+        "input_bytes": 601136,
+        "outcome": "recoverable",
+        "phase": "initial",
+        "prompt_digest": "c7835646d56f96cf876cffc6e041ea99722d4b137f34956b0f4b41064e8efb24",
+        "schema_digest": "e03e827838a5b97dda9f9a0cacf20d0c76830c98422bdfe3a941446adedd1dc5"
+      }
+    ],
+    "complete_prepared_slot_coverage": true,
+    "delivery_outcome": "delivered",
+    "generation_outcome": "success",
+    "inserted_fact_count": 37,
+    "notice_count": 0,
+    "prepared_selected_journey_slot_count": 33,
+    "prepared_shared_slot_count": 4,
+    "replay_bytes": 4036,
+    "replay_file": "sfo_to_bkk_positioning.clean.md",
+    "replay_sha256": "8bd98ea5c52b96a4f1376e52681cd5db5e79726d7241545ec77a522ba751c619",
+    "selected_attempt": 0,
+    "selection_reason": "initial_only",
+    "validation_outcome": "clean"
+  },
+  "evidence_kind": "offline_results_m2_fixtures_and_measurements",
+  "fixture_candidate_id": "f7d024bb65a87fe25bd14e71dbbf51c35f0a1995e3e9cc22fa112e677ed7eab9",
+  "fixture_writer_calls": {
+    "annotated": 2,
+    "clean": 1
+  },
+  "generated_at": "2026-10-07",
+  "generated_by": "public Results API with deterministic fixture writer; zero live calls",
+  "limitations": [
+    "Fixtures are deterministic code-authored documents, not model-authored quality evidence.",
+    "No semantic, M3, model-selection, live-budget, or practical-context-fit qualification.",
+    "No live model, network, or travel-provider calls."
+  ],
+  "offline_config_file": "offline-config.json",
+  "offline_config_sha256": "2cd98f74816d8c6e2dd6ac39fbc1eb1da5f7bb76d28df172906525be3c4ef475",
+  "source_files": [
+    {
+      "alternatives": 473,
+      "eligible_alternatives": 257,
+      "estimated_total_tokens": 1865834,
+      "file": "../../ranking-stage/m2/solutions/mixed_access.json",
+      "input_bytes": 1855734,
+      "sha256": "c4e38eddaeb394f08f08e4bea6330a073c0ef74167da523aed604a7ad2b8a6e0"
+    },
+    {
+      "alternatives": 396,
+      "eligible_alternatives": 106,
+      "estimated_total_tokens": 1258291,
+      "file": "../../ranking-stage/m2/solutions/exact_business.json",
+      "input_bytes": 1248191,
+      "sha256": "2e71c670f6266b81d9998300c5bddc8285cf2873ac9401e305e33bcd3007ff85"
+    },
+    {
+      "alternatives": 123,
+      "eligible_alternatives": 64,
+      "estimated_total_tokens": 611236,
+      "file": "../../ranking-stage/m2/solutions/sfo_to_bkk_positioning.json",
+      "input_bytes": 601136,
+      "sha256": "5faf6cc5d2bd1c43e0a3ae3c2d44a3eca5a71dcbb03960735011bc724097f6df"
+    }
+  ]
+}
