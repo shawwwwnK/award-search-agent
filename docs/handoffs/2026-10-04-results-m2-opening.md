@@ -1,5 +1,17 @@
 # Results M2 opening and Ranking closeout
 
+**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+
+**Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)
+and [ADR 0026's dated amendments](../adr/0026-model-authored-results-with-bound-facts.md).
+These supersede earlier terminal validation gates, hard five-choice and two-per-group caps,
+no-repair/single-call proposals and prohibition on attached failure disclosures below.
+The LLM owns answer layout; selected checks are non-blocking. Use at most two authoring calls,
+retain the recoverable draft with fewer material failures (correction wins ties), and attach
+traveler-facing notices/source-backed omitted disclosures. Unchecked/insufficient evidence
+remain distinct. Schema output with no recoverable document is a system/generation failure.
+Results remains unimplemented; measurement-dependent settings and live budgets remain future work.
+
 Decision records: [ADR 0026](../adr/0026-model-authored-results-with-bound-facts.md), [ADR 0027](../adr/0027-ranking-owned-solution-export-and-upstream-trust.md).
 
 Date: 2026-10-04. Status: **Ranking owner-closed including its M2 factual export; Results M2 owner-opened, unimplemented**.
@@ -34,7 +46,8 @@ Measure complete authoring input/schema size without silently dropping alternati
 
 M2.2 adds the narrow writer adapter, explicit failures and saved-document replay; M2.3 supplies
 the bounded actual-authoring diagnostic after dependent choices and numerical budgets are settled.
-Fallback breadth, writer settings and live-call limits remain decisions for M2. Judge settings and
+Recovery/delivery policy is settled in the October 7 contract; writer settings and live-call
+limits remain dependent M2 decisions after input measurement. Judge settings and
 calibration belong to M3. Opening M2 is not a claim of implementation, authorization for an
 unspecified live evaluation, or a reopening of upstream policies.
 

@@ -1,5 +1,17 @@
 # Results Stage v1: model-authored answer with grounded facts
 
+**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+
+**Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)
+and [ADR 0026's dated amendments](../adr/0026-model-authored-results-with-bound-facts.md).
+These supersede earlier terminal validation gates, hard five-choice and two-per-group caps,
+no-repair/single-call proposals and prohibition on attached failure disclosures below.
+The LLM owns answer layout; selected checks are non-blocking. Use at most two authoring calls,
+retain the recoverable draft with fewer material failures (correction wins ties), and attach
+traveler-facing notices/source-backed omitted disclosures. Unchecked/insufficient evidence
+remain distinct. Schema output with no recoverable document is a system/generation failure.
+Results remains unimplemented; measurement-dependent settings and live budgets remain future work.
+
 **Owner-approved boundary revision, 2026-10-04:** reusable factual projection now belongs to the
 [Ranking M2 export extension](2026-10-04-ranking-m2-solution-export.md). Results directly consumes
 its compact view and owns presentation grouping, factual slots/disclosures, model-input formatting
@@ -32,10 +44,10 @@ The accepted direction is:
 
 - The model authors headings, order, grouping, paragraphs, tables, emphasis and explanations.
   Code has no normal-answer skeleton or section order and does not append missing conditions.
-- Highlight useful distinct complete journeys, usually three, with at most five including
+- Highlight useful distinct complete journeys, usually three, with five as a soft target including
   alternates. Successful authorship selects at least one when complete alternatives exist.
-  One primary per observed award group and at most one meaningful cash alternate
-  from that group. Do not fill a style quota or invent an overall score/best-overall winner.
+  Multiple materially distinct alternatives from one award group are allowed;
+  the model justifies their inclusion and avoids redundancy. Do not fill a style quota or invent an overall score/best-overall winner.
 - Admitted and conditional complete alternatives share the selection/comparison pool. Specific
   requirements remain visible; a style label does not certify a condition or connection.
 - Keep award programs clear, price scope/unknowns, meaningful cabin differences, separate bookings,
@@ -48,10 +60,10 @@ The accepted direction is:
 - Clean and factor the full input; consolidate only true duplicates and preserve every distinct
   alternative. Measure the complete cleaned inputs before proposing an overflow architecture.
 
-The original proposal contemplated a short factual summary if authoring fails. Exact fallback
-breadth, retry settings and numerical call budgets were not owner-decided. The revised execution
-plan recommends a concrete call policy and records fallback as an open choice. It does not
-reinterpret a failure fallback as permission for code to structure successful answers.
+The October 7 owner policy uses one initial invocation and at most one correction, then delivers
+the recoverable draft with fewer material failures and local traveler-facing notices. Notices also
+supply known omitted disclosures; the answer layout remains model-authored. Numerical writer/live
+settings await input measurement. No code-owned factual-summary fallback is adopted.
 
 The older workbook's 5–10 choices, source-link feature, weighted ranking, round trips and symmetric
 cash scope are historical broader thinking. Newer owner decisions/ADRs govern this narrower stage;
@@ -210,8 +222,8 @@ slot source map; a token hidden across comments/code/links does not count as dis
 
 Use a tested Markdown subset and escape source strings as literal text. No recursive template
 execution, raw HTML, links/images or hidden content in initial v1. This is a proposed local
-rendering contract, not a production Web UI. Missing content invalidates the draft; code does not
-insert a fixed corrective section. Mechanically valid prose can still mislead through a heading
+rendering contract, not a production Web UI. Missing content is a non-blocking check failure;
+code attaches known omitted disclosures as local notices, without a fixed recommendation skeleton. Mechanically valid prose can still mislead through a heading
 or comparison, so M3 evaluates the filled visible document and its implications.
 
 Recommend one strict structured response carrying that document. This preserves freeform Markdown
@@ -223,10 +235,10 @@ specified in the execution plan. No model is selected without Results-specific e
 
 Separate source errors, genuine empty/partial search evidence, generation errors and delivery
 outcomes. Invalid source cannot support a factual fallback. Refusal, truncation, transport errors,
-invalid document and context exhaustion never become successful generated answers. The proposed
-single invocation has SDK retries disabled and no repair loop; numerical budgets are recorded
-before calls. A labeled factual-summary fallback remains an open choice. No normal answer is
-streamed before all document checks complete.
+no-recoverable-document schema failure and context exhaustion retain their generation/system
+failure evidence. Recoverable documents with check failures remain deliverable with local notices.
+Use one initial invocation and at most one correction; numerical settings are recorded before live
+calls. No normal answer is streamed before checks and notices are prepared.
 
 Exact replay reconstructs the saved accepted document with the same brief/versions and zero LLM
 calls. New generation creates a new artifact; it does not promise identical words or selection.
@@ -239,7 +251,7 @@ report fit failures before revising the approach.
 **M2** implements the LLM-authored document/factual-substitution boundary and demonstrates actual
 answers and explicit failure handling. **M3** calibrates an advisory LLM judge and evaluates
 repeated filled answers with human review. Fixtures and semantic criteria start during M1/M2;
-there is no runtime judge or automatic prose-repair loop.
+there is no runtime judge; M2 permits one correction and then annotated delivery.
 
 The existing 12-case, three-trial diagnostic remains a bounded development proposal. Correct
 controls, planted failures, actual exercised-family predicates, independent held-out judge labels,
@@ -247,8 +259,8 @@ all failed-attempt denominators and human adjudication are explicit. Reuse compa
 instead of duplicating model calls. Structure variability is allowed; false factual implications
 are not. The milestone plan defines completion evidence without claiming general reliability.
 
-Before M2 acceptance, settle fallback breadth versus explicit delivery failure; before live
-calls, record model choices and numerical timeout/output/campaign budgets. Offline M1 and M2.1
+Before M2 acceptance, exercise bounded recovery and annotated delivery; before live calls,
+record model choices and numerical timeout/output/campaign budgets. Offline M1 and M2.1
 can proceed independently. These are remaining engineering/presentation choices, not reasons to
 reopen frozen request, planning, provider or ranking policy.
 

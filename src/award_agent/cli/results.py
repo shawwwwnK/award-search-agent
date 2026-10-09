@@ -9,7 +9,7 @@ from pathlib import Path
 
 from award_agent.cli._atomic_output import write_new_atomic
 from award_agent.ranking.projection_contracts import SolutionProjection
-from award_agent.results.adapter import OpenAIResultsWriter
+from award_agent.results.adapter import OpenAIResultsInputMeasurer, OpenAIResultsWriter
 from award_agent.results.contracts import (
     CheckFinding,
     PreparedResultsInput,
@@ -89,7 +89,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 parser.error("--correction requires --draft")
             if args.live:
                 writer = OpenAIResultsWriter()
-                artifact = run_results(projection, config, writer)
+                artifact = run_results(projection, config, writer,
+                                       input_measurer=OpenAIResultsInputMeasurer())
             else:
                 initial = ResultsDocument.model_validate_json(read(args.draft))
                 correction = (ResultsDocument.model_validate_json(read(args.correction))

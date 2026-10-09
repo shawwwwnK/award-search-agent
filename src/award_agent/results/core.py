@@ -19,18 +19,23 @@ from award_agent.ranking.projection_contracts import (
 from .contracts import (
     CheckFinding,
     DeclaredClaim,
+    InputTokenReceipt,
     PreparedResultsInput,
     RenderedFact,
     ResultsArtifact,
     ResultsAttempt,
     ResultsConfig,
     ResultsDocument,
+    ResultsInputMeasurer,
     ResultsPart,
     ResultsWriter,
     ResultsWriterError,
     ValidationNotice,
     WriterReceipt,
 )
+from .request import response_schema, token_request, token_request_digest
+
+ArtifactVersion = Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3"]
 
 SLOT_RE = re.compile(r"\{\{fact:([a-z][a-z0-9_]*)\}\}")
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
@@ -50,6 +55,16 @@ must remain unknown. Usually select three distinct journeys; five is a soft pres
 Do not invent availability, protection, leg cabins, party totals, or valuation arithmetic.
 Use source.claim_catalog proposition names for supported deterministic checks. A claim's text must
 appear visibly in its part. For comparisons, scope_ids must equal the supplied comparison_pool_ids.
+"""
+V3_INSTRUCTIONS = """For selected recommended journeys, disclose the full required scoped facts.
+An unselected candidate may be a short side note: visibly identify it and bind its actual upstream
+status and source-grounded requirements/reason. Put its ID in excluded_journey_ids, never in
+journey_ids; an admitted or conditional candidate is not upstream rejected. To share a
+journey fact once across recommendations, use a shared part
+with a shared_disclosures binding for each exact fact key and its selected journey IDs. Every target
+must have the same source value, and each target's stable visible identifier or exact ID must appear
+in that shared part. Include the exact {{fact:key}} slot in that part. A binding alone or an inferred
+prose relationship does not disclose a fact. Keep other journey facts in their scoped parts.
 """
 
 
@@ -317,7 +332,10 @@ def _source(view: SolutionView) -> dict[str, object]:
     }
 
 
-def prepare_results(projection: SolutionProjection, config: ResultsConfig) -> PreparedResultsInput:
+def prepare_results(projection: SolutionProjection, config: ResultsConfig, *,
+                    version: ArtifactVersion = "results-artifact-v3") -> PreparedResultsInput:
+    if version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+        raise ValueError("unsupported Results render version")
     # Revalidation checks the receipt/view digest and all exact references before writer access.
     trusted = SolutionProjection.model_validate(projection.model_dump(mode="json"))
     view = trusted.view
@@ -342,8 +360,15 @@ def prepare_results(projection: SolutionProjection, config: ResultsConfig) -> Pr
         "incomplete": sorted(next((value for key, value in slots.items()
                                    if key.startswith("incomplete:")), {})),
     }
-    initial = PreparedResultsInput(source_digest=trusted.receipt.view_digest, source=source,
-        slots=slots, instructions=INSTRUCTIONS, input_bytes=0, estimated_input_tokens=0,
+    instructions = INSTRUCTIONS
+    if version == "results-artifact-v3":
+        instructions += "\n\n" + V3_INSTRUCTIONS
+    if config.authoring_guidance and config.authoring_guidance.strip():
+        instructions += "\n\n" + config.authoring_guidance
+    initial = PreparedResultsInput(contract_version=("results-prepared-v2" if
+        version == "results-artifact-v3" else "results-prepared-v1"),
+        source_digest=trusted.receipt.view_digest, source=source,
+        slots=slots, instructions=instructions, input_bytes=0, estimated_input_tokens=0,
         estimated_total_tokens=0)
     size, total, _, _ = _measurement(initial, config, (), None)
     return initial.model_copy(update={"input_bytes": size,
@@ -354,11 +379,17 @@ def prepare_results(projection: SolutionProjection, config: ResultsConfig) -> Pr
 def authoring_payload(prepared: PreparedResultsInput,
                       feedback: tuple[CheckFinding, ...] = (),
                       previous_document: ResultsDocument | None = None) -> str:
+    prior = previous_document.model_dump(mode="json") if previous_document else None
+    if prior is not None and prepared.contract_version == "results-prepared-v1":
+        for part in prior["parts"]:
+            if part["shared_disclosures"]:
+                raise ValueError("v3 shared bindings cannot enter a legacy correction")
+            part.pop("shared_disclosures")
     body = {
         "prepared": prepared.model_dump(mode="json", exclude={"instructions", "slots", "input_bytes",
             "estimated_input_tokens", "estimated_total_tokens"}),
         "feedback": [finding.model_dump(mode="json") for finding in feedback],
-        "previous_document": previous_document.model_dump(mode="json") if previous_document else None,
+        "previous_document": prior,
     }
     return json.dumps(body, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
@@ -369,8 +400,7 @@ def _measurement(prepared: PreparedResultsInput, config: ResultsConfig,
     payload = authoring_payload(prepared, feedback, previous_document)
     # The adapter's strict schema may add required fields. The explicit buffer covers
     # protocol wrapping; byte count is a conservative token upper bound, not tokenizer proof.
-    from openai.lib._pydantic import to_strict_json_schema
-    schema = to_strict_json_schema(ResultsDocument)
+    schema = response_schema(prepared.contract_version)
     schema_text = json.dumps(schema, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     prompt = prepared.instructions + payload
     size = len(prompt.encode("utf-8")) + len(schema_text.encode("utf-8"))
@@ -534,14 +564,108 @@ def _claim_check(claim: DeclaredClaim, part: ResultsPart, index: int,
                     fact, claim.claim_id, result)
 
 
-def check_document(document: ResultsDocument, projection: SolutionProjection) -> tuple[CheckFinding, ...]:
+def _visible_identity(text: str, identity: str) -> bool:
+    return bool(re.search(r"(?<!\w)" + re.escape(identity) + r"(?!\w)", text))
+
+
+def _stable_visible_journey_labels(document: ResultsDocument,
+                                   visible: tuple[str, ...]) -> dict[str, str]:
+    """A visible anchor may be followed by unlabeled contiguous journey prose."""
+    labels: dict[str, set[str]] = {}
+    label_owners: dict[str, set[str]] = {}
+    for index, part in enumerate(document.parts):
+        if part.scope != "journey" or not part.reference_id or not part.identifier:
+            continue
+        labels.setdefault(part.reference_id, set()).add(part.identifier)
+        label_owners.setdefault(part.identifier.casefold(), set()).add(part.reference_id)
+    stable_labels: dict[str, str] = {}
+    for rid, candidate_labels in labels.items():
+        if len(candidate_labels) != 1:
+            continue
+        label = next(iter(candidate_labels))
+        if len(label_owners[label.casefold()]) != 1:
+            continue
+        if all(part.identifier == label and _visible_identity(visible[index], label)
+               for index, part in enumerate(document.parts)
+               if part.scope == "journey" and part.reference_id == rid and part.identifier):
+            stable_labels[rid] = label
+    return stable_labels
+
+
+def _shared_journey_bindings(
+    document: ResultsDocument, view: SolutionView, visible: tuple[str, ...],
+) -> tuple[dict[int, dict[str, tuple[str, tuple[str, ...]]]], tuple[CheckFinding, ...]]:
+    """Resolve v3 shared facts only from explicit, visible, equal source bindings."""
+    alternatives = {item.candidate_id: item for item in view.alternatives}
+    components = {item.observation_id: item for item in view.components}
+    stable_labels = _stable_visible_journey_labels(document, visible)
+    values: dict[int, dict[str, tuple[str, tuple[str, ...]]]] = {}
+    findings: list[CheckFinding] = []
+    selected = set(document.selection.journey_ids)
+    shared_keys = set(_shared_slots(view))
+    for index, part in enumerate(document.parts):
+        if not part.shared_disclosures:
+            continue
+        if part.scope != "shared" or part.reference_id is not None:
+            findings.append(_failure("shared_binding_scope", part.scope, part.reference_id, index,
+                "Journey fact bindings are allowed only in an unreferenced shared part."))
+            continue
+        counts = {binding.key: sum(other.key == binding.key
+                                  for other in part.shared_disclosures)
+                  for binding in part.shared_disclosures}
+        for binding in part.shared_disclosures:
+            key, targets = binding.key, binding.journey_ids
+            if counts[key] != 1 or key in shared_keys:
+                findings.append(_failure("shared_binding_key", "shared", None, index,
+                    f"Shared journey fact {key} has a duplicate or global key."))
+                continue
+            if (len(targets) < 2 or len(set(targets)) != len(targets) or
+                    any(rid not in selected or rid not in alternatives or
+                        alternatives[rid].status not in {"admitted", "conditional"}
+                        for rid in targets)):
+                findings.append(_failure("shared_binding_targets", "shared", None, index,
+                    f"Shared journey fact {key} lacks distinct selected eligible targets."))
+                continue
+            if key not in _slot_keys(visible[index]):
+                findings.append(_failure("shared_binding_hidden", "shared", None, index,
+                    f"Shared journey fact {key} is not visibly bound in this part."))
+                continue
+            if any(not (_visible_identity(visible[index], rid) or
+                        (rid in stable_labels and
+                         _visible_identity(visible[index], stable_labels[rid]))) for rid in targets):
+                findings.append(_failure("shared_binding_identity", "shared", None, index,
+                    f"Shared journey fact {key} lacks each target's visible stable identity."))
+                continue
+            source_values = [_journey_slots(view, alternatives[rid], components).get(key)
+                             for rid in targets]
+            if any(value is None for value in source_values) or len(set(source_values)) != 1:
+                findings.append(_failure("shared_binding_value", "shared", None, index,
+                    f"Shared journey fact {key} is absent or differs across targets."))
+                continue
+            assert source_values[0] is not None
+            values.setdefault(index, {})[key] = (source_values[0], targets)
+    return values, tuple(findings)
+
+
+def check_document(document: ResultsDocument, projection: SolutionProjection, *,
+                   version: ArtifactVersion = "results-artifact-v3") -> tuple[CheckFinding, ...]:
+    if version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+        raise ValueError("unsupported Results render version")
+    if version != "results-artifact-v3" and any(part.shared_disclosures for part in document.parts):
+        raise ValueError("v3 shared bindings cannot enter a legacy artifact")
     view = projection.view
     alternatives = {item.candidate_id: item for item in view.alternatives}
     components = {item.observation_id: item for item in view.components}
     visible = _visible_parts(document.parts)
     findings: list[CheckFinding] = []
+    shared_values: dict[int, dict[str, tuple[str, tuple[str, ...]]]] = {}
+    if version == "results-artifact-v3":
+        shared_values, shared_findings = _shared_journey_bindings(document, view, visible)
+        findings.extend(shared_findings)
     labels: dict[str, str] = {}
     label_owners: dict[str, str] = {}
+    stable_labels = (_stable_visible_journey_labels(document, visible)
+                     if version == "results-artifact-v3" else {})
     selection = document.selection
     for candidate_id in selection.journey_ids:
         alternative = alternatives.get(candidate_id)
@@ -618,6 +742,8 @@ def check_document(document: ResultsDocument, projection: SolutionProjection) ->
                     "The resumed journey needs a visible identifier.",
                     f"Journey ID: {_safe(rid)}."))
         available = prepare_slot_keys(view, part.scope, rid, components, alternatives)
+        if version == "results-artifact-v3" and part.scope == "shared":
+            available |= set(shared_values.get(index, {}))
         if ("```" in part.markdown or "~~~" in part.markdown or "`" in part.markdown or
                 "<" in part.markdown or IMAGE_RE.search(part.markdown) or
                 LINK_RE.search(part.markdown)):
@@ -664,7 +790,26 @@ def check_document(document: ResultsDocument, projection: SolutionProjection) ->
         if not scoped:
             continue
         used = {key for index, _ in scoped for key in _slot_keys(visible[index])}
-        if alt.status == "rejected" and not {"status", "requirements"} <= used:
+        if version == "results-artifact-v3" and rid not in selection.journey_ids:
+            has_identity = ("journey_id" in used or
+                            any(_visible_identity(visible[index], rid)
+                                for index, _ in scoped) or
+                            rid in stable_labels)
+            if alt.status == "rejected" and rid not in selection.excluded_journey_ids:
+                findings.append(_failure("rejected_manifest", "journey", rid, scoped[0][0],
+                    "Rejected candidate must be listed only as excluded."))
+            if not has_identity:
+                findings.append(_failure("rejected_identity" if alt.status == "rejected"
+                    else "unselected_identity", "journey", rid, scoped[0][0],
+                    "Unselected candidate needs a visible stable identity."))
+            for key in sorted({"status", "requirements"} - used):
+                fact = _journey_slots(view, alt, components)[key]
+                findings.append(_failure(f"missing_disclosure:{key}", "journey", rid,
+                    scoped[0][0], f"Unselected candidate omitted {key}.",
+                    f"{key.replace('_', ' ').capitalize()}: {fact}."))
+            continue
+        if (alt.status == "rejected" and version != "results-artifact-v3" and
+                not {"status", "requirements"} <= used):
             reasons = next(record.reasons for record in view.reason_sets
                            if record.reason_set_id == alt.reason_set_id)
             fact = "Excluded by upstream checks: " + "; ".join(
@@ -676,8 +821,10 @@ def check_document(document: ResultsDocument, projection: SolutionProjection) ->
                     "award_carrier", "award_cabin", "award_leg_cabins",
                     "points", "fees", "award_price_scope", "price_completeness",
                     "booking_obligation", "requirements", "award_observed_at"}
-        if rid not in labels or any(part.identifier != labels[rid] or labels[rid] not in visible[index]
-                                    for index, part in scoped):
+        if (rid not in stable_labels if version == "results-artifact-v3" else
+            rid not in labels or any(part.identifier != labels[rid] or
+                                     labels[rid] not in visible[index]
+                                     for index, part in scoped)):
             required.add("journey_id")
         if alt.cash_observation_id:
             required |= {"transfer", "cash", "cash_cabin", "cash_leg_cabins",
@@ -689,6 +836,9 @@ def check_document(document: ResultsDocument, projection: SolutionProjection) ->
         cash = components.get(alt.cash_observation_id or "")
         if cash and cash.mixed_cabin_pct.state == "value":
             required.add("cash_mixed_cabin_pct")
+        if version == "results-artifact-v3" and rid in selection.journey_ids:
+            used |= {key for bindings in shared_values.values()
+                     for key, (_, targets) in bindings.items() if rid in targets}
         for key in sorted(required - used):
             fact = _journey_slots(view, alt, components)[key]
             findings.append(_failure(f"missing_disclosure:{key}", "journey", rid, scoped[0][0],
@@ -803,7 +953,8 @@ def _unescaped_pipe(base: str, position: int) -> bool:
 
 def _insert_local_notices(base: str, starts: list[int], ends: list[int],
                           parts: tuple[ResultsPart, ...],
-                          targets: dict[int, list[ValidationNotice]]) -> str:
+                          targets: dict[int, list[ValidationNotice]],
+                          render_version: ArtifactVersion) -> str:
     insertions: dict[int, list[str]] = {}
     visible = _visible_parts(parts)
     for index, notices in targets.items():
@@ -845,7 +996,9 @@ def _insert_local_notices(base: str, starts: list[int], ends: list[int],
                 table_end = next_end
             insertions.setdefault(table_end, []).append("\n\n" + text + "\n\n")
         else:
-            insertions.setdefault(line_end, []).append("\n\n" + text + "\n\n")
+            position = (min(line_end, end) if render_version != "results-artifact-v1"
+                        else line_end)
+            insertions.setdefault(position, []).append("\n\n" + text + "\n\n")
     for position in sorted(insertions, reverse=True):
         base = base[:position] + " ".join(insertions[position]) + base[position:]
     return base
@@ -853,9 +1006,17 @@ def _insert_local_notices(base: str, starts: list[int], ends: list[int],
 
 def render_results(document: ResultsDocument, projection: SolutionProjection,
                    notices: tuple[ValidationNotice, ...] = (),
+                   *, render_version: ArtifactVersion = "results-artifact-v3",
                    ) -> tuple[str, tuple[RenderedFact, ...]]:
+    if render_version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+        raise ValueError("unsupported Results render version")
+    if render_version != "results-artifact-v3" and any(part.shared_disclosures for part in document.parts):
+        raise ValueError("v3 shared bindings cannot enter a legacy artifact")
     slots = prepare_results(projection, ResultsConfig(model="replay", max_output_tokens=1,
-        timeout_seconds=1, context_limit_tokens=1, prompt_overhead_tokens=0)).slots
+        timeout_seconds=1, context_limit_tokens=1, prompt_overhead_tokens=0),
+        version=render_version).slots
+    shared_values = (_shared_journey_bindings(document, projection.view,
+                     _visible_parts(document.parts))[0] if render_version == "results-artifact-v3" else {})
     output: list[str] = []
     facts: list[RenderedFact] = []
     starts: list[int] = []
@@ -877,6 +1038,9 @@ def render_results(document: ResultsDocument, projection: SolutionProjection,
     for index, part in enumerate(document.parts):
         scope_key = f"{part.scope}:{part.reference_id}" if part.scope != "shared" else "shared"
         local_slots = slots.get(scope_key) if _valid_part_reference(part, projection.view) else None
+        if local_slots is not None and part.scope == "shared" and index in shared_values:
+            local_slots = {**local_slots, **{key: value for key, (value, _) in
+                                           shared_values[index].items()}}
         authored, fence = _safe_authored_markdown(part.markdown, fence)
         chunks: list[str] = []
         cursor = 0
@@ -886,8 +1050,13 @@ def render_results(document: ResultsDocument, projection: SolutionProjection,
                 chunks.append("Details unavailable")
             else:
                 value = local_slots[key]
-                facts.append(RenderedFact(part_index=index, scope=part.scope,
-                                          reference_id=part.reference_id, key=key, value=value))
+                if part.scope == "shared" and key in shared_values.get(index, {}):
+                    for target in shared_values[index][key][1]:
+                        facts.append(RenderedFact(part_index=index, scope="journey",
+                                                  reference_id=target, key=key, value=value))
+                else:
+                    facts.append(RenderedFact(part_index=index, scope=part.scope,
+                                              reference_id=part.reference_id, key=key, value=value))
                 chunks.append(value)
             cursor = end
         chunks.append(authored[cursor:])
@@ -898,7 +1067,7 @@ def render_results(document: ResultsDocument, projection: SolutionProjection,
         ends.append(running_length)
     shared = [notice.text for notice in end_notices]
     rendered_all = _insert_local_notices("".join(output), starts, ends,
-                                          document.parts, notice_targets)
+                                          document.parts, notice_targets, render_version)
     if shared:
         rendered_all += "\n\n" + "\n\n".join(shared)
     return rendered_all, tuple(facts)
@@ -906,7 +1075,8 @@ def render_results(document: ResultsDocument, projection: SolutionProjection,
 
 def replay_results(artifact: ResultsArtifact) -> str:
     trusted = SolutionProjection.model_validate(artifact.projection.model_dump(mode="json"))
-    expected_prepared = prepare_results(trusted, artifact.config)
+    expected_prepared = prepare_results(trusted, artifact.config,
+                                        version=artifact.contract_version)
     if artifact.prepared != expected_prepared:
         raise ValueError("saved Results preparation differs from trusted source")
     if len(artifact.attempts) > 2 or tuple(a.phase for a in artifact.attempts) != (
@@ -922,12 +1092,31 @@ def replay_results(artifact: ResultsArtifact) -> str:
         if (saved.input_bytes, saved.estimated_total_tokens, saved.prompt_digest,
                 saved.schema_digest) != (size, total, prompt_digest, schema_digest):
             raise ValueError("saved Results attempt measurement differs from prompt")
+        count = saved.input_token_receipt
+        if count is not None:
+            count = InputTokenReceipt.model_validate(count.model_dump(mode="json"))
+            request = token_request(artifact.prepared, artifact.config,
+                                    authoring_payload(artifact.prepared, feedback, previous))
+            if count.request_digest != token_request_digest(request):
+                raise ValueError("saved Results token count request differs from prompt")
+            within_bound = ((artifact.config.max_input_tokens is None or
+                             count.input_tokens <= artifact.config.max_input_tokens) and
+                            count.input_tokens + artifact.config.max_output_tokens +
+                            artifact.config.prompt_overhead_tokens <= artifact.config.context_limit_tokens)
+        else:
+            within_bound = (total <= artifact.config.context_limit_tokens and
+                            (artifact.config.max_input_tokens is None or
+                             total - artifact.config.max_output_tokens <=
+                             artifact.config.max_input_tokens))
         if saved.writer_called:
-            if total > artifact.config.context_limit_tokens:
+            if not within_bound:
                 raise ValueError("saved Results attempt exceeds context limit")
-        elif not (index == 1 and saved.outcome == "generation_error" and
-                  saved.error == "context_limit" and total > artifact.config.context_limit_tokens
-                  and saved.document is None):
+        elif not ((saved.outcome == "generation_error" and
+                   saved.error == "context_limit" and not within_bound and
+                   saved.document is None) or
+                  (saved.outcome == "measurement_error" and saved.error ==
+                   "input_token_measurement_failed" and count is None and
+                   saved.document is None)):
             raise ValueError("saved Results noninvocation receipt is inconsistent")
         if index == 1 and (previous is None or not feedback):
             raise ValueError("saved Results correction has no failed initial draft")
@@ -940,6 +1129,8 @@ def replay_results(artifact: ResultsArtifact) -> str:
             raise ValueError("saved Results failed attempt contains a document")
         if saved.outcome == "api_error" and saved.failure_subtype != "api_error":
             raise ValueError("saved Results API failure subtype is inconsistent")
+        if saved.outcome == "measurement_error" and saved.writer_called:
+            raise ValueError("saved Results measurement error invoked writer")
         if saved.outcome == "generation_error" and saved.writer_called and saved.failure_subtype not in {
             "refusal", "incomplete", "schema_error"
         }:
@@ -948,20 +1139,26 @@ def replay_results(artifact: ResultsArtifact) -> str:
             any(f.outcome == "failed" for f in artifact.attempts[0].findings)):
         raise ValueError("saved Results correction attempt is missing")
     for saved in artifact.attempts:
-        if saved.document is not None and saved.findings != check_document(saved.document, trusted):
+        if saved.document is not None and saved.findings != check_document(
+                saved.document, trusted, version=artifact.contract_version):
             raise ValueError("saved Results check receipt differs from source")
     if artifact.selected_attempt is None:
         if any(saved.outcome == "recoverable" for saved in artifact.attempts):
             raise ValueError("saved Results recoverable draft was not selected")
         if artifact.attempts:
             terminal = artifact.attempts[-1]
-            expected_outcome = "api_error" if terminal.outcome == "api_error" else "generation_error"
-            if (artifact.selection_reason != "no_recoverable_draft" or
+            expected_outcome = ("context_limit" if terminal.error == "context_limit" else
+                                "measurement_error" if terminal.outcome == "measurement_error" else
+                                "api_error" if terminal.outcome == "api_error" else "generation_error")
+            expected_reason = "context_limit" if expected_outcome == "context_limit" else "no_recoverable_draft"
+            if (artifact.selection_reason != expected_reason or
                     artifact.generation_outcome != expected_outcome):
                 raise ValueError("saved Results generation outcome is inconsistent")
         elif (artifact.selection_reason != "context_limit" or
               artifact.generation_outcome != "context_limit" or
-              artifact.prepared.estimated_total_tokens <= artifact.config.context_limit_tokens):
+              not (artifact.prepared.estimated_total_tokens > artifact.config.context_limit_tokens or
+                   (artifact.config.max_input_tokens is not None and
+                    artifact.prepared.estimated_input_tokens > artifact.config.max_input_tokens))):
             raise ValueError("saved Results context-limit outcome is inconsistent")
         if artifact.delivery_outcome != "not_delivered" or artifact.validation_outcome != "unavailable":
             raise ValueError("saved Results undelivered outcome is inconsistent")
@@ -993,7 +1190,8 @@ def replay_results(artifact: ResultsArtifact) -> str:
     if (artifact.generation_outcome != "success" or artifact.delivery_outcome != "delivered" or
             artifact.validation_outcome != ("annotated" if expected_notices else "clean")):
         raise ValueError("saved Results delivered outcome is inconsistent")
-    rendered, facts = render_results(attempt.document, artifact.projection, artifact.notices)
+    rendered, facts = render_results(attempt.document, artifact.projection, artifact.notices,
+                                     render_version=artifact.contract_version)
     if rendered != artifact.rendered_markdown or facts != artifact.inserted_facts or \
             content_digest(rendered) != artifact.rendered_digest:
         raise ValueError("saved Results artifact does not replay exactly")
@@ -1009,35 +1207,70 @@ def _receipt(writer: ResultsWriter) -> WriterReceipt | None:
 
 
 def run_results(projection: SolutionProjection, config: ResultsConfig,
-                writer: ResultsWriter) -> ResultsArtifact:
-    prepared = prepare_results(projection, config)
+                writer: ResultsWriter,
+                input_measurer: ResultsInputMeasurer | None = None, *,
+                render_version: ArtifactVersion = "results-artifact-v3") -> ResultsArtifact:
+    if render_version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+        raise ValueError("unsupported Results render version")
+    prepared = prepare_results(projection, config, version=render_version)
     attempts: list[ResultsAttempt] = []
     feedback: tuple[CheckFinding, ...] = ()
     previous: ResultsDocument | None = None
     for phase in cast("tuple[Literal['initial', 'correction'], ...]", ("initial", "correction")):
         size, total, prompt_digest, schema_digest = _measurement(prepared, config,
                                                                   feedback, previous)
-        if total > config.context_limit_tokens:
+        token_receipt: InputTokenReceipt | None = None
+        if input_measurer is not None:
+            request = token_request(prepared, config, authoring_payload(prepared, feedback, previous))
+            try:
+                measured = input_measurer.measure(request, config)
+                token_receipt = InputTokenReceipt.model_validate(
+                    measured.model_dump(mode="json"))
+                if token_receipt.request_digest != token_request_digest(request):
+                    raise ValueError("input token receipt request digest differs")
+            except (AttributeError, ResultsWriterError, ValueError, TypeError):
+                attempts.append(ResultsAttempt(phase=phase, outcome="measurement_error",
+                    error="input_token_measurement_failed", input_bytes=size,
+                    estimated_total_tokens=total, prompt_digest=prompt_digest,
+                    schema_digest=schema_digest, writer_called=False))
+                break
+        counted_overflow = token_receipt is not None and (
+            (config.max_input_tokens is not None and
+             token_receipt.input_tokens > config.max_input_tokens) or
+            token_receipt.input_tokens + config.max_output_tokens +
+            config.prompt_overhead_tokens > config.context_limit_tokens)
+        byte_overflow = token_receipt is None and input_measurer is None and (
+            total > config.context_limit_tokens or
+            (config.max_input_tokens is not None and
+             total - config.max_output_tokens > config.max_input_tokens))
+        if counted_overflow or byte_overflow:
             if not attempts:
-                return ResultsArtifact(projection=projection, config=config, prepared=prepared,
-                    attempts=(), selected_attempt=None, selection_reason="context_limit",
+                if token_receipt is not None:
+                    attempts.append(ResultsAttempt(phase="initial", outcome="generation_error",
+                        error="context_limit", input_bytes=size, estimated_total_tokens=total,
+                        prompt_digest=prompt_digest, schema_digest=schema_digest,
+                        writer_called=False, input_token_receipt=token_receipt))
+                return ResultsArtifact(contract_version=render_version,
+                    projection=projection, config=config, prepared=prepared,
+                    attempts=tuple(attempts), selected_attempt=None, selection_reason="context_limit",
                     generation_outcome="context_limit", validation_outcome="unavailable",
                     delivery_outcome="not_delivered")
             attempts.append(ResultsAttempt(phase="correction", outcome="generation_error",
                 error="context_limit", input_bytes=size, estimated_total_tokens=total,
                 prompt_digest=prompt_digest, schema_digest=schema_digest,
-                writer_called=False))
+                writer_called=False, input_token_receipt=token_receipt))
             break
         try:
             document = writer.author(prepared, config, feedback=feedback,
                                      previous_document=previous)
             if not isinstance(document, ResultsDocument):
                 document = ResultsDocument.model_validate(document)
-            findings = check_document(document, projection)
+            findings = check_document(document, projection, version=render_version)
             attempts.append(ResultsAttempt(phase=phase, outcome="recoverable",
                 document=document, findings=findings, writer_receipt=_receipt(writer),
                 input_bytes=size, estimated_total_tokens=total,
-                prompt_digest=prompt_digest, schema_digest=schema_digest))
+                prompt_digest=prompt_digest, schema_digest=schema_digest,
+                input_token_receipt=token_receipt))
             failed = tuple(item for item in findings if item.outcome == "failed")
             if phase == "initial" and failed:
                 feedback = failed
@@ -1050,22 +1283,25 @@ def run_results(projection: SolutionProjection, config: ResultsConfig,
             attempts.append(ResultsAttempt(phase=phase, outcome=outcome,
                 error=str(exc), failure_subtype=exc.outcome, writer_receipt=receipt,
                 input_bytes=size, estimated_total_tokens=total,
-                prompt_digest=prompt_digest, schema_digest=schema_digest))
+                prompt_digest=prompt_digest, schema_digest=schema_digest,
+                input_token_receipt=token_receipt))
             break
         except (ValueError, TypeError) as exc:
             attempts.append(ResultsAttempt(phase=phase, outcome="generation_error",
                 error=f"schema_error: {exc}", failure_subtype="schema_error",
                 writer_receipt=_receipt(writer), input_bytes=size,
                 estimated_total_tokens=total, prompt_digest=prompt_digest,
-                schema_digest=schema_digest))
+                schema_digest=schema_digest, input_token_receipt=token_receipt))
             break
     recoverable = [(index, attempt) for index, attempt in enumerate(attempts)
                    if attempt.outcome == "recoverable" and attempt.document is not None]
     if not recoverable:
         terminal = attempts[-1] if attempts else None
-        generation: Literal["api_error", "generation_error"] = (
+        generation: Literal["api_error", "generation_error", "measurement_error"] = (
+            "measurement_error" if terminal and terminal.outcome == "measurement_error" else
             "api_error" if terminal and terminal.outcome == "api_error" else "generation_error")
-        return ResultsArtifact(projection=projection, config=config, prepared=prepared,
+        return ResultsArtifact(contract_version=render_version,
+            projection=projection, config=config, prepared=prepared,
             attempts=tuple(attempts), selected_attempt=None, selection_reason="no_recoverable_draft",
             generation_outcome=generation, validation_outcome="unavailable",
             delivery_outcome="not_delivered")
@@ -1078,8 +1314,10 @@ def run_results(projection: SolutionProjection, config: ResultsConfig,
         else "correction_tie" if selected == 1 else "initial_fewer_failures")
     notices = tuple(_notice(finding) for finding in attempt.findings if finding.outcome == "failed")
     assert attempt.document is not None
-    rendered, facts = render_results(attempt.document, projection, notices)
-    artifact = ResultsArtifact(projection=projection, config=config, prepared=prepared,
+    rendered, facts = render_results(attempt.document, projection, notices,
+                                    render_version=render_version)
+    artifact = ResultsArtifact(contract_version=render_version,
+        projection=projection, config=config, prepared=prepared,
         attempts=tuple(attempts), selected_attempt=selected, selection_reason=reason,
         generation_outcome="success", validation_outcome="annotated" if notices else "clean",
         delivery_outcome="delivered", notices=notices, inserted_facts=facts,

@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import json
 import time
+from typing import Any, cast
 
 from openai import APIError, OpenAI
-from openai.lib._pydantic import to_strict_json_schema
 from pydantic import ValidationError
 
 from .contracts import (
     CheckFinding,
+    InputTokenReceipt,
     PreparedResultsInput,
     ResultsConfig,
     ResultsDocument,
@@ -18,6 +19,32 @@ from .contracts import (
     WriterReceipt,
 )
 from .core import authoring_payload
+from .request import token_request, token_request_digest
+
+
+class OpenAIResultsInputMeasurer:
+    """Count the exact token-bearing Responses request, without automatic retries."""
+
+    def __init__(self, client: OpenAI | None = None) -> None:
+        self._client = client
+
+    def measure(self, request: dict[str, object], config: ResultsConfig) -> InputTokenReceipt:
+        try:
+            client = (self._client or OpenAI(max_retries=0)).with_options(
+                max_retries=0, timeout=config.timeout_seconds)
+            raw = client.post("/responses/input_tokens", body=request,
+                              cast_to=dict[str, object])
+            if not isinstance(raw, dict):
+                raise TypeError("invalid input token response")
+            if raw.get("object") != "response.input_tokens":
+                raise ValueError("invalid input token response object")
+            count = raw.get("input_tokens")
+            if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+                raise ValueError("invalid input token count")
+            return InputTokenReceipt(request_digest=token_request_digest(request),
+                                     input_tokens=count, raw_response=raw)
+        except (APIError, TypeError, ValueError) as exc:
+            raise ResultsWriterError("api_error", "Results input token measurement failed.") from exc
 
 
 class OpenAIResultsWriter:
@@ -49,13 +76,10 @@ class OpenAIResultsWriter:
             client = (self._client or OpenAI(max_retries=0)).with_options(
                 max_retries=0, timeout=config.timeout_seconds,
             )
+            request = token_request(prepared, config,
+                                    authoring_payload(prepared, feedback, previous_document))
             response = client.responses.create(
-                model=config.model,
-                instructions=prepared.instructions,
-                input=authoring_payload(prepared, feedback, previous_document),
-                text={"format": {"type": "json_schema", "name": "ResultsDocument",
-                                 "strict": True,
-                                 "schema": to_strict_json_schema(ResultsDocument)}},
+                **cast(Any, request),
                 max_output_tokens=config.max_output_tokens,
                 store=False,
                 truncation="disabled",

@@ -17,6 +17,8 @@ class ResultsConfig(PlanningContractModel):
     timeout_seconds: float = Field(gt=0)
     context_limit_tokens: int = Field(gt=0)
     prompt_overhead_tokens: int = Field(ge=0)
+    max_input_tokens: int | None = Field(default=None, gt=0)
+    authoring_guidance: str | None = None
 
     @model_validator(mode="after")
     def valid_settings(self) -> ResultsConfig:
@@ -40,6 +42,11 @@ class DeclaredClaim(PlanningContractModel):
     text: str = Field(min_length=1)
 
 
+class SharedDisclosureBinding(PlanningContractModel):
+    key: str = Field(min_length=1)
+    journey_ids: tuple[str, ...] = Field(min_length=2)
+
+
 class ResultsPart(PlanningContractModel):
     scope: Literal["shared", "journey", "benchmark", "incomplete"]
     reference_id: str | None = None
@@ -47,6 +54,7 @@ class ResultsPart(PlanningContractModel):
     markdown: str
     claims: tuple[DeclaredClaim, ...] = ()
     disclosures: tuple[str, ...] = ()
+    shared_disclosures: tuple[SharedDisclosureBinding, ...] = ()
 
 
 class ResultsDocument(PlanningContractModel):
@@ -56,7 +64,7 @@ class ResultsDocument(PlanningContractModel):
 
 class PreparedResultsInput(PlanningContractModel):
     _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"source", "slots"})
-    contract_version: Literal["results-prepared-v1"] = "results-prepared-v1"
+    contract_version: Literal["results-prepared-v1", "results-prepared-v2"] = "results-prepared-v1"
     source_digest: str
     source: dict[str, object]
     slots: dict[str, dict[str, str]]
@@ -72,6 +80,22 @@ class WriterReceipt(PlanningContractModel):
     status: str | None = None
     usage: dict[str, int] = Field(default_factory=dict)
     latency_seconds: float | None = None
+
+
+class InputTokenReceipt(PlanningContractModel):
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"raw_response"})
+    method: Literal["responses_input_tokens"] = "responses_input_tokens"
+    request_digest: str
+    input_tokens: int = Field(ge=0, strict=True)
+    raw_response: dict[str, object]
+
+    @model_validator(mode="after")
+    def valid_raw_count(self) -> InputTokenReceipt:
+        raw = self.raw_response.get("input_tokens")
+        if (self.raw_response.get("object") != "response.input_tokens" or
+                isinstance(raw, bool) or not isinstance(raw, int) or raw != self.input_tokens):
+            raise ValueError("input token receipt differs from raw response")
+        return self
 
 
 class CheckFinding(PlanningContractModel):
@@ -104,7 +128,7 @@ class RenderedFact(PlanningContractModel):
 
 class ResultsAttempt(PlanningContractModel):
     phase: Literal["initial", "correction"]
-    outcome: Literal["recoverable", "api_error", "generation_error"]
+    outcome: Literal["recoverable", "api_error", "generation_error", "measurement_error"]
     document: ResultsDocument | None = None
     findings: tuple[CheckFinding, ...] = ()
     error: str | None = None
@@ -115,17 +139,18 @@ class ResultsAttempt(PlanningContractModel):
     prompt_digest: str | None = None
     schema_digest: str | None = None
     writer_called: bool = True
+    input_token_receipt: InputTokenReceipt | None = None
 
 
 class ResultsArtifact(PlanningContractModel):
-    contract_version: Literal["results-artifact-v1"] = "results-artifact-v1"
+    contract_version: Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3"] = "results-artifact-v3"
     projection: SolutionProjection
     config: ResultsConfig
     prepared: PreparedResultsInput
     attempts: tuple[ResultsAttempt, ...]
     selected_attempt: int | None
     selection_reason: str
-    generation_outcome: Literal["success", "api_error", "generation_error", "context_limit"]
+    generation_outcome: Literal["success", "api_error", "generation_error", "context_limit", "measurement_error"]
     validation_outcome: Literal["clean", "annotated", "unavailable"]
     delivery_outcome: Literal["delivered", "not_delivered"]
     notices: tuple[ValidationNotice, ...] = ()
@@ -142,6 +167,10 @@ class ResultsWriter(Protocol):
         feedback: tuple[CheckFinding, ...] = (),
         previous_document: ResultsDocument | None = None,
     ) -> ResultsDocument: ...
+
+
+class ResultsInputMeasurer(Protocol):
+    def measure(self, request: dict[str, object], config: ResultsConfig) -> InputTokenReceipt: ...
 
 
 class ResultsWriterError(Exception):

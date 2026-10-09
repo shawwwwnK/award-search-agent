@@ -1,5 +1,54 @@
 # Project State
 
+## 2026-10-08 Results M2 owner closeout
+
+The owner explicitly closed Results M2 and requested committing/pushing the pending changes.
+M2 is owner-closed for its declared model-authored, source-bound, scoped-check, bounded-correction,
+annotated-delivery and replay boundary. This supersedes earlier open/unimplemented/unclaimed-closeout
+status statements below. M3 remains planned. Full contract coverage, arbitrary prose truth and
+broader live end-to-end qualification remain unclaimed. The owner is running end-to-end tests in
+other sessions; no outcome from those sessions is asserted here. See the
+[closeout](handoffs/2026-10-08-results-m2-closeout.md) and
+[verification log](build-log/2026-10-08-results-m2-closeout.md).
+
+## 2026-10-08 local end-to-end harness
+
+The owner requested Streamlit testing from intent through Results. The local harness now connects
+ready clarification sessions to planning, bounded Provider acquisition, Ranking matching/styles/export,
+and Results through an application pipeline. Explicit events also support saved provider replay and
+frozen Results drafts; ordinary reruns only render. Artifacts are ephemeral with owner-triggered
+downloads and revision invalidation. [ADR 0028](adr/0028-local-end-to-end-validation-harness.md)
+records the narrow exception to the earlier harness provider-call exclusion.
+See the [build log](build-log/2026-10-08-end-to-end-harness.md) for verification and limits.
+This does not claim live end-to-end qualification or reopen upstream stages/M3 evaluation.
+
+## 2026-10-08 Results M2 Luna live diagnostic
+
+The owner-authorized Luna diagnostics produced ten retained answer artifacts across baseline,
+guided, bound and declared runs. Fifteen authoring calls recorded 6,444,535 input tokens and
+108,897 output tokens in writer receipts; estimated generation cost was $1.22769210, excluding
+unclaimed count-endpoint billing.
+All ten artifacts replayed exactly. Clean and annotated describe mechanical outcomes only; they do
+not establish semantic correctness or answer quality. The campaign cap was lifted while the
+runtime remains one initial call plus at most one correction per run. G08's shared-disclosure and
+journey-note engineering reconciliation is resolved for its tested scope after a fresh policy
+correction. Owner qualification, M2 closeout and M3 evaluation remain unclaimed. See the
+[diagnostic log](build-log/2026-10-08-results-m2-luna-live.md) and
+[run summary](../evidence/results-stage/m2/2026-10-08-luna/summary.json).
+
+## 2026-10-08 Results M2 disclosure reconciliation
+
+The v3 Results checker introduced shared-disclosure bindings and concise unselected journey-note handling.
+Fresh review corrected the intended scope: full journey facts apply only to selected recommendations;
+unselected journey notes need visible identity, exact source status and source requirements/reason.
+The review also found a contiguous-part identity edge, addressed with a stable-label rule.
+The final eight-module Results suite passed 112 tests; scoped lint/types and historical
+replay/generator checks passed, and independent probes confirmed the identity and note behavior.
+This closes G08's scoped engineering reconciliation, not full contract coverage or semantic
+qualification. A negative prose assertion can still contradict a present source-bound slot without
+a failed finding. M2 owner closeout and M3 remain unclaimed. See the
+[reconciliation log](build-log/2026-10-08-results-m2-disclosure-reconciliation.md).
+
 ## 2026-10-07 Results M2 implementation
 
 Results M2 now has a local public API, scoped authoring/rendering/checks, at-most-two-invocation
@@ -24,6 +73,20 @@ policy, stage reopening or qualification. `AGENTS.md` and the ADR/build-log guid
 an explicit ADR disposition for consequential decision sessions.
 
 ## Phase
+
+On 2026-10-06/07, the owner settled Results M2's non-blocking check/recovery/delivery
+policy through a design interview. The LLM owns structure and prose; scoped facts and five
+initial claim families are checked deterministically. Unchecked and insufficient-evidence
+outcomes are distinct and non-blocking. Use one initial invocation and at most one correction,
+retain the recoverable draft with fewer material failures (correction wins ties), and deliver
+with local traveler-facing notices that also supply omitted known disclosures. Five choices
+is a soft target; multiple alternatives per award group are allowed. Rejected candidates remain
+visibly excluded without changing upstream status/style. Unresolved references show unavailable
+details; no recoverable document is a system/generation failure. Final shared-understanding
+confirmation is pending. Results remains unimplemented; model/token/timeout/live settings follow
+complete-input measurement. See the [consolidated contract](handoffs/2026-10-07-results-m2-validation-and-delivery-contract.md),
+[ADR 0026](adr/0026-model-authored-results-with-bound-facts.md), and
+[interview record](build-log/2026-10-06-results-m2-design-grilling.md).
 
 On 2026-10-04 the owner explicitly **closed Ranking Stage including the M2 factual-export
 extension** and **opened Results M2 — model-authored answer with bound facts**. Results M2 is

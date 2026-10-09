@@ -1,5 +1,17 @@
 # Results Stage: LLM-authored structure with bound factual placeholders
 
+**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+
+**Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)
+and [ADR 0026's dated amendments](../adr/0026-model-authored-results-with-bound-facts.md).
+These supersede earlier terminal validation gates, hard five-choice and two-per-group caps,
+no-repair/single-call proposals and prohibition on attached failure disclosures below.
+The LLM owns answer layout; selected checks are non-blocking. Use at most two authoring calls,
+retain the recoverable draft with fewer material failures (correction wins ties), and attach
+traveler-facing notices/source-backed omitted disclosures. Unchecked/insufficient evidence
+remain distinct. Schema output with no recoverable document is a system/generation failure.
+Results remains unimplemented; measurement-dependent settings and live budgets remain future work.
+
 Decision record: [ADR 0026](../adr/0026-model-authored-results-with-bound-facts.md).
 
 **Boundary update, 2026-10-04:** the factual model view is supplied directly by the
@@ -44,7 +56,8 @@ The LLM writes all separators and whitespace. Code concatenates the parts in the
 without adding headings, paragraphs, or punctuation. The model may use prose, a table, or a mix;
 no scope order or journey contiguity is required. Scope metadata never appears automatically
 in the traveler answer. Selection counting uses unique manifest IDs, not the number of parts. Successful authorship
-selects one to five complete journeys when the complete pool is nonempty, and zero otherwise.
+targets one or more complete journeys when the complete pool is nonempty, and zero otherwise;
+five is a soft presentation target, not a schema maximum.
 
 In a journey scope, `{{route}}`, `{{schedule}}`, `{{award_quote}}`, and other allowed slots resolve
 only from that scope's complete alternative. Cross-journey slot lookup is invalid. Each placeholder token must be wholly within one part;
@@ -79,7 +92,7 @@ journey remains clear; a generic global warning cannot discharge a specific jour
 
 Code checks the following, without inventing missing text:
 
-1. Manifest IDs, original eligibility, group/alternate relationships, and the five-journey limit.
+1. Manifest IDs, original eligibility, group/alternate relationships, and the soft five-journey target.
 2. Exact allowed placeholder syntax and scope, unknown slots, and required slot coverage.
 3. The **final concatenated Markdown**, including constructs spanning part boundaries. Permit
    tested headings, paragraphs, lists, emphasis, and tables. Reject raw HTML/comments, images,
@@ -93,9 +106,10 @@ Code checks the following, without inventing missing text:
    scope, and source fact. Preserve tables and line breaks without letting a slot break syntax. Test part boundaries
    inside Markdown constructs/table cells, and reject a placeholder split across scopes.
 
-A missing mandatory fact or condition makes the authored draft invalid. Code does not append
-a corrective section or rearrange it. A separately labeled failure outcome follows the call
-policy; a fallback is not a successful model-authored answer.
+A missing mandatory fact or condition is a non-blocking check failure. Request correction
+within the two-invocation policy; if it remains missing, attach a traveler-facing notice supplying
+the known source-backed disclosure beside the affected journey. This narrow notice exception does
+not authorize rearranging the authored recommendation layout. Annotated delivery is not a clean pass.
 
 These checks bind inserted facts and visible disclosure. They cannot prove that a heading,
 pronoun, comparison, or juxtaposition accurately describes those facts. “Per person,” “all
@@ -105,14 +119,14 @@ not a reason to transfer structural control to code.
 
 ## Call transport
 
-Recommend one Responses Structured Outputs call. A strict response envelope is sufficient to
-return this document; a submission function is unnecessary for the current single authoring
-operation. OpenAI distinguishes structured response formatting from function calls that connect
+Recommend a Responses Structured Outputs submission for each authoring attempt: one initial
+invocation and at most one correction. A strict response envelope is sufficient to return this
+document; a submission function is unnecessary for this authoring operation. OpenAI distinguishes structured response formatting from function calls that connect
 a model to application functionality. [Official Structured Outputs guidance](https://developers.openai.com/api/docs/guides/structured-outputs).
 
 No fact lookup loop is needed while the complete brief is sufficient. If a submission-tool
-transport is later chosen, it must submit the same contract once, validate/fill it, and return
-that artifact directly without a subsequent model rewrite. Tool use does not strengthen factual
+transport is later chosen, it must submit the same contract per attempt, check/fill it, and
+preserve the same bounded correction and annotated-delivery policy. No post-delivery rewrite follows. Tool use does not strengthen factual
 truth or grant upstream authority. This transport recommendation is engineering judgment, not
 an owner requirement to use or avoid tools.
 

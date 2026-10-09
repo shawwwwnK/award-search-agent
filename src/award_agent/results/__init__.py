@@ -3,16 +3,19 @@
 from .contracts import (
     CheckFinding,
     DeclaredClaim,
+    InputTokenReceipt,
     PreparedResultsInput,
     RenderedFact,
     ResultsArtifact,
     ResultsAttempt,
     ResultsConfig,
     ResultsDocument,
+    ResultsInputMeasurer,
     ResultsPart,
     ResultsSelection,
     ResultsWriter,
     ResultsWriterError,
+    SharedDisclosureBinding,
     ValidationNotice,
     WriterReceipt,
 )
@@ -26,8 +29,9 @@ from .core import (
 )
 
 __all__ = [
-    "CheckFinding", "DeclaredClaim", "PreparedResultsInput", "RenderedFact", "ResultsArtifact",
-    "ResultsAttempt", "ResultsConfig", "ResultsDocument", "ResultsPart", "ResultsSelection",
-    "ResultsWriter", "ResultsWriterError", "ValidationNotice", "WriterReceipt", "authoring_payload",
+    "CheckFinding", "DeclaredClaim", "InputTokenReceipt", "PreparedResultsInput", "RenderedFact", "ResultsArtifact",
+    "ResultsAttempt", "ResultsConfig", "ResultsDocument", "ResultsInputMeasurer", "ResultsPart", "ResultsSelection",
+    "ResultsWriter", "ResultsWriterError", "SharedDisclosureBinding", "ValidationNotice",
+    "WriterReceipt", "authoring_payload",
     "check_document", "prepare_results", "render_results", "replay_results", "run_results",
 ]

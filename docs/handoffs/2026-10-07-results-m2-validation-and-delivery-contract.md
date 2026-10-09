@@ -1,5 +1,7 @@
 # Results M2: validation, recovery and delivery contract
 
+**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+
 Date: 2026-10-07. Status: owner decisions Q1–Q20 recorded; final shared-understanding
 confirmation pending. Runtime remains unimplemented. This interview does not authorize live calls.
 Decision record: [ADR 0026](../adr/0026-model-authored-results-with-bound-facts.md).
@@ -34,8 +36,31 @@ Keep route, local schedule/timezone, cabin evidence, duration/waits, scoped pric
 status, unresolved requirements, separate-booking obligations and meaningful coverage visible.
 Identical shared disclosures may appear once when applicability is clear. Preserve component
 observation dates; precise times are shown when material. Detailed provenance stays in the artifact.
+This permits a shared disclosure without requiring each journey part to repeat it; it does not
+prohibit legitimate repetition elsewhere or impose a global occurrence limit.
 When a known required disclosure remains missing after correction, an attached notice supplies
 its source-backed content, rather than merely announcing the omission.
+
+Full journey fact requirements apply to selected recommendations. Any unselected journey note must
+preserve a stable visible identity, exact source status and its source requirements/reason. A
+rejected note must remain visibly excluded with its source-grounded rejection reason; an admitted or
+conditional note must preserve that status and must not be presented as rejected. Additional
+preservation of conditions in concise notes is conservative engineering, not a separate owner
+requirement. Results cannot turn a rejected candidate into a recommendation. The separate cash
+benchmark and shared disclosures keep their existing contracts.
+
+The versioned v3 engineering representation of a shared-once disclosure is
+`ResultsPart.shared_disclosures: tuple[SharedDisclosureBinding]`; each binding contains `key` and
+`journey_ids`. A binding belongs to a shared part and must name at least two distinct selected,
+eligible journeys. The bound value must be the same existing source-slot value for every target.
+Render the bound fact once for that binding, and keep the key and every target's unambiguous visible
+stable identifier in the same part. A key can have only one binding within a part; a valid binding
+may recur in another part, and the same fact may appear in other independently scoped occurrences.
+Each authored slot occurrence is substituted once; the contract adds no global deduplication rule.
+Metadata alone does not prove visible applicability. Do not infer applicability from prose. Invalid
+or ambiguous targets, repeated keys within one part, differing source values, or missing visible
+bindings/identifiers receive a failed finding and earn no shared disclosure credit. The model still
+chooses part placement and surrounding prose.
 
 Normal selection should favor useful distinct complete journeys, usually three. Five is a soft
 presentation target, not a schema maximum or terminal delivery gate. Six or another deviation may
@@ -43,12 +68,16 @@ be delivered after correction with a notice; do not silently trim alternatives t
 Multiple materially distinct alternatives from one award group are allowed, with model justification
 and avoidance of redundancy. Existing same-group alternate relationships remain meaningful.
 
-Complete admitted/conditional alternatives are the recommendation pool. A rejected candidate
-presented by the model remains visibly excluded by upstream checks, with the reason attached;
-Results cannot change its status or assign admitted style labels. Preserve recoverable authored
-content rather than turn this selection failure into a system error. An unresolvable candidate
-or factual reference displays “Details unavailable” with an associated notice, never another
-candidate's facts. The cash anchor remains separate and cannot displace award recommendations.
+Complete admitted/conditional alternatives are the recommendation pool. Full journey disclosure
+requirements apply to the selected recommendation IDs. An unselected journey note needs stable
+visible identity, its exact source status and source requirements/reason. For a rejected candidate,
+the note also needs visible exclusion and its source-grounded rejection reason. For an admitted or
+conditional candidate, preserve that status; do not mislabel it as rejected. Results cannot change
+upstream status or assign admitted style labels to a rejected candidate.
+Preserve recoverable authored content rather than
+turn this selection failure into a system error. An unresolvable candidate or factual reference
+displays “Details unavailable” with an associated notice, never another candidate's facts. The cash
+anchor remains separate and cannot displace award recommendations.
 Existing incomplete-only/empty/partial-search distinctions remain; do not invent complete journeys.
 
 ## Selected deterministic claim checks
@@ -110,7 +139,11 @@ source-bound slot substitution, five claim families and unknown distinctions, lo
 missing disclosures supplied as notices, more than five choices, rejected selections with
 unchanged status, unavailable references, schema/generation failures, at-most-two invocations,
 correction API failure retaining original content, persistent validation failures, worsening
-correction/ties, and exact annotated-artifact replay. Include valid controls, not only failures.
+correction/ties, shared-once bindings with equal/differing obligations and explicit/ambiguous
+applicability, concise unselected notes in rejected/admitted/conditional statuses with missing-field
+controls, full disclosures for selected recommendations, and exact annotated-artifact replay.
+Include valid controls, not only failures. Preserve v1/v2 preparation,
+checks, serialization and rendering replay when v3 checking behavior is introduced.
 
 M3 reports output truthfulness, selection usefulness, clarity, unchecked/insufficient evidence,
 annotated failures and misleading paraphrases without changing delivery verdicts. Historical
@@ -125,3 +158,11 @@ bounded writer/recovery/replay, and declare the budget before any actual-authori
 There are no remaining owner policy questions in the current interview frontier; engineering
 mechanics and measurement-dependent settings remain future work. Final shared-understanding
 confirmation closes this interview and is distinct from authorizing implementation or live calls.
+
+The owner resolved the disclosure scope on 2026-10-08: full journey facts apply to selected
+recommendations; unselected journey notes preserve identity, exact source status and
+source requirements/reason, with rejected notes visibly excluded. A fresh challenge corrected
+the earlier documentation that had narrowed concise notes to rejected candidates alone. Use the
+versioned v3 representation while preserving v1/v2 replay. See the dated
+[ADR 0026 amendment](../adr/0026-model-authored-results-with-bound-facts.md#2026-10-08-amendment--rejected-candidate-note-disclosures)
+and [fresh challenge record](../build-log/2026-10-08-results-m2-disclosure-reconciliation.md#fresh-policy-challenge).

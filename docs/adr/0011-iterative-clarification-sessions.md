@@ -1,5 +1,10 @@
 # 0011: Use iterative all-blockers clarification sessions
 
+2026-10-08 amendment: [ADR 0028](0028-local-end-to-end-validation-harness.md) supersedes only
+the clarification-only harness's provider-call exclusion below. Explicit local events may now
+invoke the application pipeline through Results; session/controller and upstream policies remain
+unchanged. No automatic rerun-triggered model/provider calls are permitted.
+
 - Status: Accepted
 
 ## Context

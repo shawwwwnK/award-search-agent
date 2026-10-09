@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import shutil
 from pathlib import Path
 from typing import Literal
 
@@ -28,6 +27,7 @@ RANKING = ROOT / 'evidence/ranking-stage/m2/solutions'
 CONFIG_PATH = EVIDENCE_DIR / 'offline-config.json'
 CASES = ('mixed_access', 'exact_business', 'sfo_to_bkk_positioning')
 CANDIDATE = 'f7d024bb65a87fe25bd14e71dbbf51c35f0a1995e3e9cc22fa112e677ed7eab9'
+LEGACY_OPTIONAL_FIELDS = {'max_input_tokens', 'authoring_guidance', 'input_token_receipt'}
 
 
 def sha256(data: bytes) -> str:
@@ -38,6 +38,19 @@ def dump_json(path: Path, payload: object) -> bytes:
     data = (json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + '\n').encode('utf-8')
     path.write_bytes(data)
     return data
+
+
+def omit_new_optional_none_fields(value: object) -> object:
+    if isinstance(value, dict):
+        return {
+            key: omit_new_optional_none_fields(item)
+            for key, item in value.items()
+            if not ((key in LEGACY_OPTIONAL_FIELDS and item is None) or
+                    (key == 'shared_disclosures' and item == []))
+        }
+    if isinstance(value, list):
+        return [omit_new_optional_none_fields(item) for item in value]
+    return value
 
 
 def load_projection(path: Path) -> SolutionProjection:
@@ -110,7 +123,8 @@ class FixtureWriter:
 
 def save_artifact(out: Path, name: str, artifact: ResultsArtifact) -> dict[str, object]:
     json_path = out / f'{name}.artifact.json'
-    raw = artifact.model_dump_json(indent=2).encode('utf-8') + b'\n'
+    payload = omit_new_optional_none_fields(artifact.model_dump(mode='json'))
+    raw = (json.dumps(payload, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
     json_path.write_bytes(raw)
     validated = ResultsArtifact.model_validate_json(raw)
     replayed = replay_results(validated)
@@ -166,7 +180,10 @@ def main() -> None:
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=True)
     if out != EVIDENCE_DIR.resolve():
-        shutil.copyfile(CONFIG_PATH, out / CONFIG_PATH.name)
+        config_payload = omit_new_optional_none_fields(
+            json.loads(CONFIG_PATH.read_text(encoding='utf-8')))
+        config_bytes = (json.dumps(config_payload, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+        (out / CONFIG_PATH.name).write_bytes(config_bytes)
     config_path = out / CONFIG_PATH.name
     config_data = json.loads(config_path.read_text(encoding='utf-8'))
     config = ResultsConfig.model_validate(config_data)
@@ -176,7 +193,7 @@ def main() -> None:
         path = RANKING / f'{case}.json'
         projection = load_projection(path)
         projections[case] = projection
-        prepared = prepare_results(projection, config)
+        prepared = prepare_results(projection, config, version='results-artifact-v1')
         view = projection.view
         measurements[case] = {
             'source_file': f'../../ranking-stage/m2/solutions/{case}.json',
@@ -207,15 +224,17 @@ def main() -> None:
     if candidate.award_cabin.state != 'value' or 'business' in str(candidate.award_cabin.value).lower():
         raise AssertionError('requested fixture candidate no longer has non-business cabin evidence')
 
-    prepared = prepare_results(positioning, config)
+    prepared = prepare_results(positioning, config, version='results-artifact-v1')
     clean_writer = FixtureWriter('clean')
-    clean_artifact = run_results(positioning, config, clean_writer)
+    clean_artifact = run_results(positioning, config, clean_writer,
+                                 render_version='results-artifact-v1')
     if clean_writer.calls != 1 or clean_artifact.validation_outcome != 'clean':
         raise AssertionError('clean fixture controls did not produce one clean attempt')
     clean_meta = save_artifact(out, 'sfo_to_bkk_positioning.clean', clean_artifact)
 
     annotated_writer = FixtureWriter('annotated')
-    annotated_artifact = run_results(positioning, config, annotated_writer)
+    annotated_artifact = run_results(positioning, config, annotated_writer,
+                                     render_version='results-artifact-v1')
     if annotated_writer.calls != 2 or annotated_artifact.validation_outcome != 'annotated':
         raise AssertionError('annotated fixture did not exercise initial plus correction')
     if annotated_artifact.selected_attempt != 0 or annotated_artifact.selection_reason != 'initial_fewer_failures':
@@ -227,7 +246,8 @@ def main() -> None:
         if attempt.document is None:
             raise AssertionError(f'{attempt.phase} fixture attempt has no recoverable document')
         draft_path = out / f'sfo_to_bkk_positioning.annotated.{attempt.phase}.draft.json'
-        draft_path.write_bytes((attempt.document.model_dump_json(indent=2) + '\n').encode('utf-8'))
+        draft_path.write_bytes((attempt.document.model_dump_json(indent=2,
+            exclude={'parts': {'__all__': {'shared_disclosures'}}}) + '\n').encode('utf-8'))
 
     measurement_all = {
         'evidence_kind': 'offline_preparation_measurements',

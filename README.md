@@ -143,7 +143,7 @@ Run type checks:
 mypy src tests
 ```
 
-## Local clarification harness
+## Local end-to-end harness
 
 Install the optional dependency and run:
 
@@ -153,7 +153,7 @@ streamlit run apps/clarification_harness.py
 ```
 
 The harness is an ephemeral local validation surface. Its preferred path starts
-from a raw travel request: select explicit initial-extraction, temporal-selector,
+from a raw travel request: select explicit semantic-intent,
 clarification-interpreter, and prompt-composer models; enter a reference date and
 IANA timezone; then click **Understand request and start session**. That single
 explicit form event
@@ -186,10 +186,37 @@ is disabled.
 Aggregate interpreter/composer call counts, usage, latency, and error status are
 captured per explicit event outside the domain session. Exact model-facing traces
 are labeled private/local and are not shown in the public session JSON.
-There are no travel-search or inventory-provider calls. A named U.S. federal
-holiday in the initial request may use the existing Nager calendar boundary.
-This harness has no persistence, deployment behavior, or UI-owned workflow
-policy.
+A named U.S. federal holiday in the initial request may use the existing Nager calendar
+boundary. Once the session is **ready**, click **Run ready request through Results (live)**
+to run endpoint-airport selection, gateway discovery, search compilation, bounded Seats.aero
+and `gfly` acquisition, Ranking matching/styles/export, and Results authoring. Separate buttons
+run planning, acquisition/ranking, or Results to inspect and retry a stage. Live searches require
+`SEATS_AERO_API_KEY` plus the pinned `gfly` compatibility dependencies described in the Provider
+Stage documentation. All model/provider calls require explicit run events; editing a widget or
+downloading artifacts does not repeat them.
+
+**End-to-end settings** exposes the planning models, catalog release, provider capabilities and
+budgets, reviewed gfly Python interpreter, FX snapshot and Results configuration. Results starts with editable settings from the
+October 8 Luna diagnostic; these are run-specific values, not an adopted model policy. Live
+Results measures exact input tokens before authoring and retains its bounded correction,
+validation notices and explicit non-delivery outcomes. Model/provider calls have stage-specific
+timeouts; the harness does not impose a new whole-workflow deadline.
+
+For offline testing, select a saved search and click **Replay providers and run ranking (offline)**.
+That uses the saved request, policies and historical observations, separately labeled from the
+current intent session. Choose **Frozen draft (offline)** and supply `ResultsDocument` JSON to
+exercise rendering, checks and correction without a writer call. A replayed provider run can
+also feed the live Results writer explicitly. Offline drafts retain conservative byte guards;
+the model-specific live counter is only used with the live writer.
+
+Stage outcomes, provider coverage, ranking accounting and Results checks/usage remain visible.
+Download the answer Markdown or a ZIP containing stage JSON, acquisition tape and captured
+response bodies for replay. Downloads contain private travel data and drafts. Artifacts stay
+in the local session; temporary provider capture files are cleaned after their bytes are retained.
+A new intent session or changed clarification revision invalidates downstream output. Each new
+stage run clears its dependent output so failures cannot show an earlier answer as current.
+This harness has no persistence service, deployment behavior, or UI-owned workflow policy.
+The explicit provider-call extension is recorded in [ADR 0028](docs/adr/0028-local-end-to-end-validation-harness.md).
 
 Live clarification evaluations always save full private model-call trace sidecars
 under `evals/clarification/traces/`; that directory is gitignored. Their public

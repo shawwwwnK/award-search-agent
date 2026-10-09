@@ -435,7 +435,7 @@ def test_harness_ui_is_labeled_for_the_active_initial_semantic_and_one_way_bound
 
     assert "ADR 0017 semantic-intent" in source
     assert "ADR 0016 one-way award" in source
-    assert "One-way award clarification harness" in source
+    assert "One-way award end-to-end harness" in source
     assert "Start from ADR 0017 JSON" in source
     assert "cash-only " in source
     assert "requests are not supported" in source

@@ -1,5 +1,17 @@
 # Results Stage execution milestones
 
+**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+
+**Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)
+and [ADR 0026's dated amendments](../adr/0026-model-authored-results-with-bound-facts.md).
+These supersede earlier terminal validation gates, hard five-choice and two-per-group caps,
+no-repair/single-call proposals and prohibition on attached failure disclosures below.
+The LLM owns answer layout; selected checks are non-blocking. Use at most two authoring calls,
+retain the recoverable draft with fewer material failures (correction wins ties), and attach
+traveler-facing notices/source-backed omitted disclosures. Unchecked/insufficient evidence
+remain distinct. Schema output with no recoverable document is a system/generation failure.
+Results remains unimplemented; measurement-dependent settings and live budgets remain future work.
+
 Date: 2026-10-02; revised 2026-10-04. Status: **Ranking owner-closed with M1 preparation absorbed; Results M2 owner-opened, M3 planned; no Results implementation or qualification**.
 
 ## Active boundary revision — 2026-10-04
@@ -29,7 +41,7 @@ a normal-answer skeleton or appends omitted conditions. Internal scope parts can
 interleave. Required facts constrain content, not layout.
 
 Retain every distinct complete input alternative with conservative same-observation duplicate
-rules. Usually display three complete choices; at most five including alternates. Preserve
+rules. Usually display three complete choices; five including alternates is a soft target. Preserve
 programs, conditional requirements, scoped quotes, unknowns, separate bookings, component timing
 and actual coverage. Cash remains a separate anchor. No input selection cap, new provider calls,
 upstream policy reinterpretation, production UI or workflow framework is part of these milestones.
@@ -93,22 +105,24 @@ model-written strings exactly. Build hand-authored prose and comparison-table ex
 same journey referenced in multiple parts. Validate the final concatenated document so syntax
 spanning parts cannot hide slots. Escape untrusted values; prohibit recursive interpolation.
 
-Require one to five unique complete selections when the complete pool is nonempty (zero otherwise),
-including alternates; enforce one primary/optional alternate
-per group, same-variant facts, scoped visible conditions, unchanged memberships, qualified comparison
-slots and separate benchmark treatment. The model determines where these facts appear. A required
+Target useful complete selections when the complete pool is nonempty (zero otherwise),
+with five including alternates as a soft target rather than a schema maximum. Permit multiple
+justified alternatives per group; check same-variant facts, scoped conditions, unchanged memberships,
+qualified comparisons and separate benchmark treatment. Residual failures receive local notices. The model determines where these facts appear. A required
 condition's presence does not prove that surrounding prose is true; preserve that limitation.
 
 **M2.2: authoring adapter and failure/replay.** Recommend one strict Responses structured output
-containing the freely authored document. Configure `store=False`, one invocation, `max_retries=0`,
-no repair, explicit finite timeout/output/cancellation settings and no automatic truncation. Select
-numeric budgets/model settings before live calls. Validate refusal/incomplete/status/schema and all
-document checks before exposing an answer. Transport choice is an engineering recommendation.
+containing the freely authored document. Use one initial invocation and at most one correction;
+recommended client configuration retains `store=False`, `max_retries=0`, explicit finite
+timeout/output/cancellation settings and no automatic truncation. Select numeric budgets/model
+settings before live calls. Distinguish no-recoverable-document generation errors from non-blocking
+checks on recoverable answers. Transport/client configuration remains an engineering recommendation.
 
 Keep source, search, generation and delivery outcomes separate. Source corruption stops generation.
-Genuine empty results are valid evidence. Malformed/truncated/invalid authoring returns explicit
-failure evidence; settle whether to add the proposed separately labeled factual-summary fallback
-before accepting delivery behavior. That choice does not move normal-answer structure into code.
+Genuine empty results are valid evidence. No-recoverable-document generation errors retain explicit
+failure evidence. For recoverable authorship, retain the draft with fewer material failures
+(correction wins ties), then deliver with local notices and omitted known disclosures. The answer
+layout stays model-authored; a correction API failure retains the original recoverable draft.
 
 Save the accepted document, source/brief/version hashes, inserted-fact map, settings and attempt
 receipts. Exact replay substitutes the saved document without a model; regeneration is a new run.
@@ -136,7 +150,7 @@ Exit evidence:
 
 **Deliverable:** versioned casebook/rubric, saved writer outputs, calibrated advisory judge findings
 and adjudicated report. Define the rubric/fixtures while M1/M2 proceed; repeated judging follows
-stable M2 outputs. No runtime judge, self-approval or automatic repair loop is introduced.
+stable M2 outputs. No runtime judge or self-approval is introduced; M2's single correction is separate from M3 evaluation.
 
 **M3.1: calibration and independent checks.** Use an ordinary separate structured judge call with
 frozen brief, fact index, filled visible answer and slot map. Grade criterion-level truth and

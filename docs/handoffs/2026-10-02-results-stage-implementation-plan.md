@@ -1,5 +1,17 @@
 # Results Stage: detailed execution plan
 
+**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+
+**Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)
+and [ADR 0026's dated amendments](../adr/0026-model-authored-results-with-bound-facts.md).
+These supersede earlier terminal validation gates, hard five-choice and two-per-group caps,
+no-repair/single-call proposals and prohibition on attached failure disclosures below.
+The LLM owns answer layout; selected checks are non-blocking. Use at most two authoring calls,
+retain the recoverable draft with fewer material failures (correction wins ties), and attach
+traveler-facing notices/source-backed omitted disclosures. Unchecked/insufficient evidence
+remain distinct. Schema output with no recoverable document is a system/generation failure.
+Results remains unimplemented; measurement-dependent settings and live budgets remain future work.
+
 Date: 2026-10-02; revised 2026-10-04. Status: **reviewed engineering design; not implemented or qualified**.
 
 ## Active responsibility allocation — 2026-10-04
@@ -201,9 +213,9 @@ content. No code-generated cards, skeleton, shared-note section, or post-fill mo
 ### Selection, slots and association
 
 - Each selection is a complete admitted/conditional alternative. No style membership is required.
-  One primary per award group and at most one distinct alternate in that same group; `alternate_of`
-  must name that selected primary. No cycles, repeated IDs or cross-group alternates. Count unique
-  selected journeys, including alternates: **one to five when the complete pool is nonempty**
+  Multiple distinct alternatives per award group are permitted; any `alternate_of`
+  reference must name a selected primary in that same group. No cycles, repeated IDs or cross-group alternates. Count unique
+  selected journeys, including alternates: **one or more when the complete pool is nonempty, with five as a soft target**
   for successful authorship, and zero when it is empty. A benchmark-only or empty shortlist
   cannot be a successful answer when complete alternatives exist. Display order remains model-owned.
 - Code derives required slot obligations from each alternative and shared evidence. Aggregate
@@ -274,8 +286,10 @@ The compact brief is separately delimited data; provider/planning text is never 
 Do not pass raw provider bodies, credentials, unrelated history, or reasoning traces. No retrieval,
 provider, booking, or fact-lookup tools are exposed. [Prompt guidance](https://developers.openai.com/api/docs/guides/prompt-engineering).
 
-Proposed initial diagnostic profile: **one writer invocation, SDK `max_retries=0`, no automatic
-repair or model fallback**, `store=False`, no conversation continuation or automatic truncation.
+Owner-approved recovery profile: **one initial writer invocation and at most one correction**,
+with all detected failures supplied together. Recommended client settings retain SDK
+`max_retries=0`, `store=False`, no automatic model fallback or truncation. Retain the recoverable
+draft with fewer material failures (correction wins ties); then deliver with local notices.
 Set finite request timeout, cancellation/deadline behavior and `max_output_tokens` explicitly
 before running; choose numerical budgets from actual prompt sizes and the chosen model. Do not
 invent a measured latency/cost bound. The installed SDK is 1.109.1 and defaults to two retries
@@ -285,8 +299,10 @@ A later transient-only retry policy requires an explicit bound/receipt, not stac
 [Responses migration/storage](https://developers.openai.com/api/docs/guides/migrate-to-responses).
 
 `max_output_tokens` includes reasoning tokens on reasoning models. Require a completed response,
-no refusal, the expected parsed type, and all deterministic document checks. Incomplete output,
-even if partly parseable, never becomes a traveler answer. Do not rewrite the finished artifact.
+no refusal and a recoverable document. Preserve incomplete/status/schema failure receipts;
+when authored content is recoverable, use the current recovery/delivery contract rather than
+make residual validation failures terminal. No recoverable document is a system/generation
+failure. Recheck correction and do not rewrite the artifact after annotated delivery.
 [Reasoning output budgets](https://developers.openai.com/api/docs/guides/reasoning),
 [refusals](https://developers.openai.com/api/docs/guides/structured-outputs#refusals-with-structured-outputs).
 
@@ -295,16 +311,16 @@ even if partly parseable, never becomes a traveler answer. Do not rewrite the fi
 | Source | Trusted upstream input loaded and references resolved, or explicit `source_invalid`. Malformed/unresolvable input stops before generation and cannot support a factual fallback. |
 | Search evidence | Complete alternatives / incomplete only / no useful observations, plus independent provider coverage state. Empty completed searches differ from failed or omitted work. |
 | Generation | `completed`, `refused`, `incomplete`, `transport_error`, `invalid_document`, or `context_limit`; retain precise cause and attempt evidence. |
-| Delivery | Model-authored filled answer, optional labeled factual fallback, or explicit failure. A fallback is never recorded as successful authorship. |
+| Delivery | Model-authored answer with clean or annotated checks; unresolved details/notices preserve delivery. No recoverable document is a generation failure. No code-owned fallback layout. |
 | Evaluation | Semantic and usefulness findings on the filled answer. An undetected false sentence may pass mechanical checks; the offline judge is not a runtime gate. |
 
-Keep the originally proposed factual-summary fallback as an **open presentation choice**. The
-concrete candidate policy is one fastest complete alternative with a stable-ID tie break and
-all conditions; otherwise one supported incomplete possibility or a factual empty/failure summary.
-It discloses generation failure, coverage, and how many complete alternatives were not displayed.
-The owner has not chosen this breadth. Initial fake/live diagnostic failures can return explicit
-failed artifacts while that choice is settled; do not silently install a fixed-layout fallback
-as the normal answer. Resolve delivery behavior before claiming M2 accepted failure handling.
+Use the [current recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md).
+On persistent check failures, deliver the recoverable draft with fewer material failures and
+attach concrete traveler notices beside affected claims/journeys; supply omitted known disclosures.
+Unknown outcomes pass without confirmation. On correction API failure, retain the first recoverable
+draft and its notices with the API receipt. Rejected candidates remain visibly excluded and keep
+upstream status/style; unresolved references show unavailable details. There is no code-owned
+recommendation fallback. Validation errors never become system errors.
 
 Measure the complete serialized prompt, schema and output allowance. No separate input cap,
 hidden pruning, truncation, map/reduce selection or model-switch-on-overflow is adopted. If it

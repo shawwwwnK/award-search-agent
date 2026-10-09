@@ -1,5 +1,25 @@
 # Deferred work — finish the core workflow first
 
+**2026-10-08 Results M2 closeout disposition:** The owner explicitly closed M2 for its declared implemented boundary and requested commit/push. Earlier open/unclaimed-closeout statements are historical. G08’s scoped engineering reconciliation is complete; full contract coverage and unchecked-prose limitations remain open for their broader claims. G03/G05/G06, M3 and task-benefit gates retain their scope. The owner is performing end-to-end runs elsewhere; no results are inferred. See the [closeout](docs/handoffs/2026-10-08-results-m2-closeout.md).
+
+**2026-10-08 harness disposition:** The owner requested local intent-to-Results testing.
+The experimental Streamlit harness now invokes existing stages through explicit application
+pipeline events, with bounded provider acquisition, saved replay, revision invalidation and
+downloadable ephemeral artifacts. [ADR 0028](docs/adr/0028-local-end-to-end-validation-harness.md)
+records this narrow harness exception. Existing live qualification, M3 calibration and task-benefit
+prerequisites remain open; no parked feature or upstream stage is reopened. Offline integration
+evidence is in the [build log](docs/build-log/2026-10-08-end-to-end-harness.md).
+
+**2026-10-08 Results M2 diagnostic disposition:** The owner authorized run-specific Luna
+authoring diagnostics over saved Ranking exports and lifted the campaign generation-call cap;
+the runtime remains one initial call plus at most one correction per run. Later runs' exact count
+receipts, replay and bounded outputs establish only request-level engineering observations. A clean
+mechanical check is not semantic validation or full contract coverage. The scoped G08 reconciliation
+for shared-once applicability and journey-note obligations was implemented and verified on
+2026-10-08 after a fresh policy correction and contiguous-part identity fix. No owner qualification
+or M3 evidence follows from these runs. See the
+[diagnostic build log](docs/build-log/2026-10-08-results-m2-luna-live.md).
+
 **2026-10-07 implementation disposition (G03/G05/G06; Results core):** Results M2 has a local
 API, source-bound rendering, selected checks, bounded correction, notices, explicit configuration,
 CLI and replay. Offline implementation evidence is recorded in the
@@ -9,7 +29,7 @@ Revisit model settings/context fit before actual authoring; require measured com
 declared settings and live budget. M3 calibration and traveler-task benefit retain their existing
 completion evidence requirements. No parked feature or upstream stage was reopened.
 
-Last reviewed: 2026-10-04.
+Last reviewed: 2026-10-08.
 
 **Owner disposition, 2026-10-04:** Ranking Stage is closed including the factual-export extension.
 Results M2 is owner-opened; M3 remains planned. See the
@@ -113,8 +133,92 @@ These can be outside the current stage without disappearing into an indefinite b
 | G05 | Reproducible reviewer verification and truthful quality gates | Before claiming a clean-checkout handoff or reproducible evaluation, not every local preview | Reproduce the declared command with exact permitted artifacts/dependencies and a passing scoped gate. The 2026-10-03 current planning golden passes 4/4 locally but a tracked-only export fails because its local catalog manifest is absent; this supersedes the historical missing-provider-document mechanism. Broad mypy reports 308 errors in 22 files, ruff reports one unused test binding, and two gfly compatibility tests fail on the incomplete pinned local environment. These checks do not invalidate saved-corpus replay or prove a fresh installation works. [Preserved seeded probes](docs/reviews/evidence/2026-10-03-built-stages/manifest.json) additionally motivate independent requirement/cost oracles and exercised-family acceptance manifests; byte integrity, schema validity, and nonempty claim coverage are distinct. Whole-repo cleanup/CI are not prerequisites for a narrower disclosed demo. [Fresh review and checks](docs/reviews/2026-10-03-built-stages-deep-review.md#engineering-and-operational-readiness). [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | G06 | Operational attempt/deadline bounds and safe partial outcomes | Explicit finite retry/timeout/page policy for live integration; composed deadlines before an end-to-end bound claim | Distinguish SDK invocations, repairs, HTTP attempts, and pages; test exhaustion and partial results. One offline SDK invocation made three HTTP attempts: initial plus two retries. The 2026-10-03 review confirms active model adapters inherit installed SDK timeout/retry defaults; whole-request deadlines and exhaustion checks remain proposed under this gate. [Current review](docs/reviews/2026-10-03-built-stages-deep-review.md#engineering-and-operational-readiness). [Engineering review](docs/reviews/2026-09-19-search-planning-architecture-review.md#11-engineering-evidence-for-fde-recruiting). |
 | G07 | Privacy-safe evidence and honest demonstration | Before sharing traces or opening a recruiter-facing demo | Sanitized/synthetic public replay, no credentials/private travel, declared live-versus-replay mode, source permission check, clear current limitations. [Evidence rules](evidence/README.md), [trace implementation](src/award_agent/observability/llm_trace.py). |
+| G08 · scoped engineering reconciliation completed 2026-10-08 | Results M2 authored-document contract coverage and checker interpretation | Before M2 closeout or any claim that the full authored-document contract is enforced | **Completed for tested cases:** full journey facts apply only to selected recommendation IDs; unselected journey notes preserve visible identity, exact status and source requirements/reason, with rejected notes visibly excluded. Shared-once bindings require equal source values and visible applicability IDs. Friendly-label contiguous continuations now pass without raw IDs while ambiguous/reused labels fail. The fresh eight-module Results suite passed 112 tests; Ruff/mypy passed; ten Luna v1/v2 artifacts and twelve legacy generator files replayed byte-identically; independent targeted probes passed. See [accepted policy](docs/adr/0026-model-authored-results-with-bound-facts.md#2026-10-08-amendment--rejected-candidate-note-disclosures), [contract](docs/handoffs/2026-10-07-results-m2-validation-and-delivery-contract.md#authoring-and-factual-obligations), and [verification log](docs/build-log/2026-10-08-results-m2-disclosure-reconciliation.md). This does not establish full authored-document coverage or arbitrary prose truth. Negative prose that contradicts a present source-bound slot remains an expressiveness gap. M2 is owner-closed as of 2026-10-08 for its declared boundary; full contract coverage and M3 qualification remain unclaimed. [Closeout](docs/handoffs/2026-10-08-results-m2-closeout.md). |
 
-These are scoped gates, not a requirement to complete every future feature before demonstrating a narrower, explicitly limited slice. G05–G07 consolidate engineering recommendations from this review; they do not silently establish new runtime policy.
+These are scoped gates, not a requirement to complete every future feature before demonstrating a narrower, explicitly limited slice. G05–G08 consolidate engineering recommendations from this review; they do not silently establish new runtime policy.
+
+### 2026-10-04 AI evaluation audit follow-up
+
+**Disposition:** owner requested recording the evaluation audit here. The checks below are
+proposed work under existing G01/G03/G04/G05 and D02/D14, not authorization to implement or
+run live evaluations. Claim-specific prerequisites remain prerequisites, not optional cleanup.
+Planning, Provider and Ranking owner-qualified boundaries remain closed; Results M1 is now
+owner-opened (see the dated disposition below), with no implementation claimed. The recommended next cut is strengthening semantic-state and source-condition oracles
+before spending on a larger live campaign.
+
+The evidence is strongest for contracts, traceability and replay. It does not yet establish
+dependable model interpretation or complete traveler-task benefit. Repeated trials measure
+variation, not independent task diversity; candidate variants are not independent travel tasks.
+The three saved provider requests share SFO→BKK and the same departure date. Development cases
+used in prompt refinement remain regression evidence, not independent holdout evidence.
+
+| Stage / claim | Existing evidence and source of expected truth | Remaining limit |
+| --- | --- | --- |
+| Intent preserves the request | Labeled action/property envelopes, grounding, 19-case integrated diagnostic | Cabin and exact endpoint-set assertions are absent from the active intent scorer; full semantic fidelity is not established. |
+| Clarification resolves blockers without collateral changes | Scripted conversations, status/blockers/scope and changed/unchanged checks | The recorded 35/36 is 12 scenarios × 3 trials and does not check exact resolved values in the live diagnostic. Separate offline tests do check exact values. |
+| Planning M1/M2A grounds and selects endpoints | Versioned catalog, validation, acceptable-airport envelopes and owner review | Catalog membership does not independently establish useful endpoint selection. |
+| Planning M2B/M2C proposes and compiles useful hypotheses | Market-gate expectations, call reconciliation, relationship accounting and replay | The 46 trials / 42 calls are mechanical denominators, not semantic accuracy; hypotheses are not connectivity facts. |
+| Provider faithfully represents returned observations | Captures, normalization, provenance and replay | No universal price-scope, current availability, bookability or exhaustive-coverage claim. |
+| Ranking preserves conditions and applies styles | Independent timing/cabin assertions, synthetic cost tests and replay | Imported/new output checking has specific blind spots; all three saved requests lack a complete cost reference. |
+| Results enables a truthful useful next action | Proposed source assertions, visible-content checks and calibrated judging | No Results implementation or completed traveler-task evidence yet. |
+
+Sources: [stage state](docs/project-state.md),
+[airport criteria](src/award_agent/evaluation/airport_selector_live.py),
+[gateway reporting](src/award_agent/evaluation/gateway_discovery_live.py),
+[Ranking evidence](evidence/ranking-stage/m2/README.md), and the
+[prior cross-stage review](docs/reviews/2026-10-03-built-stages-deep-review.md).
+
+**Observed oracle gaps and inferred counterexamples:**
+
+- **G01 — intent:** `_score_result` does not assert cabin, although three behavioral cases
+  request business class. `_location_matches` uses `any`, rather than asserting the complete
+  expected endpoint set. A wrong cabin or an additional source-mentioned but incorrectly
+  selected endpoint could satisfy these checks. This is an observed missing assertion and an
+  inferred counterexample, not a demonstrated normal model failure. Sources:
+  [scorer](src/award_agent/cli/intent_eval.py) and
+  [casebook](evals/intent/one_way_award_behavior_cases_v1.yaml).
+- **G01 — clarification:** the live turn scorer checks readiness, blockers, departure presence
+  and whole-request changed/unchanged, but not exact resolved destination, travelers or date.
+  A wrong-but-ready date or collateral mutation during an allowed change could escape this
+  score. Separate controller/semantic tests constrain deterministic behavior; they do not
+  substitute for scoring actual live model interpretations. Sources:
+  [scorer](src/award_agent/evaluation/one_way_award_live.py) and
+  [fixture](evals/clarification/one_way_award_live_cases_v2.yaml).
+- **G01/G05 — negative outcome:** the integrated planning diagnostic accepts any
+  `_UpstreamBlocked` for its blocked trajectory. The cash-only case could therefore pass for
+  an unrelated missing-field interpretation. Require the correct typed reason as well as
+  stopping. Sources: [evaluator](src/award_agent/evaluation/search_planning_live.py) and
+  [casebook](evals/search_planning_live/casebook-v2.yaml).
+- **G03/G05 — imported conditions:** the October 3 probes removed required seat/party blockers
+  and separately cost-summary validation needs; specific downstream checks accepted them.
+  These are previously demonstrated seeded faults, not normal producer defects. Frozen-byte
+  checks would detect changed saved artifacts; underlying cost evidence remained. Shared
+  production logic still legitimately establishes replay/consistency, and independent
+  timing/premium checks exist. Source:
+  [recorded probe outcomes](docs/reviews/evidence/2026-10-03-built-stages/evaluation_oracles.json).
+
+| Priority / existing entry | Revisit trigger | Independent oracle and invalid / valid controls | Completion evidence and interpretation limit |
+| --- | --- | --- | --- |
+| 1 — G01/G05: exact input and turn semantics | Before dependable conversational-input claims or a larger semantic qualification campaign | Human-labeled supported fields, approved date policy and preserved unrelated constraints. Wrong cabin/date/party, invented READY or wrong stop reason versus correct READY, legitimate partial progress, supported correction and valid multi-endpoint requests. | Detect named wrong values and collateral changes while accepting controls; then evaluate fresh request families. Report false-ready and unnecessary clarification separately. Establishes fidelity, not search usefulness. |
+| 2 — G03/G05: Results condition preservation; duplicate upstream verifier dropped 2026-10-04 | Before claiming faithful Results projection | Independently asserted facts from trusted upstream output, without the production projector. Omitted or misassociated conditions/cost limitations in a faulty projection versus valid projection; missing versus zero fees and preserved quote scopes. | Projection faults detected and valid controls accepted. The owner trusts verified same-project input; upstream requirement recomputation is not a Results prerequisite. Broader constraint claims retain their own G03 scope. |
+| 3 — D02/G05: fresh planning families | Before broader semantic generalization or useful-coverage claims; follow D03 for any policy reopening | Independently reviewed acceptable sets/rationale and hand-enumerated graph expectations. Irrelevant gateway or omitted valuable endpoint versus valid alternative selection and nonempty correctly compiled hypotheses. | Split holdout by related request families; verify exercised features rather than labels. Semantic plausibility is not connectivity; acquisition value requires the separate equal-budget D02 comparison. |
+| 4 — Results M3/G05: calibrated judging | When Results exists, before judge-accuracy or answer-quality claims | Human source-backed labels with separate calibration and held-out sets. Correct values under false cheapest/per-person headings or hidden conditions versus truthful alternative wording/layouts. | Misses, false alarms, uncertain judgments and evaluator errors; human review of hard flags and a declared clean sample. Judge agreement is not traveler benefit. Extend existing M3 rather than add another framework. |
+| 5 — D14: complete task benefit | Completed Results and first supported workflow pilot | Predeclared source-backed next action and comparison with the existing workflow. Fast misleading recommendation versus accurate useful option and honest empty/partial outcomes. | Correct next actions and total effort, including clarification/retries/manual verification, across all attempted tasks. Counterbalance matched tasks. A small formative study demonstrates local benefit, not population reliability. |
+
+Across these checks, retain failed attempts in task-success and cost denominators; report
+independent families separately from repeats. Pin model/prompt/schema/policy/catalog identities.
+Record wrong values, false-ready, unnecessary clarification, detector misses, false alarms and
+harness failures separately. A different judge model alone does not establish independence.
+Guidance: [agent evaluation practices](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents),
+[LLM judge bias research](https://arxiv.org/abs/2306.05685), and the existing
+[Results M3 plan](docs/handoffs/2026-10-02-results-stage-implementation-plan.md#m3-calibrated-evaluation-of-the-completed-document).
+
+**Audit verification already performed:** 21 focused offline tests passed and all three saved
+Ranking outputs passed replay verification. A fresh-context independent reviewer confirmed the
+principal findings and scope limits. No new mutation probes or live model/provider calls ran,
+and no product files were changed by the audit. These are dated scoped checks, not a whole-repo
+or subsequent-working-tree qualification. Commands and documentation checks are recorded in the
+[audit build log](docs/build-log/2026-10-04-ai-evaluation-audit.md).
 
 ## Parked features and conditional follow-ups
 
@@ -472,6 +576,16 @@ upstream policy reopening, runtime implementation or change to G04/D06/D15/D18 f
 Fresh three-case M2 corpus verification and 50 focused tests passed; no Results/provider/model
 evaluation ran. See the [build log](docs/build-log/2026-10-04-results-stage-design-review.md).
 
+2026-10-04 — the owner requested an evaluation audit across completed stages focused on
+production AI evaluation practices, then explicitly requested recording it in this register.
+The [audit follow-up](#2026-10-04-ai-evaluation-audit-follow-up) extends G01/G03/G05 and D02/D14
+with exact semantic-state oracles, correct negative outcomes, source-condition controls,
+fresh-family evidence, calibrated Results judging and task-benefit checks. G04's cost-evidence
+limit remains. The recommended first checks are semantic fidelity and source-condition
+preservation; no implementation, live campaign, new policy or stage reopening was approved.
+The audit's 21 passing offline tests and three-case Ranking replay are scoped dated evidence.
+See the [audit build log](docs/build-log/2026-10-04-ai-evaluation-audit.md).
+
 2026-10-04 — the owner opened Results M1 and requested its design and unresolved decisions.
 M1's evidence preparation is active core work, not a new deferred feature. G03/G05 remain open:
 before general imported Results acceptance, resolve the matching-owned verifier versus explicitly
@@ -509,3 +623,6 @@ unimplemented; start with offline authoring preparation/rendering, using the exp
 M3 remains planned. Model/fallback/live-budget choices remain within M2/M3; no parked feature or
 broader provider/bookability/task-benefit claim was adopted. See the
 [closeout/opening handoff](docs/handoffs/2026-10-04-results-m2-opening.md).
+
+
+2026-10-08 — owner closed Results M2 and requested commit/push. Its declared authoring/rendering/check/recovery/delivery/replay boundary is accepted as closed; full-coverage and semantic claims under G08 remain distinct. M3 remains planned and broader gates retain their completion requirements. Full end-to-end runs continue in other sessions, without results asserted here. See the [closeout](docs/handoffs/2026-10-08-results-m2-closeout.md) and [build log](docs/build-log/2026-10-08-results-m2-closeout.md).

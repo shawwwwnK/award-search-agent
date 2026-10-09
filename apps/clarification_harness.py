@@ -1,4 +1,4 @@
-"""Local Streamlit harness for ADR 0017 semantics and ADR 0016 one-way sessions.
+"""Local Streamlit harness for one-way award testing from intent through Results.
 
 Run with ``streamlit run apps/clarification_harness.py`` after installing the
 optional ``harness`` dependency.  This module deliberately keeps Streamlit out
@@ -7,10 +7,13 @@ of the package dependencies and has no state beyond ``st.session_state``.
 
 from __future__ import annotations
 
+import io
 import json
+import zipfile
 from collections.abc import Mapping
 from datetime import date, datetime
-from typing import Any
+from pathlib import Path
+from typing import Any, cast
 from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
@@ -54,6 +57,247 @@ _ANSWER_KEY_PREFIX = "clarification_answer"
 _DEFAULT_TIMEZONE = "America/Los_Angeles"
 _INITIAL_PENDING_STAGE = "semantic_intent"
 _INITIAL_PENDING_CODE = "initial_intent_retryable"
+_WORKFLOW_KEY = "award_harness_workflow"
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _sync_workflow(st: Any, session: ClarificationSession | None) -> dict[str, Any]:
+    """Discard artifacts when their authoritative session revision changes."""
+    from award_agent.harness.pipeline import session_binding
+
+    binding = session_binding(session) if session is not None else None
+    state = st.session_state.get(_WORKFLOW_KEY)
+    if state is None or state["binding"] != binding:
+        state = {"binding": binding}
+        st.session_state[_WORKFLOW_KEY] = state
+    return cast(dict[str, Any], state)
+
+
+def _workflow_archive(state: Mapping[str, Any]) -> bytes:
+    """Export private local artifacts and response bodies without credentials."""
+    files: dict[str, bytes] = {}
+    for key in ("session", "bundle", "planning", "providers", "ranking", "results"):
+        item = state.get(key)
+        if item is None:
+            continue
+        if key == "planning":
+            models = {"planning-input": item.planning_input, "planning-result": item.result}
+        elif key == "providers":
+            models = {"provider-result": item.result, "tape": item.tape}
+            files.update(item.evidence_files)
+        elif key == "ranking":
+            models = {"matched": item.matched, "ranked": item.ranked, "solutions": item.projection}
+        else:
+            models = {key: item}
+        for name, model in models.items():
+            if model is not None:
+                files[f"{name}.json"] = model.model_dump_json(indent=2).encode()
+    output = io.BytesIO()
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+        for name, content in files.items():
+            archive.writestr(name, content)
+    return output.getvalue()
+
+
+def _render_workflow(st: Any, session: ClarificationSession | None) -> None:
+    """Explicit event surface for the application pipeline; reruns only render."""
+    from award_agent.cli.provider_results import ProviderInputBundle
+    from award_agent.harness.pipeline import (
+        HarnessSettings,
+        PlanningRun,
+        acquire_and_rank,
+        author,
+        plan_session,
+        run_from_ready,
+    )
+    from award_agent.providers.replay import ReplayTape
+    from award_agent.results import ResultsConfig, ResultsDocument, replay_results
+
+    state = _sync_workflow(st, session)
+    st.subheader("3. Run the search")
+    st.caption(
+        "Run stages explicitly. Ordinary reruns make no model or flight-provider calls. "
+        "Partial coverage and validation notices remain visible."
+    )
+    with st.sidebar.expander("Search and Results settings"):
+        selector_model = st.text_input("Endpoint-airport selector model", "gpt-5.6-luna")
+        gateway_model = st.text_input("Gateway discovery model", "gpt-5.6-luna")
+        catalog = st.text_input(
+            "Catalog release", str(_REPO_ROOT / "data/search_planning/catalogs/m1a-3cb7981519612945")
+        )
+        provider_settings = st.text_input(
+            "Provider capability and budget file",
+            str(_REPO_ROOT / "data/provider_capabilities/provider-stage-current.json"),
+        )
+        fx = st.text_input("Ranking FX snapshot", str(_REPO_ROOT / "data/ranking/m2/fx-2026-09-29.json"))
+        gfly_executable = st.text_input(
+            "Reviewed gfly Python interpreter", "/private/tmp/gfly-live-py312/bin/python",
+            help="The repository compatibility launcher verifies this pinned installation before searching.",
+        )
+        st.caption(
+            "Results values below start from the October 8 Luna diagnostic settings. "
+            "They are editable run settings, not an adopted model policy. Live Results counts "
+            "the complete input before authoring and permits at most one correction."
+        )
+        config_text = st.text_area(
+            "ResultsConfig JSON",
+            value=json.dumps({
+                "model": "gpt-6-luna", "max_output_tokens": 16384,
+                "timeout_seconds": 300, "context_limit_tokens": 1050000,
+                "prompt_overhead_tokens": 2048, "max_input_tokens": 922000,
+            }, indent=2), height=220,
+        )
+        try:
+            st.json(json.loads(Path(provider_settings).read_text()))
+        except (OSError, ValueError):
+            st.caption("Provider settings file unavailable or invalid; execution will report the error.")
+    settings = HarnessSettings(
+        catalog_path=Path(catalog), selector_model=selector_model, gateway_model=gateway_model,
+        provider_settings_path=Path(provider_settings), fx_path=Path(fx),
+        gfly_executable=Path(gfly_executable),
+    )
+    ready = session is not None and session.status.value == "ready"
+    if not ready:
+        st.info("Resolve the request to ready before running new planning or live provider searches.")
+
+    run_all = st.button("Run ready request through Results (live)", disabled=not ready, type="primary")
+    with st.expander("Run individual stages or retry") as stage_controls:
+        st.caption("For inspecting or retrying one stage at a time. Start with planning, then search providers, then author Results.")
+        plan_only = st.button("Run search planning only", disabled=not ready)
+    if run_all or plan_only:
+        # A fresh planning event invalidates every downstream artifact first.
+        binding = state["binding"]
+        state.clear()
+        state["binding"] = binding
+        try:
+            assert session is not None
+            if run_all:
+                config = ResultsConfig.model_validate_json(config_text)
+                with st.status("Running ready request through Results", expanded=True) as progress:
+                    for stage, stage_artifact in run_from_ready(session, settings, config):
+                        state[stage] = stage_artifact
+                        if isinstance(stage_artifact, PlanningRun):
+                            state["bundle"] = stage_artifact.bundle
+                        progress.write(f"{stage}: complete")
+                    delivered = state.get("results") is not None and state["results"].delivery_outcome == "delivered"
+                    progress.update(
+                        label="Results delivered; inspect checks below" if delivered else "Run stopped before Results delivery; inspect outcomes below",
+                        state="complete" if delivered else "error",
+                    )
+            else:
+                with st.spinner("Selecting endpoint airports, discovering gateways and compiling searches…"):
+                    state["planning"] = plan_session(session, settings)
+                    state["bundle"] = state["planning"].bundle
+        except Exception as exc:  # noqa: BLE001 - keep completed stages available for inspection.
+            state["error"] = f"Workflow stopped ({type(exc).__name__}): {exc}"
+
+    with st.expander("Test a saved search (offline)"):
+        root = _REPO_ROOT / "evidence/provider-stage/saved-searches/runs"
+        cases = sorted(path.name for path in root.iterdir() if (path / "bundle.json").is_file())
+        case = st.selectbox("Saved search", cases)
+        st.caption("Replay uses the saved request and historical observations; it replaces the downstream run shown here.")
+        replay_clicked = st.button("Replay providers and run ranking (offline)", disabled=not cases)
+    with stage_controls:
+        search_clicked = st.button(
+            "Search providers and run ranking (live)",
+            disabled=not ready or state.get("bundle") is None or "saved_case" in state,
+        )
+    if replay_clicked or search_clicked:
+        try:
+            if replay_clicked:
+                folder = root / case
+                bundle = ProviderInputBundle.model_validate_json((folder / "bundle.json").read_text())
+                tape = ReplayTape.model_validate_json((folder / "tape.json").read_text())
+                binding = state["binding"]
+                state.clear()
+                state.update(binding=binding, bundle=bundle, saved_case=case)
+            else:
+                if "saved_case" in state:
+                    raise ValueError("Run new planning for the ready request before live acquisition.")
+                bundle, tape = state["bundle"], None
+                for key in ("providers", "ranking", "results", "error"):
+                    state.pop(key, None)
+            with st.status("Acquiring observations and ranking", expanded=True) as progress:
+                for stage, stage_artifact in acquire_and_rank(bundle, settings, tape=tape):
+                    state[stage] = stage_artifact
+                    progress.write(f"{stage}: complete")
+                progress.update(label="Acquisition and ranking finished", state="complete")
+        except Exception as exc:  # noqa: BLE001
+            state["error"] = f"Acquisition/ranking stopped ({type(exc).__name__}): {exc}"
+
+    with stage_controls:
+        st.write("Answer authoring")
+        mode = st.radio("Results mode", ("Live writer", "Frozen draft (offline)"))
+        draft_text = correction_text = ""
+        if mode == "Frozen draft (offline)":
+            draft_text = st.text_area("ResultsDocument JSON (offline)", height=180)
+            correction_text = st.text_area("Correction ResultsDocument JSON (optional)", height=120)
+        else:
+            st.caption("Uses the Results model and limits in the sidebar. Requires a completed ranking run.")
+        author_clicked = st.button("Author Results", disabled=state.get("ranking") is None)
+    if author_clicked:
+        state.pop("results", None)
+        state.pop("error", None)
+        try:
+            config = ResultsConfig.model_validate_json(config_text)
+            draft = ResultsDocument.model_validate_json(draft_text) if mode == "Frozen draft (offline)" else None
+            correction = ResultsDocument.model_validate_json(correction_text) if draft is not None and correction_text.strip() else None
+            with st.spinner("Preparing, checking and authoring Results…"):
+                state["results"] = author(state["ranking"].projection, config, draft=draft, correction=correction)
+        except Exception as exc:  # noqa: BLE001
+            state["error"] = f"Results stopped ({type(exc).__name__}): {exc}"
+
+    if state.get("error"):
+        st.error(state["error"])
+    if state.get("saved_case"):
+        st.info(f"Showing offline saved search: {state['saved_case']}. This is separate from the current intent session.")
+    if state.get("planning") is not None:
+        st.caption(f"Planning: {state['planning'].result.outcome.value}")
+    if state.get("providers") is not None:
+        provider_result = state["providers"].result
+        st.caption(f"Provider coverage: {provider_result.status} · {len(provider_result.observations)} observations")
+    st.subheader("4. Answer")
+    artifact = state.get("results")
+    if artifact is not None:
+        st.write(f"Results: `{artifact.delivery_outcome}`; validation: `{artifact.validation_outcome}`; generation: `{artifact.generation_outcome}`")
+        if artifact.delivery_outcome == "delivered":
+            markdown = replay_results(artifact)
+            st.markdown(markdown)
+            st.download_button("Download answer Markdown", markdown, "answer.md", "text/markdown")
+        else:
+            st.error(f"No Results document delivered: {artifact.selection_reason}")
+        with st.expander("Results checks, notices and usage"):
+            st.json({
+                "notices": [item.model_dump(mode="json") for item in artifact.notices],
+                "attempts": [item.model_dump(mode="json", exclude={"writer_receipt", "document"}) for item in artifact.attempts],
+                "usage": [item.writer_receipt.usage if item.writer_receipt else {} for item in artifact.attempts],
+            })
+    else:
+        st.caption("Your answer will appear here after a run reaches Results.")
+    with st.expander("Search evidence: planning, provider coverage and ranking"):
+        planning = state.get("planning")
+        if planning is not None:
+            st.write(f"Search planning: `{planning.result.outcome.value}`")
+            st.write("Planning evidence and issues")
+            st.json(planning.result.model_dump(mode="json"))
+            st.json(planning.diagnostics)
+        providers = state.get("providers")
+        if providers is not None:
+            st.write(f"Provider search: `{providers.result.status}`; {len(providers.result.observations)} observations")
+            st.write("Provider coverage and receipts")
+            st.json(providers.result.model_dump(mode="json"))
+        ranking = state.get("ranking")
+        if ranking is not None:
+            st.write("Ranking accounting")
+            st.json(ranking.matched.accounting.model_dump(mode="json"))
+            st.write("Ranked solutions and factual export")
+            st.json(ranking.projection.model_dump(mode="json"))
+    if state.get("bundle") is not None:
+        st.caption("Downloads contain private travel requests, observations and Results drafts. Stored only in this local session unless you download them.")
+        export_state = dict(state)
+        if session is not None and "saved_case" not in state:
+            export_state["session"] = session
+        st.download_button("Download run artifacts and replay evidence", _workflow_archive(export_state), "award-harness-run.zip", "application/zip")
 
 
 def _local_message_id(*, session_id: str, revision: int) -> str:
@@ -357,11 +601,12 @@ def _render_model_diagnostics(st: object) -> None:
     records = st.session_state.get(_TELEMETRY_KEY, [])  # type: ignore[attr-defined]
     if not records:
         return
-    st.caption(  # type: ignore[attr-defined]
-        "Event-scoped receiver/composer telemetry (local only; raw traces "
-        "are private and not shown):"
-    )
-    st.json(records)  # type: ignore[attr-defined]
+    with st.expander("Intent and clarification model usage"):  # type: ignore[attr-defined]
+        st.caption(  # type: ignore[attr-defined]
+            "Event-scoped receiver/composer telemetry (local only; raw traces "
+            "are private and not shown):"
+        )
+        st.json(records)  # type: ignore[attr-defined]
 
 
 def _render_prompt_diagnostics(st: object, session: object) -> None:
@@ -373,7 +618,7 @@ def _render_prompt_diagnostics(st: object, session: object) -> None:
     """
 
     revision = session.current_revision  # type: ignore[attr-defined]
-    with st.expander("Clarification diagnostics", expanded=True):  # type: ignore[attr-defined]
+    with st.expander("Clarification diagnostics"):  # type: ignore[attr-defined]
         prompt = revision.prompt
         if prompt is None:
             st.write(  # type: ignore[attr-defined]
@@ -416,39 +661,35 @@ def main() -> None:
     # Match the existing local CLI convention without copying credentials into
     # code, session state, logs, or model-facing payloads.
     load_dotenv()
-    st.set_page_config(page_title="One-way award clarification harness", layout="wide")
-    st.title("One-way award clarification harness")
-    st.caption(
-        "Local ADR 0017 semantic-intent validation for the ADR 0016 one-way award boundary: "
-        "no persistence, search calls, or rerun-triggered model calls."
-    )
-    st.caption(
-        "A usable request needs origin, destination, a bounded outbound departure window, and "
-        "travelers. Return dates or trip durations require a separate one-way request; cash-only "
-        "requests are not supported."
-    )
-    st.caption(
-        "Named U.S. federal holidays may use the existing Nager calendar boundary; no flight or "
-        "award-inventory provider is called."
-    )
-    intent_model = st.text_input(
-        "Initial semantic intent model",
-        value="gpt-5.6-luna",
-        help="Explicit model for the initial one-way request semantic interpretation.",
-    )
-    clarification_model = st.text_input(
-        "Clarification receiver model",
-        value="gpt-5.6-luna",
-        help="Interprets an answer only after Submit answer.",
-    )
-    composer_model = st.text_input(
-        "Follow-up prompt composer model",
-        value="gpt-5.6-luna",
-        help="Authors each initial or post-reduction follow-up prompt.",
-    )
+    st.set_page_config(page_title="One-way award end-to-end harness", layout="wide")
+    st.title("One-way award end-to-end harness")
+    st.caption("Enter a request, resolve any questions, run the search, then inspect the answer. Settings are in the sidebar.")
+    st.sidebar.header("Run settings")
+    st.sidebar.caption("Local testing only. Model and provider calls require an explicit button click.")
+    st.sidebar.caption("ADR 0017 semantic-intent · ADR 0016 one-way award boundary")
+    with st.sidebar.expander("Intent and clarification models"):
+        intent_model = st.text_input(
+            "Initial semantic intent model",
+            value="gpt-5.6-luna",
+            help="Explicit model for the initial one-way request semantic interpretation.",
+        )
+        clarification_model = st.text_input(
+            "Clarification receiver model",
+            value="gpt-5.6-luna",
+            help="Interprets an answer only after Submit answer.",
+        )
+        composer_model = st.text_input(
+            "Follow-up prompt composer model",
+            value="gpt-5.6-luna",
+            help="Authors each initial or post-reduction follow-up prompt.",
+        )
 
-    st.subheader("Start a one-way award request")
-    with st.form("initial-request"):
+    st.subheader("1. Travel request")
+    st.caption("One-way awards: include origin, destination, departure dates and travelers. Submit the return as a separate one-way request; cash-only requests are not supported.")
+    with (
+        st.expander("Enter or replace the request", expanded=st.session_state.get(_SESSION_KEY) is None),
+        st.form("initial-request"),
+    ):
         request_text = st.text_area("One-way award request", height=120)
         reference_date = st.date_input(
             "Reference date",
@@ -520,7 +761,7 @@ def main() -> None:
                     error=initial_error,
                 )
 
-    with st.expander("Or start from ADR 0017 RequestUnderstandingResult JSON"):
+    with st.expander("Advanced: import an understood request (JSON)"):
         raw_initial = st.text_area(
             "RequestUnderstandingResult JSON",
             help="Paste JSON produced by the active semantic initial-intent workflow.",
@@ -580,21 +821,19 @@ def main() -> None:
         # A typed initial pending outcome has no session by design, but its
         # local request/context and aggregate receiver diagnostics must remain
         # inspectable.  The retry button is the only route back into intent.
+        st.subheader("2. Clarify and review")
+        st.caption("Start a request above to resolve any missing details, or use a saved search below for offline testing.")
+        _render_workflow(st, None)
         _render_model_diagnostics(st)
         return
 
-    _render_model_diagnostics(st)
-
     revision = session.current_revision
-    st.subheader(f"Session revision {revision.revision}")
-    st.write(f"Status: `{revision.status.value}`")
-    _render_session_state(st, session)
+    st.subheader("2. Clarify and review")
+    st.caption(f"Session revision {revision.revision} · Status: {revision.status.value}")
 
     if revision.stop_reason is not None:
         st.write(f"Terminal reason: `{revision.stop_reason.value}`")
     _render_terminal_message(st, revision.terminal_message)
-
-    _render_prompt_diagnostics(st, session)
 
     if revision.prompt is not None:
         st.subheader("Next clarification prompt")
@@ -749,8 +988,17 @@ def main() -> None:
                             adapter=answer_composer,
                             error=interpreter_error,
                         )
+    elif revision.status.value == "ready":
+        st.success("Request is ready for search planning and end-to-end testing.")
     else:
-        st.success("Session is terminal.")
+        st.warning("Session stopped. Review the request guidance above.")
+    with st.expander("Review the resolved request and clarification history"):
+        _render_session_state(st, session)
+    _render_workflow(st, session)
+    st.divider()
+    st.subheader("Session diagnostics")
+    _render_prompt_diagnostics(st, session)
+    _render_model_diagnostics(st)
     with st.expander("Current session JSON"):
         st.json(session.model_dump(mode="json"))
 
