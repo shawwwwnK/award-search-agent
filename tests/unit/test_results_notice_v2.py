@@ -130,8 +130,8 @@ def test_unknown_render_version_fails_before_authoring(
     projection: SolutionProjection, config: ResultsConfig,
 ) -> None:
     document = _document(projection)
-    unknown = cast("Literal['results-artifact-v1', 'results-artifact-v2', 'results-artifact-v3']",
-                   "results-artifact-v4")
+    unknown = cast("Literal['results-artifact-v1', 'results-artifact-v2', 'results-artifact-v3', 'results-artifact-v4']",
+                   "results-artifact-v999")
     with pytest.raises(ValueError, match="unsupported Results render version"):
         render_results(document, projection, render_version=unknown)
     with pytest.raises(ValueError, match="unsupported Results render version"):

@@ -1,5 +1,20 @@
 # ADRs
 
+2026-10-20: ADR 0026 accepts a compact Results writer view: all eligible choices
+remain selectable, rejected rows become source-backed summaries, opaque machine
+metadata stays local, and conservatively grouped observations retain member-level
+references, timestamps and bindings. The `results-prepared-v4` / `results-artifact-v5`
+implementation and offline preservation/byte-measurement gates are complete; the
+bounded Luna answer evaluation recorded five generations and five count requests. Its
+conditional result remains annotated and presentation/choice issues remain; no
+qualification or owner acceptance is claimed. See the [case evidence](../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md).
+
+2026-10-09: ADR 0026 records the owner's reopening of Results M2 presentation
+acceptance after reviewing end-to-end answers. Traveler language, friendly labels,
+local flight times and readable factual display preserve the existing authorship
+and disclosure boundary. The October 8 closeout is historical for this reopened
+presentation scope; upstream stages and M3 retain their disposition.
+
 2026-10-08 closeout: ADR 0026 records the owner’s explicit Results M2 closeout for its declared implemented boundary. This supersedes earlier unclaimed-closeout status below; M3 and broader coverage/semantic qualification remain separate. See the [closeout](../handoffs/2026-10-08-results-m2-closeout.md).
 
 2026-10-07 implementation status: ADR 0026's existing Results M2 policy now has a local

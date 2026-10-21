@@ -1,6 +1,38 @@
 # Results M2 local API and CLI
 
-Results M2 is [owner-closed as of 2026-10-08](handoffs/2026-10-08-results-m2-closeout.md) for its declared implementation boundary. M3 remains planned; diagnostic settings and broader qualification limits remain separate.
+Results M2's [October 8 engineering closeout](handoffs/2026-10-08-results-m2-closeout.md)
+is historical. On October 9 the owner reopened presentation acceptance after
+reviewing the end-to-end answers. M3 remains planned; diagnostic settings and
+broader qualification limits remain separate. The
+[presentation iteration record](../evidence/end-to-end/presentation/README.md)
+preserves original answers and separately labeled revisions for owner review.
+Live iteration stopped at the owner's request after source revision 006 to review
+API spending. On October 20 the owner authorized a bounded Luna evaluation of the
+compact input; its three-case diagnostic is recorded. Presentation acceptance remains
+pending. See the [session log](build-log/2026-10-09-results-m2-presentation.md)
+for the original cost review and the [compact-input build log](build-log/2026-10-20-results-m2-compact-input.md)
+for current verification and evaluation status.
+
+## 2026-10-20 compact writer input
+
+The compact implementation uses `results-artifact-v5` with `results-prepared-v4`.
+All admitted and conditional candidates remain individually selectable; rejected
+rows are replaced with source-backed summaries, while the full canonical projection
+and comparison authority stay in retained artifacts. Short J/A/C references bind
+writer choices to canonical records, and conservative fact groups retain each
+member's reference, retrieval timestamp and source association. The implementation
+and offline preservation/measurement gates have passed for their declared scope.
+The three-case Luna diagnostic used five generations and five input-count calls,
+recording 843,051 input and 21,591 output tokens. Admitted and incomplete deliveries
+were mechanically clean; conditional delivery was annotated with two shared-disclosure
+key findings. Independent review also identified presentation and choice-diversity
+issues. These are diagnostic observations; no M2/M3 qualification or owner presentation
+acceptance is claimed. See [ADR 0026](adr/0026-model-authored-results-with-bound-facts.md#2026-10-20-amendment--compact-model-facing-input),
+the [plan](plans/2026-10-20-2238-perf-compact-results-input-plan.md), the
+[case evidence](../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md)
+and [build log](build-log/2026-10-20-results-m2-compact-input.md).
+The post-live V5-specific cross-seed replay fix passed its seven-artifact matrix;
+the older historical finding-order concern remains separately open.
 
 Results consumes Ranking's `SolutionProjection` (the trusted `SolutionView` and its
 `ProjectionReceipt`). It preserves alternatives and source dispositions, supplies scoped factual
@@ -51,7 +83,15 @@ scope, once, as escaped literal source text. Parts can repeat and interleave; au
 are retained. Unsupported references use “Details unavailable” with local notices. The
 `disclosures` metadata cannot substitute for visible source-bound facts.
 
-New runs use the `results-artifact-v3` disclosure checks with `results-prepared-v2`.
+New presentation runs use `results-artifact-v4` with `results-prepared-v3`; these
+preserve the traveler-facing fact display, local flight dates/times, readable amounts,
+short visible labels and ordinary language for search limits and booking conditions.
+New compact-input runs use `results-artifact-v5` with `results-prepared-v4`, adding
+the compact model-facing catalog and typed references. V1–V4 artifacts retain their
+historical behavior. Writer structure remains free; formatting does not establish
+semantic truth or bookability.
+
+The V3 shared-disclosure rules continue in V4 and V5. Historical V3 uses `results-prepared-v2`.
 `ResultsPart.shared_disclosures` binds a fact key to at least two selected eligible journey IDs
 whose source-slot values match exactly; the shared part must visibly contain the fact and each
 target's stable identifier. A key is unique within one part, while valid bindings and repeated
@@ -66,7 +106,12 @@ semantic truth. See the
 
 An optional model-authored `identifier` on journey parts can provide a friendly label such as
 “Option A.” It must be visible, unique to that variant and stable when the journey resumes.
-The internal candidate ID remains in the artifact; a visible ID slot is also supported.
+The internal candidate ID remains in the artifact. In V4 and V5 selected journeys require
+a friendly visible label; benchmark and incomplete observations likewise use
+stable visible labels while their IDs stay in metadata. For a single award with
+no cash flight, an overall route/departure/arrival slot also discloses its award
+counterpart only when the underlying source values match exactly. This avoids
+duplicated schedules without removing distinct flight facts.
 Notice placement is tested with an independent Markdown renderer, including columns and cells
 spanning parts. This mechanical evidence does not qualify arbitrary presentation or prose.
 
@@ -114,6 +159,7 @@ the original live artifact and must not be described as new generation.
 
 The implementation spec is
 [Results M2](handoffs/2026-10-07-results-m2-implementation-spec.md). M3 quality evaluation, model
-selection, live budget approval, bookability, provider reliability, and traveler-task benefit remain
-separate work. Offline fixtures do not supply those claims. The adapter follows the
+selection, broader live budget approval, bookability, provider reliability, and traveler-task benefit remain
+separate work. The bounded live evaluation authorized for this compact-input change does not supply
+those claims. Offline fixtures do not supply those claims. The adapter follows the
 [official Structured Outputs contract](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses).

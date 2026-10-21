@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from html import escape
 from typing import Literal, cast
@@ -16,6 +17,7 @@ from award_agent.ranking.projection_contracts import (
     SolutionView,
 )
 
+from .authoring import build_authoring_view, compact_payload, verify_authoring_view
 from .contracts import (
     CheckFinding,
     DeclaredClaim,
@@ -35,7 +37,8 @@ from .contracts import (
 )
 from .request import response_schema, token_request, token_request_digest
 
-ArtifactVersion = Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3"]
+ArtifactVersion = Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3", "results-artifact-v4", "results-artifact-v5"]
+VERSIONS = {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3", "results-artifact-v4", "results-artifact-v5"}
 
 SLOT_RE = re.compile(r"\{\{fact:([a-z][a-z0-9_]*)\}\}")
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
@@ -65,6 +68,49 @@ with a shared_disclosures binding for each exact fact key and its selected journ
 must have the same source value, and each target's stable visible identifier or exact ID must appear
 in that shared part. Include the exact {{fact:key}} slot in that part. A binding alone or an inferred
 prose relationship does not disclose a fact. Keep other journey facts in their scoped parts.
+"""
+V4_INSTRUCTIONS = """Write the final answer for a traveler in clear, polished travel-advisor language.
+Choose natural headings that describe the trip or decision. Lead with useful choices and tradeoffs;
+use compact itinerary lines or a small table when that makes schedules and prices easier to scan.
+Do not expose source IDs, observation IDs, candidate IDs, internal status/style names, search-query
+types, provider error codes, raw ISO timestamps, UTC conversions, or raw minor currency units.
+IDs belong in structured metadata (references, selection, claim scopes, disclosure bindings), never
+visible Markdown. Give each option a short, stable
+visible label such as Option A. Use the supplied fact slots for decision-relevant facts, with
+local airport times and formatted amounts. Dates of observations suffice unless their exact times
+matter to interpretation. Summarize partial search coverage in ordinary language and preserve its
+limits. Describe unknown quote scope once where it applies; avoid repeating generic caveats.
+Do not call an incomplete lead an itinerary or suggest a result is currently bookable.
+Keep the required factual disclosures visible and associated with their options, but avoid
+mechanical field dumps and duplicate wording. Use the product-facing slot values as written.
+Do not print labels such as 'status', 'styles', 'price completeness', 'requirements', or
+'disposition' as a database-style list. Weave their facts into plain sentences. Do not assert
+that there are no unresolved requirements unless the source reason set truly has none.
+When the overall route and timing equal the award route and timing, present them once.
+Show the cash benchmark separately as a comparison, with a short visible name.
+Never write the upstream words 'admitted', 'conditional', 'tagged', or 'observation' in
+traveler prose. Use the product-facing status and style slots instead. Do not infer a
+connection city, operating airline, or cabin from a route or carrier code. Say 'reported
+airlines' when the source lists carriers. Avoid 'operated by' unless source explicitly says so.
+Each Markdown part must start and end with a blank line when adjacent to another part,
+especially before a heading. Use 'an' before a vowel sound in program names.
+The source.presentation_required_keys list is mandatory for every selected journey and
+selected comparison. Use each listed key as a visible {{fact:key}} slot. Read
+source.display_slot_vocabulary for the exact words that those slots will display and
+their natural sentence usage. In particular, weave {{fact:status}}, {{fact:styles}},
+and {{fact:award_program}} into each recommended option. Coverage, provider status,
+cash-comparison status, quote scope, and provider-update status are complete sentences;
+show them on their own.
+Price completeness is a short fragment;
+departure and arrival already include their dates, while points and money include their units.
+If {{fact:fees}} is 'fees not reported', separate it from points with a semicolon or
+sentence; do not say 'points plus fees not reported' or imply zero fees.
+For example: 'Award program: {{fact:award_program}}. {{fact:route}}, departing
+{{fact:departure}}. Price: {{fact:points}} plus {{fact:fees}}. {{fact:status}}.'
+Use 'recorded on' or 'observed on' for observation dates; they are not a booking check.
+Compare full local dates before describing an arrival as better for a traveler: a morning
+arrival on Jan 17 is later than an evening arrival on Jan 16. Do not imply a next-day
+arrival is earlier merely because its clock time is earlier.
 """
 
 
@@ -158,6 +204,194 @@ def _when(time: object) -> str:
     zone = getattr(time, "timezone", None)
     instant = getattr(time, "instant", None)
     return f"{local or 'local time unknown'} ({zone or 'timezone unknown'}; UTC {instant or 'unknown'})"
+
+
+def _display_when(time: object) -> str:
+    local = getattr(time, "local_iso", None)
+    if not local:
+        return "Time not reported"
+    try:
+        value = datetime.fromisoformat(local)
+    except ValueError:
+        return "Time not reported"
+    hour = value.strftime("%I").lstrip("0")
+    zone = getattr(time, "timezone", None)
+    place = zone.split("/")[-1].replace("_", " ") if zone else "airport local"
+    return f"{value.strftime('%b')} {value.day}, {value.year} at {hour}:{value:%M} {value:%p} ({place} time)"
+
+
+def _display_date(value: object) -> str:
+    if value is None:
+        return "Date not reported"
+    try:
+        date = datetime.fromisoformat(str(value))
+    except ValueError:
+        return "Date not reported"
+    return f"{date:%b} {date.day}, {date.year}"
+
+
+def _display_money(amount: RawField, currency: RawField, unit: str = "major") -> str:
+    if amount.state != "value":
+        return "Amount not reported"
+    try:
+        number = Decimal(str(amount.value))
+        if currency.state != "value":
+            return f"{number:,} (currency not reported; {unit} units)"
+        if unit == "unknown":
+            return f"{number:,} {currency.value} (unit not reported)"
+        if unit == "minor":
+            exponent = {"USD": 2, "CAD": 2}.get(str(currency.value))
+            if exponent is None:
+                return f"{number:,} {currency.value} minor units"
+            number /= Decimal(10) ** exponent
+    except (InvalidOperation, ValueError):
+        return "Amount not reported"
+    formatted = f"{number:,.2f}" if unit == "minor" and str(currency.value) in {"USD", "CAD"} else f"{number:,}"
+    return f"{formatted} {currency.value}"
+
+
+def _display_price_scope(scope: str) -> str:
+    return {"unknown": "The quote does not say whether this price is per person or for everyone traveling.",
+            "per_traveler": "The quoted price is per traveler.",
+            "party": "The quoted price covers the requested party."}.get(
+            scope, "The quote's traveler scope was not reported.")
+
+
+def _display_requirements(reasons: object) -> str:
+    messages = {
+        "price_incomplete": "The full trip price could not be confirmed",
+        "separate_ticket_obligation": "Separate bookings need checks for baggage, check-in, terminals, transit rules and missed-connection protection",
+        "award_travelers_unknown": "Award availability for everyone traveling has not been confirmed",
+        "positioning_permission_unknown": "The separate cash flight needs your approval",
+        "result_validation_minimum_award_seats": "Award seats for everyone traveling have not been confirmed",
+        "award_leg_cabin_unreported": "Cabin on each award flight was not reported",
+        "cash_internal_legs_unknown": "The cash flight's individual connections and times were not reported",
+    }
+    seen: set[str] = set()
+    output: list[str] = []
+    for reason in reasons:  # type: ignore[attr-defined]
+        if reason.state == "passed" or reason.code in seen:
+            continue
+        seen.add(reason.code)
+        output.append(messages.get(reason.code, reason.detail.replace("_", " ").rstrip(".")))
+    return "; ".join(output) if output else "No additional matching conditions reported"
+
+
+def _display_duration(minutes: Decimal | int | None) -> str:
+    if minutes is None:
+        return "Duration not reported"
+    if minutes != int(minutes):
+        return f"{minutes} min"
+    minutes = int(minutes)
+    hours, remainder = divmod(minutes, 60)
+    return f"{hours} hr {remainder} min" if remainder else f"{hours} hr"
+
+
+def _product_component_slots(component: SolutionComponent,
+                             scope: Literal["benchmark", "incomplete"]) -> dict[str, str]:
+    slots = _component_slots(component, scope)
+    slots.update({
+        "departure_date": _safe(f"{component.departure_date:%b} {component.departure_date.day}, {component.departure_date.year}"
+                                if component.departure_date else "Departure date not reported"),
+        "program": _safe(_plain(component.program).replace("_", " ").title()
+                         if component.program.state == "value" else "not reported"),
+        "cabin": _safe(_plain(component.cabin).replace("_", " ")
+                       if component.cabin.state == "value" else "not reported"),
+        "leg_cabins": _safe("; ".join(
+            f"{leg.origin}–{leg.destination}: " +
+            (_plain(leg.cabin).replace("_", " ") if leg.cabin.state == "value"
+             else "cabin not reported") for leg in component.legs)
+            or "Cabins for individual flights not reported"),
+        "departure": _safe(_display_when(component.departure) if component.departure.local_iso else
+                           (f"{component.departure_date:%b} {component.departure_date.day}, "
+                            f"{component.departure_date.year}; flight time not reported"
+                            if component.departure_date else "Departure date and time not reported")),
+        "arrival": _safe(_display_when(component.arrival)),
+        "observed_at": _safe(_display_date(component.retrieved_at)),
+        "provider_updated_at": _safe("The provider last updated this result on " +
+                                      _display_date(_plain(component.provider_updated_at)) + "."
+                                      if component.provider_updated_at.state == "value" else
+                                      "The provider did not report an update date."),
+        "fees": _safe(_display_money(component.taxes_fees, component.tax_currency,
+                                     component.taxes_fees_unit) if component.taxes_fees.state == "value"
+                      else "fees not reported"),
+        "cash": _safe(_display_money(component.cash_amount, component.cash_currency)),
+        "points": _safe(f"{Decimal(str(component.points.value)):,}" if component.points.state == "value"
+                        else "Points not reported"),
+        "kind": _safe(component.kind.replace("_", " ")),
+        "price_scope": _safe(_display_price_scope(component.price_scope)),
+        "disposition": _safe("A cash fare for comparison, not an award recommendation" if
+                             scope == "benchmark" else "An incomplete award lead, not a bookable itinerary"),
+    })
+    return slots
+
+
+def _product_journey_slots(view: SolutionView, alternative: SolutionAlternative,
+                           components: dict[str, SolutionComponent]) -> dict[str, str]:
+    slots = _journey_slots(view, alternative, components)
+    award = components[alternative.award_observation_id]
+    cash = components.get(alternative.cash_observation_id or "")
+    assessments = {record.assessment_id: record for record in view.assessments}
+    style_names = {"time": "Shorter travel time", "cost": "Lower estimated cost",
+                   "premium": "Premium cabin"}
+    included = [style_names.get(assessments[aid].style, assessments[aid].style)
+                for aid in alternative.assessment_ids if assessments[aid].state == "member"]
+    style_text = ", ".join(included) if included else "No highlighted comparison category"
+    reasons = next(record.reasons for record in view.reason_sets
+                   if record.reason_set_id == alternative.reason_set_id)
+    requirements = _display_requirements(reasons)
+    award_legs = "; ".join(f"{leg.origin}–{leg.destination}: " +
+                           (_plain(leg.cabin).replace("_", " ") if leg.cabin.state == "value"
+                            else "cabin not reported") for leg in award.legs)
+    cash_legs = (
+        "; ".join(f"{leg.origin}–{leg.destination}: " +
+                  (_plain(leg.cabin).replace("_", " ") if leg.cabin.state == "value"
+                   else "cabin not reported") for leg in cash.legs) if cash else "")
+    slots.update({
+        "styles": _safe(style_text),
+        "requirements": _safe(requirements),
+        "award_program": _safe(_plain(award.program).replace("_", " ").title()
+                               if award.program.state == "value" else "not reported"),
+        "award_cabin": _safe(_plain(alternative.award_cabin).replace("_", " ")
+                             if alternative.award_cabin.state == "value" else "not reported"),
+        "cash_cabin": _safe(_plain(cash.cabin).replace("_", " ")
+                            if cash.cabin.state == "value" else "not reported") if cash else slots["cash_cabin"],
+        "award_leg_cabins": _safe(award_legs or "Cabins for individual flights not reported"),
+        "cash_leg_cabins": _safe(cash_legs or "Cabins for individual flights not reported") if cash else slots["cash_leg_cabins"],
+        "departure": _safe(_display_when(alternative.departure)),
+        "arrival": _safe(_display_when(alternative.arrival)),
+        "elapsed": _safe(_display_duration(alternative.elapsed_minutes)),
+        "transfer": _safe(f"{_display_duration(alternative.transfer_minutes)} at "
+                          f"{alternative.transfer_airport}" if alternative.transfer_minutes is not None
+                          else "No transfer wait reported"),
+        "award_departure": _safe(_display_when(award.departure)),
+        "award_arrival": _safe(_display_when(award.arrival)),
+        "cash_departure": _safe(_display_when(cash.departure)) if cash else slots["cash_departure"],
+        "cash_arrival": _safe(_display_when(cash.arrival)) if cash else slots["cash_arrival"],
+        "points": _safe(f"{Decimal(str(award.points.value)):,} points" if award.points.state == "value"
+                        else "Points not reported"),
+        "fees": _safe(_display_money(award.taxes_fees, award.tax_currency,
+                                     award.taxes_fees_unit) if award.taxes_fees.state == "value"
+                      else "fees not reported"),
+        "cash": _safe(_display_money(cash.cash_amount, cash.cash_currency)) if cash else slots["cash"],
+        "award_observed_at": _safe(_display_date(award.retrieved_at)),
+        "cash_observed_at": _safe(_display_date(cash.retrieved_at)) if cash else slots["cash_observed_at"],
+        "status": _safe({"admitted": "This option meets the checked itinerary requirements.",
+                         "conditional": "A few details need confirming before booking.",
+                         "rejected": "This option was excluded after checks.",
+                         "research_lead": "This is an incomplete lead."}.get(
+                         alternative.status, "The option's status was not reported.")),
+        "booking_obligation": _safe({"single_award": "One award booking",
+                                     "separate_tickets_unverified": "Separate bookings; connection protection unverified"}.get(
+                                     alternative.booking_obligation,
+                                     alternative.booking_obligation.replace("_", " "))),
+        "price_completeness": _safe({"known": "All price components are reported",
+                                     "partial": "Some price details are still missing",
+                                     "unknown": "Total price is not known"}[alternative.price_completeness]),
+        "award_price_scope": _safe(_display_price_scope(award.price_scope)),
+        "cash_price_scope": _safe(_display_price_scope(cash.price_scope)) if cash else slots["cash_price_scope"],
+    })
+    return slots
 
 
 def _component_slots(component: SolutionComponent,
@@ -255,15 +489,54 @@ def _shared_slots(view: SolutionView) -> dict[str, str]:
                                       else "unavailable")}
 
 
+def _product_shared_slots(view: SolutionView) -> dict[str, str]:
+    slots = _shared_slots(view)
+    if not view.coverage_groups:
+        summary = "Search coverage was not reported."
+    else:
+        affected = [group for group in view.coverage_groups if group.status not in {"completed", "empty"}
+                    and group.reason != "no_observed_award_activation"]
+        if not affected:
+            summary = "The recorded searches completed for the planned routes and dates."
+        else:
+            routes = sorted({route.split(":", 1)[0].replace("-", "–")
+                             for group in affected for route in group.routes_and_dates})
+            route_text = ", ".join(routes[:4])
+            if len(routes) > 4:
+                route_text += " and other routes"
+            limits = []
+            if any(group.status == "partial" for group in affected):
+                limits.append("some results could not be retrieved")
+            if any(group.status == "omitted" for group in affected):
+                limits.append("some planned lookups were not run")
+            if any(group.status not in {"partial", "omitted"} for group in affected):
+                limits.append("some searches did not finish")
+            summary = "Some results may be missing: " + "; ".join(limits) + "."
+            if route_text:
+                summary += f" This affects {route_text}; additional options may be missing."
+    slots["coverage"] = _safe(summary)
+    slots["provider_status"] = _safe({"partial": "The provider search was incomplete.",
+                                       "completed": "The provider search completed."}.get(
+                                       view.provider_status, "The provider search status is limited."))
+    slots["benchmark_status"] = _safe("A cash fare is available for comparison." if
+                                       view.direct_cash_observation_ids else
+                                       "No cash fare was returned for comparison.")
+    return slots
+
+
 def prepare_slot_keys(view: SolutionView, scope: str, reference_id: str | None,
                       components: dict[str, SolutionComponent],
-                      alternatives: dict[str, SolutionAlternative]) -> set[str]:
+                      alternatives: dict[str, SolutionAlternative],
+                      version: ArtifactVersion = "results-artifact-v3") -> set[str]:
+    product = version in {"results-artifact-v4", "results-artifact-v5"}
     if scope == "shared" and reference_id is None:
-        return set(_shared_slots(view))
+        return set(_product_shared_slots(view) if product else _shared_slots(view))
     if scope == "journey" and reference_id in alternatives:
-        return set(_journey_slots(view, alternatives[reference_id], components))
+        return set(_product_journey_slots(view, alternatives[reference_id], components)
+                   if product else _journey_slots(view, alternatives[reference_id], components))
     if scope in {"benchmark", "incomplete"} and reference_id in components:
-        return set(_component_slots(components[reference_id], cast("Literal['benchmark', 'incomplete']", scope)))
+        return set(_product_component_slots(components[reference_id], cast("Literal['benchmark', 'incomplete']", scope))
+                   if product else _component_slots(components[reference_id], cast("Literal['benchmark', 'incomplete']", scope)))
     return set()
 
 
@@ -333,24 +606,93 @@ def _source(view: SolutionView) -> dict[str, object]:
 
 
 def prepare_results(projection: SolutionProjection, config: ResultsConfig, *,
-                    version: ArtifactVersion = "results-artifact-v3") -> PreparedResultsInput:
-    if version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+                    version: ArtifactVersion = "results-artifact-v5") -> PreparedResultsInput:
+    if version not in VERSIONS:
         raise ValueError("unsupported Results render version")
     # Revalidation checks the receipt/view digest and all exact references before writer access.
     trusted = SolutionProjection.model_validate(projection.model_dump(mode="json"))
     view = trusted.view
     components = {item.observation_id: item for item in view.components}
-    slots = {"shared": _shared_slots(view)}
-    slots.update({f"journey:{item.candidate_id}": _journey_slots(view, item, components)
+    product = version in {"results-artifact-v4", "results-artifact-v5"}
+    slots = {"shared": _product_shared_slots(view) if product else _shared_slots(view)}
+    slots.update({f"journey:{item.candidate_id}": (_product_journey_slots(view, item, components)
+                  if product else _journey_slots(view, item, components))
                   for item in view.alternatives})
-    slots.update({f"benchmark:{item.observation_id}": _component_slots(item, "benchmark")
+    slots.update({f"benchmark:{item.observation_id}": (_product_component_slots(item, "benchmark")
+                  if product else _component_slots(item, "benchmark"))
                   for item in view.components if item.observation_id in view.direct_cash_observation_ids})
-    slots.update({f"incomplete:{item.observation_id}": _component_slots(item, "incomplete")
+    slots.update({f"incomplete:{item.observation_id}": (_product_component_slots(item, "incomplete")
+                  if product else _component_slots(item, "incomplete"))
                   for item in view.components if item.observation_id in (
                       set(view.award_summary_observation_ids) |
                       set(view.unmatched_award_observation_ids) |
                       set(view.unpaired_positioning_observation_ids))})
     source = _source(view)
+    if product:
+        common_journey = {"status", "styles", "route", "departure", "arrival", "elapsed",
+                          "award_program", "award_route", "award_departure", "award_arrival",
+                          "award_carrier", "award_cabin", "award_leg_cabins", "points", "fees",
+                          "award_price_scope", "price_completeness", "booking_obligation",
+                          "requirements", "award_observed_at"}
+        journey_keys: dict[str, list[str]] = {}
+        for item in view.alternatives:
+            if item.status not in {"admitted", "conditional"}:
+                continue
+            keys = set(common_journey)
+            award = components[item.award_observation_id]
+            cash = components.get(item.cash_observation_id or "")
+            if award.mixed_cabin_pct.state == "value":
+                keys.add("award_mixed_cabin_pct")
+            if cash:
+                keys.update({"transfer", "cash", "cash_cabin", "cash_leg_cabins",
+                             "cash_route", "cash_departure", "cash_arrival",
+                             "cash_price_scope", "cash_observed_at"})
+                if cash.mixed_cabin_pct.state == "value":
+                    keys.add("cash_mixed_cabin_pct")
+            else:
+                if (item.original_origin, item.original_destination) == (award.origin, award.destination):
+                    keys.discard("award_route")
+                if item.departure == award.departure:
+                    keys.discard("award_departure")
+                if item.arrival == award.arrival:
+                    keys.discard("award_arrival")
+            journey_keys[item.candidate_id] = sorted(keys)
+        source["presentation_required_keys"] = {
+            "shared": ["coverage", "provider_status"],
+            "conditional_shared": "If no cash benchmark is selected, also show benchmark_status. If no complete journey exists, show complete_journey_count.",
+            "selected_journey_by_id": journey_keys,
+            "benchmark": ["disposition", "route", "departure", "arrival", "observed_at",
+                          "provider_updated_at", "cash", "price_scope", "carrier", "cabin",
+                          "leg_cabins"],
+            "incomplete": ["disposition", "route", "departure", "arrival", "observed_at",
+                           "provider_updated_at"],
+            "unselected_journey_note": ["status", "requirements"],
+            "identity": "Use a unique short visible identifier in each result part; keep source IDs only in metadata.",
+            "equal_schedule_alias": "For a single award with no cash component, route/departure/arrival may each replace the matching award_route/award_departure/award_arrival only when the source fields exactly match. Otherwise show both.",
+            "slot_style": "Coverage, provider status, cash comparison status, price scope and provider update are full sentences. Times include local date, time and city; money includes currency and units. Price completeness is a fragment.",
+        }
+        usage = {
+            "status": "Complete sentence about the option's checked eligibility.",
+            "styles": "Short comparison phrase; attach to this option without saying tagged or member.",
+            "booking_obligation": "Short booking phrase; use as its own sentence fragment.",
+            "price_completeness": "Short phrase about missing price details.",
+            "award_price_scope": "Complete quote-scope sentence; show on its own.",
+            "cash_price_scope": "Complete quote-scope sentence; show on its own when a cash component exists.",
+            "price_scope": "Complete quote-scope sentence for a comparison or lead.",
+            "provider_status": "Complete sentence; show on its own.",
+            "benchmark_status": "Complete sentence; show only when no cash comparison was selected.",
+            "provider_updated_at": "Complete sentence; show on its own.",
+            "disposition": "Short description of what this result is; use as a sentence fragment.",
+            "requirements": "Conditions separated by semicolons; introduce as Before booking or What to check.",
+            "award_cabin": "Short cabin phrase; not reported means evidence is absent.",
+            "cash_cabin": "Short cabin phrase; not reported means evidence is absent.",
+            "cabin": "Short cabin phrase; not reported means evidence is absent.",
+            "fees": "Known amounts include currency. If fees not reported, use a separate clause rather than plus.",
+        }
+        source["display_slot_vocabulary"] = {
+            key: {"usage": hint, "values": sorted({slot[key] for slot in slots.values() if key in slot})}
+            for key, hint in usage.items()
+        }
     source["slot_key_catalog"] = {
         "shared": sorted(slots["shared"]),
         "journey": sorted(next((value for key, value in slots.items()
@@ -361,15 +703,44 @@ def prepare_results(projection: SolutionProjection, config: ResultsConfig, *,
                                    if key.startswith("incomplete:")), {})),
     }
     instructions = INSTRUCTIONS
-    if version == "results-artifact-v3":
+    if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"}:
         instructions += "\n\n" + V3_INSTRUCTIONS
+    if product:
+        instructions += "\n\n" + V4_INSTRUCTIONS
+    if version == "results-artifact-v5":
+        instructions = instructions.replace(
+            "For comparisons, scope_ids must equal the supplied comparison_pool_ids.",
+            "For a full-pool comparison, use the supplied source.comparison.full_pool handle "
+            "as the sole scope_ids entry; it expands locally to the full eligible pool.")
     if config.authoring_guidance and config.authoring_guidance.strip():
         instructions += "\n\n" + config.authoring_guidance
-    initial = PreparedResultsInput(contract_version=("results-prepared-v2" if
-        version == "results-artifact-v3" else "results-prepared-v1"),
+    if version == "results-artifact-v5":
+        instructions += """
+
+Compact input guide: In these instructions, "source" means prepared.view in the input JSON.
+The compact view keeps common journey facts once in each journeys entry's facts object. Its
+members are individually selectable: use one concrete member.ref (J1, J2, ...) in selection,
+journey parts, claims and shared bindings. Its member award and cash references (A/C) point to
+components entries; those entries also keep facts once and give each source member its own ref
+and observed_at. Never use a group itself as a selection or claim scope. Matching group facts
+do not establish a unique physical flight or newer inventory. Preserve the chosen member's
+reported date and booking conditions. Prefer distinct useful choices without a fixed input cap.
+For each selected journey, its facts.disclosure_profile is a D reference into
+source.disclosure_profiles; every listed key remains a mandatory visible {{fact:key}} slot.
+The source.presentation_required_keys object gives shared, benchmark, incomplete and
+unselected-note requirements. The source.display_slot_vocabulary gives exact rendered words.
+For a full-pool comparison, put source.comparison.full_pool (P1) alone in the claim scope_ids;
+code expands it to Ranking's original complete comparison pool. Exclusion summaries describe
+rejected journeys and cannot be selected as recommendations. Keep J/A/C/P/D references only in
+structured metadata; use traveler-facing labels and fact slots in visible text.
+"""
+    initial = PreparedResultsInput(contract_version=("results-prepared-v4" if version == "results-artifact-v5" else
+        "results-prepared-v3" if product else
+        "results-prepared-v2" if version == "results-artifact-v3" else "results-prepared-v1"),
         source_digest=trusted.receipt.view_digest, source=source,
         slots=slots, instructions=instructions, input_bytes=0, estimated_input_tokens=0,
-        estimated_total_tokens=0)
+        estimated_total_tokens=0,
+        authoring_view=build_authoring_view(trusted, source) if version == "results-artifact-v5" else None)
     size, total, _, _ = _measurement(initial, config, (), None)
     return initial.model_copy(update={"input_bytes": size,
         "estimated_input_tokens": total - config.max_output_tokens,
@@ -379,6 +750,8 @@ def prepare_results(projection: SolutionProjection, config: ResultsConfig, *,
 def authoring_payload(prepared: PreparedResultsInput,
                       feedback: tuple[CheckFinding, ...] = (),
                       previous_document: ResultsDocument | None = None) -> str:
+    if prepared.contract_version == "results-prepared-v4":
+        return compact_payload(prepared, feedback, previous_document)
     prior = previous_document.model_dump(mode="json") if previous_document else None
     if prior is not None and prepared.contract_version == "results-prepared-v1":
         for part in prior["parts"]:
@@ -387,7 +760,7 @@ def authoring_payload(prepared: PreparedResultsInput,
             part.pop("shared_disclosures")
     body = {
         "prepared": prepared.model_dump(mode="json", exclude={"instructions", "slots", "input_bytes",
-            "estimated_input_tokens", "estimated_total_tokens"}),
+            "estimated_input_tokens", "estimated_total_tokens", "authoring_view"}),
         "feedback": [finding.model_dump(mode="json") for finding in feedback],
         "previous_document": prior,
     }
@@ -594,6 +967,7 @@ def _stable_visible_journey_labels(document: ResultsDocument,
 
 def _shared_journey_bindings(
     document: ResultsDocument, view: SolutionView, visible: tuple[str, ...],
+    version: ArtifactVersion = "results-artifact-v3",
 ) -> tuple[dict[int, dict[str, tuple[str, tuple[str, ...]]]], tuple[CheckFinding, ...]]:
     """Resolve v3 shared facts only from explicit, visible, equal source bindings."""
     alternatives = {item.candidate_id: item for item in view.alternatives}
@@ -643,15 +1017,17 @@ def _shared_journey_bindings(
                     f"Shared journey fact {key} is absent or differs across targets."))
                 continue
             assert source_values[0] is not None
-            values.setdefault(index, {})[key] = (source_values[0], targets)
+            display = (_product_journey_slots(view, alternatives[targets[0]], components)[key]
+                       if version in {"results-artifact-v4", "results-artifact-v5"} else source_values[0])
+            values.setdefault(index, {})[key] = (display, targets)
     return values, tuple(findings)
 
 
 def check_document(document: ResultsDocument, projection: SolutionProjection, *,
-                   version: ArtifactVersion = "results-artifact-v3") -> tuple[CheckFinding, ...]:
-    if version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+                   version: ArtifactVersion = "results-artifact-v5") -> tuple[CheckFinding, ...]:
+    if version not in VERSIONS:
         raise ValueError("unsupported Results render version")
-    if version != "results-artifact-v3" and any(part.shared_disclosures for part in document.parts):
+    if version not in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} and any(part.shared_disclosures for part in document.parts):
         raise ValueError("v3 shared bindings cannot enter a legacy artifact")
     view = projection.view
     alternatives = {item.candidate_id: item for item in view.alternatives}
@@ -659,13 +1035,16 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
     visible = _visible_parts(document.parts)
     findings: list[CheckFinding] = []
     shared_values: dict[int, dict[str, tuple[str, tuple[str, ...]]]] = {}
-    if version == "results-artifact-v3":
-        shared_values, shared_findings = _shared_journey_bindings(document, view, visible)
+    if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"}:
+        shared_values, shared_findings = _shared_journey_bindings(document, view, visible, version)
         findings.extend(shared_findings)
     labels: dict[str, str] = {}
     label_owners: dict[str, str] = {}
+    observation_labels: dict[str, str] = {}
+    observation_label_owners: dict[str, str] = {}
+    all_label_owners: dict[str, tuple[str, str]] = {}
     stable_labels = (_stable_visible_journey_labels(document, visible)
-                     if version == "results-artifact-v3" else {})
+                     if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} else {})
     selection = document.selection
     for candidate_id in selection.journey_ids:
         alternative = alternatives.get(candidate_id)
@@ -707,11 +1086,53 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
                                      "This is an incomplete research lead, not a complete journey."))
     for index, part in enumerate(document.parts):
         rid = part.reference_id
+        heading = part.markdown.lstrip("\n")
+        boundary_newlines = (len(document.parts[index - 1].markdown) -
+                             len(document.parts[index - 1].markdown.rstrip("\n")) +
+                             len(part.markdown) - len(part.markdown.lstrip("\n"))) if index else 0
+        if version in {"results-artifact-v4", "results-artifact-v5"} and index > 0 and \
+                re.match(r"^#{1,6}(?:[ \t]|$)", heading) and boundary_newlines == 0:
+            findings.append(_failure("boundary_spacing", part.scope, rid, index,
+                "A heading runs into the previous paragraph.",
+                "Start this heading on a new line after a blank line."))
         valid = _valid_part_reference(part, view)
         if not valid:
             findings.append(_failure("unavailable_reference", part.scope, rid, index,
                                      "Factual reference could not be resolved.", "Details unavailable."))
             continue
+        if version in {"results-artifact-v4", "results-artifact-v5"} and rid and (part.identifier or "").strip():
+            owner_key = (part.scope, rid)
+            normalized_label = (part.identifier or "").strip().casefold()
+            prior_owner = all_label_owners.get(normalized_label)
+            if prior_owner is not None and prior_owner != owner_key:
+                findings.append(_failure("identifier_reused", part.scope, rid, index,
+                    "Different results need different visible names.",
+                    "Give this result its own name."))
+            all_label_owners.setdefault(normalized_label, owner_key)
+        if version in {"results-artifact-v4", "results-artifact-v5"} and part.scope in {"benchmark", "incomplete"} and rid:
+            if index > 0 and (document.parts[index - 1].scope != part.scope or
+                              document.parts[index - 1].reference_id != rid) and not (part.identifier or "").strip():
+                findings.append(_failure("resumed_identity", part.scope, rid, index,
+                    "Name this result again when returning to it.",
+                    "Keep the result name visible here."))
+            label = (part.identifier or "").strip()
+            if label:
+                if not _visible_identity(visible[index], label):
+                    findings.append(_failure("identifier_not_visible", part.scope, rid, index,
+                        "The result name must appear visibly in this section.",
+                        "Name this result in its section."))
+                prior = observation_labels.get(rid)
+                if prior is not None and prior != label:
+                    findings.append(_failure("identifier_changed", part.scope, rid, index,
+                        "Use the same name when returning to this result.",
+                        "Use one name for this result."))
+                owner = observation_label_owners.get(label.casefold())
+                if owner is not None and owner != rid:
+                    findings.append(_failure("identifier_reused", part.scope, rid, index,
+                        "Different results need different visible names.",
+                        "Give this result its own name."))
+                observation_labels.setdefault(rid, label)
+                observation_label_owners.setdefault(label.casefold(), rid)
         if part.scope == "journey" and rid:
             label = (part.identifier or "").strip()
             if label:
@@ -741,8 +1162,8 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
                 findings.append(_failure("resumed_identity", "journey", rid, index,
                     "The resumed journey needs a visible identifier.",
                     f"Journey ID: {_safe(rid)}."))
-        available = prepare_slot_keys(view, part.scope, rid, components, alternatives)
-        if version == "results-artifact-v3" and part.scope == "shared":
+        available = prepare_slot_keys(view, part.scope, rid, components, alternatives, version)
+        if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} and part.scope == "shared":
             available |= set(shared_values.get(index, {}))
         if ("```" in part.markdown or "~~~" in part.markdown or "`" in part.markdown or
                 "<" in part.markdown or IMAGE_RE.search(part.markdown) or
@@ -790,7 +1211,7 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
         if not scoped:
             continue
         used = {key for index, _ in scoped for key in _slot_keys(visible[index])}
-        if version == "results-artifact-v3" and rid not in selection.journey_ids:
+        if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} and rid not in selection.journey_ids:
             has_identity = ("journey_id" in used or
                             any(_visible_identity(visible[index], rid)
                                 for index, _ in scoped) or
@@ -808,7 +1229,7 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
                     scoped[0][0], f"Unselected candidate omitted {key}.",
                     f"{key.replace('_', ' ').capitalize()}: {fact}."))
             continue
-        if (alt.status == "rejected" and version != "results-artifact-v3" and
+        if (alt.status == "rejected" and version not in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} and
                 not {"status", "requirements"} <= used):
             reasons = next(record.reasons for record in view.reason_sets
                            if record.reason_set_id == alt.reason_set_id)
@@ -821,32 +1242,51 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
                     "award_carrier", "award_cabin", "award_leg_cabins",
                     "points", "fees", "award_price_scope", "price_completeness",
                     "booking_obligation", "requirements", "award_observed_at"}
-        if (rid not in stable_labels if version == "results-artifact-v3" else
+        if (rid not in stable_labels if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} else
             rid not in labels or any(part.identifier != labels[rid] or
                                      labels[rid] not in visible[index]
                                      for index, part in scoped)):
             required.add("journey_id")
+        if version in {"results-artifact-v4", "results-artifact-v5"}:
+            required.discard("journey_id")
+            if rid not in stable_labels:
+                findings.append(_failure("missing_visible_option_label", "journey", rid,
+                    scoped[0][0], "Give this option a short visible label.",
+                    "This option needs a visible name."))
         if alt.cash_observation_id:
             required |= {"transfer", "cash", "cash_cabin", "cash_leg_cabins",
                          "cash_route", "cash_departure", "cash_arrival",
                          "cash_price_scope", "cash_observed_at"}
+        if version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} and rid in selection.journey_ids:
+            used |= {key for bindings in shared_values.values()
+                     for key, (_, targets) in bindings.items() if rid in targets}
         award = components[alt.award_observation_id]
+        if version in {"results-artifact-v4", "results-artifact-v5"} and not alt.cash_observation_id:
+            aliases = (("route", "award_route",
+                        (alt.original_origin, alt.original_destination) ==
+                        (award.origin, award.destination)),
+                       ("departure", "award_departure", alt.departure == award.departure),
+                       ("arrival", "award_arrival", alt.arrival == award.arrival))
+            for journey_key, award_key, equal in aliases:
+                if equal and journey_key in used:
+                    required.discard(award_key)
+                elif equal and award_key in used:
+                    required.discard(journey_key)
         if award.mixed_cabin_pct.state == "value":
             required.add("award_mixed_cabin_pct")
         cash = components.get(alt.cash_observation_id or "")
         if cash and cash.mixed_cabin_pct.state == "value":
             required.add("cash_mixed_cabin_pct")
-        if version == "results-artifact-v3" and rid in selection.journey_ids:
-            used |= {key for bindings in shared_values.values()
-                     for key, (_, targets) in bindings.items() if rid in targets}
         for key in sorted(required - used):
             fact = _journey_slots(view, alt, components)[key]
             findings.append(_failure(f"missing_disclosure:{key}", "journey", rid, scoped[0][0],
                                      f"Required {key.replace('_', ' ')} was omitted.",
                                      f"{key.replace('_', ' ').capitalize()}: {fact}."))
     for scope in ("benchmark", "incomplete"):
-        for rid in {part.reference_id for part in document.parts
-                    if part.scope == scope and _valid_part_reference(part, view)}:
+        references = {part.reference_id for part in document.parts
+                      if part.reference_id is not None and part.scope == scope and
+                      _valid_part_reference(part, view)}
+        for rid in sorted(references) if version == "results-artifact-v5" else references:
             if rid not in components:
                 continue
             scoped = [(index, part) for index, part in enumerate(document.parts)
@@ -855,6 +1295,13 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
             used = {key for index, _ in scoped for key in _slot_keys(visible[index])}
             required = {"observation_id", "disposition", "route", "departure", "arrival",
                         "observed_at", "provider_updated_at"}
+            if version in {"results-artifact-v4", "results-artifact-v5"}:
+                required.discard("observation_id")
+                if not any(part.identifier and _visible_identity(visible[index], part.identifier)
+                           for index, part in scoped):
+                    findings.append(_failure("missing_visible_observation_label", scope, rid,
+                        scoped[0][0], "Give this result a short visible label.",
+                        "This result needs a visible name."))
             if scope == "benchmark":
                 required |= {"cash", "price_scope", "carrier", "cabin", "leg_cabins"}
             if components[rid].mixed_cabin_pct.state == "value":
@@ -889,7 +1336,58 @@ def check_document(document: ResultsDocument, projection: SolutionProjection, *,
     return tuple(findings)
 
 
-def _notice(finding: CheckFinding) -> ValidationNotice:
+def _notice(finding: CheckFinding, projection: SolutionProjection | None = None,
+            version: ArtifactVersion = "results-artifact-v3") -> ValidationNotice:
+    if version in {"results-artifact-v4", "results-artifact-v5"}:
+        detail = _safe(re.sub(r"\b[0-9a-f]{64}\b", "this result", finding.message)
+                       .replace("_", " "))
+        if finding.code.startswith("claim:"):
+            match = re.search(r"The assertion ‘(.+?)’ is", finding.message)
+            if match:
+                detail = "The statement ‘" + _safe(match.group(1)) + "’ does not match the recorded details."
+        if finding.code == "missing_disclosure:no_complete_journeys":
+            detail = "No complete award journey was found in these results."
+        if finding.code.startswith("missing_disclosure:") and projection is not None:
+            key = finding.code.split(":", 1)[1]
+            if key not in {"journey_id", "observation_id", "no_complete_journeys"}:
+                view = projection.view
+                components = {item.observation_id: item for item in view.components}
+                alternatives = {item.candidate_id: item for item in view.alternatives}
+                if finding.scope == "shared":
+                    value = _product_shared_slots(view).get(key)
+                elif finding.scope == "journey" and finding.reference_id in alternatives:
+                    value = _product_journey_slots(view, alternatives[finding.reference_id], components).get(key)
+                elif finding.reference_id in components and finding.scope in {"benchmark", "incomplete"}:
+                    value = _product_component_slots(components[finding.reference_id],
+                        finding.scope).get(key)
+                else:
+                    value = None
+                if value is not None:
+                    detail = f"{key.replace('_', ' ').capitalize()}: {value}."
+        elif finding.code.startswith("claim:") and projection is not None:
+            view = projection.view
+            alt = next((item for item in view.alternatives
+                        if item.candidate_id == finding.reference_id), None)
+            if finding.code == "claim:eligibility:no_unresolved_requirements" and alt:
+                reasons = next(record.reasons for record in view.reason_sets
+                               if record.reason_set_id == alt.reason_set_id)
+                detail += " " + _safe(_display_requirements(reasons)) + "."
+            elif finding.code == "claim:connection_protection:protected_connection":
+                detail += " Missed-connection protection has not been confirmed."
+            elif finding.code.startswith("claim:price_scope:") and alt:
+                award = next(item for item in view.components
+                             if item.observation_id == alt.award_observation_id)
+                cash = next((item for item in view.components
+                             if item.observation_id == alt.cash_observation_id), None)
+                detail += " Award quote: " + _safe(_display_price_scope(award.price_scope))
+                if cash:
+                    detail += " Cash quote: " + _safe(_display_price_scope(cash.price_scope))
+            elif finding.supplied_fact:
+                detail += " " + _safe(re.sub(r"\b[0-9a-f]{64}\b", "this result",
+                                             finding.supplied_fact).replace("_", " "))
+        return ValidationNotice(code=finding.code, scope=finding.scope,
+                                reference_id=finding.reference_id, part_index=finding.part_index,
+                                claim_id=finding.claim_id, text=f"Please check: {detail}")
     # Missing-disclosure facts come from already escaped source slots. Other details
     # include raw source reasons or model wording and need escaping exactly once.
     supplied = finding.supplied_fact or "Please verify this detail before acting."
@@ -972,11 +1470,12 @@ def _insert_local_notices(base: str, starts: list[int], ends: list[int],
         identifier = parts[index].identifier
         label = identifier if identifier is not None and identifier in visible[index] else None
         text = " ".join(
-            notice.text.replace("Validation:",
+            ((notice.text.replace("Please check:", f"Please check ({_safe(label)}):", 1)
+              if label else notice.text) if render_version in {"results-artifact-v4", "results-artifact-v5"} else
+             notice.text.replace("Validation:",
                 f"Validation: ({_safe(label or notice.reference_id)})", 1)
-            if notice.scope != "shared" and (label or notice.reference_id) else notice.text
-            for notice in notices
-        )
+             if notice.scope != "shared" and (label or notice.reference_id) else notice.text)
+            for notice in notices)
         is_separator = bool(re.fullmatch(r"[\s|:\-]+", line))
         if line.lstrip().startswith("|") and not is_separator and anchor >= start:
             closing = next((position for position in range(anchor + 1, line_end)
@@ -1006,17 +1505,17 @@ def _insert_local_notices(base: str, starts: list[int], ends: list[int],
 
 def render_results(document: ResultsDocument, projection: SolutionProjection,
                    notices: tuple[ValidationNotice, ...] = (),
-                   *, render_version: ArtifactVersion = "results-artifact-v3",
+                   *, render_version: ArtifactVersion = "results-artifact-v5",
                    ) -> tuple[str, tuple[RenderedFact, ...]]:
-    if render_version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+    if render_version not in VERSIONS:
         raise ValueError("unsupported Results render version")
-    if render_version != "results-artifact-v3" and any(part.shared_disclosures for part in document.parts):
+    if render_version not in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} and any(part.shared_disclosures for part in document.parts):
         raise ValueError("v3 shared bindings cannot enter a legacy artifact")
     slots = prepare_results(projection, ResultsConfig(model="replay", max_output_tokens=1,
         timeout_seconds=1, context_limit_tokens=1, prompt_overhead_tokens=0),
         version=render_version).slots
     shared_values = (_shared_journey_bindings(document, projection.view,
-                     _visible_parts(document.parts))[0] if render_version == "results-artifact-v3" else {})
+                     _visible_parts(document.parts), render_version)[0] if render_version in {"results-artifact-v3", "results-artifact-v4", "results-artifact-v5"} else {})
     output: list[str] = []
     facts: list[RenderedFact] = []
     starts: list[int] = []
@@ -1075,6 +1574,8 @@ def render_results(document: ResultsDocument, projection: SolutionProjection,
 
 def replay_results(artifact: ResultsArtifact) -> str:
     trusted = SolutionProjection.model_validate(artifact.projection.model_dump(mode="json"))
+    if artifact.contract_version == "results-artifact-v5":
+        verify_authoring_view(trusted, artifact.prepared)
     expected_prepared = prepare_results(trusted, artifact.config,
                                         version=artifact.contract_version)
     if artifact.prepared != expected_prepared:
@@ -1183,7 +1684,7 @@ def replay_results(artifact: ResultsArtifact) -> str:
         else "correction_tie" if expected_index == 1 else "initial_fewer_failures")
     if artifact.selection_reason != expected_reason:
         raise ValueError("saved Results selection reason differs from checks")
-    expected_notices = tuple(_notice(finding) for finding in attempt.findings
+    expected_notices = tuple(_notice(finding, artifact.projection, artifact.contract_version) for finding in attempt.findings
                              if finding.outcome == "failed")
     if artifact.notices != expected_notices:
         raise ValueError("saved Results notices differ from checks")
@@ -1209,8 +1710,8 @@ def _receipt(writer: ResultsWriter) -> WriterReceipt | None:
 def run_results(projection: SolutionProjection, config: ResultsConfig,
                 writer: ResultsWriter,
                 input_measurer: ResultsInputMeasurer | None = None, *,
-                render_version: ArtifactVersion = "results-artifact-v3") -> ResultsArtifact:
-    if render_version not in {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3"}:
+                render_version: ArtifactVersion = "results-artifact-v5") -> ResultsArtifact:
+    if render_version not in VERSIONS:
         raise ValueError("unsupported Results render version")
     prepared = prepare_results(projection, config, version=render_version)
     attempts: list[ResultsAttempt] = []
@@ -1312,7 +1813,7 @@ def run_results(projection: SolutionProjection, config: ResultsConfig,
         sum(f.outcome == "failed" for f in recoverable[1][1].findings) <
         sum(f.outcome == "failed" for f in recoverable[0][1].findings)
         else "correction_tie" if selected == 1 else "initial_fewer_failures")
-    notices = tuple(_notice(finding) for finding in attempt.findings if finding.outcome == "failed")
+    notices = tuple(_notice(finding, projection, render_version) for finding in attempt.findings if finding.outcome == "failed")
     assert attempt.document is not None
     rendered, facts = render_results(attempt.document, projection, notices,
                                     render_version=render_version)

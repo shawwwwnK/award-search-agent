@@ -1,0 +1,245 @@
+{
+  "method": "one bounded Luna run per saved case, at most one correction; no provider calls or reruns",
+  "model": "gpt-6-luna",
+  "generation_calls": 5,
+  "input_count_calls": 5,
+  "total_writer_input_tokens": 843051,
+  "total_writer_output_tokens": 21591,
+  "same_model_admitted_reference": {
+    "artifact": "evidence/end-to-end/presentation/iterations/003/admitted/artifact.json",
+    "model": "gpt-6-luna",
+    "baseline_initial_input_tokens": 820736,
+    "same_canonical_projection": true,
+    "reduction_percent": 75.71,
+    "limits": "Same saved projection and Luna model; earlier prompt/source version differs. No new large-baseline calls made."
+  },
+  "cases": [
+    {
+      "case": "admitted",
+      "baseline_iteration_006_model": "gpt-6.1-sol",
+      "baseline_initial_input_tokens": 822377,
+      "new_initial_input_tokens": 199377,
+      "initial_token_reduction_percent_vs_006": 75.76,
+      "source_projection_unchanged": true,
+      "artifact_sha256": "02277382b0382935de805292cb10df9a5d38a88041c3ced804651015fa0ea82a",
+      "delivery_outcome": "delivered",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "selection_counts": {
+        "journeys": 2,
+        "incomplete_leads": 0,
+        "cash_benchmark": 1
+      },
+      "attempts": [
+        {
+          "phase": "initial",
+          "outcome": "recoverable",
+          "counted_input_tokens": 199377,
+          "writer_usage": {
+            "input_tokens": 199377,
+            "output_tokens": 7145,
+            "total_tokens": 206522
+          },
+          "latency_seconds": 99.37333662481979,
+          "raw_usage": {
+            "input_tokens": 199377,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 199374
+            },
+            "output_tokens": 7145,
+            "output_tokens_details": {
+              "reasoning_tokens": 6271
+            },
+            "total_tokens": 206522
+          },
+          "model_returned": "gpt-6-luna",
+          "failed_findings": []
+        }
+      ]
+    },
+    {
+      "case": "conditional",
+      "baseline_iteration_006_model": "gpt-6.1-sol",
+      "baseline_initial_input_tokens": 732878,
+      "new_initial_input_tokens": 179488,
+      "initial_token_reduction_percent_vs_006": 75.51,
+      "source_projection_unchanged": true,
+      "artifact_sha256": "443a9a0c4ebc200fdfc3d8f79d7419104d5c63e9083683f2b7114aa9e229f8af",
+      "delivery_outcome": "delivered",
+      "validation_outcome": "annotated",
+      "selected_attempt": 1,
+      "selection_counts": {
+        "journeys": 2,
+        "incomplete_leads": 0,
+        "cash_benchmark": 1
+      },
+      "attempts": [
+        {
+          "phase": "initial",
+          "outcome": "recoverable",
+          "counted_input_tokens": 179488,
+          "writer_usage": {
+            "input_tokens": 179488,
+            "output_tokens": 5462,
+            "total_tokens": 184950
+          },
+          "latency_seconds": 86.30948008270934,
+          "raw_usage": {
+            "input_tokens": 179488,
+            "input_tokens_details": {
+              "cached_tokens": 3098,
+              "cache_write_tokens": 176387
+            },
+            "output_tokens": 5462,
+            "output_tokens_details": {
+              "reasoning_tokens": 3937
+            },
+            "total_tokens": 184950
+          },
+          "model_returned": "gpt-6-luna",
+          "failed_findings": [
+            {
+              "code": "shared_binding_value",
+              "message": "Shared journey fact provider_updated_at is absent or differs across targets."
+            },
+            {
+              "code": "shared_binding_key",
+              "message": "Shared journey fact coverage has a duplicate or global key."
+            },
+            {
+              "code": "shared_binding_key",
+              "message": "Shared journey fact provider_status has a duplicate or global key."
+            },
+            {
+              "code": "unavailable_fact",
+              "message": "The factual slot provider_updated_at is unavailable in this exact scope."
+            },
+            {
+              "code": "unavailable_fact",
+              "message": "The factual slot cash_carrier is unavailable in this exact scope."
+            },
+            {
+              "code": "unavailable_fact",
+              "message": "The factual slot cash_carrier is unavailable in this exact scope."
+            }
+          ]
+        },
+        {
+          "phase": "correction",
+          "outcome": "recoverable",
+          "counted_input_tokens": 181314,
+          "writer_usage": {
+            "input_tokens": 181314,
+            "output_tokens": 4817,
+            "total_tokens": 186131
+          },
+          "latency_seconds": 61.61560087511316,
+          "raw_usage": {
+            "input_tokens": 181314,
+            "input_tokens_details": {
+              "cached_tokens": 3098,
+              "cache_write_tokens": 178213
+            },
+            "output_tokens": 4817,
+            "output_tokens_details": {
+              "reasoning_tokens": 3438
+            },
+            "total_tokens": 186131
+          },
+          "model_returned": "gpt-6-luna",
+          "failed_findings": [
+            {
+              "code": "shared_binding_key",
+              "message": "Shared journey fact coverage has a duplicate or global key."
+            },
+            {
+              "code": "shared_binding_key",
+              "message": "Shared journey fact provider_status has a duplicate or global key."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case": "incomplete",
+      "baseline_iteration_006_model": "gpt-6.1-sol",
+      "baseline_initial_input_tokens": 253293,
+      "new_initial_input_tokens": 141023,
+      "initial_token_reduction_percent_vs_006": 44.32,
+      "source_projection_unchanged": true,
+      "artifact_sha256": "07842e00feaba227f42a10e9f80df6d6e771d768de212d545252b8cb67c6c91c",
+      "delivery_outcome": "delivered",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "selection_counts": {
+        "journeys": 0,
+        "incomplete_leads": 2,
+        "cash_benchmark": 1
+      },
+      "attempts": [
+        {
+          "phase": "initial",
+          "outcome": "recoverable",
+          "counted_input_tokens": 141023,
+          "writer_usage": {
+            "input_tokens": 141023,
+            "output_tokens": 2730,
+            "total_tokens": 143753
+          },
+          "latency_seconds": 45.04248008411378,
+          "raw_usage": {
+            "input_tokens": 141023,
+            "input_tokens_details": {
+              "cached_tokens": 3098,
+              "cache_write_tokens": 137922
+            },
+            "output_tokens": 2730,
+            "output_tokens_details": {
+              "reasoning_tokens": 1900
+            },
+            "total_tokens": 143753
+          },
+          "model_returned": "gpt-6-luna",
+          "failed_findings": [
+            {
+              "code": "missing_disclosure:disposition",
+              "message": "Required disposition was omitted."
+            },
+            {
+              "code": "missing_disclosure:disposition",
+              "message": "Required disposition was omitted."
+            }
+          ]
+        },
+        {
+          "phase": "correction",
+          "outcome": "recoverable",
+          "counted_input_tokens": 141849,
+          "writer_usage": {
+            "input_tokens": 141849,
+            "output_tokens": 1437,
+            "total_tokens": 143286
+          },
+          "latency_seconds": 20.770730833988637,
+          "raw_usage": {
+            "input_tokens": 141849,
+            "input_tokens_details": {
+              "cached_tokens": 3098,
+              "cache_write_tokens": 138748
+            },
+            "output_tokens": 1437,
+            "output_tokens_details": {
+              "reasoning_tokens": 617
+            },
+            "total_tokens": 143286
+          },
+          "model_returned": "gpt-6-luna",
+          "failed_findings": []
+        }
+      ]
+    }
+  ],
+  "qualification": "Request-specific diagnostic only; mechanical checks do not establish arbitrary prose truth, broad utility or owner acceptance. Iteration006 token comparisons use Sol baselines, not a controlled same-model experiment.",
+  "cost": "No invoice or current rate verification; exact raw usage including cache details retained, no dollar cost asserted."
+}

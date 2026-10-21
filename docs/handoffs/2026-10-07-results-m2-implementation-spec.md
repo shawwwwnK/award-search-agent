@@ -1,3 +1,25 @@
+## 2026-10-20 input-representation amendment
+
+ADR 0026 now accepts a compact, versioned model-facing authoring view. Keep every
+admitted and conditional canonical candidate selectable, preserve distinct incomplete
+leads and cash benchmarks, and replace rejected candidate rows with source-backed
+exclusion summaries. The full canonical projection, all identities and full-pool
+comparison authority remain in local artifacts. Short J/A/C references bind model
+selections back to canonical evidence. Conservatively grouped facts retain each
+member's selectable reference, exact retrieval timestamp and source binding. This
+amendment supersedes the all-distinct-alternatives prepared-input requirement below
+only for the writer-facing representation; canonical evidence preservation and all
+other selection/disclosure requirements continue. The implementation uses
+`results-artifact-v5` with `results-prepared-v4`; offline preservation and input
+measurements are recorded in the [compact-input build log](../build-log/2026-10-20-results-m2-compact-input.md).
+The bounded Luna answer evaluation is recorded in the [case evidence](../../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md); it does not qualify answer quality or establish owner acceptance. See [ADR 0026](../adr/0026-model-authored-results-with-bound-facts.md#2026-10-20-amendment--compact-model-facing-input).
+
+The implementation-direction and live-call statements in this dated specification
+below preserve the original October 7 authorization context. Where they say the
+work is not authorized or require every detailed alternative in writer input, they
+are superseded narrowly by this October 20 amendment and the owner's current
+implementation authorization; all unrelated limits and evidence requirements remain.
+
 ## Problem Statement
 
 A traveler needs to turn observed award-led journeys into understandable options to investigate.

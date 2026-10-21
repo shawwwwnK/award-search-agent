@@ -1,5 +1,73 @@
 # Project State
 
+## 2026-10-20 compact Results M2 input and bounded Luna diagnostic recorded
+
+The owner authorized implementation of the compact writer-facing view and its
+bounded Luna evaluation. Preserve every eligible journey as an individually
+selectable option, summarize rejected candidates, keep canonical evidence and
+comparison scope locally complete, and group only matching facts while retaining
+each member's reference, retrieval timestamp and source binding. The diagnostic is
+limited to the three saved admitted/conditional/incomplete cases, at most three
+initial generations plus three corrections and at most six associated count
+requests; no provider calls or automatic reruns. The compact representation uses
+`results-artifact-v5` / `results-prepared-v4`. Offline preservation passed and full
+initial request JSON fell by 64.13% for admitted, 63.42% for conditional and 32.11%
+for incomplete. These are byte changes, not token measurements. The bounded Luna
+diagnostic recorded five generations and five count requests (843,051 input and
+21,591 output tokens). The admitted and incomplete cases were mechanically clean;
+the conditional case was delivered annotated with two shared-disclosure key failures.
+Independent answer review identified visible presentation and choice-diversity
+issues; no M2/M3 qualification or owner acceptance is claimed. Before the narrow
+post-live replay fix, the repository suite finished with 878 passed, 99 skipped and
+two known gfly environment failures. The final post-fix Results/evaluation/harness
+gate passed 162 tests in 172.36 seconds; mypy on eleven files and scoped Ruff passed.
+A V5-only incomplete-artifact finding-order fix
+then passed replay for all seven tested artifacts (new V5 plus saved V1–V4) at hash
+seeds 11, 23 and 37. All five original live requests and artifact hashes were confirmed
+unchanged; no paid calls were made. This scoped fix does not close the separately
+recorded historical finding-order concern. See [ADR 0026](adr/0026-model-authored-results-with-bound-facts.md#2026-10-20-amendment--compact-model-facing-input),
+the [plan](plans/2026-10-20-2238-perf-compact-results-input-plan.md), the
+[case evidence README](../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md),
+and the [build log](build-log/2026-10-20-results-m2-compact-input.md).
+
+## 2026-10-09 Results M2 presentation revision opened
+
+The owner reviewed the end-to-end `answer.md` files, rejected their presentation,
+and requested coordinated fixes before closing M2. Results M2 presentation work
+and owner acceptance are reopened for this scope. The October 8 closeout remains
+the historical acceptance of the declared engineering boundary; it no longer
+describes current presentation readiness. Ranking and earlier stages remain closed;
+M3 remains planned.
+
+The requested direction is traveler-facing results: friendly option labels,
+readable local flight times and prices, compact itinerary formatting, natural
+headings and ordinary travel language. Internal IDs and detailed search receipts
+remain in artifacts. Model ownership of structure and required factual disclosures
+are preserved. See [ADR 0026](adr/0026-model-authored-results-with-bound-facts.md)
+and the [presentation iteration record](../evidence/end-to-end/presentation/README.md).
+Offline examples support owner styling review; they do not establish live writer
+quality or broader qualification.
+
+The owner subsequently instructed stopping after the in-flight iteration to review
+API costs. That stop was lifted narrowly on 2026-10-20 for the compact-input diagnostic
+described above; it does not authorize further presentation iterations or a wider
+cohort. Source revision 006 remains frozen; presentation acceptance is pending.
+
+## 2026-10-09 intent-golden end-to-end diagnostic
+
+Subagents executed six early-2027 derivatives through live Results M2 with preserved
+inputs, scripted clarification provenance, provider/model traces and per-stage metrics.
+Three initial requests needed clarification. Corrected standard-budget January contrasts
+selected three admitted award options and three conditional options respectively;
+four other final outputs had no complete journeys under partial acquisition.
+Estimated revised-campaign generation cost is $0.923774, excluding provider and count
+endpoint charges. Verification also exposed a cross-process Results finding-order replay
+defect in a retained annotated compact comparison; final selected outputs replayed exactly.
+See the [report](../evidence/end-to-end/2026-10-08-golden-diagnostic/report.md) and
+[build log](build-log/2026-10-08-end-to-end-golden-diagnostic.md).
+These are diagnostic review candidates; no new end-to-end golden set or broader
+qualification is claimed. Existing M2 owner closeout and planned M3 status retain scope.
+
 ## 2026-10-08 Results M2 owner closeout
 
 The owner explicitly closed Results M2 and requested committing/pushing the pending changes.

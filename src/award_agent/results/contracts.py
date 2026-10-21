@@ -62,9 +62,31 @@ class ResultsDocument(PlanningContractModel):
     parts: tuple[ResultsPart, ...] = Field(min_length=1)
 
 
+class AuthoringReferenceMap(PlanningContractModel):
+    """Typed model-facing aliases to canonical Results identities."""
+
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset(
+        {"journeys", "awards", "cash", "comparison_pools"})
+    journeys: dict[str, str]
+    awards: dict[str, str]
+    cash: dict[str, str]
+    comparison_pools: dict[str, tuple[str, ...]]
+
+
+class CompactAuthoringInput(PlanningContractModel):
+    """Frozen compact view and local binding evidence for a writer attempt."""
+
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"view", "references"})
+    contract_version: Literal["results-authoring-v1"] = "results-authoring-v1"
+    source_digest: str
+    view: dict[str, object]
+    references: AuthoringReferenceMap
+    binding_digest: str
+
+
 class PreparedResultsInput(PlanningContractModel):
-    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"source", "slots"})
-    contract_version: Literal["results-prepared-v1", "results-prepared-v2"] = "results-prepared-v1"
+    _copy_on_read_fields: ClassVar[frozenset[str]] = frozenset({"source", "slots", "authoring_view"})
+    contract_version: Literal["results-prepared-v1", "results-prepared-v2", "results-prepared-v3", "results-prepared-v4"] = "results-prepared-v1"
     source_digest: str
     source: dict[str, object]
     slots: dict[str, dict[str, str]]
@@ -72,6 +94,7 @@ class PreparedResultsInput(PlanningContractModel):
     input_bytes: int = Field(ge=0)
     estimated_input_tokens: int = Field(ge=0)
     estimated_total_tokens: int = Field(ge=0)
+    authoring_view: CompactAuthoringInput | None = None
 
 
 class WriterReceipt(PlanningContractModel):
@@ -143,7 +166,7 @@ class ResultsAttempt(PlanningContractModel):
 
 
 class ResultsArtifact(PlanningContractModel):
-    contract_version: Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3"] = "results-artifact-v3"
+    contract_version: Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3", "results-artifact-v4", "results-artifact-v5"] = "results-artifact-v5"
     projection: SolutionProjection
     config: ResultsConfig
     prepared: PreparedResultsInput

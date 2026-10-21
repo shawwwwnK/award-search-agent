@@ -18,11 +18,30 @@ from award_agent.results import (
     ResultsSelection,
     ResultsWriterError,
     authoring_payload,
-    prepare_results,
     replay_results,
-    run_results,
 )
-from award_agent.results.core import check_document
+from award_agent.results import (
+    prepare_results as _prepare_results,
+)
+from award_agent.results import (
+    run_results as _run_results,
+)
+from award_agent.results.core import check_document as _check_document
+
+
+# This module verifies the saved v3 contract independently of the current v4 default.
+def prepare_results(*args, **kwargs):
+    kwargs.setdefault("version", "results-artifact-v3")
+    return _prepare_results(*args, **kwargs)
+
+def run_results(*args, **kwargs):
+    kwargs.setdefault("render_version", "results-artifact-v3")
+    return _run_results(*args, **kwargs)
+
+def check_document(*args, **kwargs):
+    kwargs.setdefault("version", "results-artifact-v3")
+    return _check_document(*args, **kwargs)
+
 
 
 @pytest.fixture(scope="module")

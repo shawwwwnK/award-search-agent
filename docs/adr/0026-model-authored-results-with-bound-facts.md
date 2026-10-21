@@ -1,5 +1,166 @@
 # ADR 0026: Model-authored Results structure with bound facts
 
+## 2026-10-20 amendment — compact model-facing input
+
+Status: accepted input-representation policy; implementation and qualification are
+tracked separately. Decision and recording date: 2026-10-20. Source: the owner's
+authorization to implement the compact Results M2 input plan and conduct its bounded
+Luna evaluation; see the [plan](../plans/2026-10-20-2238-perf-compact-results-input-plan.md).
+
+### Context and options
+
+The saved iteration 006 writer requests contain hundreds of rejected journey
+permutations, long machine identifiers, repeated disclosure/cost structures and
+repeated observations. Retaining every detailed record in the writer context makes
+authoring more expensive and burdens option selection. A short code-selected shortlist
+would reduce input further but would hide eligible choices from the model. Dropping
+one of matching observations would require choosing a representative or defining
+freshness semantics.
+
+### Decision
+
+Keep the complete canonical Ranking projection, identities, receipts and full-pool
+comparison authority locally. Construct a versioned compact Results authoring view.
+Keep every admitted and conditional canonical candidate individually selectable;
+retain distinct incomplete leads and separate direct-cash benchmarks with their
+source-backed meanings. Replace individual rejected recommendation rows with compact
+source-backed exclusion summaries. The summary does not change Ranking disposition,
+eligibility or canonical candidate counts.
+
+Use short typed J/A/C references for journeys, award observations and cash observations.
+The writer uses these references for selections and factual slots; Results maps them
+back to canonical identities before existing checks and rendering. Hashes, digests,
+query/transport lineage, local reverse maps and other machine-only metadata stay in
+the retained artifact and out of the writer request. Preserve decision-relevant facts,
+including unknowns, price scope, cabin evidence, schedules, conditions, obligations,
+coverage and observation freshness.
+
+Group repeated reported facts only when the plan's conservative equivalence predicate
+holds. Include shared facts once and keep every member's own selectable reference,
+exact retrieval timestamp and source binding. Do not select a latest representative,
+merge member evidence, infer physical-flight identity or increase confidence because
+facts repeated. Uncertain matches remain separate. Historical artifact versions retain
+their original request and replay semantics. The implementation uses
+`results-prepared-v4` with `results-artifact-v5`; the complete local evidence and
+versioned source snapshot are recorded in the [compact-input build log](../build-log/2026-10-20-results-m2-compact-input.md).
+
+This amendment supersedes the earlier requirement that every distinct alternative's
+full detailed row appear in prepared writer input, only for the writer-facing
+representation. It does not supersede canonical preservation, candidate eligibility,
+full-pool comparison scope, model ownership of selection and answer structure, or the
+existing source-bound disclosure and replay contracts. The later expansion of output
+beyond current guidance remains a separate policy change.
+
+### Consequences
+
+The writer sees all eligible options through a smaller, typed catalog, plus concise
+exclusion and coverage summaries. Results artifacts remain complete and auditable.
+Aliases add a translation boundary that must remain frozen across correction, shared
+disclosures, claims and replay. Grouping reduces repeated model-facing facts while
+retaining independent candidate/member identity. This choice does not establish that
+the model interprets the compact representation equally well or that each grouped
+member represents a unique physical flight.
+
+The owner authorized a bounded Luna diagnostic over the three saved admitted,
+conditional and incomplete cases, capped at three initial generations and three
+corrections, with their associated input-count requests (at most six generations and
+six count requests), no provider calls and no automatic reruns. This authorizes only
+that diagnostic; it does not establish qualification, a broader campaign or M3.
+
+### Evaluation
+
+Offline evidence must show every eligible candidate remains selectable, rejected
+summaries reconcile to canonical exclusions, incomplete leads and benchmarks remain
+distinct, and decision-relevant differences survive. Exercise aliases through initial
+authoring, correction, checking, rendering and replay; reject unknown/wrong-kind or
+tampered mappings. For grouped records, verify member-specific references, timestamps
+and bindings and controls that must remain separate. Measure complete initial and
+correction requests, reporting bytes and actual model token counts separately. The
+bounded live evaluation must retain inputs, outputs, usage, cost and review notes for
+all attempted cases, including failures. Live observations remain diagnostic evidence,
+not semantic qualification or owner acceptance.
+
+The offline accounting and preservation probes passed for their declared scope.
+Complete initial request JSON bytes fell by 64.13% for admitted, 63.42% for conditional
+and 32.11% for incomplete. A representative correction serialization fell by 64.02%,
+63.29% and 32.11%, respectively. These are serialized-byte measurements, not model
+token savings. The bounded three-case Luna diagnostic recorded five generation and five
+count requests, totaling 843,051 input and 21,591 output tokens. Against iteration 006's
+different Sol model, initial-input token counts were lower by 75.76%, 75.51% and 44.32%.
+The same-projection admitted comparison against iteration 003's Luna request measured
+75.71% fewer initial tokens, but that earlier prompt/source differs. Neither comparison
+isolates compaction. No dollar cost is claimed because rates and invoice were not
+verified. Independent review found no unsupported positive claims about availability,
+protection, cabin or party-wide price, while identifying output-quality and choice
+diversity defects; conditional delivery remains annotated with two shared-binding-key
+findings. A V5-only finding-order fix then passed replay for the three new artifacts and
+four saved V1–V4 artifacts at seeds 11, 23 and 37, with original live requests/artifacts
+unchanged. It does not close the separately recorded older historical finding-order
+concern. The [case evidence](../../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md)
+and [build log](../build-log/2026-10-20-results-m2-compact-input.md) contain details.
+These scoped mechanics do not qualify answer quality, M2 or M3, and do not constitute
+owner presentation acceptance.
+
+### Revisit trigger
+
+Revisit if preservation checks find a useful distinction missing, aliases cannot be
+bound reliably through correction/replay, grouping changes member identity or source
+association, or actual token savings do not justify the added representation. Any
+eligible-option pruning, latest-member replacement, provider-query coalescing or
+expanded-output policy requires its own explicit decision and evidence.
+
+## 2026-10-09 amendment — traveler-facing presentation revision
+
+Status: accepted presentation direction, implementation and owner review tracked
+separately. Decision and recording date: 2026-10-09. Source: the owner's review of
+`evidence/end-to-end/` answers and instruction to orchestrate cosmetic fixes before
+closing M2; see the [session log](../build-log/2026-10-09-results-m2-presentation.md).
+
+### Context and options
+
+Saved answers expose long source IDs, raw coverage receipts, technical labels and
+timestamps, and dense unformatted itinerary details. The owner requires these
+answers to serve as the results delivered to travelers. Retaining those technical
+representations in visible answers was rejected. Replacing the model's document
+with a fixed code-owned layout would conflict with the accepted authorship boundary.
+
+### Decision
+
+Preserve model control of headings, grouping, ordering and prose, while improving
+writer guidance and deterministic factual display. Use friendly option identifiers,
+natural travel language, compact readable itinerary facts and airport-local flight
+times with dates. Keep internal source IDs and full search receipts in retained
+artifacts. Explain coverage limits and unknown prices, cabins or booking conditions
+in terms a traveler can act on; do not hide them. Never invent timezones, convert
+unknown units as if known, infer per-person pricing, or equate an endpoint-to-endpoint
+itinerary with a nonstop flight.
+
+Save each styling iteration separately with its baseline/source bindings, authoring
+method, verification and owner-review status. Offline authored examples and replay
+derivatives must be distinguished from live model generation. Historical artifacts
+retain their original rendering semantics and bytes.
+
+For the new presentation version, selected journey, benchmark and incomplete
+observation identity is established by stable visible friendly labels, while IDs
+remain in scoped artifact metadata. This supersedes raw-ID display obligations;
+visible scope association, source status and required disclosure content remain.
+For a single award without a cash component, one route/departure/arrival display
+may satisfy both overall and award schedule disclosures only when the underlying
+source values are identical. Distinct component schedules remain independently
+required. This changes duplicate slot obligations, not the facts disclosed.
+
+### Consequences, evaluation and revisit
+
+This reopens Results M2 presentation acceptance before the owner's next closeout,
+superseding October 8's closed status only for current presentation readiness. It
+does not reopen upstream eligibility, valuation, source trust or M3. Required
+disclosures and bounded correction remain unchanged. Verify local-time and monetary
+formatting, source associations and historical replay; review representative
+admitted, conditional and incomplete answers. Owner acceptance and live writer
+quality remain distinct from passing mechanical checks. Revisit formatting and
+guidance when subsequent owner review exposes presentation problems or missing
+decision-relevant facts.
+
 ## 2026-10-07 implementation disposition
 
 The owner invoked implementation of the October 7 Results M2 spec. The local API now implements

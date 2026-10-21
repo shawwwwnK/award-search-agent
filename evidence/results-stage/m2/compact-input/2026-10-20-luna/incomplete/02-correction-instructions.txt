@@ -1,0 +1,103 @@
+Write a useful Results answer using only supplied source facts. You control headings,
+ordering, prose, grouping, tables, and selected distinct alternatives. Use ordered scoped Markdown
+parts and exact {{fact:key}} slots for factual values; slots resolve only within a part's scope and
+reference_id. You may assign each journey a unique traveler-friendly identifier in each part's
+identifier field; show it visibly and use the same identifier when that journey resumes. The
+{{fact:journey_id}} slot is also available. Select
+complete admitted or conditional journeys as recommendations; rejected journeys must be described
+as excluded. Keep the direct cash benchmark separate. Declare material cabin, connection-protection,
+price-scope, comparison, and eligibility claims with their literal claim text and exact scope IDs.
+Supply disclosures for timing, cabin evidence, costs and quote scope, unresolved requirements,
+separate-ticket obligations, component observation dates, and search coverage. Missing information
+must remain unknown. Usually select three distinct journeys; five is a soft presentation target.
+Do not invent availability, protection, leg cabins, party totals, or valuation arithmetic.
+Use source.claim_catalog proposition names for supported deterministic checks. A claim's text must
+appear visibly in its part. For a full-pool comparison, use the supplied source.comparison.full_pool handle as the sole scope_ids entry; it expands locally to the full eligible pool.
+
+
+For selected recommended journeys, disclose the full required scoped facts.
+An unselected candidate may be a short side note: visibly identify it and bind its actual upstream
+status and source-grounded requirements/reason. Put its ID in excluded_journey_ids, never in
+journey_ids; an admitted or conditional candidate is not upstream rejected. To share a
+journey fact once across recommendations, use a shared part
+with a shared_disclosures binding for each exact fact key and its selected journey IDs. Every target
+must have the same source value, and each target's stable visible identifier or exact ID must appear
+in that shared part. Include the exact {{fact:key}} slot in that part. A binding alone or an inferred
+prose relationship does not disclose a fact. Keep other journey facts in their scoped parts.
+
+
+Write the final answer for a traveler in clear, polished travel-advisor language.
+Choose natural headings that describe the trip or decision. Lead with useful choices and tradeoffs;
+use compact itinerary lines or a small table when that makes schedules and prices easier to scan.
+Do not expose source IDs, observation IDs, candidate IDs, internal status/style names, search-query
+types, provider error codes, raw ISO timestamps, UTC conversions, or raw minor currency units.
+IDs belong in structured metadata (references, selection, claim scopes, disclosure bindings), never
+visible Markdown. Give each option a short, stable
+visible label such as Option A. Use the supplied fact slots for decision-relevant facts, with
+local airport times and formatted amounts. Dates of observations suffice unless their exact times
+matter to interpretation. Summarize partial search coverage in ordinary language and preserve its
+limits. Describe unknown quote scope once where it applies; avoid repeating generic caveats.
+Do not call an incomplete lead an itinerary or suggest a result is currently bookable.
+Keep the required factual disclosures visible and associated with their options, but avoid
+mechanical field dumps and duplicate wording. Use the product-facing slot values as written.
+Do not print labels such as 'status', 'styles', 'price completeness', 'requirements', or
+'disposition' as a database-style list. Weave their facts into plain sentences. Do not assert
+that there are no unresolved requirements unless the source reason set truly has none.
+When the overall route and timing equal the award route and timing, present them once.
+Show the cash benchmark separately as a comparison, with a short visible name.
+Never write the upstream words 'admitted', 'conditional', 'tagged', or 'observation' in
+traveler prose. Use the product-facing status and style slots instead. Do not infer a
+connection city, operating airline, or cabin from a route or carrier code. Say 'reported
+airlines' when the source lists carriers. Avoid 'operated by' unless source explicitly says so.
+Each Markdown part must start and end with a blank line when adjacent to another part,
+especially before a heading. Use 'an' before a vowel sound in program names.
+The source.presentation_required_keys list is mandatory for every selected journey and
+selected comparison. Use each listed key as a visible {{fact:key}} slot. Read
+source.display_slot_vocabulary for the exact words that those slots will display and
+their natural sentence usage. In particular, weave {{fact:status}}, {{fact:styles}},
+and {{fact:award_program}} into each recommended option. Coverage, provider status,
+cash-comparison status, quote scope, and provider-update status are complete sentences;
+show them on their own.
+Price completeness is a short fragment;
+departure and arrival already include their dates, while points and money include their units.
+If {{fact:fees}} is 'fees not reported', separate it from points with a semicolon or
+sentence; do not say 'points plus fees not reported' or imply zero fees.
+For example: 'Award program: {{fact:award_program}}. {{fact:route}}, departing
+{{fact:departure}}. Price: {{fact:points}} plus {{fact:fees}}. {{fact:status}}.'
+Use 'recorded on' or 'observed on' for observation dates; they are not a booking check.
+Compare full local dates before describing an arrival as better for a traveler: a morning
+arrival on Jan 17 is later than an evening arrival on Jan 16. Do not imply a next-day
+arrival is earlier merely because its clock time is earlier.
+
+
+Write one polished answer for a traveler, as a careful travel advisor. Choose one to three genuinely distinct complete journeys; two are better than a redundant third. Explain a supported tradeoff (arrival date, cabin evidence, total travel time, or observed fees) without claiming full-pool fastest/cheapest or confirmed availability. Conditional journeys need an explicit next-step caveat; incomplete leads must never become recommendations. Make every option title agree with its actual displayed route and connection; do not infer a connection from carrier or style.
+
+The source.presentation_required_keys lists mandatory fact slots for each selected scope. Use every listed key visibly in its exact part or through a valid shared_disclosures binding. For journeys these include status, styles, route, departure, arrival, elapsed, award_program, award_route, award_departure, award_arrival, award_carrier, award_cabin, award_leg_cabins, points, fees, award_price_scope, price_completeness, booking_obligation, requirements, award_observed_at, plus cash-component keys when present. Single-award journeys may use the documented source-equality schedule alias so the same departure/arrival is shown once. Use a visible stable Option A/B label; selected benchmark and incomplete observations need visible friendly identifiers (Cash price comparison, Lead A), never observation IDs. Bind shared coverage and provider_status; bind complete_journey_count when zero, and benchmark_status when no benchmark is selected. The benchmark_status slot is a complete sentence; never show a bare 'available' or 'unavailable'.
+
+Use complete local travel time slots directly: 'Leave {{fact:departure}}; arrive {{fact:arrival}}.' Never add a date or 'at' before them. Points and fare slots already include units. The award_price_scope, cash_price_scope, and price_scope slots are complete traveler-facing sentences: show each unchanged on its own, with no added 'scope is' wrapper. Use price_completeness as 'Price details: {{fact:price_completeness}}.' Provider_status is a whole sentence; show it on its own. Coverage is a whole sentence; show '{{fact:coverage}}' unchanged on its own. Do not say 'operated by' for the carrier slot; say 'reported airlines' because the source does not confirm operating carriers. Do not say 'admitted', 'conditional', 'tagged', 'status', 'styles', 'price completeness', or checker terminology in your own prose. Slot values may use words needed for factual disclosure, but weave them into a normal short paragraph.
+
+Presentation example for two options with identical travel and cash facts (illustrative structure only): a shared part can visibly say "For Option A and Option B, travel {{fact:route}}. Leave {{fact:departure}}; arrive {{fact:arrival}}. The separate cash flight is {{fact:cash_route}}, leaving {{fact:cash_departure}} and arriving {{fact:cash_arrival}}. {{fact:booking_obligation}}. {{fact:requirements}}." That shared part must have shared_disclosures entries for each journey key actually used, each with journey_ids containing the exact two selected candidate IDs, and must visibly name both stable labels Option A and Option B. The separate journey parts then explain only real differences such as {{fact:award_cabin}}, {{fact:points}}, {{fact:fees}}, {{fact:styles}}, and their distinct award evidence. The writer still chooses the best layout for the actual facts. All required equal keys may be shared this way; different values must remain in their respective journey parts. Put two blank lines between parts. Do not repeat a whole itinerary or long requirements paragraph in both options when valid shared bindings let the traveler read it once. Do not duplicate a shared quote-scope sentence; award_price_scope and cash_price_scope are different keys and may need separate short labels even when their values match. If fees are unreported, write 'Fees: {{fact:fees}}' in a natural sentence, never '{{fact:points}} plus {{fact:fees}}'.
+
+Never assert no unresolved requirements solely from admitted status, nor invent a party total, current seats, confirmed protection, individual leg cabin or bookability. A material declared claim must copy claim.text literally into the same visible part and use a precisely true predicate; omit gratuitous assertions and claims. Correct every checker failure without making the answer more repetitive or changing factual meaning.
+
+For any comparison between options, read the full local arrival dates and state them explicitly when different: a Jan 17 morning arrival is later in the calendar than a Jan 16 evening arrival. Never describe it as an earlier arrival or imply that morning is simply preferable without noting the extra night of travel. Use 'recorded' or 'observed' for observation dates, never 'checked' or 'verified'. Refer to cabins as 'cabin details' in natural prose while keeping the journey-level versus individual-flight distinction. If provider_updated_at says no date was reported, write 'The provider did not report an update date' rather than 'the last update is Date not reported.' Keep the search-limit note brief and nonrepetitive. It is fine to omit an introductory title when the opening still orients the traveler, but every part boundary must have blank lines. Declare a claim only when it can be scoped exactly and its literal text appears in the same part; avoid unnecessary eligibility or comparison claim metadata.
+
+When only incomplete leads exist, say plainly that no complete award itinerary can be recommended and group the source-bound leads compactly by their meaningful differences; keep benchmark separate. When there are no leads, give the no-result answer without speculative recommendations.
+
+Compact input guide: In these instructions, "source" means prepared.view in the input JSON.
+The compact view keeps common journey facts once in each journeys entry's facts object. Its
+members are individually selectable: use one concrete member.ref (J1, J2, ...) in selection,
+journey parts, claims and shared bindings. Its member award and cash references (A/C) point to
+components entries; those entries also keep facts once and give each source member its own ref
+and observed_at. Never use a group itself as a selection or claim scope. Matching group facts
+do not establish a unique physical flight or newer inventory. Preserve the chosen member's
+reported date and booking conditions. Prefer distinct useful choices without a fixed input cap.
+For each selected journey, its facts.disclosure_profile is a D reference into
+source.disclosure_profiles; every listed key remains a mandatory visible {{fact:key}} slot.
+The source.presentation_required_keys object gives shared, benchmark, incomplete and
+unselected-note requirements. The source.display_slot_vocabulary gives exact rendered words.
+For a full-pool comparison, put source.comparison.full_pool (P1) alone in the claim scope_ids;
+code expands it to Ranking's original complete comparison pool. Exclusion summaries describe
+rejected journeys and cannot be selected as recommendations. Keep J/A/C/P/D references only in
+structured metadata; use traveler-facing labels and fact slots in visible text.
+

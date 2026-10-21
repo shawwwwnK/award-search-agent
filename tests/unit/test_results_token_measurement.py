@@ -18,8 +18,21 @@ from award_agent.results.contracts import (
     ResultsPart,
     ResultsSelection,
 )
-from award_agent.results.core import prepare_results, replay_results, run_results
+from award_agent.results.core import prepare_results as _prepare_results
+from award_agent.results.core import replay_results
+from award_agent.results.core import run_results as _run_results
 from award_agent.results.request import token_request_digest
+
+
+# This module verifies the saved v3 contract independently of the current v4 default.
+def prepare_results(*args, **kwargs):
+    kwargs.setdefault("version", "results-artifact-v3")
+    return _prepare_results(*args, **kwargs)
+
+def run_results(*args, **kwargs):
+    kwargs.setdefault("render_version", "results-artifact-v3")
+    return _run_results(*args, **kwargs)
+
 
 
 @pytest.fixture(scope="module")

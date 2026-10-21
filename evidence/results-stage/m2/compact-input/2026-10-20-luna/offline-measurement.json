@@ -1,0 +1,284 @@
+{
+  "method": "offline complete token-bearing Results request serialization",
+  "model_setting": "gpt-6-luna",
+  "config_source": "evidence/end-to-end/presentation/iterations/006/config.json",
+  "config_sha256": "3488e1e11765a0704ef8f073a72ee439542687625a9570612f669369e883dac0",
+  "cases": [
+    {
+      "case": "admitted",
+      "source_artifact": "evidence/end-to-end/presentation/iterations/006/admitted/artifact.json",
+      "source_artifact_sha256": "d9e6a0512516352f41a631023d958ab9e45d0fe50f707f216be91b648e936653",
+      "canonical_source_digest": "d109d0cac9524b2f5d077a6c9f7814723147018d5afdd9d2283563dda55bdd5b",
+      "historical_iteration_006": {
+        "attempt_count": 2,
+        "input_tokens": [
+          822377,
+          824274
+        ],
+        "writer_usage": [
+          {
+            "input_tokens": 822377,
+            "output_tokens": 2186,
+            "total_tokens": 824563
+          },
+          {
+            "input_tokens": 824274,
+            "output_tokens": 1879,
+            "total_tokens": 826153
+          }
+        ]
+      },
+      "candidate_counts": {
+        "canonical_total": 618,
+        "eligible_selectable": 258,
+        "rejected_summarized": 360,
+        "compact_journey_groups": 142,
+        "journeys_factored": 116,
+        "compact_component_groups": 208
+      },
+      "requests": {
+        "v4_baseline": {
+          "contract_version": "results-prepared-v3",
+          "instructions_bytes": 11487,
+          "schema_bytes": 2613,
+          "input_string_bytes": 2211136,
+          "initial_json_bytes": 2421717,
+          "initial_sha256": "a6c8afa88d628ff99e48e6b37f26295dc79e2cc68bc161e0da8f476d61523205",
+          "representative_correction_json_bytes": 2427975,
+          "representative_correction_sha256": "75364d0fe89008a58d49dd197f1e050d64466855b4764c2f4e1a264f43ef85b3"
+        },
+        "v5_compact": {
+          "contract_version": "results-prepared-v4",
+          "instructions_bytes": 13031,
+          "schema_bytes": 2613,
+          "input_string_bytes": 750553,
+          "initial_json_bytes": 868610,
+          "initial_sha256": "b3887759c64ebd441ca1d44fce941805ea6fff30366f78e692e84676eced7772",
+          "representative_correction_json_bytes": 873514,
+          "representative_correction_sha256": "e33f0a7b8d69aaa12d0e522db666cc227097a3d18277a1516c7c40893d332574"
+        }
+      },
+      "byte_reduction_percent": {
+        "initial": 64.13,
+        "representative_correction": 64.02
+      },
+      "counterfactual_report": {
+        "nonadditive": true,
+        "simulation_not_production": true,
+        "directions": {
+          "opaque_identifier_shortening": {
+            "method": "Replace every structural 64-hex match in baseline request keys and string values, including embedded IDs, with deterministic ID labels. Labels estimate size only; no production replacement is proposed.",
+            "distinct_64hex_identifiers": 1894,
+            "baseline_request_json_bytes": 2421717,
+            "counterfactual_request_json_bytes": 1735143,
+            "byte_saving": 686574
+          },
+          "rejected_candidate_row_filtering": {
+            "method": "Remove rejected alternative rows from the V4 baseline source while retaining all linked tables and metadata as a conservative isolated filtering estimate.",
+            "rejected_rows_removed": 360,
+            "baseline_request_json_bytes": 2421717,
+            "counterfactual_request_json_bytes": 1742309,
+            "byte_saving": 679408
+          },
+          "observation_grouping": {
+            "method": "Expand each multi-member compact journey/component group into singleton entries by repeating its shared facts once per member.",
+            "journeys_groups_expanded": 116,
+            "journeys_extra_members": 116,
+            "journeys_before": 142,
+            "journeys_after": 258,
+            "components_groups_expanded": 21,
+            "components_extra_members": 21,
+            "components_before": 208,
+            "components_after": 229,
+            "compact_request_json_bytes": 868610,
+            "ungrouped_counterfactual_request_json_bytes": 1296284,
+            "byte_saving_from_grouping": 427674
+          }
+        },
+        "note": "These isolated counterfactuals overlap with each other and with the combined V4-to-V5 representation change. Their savings must not be added."
+      },
+      "interpretation": "Serialized UTF-8 byte counts only; no new token count was requested. The correction is reconstructed from saved V4 feedback and draft, then translated into the compact alias namespace."
+    },
+    {
+      "case": "conditional",
+      "source_artifact": "evidence/end-to-end/presentation/iterations/006/conditional/artifact.json",
+      "source_artifact_sha256": "99a05e8a0042e0e4399377cb5109dd39f6695b6ff532ef31d9bad776d72c2817",
+      "canonical_source_digest": "5c1cdc32cafab3b6162cd5e7bcade72c4f3f9c640453e9d29f6068277bd6a497",
+      "historical_iteration_006": {
+        "attempt_count": 2,
+        "input_tokens": [
+          732878,
+          736664
+        ],
+        "writer_usage": [
+          {
+            "input_tokens": 732878,
+            "output_tokens": 4245,
+            "total_tokens": 737123
+          },
+          {
+            "input_tokens": 736664,
+            "output_tokens": 3857,
+            "total_tokens": 740521
+          }
+        ]
+      },
+      "candidate_counts": {
+        "canonical_total": 528,
+        "eligible_selectable": 232,
+        "rejected_summarized": 296,
+        "compact_journey_groups": 116,
+        "journeys_factored": 116,
+        "compact_component_groups": 200
+      },
+      "requests": {
+        "v4_baseline": {
+          "contract_version": "results-prepared-v3",
+          "instructions_bytes": 11487,
+          "schema_bytes": 2613,
+          "input_string_bytes": 1959617,
+          "initial_json_bytes": 2144234,
+          "initial_sha256": "26d497aac3b1c02bb292f57c20b1c5edc0d52b12e2a1ed043a5b23a2499e6dda",
+          "representative_correction_json_bytes": 2154629,
+          "representative_correction_sha256": "5ac008ee65df93e7cc24537abc17613a8e656ae7e2dc044bdbd419640a8a2b04"
+        },
+        "v5_compact": {
+          "contract_version": "results-prepared-v4",
+          "instructions_bytes": 13031,
+          "schema_bytes": 2613,
+          "input_string_bytes": 677275,
+          "initial_json_bytes": 784268,
+          "initial_sha256": "cdf0473919718339b7e882c0d2083c3fd271f33978ab101b8b82eaa1ec287938",
+          "representative_correction_json_bytes": 791001,
+          "representative_correction_sha256": "8ea51c9106771362486d203661908f22f94d6eacb27413928bcd89d5e8fec2b1"
+        }
+      },
+      "byte_reduction_percent": {
+        "initial": 63.42,
+        "representative_correction": 63.29
+      },
+      "counterfactual_report": {
+        "nonadditive": true,
+        "simulation_not_production": true,
+        "directions": {
+          "opaque_identifier_shortening": {
+            "method": "Replace every structural 64-hex match in baseline request keys and string values, including embedded IDs, with deterministic ID labels. Labels estimate size only; no production replacement is proposed.",
+            "distinct_64hex_identifiers": 1603,
+            "baseline_request_json_bytes": 2144234,
+            "counterfactual_request_json_bytes": 1533613,
+            "byte_saving": 610621
+          },
+          "rejected_candidate_row_filtering": {
+            "method": "Remove rejected alternative rows from the V4 baseline source while retaining all linked tables and metadata as a conservative isolated filtering estimate.",
+            "rejected_rows_removed": 296,
+            "baseline_request_json_bytes": 2144234,
+            "counterfactual_request_json_bytes": 1571094,
+            "byte_saving": 573140
+          },
+          "observation_grouping": {
+            "method": "Expand each multi-member compact journey/component group into singleton entries by repeating its shared facts once per member.",
+            "journeys_groups_expanded": 116,
+            "journeys_extra_members": 116,
+            "journeys_before": 116,
+            "journeys_after": 232,
+            "components_groups_expanded": 19,
+            "components_extra_members": 19,
+            "components_before": 200,
+            "components_after": 219,
+            "compact_request_json_bytes": 784268,
+            "ungrouped_counterfactual_request_json_bytes": 1214895,
+            "byte_saving_from_grouping": 430627
+          }
+        },
+        "note": "These isolated counterfactuals overlap with each other and with the combined V4-to-V5 representation change. Their savings must not be added."
+      },
+      "interpretation": "Serialized UTF-8 byte counts only; no new token count was requested. The correction is reconstructed from saved V4 feedback and draft, then translated into the compact alias namespace."
+    },
+    {
+      "case": "incomplete",
+      "source_artifact": "evidence/end-to-end/presentation/iterations/006/incomplete/artifact.json",
+      "source_artifact_sha256": "a34d90186f96e64fb6b7cf6352f65ca3cb80392c487acaae71f378b41b0f107d",
+      "canonical_source_digest": "0f6169759effc12665625783ab2e8215c87162ff916627f40fd4e03292e4b0c9",
+      "historical_iteration_006": {
+        "attempt_count": 1,
+        "input_tokens": [
+          253293
+        ],
+        "writer_usage": [
+          {
+            "input_tokens": 253293,
+            "output_tokens": 32768,
+            "total_tokens": 286061
+          }
+        ]
+      },
+      "candidate_counts": {
+        "canonical_total": 0,
+        "eligible_selectable": 0,
+        "rejected_summarized": 0,
+        "compact_journey_groups": 0,
+        "journeys_factored": 0,
+        "compact_component_groups": 383
+      },
+      "requests": {
+        "v4_baseline": {
+          "contract_version": "results-prepared-v3",
+          "instructions_bytes": 11487,
+          "schema_bytes": 2613,
+          "input_string_bytes": 739293,
+          "initial_json_bytes": 846934,
+          "initial_sha256": "d8eabaad1c6dbf9c024b769a66bc7ad547e1be39a84d22ec1827b718af71d615",
+          "representative_correction_json_bytes": 846934,
+          "representative_correction_sha256": "d8eabaad1c6dbf9c024b769a66bc7ad547e1be39a84d22ec1827b718af71d615"
+        },
+        "v5_compact": {
+          "contract_version": "results-prepared-v4",
+          "instructions_bytes": 13031,
+          "schema_bytes": 2613,
+          "input_string_bytes": 478734,
+          "initial_json_bytes": 574989,
+          "initial_sha256": "5ab366b8be03c1848f96f6b3fc660366a730e25e1545b42df1e6a66a94fb6bec",
+          "representative_correction_json_bytes": 574989,
+          "representative_correction_sha256": "5ab366b8be03c1848f96f6b3fc660366a730e25e1545b42df1e6a66a94fb6bec"
+        }
+      },
+      "byte_reduction_percent": {
+        "initial": 32.11,
+        "representative_correction": 32.11
+      },
+      "counterfactual_report": {
+        "nonadditive": true,
+        "simulation_not_production": true,
+        "directions": {
+          "opaque_identifier_shortening": {
+            "method": "Replace every structural 64-hex match in baseline request keys and string values, including embedded IDs, with deterministic ID labels. Labels estimate size only; no production replacement is proposed.",
+            "distinct_64hex_identifiers": 492,
+            "baseline_request_json_bytes": 846934,
+            "counterfactual_request_json_bytes": 703645,
+            "byte_saving": 143289
+          },
+          "rejected_candidate_row_filtering": {
+            "method": "Remove rejected alternative rows from the V4 baseline source while retaining all linked tables and metadata as a conservative isolated filtering estimate.",
+            "rejected_rows_removed": 0,
+            "baseline_request_json_bytes": 846934,
+            "counterfactual_request_json_bytes": 846934,
+            "byte_saving": 0
+          },
+          "observation_grouping": {
+            "method": "Expand each multi-member compact journey/component group into singleton entries by repeating its shared facts once per member.",
+            "journeys_before": 0,
+            "journeys_after": 0,
+            "components_before": 383,
+            "components_after": 383,
+            "compact_request_json_bytes": 574989,
+            "ungrouped_counterfactual_request_json_bytes": 574989,
+            "byte_saving_from_grouping": 0
+          }
+        },
+        "note": "These isolated counterfactuals overlap with each other and with the combined V4-to-V5 representation change. Their savings must not be added."
+      },
+      "interpretation": "Serialized UTF-8 byte counts only; no new token count was requested. The correction is reconstructed from saved V4 feedback and draft, then translated into the compact alias namespace."
+    }
+  ],
+  "bytes_are_not_tokens": true
+}

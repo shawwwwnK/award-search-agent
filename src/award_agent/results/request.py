@@ -17,7 +17,7 @@ def response_schema(prepared_version: str) -> dict[str, object]:
         part["properties"].pop("shared_disclosures")
         part["required"].remove("shared_disclosures")
         definitions.pop("SharedDisclosureBinding")
-    elif prepared_version != "results-prepared-v2":
+    elif prepared_version not in {"results-prepared-v2", "results-prepared-v3", "results-prepared-v4"}:
         raise ValueError("unsupported Results prepared version")
     return schema
 

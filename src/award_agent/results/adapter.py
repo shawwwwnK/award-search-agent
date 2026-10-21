@@ -9,6 +9,7 @@ from typing import Any, cast
 from openai import APIError, OpenAI
 from pydantic import ValidationError
 
+from .authoring import rebind_document
 from .contracts import (
     CheckFinding,
     InputTokenReceipt,
@@ -101,7 +102,8 @@ class OpenAIResultsWriter:
         )
         try:
             # Parse after preserving raw response: schema failures retain generation evidence.
-            return ResultsDocument.model_validate_json(response.output_text)
+            document = ResultsDocument.model_validate_json(response.output_text)
+            return rebind_document(prepared, document) if prepared.contract_version == "results-prepared-v4" else document
         except (ValidationError, json.JSONDecodeError) as exc:
             if response.status == "incomplete":
                 raise ResultsWriterError("incomplete", "Writer response was incomplete.", raw) from exc

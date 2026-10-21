@@ -1,5 +1,50 @@
 # Deferred work — finish the core workflow first
 
+**2026-10-09 Results M2 presentation disposition:** The owner rejected the saved
+end-to-end answers' cosmetic presentation and reopened this part of M2 before
+closeout. This is active core work, not optional cleanup. Track formatting, local
+time display, traveler language and heading revisions in the
+[presentation iterations](evidence/end-to-end/presentation/README.md), preserving
+baseline answers and source bindings. Owner review of revised answers remains
+pending; offline authored examples do not establish live model quality. Existing
+G03/G05/G06/G08 prerequisites and the separately recorded replay-order defect
+remain in scope for their claims. No upstream or parked feature is reopened.
+The owner stopped live iteration after the in-flight run to review API spending.
+That stop was lifted narrowly on 2026-10-20 for the compact-input diagnostic in
+the [plan](docs/plans/2026-10-20-2238-perf-compact-results-input-plan.md): three
+saved cases, at most three initial generations and three corrections, and at most
+six associated count requests, with no provider calls or automatic reruns. It does
+not reopen a wider presentation campaign. Presentation remains required core work;
+revision 006 is retained for review, and owner presentation acceptance remains
+pending. Diagnostic output review is separate from engineering checks and does not
+establish qualification.
+
+**2026-10-20 compact-input implementation disposition:** The owner authorized
+implementation and the bounded Luna diagnostic. This is active core work, not a
+new deferred item. Offline preservation, reference binding, grouped-member identity
+and request measurement checks have passed for their declared scope; measured byte
+reductions and their limits are recorded in the [build log](docs/build-log/2026-10-20-results-m2-compact-input.md).
+The bounded Luna diagnostic is complete and its inputs, outputs, usage and answer
+review are recorded there. It found an annotated conditional delivery and visible
+quality issues, so do not infer M2/M3 qualification from the run. Cross-process replay
+also exposed a V5 incomplete-artifact finding-order defect. A V5-only fix passed the
+three-seed replay matrix for all three new V5 artifacts and saved V1–V4 artifacts,
+without modifying live requests/artifacts or making paid calls. This does not close
+the separately recorded historical finding-order concern; keep that older issue open
+for its own trigger and evidence. Owner presentation acceptance remains pending.
+
+**2026-10-09 end-to-end diagnostic disposition (G03/G05/G06; Results replay):**
+Six early-2027 intent-golden derivatives now have live stage traces and measured latency,
+tokens and generation estimates. Three needed scripted clarification; partial acquisition
+and one-trial results do not close broader qualification or task-benefit gates. Owner
+selection of a full end-to-end golden set remains a later activity. Verification exposed
+a core Results replay prerequisite: incomplete-observation finding order must be stable
+across Python processes. One saved annotated comparison intermittently fails exact receipt
+equality despite identical findings. This is recorded unresolved engineering work, not
+optional cleanup; revisit before claiming general exact replay, with cross-process/hash-seed
+tests and preserved-artifact compatibility evidence. No parked feature is reopened.
+See the [diagnostic log](docs/build-log/2026-10-08-end-to-end-golden-diagnostic.md).
+
 **2026-10-08 Results M2 closeout disposition:** The owner explicitly closed M2 for its declared implemented boundary and requested commit/push. Earlier open/unclaimed-closeout statements are historical. G08’s scoped engineering reconciliation is complete; full contract coverage and unchecked-prose limitations remain open for their broader claims. G03/G05/G06, M3 and task-benefit gates retain their scope. The owner is performing end-to-end runs elsewhere; no results are inferred. See the [closeout](docs/handoffs/2026-10-08-results-m2-closeout.md).
 
 **2026-10-08 harness disposition:** The owner requested local intent-to-Results testing.
@@ -29,7 +74,7 @@ Revisit model settings/context fit before actual authoring; require measured com
 declared settings and live budget. M3 calibration and traveler-task benefit retain their existing
 completion evidence requirements. No parked feature or upstream stage was reopened.
 
-Last reviewed: 2026-10-08.
+Last reviewed: 2026-10-20.
 
 **Owner disposition, 2026-10-04:** Ranking Stage is closed including the factual-export extension.
 Results M2 is owner-opened; M3 remains planned. See the

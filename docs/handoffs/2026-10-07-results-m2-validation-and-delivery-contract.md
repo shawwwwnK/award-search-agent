@@ -1,6 +1,21 @@
 # Results M2: validation, recovery and delivery contract
 
-**Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
+**Historical closeout, 2026-10-08:** Results M2 was owner-closed for its declared implemented boundary; M3 remained planned. Presentation acceptance reopened on 2026-10-09. As of 2026-10-20, compact input is implemented and the bounded diagnostic is recorded; this does not establish new owner acceptance or M3 qualification. Historical evidence and policy limits remain in force.
+
+**2026-10-20 input-representation amendment:** ADR 0026 accepts a compact, versioned
+writer view. Every admitted and conditional canonical candidate remains selectable;
+incomplete leads and direct-cash benchmarks remain distinct; rejected rows are replaced
+with source-backed exclusion summaries. The complete canonical projection and comparison
+scope remain local. Typed short J/A/C references rebind selections to canonical evidence,
+and conservative groups retain per-member references, retrieval timestamps and bindings.
+This supersedes the all-distinct-alternatives writer-input language below only for the
+model-facing representation. The implementation uses `results-artifact-v5` and
+`results-prepared-v4`; offline preservation and request-byte measurements are recorded
+in the [compact-input build log](../build-log/2026-10-20-results-m2-compact-input.md).
+The user has authorized a bounded Luna diagnostic under the
+three-case/six-generation/six-count-request limits in the [compact-input plan](../plans/2026-10-20-2238-perf-compact-results-input-plan.md);
+the three-case run is recorded in the [case evidence](../../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md).
+It remains diagnostic evidence, not M2/M3 qualification or owner acceptance.
 
 Date: 2026-10-07. Status: owner decisions Q1–Q20 recorded; final shared-understanding
 confirmation pending. Runtime remains unimplemented. This interview does not authorize live calls.

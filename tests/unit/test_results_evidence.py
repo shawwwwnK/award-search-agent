@@ -16,15 +16,30 @@ from award_agent.results import (
     ResultsDocument,
     ResultsPart,
     ResultsSelection,
-    prepare_results,
     replay_results,
-    run_results,
+)
+from award_agent.results import (
+    prepare_results as _prepare_results,
+)
+from award_agent.results import (
+    run_results as _run_results,
 )
 from award_agent.results.adapter import OpenAIResultsWriter
 from award_agent.results.contracts import CheckFinding
 
 SOURCE = Path("evidence/ranking-stage/m2/solutions/sfo_to_bkk_positioning.json")
 JOURNEY = "f7d024bb65a87fe25bd14e71dbbf51c35f0a1995e3e9cc22fa112e677ed7eab9"
+
+
+# This module verifies the saved v3 contract independently of the current v4 default.
+def prepare_results(*args, **kwargs):
+    kwargs.setdefault("version", "results-artifact-v3")
+    return _prepare_results(*args, **kwargs)
+
+def run_results(*args, **kwargs):
+    kwargs.setdefault("render_version", "results-artifact-v3")
+    return _run_results(*args, **kwargs)
+
 
 
 @pytest.fixture(scope="module")
