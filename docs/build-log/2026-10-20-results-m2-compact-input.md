@@ -128,6 +128,14 @@ and live receipts are preserved. The new compact implementation, tests, plan,
 documentation and diagnostic evidence are included. Unrelated pre-existing
 golden-diagnostic campaign files remain outside this commit.
 
+The owner subsequently requested committing and pushing the implementation and
+proper documentation. The implementation/evidence commit is `693517b`. A follow-up
+documentation check corrected the ADR index's relative link to the compact-input
+evidence. This link-only correction changes no policy and needs no new ADR; the
+existing ADR 0026 amendment remains the decision record. Local link resolution and
+`git diff --check` were checked before the follow-up commit; no additional live
+calls or code tests were needed for this documentation-only change.
+
 ## ADR disposition and owner interpretation
 
 ADR 0026 was amended for the accepted compact writer-input policy; the index and

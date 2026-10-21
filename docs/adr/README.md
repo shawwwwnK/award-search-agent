@@ -7,7 +7,7 @@ references, timestamps and bindings. The `results-prepared-v4` / `results-artifa
 implementation and offline preservation/byte-measurement gates are complete; the
 bounded Luna answer evaluation recorded five generations and five count requests. Its
 conditional result remains annotated and presentation/choice issues remain; no
-qualification or owner acceptance is claimed. See the [case evidence](../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md).
+qualification or owner acceptance is claimed. See the [case evidence](../../evidence/results-stage/m2/compact-input/2026-10-20-luna/README.md).
 
 2026-10-09: ADR 0026 records the owner's reopening of Results M2 presentation
 acceptance after reviewing end-to-end answers. Traveler language, friendly labels,
