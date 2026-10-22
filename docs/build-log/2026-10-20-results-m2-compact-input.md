@@ -141,3 +141,40 @@ calls or code tests were needed for this documentation-only change.
 ADR 0026 was amended for the accepted compact writer-input policy; the index and
 affected contracts/state were updated. This log records no additional product
 decision. **Owner interpretation and next cut line:** pending owner review.
+
+## 2026-10-21 independent review and owner discussion
+
+At the owner's request, an independent architect agent reviewed the three saved
+answers, decoded writer inputs, canonical artifacts, usage receipts and milestone
+requirements. This was a read-only review with no live calls or repository edits.
+The agent freshly replayed all three artifacts and confirmed that their answers
+matched the saved `answer.md` files. It also reconciled the canonical projections
+with the frozen source, all 258/232 eligible aliases, and count/generation input
+usage across the five attempts. These are agent-observed checks; no new full-suite
+run is claimed.
+
+The review found the compact-input engineering goal substantially achieved for
+these cases, while traveler-facing M2 presentation remains open. The conditional
+answer selects two cash-feeder variants sharing one award observation and retains
+two checker notices. Business-cabin alternatives remain in the input; their omission
+is a usefulness concern, not an explicit preference violation. The incomplete answer
+omits available Alaska program names and points units and contains a stray zero and
+awkward missing-time wording. The admitted answer explains a useful calendar-arrival
+tradeoff. No unsupported positive claim of availability, connection protection,
+per-leg cabin, party-wide total or bookability was found in this scoped review.
+
+The review also found administrative identifiers in retained request temporal
+contributions, including contribution/amendment identifiers, interpretation candidate
+references and source message metadata. Removing that lineage while preserving
+decision-relevant temporal meaning is a follow-up recommendation, not an implemented
+change or owner-approved new cut. Output breadth, presentation fixes and a further
+bounded Luna evaluation likewise remain recommendations pending scope/authorization.
+
+In response to the owner's question about separate admitted and conditional answers,
+the session clarified that the three saved folders are independent evaluation cases.
+They do not impose separate product answers: a real request can present admitted and
+conditional options together with option-specific conditions. Admission denotes
+passing the declared deterministic itinerary checks, not confirmed bookability.
+This explains the existing boundary and changes no eligibility or output policy;
+no new ADR is needed. No owner acceptance, milestone closeout or M3 qualification
+was inferred from the discussion.
