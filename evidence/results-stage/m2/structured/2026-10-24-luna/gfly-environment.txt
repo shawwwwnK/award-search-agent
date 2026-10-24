@@ -1,0 +1,25 @@
+Full suite command: .venv/bin/python -m pytest -q
+Result: 2 failed, 926 passed, 99 skipped in 817.80 seconds.
+
+Failing tests:
+tests/unit/test_gfly_compat.py::test_reviewed_fixture_preserves_all_rows_and_unknown_price
+tests/unit/test_gfly_compat.py::test_launcher_reports_effective_version_and_source_digest
+
+Diagnostic command:
+/private/tmp/gfly-live-py312/bin/python scripts/gfly_compat.py version --json
+Result: RuntimeError: use the pinned interpreter at /private/tmp/gfly-live-py312/bin/python
+
+Diagnostic command:
+/private/tmp/gfly-live-py312/bin/python -c 'import sys; print(sys.prefix); print(sys.executable)'
+Actual sys.prefix: /opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12
+Actual sys.executable: /opt/homebrew/opt/python@3.12/bin/python3.12
+
+Diagnostic command checks importlib.util.find_spec for fast_flights and gfly:
+fast_flights installed: False
+gfly installed: False
+
+The local path resolves to the system interpreter instead of the required pinned
+environment. scripts/gfly_compat.py and tests/unit/test_gfly_compat.py have no
+changes from the starting HEAD. The earlier October 20 implementation log records
+the same two known gfly environment failures. No environment repair or dependency
+installation was attempted in this Results-scoped task.

@@ -1,10 +1,44 @@
 # ADR 0029: Structured Results and a local flight workspace
 
-- Status: Accepted product/ownership decision; planned, not implemented.
+- Status: Accepted product/ownership decision; U1–U3 backend implemented locally;
+  frontend milestones and M3 remain planned, owner presentation acceptance open.
 - Decision and recording date: 2026-10-23, on confirmation of shared understanding.
 - Source: owner design interview Q1–Q23, architect challenge, and instruction to update
   docs and produce a complete plan. See the [interview/build log](../build-log/2026-10-23-results-frontend-design-interview.md).
 - Execution plan and current Product Contract: [structured Results/workspace plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md).
+
+## 2026-10-24 implementation and diagnostic disposition
+
+The owner subsequently invoked the implement skill through code review, live
+evaluation/iteration and a current-branch commit. U1–U3 now implement structured
+facts, observed/frozen currency handling, authoring/checking/bounded correction,
+CLI inspection and replay. Workspace/resolved v2 adds source-known component
+departure dates; saved v1 factual shapes preserve their exact fields/replay.
+Outer artifact V6/document v2/prepared v5 stay unchanged because the downstream
+fact shape has its own explicit version and is absent from the writer schema.
+
+The three-round saved-case diagnostic records 14 generations/counts. Independent
+review prompted meaningful source-framing, choice and date/airport corrections;
+final unchecked declarations and wording limitations remain explicit. Two live FX
+smoke invocations returned 403 and explicit fallback; positive acquisition remains
+unclaimed. No travel-provider search, upstream policy change, frontend delivery,
+M3 qualification or owner presentation closeout follows. See the
+[implementation/evidence log](../build-log/2026-10-24-results-m2-structured-implementation.md)
+and [diagnostic](../../evidence/results-stage/m2/structured/2026-10-24-luna/README.md).
+This updates implementation status only; the accepted decisions and milestone
+goals below are unchanged. Earlier uninvoked/planning-only wording describes the
+original October 23 decision and October 24 preparation checkpoint.
+
+## 2026-10-24 execution disposition
+
+The owner opened U1–U3 Results M2 revision implementation in this session, first
+requesting further subagent investigation, detailed implementation planning and
+notice of milestone-goal changes. The preparation checkpoint refines the existing
+plan without changing the accepted decisions or milestone goals. Runtime work and
+verification are not yet claimed; frontend milestones and M3 retain their separate
+scope. This supersedes the October 23 uninvoked-implementation status for U1–U3
+only, not historical replay, qualification limits or later milestone gates.
+See the [preparation log](../build-log/2026-10-24-results-m2-revision-preparation.md).
 
 ## Context
 

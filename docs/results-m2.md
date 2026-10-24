@@ -1,6 +1,78 @@
 # Results M2 local API and CLI
 
-**Current direction, 2026-10-23:** [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the [current plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) establish the accepted frontend-primary structured-answer design for future presentation; it is not implemented. This guide's CLI instructions describe the implemented legacy runtime and remain applicable to it. Historical V1–V5 Markdown checks, request schema and replay rules remain unchanged. For the new channel only, this supersedes the earlier model-only factual layout and visible eligibility, condition and prose-slot obligations. Upstream Ranking policy and trust remain unchanged. M2 presentation acceptance is open; M3 remains planned.
+**Current channel, 2026-10-24:** [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the [current plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) govern the new structured backend, implemented for Results M2 U1–U3. Frontend rendering/integration and Results M3 retain separate milestones. Historical V1–V5 Markdown generation remains the CLI default, with its original schemas, checks and replay routing. The new channel replaces mandatory prose slots/status/checklists with source-resolved facts. Ranking policy and upstream trust remain unchanged; owner presentation acceptance remains open.
+
+## Structured Results V6
+
+`resolve_workspace(projection)` exposes every eligible exact variant, conservative
+award-family groups, component facts, direct cash benchmarks and incomplete leads.
+`select_groups(evidence, sort="shortest")` returns actual representatives with no
+network work; supported sorts also include `departure`, `lowest_cash`,
+`fewest_points` (requires one `program`) and `comparison_cost`. Missing or
+incomparable values follow comparable values. The latter cost is Ranking's
+heuristic, not payable cash. Known observed values use the projection's frozen FX
+snapshot and retain their original amount/unit/scope; unsupported units and missing
+rates remain explicit.
+
+```python
+from award_agent.results import resolve_workspace, select_groups
+from award_agent.results.structured import run_structured_results, replay_structured_results
+from award_agent.results.adapter import OpenAIStructuredResultsWriter, OpenAIResultsInputMeasurer
+
+evidence = resolve_workspace(projection)  # no model/provider/rate calls
+groups = select_groups(evidence)
+artifact = run_structured_results(projection, config, OpenAIStructuredResultsWriter(),
+                                 input_measurer=OpenAIResultsInputMeasurer())
+answer = replay_structured_results(artifact)  # no calls
+```
+
+The model writes ordered narrative and typed exact references using the complete
+compact catalog. Code binds aliases and resolves facts. Selected references and
+declared claims are checked; one correction follows only a recoverable draft with
+failed checks. The draft with fewer failed findings is retained, with correction
+winning ties. Unrecoverable API/refusal/schema failure does not authorize another
+generation. A failed or context-limited authored answer retains `artifact.evidence`;
+its `resolved` answer is `None`. Invalid source is an explicit error. Scoped claim
+checks do not prove arbitrary prose truth or useful selection.
+
+New authoring contracts are `results-document-v2`, `results-prepared-v5` and
+`results-artifact-v6`. Current factual output uses `results-workspace-evidence-v2`
+and `results-resolved-v2`, including source-known component departure dates when
+clock times are absent. Saved v1 factual shapes retain their original fields and
+exact replay; the outer artifact version remains V6.
+Inspect `artifact.resolved` alongside `artifact.evidence`; no second model-authored
+Markdown answer is generated. `resolved.findings` and unavailable reference blocks
+preserve annotated outcomes for the later frontend.
+
+```bash
+.venv/bin/python -m award_agent.cli.results measure --structured --projection projection.json --config config.json --output measurement.json
+.venv/bin/python -m award_agent.cli.results author --structured --projection projection.json --config config.json --draft structured-draft.json --output artifact.json
+.venv/bin/python -m award_agent.cli.results replay --artifact artifact.json --output resolved.json
+```
+
+`author --structured --live` replaces `--draft` and makes explicit paid count/writer
+calls using supplied settings. Replay dispatches on the outer artifact version;
+legacy replay emits the original Markdown, V6 replay emits the resolved JSON.
+All output paths must be new. The bounded saved-case diagnostic is
+`scripts/run_structured_results_eval.py`; it is offline by default, with explicit
+`--case`, `--round` and `--live` controls and an immutable campaign call ledger.
+
+New-run FX is explicit: `harness.pipeline.rank` (and the acquisition pipeline
+entry points) accepts either `fx_snapshot=` or `fx_acquirer=acquire_fx_snapshot`.
+The acquirer runs once before Ranking; the historical default remains the supplied
+saved FX file. It returns an acquisition receipt on `RankingRun.fx_receipt`.
+To retain that receipt in structured evidence, construct `FxAcquisition` from this
+receipt and the run's embedded snapshot and pass `fx_acquisition=` to
+`run_structured_results` or `resolve_workspace`. A mismatched snapshot is rejected.
+Supplied historical snapshots need no invented acquisition receipt. Acquisition
+outage is explicit and yields USD-only identity conversion, retaining original
+non-USD amounts. Ordinary resolution/replay never refreshes FX.
+
+Verification and diagnostic results are in the
+[implementation log](build-log/2026-10-24-results-m2-structured-implementation.md)
+and [evidence record](../evidence/results-stage/m2/structured/2026-10-24-luna/README.md).
+The evidence includes an explicit evaluated configuration, not an adopted default
+or general model-context qualification. This API guide does not establish frontend/M3 acceptance.
 
 Results M2's [October 8 engineering closeout](handoffs/2026-10-08-results-m2-closeout.md)
 is historical. On October 9 the owner reopened presentation acceptance after

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import os
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -39,6 +39,7 @@ from award_agent.results.contracts import (
     ResultsDocument,
 )
 from award_agent.results.core import run_results
+from award_agent.results.currency import FxAcquisition, FxAcquisitionReceipt
 from award_agent.search_planning.airport_selection_policy import (
     context_for_resolved_location,
     load_default_airport_selection_cap_policy,
@@ -121,6 +122,7 @@ class RankingRun:
     matched: MatchedJourneySet
     ranked: RankedJourneySet
     projection: SolutionProjection
+    fx_receipt: FxAcquisitionReceipt | None = None
 
 
 def session_binding(session: ClarificationSession) -> tuple[str, int, str]:
@@ -332,7 +334,11 @@ def acquire(bundle: ProviderInputBundle, settings: HarnessSettings,
 
 
 def rank(bundle: ProviderInputBundle, result: ProviderResultSet,
-         settings: HarnessSettings) -> RankingRun:
+         settings: HarnessSettings, *,
+         fx_snapshot: CurrencyConversionSnapshot | None = None,
+         fx_acquirer: Callable[[tuple[str, ...]], FxAcquisition] | None = None) -> RankingRun:
+    if fx_snapshot is not None and fx_acquirer is not None:
+        raise ValueError("supply an FX snapshot or acquirer, not both")
     matched = assemble_matched_journeys(bundle.plan, result,
         current_session_id=bundle.current_session_id,
         current_revision=bundle.current_revision,
@@ -340,9 +346,23 @@ def rank(bundle: ProviderInputBundle, result: ProviderResultSet,
         expected_compilation_binding_digest=bundle.expected_compilation_binding_digest,
         policy=bundle.policy, award_capability=bundle.award_capability,
         cash_capability=bundle.cash_capability)
-    snapshot = CurrencyConversionSnapshot.model_validate_json(settings.fx_path.read_bytes())
+    receipt = None
+    if fx_acquirer is not None:
+        currencies = {"USD"}
+        for observation in matched.provider_result.observations:
+            for raw in (observation.tax_currency, observation.cash_currency):
+                code = raw.value if raw.state == "value" else None
+                if isinstance(code, str) and len(code) == 3 and code.isascii() and code.isupper() and code.isalpha():
+                    currencies.add(code)
+        acquisition = fx_acquirer(tuple(sorted(currencies)))
+        snapshot = acquisition.snapshot
+        receipt = acquisition.receipt
+    elif fx_snapshot is not None:
+        snapshot = fx_snapshot
+    else:
+        snapshot = CurrencyConversionSnapshot.model_validate_json(settings.fx_path.read_bytes())
     ranked = assign_journey_styles(matched, policy=RankingStylePolicy(), fx_snapshot=snapshot)
-    return RankingRun(matched, ranked, project_solutions(ranked))
+    return RankingRun(matched, ranked, project_solutions(ranked), receipt)
 
 
 class _FrozenWriter:
@@ -367,18 +387,26 @@ def author(projection: SolutionProjection, config: ResultsConfig,
 
 
 def acquire_and_rank(bundle: ProviderInputBundle, settings: HarnessSettings,
-                     tape: ReplayTape | None = None
+                     tape: ReplayTape | None = None, *,
+                     fx_snapshot: CurrencyConversionSnapshot | None = None,
+                     fx_acquirer: Callable[[tuple[str, ...]], FxAcquisition] | None = None,
                      ) -> Iterator[tuple[Literal["providers", "ranking"], ProviderRun | RankingRun]]:
     """Yield each completed stage so a local UI can retain partial evidence."""
     providers = acquire(bundle, settings, tape)
     yield "providers", providers
     if providers.result.status == "stale":
         return
-    yield "ranking", rank(bundle, providers.result, settings)
+    if fx_snapshot is not None or fx_acquirer is not None:
+        yield "ranking", rank(bundle, providers.result, settings,
+                              fx_snapshot=fx_snapshot, fx_acquirer=fx_acquirer)
+    else:
+        yield "ranking", rank(bundle, providers.result, settings)
 
 
 def run_from_ready(session: ClarificationSession, settings: HarnessSettings,
-                   config: ResultsConfig
+                   config: ResultsConfig, *,
+                   fx_snapshot: CurrencyConversionSnapshot | None = None,
+                   fx_acquirer: Callable[[tuple[str, ...]], FxAcquisition] | None = None,
                    ) -> Iterator[tuple[Literal["planning", "providers", "ranking", "results"],
                                        PlanningRun | ProviderRun | RankingRun | ResultsArtifact]]:
     """Run the complete local workflow from an authoritative ready session."""
@@ -390,6 +418,10 @@ def run_from_ready(session: ClarificationSession, settings: HarnessSettings,
     yield "providers", providers
     if providers.result.status == "stale":
         return
-    ranking = rank(planning.bundle, providers.result, settings)
+    if fx_snapshot is not None or fx_acquirer is not None:
+        ranking = rank(planning.bundle, providers.result, settings,
+                       fx_snapshot=fx_snapshot, fx_acquirer=fx_acquirer)
+    else:
+        ranking = rank(planning.bundle, providers.result, settings)
     yield "ranking", ranking
     yield "results", author(ranking.projection, config)

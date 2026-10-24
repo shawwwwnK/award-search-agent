@@ -16,7 +16,7 @@ execution: code
 
 **Authority:** Current owner instructions, `AGENTS.md`, `docs/project-state.md`, ADR 0029 and the Product Contract below. ADRs 0024/0025/0027 retain upstream matching, style and export authority. ADR 0026 remains authoritative for historical artifacts and unchanged authoring/recovery guarantees.
 
-**Execution profile:** This session authorizes documentation and planning only. Later implementation proceeds offline on saved evidence first, then through the existing initial-request pipeline. No model/provider/FX calls, dependency installation, deployment, commits or implementation are authorized by writing this plan. Model configurations and any live diagnostic budget must be explicit when separately opened.
+**Execution profile:** The October 23 session authorized documentation and planning only. On October 24 the owner opened Results M2 revision, first requesting investigation and detailed planning, then invoking implement through subagents, reviews, live evaluation/iteration and a current-branch commit. Implementation scope is U1–U3; U4–U7 retain separate milestone gates. The [declared saved-case campaign](../../evidence/results-stage/m2/structured/2026-10-24-luna/campaign.json) supplies explicit settings and an 18-generation/18-count cap across at most three rounds, with no travel-provider acquisition. The [implementation log](../build-log/2026-10-24-results-m2-structured-implementation.md) records actual execution and claim limits. This invocation does not adopt a default model or authorize a future campaign merely by leaving unused budget.
 
 **Finish:** The implementing session supplies the verification evidence and updates the build log. The owner assesses presentation and decides closeout; passing tests alone does not establish traveler benefit or M3 qualification. Stop and surface a genuine product conflict instead of changing upstream policy or dropping eligible options.
 
@@ -217,6 +217,17 @@ All new paths below are proposed homes, not claims that these files already exis
 
 **Verification:** Exact source association and full eligible accounting pass offline saved and independently specified synthetic controls. No model/provider access.
 
+**October 24 implementation detail (R2–R6/R9/R11; KTD1/KTD3):**
+
+- Use immutable Pydantic contracts consistent with the repository. `workspace_contracts.py` defines a versioned evidence package, exact journey/component views, conservative group membership, benchmark/lead views, typed unknowns and source bindings. `presentation.py` resolves a verified `SolutionProjection` into that package without another matching verifier. Retain canonical evidence locally; avoid embedding a complete projection in each journey object.
+- Bind the package to the projection/view/receipt digests, request and embedded FX snapshot. Invalid source integrity is an explicit source failure. Zero eligible journeys is a valid evidence package. Authored output is a separate attachment: absent, pending or failed authoring does not change source availability or erase results.
+- Index eligible alternatives by exact `candidate_id`; derive group membership from existing `option_family_id`. This conservatively groups cash variants sharing an award/planning family without declaring physical-flight equivalence across observations. Preserve all member IDs. Existing compact writer groups compress identical facts and are not explorer groups.
+- Implement deterministic, pure representative selection over surviving exact IDs. Default to shortest complete journey with a stable ID tie-breaker and unknowns last. Return one actual member and obtain its schedule, price and style indicators together. Support the named sort keys and explicit incomparability states; UI filter widgets and browser state belong to U4.
+- Resolve component order from topology; derive each connection wait from adjacent aware arrival/departure instants only at a continuous airport. Distinguish intra-award waits from a separate-booking award/cash boundary. Never use `transfer_minutes` as all layovers. Preserve frozen projected local ISO/zone values for display; do not regenerate historical local times from host timezone data. Show full local departure/arrival dates and day offsets, with unknown/invalid timing explicit.
+- Preserve cabin evidence at journey/leg scope, program, carrier/flight numbers where supplied, price scope, separate bookings, original timestamps and sources. Traveler-facing fields omit internal eligibility labels and requirement lists; retain those internally. Provide the shared availability guidance once at package/delivery scope. Benchmarks and incomplete leads have distinct reference kinds and cannot enter eligible groups.
+
+**Independent controls:** Reconcile eligible source IDs against output IDs and group member IDs (each exactly once), not just counts. Saved source inspection found 258/232/0 eligible alternatives; assert source-derived sets so fixtures remain the authority. Add hand-specified two-feeder/different-price controls, a nonrepresentative selected variant, multiple award connections plus one cash boundary, west/east date-line crossings, overnight dates, missing zones/instants and mismatched airport continuity. Record expected instants/waits independently of resolver helpers.
+
 ### U2. Freeze shared FX and distinct price comparisons
 
 **Goal:** Display USD estimates consistent with each run's Ranking basis.
@@ -236,6 +247,18 @@ All new paths below are proposed homes, not claims that these files already exis
 5. A saved run's conversions remain identical after the external rate source changes. Rate direction, identity rate, partial/missing rates, nonfinite/malformed values and timeout have explicit controls.
 
 **Verification:** Fake-rate-source integration and arithmetic/control fixtures demonstrate coherence; no real FX request required by tests.
+
+**October 24 implementation detail (R7/R8; KTD5):**
+
+- Keep `CurrencyConversionSnapshot`, `RankingStylePolicy` and style arithmetic unchanged. Add a narrow injected rate-source callable and acquisition receipt in `currency.py`; preserve raw-response digest, source, effective date, retrieval time, success/partial/unavailable outcome and missing currencies. Do not introduce a currency service framework or new dependency solely for HTTP.
+- Use an explicit supplied snapshot for saved/offline inputs. At the new-run seam immediately before `assign_journey_styles`, acquire once and pass the same validated immutable snapshot through Ranking, projection and Results. `harness/pipeline.py` currently loads a fixed September 29 snapshot; replace that behavior only for the explicit configured new-run path. Do not refresh during Results preparation, rendering or replay. Source acquisition failure follows the existing plan's explicit outage receipt and USD-only fallback; it must not look like fresh successful rate acquisition.
+- Initial adapter target: Frankfurter v2's ECB-specific rates endpoint, using USD base and a bounded currency set. Its official documentation supports provider-specific and dated rates; use its actual effective date rather than retrieval date. Normalize base-USD quotes to `rates_to_usd` by inversion with Decimal and retain USD=1. Validate response currency/date/rate fields and raw provenance before constructing the snapshot. Do not combine different effective dates into an apparently single-date snapshot. Missing/unsupported rates stay missing. Use a finite configured timeout, one request and no hidden retries; fake responses cover implementation offline.
+- Keep observed monetary breakdowns separate from `JourneyCost`: the latter can include point valuation and estimated taxes. Normalize reported award taxes only for explicitly supported minor units (currently USD/CAD); normalize cash fares from their reported major units. Preserve the original amount/currency/unit/scope even when no USD conversion is possible.
+- A payable-cash comparison key requires all monetary components observed, known quote scope, supported units and applicable rates. Normalize to a declared common per-traveler basis using the frozen traveler count; unknown party scope remains incomparable. Known zero is comparable. Points sorting requires one program and compatible known scope. The existing heuristic comparison cost is a separate labeled key and never masquerades as payable cash. Never recalculate Ranking styles from display rounding.
+
+**Independent controls:** Fixed Decimal examples cover USD identity, reciprocal CAD quotes, party/per-person normalization and rounding only at display; an estimated-tax fixture must have a heuristic key but no complete observed-cash key. Cover malformed/nonfinite/zero rates, future or mixed response dates, missing currencies, timeout and outage receipts. A fake acquisition counter proves one initial acquisition and zero calls for supplied snapshots, resolution and replay. Vendor/date/timeout configuration and precise HTTP fixtures are recorded with implementation, without making live rate requests during verification.
+
+Rate-source grounding: [Frankfurter official API documentation](https://frankfurter.dev/) (read October 24). This is an implementation target, not evidence that live acquisition has run or that additional currency minor units are supported.
 
 ### U3. Author and replay the structured answer
 
@@ -259,6 +282,31 @@ All new paths below are proposed homes, not claims that these files already exis
 6. Complete initial/correction request measurement uses the actual new response schema; oversized input is explicit, never silently truncated.
 
 **Verification:** New fake-writer tests, old Results regression anchors, and exact structured replay pass for declared fixtures. Selection usefulness such as AE1 remains a presentation review claim, not something schema validity proves.
+
+**October 24 implementation detail (R1/R2/R6/R11; KTD2/KTD3):**
+
+- Introduce separate structured models, proposed in `structured_contracts.py`: `StructuredResultsDocument`, prepared input, attempt, resolved answer and artifact. Use explicit new versions (proposed `results-document-v2`, `results-prepared-v5`, `results-artifact-v6`) after checking existing literals for collisions. Preserve legacy `ResultsDocument`, `ResultsPart`, prepared/artifact types and response schemas byte-for-byte in meaning; optional fields on those models would still change strict schema/request digests.
+- The document contains ordered narrative blocks and typed exact-reference entries with stable traveler labels and scoped declared claims. Distinguish recommendation entries from unselected discussion, direct benchmarks and incomplete leads. The model owns order, headings, explanation and selection; factual components come from U1. Do not add a fixed answer skeleton, style quota or new Ranking score.
+- Reuse V5's compact catalog and exact J/A/C alias binding in a new preparation builder, retaining every eligible member and full comparison context. Replace legacy slot/checklist instructions only for the new prepared version. Freeze the alias namespace across initial and correction requests. Do not mutate legacy preparation to obtain the new request.
+- Add a separate structured resolver/checker, proposed `structured.py`. Validate reference kind/membership, recommendation eligibility, selection consistency, exact factual association, visible declared-claim text/scope and the supported five claim families. Unknown or wrong-kind references become explicit unavailable entries/findings; never substitute another member or promote a lead. New resolved facts and material booking/price/cabin disclosures satisfy the new channel; old mandatory prose slots/status/checklists remain on the legacy checker.
+- Reuse the writer adapter's transport/configuration/token-measurement plumbing and share bounded orchestration only where semantics match. Avoid either a broad runner framework or a second copied orchestration implementation. One initial call; one correction only for a recoverable draft with failed checks; fewer material failures wins, correction wins ties. Refusal/API/schema failure without a recoverable draft does not permit another generation. Source evidence stays accessible when there is no authored answer.
+- Make response-schema and measurement dispatch explicit for the new prepared version. Count and hash the actual initial/correction schema, instructions and payload. Preserve explicit oversized-context failures; never trim away eligible options to fit a budget. Tests use fake writers/measurers, with no generation/count endpoint calls.
+- Add structured replay that verifies source/prepared/request/alias bindings, recomputes checks and resolves the saved document into the same structured evidence. Compare stable serialized output and attempt/delivery receipts. Record complete failure/unavailable states as well as successful delivery. New output uses deterministic ordering wherever serialized sets/findings occur.
+- Dispatch CLI loading by outer `contract_version` before parsing into legacy or new types. Add an explicit structured generation/inspection path and expose the API for U4/U5; leave historical default generation/replay semantics intact during M2. Structured JSON is the inspection artifact; no second independently authored Markdown answer. U5 later switches the connected workspace path. Streamlit remains the existing validation surface.
+
+**Independent controls:** Fake documents select an exact nonrepresentative member, repeat a reference, compare an unselected business option, reference an unknown/wrong-kind ID and annotate a material failed claim. Check initial-clean, improved/worse/tied correction, correction transport failure, unrecoverable initial failure and context overflow with exact invocation counts. Full explorer identity must survive every authored outcome. Mutation controls change source binding, alias binding, schema digest, resolved facts and claim scope independently and require explicit replay/check failures. A fake-writer choice example is engineering evidence, not a claim that a live model makes useful selections.
+
+### M2 revision execution order and checkpoint
+
+This detail refines U1–U3 without changing their milestone goals. Work in this order:
+
+1. Inventory saved V1–V5 artifacts and establish replay/request-schema characterization before touching shared paths. Record known baseline failures, hashes and seeds separately; never rewrite old artifacts to get green results.
+2. Implement U1 contracts, complete identity accounting and schedule/group resolver over saved projections and independent controls.
+3. Implement U2 observed-money/comparability primitives and fake-backed frozen-snapshot adapter; integrate the explicit pre-Ranking seam without changing Ranking policy.
+4. Implement U3 versioned authoring contracts/preparation/request schema, checker/resolver, bounded writer flow, artifact/replay and explicit CLI path. Integrate U1/U2 resolved data.
+5. Run scoped regressions and independent review, then the broader gate once stable. Prepare M3 cases/expected facts and criteria for the duplicate-feeder/business choice, complex connections, price scope and authoring failure. Update usage, project state, ADR implementation disposition, deferred-register disposition and build log using actual evidence.
+
+Do not claim U4 browser display, U5 transport/connected execution, U6 follow-ups or U7/M3 assessment complete from these backend fixtures. Owner visual acceptance remains open. A discovery requiring new Ranking policy, a narrowed eligible pool, changed historical replay rules or a changed product goal must be reported before adopting it.
 
 ### U4. Render the replay-first flight workspace
 
@@ -348,7 +396,19 @@ The frontend unit establishes concrete build, type, component and browser script
 
 Required evidence families: full eligible ID accounting; actual-variant grouping/navigation; connection/date arithmetic with unknowns; scoped observed/converted versus heuristic money; versioned answer/checker/replay; explicit-event lifecycle; follow-up no-search boundaries; and owner review of meaningful choices. Existing three-case diagnostics are grounding, not substitute results for the new implementation.
 
-This planning session performs documentation/link/diff checks only. It does not run runtime tests or imply the units are implemented.
+The October 23 planning session and October 24 preparation checkpoint performed documentation/link/diff checks only. The subsequent October 24 implement invocation runs the gates above and records actual runtime/evaluation evidence in its implementation log; earlier planning checks are not runtime results.
+
+For the October 24 M2 implementation invocation, the initial focused gate is
+`.venv/bin/python -m pytest tests/unit/test_results*.py tests/unit/test_compact_results_eval.py tests/unit/test_ranking_solution_projection.py tests/unit/test_harness_pipeline.py tests/unit/test_harness_workflow_ui.py`
+plus the new U1/U2 test modules named above. Run
+`.venv/bin/ruff check src/award_agent/results src/award_agent/harness/pipeline.py src/award_agent/cli/results.py`
+and `.venv/bin/mypy src/award_agent/results src/award_agent/harness/pipeline.py src/award_agent/cli/results.py`
+on the integrated implementation, including lint for new tests. After focused
+checks pass, run `.venv/bin/python -m pytest` once and distinguish pre-existing
+environment failures from new failures. Historical characterization and final
+replay run in fresh processes with `PYTHONHASHSEED=11`, `23` and `37`; record
+the artifact inventory, exact commands and outcomes in the implementation log.
+These are future verification commands, not tests executed at this checkpoint.
 
 ---
 
@@ -366,4 +426,4 @@ No launch-blocking product question remains. Implementation details reserved abo
 - Existing contracts: `docs/handoffs/2026-10-01-ranking-m2-styles-contract.md`, `2026-10-04-ranking-m2-solution-export.md`, `2026-10-07-results-m2-validation-and-delivery-contract.md` under `docs/handoffs/`.
 - Evidence: `evidence/results-stage/m2/compact-input/2026-10-20-luna/answer-review.md`, its three case artifacts, and `evidence/ranking-stage/m2/solutions/README.md`.
 - New current policy supersedes only the specified primary presentation boundaries. Add notices to older Results design/milestone/template/spec/implementation documents and usage docs; keep their historical implementation instructions and replay semantics intact. Update project state, ADR index, glossary, AGENTS current milestone/local-frontend scope and the existing deferred entries.
-- External grounding: [React's official build-tool guidance](https://react.dev/learn/build-a-react-app-from-scratch) distinguishes a client build tool from routing/data-fetching architecture. It informs the explicit local application seam; it does not select a framework, version or additional library here. FX source selection remains an implementation choice against the existing snapshot contract.
+- External grounding: [React's official build-tool guidance](https://react.dev/learn/build-a-react-app-from-scratch) distinguishes a client build tool from routing/data-fetching architecture. It informs the explicit local application seam; it does not select a framework, version or additional library here. The October 24 U2 detail selects Frankfurter v2's ECB-specific endpoint as the initial FX adapter target against the existing snapshot contract; live acquisition remains untested.

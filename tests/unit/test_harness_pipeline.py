@@ -1,6 +1,7 @@
 """Offline checks for the local end-to-end harness boundary."""
 
-from datetime import date
+from datetime import UTC, date, datetime
+from decimal import Decimal
 from pathlib import Path
 from types import SimpleNamespace
 from typing import cast
@@ -31,7 +32,9 @@ from award_agent.harness.pipeline import (
     run_from_ready,
 )
 from award_agent.providers.replay import ReplayTape
+from award_agent.ranking.style_contracts import CurrencyConversionSnapshot, RankedJourneySet
 from award_agent.results.contracts import ResultsArtifact, ResultsConfig, ResultsDocument
+from award_agent.results.currency import acquire_fx_snapshot
 from award_agent.search_planning.airport_selector import (
     AirportSelectionProposal,
     AirportSelectionProposalOutcome,
@@ -190,3 +193,38 @@ def test_provider_replay_ranking_results_and_binding_rejection() -> None:
     stale_bundle = bundle.model_copy(update={"current_revision": bundle.current_revision + 1})
     with pytest.raises(ValueError):
         rank(stale_bundle, provider.result, settings)
+
+
+def test_rank_shares_one_explicit_fx_snapshot_with_projection(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    saved = RankedJourneySet.model_validate_json(
+        Path("evidence/ranking-stage/m2/styled/mixed_access.json").read_bytes()
+    )
+    bundle = ProviderInputBundle.model_validate_json((SAVED / "bundle.json").read_bytes())
+    monkeypatch.setattr(pipeline, "assemble_matched_journeys", lambda *_args, **_kwargs: saved.matched)
+    supplied = CurrencyConversionSnapshot(
+        snapshot_id="supplied-cad", as_of=date(2026, 10, 23), source="test",
+        source_digest="0" * 64, rates_to_usd={"USD": Decimal(1), "CAD": Decimal("0.8")},
+    )
+    direct = rank(bundle, saved.matched.provider_result, HarnessSettings(fx_path=Path("absent")),
+                  fx_snapshot=supplied)
+    assert direct.ranked.fx_snapshot == supplied
+    assert direct.projection.view.fx_snapshot == supplied
+    assert direct.fx_receipt is None
+
+    calls: list[tuple[str, ...]] = []
+    now = datetime(2026, 10, 24, 12, tzinfo=UTC)
+
+    def acquirer(currencies: tuple[str, ...]):
+        calls.append(currencies)
+        return acquire_fx_snapshot(currencies, now=now,
+                                   fetch=lambda _url, _timeout: (_ for _ in ()).throw(
+                                       TimeoutError("offline fixture")))
+
+    outage = rank(bundle, saved.matched.provider_result, HarnessSettings(fx_path=Path("absent")),
+                  fx_acquirer=acquirer)
+    assert len(calls) == 1 and "USD" in calls[0]
+    assert outage.fx_receipt is not None and outage.fx_receipt.status == "unavailable"
+    assert outage.ranked.fx_snapshot == outage.projection.view.fx_snapshot
+    assert outage.ranked.fx_snapshot.rates_to_usd == {"USD": Decimal(1)}

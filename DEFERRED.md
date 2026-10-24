@@ -1,5 +1,26 @@
 # Deferred work — finish the core workflow first
 
+**2026-10-24 Results M2 revision disposition:** U1–U3 are implemented locally
+with a bounded three-case live diagnostic and independent code/answer review.
+This is active core work executed under the owner's implement invocation, not
+optional cleanup or an opening of Frontend/M3. See the
+[implementation log](docs/build-log/2026-10-24-results-m2-structured-implementation.md)
+and [evidence](evidence/results-stage/m2/structured/2026-10-24-luna/README.md).
+No D01/D09/D10/D11 scope changed; owner presentation acceptance remains open.
+G03/G05/G06/G08 retain their claim-specific limits: unchecked declarations, prose
+quality and broader qualification are not closed by source-bound structured data
+or a small diagnostic. Successful live FX acquisition also remains unclaimed
+after the recorded 403/outage responses; retain explicit fallback and require
+positive acquisition evidence before claiming that external path works here.
+
+The declared historical replay matrix preserves all source bytes/schema digests
+and the same 15 passing checks plus three baseline V4 preparation mismatches
+across seeds 11/23/37. The V4 mismatch is additional historical replay evidence,
+not a resolution of the older finding-order concern. Revisit these existing
+replay prerequisites before claiming universal historical compatibility; require
+fresh cross-process evidence without rewriting original artifacts. No separate
+optional-cleanup item or owner qualification conclusion is introduced.
+
 **2026-10-23 Results/frontend design disposition:** The owner confirmed a structured
 answer, reusable flight display, complete grouped eligible explorer and evidence-only
 follow-up conversation. This is active Results presentation design, not optional
@@ -91,7 +112,7 @@ Revisit model settings/context fit before actual authoring; require measured com
 declared settings and live budget. M3 calibration and traveler-task benefit retain their existing
 completion evidence requirements. No parked feature or upstream stage was reopened.
 
-Last reviewed: 2026-10-23.
+Last reviewed: 2026-10-24.
 
 **Owner disposition, 2026-10-04:** Ranking Stage is closed including the factual-export extension.
 Results M2 is owner-opened; M3 remains planned. See the

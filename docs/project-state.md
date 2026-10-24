@@ -1,5 +1,50 @@
 # Project State
 
+## 2026-10-24 Results M2 structured backend and bounded live iteration
+
+The owner invoked implementation through subagents, review, live evaluation and
+iteration under the implement skill, including a current-branch commit. U1–U3 now
+provide complete exact workspace facts and family groups, observed-money/FX
+handling, structured authoring with a shared bounded runner, typed claim/reference
+checks, versioned resolved facts, a CLI and exact replay. Legacy V1–V5 response
+schemas and replay routing remain isolated. Source-known component departure dates
+use workspace/resolved v2; saved v1 shapes retain their original replay.
+
+The [three-case diagnostic](../evidence/results-stage/m2/structured/2026-10-24-luna/README.md)
+used nine runs over three rounds, 14 generations and 14 input counts
+(2,308,185 writer input and 36,919 output tokens). Initial mechanical cleanliness
+hid semantic failures; targeted iteration corrected omitted material alternatives,
+false absence of complete conditional journeys, wrong-airport departure wording
+and an incompatible-date partial-route suggestion. The final cohort uses one
+explicit configuration, has no failed checks and received independent source review.
+Unchecked cabin declarations and two wording weaknesses remain recorded; this is
+not exhaustive prose verification, rendered usefulness or owner acceptance.
+
+New-run FX acquisition is explicit before Ranking and its receipt can remain bound
+to saved structured evidence. The live endpoint returned 403 in both recorded
+smoke invocations, exercising explicit USD-only fallback; successful live rate
+acquisition is unclaimed. Saved sources retained their original rates and no travel
+providers were called. Verification commands, review dispositions, historical
+replay baseline limits and full-suite outcomes belong to the
+[implementation log](build-log/2026-10-24-results-m2-structured-implementation.md).
+
+Milestone goals are unchanged. Frontend M1/M2 and Results M3 remain planned;
+M2 owner presentation acceptance remains open across rendered review. The
+preparation-only status immediately below is historical for its earlier checkpoint.
+
+## 2026-10-24 Results M2 revision implementation preparation
+
+The owner opened Results M2 revision implementation for this session and requested
+further subagent investigation and a detailed plan before coding, with notice of
+any milestone-goal changes. Three read-only investigations covered U1 factual
+resolution/grouping, U2 frozen FX/observed-money comparisons, and U3 structured
+authoring/checking/replay. The [plan](plans/2026-10-23-2334-feat-results-workspace-plan.md)
+now details these seams, independent controls and execution order. No milestone
+goal changes were identified: U1–U3 remain Results M2, frontend milestones remain
+separate, and M3 remains evaluation/acceptance. This checkpoint adds documentation
+only; no runtime implementation, test result or new live-call campaign is claimed.
+See the [preparation log](build-log/2026-10-24-results-m2-revision-preparation.md).
+
 ## 2026-10-23 structured Results and local workspace design accepted
 
 The owner subsequently accepted the milestone map in the

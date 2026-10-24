@@ -31,11 +31,11 @@ from .contracts import (
     ResultsInputMeasurer,
     ResultsPart,
     ResultsWriter,
-    ResultsWriterError,
     ValidationNotice,
     WriterReceipt,
 )
 from .request import response_schema, token_request, token_request_digest
+from .runner import RequestEnvelope, run_attempts
 
 ArtifactVersion = Literal["results-artifact-v1", "results-artifact-v2", "results-artifact-v3", "results-artifact-v4", "results-artifact-v5"]
 VERSIONS = {"results-artifact-v1", "results-artifact-v2", "results-artifact-v3", "results-artifact-v4", "results-artifact-v5"}
@@ -1714,112 +1714,40 @@ def run_results(projection: SolutionProjection, config: ResultsConfig,
     if render_version not in VERSIONS:
         raise ValueError("unsupported Results render version")
     prepared = prepare_results(projection, config, version=render_version)
-    attempts: list[ResultsAttempt] = []
-    feedback: tuple[CheckFinding, ...] = ()
-    previous: ResultsDocument | None = None
-    for phase in cast("tuple[Literal['initial', 'correction'], ...]", ("initial", "correction")):
+
+    def request_for(feedback: tuple[CheckFinding, ...],
+                    previous: ResultsDocument | None) -> RequestEnvelope:
         size, total, prompt_digest, schema_digest = _measurement(prepared, config,
                                                                   feedback, previous)
-        token_receipt: InputTokenReceipt | None = None
-        if input_measurer is not None:
-            request = token_request(prepared, config, authoring_payload(prepared, feedback, previous))
-            try:
-                measured = input_measurer.measure(request, config)
-                token_receipt = InputTokenReceipt.model_validate(
-                    measured.model_dump(mode="json"))
-                if token_receipt.request_digest != token_request_digest(request):
-                    raise ValueError("input token receipt request digest differs")
-            except (AttributeError, ResultsWriterError, ValueError, TypeError):
-                attempts.append(ResultsAttempt(phase=phase, outcome="measurement_error",
-                    error="input_token_measurement_failed", input_bytes=size,
-                    estimated_total_tokens=total, prompt_digest=prompt_digest,
-                    schema_digest=schema_digest, writer_called=False))
-                break
-        counted_overflow = token_receipt is not None and (
-            (config.max_input_tokens is not None and
-             token_receipt.input_tokens > config.max_input_tokens) or
-            token_receipt.input_tokens + config.max_output_tokens +
-            config.prompt_overhead_tokens > config.context_limit_tokens)
-        byte_overflow = token_receipt is None and input_measurer is None and (
-            total > config.context_limit_tokens or
-            (config.max_input_tokens is not None and
-             total - config.max_output_tokens > config.max_input_tokens))
-        if counted_overflow or byte_overflow:
-            if not attempts:
-                if token_receipt is not None:
-                    attempts.append(ResultsAttempt(phase="initial", outcome="generation_error",
-                        error="context_limit", input_bytes=size, estimated_total_tokens=total,
-                        prompt_digest=prompt_digest, schema_digest=schema_digest,
-                        writer_called=False, input_token_receipt=token_receipt))
-                return ResultsArtifact(contract_version=render_version,
-                    projection=projection, config=config, prepared=prepared,
-                    attempts=tuple(attempts), selected_attempt=None, selection_reason="context_limit",
-                    generation_outcome="context_limit", validation_outcome="unavailable",
-                    delivery_outcome="not_delivered")
-            attempts.append(ResultsAttempt(phase="correction", outcome="generation_error",
-                error="context_limit", input_bytes=size, estimated_total_tokens=total,
-                prompt_digest=prompt_digest, schema_digest=schema_digest,
-                writer_called=False, input_token_receipt=token_receipt))
-            break
-        try:
-            document = writer.author(prepared, config, feedback=feedback,
-                                     previous_document=previous)
-            if not isinstance(document, ResultsDocument):
-                document = ResultsDocument.model_validate(document)
-            findings = check_document(document, projection, version=render_version)
-            attempts.append(ResultsAttempt(phase=phase, outcome="recoverable",
-                document=document, findings=findings, writer_receipt=_receipt(writer),
-                input_bytes=size, estimated_total_tokens=total,
-                prompt_digest=prompt_digest, schema_digest=schema_digest,
-                input_token_receipt=token_receipt))
-            failed = tuple(item for item in findings if item.outcome == "failed")
-            if phase == "initial" and failed:
-                feedback = failed
-                previous = document
-                continue
-            break
-        except ResultsWriterError as exc:
-            outcome: Literal["api_error", "generation_error"] = "api_error" if exc.outcome == "api_error" else "generation_error"
-            receipt = _receipt(writer) or WriterReceipt(raw_response=exc.raw_response)
-            attempts.append(ResultsAttempt(phase=phase, outcome=outcome,
-                error=str(exc), failure_subtype=exc.outcome, writer_receipt=receipt,
-                input_bytes=size, estimated_total_tokens=total,
-                prompt_digest=prompt_digest, schema_digest=schema_digest,
-                input_token_receipt=token_receipt))
-            break
-        except (ValueError, TypeError) as exc:
-            attempts.append(ResultsAttempt(phase=phase, outcome="generation_error",
-                error=f"schema_error: {exc}", failure_subtype="schema_error",
-                writer_receipt=_receipt(writer), input_bytes=size,
-                estimated_total_tokens=total, prompt_digest=prompt_digest,
-                schema_digest=schema_digest, input_token_receipt=token_receipt))
-            break
-    recoverable = [(index, attempt) for index, attempt in enumerate(attempts)
-                   if attempt.outcome == "recoverable" and attempt.document is not None]
-    if not recoverable:
-        terminal = attempts[-1] if attempts else None
-        generation: Literal["api_error", "generation_error", "measurement_error"] = (
-            "measurement_error" if terminal and terminal.outcome == "measurement_error" else
-            "api_error" if terminal and terminal.outcome == "api_error" else "generation_error")
+        request = token_request(prepared, config, authoring_payload(prepared, feedback, previous))
+        return RequestEnvelope(request, size, total, prompt_digest, schema_digest)
+
+    def invoke(feedback: tuple[CheckFinding, ...],
+               previous: ResultsDocument | None) -> ResultsDocument:
+        document = writer.author(prepared, config, feedback=feedback,
+                                 previous_document=previous)
+        return document if isinstance(document, ResultsDocument) else ResultsDocument.model_validate(document)
+
+    outcome = run_attempts(config, input_measurer, request_for=request_for,
+        invoke=invoke,
+        check=lambda document: check_document(document, projection, version=render_version),
+        take_receipt=lambda: _receipt(writer))
+    attempts = tuple(ResultsAttempt(**vars(item)) for item in outcome.attempts)
+    if outcome.selected_attempt is None:
         return ResultsArtifact(contract_version=render_version,
-            projection=projection, config=config, prepared=prepared,
-            attempts=tuple(attempts), selected_attempt=None, selection_reason="no_recoverable_draft",
-            generation_outcome=generation, validation_outcome="unavailable",
+            projection=projection, config=config, prepared=prepared, attempts=attempts,
+            selected_attempt=None, selection_reason=outcome.selection_reason,
+            generation_outcome=outcome.generation_outcome, validation_outcome="unavailable",
             delivery_outcome="not_delivered")
-    selected, attempt = min(recoverable, key=lambda pair: (
-        sum(f.outcome == "failed" for f in pair[1].findings), -pair[0]))
-    reason = "initial_only" if len(recoverable) == 1 else (
-        "correction_fewer_failures" if selected == 1 and
-        sum(f.outcome == "failed" for f in recoverable[1][1].findings) <
-        sum(f.outcome == "failed" for f in recoverable[0][1].findings)
-        else "correction_tie" if selected == 1 else "initial_fewer_failures")
-    notices = tuple(_notice(finding, projection, render_version) for finding in attempt.findings if finding.outcome == "failed")
-    assert attempt.document is not None
-    rendered, facts = render_results(attempt.document, projection, notices,
-                                    render_version=render_version)
+    selected = attempts[outcome.selected_attempt]
+    assert selected.document is not None
+    notices = tuple(_notice(finding, projection, render_version) for finding in selected.findings
+                    if finding.outcome == "failed")
+    rendered, facts = render_results(selected.document, projection, notices,
+                                     render_version=render_version)
     artifact = ResultsArtifact(contract_version=render_version,
-        projection=projection, config=config, prepared=prepared,
-        attempts=tuple(attempts), selected_attempt=selected, selection_reason=reason,
+        projection=projection, config=config, prepared=prepared, attempts=attempts,
+        selected_attempt=outcome.selected_attempt, selection_reason=outcome.selection_reason,
         generation_outcome="success", validation_outcome="annotated" if notices else "clean",
         delivery_outcome="delivered", notices=notices, inserted_facts=facts,
         rendered_markdown=rendered, rendered_digest=content_digest(rendered))

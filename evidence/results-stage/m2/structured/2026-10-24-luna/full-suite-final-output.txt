@@ -1,0 +1,216 @@
+Captured final pytest output; trailing whitespace trimmed for repository formatting.
+
+................................ [ 77%]
+.................................sssssssssssssssssssssssssssssssssssssss [ 84%]
+sssssssssssssssssssssss................................................. [ 91%]
+....................sssssssssssssssssssssssssssssssssssss............... [ 98%]
+...................                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_reviewed_fixture_preserves_all_rows_and_unknown_price __________
+
+    @pytest.mark.skipif(not PINNED_PYTHON.exists(), reason="pinned local gfly environment absent")
+    def test_reviewed_fixture_preserves_all_rows_and_unknown_price() -> None:
+        code = """
+    import json, sys
+    from pathlib import Path
+    from scripts import gfly_compat as compat
+    from fast_flights import parser
+    from gfly.backend import _norm_google
+    fixture = json.loads(Path(sys.argv[1]).read_text())
+    payload = fixture['payload']
+    js = 'data:' + json.dumps(payload) + ','
+    try:
+        parser.parse_js(js)
+    except IndexError:
+        pass
+    else:
+        raise AssertionError('baseline parser unexpectedly accepted empty price')
+    site, _ = compat._verify_installation()
+    compat._install_compatibility((site / 'fast_flights/parser.py').read_text())
+    rows = parser.parse_js(js)
+    normalized = [_norm_google(row, 'USD', True) for row in rows]
+    assert len(normalized) == 8
+    assert [row['price'] for row in normalized] == [535, 566, 570, 670, 697, 773, 1156, None]
+    assert all(row['origin'] and row['destination'] and row['departure'] and row['arrival'] for row in normalized)
+    payload[3][0][0][1][0] = [None, 0]
+    assert parser.parse_js('data:' + json.dumps(payload) + ',')[0].price == 0
+    payload[3][0][0][1][0] = [None]
+    try:
+        parser.parse_js('data:' + json.dumps(payload) + ',')
+    except IndexError:
+        pass
+    else:
+        raise AssertionError('malformed nonempty vector was accepted')
+    print(json.dumps({'count': len(normalized), 'prices': [row['price'] for row in normalized]}))
+    """
+>       result = subprocess.run(
+            [str(PINNED_PYTHON), "-c", code, str(FIXTURE)],
+            cwd=ROOT, capture_output=True, text=True, timeout=10, check=True,
+        )
+
+tests/unit/test_gfly_compat.py:65:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = True, timeout = 10, check = True
+popenargs = (['/private/tmp/gfly-live-py312/bin/python', '-c', "\nimport json, sys\nfrom pathlib import Path\nfrom scripts import ...n normalized]}))\n", '/Users/shawnkang/bots/award-search/tests/fixtures/providers/gfly_missing_price_minimized.json'],)
+kwargs = {'cwd': PosixPath('/Users/shawnkang/bots/award-search'), 'text': True, 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/private/tmp/gfly-live-py312/bin/python', '-c', "\nimport json, sys\nfrom pathlib import Path\nfrom scripts import gfly_compat as compat\nfrom fast_flights import parser\nfrom gfly.backend import _norm_google\nfixture = json.loads(Path(sys.argv[1]).read_text())\npayload = fixture['payload']\njs = 'data:' + json.dumps(payload) + ','\ntry:\n    parser.parse_js(js)\nexcept IndexError:\n    pass\nelse:\n    raise AssertionError('baseline parser unexpectedly accepted empty price')\nsite, _ = compat._verify_installation()\ncompat._install_compatibility((site / 'fast_flights/parser.py').read_text())\nrows = parser.parse_js(js)\nnormalized = [_norm_google(row, 'USD', True) for row in rows]\nassert len(normalized) == 8\nassert [row['price'] for row in normalized] == [535, 566, 570, 670, 697, 773, 1156, None]\nassert all(row['origin'] and row['destination'] and row['departure'] and row['arrival'] for row in normalized)\npayload[3][0][0][1][0] = [None, 0]\nassert parser.parse_js('data:' + json.dumps(payload) + ',')[0].price == 0\npayload[3][0][0][1][0] = [None]\ntry:\n    parser.parse_js('data:' + json.dumps(payload) + ',')\nexcept IndexError:\n    pass\nelse:\n    raise AssertionError('malformed nonempty vector was accepted')\nprint(json.dumps({'count': len(normalized), 'prices': [row['price'] for row in normalized]}))\n", '/Users/shawnkang/bots/award-search/tests/fixtures/providers/gfly_missing_price_minimized.json']' returned non-zero exit status 1.
+
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py:571: CalledProcessError
+__________ test_launcher_reports_effective_version_and_source_digest ___________
+
+    @pytest.mark.skipif(not PINNED_PYTHON.exists(), reason="pinned local gfly environment absent")
+    def test_launcher_reports_effective_version_and_source_digest() -> None:
+        command = [str(PINNED_PYTHON), str(ROOT / "scripts/gfly_compat.py")]
+>       version = subprocess.run(command + ["version", "--json"], capture_output=True,
+                                 text=True, timeout=10, check=True)
+
+tests/unit/test_gfly_compat.py:77:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = True, timeout = 10, check = True
+popenargs = (['/private/tmp/gfly-live-py312/bin/python', '/Users/shawnkang/bots/award-search/scripts/gfly_compat.py', 'version', '--json'],)
+kwargs = {'text': True, 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/private/tmp/gfly-live-py312/bin/python', '/Users/shawnkang/bots/award-search/scripts/gfly_compat.py', 'version', '--json']' returned non-zero exit status 1.
+
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py:571: CalledProcessError
+=========================== short test summary info ============================
+FAILED tests/unit/test_gfly_compat.py::test_reviewed_fixture_preserves_all_rows_and_unknown_price
+FAILED tests/unit/test_gfly_compat.py::test_launcher_reports_effective_version_and_source_digest
+2 failed, 926 passed, 99 skipped in 817.80s (0:13:37)

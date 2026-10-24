@@ -1,5 +1,16 @@
 # ADRs
 
+2026-10-24 implementation: ADR 0029 now records the locally implemented U1–U3
+structured backend, versioned factual shapes and bounded live diagnostic. Matching,
+Ranking, upstream trust and milestone goals remain unchanged. Frontend milestones,
+M3 and owner presentation acceptance remain separate. Verification and remaining
+limitations are in the [implementation log](../build-log/2026-10-24-results-m2-structured-implementation.md).
+
+2026-10-24: ADR 0029 records the owner's implementation invocation for Results M2
+revision U1–U3 and its investigation/planning checkpoint. Accepted product policy
+and milestone goals are unchanged; runtime implementation and verification are not
+yet claimed. See the [preparation log](../build-log/2026-10-24-results-m2-revision-preparation.md).
+
 2026-10-23 milestone allocation: ADR 0029 also records the owner's acceptance of
 **Results M2 revision (U1–U3) → Frontend M1 (U4) → Frontend M2 (U5–U6) → Results
 M3 evaluation/closeout**. M3 preparation can start during M2; final rendered review

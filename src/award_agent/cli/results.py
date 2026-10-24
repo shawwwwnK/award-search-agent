@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 from award_agent.cli._atomic_output import write_new_atomic
@@ -31,6 +31,60 @@ class _FrozenWriter:
         return self.correction or self.initial if previous_document is not None else self.initial
 
 
+def _structured_output(args: argparse.Namespace,
+                       read: Callable[[Path], bytes]) -> tuple[str, dict[str, object]]:
+    from award_agent.results.structured import (
+        prepare_structured_results,
+        run_structured_results,
+    )
+    from award_agent.results.structured_contracts import StructuredDocument, StructuredPreparedInput
+
+    projection = SolutionProjection.model_validate_json(read(args.projection))
+    config = ResultsConfig.model_validate_json(read(args.config))
+    if args.command == "measure":
+        prepared = prepare_structured_results(projection, config)
+        summary: dict[str, object] = {
+            "prepared_version": prepared.contract_version,
+            "source_digest": prepared.source_digest,
+            "alternatives": len(projection.view.alternatives),
+            "eligible_alternatives": projection.receipt.eligible_alternatives,
+            "input_bytes": prepared.input_bytes,
+            "estimated_input_tokens": prepared.estimated_input_tokens,
+            "max_output_tokens": config.max_output_tokens,
+            "estimated_total_tokens": prepared.estimated_total_tokens,
+            "context_limit_tokens": config.context_limit_tokens,
+            "token_measurement": "conservative_utf8_upper_bound",
+            "within_conservative_bound": prepared.estimated_total_tokens <= config.context_limit_tokens,
+            "qualification": "Input measurement only; no model context-fit qualification.",
+        }
+        return json.dumps(summary, indent=2), summary
+    if args.correction and not args.draft:
+        raise ValueError("--correction requires --draft")
+    if args.live:
+        from award_agent.results.adapter import OpenAIStructuredResultsWriter
+
+        artifact = run_structured_results(projection, config, OpenAIStructuredResultsWriter(),
+                                          input_measurer=OpenAIResultsInputMeasurer())
+    else:
+        initial = StructuredDocument.model_validate_json(read(args.draft))
+        correction = (StructuredDocument.model_validate_json(read(args.correction))
+                      if args.correction else None)
+
+        class FrozenStructuredWriter:
+            def author(self, prepared: StructuredPreparedInput, config: ResultsConfig,
+                       feedback: tuple[CheckFinding, ...] = (),
+                       previous_document: StructuredDocument | None = None) -> StructuredDocument:
+                return (correction or initial) if previous_document is not None else initial
+
+        artifact = run_structured_results(projection, config, FrozenStructuredWriter())
+    return artifact.model_dump_json(indent=2), {
+        "generation_outcome": artifact.generation_outcome,
+        "validation_outcome": artifact.validation_outcome,
+        "delivery_outcome": artifact.delivery_outcome,
+        "attempts": len(artifact.attempts),
+    }
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -39,6 +93,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         command.add_argument("--projection", type=Path, required=True)
         command.add_argument("--config", type=Path, required=True)
         command.add_argument("--output", type=Path, required=True)
+        command.add_argument("--structured", action="store_true",
+                             help="Use the versioned structured Results channel.")
         if name == "author":
             mode = command.add_mutually_exclusive_group(required=True)
             mode.add_argument("--draft", type=Path, help="Offline frozen initial ResultsDocument.")
@@ -60,10 +116,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         return content
 
     if args.command == "replay":
-        artifact = ResultsArtifact.model_validate_json(read(args.artifact))
-        rendered = replay_results(artifact)
-        summary: dict[str, object] = {"delivery_outcome": artifact.delivery_outcome,
-                                      "rendered_digest": artifact.rendered_digest}
+        raw = read(args.artifact)
+        if json.loads(raw).get("contract_version") == "results-artifact-v6":
+            from award_agent.results.structured import replay_structured_results
+            from award_agent.results.structured_contracts import StructuredResultsArtifact
+
+            structured_artifact = StructuredResultsArtifact.model_validate_json(raw)
+            answer = replay_structured_results(structured_artifact)
+            rendered = "null" if answer is None else answer.model_dump_json(indent=2)
+            summary: dict[str, object] = {"delivery_outcome": structured_artifact.delivery_outcome,
+                                          "resolved_digest": structured_artifact.resolved_digest}
+        else:
+            artifact = ResultsArtifact.model_validate_json(raw)
+            rendered = replay_results(artifact)
+            summary = {"delivery_outcome": artifact.delivery_outcome,
+                       "rendered_digest": artifact.rendered_digest}
+    elif args.structured:
+        rendered, summary = _structured_output(args, read)
     else:
         projection = SolutionProjection.model_validate_json(read(args.projection))
         config = ResultsConfig.model_validate_json(read(args.config))
@@ -105,7 +174,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise ValueError("Results input changed during processing")
     write_new_atomic(args.output, rendered, trailing_newline=args.command != "replay")
     print(json.dumps({"output": str(args.output), **summary}))
-    if args.command == "author" and artifact.delivery_outcome != "delivered":
+    if args.command == "author" and summary["delivery_outcome"] != "delivered":
         return 1
     return 0
 

@@ -7,6 +7,7 @@ import time
 from typing import Any, cast
 
 from openai import APIError, OpenAI
+from openai.types.responses import Response
 from pydantic import ValidationError
 
 from .authoring import rebind_document
@@ -21,6 +22,16 @@ from .contracts import (
 )
 from .core import authoring_payload
 from .request import token_request, token_request_digest
+from .structured import structured_payload, structured_token_request
+from .structured_contracts import StructuredDocument, StructuredPreparedInput
+
+
+def _send_response(client: OpenAI, request: dict[str, object],
+                   config: ResultsConfig) -> Response:
+    """One explicit Responses call shared by both Results document channels."""
+    return cast(Response, client.with_options(max_retries=0, timeout=config.timeout_seconds).responses.create(
+        **cast(Any, request), max_output_tokens=config.max_output_tokens,
+        store=False, truncation="disabled"))
 
 
 class OpenAIResultsInputMeasurer:
@@ -74,17 +85,10 @@ class OpenAIResultsWriter:
         # Construct lazily so measurement, replay and source failures need no credentials.
         started = time.perf_counter()
         try:
-            client = (self._client or OpenAI(max_retries=0)).with_options(
-                max_retries=0, timeout=config.timeout_seconds,
-            )
+            client = self._client or OpenAI(max_retries=0)
             request = token_request(prepared, config,
                                     authoring_payload(prepared, feedback, previous_document))
-            response = client.responses.create(
-                **cast(Any, request),
-                max_output_tokens=config.max_output_tokens,
-                store=False,
-                truncation="disabled",
-            )
+            response = _send_response(client, request, config)
         except (APIError, ValueError) as exc:
             self._receipt = WriterReceipt(latency_seconds=time.perf_counter() - started)
             raise ResultsWriterError("api_error", "Results writer API request failed.") from exc
@@ -111,3 +115,46 @@ class OpenAIResultsWriter:
                    for item in response.output):
                 raise ResultsWriterError("refusal", "Writer declined to produce a document.", raw) from exc
             raise ResultsWriterError("schema_error", "Writer returned no recoverable document.", raw) from exc
+
+
+class OpenAIStructuredResultsWriter:
+    """One bounded structured authoring call; attempt policy is in the Results runner."""
+
+    def __init__(self, client: OpenAI | None = None) -> None:
+        self._client = client
+        self._receipt: WriterReceipt | None = None
+
+    def take_receipt(self) -> WriterReceipt | None:
+        receipt, self._receipt = self._receipt, None
+        return receipt
+
+    def author(self, prepared: StructuredPreparedInput, config: ResultsConfig,
+               feedback: tuple[CheckFinding, ...] = (),
+               previous_document: StructuredDocument | None = None) -> StructuredDocument:
+        self._receipt = None
+        started = time.perf_counter()
+        try:
+            client = self._client or OpenAI(max_retries=0)
+            request = structured_token_request(prepared, config,
+                structured_payload(prepared, feedback, previous_document))
+            response = _send_response(client, request, config)
+        except (APIError, ValueError) as exc:
+            self._receipt = WriterReceipt(latency_seconds=time.perf_counter() - started)
+            raise ResultsWriterError("api_error", "Structured Results writer request failed.") from exc
+        raw = response.model_dump_json()
+        usage = response.usage
+        self._receipt = WriterReceipt(raw_response=raw, status=response.status,
+            usage={} if usage is None else {
+                "input_tokens": usage.input_tokens,
+                "output_tokens": usage.output_tokens,
+                "total_tokens": usage.total_tokens,
+            }, latency_seconds=time.perf_counter() - started)
+        try:
+            return StructuredDocument.model_validate_json(response.output_text)
+        except (ValidationError, json.JSONDecodeError) as exc:
+            if response.status == "incomplete":
+                raise ResultsWriterError("incomplete", "Structured response was incomplete.", raw) from exc
+            if any(item.type == "message" and any(part.type == "refusal" for part in item.content)
+                   for item in response.output):
+                raise ResultsWriterError("refusal", "Writer declined a structured document.", raw) from exc
+            raise ResultsWriterError("schema_error", "Writer returned no structured document.", raw) from exc

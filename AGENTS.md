@@ -58,6 +58,17 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+**2026-10-24 execution update:** The owner invoked Results M2 revision U1–U3
+implementation, review, live evaluation/iteration and a current-branch commit.
+The structured backend now has complete workspace facts, frozen FX/observed-money
+handling and versioned authoring/checks/replay. See the
+[implementation log](docs/build-log/2026-10-24-results-m2-structured-implementation.md)
+and [three-round diagnostic](evidence/results-stage/m2/structured/2026-10-24-luna/README.md).
+This supersedes the October 23 planning-only status for U1–U3; milestone goals
+are unchanged. Frontend M1/M2 and Results M3 retain their separate scope and gates.
+Owner presentation acceptance remains open; narrative/checker limitations and
+the live FX endpoint's 403/outage result are recorded, not treated as qualification.
+
 **2026-10-23 current direction:** Results M2 presentation acceptance remains open
 following the October 9 reopening. The owner confirmed the structured Results/local
 workspace design and authorized investigation, documentation and planning only. Start

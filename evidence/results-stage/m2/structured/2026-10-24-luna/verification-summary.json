@@ -1,0 +1,129 @@
+{
+  "status": "passed",
+  "fresh_processes": 27,
+  "hash_seeds": [
+    11,
+    23,
+    37
+  ],
+  "artifacts": 9,
+  "assertion_groups_passed": 31,
+  "assertion_groups_failed": 0,
+  "campaign_audit": {
+    "artifacts": [
+      {
+        "case": "admitted",
+        "round": 1,
+        "generation_calls": 1,
+        "count_calls": 1,
+        "generation_receipts": 1,
+        "count_receipts": 1
+      },
+      {
+        "case": "conditional",
+        "round": 1,
+        "generation_calls": 2,
+        "count_calls": 2,
+        "generation_receipts": 2,
+        "count_receipts": 2
+      },
+      {
+        "case": "incomplete",
+        "round": 1,
+        "generation_calls": 2,
+        "count_calls": 2,
+        "generation_receipts": 2,
+        "count_receipts": 2
+      },
+      {
+        "case": "admitted",
+        "round": 2,
+        "generation_calls": 1,
+        "count_calls": 1,
+        "generation_receipts": 1,
+        "count_receipts": 1
+      },
+      {
+        "case": "conditional",
+        "round": 2,
+        "generation_calls": 1,
+        "count_calls": 1,
+        "generation_receipts": 1,
+        "count_receipts": 1
+      },
+      {
+        "case": "incomplete",
+        "round": 2,
+        "generation_calls": 2,
+        "count_calls": 2,
+        "generation_receipts": 2,
+        "count_receipts": 2
+      },
+      {
+        "case": "admitted",
+        "round": 3,
+        "generation_calls": 2,
+        "count_calls": 2,
+        "generation_receipts": 2,
+        "count_receipts": 2
+      },
+      {
+        "case": "conditional",
+        "round": 3,
+        "generation_calls": 1,
+        "count_calls": 1,
+        "generation_receipts": 1,
+        "count_receipts": 1
+      },
+      {
+        "case": "incomplete",
+        "round": 3,
+        "generation_calls": 2,
+        "count_calls": 2,
+        "generation_receipts": 2,
+        "count_receipts": 2
+      }
+    ],
+    "campaign_reservations": {
+      "count/admitted/round-1": 1,
+      "count/admitted/round-2": 1,
+      "count/admitted/round-3": 2,
+      "count/conditional/round-1": 2,
+      "count/conditional/round-2": 1,
+      "count/conditional/round-3": 1,
+      "count/incomplete/round-1": 2,
+      "count/incomplete/round-2": 2,
+      "count/incomplete/round-3": 2,
+      "generation/admitted/round-1": 1,
+      "generation/admitted/round-2": 1,
+      "generation/admitted/round-3": 2,
+      "generation/conditional/round-1": 2,
+      "generation/conditional/round-2": 1,
+      "generation/conditional/round-3": 1,
+      "generation/incomplete/round-1": 2,
+      "generation/incomplete/round-2": 2,
+      "generation/incomplete/round-3": 2
+    },
+    "model_responses_with_usage": 14,
+    "actual_model_usage_tokens": {
+      "writer_input": 2308185,
+      "writer_output": 36919,
+      "writer_total": 2345104,
+      "writer_cached_input": 9258,
+      "writer_cache_write_input": 2298885,
+      "writer_reasoning_output": 27868,
+      "measured_input": 2308185
+    },
+    "round3_configs_equal": true,
+    "round3_source_snapshot_hashes_equal": true,
+    "round3_source_snapshot_sha256": "d0edfc28be4a4eb3fdb37ba581e85717ebd7e8a7047ca723ad8747c7d057a546"
+  },
+  "limits": [
+    "Saved local artifacts only; no live model/provider calls.",
+    "Audit checks artifact/source replay and recorded receipts, not semantic truth of model-authored prose."
+  ],
+  "command": "PYTHONPATH=src .venv/bin/python evidence/results-stage/m2/structured/2026-10-24-luna/replay-check.py",
+  "replay_checks_passed": 27,
+  "replay_checks_failed": 0,
+  "campaign_reconciliation_groups_passed": 4
+}
