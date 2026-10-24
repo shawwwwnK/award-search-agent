@@ -1,5 +1,7 @@
 # Results M2: validation, recovery and delivery contract
 
+**Current direction, 2026-10-23:** [ADR 0029](../adr/0029-structured-results-and-local-workspace.md) and the [current plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md) establish the accepted frontend-primary structured-answer design for future presentation; it is not implemented. Historical V1–V5 Markdown checks, request schema and replay rules remain unchanged. For the new channel only, this supersedes the earlier model-only factual layout and visible eligibility, condition and prose-slot obligations. Upstream Ranking policy and trust remain unchanged. M2 presentation acceptance is open; M3 remains planned.
+
 **Historical closeout, 2026-10-08:** Results M2 was owner-closed for its declared implemented boundary; M3 remained planned. Presentation acceptance reopened on 2026-10-09. As of 2026-10-20, compact input is implemented and the bounded diagnostic is recorded; this does not establish new owner acceptance or M3 qualification. Historical evidence and policy limits remain in force.
 
 **2026-10-20 input-representation amendment:** ADR 0026 accepts a compact, versioned

@@ -1,5 +1,18 @@
 # ADR 0026: Model-authored Results structure with bound facts
 
+## 2026-10-23 successor presentation decision
+
+[ADR 0029](0029-structured-results-and-local-workspace.md) accepts the structured-answer
+and local-workspace revision after the owner's confirmed design interview. Its
+[plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md) is current for future
+presentation work; implementation remains pending. For the new channel only, it
+supersedes exclusive model-owned factual layout, mandatory self-contained Markdown,
+visible eligibility/requirement text and prose-slot completeness. The model keeps
+selection/narrative authority; code resolves facts; material booking/pricing facts
+remain visible. Internal source preservation, compact all-eligible input and bounded
+authoring policy remain. Historical V1–V5 documents/checkers/request schemas and replay
+retain their original rules. No existing artifact is reinterpreted or qualified.
+
 ## 2026-10-20 amendment — compact model-facing input
 
 Status: accepted input-representation policy; implementation and qualification are

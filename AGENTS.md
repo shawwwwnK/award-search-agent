@@ -58,6 +58,25 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+**2026-10-23 current direction:** Results M2 presentation acceptance remains open
+following the October 9 reopening. The owner confirmed the structured Results/local
+workspace design and authorized investigation, documentation and planning only. Start
+with [ADR 0029](docs/adr/0029-structured-results-and-local-workspace.md) and the
+[current plan](docs/plans/2026-10-23-2334-feat-results-workspace-plan.md). The frontend
+renders code-resolved flight facts alongside model-authored narrative; a complete
+eligible explorer is independent of authoring. Existing Ranking policy/trust stays
+unchanged. No runtime implementation or new live-call campaign is claimed/authorized
+by this planning session. Historical V1–V5 Results replay keeps its original behavior.
+M3 remains planned. Earlier closeout/opening paragraphs below retain historical scope.
+
+The owner accepted the delivery sequence **Results M2 revision (U1–U3) → Frontend
+M1 saved-results workspace (U4) → Frontend M2 connected experience (U5–U6) → Results
+M3 evaluation/closeout**. M3 preparation can start during M2, but integrated review
+finishes after frontend integration; U7 evidence is not automatic M3 qualification.
+Results owns follow-up evidence/answer policy, while Frontend owns UI/integration.
+See the current plan's milestone table. This records scope, not an implementation
+invocation or a paid evaluation budget.
+
 Results M2 is owner-closed as of 2026-10-08 for its declared authoring, factual binding, scoped checks, bounded correction, annotated delivery and replay boundary. See `docs/handoffs/2026-10-08-results-m2-closeout.md`. This supersedes earlier open/unclaimed-closeout status below. M3 remains planned. The owner is conducting end-to-end runs in other sessions; no outcomes or broader qualification are inferred here.
 
 On 2026-10-07 the owner invoked implementation of
@@ -272,6 +291,13 @@ service, authentication, deployment, or workflow policy in the UI layer. As owne
 2026-10-08, explicit harness events may trigger bounded provider calls through the application
 pipeline for intent-to-Results testing; ordinary reruns must make no model/provider calls.
 Artifacts remain ephemeral with explicit downloads. See ADR 0028.
+
+The owner-approved 2026-10-23 design also plans a local traveler-facing results
+workspace under ADR 0029. It is not a production Web UI or a deployment exception.
+Future implementation must reuse explicit application events and ephemeral,
+revision-bound evidence; ordinary rendering makes no calls. Explicit follow-up
+questions may use retained evidence with no new travel searches or request mutation.
+Implementation remains a later invocation; D01 re-search and D11 deployment remain deferred.
 
 ## Development expectations
 

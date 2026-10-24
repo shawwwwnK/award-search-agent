@@ -1,5 +1,22 @@
 # ADRs
 
+2026-10-23 milestone allocation: ADR 0029 also records the owner's acceptance of
+**Results M2 revision (U1–U3) → Frontend M1 (U4) → Frontend M2 (U5–U6) → Results
+M3 evaluation/closeout**. M3 preparation can start during M2; final rendered review
+follows integration. U7 supplies evidence, not automatic M3 qualification. Results
+keeps follow-up evidence/answer-policy ownership. No implementation or evaluation
+campaign is invoked by this sequencing decision.
+
+2026-10-23: [ADR 0029](0029-structured-results-and-local-workspace.md) records the accepted
+structured Results/local-workspace design. Model-authored narrative selects exact
+options; code resolves factual objects; an independent eligible explorer and
+evidence-only follow-ups use retained results. UI eligibility labels/checklists are
+removed while material booking/pricing facts remain. This supersedes only the new
+presentation channel's specified ADR 0026 obligations; historical V1–V5 behavior,
+Ranking policy and upstream trust remain. The
+[complete plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md) is documented,
+not implemented; Results presentation acceptance is open and M3 remains planned.
+
 2026-10-20: ADR 0026 accepts a compact Results writer view: all eligible choices
 remain selectable, rejected rows become source-backed summaries, opaque machine
 metadata stays local, and conservatively grouped observations retain member-level
@@ -65,6 +82,10 @@ Expected sections:
 - Revisit trigger
 
 ## Index
+
+- [0029: Structured Results and a local flight workspace](0029-structured-results-and-local-workspace.md) —
+  accepted 2026-10-23 design; frontend-primary structured answer, canonical fact resolution,
+  complete grouped explorer, shared run FX and no-search follow-ups. Implementation pending.
 
 - [0028: Local end-to-end validation harness](0028-local-end-to-end-validation-harness.md) —
   2026-10-08 owner-authorized explicit local intent-to-Results testing; bounded provider calls

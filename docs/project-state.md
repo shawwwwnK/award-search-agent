@@ -1,5 +1,40 @@
 # Project State
 
+## 2026-10-23 structured Results and local workspace design accepted
+
+The owner subsequently accepted the milestone map in the
+[plan](plans/2026-10-23-2334-feat-results-workspace-plan.md#sequencing-and-dependencies):
+**Results M2 revision** (U1–U3 structured answer), **Frontend M1** (U4 saved-results
+workspace), **Frontend M2** (U5–U6 connected initial workflow/evidence-only
+follow-ups), then **Results M3** evaluation and acceptance. Prepare M3 evidence
+and criteria earlier; complete rendered/integrated assessment after Frontend M2.
+U7 supplies review evidence without automatically satisfying M3's evaluator or
+qualification boundary. Results retains follow-up evidence/answer policy; Frontend
+owns UI/integration. All new implementation/evaluation remains planned.
+
+The owner confirmed the Results/frontend design after a decision interview and
+architect challenge, then requested further investigation and a complete documented
+plan. [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the
+[plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) are current for this revision.
+The model authors narrative and selects exact option references; code resolves flight
+facts for reusable frontend displays and inspectable structured text. A grouped explorer
+retains every eligible journey independently of authoring, with exact variant links.
+Existing Ranking styles/highlight policy and trusted upstream ownership remain unchanged.
+
+The unified UI omits admitted/conditional labels and requirement checklists while
+preserving material booking/pricing/cabin facts and shared availability guidance.
+USD estimates use each run's dated FX snapshot consistently with Ranking. Direct cash
+and incomplete leads stay separate. Follow-up answers use retained evidence only,
+without new searches, request revision, reranking or FX refresh. Conversational request
+changes/re-search remain D01; deployment, authentication and persistence remain deferred.
+
+This is design/documentation only. The new structured writer/checker/artifact versions,
+local frontend/transport, FX acquisition adapter and follow-up path are not implemented.
+Existing V1–V5 Markdown artifacts keep their original checks/request schemas/replay.
+Results M2 presentation acceptance remains open; M3 remains planned. No new live calls,
+runtime verification, broader qualification or owner presentation acceptance is claimed.
+See the [session record](build-log/2026-10-23-results-frontend-design-interview.md).
+
 ## 2026-10-20 compact Results M2 input and bounded Luna diagnostic recorded
 
 The owner authorized implementation of the compact writer-facing view and its

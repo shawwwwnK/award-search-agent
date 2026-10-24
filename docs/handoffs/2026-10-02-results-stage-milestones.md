@@ -1,5 +1,33 @@
 # Results Stage execution milestones
 
+## 2026-10-23 accepted Results/frontend milestone allocation
+
+The owner accepted the following stage map for the
+[current structured Results/workspace plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md#sequencing-and-dependencies).
+It is planned work, not an implementation invocation or a new closeout.
+
+| Milestone | Deliverable | Gate |
+| --- | --- | --- |
+| Results M2 revision | U1–U3: structured flight facts, shared FX/USD display, structured writer/checks/replay | Source-bound inspectable answers, full eligible access, declared historical compatibility. |
+| Frontend M1 | U4: saved-results flight component, recommendations, grouped explorer/details | Readable saved examples, exact variant navigation and discoverable meaningful alternatives. |
+| Frontend M2 | U5–U6: existing initial workflow integration and evidence-only follow-up UI | Explicit execution/revision binding; retained-evidence answers with no new searches. Results retains evidence/answer policy ownership. |
+| Results M3 | U7 integrated review evidence, plus declared evaluation/calibration/adjudication scope | Owner disposition and explicit claim limits after the integrated experience is available; no automatic qualification from U7 or test passes. |
+
+Delivery order is **Results M2 revision → Frontend M1 → Frontend M2 → Results M3
+closeout**. Prepare M3 cases/expected facts/criteria during the M2 revision and
+review intermediate structured answers; finish rendered/integrated evaluation after
+the frontend. M3 means evaluation, not all LLM implementation. Results M2 presentation
+acceptance remains open until the corresponding owner review.
+
+At M3 opening, adapt the earlier evaluator contract to structured/frontend outputs
+and declare its actual scope/cohort/budget. The older 12×3/83-call proposal below is
+historical planning, not a newly authorized campaign. Earlier milestone detail below
+retains its dated context; use the current plan and
+[ADR 0029](../adr/0029-structured-results-and-local-workspace.md#2026-10-23-milestone-allocation)
+for the accepted revision.
+
+**Current direction, 2026-10-23:** [ADR 0029](../adr/0029-structured-results-and-local-workspace.md) and the [current plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md) establish the accepted frontend-primary structured-answer design for future presentation; it is not implemented. Historical V1–V5 Markdown checks, request schema and replay rules remain unchanged. For the new channel only, this supersedes the earlier model-only factual layout and visible eligibility, condition and prose-slot obligations. Upstream Ranking policy and trust remain unchanged. M2 presentation acceptance is open; M3 remains planned.
+
 **Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
 
 **Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)

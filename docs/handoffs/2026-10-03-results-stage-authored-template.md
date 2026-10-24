@@ -1,5 +1,7 @@
 # Results Stage: LLM-authored structure with bound factual placeholders
 
+**Current direction, 2026-10-23:** [ADR 0029](../adr/0029-structured-results-and-local-workspace.md) and the [current plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md) establish the accepted frontend-primary structured-answer design for future presentation; it is not implemented. Historical V1–V5 Markdown checks, request schema and replay rules remain unchanged. For the new channel only, this supersedes the earlier model-only factual layout and visible eligibility, condition and prose-slot obligations. Upstream Ranking policy and trust remain unchanged. M2 presentation acceptance is open; M3 remains planned.
+
 **Current status, 2026-10-08:** Results M2 is [owner-closed](2026-10-08-results-m2-closeout.md) for its declared implemented boundary; M3 remains planned. This supersedes earlier open/unimplemented/pending-closeout status in this document, while preserving historical evidence and policy limits.
 
 **Current M2 policy, 2026-10-07:** use the [consolidated validation/recovery/delivery contract](2026-10-07-results-m2-validation-and-delivery-contract.md)

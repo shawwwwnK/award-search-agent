@@ -4,6 +4,27 @@ Language for presenting observed award-led journeys and their limitations.
 
 ## Language
 
+**Structured answer**:
+A recommendation expressed as narrative and references to existing flight options,
+with their source-resolved facts available for both visual display and text inspection.
+
+**Flight option**:
+One exact complete award-led journey found in a run, including any matched cash flight;
+its schedule, price and booking facts belong to that journey rather than an award group's best parts.
+
+**Results explorer**:
+The browsable collection of every eligible flight option retained for a particular
+search run, independent of which options the recommendation highlights.
+
+**Potential lead**:
+A supported flight observation that lacks enough information to be presented as a
+complete eligible journey.
+
+**Verification guidance**:
+A reminder to confirm current availability and prices on official booking sites;
+it does not assert that a flight is bookable or replace known booking/price facts.
+_Avoid_: Validation notice
+
 **Results validation**:
 Checks of an authored traveler's answer against selected factual and disclosure rules; failed
 checks are reported and do not prevent delivery.

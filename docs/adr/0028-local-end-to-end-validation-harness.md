@@ -1,5 +1,11 @@
 # ADR 0028: Local end-to-end validation harness
 
+2026-10-23: [ADR 0029](0029-structured-results-and-local-workspace.md) accepts a planned
+local frontend successor reusing this explicit-event pipeline and revision/invalidation
+boundary. This ADR continues to describe the implemented Streamlit harness. The new
+frontend transport and evidence-only follow-up adapter are not implemented; no production
+delivery or additional live-call budget is opened.
+
 - Status: Accepted
 - Decision and recording date: 2026-10-08
 - Source: owner's request to update Streamlit for end-to-end intent-to-Results testing.
