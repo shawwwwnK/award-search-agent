@@ -1,0 +1,840 @@
+{
+  "scope": "Six owner-requested early-2027 derivatives; one trial each, scripted followups labeled",
+  "cross_process_replay_probe": {
+    "artifact": "early-2027/runs/mixed_award_cash_eligible/continuation-2/results-artifact.json",
+    "diagnosis": "Incomplete-observation finding iteration over a set changes receipt order across processes; saved artifact not modified.",
+    "probes": [
+      {
+        "python_hash_seed": 0,
+        "exact_replay": false,
+        "error": "saved Results check receipt differs from source",
+        "finding_multisets_equal": true
+      },
+      {
+        "python_hash_seed": 1,
+        "exact_replay": true
+      },
+      {
+        "python_hash_seed": 2,
+        "exact_replay": true
+      },
+      {
+        "python_hash_seed": 3,
+        "exact_replay": false,
+        "error": "saved Results check receipt differs from source",
+        "finding_multisets_equal": true
+      }
+    ]
+  },
+  "cost_exclusions": "Provider billing, input-token measurement billing and absent usage",
+  "latency_basis": "Compose latest measured completed stages along the final continuation chain, including original intent; excludes replay, idle permission gaps and superseded acquisition/authoring runs",
+  "cases": [
+    {
+      "case": "ready_whole_month",
+      "input": "Find one award seat from SFO to BKK in January 2027.",
+      "reference_date": "2026-10-08",
+      "expected_departure_window": {
+        "start": "2027-01-01",
+        "end": "2027-01-31"
+      },
+      "initial_action": "none",
+      "initial_departure_matches_declared_window": true,
+      "initial_travelers": 1,
+      "final_departure_matches_declared_window": true,
+      "final_travelers_match_source": true,
+      "scripted_continuation": false,
+      "provider_profile": "compact",
+      "provider_status": "partial",
+      "provider_observations": 383,
+      "provider_award_usage": {
+        "requests": 3,
+        "attempts": 3,
+        "pages": 3,
+        "detail_calls": 0,
+        "rows": 293,
+        "bytes": 671624,
+        "elapsed_seconds": 0.939648624509573
+      },
+      "provider_cash_usage": {
+        "requests": 1,
+        "attempts": 1,
+        "pages": 1,
+        "detail_calls": 0,
+        "rows": 5,
+        "bytes": 3092,
+        "elapsed_seconds": 13.073300790973008
+      },
+      "ranking_accounting": {
+        "award_itineraries": 0,
+        "cash_positioning_observations": 0,
+        "direct_cash_observations": 5,
+        "scoped_pairs": 0,
+        "retained_direct": 0,
+        "retained_mixed": 0,
+        "admitted": 0,
+        "conditional": 0,
+        "rejected": 0,
+        "research_leads": 0,
+        "unpaired_positioning_observation_ids": []
+      },
+      "selected_journeys": 0,
+      "selected_finding_outcomes": {
+        "unchecked": 4
+      },
+      "remaining_failed_findings": [],
+      "notices": 0,
+      "results": {
+        "elapsed_seconds": 40.056,
+        "generation": "success",
+        "validation": "clean",
+        "delivery": "delivered",
+        "attempts": 1
+      },
+      "stage_seconds": {
+        "intent": 3.07,
+        "clarification": 0.006,
+        "planning": 74.422,
+        "providers": 67.988,
+        "ranking": 0.67,
+        "results": 40.056
+      },
+      "live_stage_seconds_including_initial_and_continuation": 186.212,
+      "generation_calls": 3,
+      "generation_api_seconds": 54.392,
+      "input_tokens": 256262,
+      "output_tokens": 5704,
+      "estimated_generation_cost_usd": "0.0352155900",
+      "answer": "early-2027/runs/ready_whole_month/answer.md",
+      "acquisition_profile_comparisons": [
+        {
+          "trace": "early-2027/runs/ready_whole_month",
+          "profile": "compact",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 40.056,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 1
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 186.212,
+          "answer": "early-2027/runs/ready_whole_month/answer.md"
+        }
+      ],
+      "trace": "early-2027/runs/ready_whole_month",
+      "initial_trace": "early-2027/runs/ready_whole_month"
+    },
+    {
+      "case": "ready_early_month",
+      "input": "Find one award seat from SFO to BKK in early February 2027.",
+      "reference_date": "2026-10-08",
+      "expected_departure_window": {
+        "start": "2027-02-01",
+        "end": "2027-02-10"
+      },
+      "initial_action": "none",
+      "initial_departure_matches_declared_window": true,
+      "initial_travelers": 1,
+      "final_departure_matches_declared_window": true,
+      "final_travelers_match_source": true,
+      "scripted_continuation": false,
+      "provider_profile": "compact",
+      "provider_status": "partial",
+      "provider_observations": 289,
+      "provider_award_usage": {
+        "requests": 3,
+        "attempts": 3,
+        "pages": 3,
+        "detail_calls": 0,
+        "rows": 207,
+        "bytes": 474885,
+        "elapsed_seconds": 0.6339750839397311
+      },
+      "provider_cash_usage": {
+        "requests": 1,
+        "attempts": 1,
+        "pages": 1,
+        "detail_calls": 0,
+        "rows": 8,
+        "bytes": 4752,
+        "elapsed_seconds": 1.2797496248967946
+      },
+      "ranking_accounting": {
+        "award_itineraries": 0,
+        "cash_positioning_observations": 0,
+        "direct_cash_observations": 8,
+        "scoped_pairs": 0,
+        "retained_direct": 0,
+        "retained_mixed": 0,
+        "admitted": 0,
+        "conditional": 0,
+        "rejected": 0,
+        "research_leads": 0,
+        "unpaired_positioning_observation_ids": []
+      },
+      "selected_journeys": 0,
+      "selected_finding_outcomes": {
+        "unchecked": 2
+      },
+      "remaining_failed_findings": [],
+      "notices": 0,
+      "results": {
+        "elapsed_seconds": 58.056,
+        "generation": "success",
+        "validation": "clean",
+        "delivery": "delivered",
+        "attempts": 2
+      },
+      "stage_seconds": {
+        "intent": 4.58,
+        "clarification": 0.009,
+        "planning": 64.35,
+        "providers": 43.507,
+        "ranking": 0.474,
+        "results": 58.056
+      },
+      "live_stage_seconds_including_initial_and_continuation": 170.976,
+      "generation_calls": 4,
+      "generation_api_seconds": 72.325,
+      "input_tokens": 413527,
+      "output_tokens": 7303,
+      "estimated_generation_cost_usd": "0.0555412250",
+      "answer": "early-2027/runs/ready_early_month/answer.md",
+      "acquisition_profile_comparisons": [
+        {
+          "trace": "early-2027/runs/ready_early_month",
+          "profile": "compact",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 58.056,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 2
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 170.976,
+          "answer": "early-2027/runs/ready_early_month/answer.md"
+        }
+      ],
+      "trace": "early-2027/runs/ready_early_month",
+      "initial_trace": "early-2027/runs/ready_early_month"
+    },
+    {
+      "case": "ready_holiday_window",
+      "input": "I need one award seat from Seattle to Tokyo over Martin Luther King Jr. Day weekend in 2027.",
+      "reference_date": "2026-10-08",
+      "expected_departure_window": {
+        "start": "2027-01-15",
+        "end": "2027-01-18"
+      },
+      "initial_action": "ask",
+      "initial_departure_matches_declared_window": false,
+      "initial_travelers": 1,
+      "final_departure_matches_declared_window": true,
+      "final_travelers_match_source": true,
+      "scripted_continuation": true,
+      "provider_profile": "compact",
+      "provider_status": "partial",
+      "provider_observations": 69,
+      "provider_award_usage": {
+        "requests": 3,
+        "attempts": 3,
+        "pages": 3,
+        "detail_calls": 0,
+        "rows": 46,
+        "bytes": 103585,
+        "elapsed_seconds": 0.5151487085968256
+      },
+      "provider_cash_usage": {
+        "requests": 1,
+        "attempts": 1,
+        "pages": 1,
+        "detail_calls": 0,
+        "rows": 6,
+        "bytes": 4007,
+        "elapsed_seconds": 1.4509495408274233
+      },
+      "ranking_accounting": {
+        "award_itineraries": 0,
+        "cash_positioning_observations": 0,
+        "direct_cash_observations": 6,
+        "scoped_pairs": 0,
+        "retained_direct": 0,
+        "retained_mixed": 0,
+        "admitted": 0,
+        "conditional": 0,
+        "rejected": 0,
+        "research_leads": 0,
+        "unpaired_positioning_observation_ids": []
+      },
+      "selected_journeys": 0,
+      "selected_finding_outcomes": {
+        "unchecked": 6
+      },
+      "remaining_failed_findings": [],
+      "notices": 0,
+      "results": {
+        "elapsed_seconds": 42.415,
+        "generation": "success",
+        "validation": "clean",
+        "delivery": "delivered",
+        "attempts": 1
+      },
+      "stage_seconds": {
+        "intent": 14.983,
+        "clarification": 2.39,
+        "clarification_answer": 2.423,
+        "planning": 87.915,
+        "providers": 61.78,
+        "ranking": 0.231,
+        "results": 42.415
+      },
+      "live_stage_seconds_including_initial_and_continuation": 212.137,
+      "generation_calls": 8,
+      "generation_api_seconds": 86.779,
+      "input_tokens": 65228,
+      "output_tokens": 8655,
+      "estimated_generation_cost_usd": "0.0147035300",
+      "answer": "early-2027/runs/ready_holiday_window/continuation-1/answer.md",
+      "acquisition_profile_comparisons": [
+        {
+          "trace": "early-2027/runs/ready_holiday_window/continuation-1",
+          "profile": "compact",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 42.415,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 1
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 194.764,
+          "answer": "early-2027/runs/ready_holiday_window/continuation-1/answer.md"
+        }
+      ],
+      "trace": "early-2027/runs/ready_holiday_window/continuation-1",
+      "initial_trace": "early-2027/runs/ready_holiday_window"
+    },
+    {
+      "case": "typo_recognizable_date",
+      "input": "Find one award seat from SFO to BKK on the Fridai after New Year's Day 2027.",
+      "reference_date": "2026-10-08",
+      "expected_departure_window": {
+        "start": "2027-01-08",
+        "end": "2027-01-08"
+      },
+      "initial_action": "ask",
+      "initial_departure_matches_declared_window": false,
+      "initial_travelers": 1,
+      "final_departure_matches_declared_window": true,
+      "final_travelers_match_source": true,
+      "scripted_continuation": true,
+      "provider_profile": "standard",
+      "provider_status": "partial",
+      "provider_observations": 247,
+      "provider_award_usage": {
+        "requests": 9,
+        "attempts": 9,
+        "pages": 7,
+        "detail_calls": 2,
+        "rows": 127,
+        "bytes": 284173,
+        "elapsed_seconds": 3.705165791325271
+      },
+      "provider_cash_usage": {
+        "requests": 3,
+        "attempts": 3,
+        "pages": 3,
+        "detail_calls": 0,
+        "rows": 72,
+        "bytes": 33281,
+        "elapsed_seconds": 21.74502983270213
+      },
+      "ranking_accounting": {
+        "award_itineraries": 13,
+        "cash_positioning_observations": 66,
+        "direct_cash_observations": 6,
+        "scoped_pairs": 528,
+        "retained_direct": 0,
+        "retained_mixed": 528,
+        "admitted": 0,
+        "conditional": 232,
+        "rejected": 296,
+        "research_leads": 0,
+        "unpaired_positioning_observation_ids": []
+      },
+      "selected_journeys": 3,
+      "selected_finding_outcomes": {
+        "failed": 5,
+        "unchecked": 19
+      },
+      "remaining_failed_findings": [
+        {
+          "code": "shared_binding_key",
+          "message": "Shared journey fact provider_status has a duplicate or global key."
+        },
+        {
+          "code": "shared_binding_key",
+          "message": "Shared journey fact coverage has a duplicate or global key."
+        },
+        {
+          "code": "shared_binding_key",
+          "message": "Shared journey fact complete_journey_count has a duplicate or global key."
+        },
+        {
+          "code": "shared_binding_key",
+          "message": "Shared journey fact benchmark_status has a duplicate or global key."
+        },
+        {
+          "code": "claim_scope_mismatch",
+          "message": "Declared assertion does not have the exact supported scope."
+        }
+      ],
+      "notices": 5,
+      "results": {
+        "elapsed_seconds": 165.299,
+        "generation": "success",
+        "validation": "annotated",
+        "delivery": "delivered",
+        "attempts": 2
+      },
+      "stage_seconds": {
+        "intent": 11.017,
+        "clarification": 1.254,
+        "clarification_answer": 2.786,
+        "planning": 70.022,
+        "providers": 61.849,
+        "ranking": 1.366,
+        "results": 165.299
+      },
+      "live_stage_seconds_including_initial_and_continuation": 313.593,
+      "generation_calls": 9,
+      "generation_api_seconds": 260.248,
+      "input_tokens": 1538869,
+      "output_tokens": 27395,
+      "estimated_generation_cost_usd": "0.3791466000",
+      "answer": "early-2027/runs/typo_recognizable_date/continuation-3/answer.md",
+      "acquisition_profile_comparisons": [
+        {
+          "trace": "early-2027/runs/typo_recognizable_date/continuation-1",
+          "profile": "compact",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 42.732,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 1
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 172.161,
+          "answer": "early-2027/runs/typo_recognizable_date/continuation-1/answer.md"
+        },
+        {
+          "trace": "early-2027/runs/typo_recognizable_date/continuation-3",
+          "profile": "standard",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 165.299,
+            "generation": "success",
+            "validation": "annotated",
+            "delivery": "delivered",
+            "attempts": 2
+          },
+          "ranked_journeys": 528,
+          "attempt_live_seconds": 228.514,
+          "answer": "early-2027/runs/typo_recognizable_date/continuation-3/answer.md"
+        },
+        {
+          "trace": "early-2027/runs/typo_recognizable_date/continuation-2",
+          "profile": "standard",
+          "valid_profile_comparison": false,
+          "results": {
+            "elapsed_seconds": 29.928,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 1
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 30.169,
+          "answer": "early-2027/runs/typo_recognizable_date/continuation-2/answer.md"
+        }
+      ],
+      "trace": "early-2027/runs/typo_recognizable_date/continuation-3",
+      "initial_trace": "early-2027/runs/typo_recognizable_date"
+    },
+    {
+      "case": "mixed_award_cash_eligible",
+      "input": "Find one award and cash flight from SFO to BKK on January 15, 2027.",
+      "reference_date": "2026-10-08",
+      "expected_departure_window": {
+        "start": "2027-01-15",
+        "end": "2027-01-15"
+      },
+      "initial_action": "ask",
+      "initial_departure_matches_declared_window": true,
+      "initial_travelers": null,
+      "final_departure_matches_declared_window": true,
+      "final_travelers_match_source": true,
+      "scripted_continuation": true,
+      "provider_profile": "standard",
+      "provider_status": "partial",
+      "provider_observations": 261,
+      "provider_award_usage": {
+        "requests": 8,
+        "attempts": 8,
+        "pages": 6,
+        "detail_calls": 2,
+        "rows": 137,
+        "bytes": 295269,
+        "elapsed_seconds": 1.5085138343274593
+      },
+      "provider_cash_usage": {
+        "requests": 3,
+        "attempts": 3,
+        "pages": 3,
+        "detail_calls": 0,
+        "rows": 84,
+        "bytes": 38997,
+        "elapsed_seconds": 24.357874957844615
+      },
+      "ranking_accounting": {
+        "award_itineraries": 34,
+        "cash_positioning_observations": 74,
+        "direct_cash_observations": 10,
+        "scoped_pairs": 592,
+        "retained_direct": 26,
+        "retained_mixed": 592,
+        "admitted": 26,
+        "conditional": 232,
+        "rejected": 360,
+        "research_leads": 0,
+        "unpaired_positioning_observation_ids": []
+      },
+      "selected_journeys": 3,
+      "selected_finding_outcomes": {
+        "unchecked": 11
+      },
+      "remaining_failed_findings": [],
+      "notices": 0,
+      "results": {
+        "elapsed_seconds": 172.691,
+        "generation": "success",
+        "validation": "clean",
+        "delivery": "delivered",
+        "attempts": 2
+      },
+      "stage_seconds": {
+        "intent": 4.778,
+        "clarification": 1.991,
+        "clarification_answer": 4.222,
+        "planning": 81.12,
+        "providers": 78.111,
+        "ranking": 1.705,
+        "results": 172.691
+      },
+      "live_stage_seconds_including_initial_and_continuation": 344.618,
+      "generation_calls": 9,
+      "generation_api_seconds": 301.366,
+      "input_tokens": 1732404,
+      "output_tokens": 29609,
+      "estimated_generation_cost_usd": "0.4270380850",
+      "answer": "early-2027/runs/mixed_award_cash_eligible/continuation-3/answer.md",
+      "acquisition_profile_comparisons": [
+        {
+          "trace": "early-2027/runs/mixed_award_cash_eligible/continuation-1",
+          "profile": "compact",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 32.042,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 1
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 163.764,
+          "answer": "early-2027/runs/mixed_award_cash_eligible/continuation-1/answer.md"
+        },
+        {
+          "trace": "early-2027/runs/mixed_award_cash_eligible/continuation-3",
+          "profile": "standard",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 172.691,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 2
+          },
+          "ranked_journeys": 618,
+          "attempt_live_seconds": 252.507,
+          "answer": "early-2027/runs/mixed_award_cash_eligible/continuation-3/answer.md"
+        },
+        {
+          "trace": "early-2027/runs/mixed_award_cash_eligible/continuation-2",
+          "profile": "standard",
+          "valid_profile_comparison": false,
+          "results": {
+            "elapsed_seconds": 70.642,
+            "generation": "success",
+            "validation": "annotated",
+            "delivery": "delivered",
+            "attempts": 2
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 70.829,
+          "answer": "early-2027/runs/mixed_award_cash_eligible/continuation-2/answer.md"
+        }
+      ],
+      "trace": "early-2027/runs/mixed_award_cash_eligible/continuation-3",
+      "initial_trace": "early-2027/runs/mixed_award_cash_eligible"
+    },
+    {
+      "case": "default_award_home_airport_not_return",
+      "input": "Find one business-class seat from my home airport SFO to BKK on February 10, 2027.",
+      "reference_date": "2026-10-08",
+      "expected_departure_window": {
+        "start": "2027-02-10",
+        "end": "2027-02-10"
+      },
+      "initial_action": "none",
+      "initial_departure_matches_declared_window": true,
+      "initial_travelers": 1,
+      "final_departure_matches_declared_window": true,
+      "final_travelers_match_source": true,
+      "scripted_continuation": false,
+      "provider_profile": "standard",
+      "provider_status": "partial",
+      "provider_observations": 33,
+      "provider_award_usage": {
+        "requests": 5,
+        "attempts": 5,
+        "pages": 3,
+        "detail_calls": 2,
+        "rows": 34,
+        "bytes": 75695,
+        "elapsed_seconds": 0.8376313745975494
+      },
+      "provider_cash_usage": {
+        "requests": 1,
+        "attempts": 1,
+        "pages": 1,
+        "detail_calls": 0,
+        "rows": 6,
+        "bytes": 3605,
+        "elapsed_seconds": 1.4150813329033554
+      },
+      "ranking_accounting": {
+        "award_itineraries": 2,
+        "cash_positioning_observations": 0,
+        "direct_cash_observations": 6,
+        "scoped_pairs": 0,
+        "retained_direct": 0,
+        "retained_mixed": 0,
+        "admitted": 0,
+        "conditional": 0,
+        "rejected": 0,
+        "research_leads": 0,
+        "unpaired_positioning_observation_ids": []
+      },
+      "selected_journeys": 0,
+      "selected_finding_outcomes": {
+        "unchecked": 2
+      },
+      "remaining_failed_findings": [],
+      "notices": 0,
+      "results": {
+        "elapsed_seconds": 64.741,
+        "generation": "success",
+        "validation": "clean",
+        "delivery": "delivered",
+        "attempts": 2
+      },
+      "stage_seconds": {
+        "intent": 3.172,
+        "clarification": 0.01,
+        "planning": 67.824,
+        "providers": 60.777,
+        "ranking": 0.106,
+        "results": 64.741
+      },
+      "live_stage_seconds_including_initial_and_continuation": 196.63,
+      "generation_calls": 4,
+      "generation_api_seconds": 80.774,
+      "input_tokens": 65179,
+      "output_tokens": 7565,
+      "estimated_generation_cost_usd": "0.0121287750",
+      "answer": "early-2027/runs/default_award_home_airport_not_return/answer.md",
+      "acquisition_profile_comparisons": [
+        {
+          "trace": "early-2027/runs/default_award_home_airport_not_return",
+          "profile": "standard",
+          "valid_profile_comparison": true,
+          "results": {
+            "elapsed_seconds": 64.741,
+            "generation": "success",
+            "validation": "clean",
+            "delivery": "delivered",
+            "attempts": 2
+          },
+          "ranked_journeys": 0,
+          "attempt_live_seconds": 196.63,
+          "answer": "early-2027/runs/default_award_home_airport_not_return/answer.md"
+        }
+      ],
+      "trace": "early-2027/runs/default_award_home_airport_not_return",
+      "initial_trace": "early-2027/runs/default_award_home_airport_not_return"
+    }
+  ],
+  "verification": [
+    {
+      "artifact": "early-2027/runs/default_award_home_airport_not_return/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 2443,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/mixed_award_cash_eligible/continuation-1/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 3431,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/mixed_award_cash_eligible/continuation-2/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 5282,
+      "source_projection_equal": true,
+      "exact_results_replay": false,
+      "replay_error": "saved Results check receipt differs from source",
+      "finding_order_only_mismatch": true
+    },
+    {
+      "artifact": "early-2027/runs/mixed_award_cash_eligible/continuation-3/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 7330,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/ready_early_month/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 2646,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/ready_holiday_window/continuation-1/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 6399,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/ready_whole_month/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 5596,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/typo_recognizable_date/continuation-1/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 6918,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/typo_recognizable_date/continuation-2/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 3726,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "early-2027/runs/typo_recognizable_date/continuation-3/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 11728,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "runs/mixed_award_cash_eligible/continuation-1/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 7749,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "runs/ready_early_month/continuation-1/results-artifact.json",
+      "delivery": "not_delivered",
+      "markdown_bytes": 0,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "runs/ready_early_month/continuation-2/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 3979,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "runs/ready_holiday_window/continuation-1/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 8447,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "runs/ready_whole_month/continuation-1/results-artifact.json",
+      "delivery": "not_delivered",
+      "markdown_bytes": 0,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    },
+    {
+      "artifact": "runs/typo_recognizable_date/continuation-3/results-artifact.json",
+      "delivery": "delivered",
+      "markdown_bytes": 7990,
+      "source_projection_equal": true,
+      "exact_results_replay": true,
+      "replay_error": null,
+      "finding_order_only_mismatch": false
+    }
+  ]
+}

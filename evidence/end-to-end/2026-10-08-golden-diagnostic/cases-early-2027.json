@@ -1,0 +1,49 @@
+{
+  "source": "evals/intent/one_way_award_behavior_cases_v1.yaml",
+  "campaign": "early-2027",
+  "reference_date": "2026-10-08",
+  "cases": {
+    "ready_whole_month": {
+      "input_replace": {"old": "May 2027", "new": "January 2027"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "expected_departure_window": {"start": "2027-01-01", "end": "2027-01-31"},
+      "reason": "Owner-requested early-2027 derivative of the whole-month fixture."
+    },
+    "ready_early_month": {
+      "input_replace": {"old": "May 2027", "new": "February 2027"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "expected_departure_window": {"start": "2027-02-01", "end": "2027-02-10"},
+      "reason": "Owner-requested early-2027 derivative of the early-month fixture."
+    },
+    "ready_holiday_window": {
+      "input_replace": {"old": "Labor Day weekend", "new": "Martin Luther King Jr. Day weekend in 2027"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "expected_departure_window": {"start": "2027-01-15", "end": "2027-01-18"},
+      "scripted_clarification": "January 15 through January 18, 2027.",
+      "answer_source": "Diagnostic continuation from this predeclared early-2027 derivative's expected MLK weekend; not an actual user answer or first-pass success.",
+      "reason": "Owner-requested 2027 holiday-weekend derivative with explicit year; MLK Day is January 18."
+    },
+    "typo_recognizable_date": {
+      "input_replace": {"old": "Thanskgiving", "new": "New Year's Day 2027"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "expected_departure_window": {"start": "2027-01-08", "end": "2027-01-08"},
+      "scripted_clarification": "January 8, 2027.",
+      "answer_source": "Diagnostic continuation from this predeclared early-2027 derivative's expected Friday after New Year's Day; not an actual user answer or first-pass success.",
+      "reason": "Owner-requested typo and relative-holiday derivative; the Friday after January 1, 2027 is January 8."
+    },
+    "mixed_award_cash_eligible": {
+      "input_replace": {"old": "October 5", "new": "January 15, 2027"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "expected_departure_window": {"start": "2027-01-15", "end": "2027-01-15"},
+      "scripted_clarification": "One traveler, departing January 15, 2027.",
+      "answer_source": "Diagnostic continuation from the original request's explicit one traveler and this predeclared date derivative; not an actual user answer or first-pass success.",
+      "reason": "Owner-requested early-2027 derivative of mixed award/cash intent."
+    },
+    "default_award_home_airport_not_return": {
+      "input_replace": {"old": "October 5", "new": "February 10, 2027"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "expected_departure_window": {"start": "2027-02-10", "end": "2027-02-10"},
+      "reason": "Owner-requested early-2027 business-class/home-airport derivative replacing the New York–Lisbon relative-weekend case."
+    }
+  }
+}

@@ -1,0 +1,1472 @@
+{
+  "schema_version": 1,
+  "campaign": "early-2027",
+  "basis": "pricing-basis.json; Standard generation response usage, one long-context decision per call",
+  "limitations": [
+    "Generation estimates exclude /responses/input_tokens count-endpoint billing and provider charges.",
+    "Calls without SDK usage have unknown cost. Cache-write tokens are zero only where the SDK reports no such class; undisclosed account caching is unmeasured.",
+    "Attempt wall times are reported individually because continuations and preserved copies are not additive."
+  ],
+  "cases": {
+    "default_award_home_airport_not_return": {
+      "generation_calls": 4,
+      "input_tokens": 65179,
+      "output_tokens": 7565,
+      "cached_input_tokens": 7991,
+      "cache_write_tokens": 57176,
+      "reasoning_output_tokens": 4978,
+      "generation_estimate_usd": "0.0121287750",
+      "model_api_seconds": 80.774,
+      "missing_usage_calls": 0,
+      "input_token_measurement_calls": 2,
+      "attempts": [
+        {
+          "directory": "early-2027/runs/default_award_home_airport_not_return",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "elapsed_seconds": 3.172,
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 2397,
+                "output_tokens": 235,
+                "total_tokens": 2632
+              },
+              "outcome": "completed"
+            },
+            "clarification": {
+              "usage": null,
+              "session_status": "ready",
+              "elapsed_seconds": 0.01
+            },
+            "planning": {
+              "elapsed_seconds": 67.824,
+              "diagnostics": [
+                "m2a_selector_calls=0",
+                "m2a_selector_total_tokens=0",
+                "m2b_generator_calls=1",
+                "m2b_generator_total_tokens=3848",
+                "planning_elapsed_seconds=67.821"
+              ],
+              "outcome": "planned"
+            },
+            "providers": {
+              "elapsed_seconds": 60.777,
+              "status": "partial",
+              "captured_pages": 6,
+              "body_files": 6
+            },
+            "ranking": {
+              "elapsed_seconds": 0.106,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 64.741,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 2
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 239.665,
+          "live_pipeline_seconds": 196.63
+        }
+      ],
+      "models": {
+        "gpt-5.6-luna": 2,
+        "gpt-6-luna": 2
+      },
+      "calls": [
+        {
+          "path": "early-2027/runs/default_award_home_airport_not_return/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_049c22b52168064d016ac88f43780c87d0a20ab4cc797b38cb",
+          "latency_seconds": 3.141,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2397,
+            "output_tokens": 235,
+            "cached_input_tokens": 2362,
+            "cache_write_tokens": 32,
+            "reasoning_output_tokens": 0
+          },
+          "estimate_usd": "0.0003378400"
+        },
+        {
+          "path": "early-2027/runs/default_award_home_airport_not_return/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0a763a1bf9a623b2016ac88f769e5c87d084d9b9abe576a3c2",
+          "latency_seconds": 13.593,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2683,
+            "output_tokens": 1165,
+            "cached_input_tokens": 1957,
+            "cache_write_tokens": 723,
+            "reasoning_output_tokens": 927
+          },
+          "estimate_usd": "0.0016184900"
+        },
+        {
+          "path": "early-2027/runs/default_award_home_airport_not_return/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.277,
+          "input_tokens_counted": 29538,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/default_award_home_airport_not_return/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0ac7f12c0a381f90016ac88ff28ff887d0888470c15bd827a5",
+          "latency_seconds": 34.216,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 29538,
+            "output_tokens": 3234,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 27699,
+            "reasoning_output_tokens": 2106
+          },
+          "estimate_usd": "0.0050980350"
+        },
+        {
+          "path": "early-2027/runs/default_award_home_airport_not_return/model-calls/call-005.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.276,
+          "input_tokens_counted": 30561,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/default_award_home_airport_not_return/model-calls/call-006.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_07f585e7a94dc21c016ac89014feec87d0a6323e5d5c3a0c25",
+          "latency_seconds": 29.824,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 30561,
+            "output_tokens": 2931,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 28722,
+            "reasoning_output_tokens": 1945
+          },
+          "estimate_usd": "0.0050744100"
+        }
+      ]
+    },
+    "mixed_award_cash_eligible": {
+      "generation_calls": 9,
+      "input_tokens": 1732404,
+      "output_tokens": 29609,
+      "cached_input_tokens": 61678,
+      "cache_write_tokens": 1670343,
+      "reasoning_output_tokens": 15700,
+      "generation_estimate_usd": "0.4270380850",
+      "model_api_seconds": 301.366,
+      "missing_usage_calls": 0,
+      "input_token_measurement_calls": 5,
+      "attempts": [
+        {
+          "directory": "early-2027/runs/mixed_award_cash_eligible/continuation-1",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible"
+            },
+            "clarification_answer": {
+              "elapsed_seconds": 4.222,
+              "receiver_usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 1671,
+                "output_tokens": 243,
+                "total_tokens": 1914
+              },
+              "composer_usage": null,
+              "status": "ready"
+            },
+            "planning": {
+              "elapsed_seconds": 81.12,
+              "diagnostics": [
+                "m2a_selector_calls=0",
+                "m2a_selector_total_tokens=0",
+                "m2b_generator_calls=1",
+                "m2b_generator_total_tokens=4722",
+                "planning_elapsed_seconds=81.115"
+              ],
+              "outcome": "planned"
+            },
+            "providers": {
+              "elapsed_seconds": 46.265,
+              "status": "partial",
+              "captured_pages": 4,
+              "body_files": 4
+            },
+            "ranking": {
+              "elapsed_seconds": 0.115,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 32.042,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 1
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 216.749,
+          "live_pipeline_seconds": 163.764
+        },
+        {
+          "directory": "early-2027/runs/mixed_award_cash_eligible/continuation-2",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1"
+            },
+            "planning": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1"
+            },
+            "providers": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1",
+              "status": "partial"
+            },
+            "ranking": {
+              "elapsed_seconds": 0.187,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 70.642,
+              "generation": "success",
+              "validation": "annotated",
+              "delivery": "delivered",
+              "attempts": 2
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 128.6,
+          "live_pipeline_seconds": 70.829
+        },
+        {
+          "directory": "early-2027/runs/mixed_award_cash_eligible/continuation-3",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1"
+            },
+            "planning": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/mixed_award_cash_eligible/continuation-1"
+            },
+            "providers": {
+              "elapsed_seconds": 78.111,
+              "status": "partial",
+              "captured_pages": 11,
+              "body_files": 10
+            },
+            "ranking": {
+              "elapsed_seconds": 1.705,
+              "journeys": 618
+            },
+            "results": {
+              "elapsed_seconds": 172.691,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 2
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 305.324,
+          "live_pipeline_seconds": 252.507
+        },
+        {
+          "directory": "early-2027/runs/mixed_award_cash_eligible",
+          "status": "blocked_by_original_request",
+          "stages": {
+            "intent": {
+              "elapsed_seconds": 4.778,
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 2395,
+                "output_tokens": 434,
+                "total_tokens": 2829
+              },
+              "outcome": "completed"
+            },
+            "clarification": {
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 359,
+                "output_tokens": 45,
+                "total_tokens": 404
+              },
+              "session_status": "awaiting_answer",
+              "elapsed_seconds": 1.991
+            }
+          },
+          "delivery": null,
+          "provider_exact_replay": null,
+          "results_exact_replay": null,
+          "wall_seconds": 6.77,
+          "live_pipeline_seconds": 6.769
+        }
+      ],
+      "models": {
+        "gpt-5.6-luna": 4,
+        "gpt-6-luna": 5
+      },
+      "calls": [
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-1/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "clarification_answer",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0f4e1d8a3eeceb1a016ac88f55053487d0a3fac8ede7fcdae7",
+          "latency_seconds": 4.175,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 1671,
+            "output_tokens": 243,
+            "cached_input_tokens": 1562,
+            "cache_write_tokens": 106,
+            "reasoning_output_tokens": 84
+          },
+          "estimate_usd": "0.0003499400"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-1/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0b52baf3704dbfa9016ac88f8dbd9c87d0bbcd21f1c84845df",
+          "latency_seconds": 23.979,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2683,
+            "output_tokens": 2039,
+            "cached_input_tokens": 1957,
+            "cache_write_tokens": 723,
+            "reasoning_output_tokens": 1552
+          },
+          "estimate_usd": "0.0026672900"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-1/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.378,
+          "input_tokens_counted": 48456,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-1/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0b148ac99624b540016ac8900df4c087d08b3b6f5141bb1718",
+          "latency_seconds": 31.555,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 48456,
+            "output_tokens": 2937,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 46617,
+            "reasoning_output_tokens": 1882
+          },
+          "estimate_usd": "0.0073142850"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-2/model-calls/call-001.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.678,
+          "input_tokens_counted": 48456,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-2/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_09ea729e651e3c77016ac892297b0c87d08a75fa29a1ef8fc8",
+          "latency_seconds": 32.849,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 48456,
+            "output_tokens": 3704,
+            "cached_input_tokens": 48453,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 1305
+          },
+          "estimate_usd": "0.0023368300"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-2/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.683,
+          "input_tokens_counted": 51915,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-2/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0688008905b74d76016ac8924b05ac87d081d61b14148703c9",
+          "latency_seconds": 36.089,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 51915,
+            "output_tokens": 4152,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 50076,
+            "reasoning_output_tokens": 1741
+          },
+          "estimate_usd": "0.0083541600"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-3/model-calls/call-001.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.956,
+          "input_tokens_counted": 785889,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-3/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_016248acfdc736f1016ac89318068487d083c6f58fb821e3bb",
+          "latency_seconds": 96.818,
+          "pricing_bracket": "long_context",
+          "usage": {
+            "input_tokens": 785889,
+            "output_tokens": 9410,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 784050,
+            "reasoning_output_tokens": 5455
+          },
+          "estimate_usd": "0.2031073200"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-3/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.743,
+          "input_tokens_counted": 790580,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/continuation-3/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0baf698fa18fbd72016ac89379bdb487d092cbbe82fca99748",
+          "latency_seconds": 69.178,
+          "pricing_bracket": "long_context",
+          "usage": {
+            "input_tokens": 790580,
+            "output_tokens": 6645,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 788741,
+            "reasoning_output_tokens": 3480
+          },
+          "estimate_usd": "0.2022063200"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_07dde2c8cf9562b8016ac88f449ca887d09bd95b39ce614f1e",
+          "latency_seconds": 4.744,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2395,
+            "output_tokens": 434,
+            "cached_input_tokens": 2362,
+            "cache_write_tokens": 30,
+            "reasoning_output_tokens": 201
+          },
+          "estimate_usd": "0.0005761400"
+        },
+        {
+          "path": "early-2027/runs/mixed_award_cash_eligible/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "clarification",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_07f755bac64b0e4c016ac88f495abc87d08032914f8fb07512",
+          "latency_seconds": 1.979,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 359,
+            "output_tokens": 45,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 0
+          },
+          "estimate_usd": "0.0001258000"
+        }
+      ]
+    },
+    "ready_early_month": {
+      "generation_calls": 4,
+      "input_tokens": 413527,
+      "output_tokens": 7303,
+      "cached_input_tokens": 7991,
+      "cache_write_tokens": 405524,
+      "reasoning_output_tokens": 3363,
+      "generation_estimate_usd": "0.0555412250",
+      "model_api_seconds": 72.325,
+      "missing_usage_calls": 0,
+      "input_token_measurement_calls": 2,
+      "attempts": [
+        {
+          "directory": "early-2027/runs/ready_early_month",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "elapsed_seconds": 4.58,
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 2391,
+                "output_tokens": 422,
+                "total_tokens": 2813
+              },
+              "outcome": "completed"
+            },
+            "clarification": {
+              "usage": null,
+              "session_status": "ready",
+              "elapsed_seconds": 0.009
+            },
+            "planning": {
+              "elapsed_seconds": 64.35,
+              "diagnostics": [
+                "m2a_selector_calls=0",
+                "m2a_selector_total_tokens=0",
+                "m2b_generator_calls=1",
+                "m2b_generator_total_tokens=3662",
+                "planning_elapsed_seconds=64.346"
+              ],
+              "outcome": "planned"
+            },
+            "providers": {
+              "elapsed_seconds": 43.507,
+              "status": "partial",
+              "captured_pages": 4,
+              "body_files": 4
+            },
+            "ranking": {
+              "elapsed_seconds": 0.474,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 58.056,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 2
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 216.623,
+          "live_pipeline_seconds": 170.976
+        }
+      ],
+      "models": {
+        "gpt-5.6-luna": 2,
+        "gpt-6-luna": 2
+      },
+      "calls": [
+        {
+          "path": "early-2027/runs/ready_early_month/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0624486005d392c9016ac88f4214bc87d0aa2a163e934dbaf6",
+          "latency_seconds": 4.536,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2391,
+            "output_tokens": 422,
+            "cached_input_tokens": 2362,
+            "cache_write_tokens": 26,
+            "reasoning_output_tokens": 177
+          },
+          "estimate_usd": "0.0005607400"
+        },
+        {
+          "path": "early-2027/runs/ready_early_month/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0a288bbc49416bf3016ac88f76941487d0bb722eb65c69e6ef",
+          "latency_seconds": 11.563,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2683,
+            "output_tokens": 979,
+            "cached_input_tokens": 1957,
+            "cache_write_tokens": 723,
+            "reasoning_output_tokens": 739
+          },
+          "estimate_usd": "0.0013952900"
+        },
+        {
+          "path": "early-2027/runs/ready_early_month/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.484,
+          "input_tokens_counted": 202874,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/ready_early_month/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0c2c8fca611a03f8016ac88fe0ee0c87d0a072404eb7830158",
+          "latency_seconds": 37.559,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 202874,
+            "output_tokens": 3949,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 201035,
+            "reasoning_output_tokens": 1538
+          },
+          "estimate_usd": "0.0271225350"
+        },
+        {
+          "path": "early-2027/runs/ready_early_month/model-calls/call-005.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.64,
+          "input_tokens_counted": 205579,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/ready_early_month/model-calls/call-006.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0f11159ee8406183016ac8900731f887d0afa59b4455be5b56",
+          "latency_seconds": 18.667,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 205579,
+            "output_tokens": 1953,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 203740,
+            "reasoning_output_tokens": 909
+          },
+          "estimate_usd": "0.0264626600"
+        }
+      ]
+    },
+    "ready_holiday_window": {
+      "generation_calls": 8,
+      "input_tokens": 65228,
+      "output_tokens": 8655,
+      "cached_input_tokens": 7717,
+      "cache_write_tokens": 56557,
+      "reasoning_output_tokens": 4880,
+      "generation_estimate_usd": "0.0147035300",
+      "model_api_seconds": 86.779,
+      "missing_usage_calls": 0,
+      "input_token_measurement_calls": 1,
+      "attempts": [
+        {
+          "directory": "early-2027/runs/ready_holiday_window/continuation-1",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/ready_holiday_window"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/ready_holiday_window"
+            },
+            "clarification_answer": {
+              "elapsed_seconds": 2.423,
+              "receiver_usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 1666,
+                "output_tokens": 176,
+                "total_tokens": 1842
+              },
+              "composer_usage": null,
+              "status": "ready"
+            },
+            "planning": {
+              "elapsed_seconds": 87.915,
+              "diagnostics": [
+                "m2a_selector_calls=2",
+                "m2a_selector_total_tokens=703",
+                "m2b_generator_calls=1",
+                "m2b_generator_total_tokens=4676",
+                "planning_elapsed_seconds=87.908"
+              ],
+              "outcome": "planned"
+            },
+            "providers": {
+              "elapsed_seconds": 61.78,
+              "status": "partial",
+              "captured_pages": 4,
+              "body_files": 3
+            },
+            "ranking": {
+              "elapsed_seconds": 0.231,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 42.415,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 1
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 250.958,
+          "live_pipeline_seconds": 194.764
+        },
+        {
+          "directory": "early-2027/runs/ready_holiday_window",
+          "status": "blocked_by_original_request",
+          "stages": {
+            "intent": {
+              "elapsed_seconds": 14.983,
+              "usage": {
+                "calls": 2,
+                "captured_calls": 2,
+                "missing_calls": 0,
+                "input_tokens": 5138,
+                "output_tokens": 1382,
+                "total_tokens": 6520
+              },
+              "outcome": "completed"
+            },
+            "clarification": {
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 355,
+                "output_tokens": 43,
+                "total_tokens": 398
+              },
+              "session_status": "awaiting_answer",
+              "elapsed_seconds": 2.39
+            }
+          },
+          "delivery": null,
+          "provider_exact_replay": null,
+          "results_exact_replay": null,
+          "wall_seconds": 17.374,
+          "live_pipeline_seconds": 17.373
+        }
+      ],
+      "models": {
+        "gpt-5.6-luna": 7,
+        "gpt-6-luna": 1
+      },
+      "calls": [
+        {
+          "path": "early-2027/runs/ready_holiday_window/continuation-1/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "clarification_answer",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_00bd37c784c5e9c6016ac88cfba2f487d098b5ac05b96a92fd",
+          "latency_seconds": 2.375,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 1666,
+            "output_tokens": 176,
+            "cached_input_tokens": 1562,
+            "cache_write_tokens": 101,
+            "reasoning_output_tokens": 42
+          },
+          "estimate_usd": "0.0002682900"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/continuation-1/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_09e746987b4bffd9016ac88d350b2c87d0bc9327a02ae243f1",
+          "latency_seconds": 2.026,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 292,
+            "output_tokens": 65,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 36
+          },
+          "estimate_usd": "0.0001364000"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/continuation-1/model-calls/call-003.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_060107a61a72ac3d016ac88d371cd487d0b696d6d1f80e33e5",
+          "latency_seconds": 1.759,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 292,
+            "output_tokens": 54,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 24
+          },
+          "estimate_usd": "0.0001232000"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/continuation-1/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0a6f20edf5b8d592016ac88d39c58087d0af76e65ea6cb5945",
+          "latency_seconds": 21.723,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2802,
+            "output_tokens": 1874,
+            "cached_input_tokens": 1957,
+            "cache_write_tokens": 842,
+            "reasoning_output_tokens": 1424
+          },
+          "estimate_usd": "0.0024990400"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/continuation-1/model-calls/call-005.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.462,
+          "input_tokens_counted": 54683,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/continuation-1/model-calls/call-006.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0d2920cc191a6aa5016ac88dcc99b087d0bb337a2f991f76c0",
+          "latency_seconds": 41.583,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 54683,
+            "output_tokens": 5061,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 52844,
+            "reasoning_output_tokens": 2496
+          },
+          "estimate_usd": "0.0091546600"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0280b1af68dcc7ef016ac88cc6b5d487d08fe3c45c626df6ad",
+          "latency_seconds": 9.678,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2396,
+            "output_tokens": 926,
+            "cached_input_tokens": 2362,
+            "cache_write_tokens": 31,
+            "reasoning_output_tokens": 663
+          },
+          "estimate_usd": "0.0011667900"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_061282374e6e1d8a016ac88cd05f8887d0809bc6fa1270bd62",
+          "latency_seconds": 5.262,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2742,
+            "output_tokens": 456,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 2739,
+            "reasoning_output_tokens": 195
+          },
+          "estimate_usd": "0.0012325500"
+        },
+        {
+          "path": "early-2027/runs/ready_holiday_window/model-calls/call-003.json",
+          "purpose": "generation",
+          "stage": "clarification",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_089fb12be4087243016ac88cd5be2487d0a6fe02fe1f0941e1",
+          "latency_seconds": 2.373,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 355,
+            "output_tokens": 43,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 0
+          },
+          "estimate_usd": "0.0001226000"
+        }
+      ]
+    },
+    "ready_whole_month": {
+      "generation_calls": 3,
+      "input_tokens": 256262,
+      "output_tokens": 5704,
+      "cached_input_tokens": 6155,
+      "cache_write_tokens": 250098,
+      "reasoning_output_tokens": 2789,
+      "generation_estimate_usd": "0.0352155900",
+      "model_api_seconds": 54.392,
+      "missing_usage_calls": 0,
+      "input_token_measurement_calls": 1,
+      "attempts": [
+        {
+          "directory": "early-2027/runs/ready_whole_month",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "elapsed_seconds": 3.07,
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 2390,
+                "output_tokens": 242,
+                "total_tokens": 2632
+              },
+              "outcome": "completed"
+            },
+            "clarification": {
+              "usage": null,
+              "session_status": "ready",
+              "elapsed_seconds": 0.006
+            },
+            "planning": {
+              "elapsed_seconds": 74.422,
+              "diagnostics": [
+                "m2a_selector_calls=0",
+                "m2a_selector_total_tokens=0",
+                "m2b_generator_calls=1",
+                "m2b_generator_total_tokens=3729",
+                "planning_elapsed_seconds=74.419"
+              ],
+              "outcome": "planned"
+            },
+            "providers": {
+              "elapsed_seconds": 67.988,
+              "status": "partial",
+              "captured_pages": 4,
+              "body_files": 4
+            },
+            "ranking": {
+              "elapsed_seconds": 0.67,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 40.056,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 1
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 245.502,
+          "live_pipeline_seconds": 186.212
+        }
+      ],
+      "models": {
+        "gpt-5.6-luna": 2,
+        "gpt-6-luna": 1
+      },
+      "calls": [
+        {
+          "path": "early-2027/runs/ready_whole_month/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_01d9ea09bbf6f7c9016ac88cc55dc487d0b5efe7f1de04831d",
+          "latency_seconds": 3.041,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2390,
+            "output_tokens": 242,
+            "cached_input_tokens": 2362,
+            "cache_write_tokens": 25,
+            "reasoning_output_tokens": 0
+          },
+          "estimate_usd": "0.0003444900"
+        },
+        {
+          "path": "early-2027/runs/ready_whole_month/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_034abdeae44b65c4016ac88d00a15487d0b4f89d056248bb8e",
+          "latency_seconds": 12.59,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2683,
+            "output_tokens": 1046,
+            "cached_input_tokens": 1957,
+            "cache_write_tokens": 723,
+            "reasoning_output_tokens": 820
+          },
+          "estimate_usd": "0.0014756900"
+        },
+        {
+          "path": "early-2027/runs/ready_whole_month/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.454,
+          "input_tokens_counted": 251189,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/ready_whole_month/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0439a1cdebfdb7f1016ac88d931c4c87d0b0c66b49e8116343",
+          "latency_seconds": 38.761,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 251189,
+            "output_tokens": 4416,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 249350,
+            "reasoning_output_tokens": 1969
+          },
+          "estimate_usd": "0.0333954100"
+        }
+      ]
+    },
+    "typo_recognizable_date": {
+      "generation_calls": 9,
+      "input_tokens": 1538869,
+      "output_tokens": 27395,
+      "cached_input_tokens": 74007,
+      "cache_write_tokens": 1464483,
+      "reasoning_output_tokens": 11725,
+      "generation_estimate_usd": "0.3791466000",
+      "model_api_seconds": 260.248,
+      "missing_usage_calls": 0,
+      "input_token_measurement_calls": 4,
+      "attempts": [
+        {
+          "directory": "early-2027/runs/typo_recognizable_date/continuation-1",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date"
+            },
+            "clarification_answer": {
+              "elapsed_seconds": 2.786,
+              "receiver_usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 1664,
+                "output_tokens": 175,
+                "total_tokens": 1839
+              },
+              "composer_usage": null,
+              "status": "ready"
+            },
+            "planning": {
+              "elapsed_seconds": 70.022,
+              "diagnostics": [
+                "m2a_selector_calls=0",
+                "m2a_selector_total_tokens=0",
+                "m2b_generator_calls=1",
+                "m2b_generator_total_tokens=3833",
+                "planning_elapsed_seconds=70.016"
+              ],
+              "outcome": "planned"
+            },
+            "providers": {
+              "elapsed_seconds": 56.447,
+              "status": "partial",
+              "captured_pages": 4,
+              "body_files": 4
+            },
+            "ranking": {
+              "elapsed_seconds": 0.174,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 42.732,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 1
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 234.374,
+          "live_pipeline_seconds": 172.161
+        },
+        {
+          "directory": "early-2027/runs/typo_recognizable_date/continuation-2",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1"
+            },
+            "planning": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1"
+            },
+            "providers": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1",
+              "status": "partial"
+            },
+            "ranking": {
+              "elapsed_seconds": 0.241,
+              "journeys": 0
+            },
+            "results": {
+              "elapsed_seconds": 29.928,
+              "generation": "success",
+              "validation": "clean",
+              "delivery": "delivered",
+              "attempts": 1
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 88.757,
+          "live_pipeline_seconds": 30.169
+        },
+        {
+          "directory": "early-2027/runs/typo_recognizable_date/continuation-3",
+          "status": "finished",
+          "stages": {
+            "intent": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1"
+            },
+            "clarification": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1"
+            },
+            "planning": {
+              "reused_from": "/Users/shawnkang/bots/award-search/evidence/end-to-end/2026-10-08-golden-diagnostic/early-2027/runs/typo_recognizable_date/continuation-1"
+            },
+            "providers": {
+              "elapsed_seconds": 61.849,
+              "status": "partial",
+              "captured_pages": 12,
+              "body_files": 11
+            },
+            "ranking": {
+              "elapsed_seconds": 1.366,
+              "journeys": 528
+            },
+            "results": {
+              "elapsed_seconds": 165.299,
+              "generation": "success",
+              "validation": "annotated",
+              "delivery": "delivered",
+              "attempts": 2
+            }
+          },
+          "delivery": "delivered",
+          "provider_exact_replay": true,
+          "results_exact_replay": true,
+          "wall_seconds": 279.161,
+          "live_pipeline_seconds": 228.514
+        },
+        {
+          "directory": "early-2027/runs/typo_recognizable_date",
+          "status": "blocked_by_original_request",
+          "stages": {
+            "intent": {
+              "elapsed_seconds": 11.017,
+              "usage": {
+                "calls": 2,
+                "captured_calls": 2,
+                "missing_calls": 0,
+                "input_tokens": 5140,
+                "output_tokens": 1061,
+                "total_tokens": 6201
+              },
+              "outcome": "completed"
+            },
+            "clarification": {
+              "usage": {
+                "calls": 1,
+                "captured_calls": 1,
+                "missing_calls": 0,
+                "input_tokens": 355,
+                "output_tokens": 43,
+                "total_tokens": 398
+              },
+              "session_status": "awaiting_answer",
+              "elapsed_seconds": 1.254
+            }
+          },
+          "delivery": null,
+          "provider_exact_replay": null,
+          "results_exact_replay": null,
+          "wall_seconds": 12.271,
+          "live_pipeline_seconds": 12.271
+        }
+      ],
+      "models": {
+        "gpt-5.6-luna": 5,
+        "gpt-6-luna": 4
+      },
+      "calls": [
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-1/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "clarification_answer",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0e1546a39abb4554016ac88d2b182487d0a0c8e1872bf48175",
+          "latency_seconds": 2.748,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 1664,
+            "output_tokens": 175,
+            "cached_input_tokens": 1562,
+            "cache_write_tokens": 99,
+            "reasoning_output_tokens": 46
+          },
+          "estimate_usd": "0.0002665900"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-1/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "planning",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_0473fc0c26e198e6016ac88d5f8c0887d0a014bf405c4cee89",
+          "latency_seconds": 13.221,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2683,
+            "output_tokens": 1150,
+            "cached_input_tokens": 1957,
+            "cache_write_tokens": 723,
+            "reasoning_output_tokens": 516
+          },
+          "estimate_usd": "0.0016004900"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-1/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.353,
+          "input_tokens_counted": 62621,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-1/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_00a956786ae1351d016ac88deb0ba887d0ad4aa70c96bc0351",
+          "latency_seconds": 42.14,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 62621,
+            "output_tokens": 5114,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 60782,
+            "reasoning_output_tokens": 2023
+          },
+          "estimate_usd": "0.0101734100"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-2/model-calls/call-001.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 1.172,
+          "input_tokens_counted": 62621,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-2/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_05ec3d5ea8aa361c016ac8922a00b487d0a16ac25890cde3ff",
+          "latency_seconds": 28.523,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 62621,
+            "output_tokens": 2592,
+            "cached_input_tokens": 62618,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 1552
+          },
+          "estimate_usd": "0.0019224800"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-3/model-calls/call-001.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.886,
+          "input_tokens_counted": 698801,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-3/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_06a89c336ffcc153016ac892fd87b487d08abb8a9c49bfc7a0",
+          "latency_seconds": 85.999,
+          "pricing_bracket": "long_context",
+          "usage": {
+            "input_tokens": 698801,
+            "output_tokens": 8934,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 696962,
+            "reasoning_output_tokens": 3817
+          },
+          "estimate_usd": "0.1809783200"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-3/model-calls/call-003.json",
+          "purpose": "input_token_measurement",
+          "stage": "results",
+          "latency_seconds": 0.805,
+          "input_tokens_counted": 704984,
+          "billable_cost": "unknown; excluded from generation estimate"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/continuation-3/model-calls/call-004.json",
+          "purpose": "generation",
+          "stage": "results",
+          "model": "gpt-6-luna",
+          "response_id": "resp_0c4ac4b27d136ab5016ac893547fcc87d0b283ee50f3e64eff",
+          "latency_seconds": 75.428,
+          "pricing_bracket": "long_context",
+          "usage": {
+            "input_tokens": 704984,
+            "output_tokens": 8326,
+            "cached_input_tokens": 1836,
+            "cache_write_tokens": 703145,
+            "reasoning_output_tokens": 3249
+          },
+          "estimate_usd": "0.1820680700"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/model-calls/call-001.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_04fb6ff8a98e748d016ac88d15572c87d0810fe1e285b7b44c",
+          "latency_seconds": 4.427,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2396,
+            "output_tokens": 425,
+            "cached_input_tokens": 2362,
+            "cache_write_tokens": 31,
+            "reasoning_output_tokens": 155
+          },
+          "estimate_usd": "0.0005655900"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/model-calls/call-002.json",
+          "purpose": "generation",
+          "stage": "intent",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_02568a87bcc3fb0b016ac88d19a87887d0b544ace4ec027a9a",
+          "latency_seconds": 6.525,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 2744,
+            "output_tokens": 636,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 2741,
+            "reasoning_output_tokens": 367
+          },
+          "estimate_usd": "0.0014490500"
+        },
+        {
+          "path": "early-2027/runs/typo_recognizable_date/model-calls/call-003.json",
+          "purpose": "generation",
+          "stage": "clarification",
+          "model": "gpt-5.6-luna",
+          "response_id": "resp_097f726084783bdb016ac88d2035c487d0bc25338789190337",
+          "latency_seconds": 1.237,
+          "pricing_bracket": "short_context",
+          "usage": {
+            "input_tokens": 355,
+            "output_tokens": 43,
+            "cached_input_tokens": 0,
+            "cache_write_tokens": 0,
+            "reasoning_output_tokens": 0
+          },
+          "estimate_usd": "0.0001226000"
+        }
+      ]
+    }
+  }
+}

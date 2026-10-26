@@ -1,0 +1,47 @@
+{
+  "as_of": "2026-10-08",
+  "currency": "USD",
+  "unit": "per_1m_tokens",
+  "source": "official OpenAI Docs, Standard API processing",
+  "models": {
+    "gpt-5.6-luna": {
+      "short_context": {
+        "input": 0.2,
+        "cached_input": 0.02,
+        "cache_write": 0.25,
+        "output": 1.2
+      },
+      "long_context": {
+        "input": 0.4,
+        "cached_input": 0.04,
+        "cache_write": 0.5,
+        "output": 1.8
+      },
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+    },
+    "gpt-6-luna": {
+      "short_context": {
+        "input": 0.1,
+        "cached_input": 0.01,
+        "cache_write": 0.125,
+        "output": 0.5
+      },
+      "long_context": {
+        "input": 0.2,
+        "cached_input": 0.02,
+        "cache_write": 0.25,
+        "output": 0.75
+      },
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-6-luna"
+    }
+  },
+  "long_context_rule": "If one request has more than 272000 input tokens, long-context rates apply to all its input, cached input, cache writes, and output tokens.",
+  "calculation": "For each successful model response: sum token_count * applicable_rate / 1000000 for each token class, then sum calls. Never apply the long-context rule to aggregated stage or case input tokens.",
+  "limitations": [
+    "These published rates estimate API generation charges; they are not an account invoice.",
+    "The repository's summarized usage drops cached-input and cache-write classes. Where they cannot be recovered from a raw response, a calculation from total input and output is an explicitly uncached approximation, not an exact bill.",
+    "Results input-token measurement invokes a separate counting endpoint. Its billing is not established by the saved generation receipts and is excluded from generation estimates.",
+    "Seats.aero and gfly account charges or quotas are not visible in the repository's provider receipts; provider costs remain unknown.",
+    "Failed requests without response usage have unknown billable tokens. Report missing usage explicitly rather than treating it as zero cost."
+  ]
+}

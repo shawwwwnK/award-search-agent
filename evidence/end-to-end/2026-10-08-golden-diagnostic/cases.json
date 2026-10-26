@@ -1,0 +1,26 @@
+{
+  "source": "evals/intent/one_way_award_behavior_cases_v1.yaml",
+  "cases": {
+    "ready_whole_month": {},
+    "ready_early_month": {},
+    "ready_holiday_window": {
+      "context_override": {"reference_date": "2027-08-29"},
+      "reason": "The original 2026 Labor Day window is past; run the same request wording against the next Labor Day."
+    },
+    "ready_relative_weekend": {
+      "scripted_clarification": "December 5 through December 6, 2026.",
+      "answer_source": "Original fixture oracle departure_window for the relative weekend; diagnostic continuation only."
+    },
+    "typo_recognizable_date": {
+      "scripted_clarification": "November 27, 2026.",
+      "answer_source": "Original fixture oracle departure_window; diagnostic continuation only."
+    },
+    "mixed_award_cash_eligible": {
+      "input_replace": {"old": "October 5", "new": "October 15"},
+      "context_override": {"reference_date": "2026-10-08"},
+      "reason": "The original October 5 departure is past; shift the explicit day ten days forward.",
+      "scripted_clarification": "One traveler.",
+      "answer_source": "Original fixture input says one award and cash flight; diagnostic continuation only."
+    }
+  }
+}
