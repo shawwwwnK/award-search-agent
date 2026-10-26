@@ -1,0 +1,156 @@
+{
+  "generation_attempts": 8,
+  "count_calls": 0,
+  "total_input_tokens": 1380923,
+  "total_output_tokens": 28122,
+  "estimated_generation_cost_usd": "0.140501550",
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "cost_limits": "Estimate using default short-context 30m writes, not invoice; includes failed schema generation; excludes native Codex work.",
+  "probes": [
+    {
+      "name": "admitted-low",
+      "case": "admitted",
+      "effort": "low",
+      "variant": "original",
+      "first_text_seconds": 7.162839416880161,
+      "full_response_seconds": 16.515831083990633,
+      "input_tokens": 207324,
+      "cached_tokens": 0,
+      "output_tokens": 1366,
+      "reasoning_tokens": 360,
+      "failed_checks": 0,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    },
+    {
+      "name": "admitted-medium",
+      "case": "admitted",
+      "effort": "medium",
+      "variant": "original",
+      "first_text_seconds": 77.42036345787346,
+      "full_response_seconds": 87.25002458319068,
+      "input_tokens": 207324,
+      "cached_tokens": 207321,
+      "output_tokens": 8366,
+      "reasoning_tokens": 7054,
+      "failed_checks": 2,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    },
+    {
+      "name": "incomplete-low",
+      "case": "incomplete",
+      "effort": "low",
+      "variant": "original",
+      "first_text_seconds": 4.6652566669508815,
+      "full_response_seconds": 13.106237582862377,
+      "input_tokens": 171065,
+      "cached_tokens": 1444,
+      "output_tokens": 1198,
+      "reasoning_tokens": 264,
+      "failed_checks": 3,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    },
+    {
+      "name": "conditional-low",
+      "case": "conditional",
+      "effort": "low",
+      "variant": "original",
+      "first_text_seconds": 9.62366491695866,
+      "full_response_seconds": 17.0628008749336,
+      "input_tokens": 189806,
+      "cached_tokens": 1444,
+      "output_tokens": 1476,
+      "reasoning_tokens": 639,
+      "failed_checks": 0,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    },
+    {
+      "name": "conditional-factored-medium",
+      "case": "conditional",
+      "effort": "medium",
+      "variant": "factored",
+      "first_text_seconds": 36.53480308270082,
+      "full_response_seconds": 43.22216262482107,
+      "input_tokens": 130864,
+      "cached_tokens": 0,
+      "output_tokens": 4291,
+      "reasoning_tokens": 3470,
+      "failed_checks": 0,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    },
+    {
+      "name": "admitted-factored-medium",
+      "case": "admitted",
+      "effort": "medium",
+      "variant": "factored",
+      "first_text_seconds": 45.59601266728714,
+      "full_response_seconds": 55.94721037521958,
+      "input_tokens": 142367,
+      "cached_tokens": 1503,
+      "output_tokens": 5662,
+      "reasoning_tokens": 4365,
+      "failed_checks": 3,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    },
+    {
+      "name": "conditional-medium",
+      "error": {
+        "type": "ValidationError",
+        "elapsed_seconds": 43.141841041855514,
+        "first_event_seconds": 0.9723292500711977,
+        "first_text_seconds": 34.13539291685447
+      },
+      "request_integrity": "passed",
+      "schema_failure_reproduced": true,
+      "timing": {
+        "case": "conditional",
+        "effort": "medium",
+        "variant": "original",
+        "first_event_seconds": 0.9723292500711977,
+        "first_text_seconds": 34.13539291685447,
+        "full_response_seconds": 42.83550108317286,
+        "status": "completed",
+        "usage": {
+          "input_tokens": 189806,
+          "input_tokens_details": {
+            "cached_tokens": 189803,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 4218,
+          "output_tokens_details": {
+            "reasoning_tokens": 3139
+          },
+          "total_tokens": 194024
+        },
+        "returned_reasoning": {
+          "effort": "medium",
+          "generate_summary": null,
+          "summary": null,
+          "context": "all_turns",
+          "mode": "standard"
+        }
+      }
+    },
+    {
+      "name": "admitted-factored-low",
+      "case": "admitted",
+      "effort": "low",
+      "variant": "factored",
+      "first_text_seconds": 7.413771832827479,
+      "full_response_seconds": 15.085339915938675,
+      "input_tokens": 142367,
+      "cached_tokens": 0,
+      "output_tokens": 1545,
+      "reasoning_tokens": 487,
+      "failed_checks": 1,
+      "request_integrity": "passed",
+      "offline_resolution_recheck": "passed"
+    }
+  ],
+  "limits": "Single draws; no correction; streamed JSON is usable only after parsing/checking. Not canonical runtime artifacts or historical replay qualification."
+}

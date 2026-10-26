@@ -742,3 +742,14 @@ first-token/full-answer measurements remain unimplemented; no numeric SLA, model
 default, workflow change or new paid campaign is adopted. G06 attempt/deadline claims
 remain distinct from interactive responsiveness. This is an open readiness issue,
 not a post-core optional feature. [Note](docs/plans/2026-10-25-results-m2-latency-investigation.md).
+
+2026-10-25 latency investigation follow-up (G06/G08) — subsequent owner request
+authorized Luna-only investigation and experiments. Eight saved-input generations
+show large reasoning latency and exact input repetition; lower effort is faster,
+but none passes both mechanical and source/composition review. Factoring reduces
+input tokens about31% with mixed timing and no qualified answer. No runtime/default
+change or gate closure. Decision-oriented comparisons and stable-prefix serialization
+remain proposed; revisit adoption with repeated source-correct complete-answer timing
+including corrections and the owner's interactive target. These are prerequisites
+for their responsiveness/quality claims, not optional cleanup. See the
+[evidence](evidence/results-stage/m2/structured/2026-10-25-latency/README.md).

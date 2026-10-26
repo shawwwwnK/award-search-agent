@@ -1,5 +1,34 @@
 # Project State
 
+## 2026-10-25 Luna latency investigation and bounded experiments
+
+Next-session continuation is captured in the
+[advisor-reviewed latency handoff](handoffs/2026-10-25-results-m2-luna-latency-next-cut.md):
+improve the existing writer input, preserve current ownership and bounded annotated
+recovery, and measure a small Luna diagnostic under separately declared bounds.
+Comparison aids remain narrow proposals; frontend/M3 scope and runtime defaults
+are unchanged. The handoff records recommended work, not a new live campaign.
+
+The owner requested investigation and experiments while keeping Luna. Eight saved-
+input generations tested explicit medium/low reasoning and lossless repeated-fact
+catalogs. Low returned initial generations in13–17seconds, but no probe passed both
+mechanical and independent source/composition review. Medium baselines also failed,
+so this does not isolate low effort as the cause of quality defects. Input factoring
+preserves every exact option and original value, reduces API input tokens about31%,
+and has mixed latency evidence: admitted87→56seconds, conditional about43seconds
+either way. A nearly fully cached medium call still waited77seconds for first text.
+Reasoning is a major observed contributor; queue/prefill/network components are not
+separately isolated. First visible JSON is not a usable checked answer.
+
+No runtime default or product code changed. Proposed next work is a decision-oriented
+input/comparison aid, stable preparation before correction feedback, and matched
+repeat measurements including corrections. These remain proposals. The offline
+factoring/integrity checks and27focused tests pass; the full suite was not rerun.
+See the [evidence and actual answers](../evidence/results-stage/m2/structured/2026-10-25-latency/README.md),
+[independent review](../evidence/results-stage/m2/structured/2026-10-25-latency/review.md)
+and [build log](build-log/2026-10-25-results-m2-latency-experiments.md).
+Interactive acceptance, frontend milestones and M3 remain open/separate.
+
 ## 2026-10-25 Results latency gap recorded
 
 The owner rejected the observed Results generation delay as too long for the intended

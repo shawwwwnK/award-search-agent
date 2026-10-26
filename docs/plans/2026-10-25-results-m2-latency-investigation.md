@@ -1,5 +1,25 @@
 # Results M2 latency gap and proposed investigation
 
+## Subsequent investigation: 2026-10-25
+
+The owner subsequently requested investigation, mitigations and experiments while
+keeping Luna. That request supersedes the documentation-only authorization below
+for the new bounded diagnostic. Eight saved-input generations tested explicit
+medium/low effort and lossless input factoring; no runtime/default changes, travel
+searches, FX refreshes or new token-count calls occurred.
+
+Low produced 13–17-second initial generations, but no probe passed both source and
+mechanical review. Factoring reduced input tokens about 31%; medium admitted fell
+87→56 seconds while conditional stayed about 43 seconds. This is not a demonstrated
+quality-preserving responsiveness fix. A cached medium request still waited77seconds
+for first visible JSON. Exact timings, failures, offline preservation and the proposed
+decision-oriented input experiment are in the
+[evidence report](../../evidence/results-stage/m2/structured/2026-10-25-latency/README.md)
+and [build log](../build-log/2026-10-25-results-m2-latency-experiments.md).
+
+The remainder preserves the earlier observation/proposal checkpoint. No numeric
+acceptance threshold, new shared model default or M3 qualification is inferred.
+
 Date: 2026-10-25. Status: owner-reported responsiveness gap; investigation proposals
 recorded, not implemented. The current instruction authorizes documentation and a
 commit only. No new paid campaign, runtime change or frontend implementation follows.

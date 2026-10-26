@@ -1,5 +1,11 @@
 # ADRs
 
+2026-10-25 latency experiment: ADR0029 records the subsequent owner-authorized
+Luna-only diagnostic. Eight saved-input probes preserve every option under exact
+factoring, but none passes both mechanical and semantic review. No runtime default,
+input ownership or qualification change follows. See the
+[report](../../evidence/results-stage/m2/structured/2026-10-25-latency/README.md).
+
 2026-10-25 latency follow-up: ADR 0029 records the owner's rejection of observed
 request-to-full-response delay as too long. The [investigation note](../plans/2026-10-25-results-m2-latency-investigation.md)
 separates generation/answer/application timing and unimplemented optimization proposals.

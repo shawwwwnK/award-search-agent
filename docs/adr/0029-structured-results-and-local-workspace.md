@@ -9,6 +9,23 @@
 
 ## 2026-10-25 amendment: complete-answer composition
 
+### Subsequent Luna latency experiment disposition
+
+Recording/decision date:2026-10-25. The owner requested investigation and experiments
+while retaining Luna. The bounded eight-generation diagnostic tested lower effort
+and lossless repeated-fact catalogs outside runtime code. No candidate passed both
+source/composition and mechanical review; the original medium baselines also failed.
+Thus no effort/input default, guarantee or ownership change is accepted. Numerical
+prose remains model-authored under the existing decision. A decision-oriented view
+with deterministic comparison aids and prefix ordering is proposed for a future
+experiment, not an adopted stronger binding requirement or Ranking policy change.
+The earlier documentation-only/live-budget statement describes its prior checkpoint;
+the new explicit request authorized this diagnostic only. See the
+[report](../../evidence/results-stage/m2/structured/2026-10-25-latency/README.md).
+Revisit adoption after repeated quality-preserving, complete-answer timing evidence;
+owner interactive acceptance and M3 remain separate. No new ADR is needed for these
+isolated settings/serialization probes within the existing ownership boundary.
+
 Status: accepted clarification and implementation/live-iteration invocation.
 Decision and recording date: 2026-10-25. Source: owner composition interview Q1–Q5
 and instruction to update documentation, implement with subagents, perform code
