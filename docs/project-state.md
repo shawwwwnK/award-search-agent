@@ -1,5 +1,20 @@
 # Project State
 
+## 2026-10-25 lower-cost writer experiment
+
+At the owner's request, retried Luna and tested GPT-5.6 Terra against the unchanged
+passing Sol source/input/brief. Luna completed a three-case composition-pass cohort
+at estimated USD0.09934 versus reused Sol USD1.90099 (94.77% less), but with about
+twice the summed generation time. A conditional tie-wording source-review flag is
+preserved alongside adjudication as a minor ambiguity; earlier Luna failures still
+preclude a stable-quality claim. Terra's admitted sentinel cost nearly the same as
+Sol and missed consolidated limitations/exact-alternative support, so it stopped.
+Five generations/five counts, no runtime/provider/FX changes. Luna9/Terra3 source-
+version replay checks passed. No global default or qualification decision follows.
+See [actual answers, metadata and disagreement](../evidence/results-stage/m2/structured/2026-10-25-cost-experiments/README.md)
+and the [experiment log](build-log/2026-10-25-results-m2-cost-experiments.md).
+
+
 ## 2026-10-25 Results M2 complete-answer composition correction
 
 The owner invoked documentation, implementation with subagents, independent code

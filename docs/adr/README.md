@@ -1,5 +1,9 @@
 # ADRs
 
+2026-10-25 cost follow-up: [Luna/Terra model comparison](../build-log/2026-10-25-results-m2-cost-experiments.md)
+records owner-authorized experiments under unchanged ADR 0029 boundaries. No ADR
+or default-model decision changes; source-review disagreement remains explicit.
+
 2026-10-25: ADR 0029 clarifies complete LLM-authored composition, embedded journey
 displays, cash context and consolidated limitations. Model-written numerical prose
 is accepted for now; one composer and the existing contract are the initial approach.

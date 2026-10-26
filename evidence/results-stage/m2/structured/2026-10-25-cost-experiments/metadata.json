@@ -1,0 +1,287 @@
+{
+  "rates_per_million_usd": {
+    "gpt-6-luna": {
+      "input": "0.10",
+      "cached": "0.01",
+      "write": "0.125",
+      "output": "0.50"
+    },
+    "gpt-5.6-terra": {
+      "input": "2.00",
+      "cached": "0.20",
+      "write": "2.50",
+      "output": "12.00"
+    },
+    "gpt-6.1-sol": {
+      "input": "2.00",
+      "cached": "0.10",
+      "write": "2.50",
+      "output": "10.00"
+    }
+  },
+  "pricing_sources": [
+    "https://developers.openai.com/api/docs/pricing",
+    "https://developers.openai.com/api/docs/guides/prompt-caching"
+  ],
+  "assumptions": [
+    "Estimated, not an invoice. Default 30-minute writes at1.25x ordinary input.",
+    "No request exceeds272000 tokens; returned service tier is default.",
+    "Output includes reasoning tokens, not billed twice.",
+    "Token-count fees/latency and native Codex work excluded.",
+    "Per-request generation latency excludes count calls and local processing.",
+    "Summed latency is not wall time; cases run concurrently.",
+    "Single saved-case draws do not establish quality consistency."
+  ],
+  "experiments": {
+    "luna-retest": {
+      "runs": 3,
+      "generations": 4,
+      "count_requests": 4,
+      "input_tokens": 739968,
+      "output_tokens": 14677,
+      "reasoning_tokens": 10846,
+      "cached_input_tokens": 4332,
+      "cache_write_tokens": 735624,
+      "estimated_cost_usd": "0.099336020",
+      "summed_generation_seconds": 233.22787333326414,
+      "mean_generation_seconds": 58.306968333316036,
+      "median_generation_seconds": 55.99530058354139,
+      "min_generation_seconds": 30.5271829161793,
+      "max_generation_seconds": 90.71008925000206,
+      "attempts": [
+        {
+          "model": "gpt-6-luna",
+          "case": "admitted",
+          "round": 1,
+          "phase": "initial",
+          "attempt": 1,
+          "selected": true,
+          "input_tokens": 207324,
+          "ordinary_input_tokens": 3,
+          "cached_input_tokens": 0,
+          "cache_write_tokens": 207321,
+          "output_tokens": 5707,
+          "reasoning_tokens": 4653,
+          "latency_seconds": 90.71008925000206,
+          "estimated_cost_usd": "0.028768925",
+          "failed_findings": 0,
+          "artifact": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/admitted/artifact.json"
+        },
+        {
+          "model": "gpt-6-luna",
+          "case": "conditional",
+          "round": 1,
+          "phase": "initial",
+          "attempt": 1,
+          "selected": true,
+          "input_tokens": 189806,
+          "ordinary_input_tokens": 3,
+          "cached_input_tokens": 1444,
+          "cache_write_tokens": 188359,
+          "output_tokens": 4590,
+          "reasoning_tokens": 3624,
+          "latency_seconds": 72.75251237489283,
+          "estimated_cost_usd": "0.025854615",
+          "failed_findings": 0,
+          "artifact": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/conditional/artifact.json"
+        },
+        {
+          "model": "gpt-6-luna",
+          "case": "incomplete",
+          "round": 1,
+          "phase": "initial",
+          "attempt": 1,
+          "selected": false,
+          "input_tokens": 171065,
+          "ordinary_input_tokens": 3,
+          "cached_input_tokens": 1444,
+          "cache_write_tokens": 169618,
+          "output_tokens": 1882,
+          "reasoning_tokens": 1034,
+          "latency_seconds": 30.5271829161793,
+          "estimated_cost_usd": "0.02215799",
+          "failed_findings": 1,
+          "artifact": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/incomplete/artifact.json"
+        },
+        {
+          "model": "gpt-6-luna",
+          "case": "incomplete",
+          "round": 1,
+          "phase": "correction",
+          "attempt": 2,
+          "selected": true,
+          "input_tokens": 171773,
+          "ordinary_input_tokens": 3,
+          "cached_input_tokens": 1444,
+          "cache_write_tokens": 170326,
+          "output_tokens": 2498,
+          "reasoning_tokens": 1535,
+          "latency_seconds": 39.238088792189956,
+          "estimated_cost_usd": "0.02255449",
+          "failed_findings": 0,
+          "artifact": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/incomplete/artifact.json"
+        }
+      ]
+    },
+    "terra": {
+      "runs": 1,
+      "generations": 1,
+      "count_requests": 1,
+      "input_tokens": 207324,
+      "output_tokens": 1464,
+      "reasoning_tokens": 516,
+      "cached_input_tokens": 0,
+      "cache_write_tokens": 207321,
+      "estimated_cost_usd": "0.5358765",
+      "summed_generation_seconds": 17.21976949973032,
+      "mean_generation_seconds": 17.21976949973032,
+      "median_generation_seconds": 17.21976949973032,
+      "min_generation_seconds": 17.21976949973032,
+      "max_generation_seconds": 17.21976949973032,
+      "attempts": [
+        {
+          "model": "gpt-5.6-terra",
+          "case": "admitted",
+          "round": 1,
+          "phase": "initial",
+          "attempt": 1,
+          "selected": true,
+          "input_tokens": 207324,
+          "ordinary_input_tokens": 3,
+          "cached_input_tokens": 0,
+          "cache_write_tokens": 207321,
+          "output_tokens": 1464,
+          "reasoning_tokens": 516,
+          "latency_seconds": 17.21976949973032,
+          "estimated_cost_usd": "0.5358765",
+          "failed_findings": 0,
+          "artifact": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/terra/round-1/admitted/artifact.json"
+        }
+      ]
+    }
+  },
+  "sol_baseline": {
+    "runs": 3,
+    "generations": 4,
+    "count_requests": 4,
+    "input_tokens": 740382,
+    "output_tokens": 6044,
+    "reasoning_tokens": 1102,
+    "cached_input_tokens": 4332,
+    "cache_write_tokens": 736038,
+    "estimated_cost_usd": "1.9009922",
+    "summed_generation_seconds": 113.47214158438146,
+    "mean_generation_seconds": 28.368035396095365,
+    "median_generation_seconds": 29.778247395996004,
+    "min_generation_seconds": 19.330837833695114,
+    "max_generation_seconds": 34.58480895869434,
+    "attempts": [
+      {
+        "model": "gpt-6.1-sol",
+        "case": "admitted",
+        "round": 1,
+        "phase": "initial",
+        "attempt": 1,
+        "selected": true,
+        "input_tokens": 207324,
+        "ordinary_input_tokens": 3,
+        "cached_input_tokens": 0,
+        "cache_write_tokens": 207321,
+        "output_tokens": 1785,
+        "reasoning_tokens": 323,
+        "latency_seconds": 34.58480895869434,
+        "estimated_cost_usd": "0.5361585",
+        "failed_findings": 0,
+        "artifact": "evidence/results-stage/m2/structured/2026-10-25-composition-sol/round-1/admitted/artifact.json"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "case": "conditional",
+        "round": 1,
+        "phase": "initial",
+        "attempt": 1,
+        "selected": true,
+        "input_tokens": 189806,
+        "ordinary_input_tokens": 3,
+        "cached_input_tokens": 1444,
+        "cache_write_tokens": 188359,
+        "output_tokens": 1572,
+        "reasoning_tokens": 456,
+        "latency_seconds": 32.34328558295965,
+        "estimated_cost_usd": "0.4867679",
+        "failed_findings": 0,
+        "artifact": "evidence/results-stage/m2/structured/2026-10-25-composition-sol/round-1/conditional/artifact.json"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "case": "incomplete",
+        "round": 1,
+        "phase": "initial",
+        "attempt": 1,
+        "selected": false,
+        "input_tokens": 171065,
+        "ordinary_input_tokens": 3,
+        "cached_input_tokens": 1444,
+        "cache_write_tokens": 169618,
+        "output_tokens": 1482,
+        "reasoning_tokens": 207,
+        "latency_seconds": 27.213209209032357,
+        "estimated_cost_usd": "0.4390154",
+        "failed_findings": 2,
+        "artifact": "evidence/results-stage/m2/structured/2026-10-25-composition-sol/round-1/incomplete/artifact.json"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "case": "incomplete",
+        "round": 1,
+        "phase": "correction",
+        "attempt": 2,
+        "selected": true,
+        "input_tokens": 172187,
+        "ordinary_input_tokens": 3,
+        "cached_input_tokens": 1444,
+        "cache_write_tokens": 170740,
+        "output_tokens": 1205,
+        "reasoning_tokens": 116,
+        "latency_seconds": 19.330837833695114,
+        "estimated_cost_usd": "0.4390504",
+        "failed_findings": 0,
+        "artifact": "evidence/results-stage/m2/structured/2026-10-25-composition-sol/round-1/incomplete/artifact.json"
+      }
+    ]
+  },
+  "per_case_comparisons": {
+    "luna-retest": {
+      "conditional": {
+        "candidate_cost_usd": "0.025854615",
+        "sol_cost_usd": "0.4867679",
+        "candidate_generation_seconds": 72.75251237489283,
+        "sol_generation_seconds": 32.34328558295965,
+        "cost_reduction_percent": 94.68851273882275
+      },
+      "admitted": {
+        "candidate_cost_usd": "0.028768925",
+        "sol_cost_usd": "0.5361585",
+        "candidate_generation_seconds": 90.71008925000206,
+        "sol_generation_seconds": 34.58480895869434,
+        "cost_reduction_percent": 94.63424994661094
+      },
+      "incomplete": {
+        "candidate_cost_usd": "0.04471248",
+        "sol_cost_usd": "0.8780658",
+        "candidate_generation_seconds": 69.76527170836926,
+        "sol_generation_seconds": 46.54404704272747,
+        "cost_reduction_percent": 94.90784403628976
+      }
+    },
+    "terra": {
+      "admitted": {
+        "candidate_cost_usd": "0.5358765",
+        "sol_cost_usd": "0.5361585",
+        "candidate_generation_seconds": 17.21976949973032,
+        "sol_generation_seconds": 34.58480895869434,
+        "cost_reduction_percent": 0.05259638707583671
+      }
+    }
+  }
+}

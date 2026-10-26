@@ -727,3 +727,10 @@ checks pass for declared scope; full suite retains two unchanged gfly environmen
 failures. G08 is not promoted to arbitrary prose truth or M3 qualification. No
 D01/D09/D10/D11 work or runtime multi-agent orchestration was opened. See the
 [session log](docs/build-log/2026-10-25-results-m2-composition-correction.md).
+
+2026-10-25 cost follow-up — owner authorized cheaper-writer experiments. The Luna
+retry is much cheaper and passes the composition review, with one source tie-wording
+flag/adjudication retained and prior variance unclosed. Terra does not offer input
+cost savings over Sol and stops after its composition-failing sentinel. G08 still
+does not claim exhaustive narrative truth; no new feature deferral or default model
+adoption. [Evidence](evidence/results-stage/m2/structured/2026-10-25-cost-experiments/README.md).
