@@ -128,3 +128,13 @@ all attempts, review limitations, exact counts and commands. Total session: 15 r
 22 generations and 22 counts, with no new provider search or FX refresh. Final replay
 9/9, all archived-source replays 45/45; full suite 931 passed, 99 skipped, 2 unchanged
 gfly environment failures. Owner presentation acceptance, frontend and M3 remain open.
+
+## Subsequent latency disposition
+
+The owner rejected the measured request-to-full-response delay as too long. The
+composition result above is scoped to content quality; it does not qualify interactive
+latency. See the [latency gap and proposed investigation](2026-10-25-results-m2-latency-investigation.md).
+Smaller writer context, lower reasoning and first-token/full-answer measurement remain
+proposals, with no new implementation, numeric target or paid campaign invoked.
+Milestone sequence, canonical facts, full eligible selection and explorer guarantees
+are unchanged. This latency issue remains open for interactive readiness.

@@ -1,5 +1,10 @@
 # ADRs
 
+2026-10-25 latency follow-up: ADR 0029 records the owner's rejection of observed
+request-to-full-response delay as too long. The [investigation note](../plans/2026-10-25-results-m2-latency-investigation.md)
+separates generation/answer/application timing and unimplemented optimization proposals.
+No architecture, numeric target, model default or live budget is changed.
+
 2026-10-25 cost follow-up: [Luna/Terra model comparison](../build-log/2026-10-25-results-m2-cost-experiments.md)
 records owner-authorized experiments under unchanged ADR 0029 boundaries. No ADR
 or default-model decision changes; source-review disagreement remains explicit.

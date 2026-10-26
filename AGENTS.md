@@ -58,6 +58,13 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+**2026-10-25 latency gap:** The owner considers the measured Results delay too long
+for an interactive step. Composition/cost success does not establish latency acceptance.
+See the [latency measurement and proposed investigation](docs/plans/2026-10-25-results-m2-latency-investigation.md).
+Input reduction, lower reasoning and first-token/full-answer measurement are proposals
+only; this documentation update does not invoke implementation or a paid campaign.
+
+
 **2026-10-25 composition correction:** Implemented the owner's complete LLM-authored
 answer goal: individual explanations woven with embedded journey references, alternatives,
 cash context and consolidated limitations. Model-written numerical prose remains trusted

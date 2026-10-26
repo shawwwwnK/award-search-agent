@@ -70,6 +70,23 @@ is bounded/fallible, not arbitrary prose verification. Owner presentation accept
 frontend and M3 remain open. This records engineering/evaluation disposition without
 inventing an owner closeout decision.
 
+### October 25 latency observation and open acceptance issue
+
+After the cheaper-model comparison, the owner rejected the observed delay as too
+long for the intended interactive Results step. The adapter's timing approximates
+request-to-full-response duration, not first token or complete workflow latency.
+Luna retry mean: 58.31 seconds per generation; 77.74 seconds of summed generation
+per completed answer, with counting/local overhead unmeasured. These are saved-input
+observations and do not include upstream search time.
+
+The [latency note](../plans/2026-10-25-results-m2-latency-investigation.md) records
+input reduction, lower reasoning and separate responsiveness measurements as proposals.
+No implementation method, numeric target, new model default or paid campaign is
+accepted by this documentation update. Existing model/code ownership, exact selectable
+options, full evidence/explorer, Ranking and milestone boundaries are unchanged.
+This is an evidence/acceptance clarification, not a new architectural decision or
+an inference that previous composition success established adequate latency.
+
 ## 2026-10-24 implementation and diagnostic disposition
 
 The owner subsequently invoked the implement skill through code review, live

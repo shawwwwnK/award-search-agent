@@ -2,6 +2,22 @@
 
 **Current channel, 2026-10-24:** [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the [current plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) govern the new structured backend, implemented for Results M2 U1–U3. Frontend rendering/integration and Results M3 retain separate milestones. Historical V1–V5 Markdown generation remains the CLI default, with its original schemas, checks and replay routing. The new channel replaces mandatory prose slots/status/checklists with source-resolved facts. Ranking policy and upstream trust remain unchanged; owner presentation acceptance remains open.
 
+## Generation latency interpretation
+
+`WriterReceipt.latency_seconds` for structured authoring measures approximately
+client request construction through receipt/serialization of the complete response.
+It excludes token-count calls, later authored-document validation and upstream travel
+searches. It does not measure time to first token or full application completion.
+The current saved-input Luna retry averaged 58.31 seconds per generation and 77.74
+seconds of summed generation time per completed answer (including correction).
+Cases ran concurrently, so their summed time is not session wall time.
+
+The owner considers these delays too long. Composition/cost evidence is not latency
+acceptance. See the [measurement and proposed investigation](plans/2026-10-25-results-m2-latency-investigation.md).
+Input reduction, lower reasoning and streaming/first-usable-result measurements have
+not been implemented or evaluated. No new setting, numeric target or paid campaign
+is authorized by this documentation update.
+
 ## October 25 composition correction
 
 The [composition contract](plans/2026-10-25-results-m2-composition-correction.md)

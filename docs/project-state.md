@@ -1,5 +1,22 @@
 # Project State
 
+## 2026-10-25 Results latency gap recorded
+
+The owner rejected the observed Results generation delay as too long for the intended
+interactive step. Luna's 58.31-second figure is per generation; the three completed
+answers consumed 90.71/72.75/69.77 seconds of generation time, averaging 77.74 seconds
+per answer before unmeasured counting/local overhead. The adapter timer approximates
+request-to-full-response time; it is neither first-token nor end-to-end application
+latency. All runs used saved upstream inputs. No latency acceptance follows from the
+composition-pass or cheaper-model results.
+
+The [latency investigation note](plans/2026-10-25-results-m2-latency-investigation.md)
+records proposed input reduction, lower reasoning and separate first-token/full-answer
+measurement. These are unimplemented proposals; no dominant cause, numeric target,
+new default or new live budget is adopted. This session updates documentation only.
+Frontend milestones, owner presentation acceptance and M3 remain separately scoped.
+
+
 ## 2026-10-25 lower-cost writer experiment
 
 At the owner's request, retried Luna and tested GPT-5.6 Terra against the unchanged
