@@ -1,0 +1,12 @@
+{
+  "probe_returncode": 0,
+  "probe": {
+    "prefix": "/opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12",
+    "executable": "/opt/homebrew/opt/python@3.12/bin/python3.12",
+    "fast_flights": false,
+    "gfly": false
+  },
+  "version_returncode": 1,
+  "version_stderr": "Traceback (most recent call last):\n  File \"/Users/shawnkang/bots/award-search/scripts/gfly_compat.py\", line 99, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/Users/shawnkang/bots/award-search/scripts/gfly_compat.py\", line 79, in main\n    site, hashes = _verify_installation()\n                   ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/shawnkang/bots/award-search/scripts/gfly_compat.py\", line 44, in _verify_installation\n    raise RuntimeError(f\"use the pinned interpreter at {EXPECTED_PREFIX}/bin/python\")\nRuntimeError: use the pinned interpreter at /private/tmp/gfly-live-py312/bin/python",
+  "interpretation": "Same two fixture/launcher environment failure names as prior diagnostic; pinned path resolves to system interpreter without required packages. No environment repair within Results composition scope."
+}

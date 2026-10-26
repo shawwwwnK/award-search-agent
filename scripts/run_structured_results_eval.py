@@ -54,9 +54,10 @@ def reserve_call(root: Path, kind: Literal["count", "generation"], limit: int,
 
 class RecordingMeasurer:
     def __init__(self, delegate: OpenAIResultsInputMeasurer, directory: Path,
-                 case: str, round_number: int, limit: int) -> None:
+                 case: str, round_number: int, limit: int, root: Path | None = None) -> None:
         self.delegate, self.directory = delegate, directory
         self.case, self.round_number, self.limit = case, round_number, limit
+        self.root = ROOT if root is None else root
         self.calls = 0
 
     def measure(self, request: dict[str, object], config: ResultsConfig) -> InputTokenReceipt:
@@ -64,7 +65,7 @@ class RecordingMeasurer:
         if self.calls > 2:
             raise ValueError("per-run count limit reached")
         write_json(self.directory / f"{self.calls:02d}-request.json", request)
-        reserve_call(ROOT, "count", self.limit, self.case, self.round_number)
+        reserve_call(self.root, "count", self.limit, self.case, self.round_number)
         receipt = self.delegate.measure(request, config)
         write_json(self.directory / f"{self.calls:02d}-count.json", receipt.model_dump(mode="json"))
         return receipt
@@ -72,9 +73,10 @@ class RecordingMeasurer:
 
 class RecordingWriter:
     def __init__(self, delegate: OpenAIStructuredResultsWriter, directory: Path,
-                 case: str, round_number: int, limit: int) -> None:
+                 case: str, round_number: int, limit: int, root: Path | None = None) -> None:
         self.delegate, self.directory = delegate, directory
         self.case, self.round_number, self.limit = case, round_number, limit
+        self.root = ROOT if root is None else root
         self.calls = 0
 
     def author(self, prepared: StructuredPreparedInput, config: ResultsConfig,
@@ -83,7 +85,7 @@ class RecordingWriter:
         self.calls += 1
         if self.calls > 2:
             raise ValueError("per-run generation limit reached")
-        reserve_call(ROOT, "generation", self.limit, self.case, self.round_number)
+        reserve_call(self.root, "generation", self.limit, self.case, self.round_number)
         return self.delegate.author(prepared, config, feedback, previous_document)
 
     def take_receipt(self) -> WriterReceipt | None:
@@ -94,8 +96,10 @@ class RecordingWriter:
         return receipt
 
 
-def run_case(case: str, round_number: int, *, live: bool) -> dict[str, object]:
-    campaign = json.loads((ROOT / "campaign.json").read_text())
+def run_case(case: str, round_number: int, *, live: bool,
+             campaign_root: Path | None = None) -> dict[str, object]:
+    root = ROOT if campaign_root is None else campaign_root
+    campaign = json.loads((root / "campaign.json").read_text())
     settings = dict(campaign["settings"])
     guidance = campaign.get("round_guidance", {}).get(str(round_number))
     if guidance is not None:
@@ -122,7 +126,7 @@ def run_case(case: str, round_number: int, *, live: bool) -> dict[str, object]:
     from dotenv import load_dotenv
 
     load_dotenv(REPO / ".env")
-    directory = ROOT / f"round-{round_number}" / case
+    directory = root / f"round-{round_number}" / case
     directory.mkdir(parents=True, exist_ok=False)
     write_json(directory / "config.json", config.model_dump(mode="json"))
     files = sorted((REPO / "src/award_agent/results").glob("*.py")) + [Path(__file__)]
@@ -133,9 +137,9 @@ def run_case(case: str, round_number: int, *, live: bool) -> dict[str, object]:
             archive.write(path, str(path.relative_to(REPO)))
     write_json(directory / "source-receipt.json", summary)
     measurer = RecordingMeasurer(OpenAIResultsInputMeasurer(), directory, case, round_number,
-                                 campaign["maximum_input_count_calls"])
+                                 campaign["maximum_input_count_calls"], root)
     writer = RecordingWriter(OpenAIStructuredResultsWriter(), directory, case, round_number,
-                             campaign["maximum_generation_calls"])
+                             campaign["maximum_generation_calls"], root)
     artifact = run_structured_results(projection, config, writer, input_measurer=measurer)
     write_json(directory / "artifact.json", artifact.model_dump(mode="json"))
     resolved = replay_structured_results(artifact)
@@ -164,10 +168,12 @@ def run_case(case: str, round_number: int, *, live: bool) -> dict[str, object]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case", choices=CASES, required=True)
-    parser.add_argument("--round", type=int, choices=(1, 2, 3), default=1)
+    parser.add_argument("--round", type=int, default=1)
+    parser.add_argument("--campaign-root", type=Path, default=None)
     parser.add_argument("--live", action="store_true")
     args = parser.parse_args()
-    summary = run_case(args.case, args.round, live=args.live)
+    summary = run_case(args.case, args.round, live=args.live,
+                       campaign_root=args.campaign_root)
     print(json.dumps(summary, indent=2), flush=True)
     return int(args.live and summary.get("delivery_outcome") != "delivered")
 

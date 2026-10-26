@@ -1,5 +1,39 @@
 # Project State
 
+## 2026-10-25 Results M2 complete-answer composition correction
+
+The owner invoked documentation, implementation with subagents, independent code
+review and full saved-case live iteration. The structured writer now composes
+individual Ranking-informed explanations into one natural answer, with embedded
+exact references, alternatives, cash context and consolidated applicable limitations.
+A structured-only identity index beside incomplete lead aliases preserves every
+source/member/unknown while reducing cross-table selection work. Model-written
+numerical prose remains trusted for now; its truth is not proved by mechanical checks.
+The output contract, Ranking and complete explorer remain unchanged.
+
+Four Luna cohorts retained material failures despite clean checks. A GPT-6.1 Sol
+trial used the same final source, input, instructions and code, changing only the
+explicit writer model. Its complete three-case cohort passed independent composition
+and source review, including recomputed numerical comparisons. Read the actual
+[final answers](../evidence/results-stage/m2/structured/2026-10-25-composition-sol/README.md).
+This is a source-reviewed development cohort, not repeatability, broad model
+qualification, owner presentation acceptance, frontend delivery or Results M3.
+
+The session recorded 15 saved-case runs, 22 generations and 22 input counts; no
+travel-provider searches or FX refreshes. Final Sol replay passed 9 fresh processes;
+all 15 artifacts passed 45 archived-source replays. Standards and Spec reviews each
+reported zero findings. Full suite: **931 passed, 99 skipped, two unchanged gfly
+environment failures**. Final focused structured tests passed 18; scoped types/Ruff
+passed. Earlier V6 preparation replay is intentionally superseded by new instructions;
+original evidence/source archives are unchanged. Legacy V1–V5 outcomes/schema digests
+match their prior baseline (including the historical V4 mismatch).
+
+See the [correction contract](plans/2026-10-25-results-m2-composition-correction.md),
+[ADR 0029](adr/0029-structured-results-and-local-workspace.md) and
+[implementation/evidence log](build-log/2026-10-25-results-m2-composition-correction.md).
+Frontend M1/M2 and Results M3 retain their separate scope; owner presentation acceptance
+remains open. No implicit default model or new live-call authorization is adopted.
+
 ## 2026-10-24 Results M2 structured backend and bounded live iteration
 
 The owner invoked implementation through subagents, review, live evaluation and

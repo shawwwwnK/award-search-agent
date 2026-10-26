@@ -43,13 +43,16 @@ def _config() -> ResultsConfig:
 
 
 @pytest.mark.parametrize("case", ("admitted", "conditional", "incomplete"))
-def test_saved_round_one_artifact_replays_exactly(case: str) -> None:
+def test_saved_round_one_artifact_retains_original_instruction_boundary(case: str) -> None:
     path = Path("evidence/results-stage/m2/structured/2026-10-24-luna/round-1") / case / "artifact.json"
     artifact = StructuredResultsArtifact.model_validate_json(path.read_bytes())
     assert artifact.evidence.contract_version == "results-workspace-evidence-v1"
     assert artifact.resolved is not None
     assert artifact.resolved.contract_version == "results-resolved-v1"
-    assert replay_structured_results(artifact) == artifact.resolved
+    assert artifact.prepared.instructions != prepare_structured_results(
+        artifact.evidence.source, artifact.config).instructions
+    with pytest.raises(ValueError, match="saved structured preparation differs from source"):
+        replay_structured_results(artifact)
 
 
 def _first_award_summary_lead(prepared: StructuredPreparedInput) -> tuple[str, str]:
@@ -60,6 +63,59 @@ def _first_award_summary_lead(prepared: StructuredPreparedInput) -> tuple[str, s
     reference = row.get("ref")
     assert isinstance(reference, str)
     return reference, prepared.references.awards[reference]
+
+
+def test_incomplete_lead_identity_matches_every_exact_source_member() -> None:
+    saved = ResultsArtifact.model_validate_json(Path(
+        "evidence/results-stage/m2/compact-input/2026-10-20-luna/incomplete/artifact.json"
+    ).read_bytes())
+    prepared = prepare_structured_results(saved.projection, _config())
+    rows = prepared.authoring_view.view["incomplete_leads"]
+    assert isinstance(rows, list)
+    source = {item.observation_id: item.model_dump(mode="json")
+              for item in saved.projection.view.components}
+    aliases = prepared.references.awards | prepared.references.cash
+    expected_ids = dict.fromkeys((
+        *saved.projection.view.award_summary_observation_ids,
+        *saved.projection.view.unmatched_award_observation_ids,
+        *saved.projection.view.unpaired_positioning_observation_ids))
+    assert [aliases[row["ref"]] for row in rows] == list(expected_ids)
+    for row in rows:
+        item = source[aliases[row["ref"]]]
+        identity = row["identity"]
+        assert {field: identity[field] for field in (
+            "origin", "destination", "departure_date", "price_scope")} == {
+                field: item[field] for field in (
+                    "origin", "destination", "departure_date", "price_scope")}
+        for field in ("program", "cabin", "points", "cash_amount", "cash_currency"):
+            assert identity[field] == {key: item[field][key] for key in ("state", "value")}
+    alaska = [row for row in rows if row["identity"]["program"]["value"] == "alaska"
+              and row["identity"]["departure_date"] == "2027-01-17"
+              and row["identity"]["points"]["value"] in {42500, 55000}]
+    assert {(row["identity"]["cabin"]["value"],
+             row["identity"]["points"]["value"]) for row in alaska} == {
+                 ("economy", 42500), ("premium_economy", 55000)}
+
+    selected_aliases = tuple(row["ref"] for row in alaska)
+    document = StructuredDocument(selection=StructuredSelection(
+        incomplete_observation_ids=selected_aliases), blocks=(
+        StructuredBlock(kind="narrative", text="Two incomplete Alaska leads need verification."),
+        *(StructuredBlock(kind="reference", reference_kind="lead", reference_id=alias,
+                           label="Award lead", text="") for alias in selected_aliases)))
+
+    class FrozenWriter:
+        def author(self, *args: object, **kwargs: object) -> StructuredDocument:
+            return document
+
+    artifact = run_structured_results(saved.projection, _config(), FrozenWriter())
+    assert artifact.resolved is not None
+    assert not [f for f in artifact.resolved.findings if f.outcome == "failed"]
+    for block in artifact.resolved.blocks[1:]:
+        assert block.component is not None
+        assert block.component.observation_id == block.canonical_id
+        assert str(block.component.departure_date) == "2027-01-17"
+        assert block.component.program.value == "alaska"
+    assert replay_structured_results(artifact) == artifact.resolved
 
 
 def test_structured_answer_resolves_exact_selected_variant_and_preserves_explorer() -> None:
@@ -91,6 +147,49 @@ def test_structured_answer_resolves_exact_selected_variant_and_preserves_explore
     assert artifact.resolved.blocks[1].journey is not None
     assert artifact.resolved.blocks[1].journey.candidate_id == candidate_id
     assert {journey.candidate_id for journey in artifact.evidence.journeys} == {
+        item.candidate_id for item in projection.view.alternatives
+        if item.status in {"admitted", "conditional"}}
+    assert replay_structured_results(artifact) == artifact.resolved
+
+
+def test_connected_answer_keeps_embedded_exact_refs_and_shared_limitations() -> None:
+    projection = _projection()
+    prepared = prepare_structured_results(projection, _config())
+    first, second = tuple(prepared.references.journeys)[:2]
+    benchmark = next(iter(prepared.references.cash))
+    document = StructuredDocument(selection=StructuredSelection(
+        journey_ids=(first, second), benchmark_observation_id=benchmark), blocks=(
+        StructuredBlock(kind="narrative", text="This arrival makes the first journey worth a look."),
+        StructuredBlock(kind="reference", reference_kind="journey", reference_id=first,
+                        label="Earlier arrival", text=""),
+        StructuredBlock(kind="narrative", text="The second changes the choice if departure matters more."),
+        StructuredBlock(kind="reference", reference_kind="journey", reference_id=second,
+                        label="Later departure", text=""),
+        StructuredBlock(kind="narrative", text="The observed cash search gives the awards context."),
+        StructuredBlock(kind="reference", reference_kind="benchmark", reference_id=benchmark,
+                        label="Cash baseline", text=""),
+        StructuredBlock(kind="narrative", text=(
+            "Both award quotes need scope confirmation; the cash quote also needs scope "
+            "confirmation. Check current availability before booking.")),
+    ))
+
+    class FrozenWriter:
+        def author(self, *args: object, **kwargs: object) -> StructuredDocument:
+            return document
+
+    artifact = run_structured_results(projection, _config(), FrozenWriter())
+    assert artifact.resolved is not None
+    assert artifact.delivery_outcome == "delivered"
+    assert not [f for f in artifact.resolved.findings if f.outcome == "failed"]
+    assert [block.kind for block in artifact.resolved.blocks] == [
+        "narrative", "reference", "narrative", "reference", "narrative",
+        "reference", "narrative"]
+    assert [block.canonical_id for block in artifact.resolved.blocks if
+            block.kind == "reference"] == [
+        prepared.references.journeys[first], prepared.references.journeys[second],
+        prepared.references.cash[benchmark]]
+    assert artifact.resolved.blocks[-1].text.startswith("Both award quotes")
+    assert {item.candidate_id for item in artifact.evidence.journeys} == {
         item.candidate_id for item in projection.view.alternatives
         if item.status in {"admitted", "conditional"}}
     assert replay_structured_results(artifact) == artifact.resolved

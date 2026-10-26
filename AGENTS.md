@@ -58,6 +58,18 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+**2026-10-25 composition correction:** Implemented the owner's complete LLM-authored
+answer goal: individual explanations woven with embedded journey references, alternatives,
+cash context and consolidated limitations. Model-written numerical prose remains trusted
+for now; structured lead identities support exact selection. Four Luna cohorts failed;
+the same final code/input/brief with an explicit GPT-6.1 Sol configuration passed the
+three-case independent source/composition review. See the
+[final answers](evidence/results-stage/m2/structured/2026-10-25-composition-sol/README.md)
+and [session log](docs/build-log/2026-10-25-results-m2-composition-correction.md).
+Full suite: 931 passed, 99 skipped, two unchanged gfly environment failures. Source-version
+replay audits pass; original V6 current-code preparation is intentionally superseded,
+with original evidence intact. Frontend, owner acceptance and M3 remain separate.
+
 **2026-10-24 execution update:** The owner invoked Results M2 revision U1–U3
 implementation, review, live evaluation/iteration and a current-branch commit.
 The structured backend now has complete workspace facts, frozen FX/observed-money

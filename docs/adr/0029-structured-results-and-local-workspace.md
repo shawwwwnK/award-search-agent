@@ -7,6 +7,69 @@
   docs and produce a complete plan. See the [interview/build log](../build-log/2026-10-23-results-frontend-design-interview.md).
 - Execution plan and current Product Contract: [structured Results/workspace plan](../plans/2026-10-23-2334-feat-results-workspace-plan.md).
 
+## 2026-10-25 amendment: complete-answer composition
+
+Status: accepted clarification and implementation/live-iteration invocation.
+Decision and recording date: 2026-10-25. Source: owner composition interview Q1–Q5
+and instruction to update documentation, implement with subagents, perform code
+review and iterate full saved-case live runs. See the
+[correction contract](../plans/2026-10-25-results-m2-composition-correction.md).
+
+The owner rejected disconnected option sections and an editorial rewrite that
+removed useful individual explanations. The answer must highlight Ranking-informed
+choices, explain them individually, weave relevant alternatives and cash baseline
+into a natural overall account, place exact journey cards within the explanation,
+and consolidate limitations while identifying affected options. The frontend places
+the full explorer at the end. No fixed skeleton, number, cabin/style quota or
+card-per-paragraph pattern applies. Results may select other eligible exact options
+with supported rationale; Ranking policy stays unchanged.
+
+Options considered were one composer, option writers plus a synthesizer, and a narrow
+inline-fact/reference contract. Multi-agent authoring was a suggested means only.
+Use one LLM composer initially. The owner accepts model-written numerical prose
+without inline code substitution for now. Code-resolved factual objects and existing
+claim checks retain their existing scope; neither verifies arbitrary narrative prose.
+The existing wire contract is sufficient.
+
+This clarifies October 23 ownership/presentation; it supersedes any interpretation
+that separate factual displays dictate separate mini-answers or that cash must
+occupy its own prose section. Cash remains outside award recommendation eligibility.
+Work remains Results M2 before Frontend M1; frontend and M3 are not implemented or
+qualified here. The owner permits intentional development compatibility breaks:
+keep original evidence unchanged and record replay consequences rather than add
+compatibility machinery solely to avoid a break.
+
+Two live-reviewed iterations exposed repeated incomplete-lead alias/prose mismatches.
+The structured input therefore adds a compact source-copied identity beside every
+existing lead alias, preserving all rows, aliases, grouped detail and typed unknowns.
+This is input ergonomics, not a new verifier or narrower narrative contract; its
+quality effect must be established by review. Shared legacy authoring stays unchanged.
+
+Evaluate a full saved-case live authoring cohort and iterate reviewed material
+failures. Mechanical checks/replay remain separate from composition review. Revisit
+authoring topology if demonstrated one-composer failures justify it; revisit stronger
+narrative binding if observed errors justify its contract. Actual work and evidence
+belong in the [session log](../build-log/2026-10-25-results-m2-composition-correction.md).
+
+### October 25 implementation and evidence disposition
+
+The correction is implemented with one composer and the existing wire contract.
+Structured-only lead identity enrichment preserves all aliases, source values and
+unknowns. Four Luna cohorts retained material omissions/numerical/reference errors.
+The final same-code/input/brief GPT-6.1 Sol three-case cohort passed independent
+composition and source review; its exact explicit configuration remains evaluation
+evidence, not an implicit default or general model qualification. See the
+[final evidence](../../evidence/results-stage/m2/structured/2026-10-25-composition-sol/README.md).
+
+The session used 22 generations and 22 input counts, no travel-provider or FX calls.
+Final Sol replay passed 9 fresh processes; all 15 new artifacts passed 45 archived-
+source replays. Code-review axes each had zero findings. Full suite recorded 931
+passed, 99 skipped and two unchanged gfly environment failures. Original evidence
+is unchanged; old V6 current-code preparation mismatch is intentional. Source review
+is bounded/fallible, not arbitrary prose verification. Owner presentation acceptance,
+frontend and M3 remain open. This records engineering/evaluation disposition without
+inventing an owner closeout decision.
+
 ## 2026-10-24 implementation and diagnostic disposition
 
 The owner subsequently invoked the implement skill through code review, live

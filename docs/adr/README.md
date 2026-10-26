@@ -1,5 +1,11 @@
 # ADRs
 
+2026-10-25: ADR 0029 clarifies complete LLM-authored composition, embedded journey
+displays, cash context and consolidated limitations. Model-written numerical prose
+is accepted for now; one composer and the existing contract are the initial approach.
+See the [correction contract](../plans/2026-10-25-results-m2-composition-correction.md)
+and [final source-reviewed cohort](../../evidence/results-stage/m2/structured/2026-10-25-composition-sol/README.md).
+
 2026-10-24 implementation: ADR 0029 now records the locally implemented U1–U3
 structured backend, versioned factual shapes and bounded live diagnostic. Matching,
 Ranking, upstream trust and milestone goals remain unchanged. Frontend milestones,
@@ -96,7 +102,9 @@ Expected sections:
 
 - [0029: Structured Results and a local flight workspace](0029-structured-results-and-local-workspace.md) —
   accepted 2026-10-23 design; frontend-primary structured answer, canonical fact resolution,
-  complete grouped explorer, shared run FX and no-search follow-ups. Implementation pending.
+  complete grouped explorer, shared run FX and no-search follow-ups. Structured backend
+  implemented; October 25 composition cohort source-reviewed. Frontend/follow-ups and
+  M3 remain planned, owner presentation acceptance open.
 
 - [0028: Local end-to-end validation harness](0028-local-end-to-end-validation-harness.md) —
   2026-10-08 owner-authorized explicit local intent-to-Results testing; bounded provider calls

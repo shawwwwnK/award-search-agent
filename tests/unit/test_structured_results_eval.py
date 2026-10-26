@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+from typing import cast
 
 import pytest
 
@@ -81,6 +82,51 @@ def test_offline_case_prepares_saved_evidence_without_calling_or_writing(
     assert sorted(path.name for path in root.iterdir()) == ["campaign.json"]
 
 
+def test_selected_campaign_prepares_its_own_guidance_without_writing_old_evidence(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original = _sandbox_campaign(tmp_path, monkeypatch)
+    selected = tmp_path / "composition"
+    selected.mkdir()
+    campaign = json.loads((original / "campaign.json").read_text())
+    campaign["settings"]["authoring_guidance"] = "COMPOSITION_GUIDANCE"
+    campaign["round_guidance"] = {}
+    (selected / "campaign.json").write_text(json.dumps(campaign))
+    captured: list[str | None] = []
+    prepare = _MODULE.prepare_structured_results
+
+    def record_guidance(projection: SolutionProjection, config: ResultsConfig) -> StructuredPreparedInput:
+        captured.append(config.authoring_guidance)
+        return cast(StructuredPreparedInput, prepare(projection, config))
+
+    monkeypatch.setattr(_MODULE, "prepare_structured_results", record_guidance)
+    summary = _MODULE.run_case("admitted", 2, live=False, campaign_root=selected)
+
+    assert summary["mode"] == "offline"
+    assert captured == ["COMPOSITION_GUIDANCE"]
+    assert sorted(path.name for path in original.iterdir()) == ["campaign.json"]
+    assert sorted(path.name for path in selected.iterdir()) == ["campaign.json"]
+
+
+def test_selected_campaign_rejects_undeclared_round_before_source_or_calls(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    selected = tmp_path / "composition"
+    selected.mkdir()
+    (selected / "campaign.json").write_text(json.dumps({
+        "settings": {"model": "offline-test", "max_output_tokens": 100,
+                     "timeout_seconds": 10, "context_limit_tokens": 1000,
+                     "prompt_overhead_tokens": 0},
+        "maximum_targeted_rounds": 1,
+    }))
+    monkeypatch.setattr(_MODULE, "SOURCE", tmp_path / "missing-source")
+
+    with pytest.raises(ValueError, match="round outside declared campaign"):
+        _MODULE.run_case("admitted", 2, live=True, campaign_root=selected)
+
+    assert sorted(path.name for path in selected.iterdir()) == ["campaign.json"]
+
+
 def test_call_reservation_is_immutable_and_stops_at_budget(tmp_path: Path) -> None:
     _MODULE.reserve_call(tmp_path, "generation", 1, "admitted", 1)
     receipt = tmp_path / "calls/generation-001.json"
@@ -92,6 +138,36 @@ def test_call_reservation_is_immutable_and_stops_at_budget(tmp_path: Path) -> No
     assert receipt.read_bytes() == before
     assert json.loads(before) == {"kind": "generation", "case": "admitted",
         "round": 1, "status": "reserved_before_invocation"}
+
+
+def test_selected_campaign_records_paid_attempts_in_its_own_ledger(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    old_root = _sandbox_campaign(tmp_path, monkeypatch)
+    selected = tmp_path / "composition"
+    selected.mkdir()
+    call_dir = selected / "round-1" / "admitted"
+    call_dir.mkdir(parents=True)
+    config = ResultsConfig(model="offline-test", max_output_tokens=100,
+        timeout_seconds=10, context_limit_tokens=1000, prompt_overhead_tokens=0)
+    request: dict[str, object] = {"model": "offline-test", "instructions": "write", "input": "{}"}
+    measurer = _MODULE.RecordingMeasurer(FakeMeasurer(), call_dir, "admitted", 1, 1,
+                                         selected)
+    writer = _MODULE.RecordingWriter(FailingWriter(), call_dir, "admitted", 1, 1,
+                                     selected)
+    projection = SolutionProjection.model_validate_json(Path(
+        "evidence/ranking-stage/m2/solutions/exact_business.json").read_bytes())
+    prepared = prepare_structured_results(projection, config)
+
+    assert measurer.measure(request, config).input_tokens == 17
+    with pytest.raises(ResultsWriterError, match="writer failed"):
+        writer.author(prepared, config)
+
+    assert sorted(path.name for path in (selected / "calls").iterdir()) == [
+        "count-001.json", "generation-001.json"]
+    assert not (old_root / "calls").exists()
+    with pytest.raises(ValueError, match="limit reached"):
+        measurer.measure(request, config)
 
 
 def test_recording_measurer_saves_request_and_receipt_and_budget_blocks_delegate(

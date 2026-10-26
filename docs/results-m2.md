@@ -2,6 +2,41 @@
 
 **Current channel, 2026-10-24:** [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the [current plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) govern the new structured backend, implemented for Results M2 U1–U3. Frontend rendering/integration and Results M3 retain separate milestones. Historical V1–V5 Markdown generation remains the CLI default, with its original schemas, checks and replay routing. The new channel replaces mandatory prose slots/status/checklists with source-resolved facts. Ranking policy and upstream trust remain unchanged; owner presentation acceptance remains open.
 
+## October 25 composition correction
+
+The [composition contract](plans/2026-10-25-results-m2-composition-correction.md)
+clarifies the structured channel: the LLM authors a naturally connected answer with
+individual highlights, relevant alternatives, embedded exact journey references,
+cash context and consolidated applicable limitations. Cards carry code-resolved
+facts; ordinary numerical prose remains model-authored and is not fully checked.
+The complete explorer is independent and is placed at the end by the future frontend.
+No renderer or runtime multi-agent orchestration is part of this correction.
+
+**Development compatibility disposition:** the base authoring instructions change
+in this correction. October 24 V6 artifacts remain byte-for-byte historical evidence,
+but current-code replay rejects their saved preparation. Their captured source archives
+retain the original implementation. The earlier nested factual v1/v2 replay result was
+verified under October 24 source; it is not a current-code compatibility claim.
+New composition artifacts must replay exactly. Legacy V1–V5 paths are unchanged.
+
+The final [source-reviewed composition cohort](../evidence/results-stage/m2/structured/2026-10-25-composition-sol/README.md)
+uses [an explicit GPT-6.1 Sol configuration](../evidence/results-stage/m2/structured/2026-10-25-composition-sol/evaluated-config.json).
+Use that configuration when reproducing this evaluated writer; there is no implicit
+model default. It uses the same final input/brief/code as the rejected Luna cohort,
+with only model changed. The lead index now carries source-derived identity beside
+each alias; no lead or eligible journey is removed. Review remains scoped evidence,
+not a promise of repeatability or owner acceptance.
+
+The original campaign remains historical. Select a new isolated campaign explicitly:
+
+```bash
+.venv/bin/python scripts/run_structured_results_eval.py --campaign-root evidence/results-stage/m2/structured/2026-10-25-composition-luna --case admitted --round 1
+```
+
+This prepares offline. Add `--live` only for an authorized new paid invocation;
+case directories, call reservations, requests and receipts cannot be overwritten.
+See the [session log](build-log/2026-10-25-results-m2-composition-correction.md).
+
 ## Structured Results V6
 
 `resolve_workspace(projection)` exposes every eligible exact variant, conservative
@@ -38,8 +73,9 @@ checks do not prove arbitrary prose truth or useful selection.
 New authoring contracts are `results-document-v2`, `results-prepared-v5` and
 `results-artifact-v6`. Current factual output uses `results-workspace-evidence-v2`
 and `results-resolved-v2`, including source-known component departure dates when
-clock times are absent. Saved v1 factual shapes retain their original fields and
-exact replay; the outer artifact version remains V6.
+clock times are absent. Saved v1 factual shapes retain their original fields; the outer artifact version
+remains V6. Historical exact-replay claims are source-version-specific as described
+in the October 25 compatibility disposition above.
 Inspect `artifact.resolved` alongside `artifact.evidence`; no second model-authored
 Markdown answer is generated. `resolved.findings` and unavailable reference blocks
 preserve annotated outcomes for the later frontend.

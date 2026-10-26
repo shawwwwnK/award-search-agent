@@ -37,22 +37,75 @@ from .structured_contracts import (
 )
 from .workspace_contracts import WorkspaceEvidence
 
-INSTRUCTIONS = """Write a useful travel answer from the supplied compact evidence. You control
-headings, order, narrative and which exact journeys to recommend. Use ordered narrative blocks
-and exact typed reference blocks; use J aliases for journeys, C aliases for direct cash benchmarks,
-and A/C aliases for incomplete leads. A group is not a selectable journey. Recommend only complete
-eligible journeys. Discuss meaningful differences and a notable unselected alternative when it
-changes the choice. Keep benchmarks and incomplete leads separate. Give each selected option a
-short stable traveler-facing label. Explain tradeoffs without copying complete flight facts:
-the application resolves schedules, prices, cabins and source details from references. Never claim
-current seats, protected connections, complete unreported prices, or booking availability. Do not
-print internal IDs, statuses or checklist labels in traveler prose. Source observations are dated,
-not real-time. Known original currency and USD conversion are factual; Ranking estimated comparison
-cost, points valuation and estimated taxes are heuristic, never payable cash. Use full local dates
-for arrival comparisons. Declared claims must copy their literal text into the block and use exact
-scope aliases; full-pool comparison uses P1. Omit claims you cannot precisely support. This
-channel requires no Markdown fact slots or mandatory status/requirements inventory. Output only
-the requested structured document.
+INSTRUCTIONS = """Write one complete, natural travel answer from the supplied compact evidence.
+You own the final words, order, emphasis and exact journey selection. Use Ranking's supplied styles
+and highlights as a starting point, then choose other eligible journeys when a meaningful difference
+helps the traveler decide. Do not impose a recommendation count, cabin quota, style quota or answer
+outline. Explain each highlighted option individually and connect those explanations into one
+decision narrative. Relate relevant alternatives to the choice, including a notable unselected
+option when its cabin, route or booking arrangement changes the decision. Explain the traveler
+benefit and countercost of a recommendation together: an earlier arrival may require a much earlier
+departure, while a better cabin may cost more points or take longer. Use the actual departure,
+arrival and whole-journey facts rather than a component time or a bare list of caveats. Check that
+each claimed difference really differs between the exact journeys; describe shared booking or
+positioning requirements as shared, not as one option's disadvantage. Express durations in
+ordinary hours and minutes rather than raw minute counts.
+
+Before settling the highlights, compare them with each other and with the meaningful eligible
+landscape. Each highlighted journey should add a concrete choice the others do not supply. A
+near-equivalent schedule variant should not crowd out a materially different cabin, booking or
+routing choice; briefly discuss a decision-changing unselected alternative with its exact reference.
+This is a relevance test, not a required number of options or a cabin, style or topology quota.
+
+Use ordered narrative blocks and exact typed reference blocks. Place a reference where its compact
+journey or cash display naturally supports the surrounding explanation. A reference does not need
+its own section, heading or repeated introduction; do not write a stack of independent option
+summaries. Keep reference-block text to a short interpretation or supported declared claim, or
+leave it empty; the resolved display supplies schedule and price details. Give each selected
+journey a short stable traveler-facing label. Use J aliases for
+journeys, C aliases for direct cash benchmarks, and A/C aliases for incomplete leads. The
+internal direct-cash category means the requested endpoint pair, not a nonstop flight. A group is
+not a selectable journey. Recommend only complete eligible journeys, including those internally
+marked conditional; keep internal statuses and checklists out of traveler prose.
+
+Use the end-to-end requested-route cash search as a separate baseline in the explanation when
+available, not as
+an award recommendation or an assumed comparable party total. If no complete journey qualifies,
+say so and discuss relevant incomplete observations only as potential leads with their missing
+facts and route or date mismatches. The independent explorer contains the full eligible inventory;
+do not enumerate it in the answer. Mention a nearby variant briefly or leave it to the explorer
+when it adds little to the highlighted choices.
+
+Bring material limitations together in a readable passage that identifies the affected options.
+Preserve separate-ticket risk, traveler and cabin uncertainty, incomplete or unknown-scope prices,
+and dated availability without repeating the same caveat after every option. Put a limitation
+earlier when it is needed to understand a specific comparison. Never claim current seats,
+protected connections, complete unreported prices or confirmed booking availability. Distinguish
+unknown price scope from traveler or seat evidence: if the source supports the requested traveler
+count, do not call that count unconfirmed merely because the party price is unknown. A returned
+one-traveler search echo does not establish per-person price scope.
+
+Use numerical facts in prose when they explain a decision, checking dates, airports, time
+differences and price scopes against the evidence. Let resolved reference displays carry detailed
+schedules, price breakdowns, cabin and source facts instead of copying whole itineraries into
+prose. Source observations are dated, not real-time. Known original currency and USD conversion
+are factual; Ranking estimated comparison cost, points valuation and estimated taxes are heuristic,
+never payable cash. Use full local dates for arrival comparisons and do not imply points from
+different programs are directly comparable. Compare points as a cost only within one program;
+report quotes from different programs separately.
+
+Before finalizing, audit every selected and discussed reference against its exact member in the
+supplied journeys or components. Match each narrative mention and friendly label to that same
+member's route, date, program, cabin, points and price facts. Group facts belong only to that
+group's members; an alias for another similar-looking result is not interchangeable. Incomplete
+lead aliases carry their own compact identity next to each ref; use it for the same check even
+when a lead has no complete flight schedule.
+
+Declared claims must copy their literal text into the exact typed reference block and use exact
+scope aliases; full-pool comparison uses P1. A visible claim sentence must sound like ordinary
+travel language, never a claim-catalog definition, checker explanation or internal field name.
+Omit claims you cannot precisely support. Do not print internal IDs or aliases in traveler prose.
+Output only the requested structured document.
 """
 
 
@@ -133,6 +186,25 @@ def prepare_structured_results(projection: SolutionProjection,
         view.pop(key, None)
     for group in cast(list[dict[str, object]], view["journeys"]):
         cast(dict[str, object], group["facts"]).pop("disclosure_profile", None)
+    # Keep the compact grouped facts, while making each incomplete lead's own
+    # identity visible beside its alias. A similar summary elsewhere in the
+    # catalog must not supply the facts for a selected lead.
+    identity_fields = ("origin", "destination", "departure_date", "program", "cabin",
+                       "points", "price_scope", "cash_amount", "cash_currency")
+    identities: dict[str, dict[str, object]] = {}
+    for group in cast(list[dict[str, object]], view["components"]):
+        facts = cast(dict[str, object], group["facts"])
+        identity = {field: facts[field] for field in identity_fields}
+        for member in cast(list[dict[str, object]], group["members"]):
+            alias = cast(str, member["ref"])
+            if alias in identities:
+                raise ValueError("component alias occurs in more than one group")
+            identities[alias] = identity
+    for lead in cast(list[dict[str, object]], view["incomplete_leads"]):
+        alias = cast(str, lead["ref"])
+        if alias not in identities:
+            raise ValueError("incomplete lead has no grouped component facts")
+        lead["identity"] = identities[alias]
     compact = CompactAuthoringInput(source_digest=compact.source_digest,
         view=view, references=compact.references,
         binding_digest=content_digest({"source_digest": compact.source_digest,

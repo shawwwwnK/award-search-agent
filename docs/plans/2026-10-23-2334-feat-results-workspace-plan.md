@@ -22,6 +22,21 @@ execution: code
 
 ---
 
+## 2026-10-25 composition clarification and execution
+
+The owner clarified R1/R2/R6/R9: one LLM-written complete answer weaves individually
+explained Ranking-informed highlights, relevant alternatives and a cash baseline,
+with exact cards embedded at useful points and limitations consolidated by applicable
+option. The frontend explorer follows at the end. This imposes no fixed skeleton,
+order or option count. Model-written numerical prose is accepted for now; no inline
+binding contract is required. One composer is the initial means; runtime multi-agent
+orchestration remains unopened. The owner invoked implementation, code review and
+full saved-case live iteration. See the [correction contract](2026-10-25-results-m2-composition-correction.md)
+and [ADR 0029 amendment](../adr/0029-structured-results-and-local-workspace.md).
+Earlier October 24 diagnostic/replay claims retain their historical source version;
+current composition instructions intentionally supersede earlier V6 preparation.
+Frontend M1/M2, owner acceptance and M3 retain their separate gates.
+
 ## Product Contract
 
 ### Summary
