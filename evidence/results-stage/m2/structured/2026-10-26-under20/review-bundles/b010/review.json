@@ -1,0 +1,39 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "decision-rich",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "$80 less for the positioning flight, with 15 minutes more elapsed travel time",
+      "source_id": [
+        "4a2ad78e800f373f698a2f8b5f012a4b90571e1cf1bb0baec59e42040c4c6f01",
+        "9d9c0a14d4981e7d08c911a19e391d56a4df6098b720ddb19e5da2ff00968fd3"
+      ],
+      "expected_fact": "USD139−USD59=USD80 for the reported positioning amounts; duration 1680−1665=15 minutes. Both price scopes remain unknown.",
+      "impact": "The arithmetic and listed-fare association are right, and text explicitly excludes full trip cost. Explicitly call this a difference between observed quotes, with unknown scope, to avoid implying a guaranteed personal saving."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "There is also an Aeroplan summary lead for SFO–BKK on January 8 at 65,000 points plus CA$102",
+      "source_id": "d08ee88a0a617b9457d9c3408f68951ad95220588334b41165fe3db37fa04729",
+      "expected_fact": "Lead facts are correct but repeated immediately in the lead reference block. Cash benchmark price scope is also unknown.",
+      "impact": "Remove duplicate lead prose and make the cash price-scope caveat explicit; neither issue changes the core truth or useful comparison."
+    }
+  ],
+  "notes": {
+    "scope": "Only b010 four allowed files. No runtime/config/performance/campaign/index/prior review reads or live calls.",
+    "H_basis": "Both exact American/United positioning schedules, common Turkish economy award identity,110,000 miles,164/186-minute LAX gaps,1665/1680-minute elapsed times and USD139/USD59 quotes match. Selected American option ties minimum eligible duration. USD80 and15-minute comparison is exact. Cash benchmark USD452 via SEA/ICN,Jan 8 06:05 to Jan 10 00:20,1635 minutes correct. Aeroplan Jan 8 SFO–BKK lead is65,000 points+CAD102 from 10,200 minor units with no schedule. Turkish seat/tax limitations and positioning/protection/eligibility uncertainties match. No cross-program valuation or protected/bookable guarantee.",
+    "U_basis": "Exact choices, a clear time-versus-positioning-price/buffer tradeoff, explicit separate-ticket principal downside and missing award taxes/traveler support, cash comparison and separate research lead. Pass.",
+    "C_basis": "Decision-rich: quantified comparison and explanation of what partial money buys, conditional connection responsibilities and an alternate evidence path. No requirement to cover more cabins/frontier. Duplicate prose and scope caveats remain polish issues.",
+    "protocol": "J19/J13 selected journey references, C1 benchmark and A1 incomplete lead all resolve in their proper canonical roles. Clean.",
+    "verification": "All232 eligible IDs match source pool; recomputed all 232 elapsed durations, checked selected component carriers, award identity and unknown-seat/tax findings,164/186-minute gaps,USD80/15-minute differences, benchmark facts and source Aeroplan date/cabin/taxes. Checked full landscape minimum duration and source roles. Files written/reloaded.",
+    "uncertainty": "No material source-association uncertainty. Strongest is preference language backed by the displayed speed tradeoff, not a unique optimality claim. Observed quote differences do not establish complete party prices.",
+    "escalation": "No escalation recommended."
+  }
+}

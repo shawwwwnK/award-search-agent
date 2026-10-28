@@ -1,0 +1,39 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "confirm current availability, itinerary details, and prices with the booking provider before relying on either option.",
+      "source_id": [
+        "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+        "29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d"
+      ],
+      "expected_fact": "Both displayed observations have unknown price_scope; neither amount establishes a complete per-traveler or party total.",
+      "impact": "The verification caveat is useful but leaves price scope implicit. This is a limitation-quality weakness, not a false total assertion: the award is explicitly a summary lead, the cash amount is listed, and neither is represented as per-person or an all-in party price."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "For SFO–BKK in January 2027, the results include an award summary worth checking",
+      "source_id": "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "expected_fact": "There are 106 SFO–BKK summary observations spanning all 31 January dates and multiple programs/cabins; the selected lead is specifically January1. All five cash benchmarks are January1 observations.",
+      "impact": "The response supplies a relevant January1 example but little guidance about the wider month or why this lead/cash benchmark was selected. Labels and dates are explicit, so it does not claim January1 is the only possible date or full-month cash coverage. Optional breadth/selection rationale limits richness, not the truthful no-complete-results useful core."
+    }
+  ],
+  "notes": {
+    "scope": "Read only b004 answer.md, document.json, evidence.json and references.json. No campaign, settings, runtimes, metrics, model-arm, timing, prior review or external sources inspected. No live calls or delegation. Existing review bundles untouched.",
+    "H_basis": "Source and workspace have zero complete award journeys, zero alternatives and an empty eligible pool. All 378 award observations are summary leads lacking complete itinerary schedules. Selected A3 is SFO–BKK on January1,2027, Alaska economy,42,500 points,USD5090 minor units=USD50.90,carrier codes AS/JX and absent itinerary times/legs. The answer accurately preserves its lead status. C2 is EVA Air SFO–TPE–BKK,January1 noon to January3 11:10 local,one stop,USD686,1930 minutes. Source explicitly omits SFO–BKK detail queries for resource_budget_exhausted, with other partial pagination coverage. No unsupported cross-program points ranking, unique/cheapest/fastest claim, scoped price total, shared-flight identity, seat-zero interpretation or verified-bookability assertion appears.",
+    "U_basis": "Pass through the no-complete-results branch: truthful absence of complete award journeys, one exact relevant route/date lead with program/cabin/observed amounts, a clear schedule/detail evidence gap, separately identified cash context and verification guidance. Extra month/program/cabin coverage is not necessary for this core. Unknown price-scope disclosure could be clearer but does not nullify the supported lead and evidence-gap explanation.",
+    "C_basis": "Basic. Clearly separates lead and cash itinerary and identifies the decisive missing evidence, but offers limited selection rationale, month-wide orientation and price-scope explanation. No optimal-frontier or cabin quota applied.",
+    "protocol": "Canonical journey selection is empty. Selected incomplete observation resolves in the lead collection and appears in a lead block; selected benchmark belongs to direct_cash_benchmark_ids and appears in the benchmark role. References A3/C2 map exactly. No annotation or unrecoverable selection/role failure; structural protocol clean.",
+    "verification": "Inspected all source collection counts and lead missing-information categories; all 378 leads are schedule-incomplete. Partitioned lead routes:106 SFO–BKK,105 SFO–TPE,167 TPE–BKK. Verified direct-route lead dates span January1–31, selected date is in the requested window, exact selected source components and monetary units, reference roles and mappings, all five cash benchmarks and coverage reasons. Recomputed selected cash elapsed time from UTC instants as1930 minutes. Selected lead reports8 seats; no zero-seat inference was needed.",
+    "uncertainty": "No unresolved material source-association uncertainty. Reported lead/price observations do not establish live availability, complete price scope or booking feasibility. Protocol is an inspection verdict, not a claim about unseen runtime checks.",
+    "escalation": "No escalation recommended."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [],
+  "notes": {
+    "scope": "Only b018 answer/document/evidence/references and the frozen quality rubric; no other run/review/settings/timing/runtime files or paid calls.",
+    "H_evidence": [
+      "A3/0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b is a January 1 Alaska economy SFO-BKK summary, 42500 miles and eight reported seats. A5/f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e is January 2 United economy, 55000 miles and nine seats. Both lack departure/arrival instants and have itinerary_schedule_incomplete lead records.",
+      "A11/92cd048e70acfdfb2a3e20578d2f422fb6216c4dad6c60e4ee334a0b34c04f3a is January 4 United economy with source seats.value=0 and source finding seats_zero_ambiguous, message zero may mean seat count is unavailable. The answer correctly preserves ambiguity rather than asserting a guaranteed absence or availability.",
+      "A2/cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044 is a January 1 United summary. All prose aliases and displayed selected lead identities match references.json. Repeating A3 among other leads is redundant but does not invent a distinct record.",
+      "Cash benchmark 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630 is Cathay Pacific, USD 640 major units, one stop SFO-HKG-BKK, unknown price scope. The one-stop wording prevents the label Direct cash reference from being a nonstop claim.",
+      "There are zero complete eligible journeys in both WorkspaceEvidence and source.view. Component counts include 106 SFO-BKK, 105 SFO-TPE and 167 TPE-BKK award summaries; no unsupported assembled connection is claimed. Provider status is partial.",
+      "The United/Alaska comparison is explicitly of mileage quotes with named distinct programs, not a claim of exchangeable currencies or economic superiority. An explicit cross-program caveat would improve clarity, but no value arithmetic or cheapest/only claim is made. Known summary fees are omitted, not declared nonexistent; total fees still require confirmation."
+    ],
+    "U_evidence": [
+      "Truthful outcome: \"There are no complete award journeys in this packet, so I can\u2019t recommend a bookable award itinerary.\" This matches the supplied empty complete-journey sets.",
+      "Relevant exact leads and the concrete limitation are supplied: \"Alaska shows 42,500 miles on Jan 1, with eight seats reported (A3); United shows 55,000 miles on Jan 2, with nine seats reported (A5)\" and \"confirm the full routing, schedule, current availability and total fees with the program.\"",
+      "Supported cash context gives a USD 640 one-stop Cathay observation with unknown price scope; final text preserves partial coverage, stale-availability risk and the absence of connected/protected evidence for separate TPE components."
+    ],
+    "C_reason": "Basic: useful lead triage and explicit zero-seat ambiguity, but limited decision interpretation. Lost dimensions include the known Alaska USD 50.90 versus United USD 24.50 summary fee quotes, an explicit cross-program point-value caveat, and the cash reference January 1 departure / January 4 arrival and long 2680-minute duration. Those omissions do not falsify the scoped no-complete-award outcome; no exhaustive frontier or optimal-reference rule imposed.",
+    "protocol": "Clean: document parses, selected lead/benchmark IDs resolve, aliases match canonical mappings and no failure annotation appears.",
+    "verification": "Compared selected component facts against source.view, checked source zero-seat qualifier, lead membership, short aliases, empty complete-journey sets, benchmark membership and component endpoint coverage. Independently recomputed the cash calendar interval as 2680 minutes = 44h40, consistent with source despite its omission from prose.",
+    "uncertainty": "No material source discrepancy found. Cash and award live availability remain unverified. The raw mileage comparison interpretation is recorded above; no cross-program valuation is inferred.",
+    "escalation": "Not recommended."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "bundle": "b028",
+  "rubric": "Frozen H/U/C: hard truth/scope/identity, minimum useful answer, graded composition. No cabin/style quota or exhaustive frontier requirement.",
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "hard_findings": [],
+  "verdict_reason": "The exact recommendation has an accurate conditional rationale, quantified downside, alternatives, cash context and limitations. Every asserted timeline, carrier, route and price comparison is supported. Composition remains basic: a four-minute departure preference and a uniformly later alternative provide limited decision guidance.",
+  "findings": [
+    {
+      "severity": "soft",
+      "axis": "C",
+      "quote": "J63 is a reasonable pick if you want the earlier departure while keeping the earlier Bangkok arrival",
+      "detail": "The preference is expressly conditional and factually supported, but the principal distinction is only four minutes. The later-arriving alternative is described without a reason to choose it, and the cash comparison omits the useful fact that it arrives 3h55 before J63. These are composition opportunities, not invalidations of the scoped award recommendation.",
+      "canonical_ids": [
+        "0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+        "05047f23f37c857b4b9346e023632d880f246a6cbded49a29742793322df1945",
+        "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+        "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2"
+      ]
+    }
+  ],
+  "notes": [
+    "Earlier arrival is interpreted as the scoped comparison between displayed award choices, not an assertion that the lead arrives before the cash benchmark or every eligible journey.",
+    "One stop is expressly the award itinerary, LAX\u2013IST\u2013BKK, and does not misdescribe the complete SFO\u2013LAX\u2013IST\u2013BKK route.",
+    "Dollar amounts map to USD in the source. Unknown scope and fees are disclosed; no complete party total or economic ordering across programs is invented.",
+    "Traveler support unconfirmed is read at assembled-journey level: the cash observations return one traveler, but the awards have absent returned travelers and unknown seats.",
+    "Protocol clean describes the supplied parseable document and valid references; runtime delivery status is outside the permitted artifacts."
+  ],
+  "verification": {
+    "request": "One traveler, SFO\u2013BKK, Jan 8 2027 departure.",
+    "canonical_mappings": {
+      "J63": "0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "J75": "05047f23f37c857b4b9346e023632d880f246a6cbded49a29742793322df1945",
+      "J115": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153"
+    },
+    "timeline": [
+      "J63: Jan 8 08:36 -08:00 to Jan 10 04:15 +07:00; 1719 min, waits LAX 150 / IST 140 min.",
+      "J75: Jan 8 08:40 -08:00 to Jan 10 04:15 +07:00; 1715 min, waits LAX 149 / IST 140 min. Same award observation 14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8 as J63, TK180/TK58.",
+      "J115: Jan 8 08:40 -08:00 to Jan 10 08:50 +07:00; 1990 min, waits LAX 149 / IST 420 min. Award d34f03239f17a5ecf12fe3d00b95363508cdc0046af9ecd5b9601bf0ff3096ac is TK180/TK64. Arrival is 275 min later.",
+      "Cash f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2: Jan 8 06:05 -08:00 to Jan 10 00:20 +07:00, 1635 min, SFO\u2013SEA\u2013ICN\u2013BKK, two stops, Delta/Korean Air, USD452."
+    ],
+    "money_support": "All displayed award itineraries: Turkish, 275000 raw points, business award-level cabin, absent leg cabins, unknown fees/seat count/price scope, absent returned_travelers. J63 access c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388 is American USD59; J75/J115 access bd251472ff574960a50024728ca496172652d0c105703753dac70129e3b2a85e is Alaska USD59. Cash price scopes unknown; returned_travelers=1.",
+    "checks": "Read only b028 answer.md/document.json/evidence.json/references.json. Resolved all canonical identities. Python recomputed journey/component durations and each connection wait, and asserted UTC/local equivalence, named-zone offsets and local date changes for every journey leg. All assertions passed. Source provider_status=partial."
+  },
+  "uncertainty": "No material unresolved truth/usefulness uncertainty; interpretations recorded above. No live availability verified.",
+  "escalation_recommended": false
+}

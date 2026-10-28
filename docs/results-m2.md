@@ -2,21 +2,94 @@
 
 **Current channel, 2026-10-24:** [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the [current plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) govern the new structured backend, implemented for Results M2 U1–U3. Frontend rendering/integration and Results M3 retain separate milestones. Historical V1–V5 Markdown generation remains the CLI default, with its original schemas, checks and replay routing. The new channel replaces mandatory prose slots/status/checklists with source-resolved facts. Ranking policy and upstream trust remain unchanged; owner presentation acceptance remains open.
 
-## Generation latency interpretation
+## 2026-10-27 experimental interactive channel
+
+The separate interactive path uses `results-prepared-v6` and
+`results-artifact-v7`. It gives Luna a decision packet containing every eligible
+journey, source-backed facts and unknowns, while the resolved artifact retains the
+complete eligible explorer and canonical evidence. The model authors the answer
+and selects references; code resolves them into existing source-backed cards.
+Invalid or wrong-role references fail explicitly. They are not repaired silently.
+
+The new wire omits optional model-declared claim annotations. Mechanical checks
+and source-resolved cards help bind choices to facts, but ordinary numerical prose
+is not exhaustively checked. Live execution returns the constructed artifact;
+independent reconstruction and tamper checks are available through V7 replay,
+which makes no model or provider calls. This allocates replay work outside the
+interactive return path.
+
+**Status: experimental and under evaluation.** In particular,
+`--packet-profile joined-v3` with low effort and Fast service has not yet earned a
+speed or quality qualification. Fast is premium processing; the artifact records
+the service tier returned by the API. No model default or broad latency guarantee
+follows from this channel.
+
+## Experimental focused channel, V8
+
+The current candidate, `--packet-profile focused-v3`, runs two sequential Luna
+tasks: a selector sees the
+full eligible inventory at no reasoning effort, then a composer uses explicit low
+reasoning. Both use Fast service. The selector chooses at most eight exact source
+references, including any cash benchmark, and code builds the composer packet from
+those records. The composer receives facts only for the selected records, so its
+comparisons and conclusions must stay within the choices it can see. The complete
+canonical evidence and eligible explorer remain available in the artifact. This
+selection boundary can leave useful alternatives outside the composed answer; the
+focused profile remains under evaluation. Its selector has one typed list capped
+at eight total references. Code supplies exact elapsed/departure/arrival
+comparisons within the selected journey pool; Luna still owns the prose and can
+misstate other facts. Older focused-v1/v2 requests retain exact replay routing.
+
+The versioned `results-artifact-v8` records `selector_settings` and
+`composer_settings`. The run makes at most two count requests and two generation
+requests, with no third correction pass. V8 replay reconstructs and checks both
+stages offline without API calls. Existing V7 profiles and replay routes remain
+available. In the frozen six-run saved-case evaluation, all completions took
+6.72–8.46s (median 7.63s); independent factual/usefulness review passed 5/6 and
+6/6, with basic comparative depth. One answer reports one seat where the source
+reports two. Thus the speed target passes on these cases while strict combined
+qualification fails. See the [final decision report](../evidence/results-stage/m2/structured/2026-10-26-under20/README.md).
+
+For V7 interactive profiles, the CLI requires an explicit reasoning effort. The
+focused profile owns both efforts and tiers internally; passing
+`--reasoning-effort` or `--service-tier` with it is rejected. Set
+`config.json` to `gpt-6-luna` when reproducing the current evaluation; the command
+does not override the configured model. For example:
+
+```bash
+.venv/bin/python -m award_agent.cli.results measure --interactive --reasoning-effort low --service-tier fast --packet-profile joined-v3 --projection projection.json --config config.json --output measurement.json
+.venv/bin/python -m award_agent.cli.results author --interactive --reasoning-effort low --service-tier fast --packet-profile joined-v3 --projection projection.json --config config.json --output artifact.json --live
+.venv/bin/python -m award_agent.cli.results replay --artifact artifact.json --output resolved.json
+.venv/bin/python -m award_agent.cli.results author --interactive --packet-profile focused-v3 --projection projection.json --config config.json --output focused-artifact.json --live
+.venv/bin/python -m award_agent.cli.results replay --artifact focused-artifact.json --output focused-resolved.json
+```
+
+The first command prepares the packet and returns its version and digests; it
+makes no API calls and does not measure input bytes, tokens, or context fit. The
+explicit V7 `--live` command makes count and writer API calls, with at most one
+bounded correction generation. V8 instead uses one selector and one composer,
+with no third correction. Replay makes no calls. See the [experiment and evidence](../evidence/results-stage/m2/structured/2026-10-26-under20/README.md),
+[session log](build-log/2026-10-26-results-under20.md), and
+[ADR 0029](adr/0029-structured-results-and-local-workspace.md). Existing V1–V6
+artifact replay and the historical CLI routes remain available.
+
+## October 25 historical generation latency interpretation
 
 `WriterReceipt.latency_seconds` for structured authoring measures approximately
 client request construction through receipt/serialization of the complete response.
 It excludes token-count calls, later authored-document validation and upstream travel
 searches. It does not measure time to first token or full application completion.
-The current saved-input Luna retry averaged 58.31 seconds per generation and 77.74
+The October 25 saved-input Luna retry averaged 58.31 seconds per generation and 77.74
 seconds of summed generation time per completed answer (including correction).
 Cases ran concurrently, so their summed time is not session wall time.
 
-The owner considers these delays too long. Composition/cost evidence is not latency
-acceptance. See the [measurement and proposed investigation](plans/2026-10-25-results-m2-latency-investigation.md).
-Input reduction, lower reasoning and streaming/first-usable-result measurements have
-not been implemented or evaluated. No new setting, numeric target or paid campaign
-is authorized by this documentation update.
+The owner considered these delays too long. Composition/cost evidence is not latency
+acceptance. The [October 25 investigation](plans/2026-10-25-results-m2-latency-investigation.md)
+proposed input reduction, lower reasoning and first-usable-result measurement. The
+separately versioned October 27 interactive work above now implements and evaluates
+those input/effort choices while recording first-event, first-text and full-response
+timings. Its diagnostic evidence does not rewrite the October 25 measurements; the
+interactive section above governs current status and evaluation.
 
 ## October 25 composition correction
 

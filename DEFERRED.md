@@ -753,3 +753,45 @@ remain proposed; revisit adoption with repeated source-correct complete-answer t
 including corrections and the owner's interactive target. These are prerequisites
 for their responsiveness/quality claims, not optional cleanup. See the
 [evidence](evidence/results-stage/m2/structured/2026-10-25-latency/README.md).
+
+2026-10-28 under20 disposition (G06/G08) — fixed two-task Luna `focused-v3`
+implemented and tested. All six unchanged full runs completed in 6.72–8.46s
+(median 7.63s), H/U review passed 5/6 and 6/6, all basic depth. One reported-seat
+count is wrong (one in prose versus two in source); the strict joint quality/
+latency gate therefore remains unmet. Preserve the implementation as an explicit
+fast candidate and all failed evidence. Before a factual-quality/default-adoption
+claim, address prose/source binding and demonstrate fresh source-correct repeated
+cohorts; before presentation acceptance, the owner must accept the comparative-
+depth tradeoff. Composed deadlines, population reliability, full-application
+latency and M3 remain distinct. These are claim prerequisites, not optional
+cleanup. [Final report](evidence/results-stage/m2/structured/2026-10-26-under20/README.md)
+and [session log](docs/build-log/2026-10-26-results-under20.md).
+
+Subsequent owner direction on 2026-10-28: commit this checkpoint and continue
+inspection/iteration in another session, intending to make the fast profile the
+default. The switch and quality acceptance remain pending; retain the measured
+failure and prerequisites above. [Handoff](docs/handoffs/2026-10-28-results-fast-profile-next-session.md).
+
+2026-10-27 under20 invocation (G06/G08) — the owner now explicitly sets a
+below20second Results goal, retains Luna and invokes architecture/input/parsing/
+quality reassessment with subagents and live iteration. This supersedes the
+earlier unset numeric target, not the end-to-end deadline/semantic gates. The
+interactive runtime is being implemented with complete source-preserving writer
+packets, exact role identities and independent offline replay. Its first frozen
+confirmation cohort failed. Subsequent candidates remain diagnostic until each
+unchanged-configuration confirmation answer passes source/usefulness review and
+actual Results completion below20s. This is required responsiveness work, not
+optional cleanup; owner presentation acceptance, population reliability and full
+application latency remain separate. See the
+[active session](docs/build-log/2026-10-26-results-under20.md) and ADR0029.
+
+2026-10-26 latency next-cut disposition (G06/G08) — owner-authorized isolated
+input/effort/topology campaign completed40generations/40counts. V1 medium is faster
+but its passing cohort did not repeat; low variants retain factual/choice defects;
+parallel workers add latency without demonstrated quality improvement. V2 medium
+does not improve median responsiveness. Source preservation and exact request
+measurement pass; source interpretation is not mechanically proved. No runtime
+adoption, owner latency/presentation acceptance, semantic-verification guarantee,
+composed deadline or gate closure. Revisit on the owner's keep/cut decision and
+evidence for the chosen quality/latency claim. See the
+[decision report](evidence/results-stage/m2/structured/2026-10-25-latency-next-cut/README.md).

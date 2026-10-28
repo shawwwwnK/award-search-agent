@@ -1,0 +1,45 @@
+{
+  "H": "fail",
+  "U": "fail",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "H1",
+      "axis": "H",
+      "severity": "hard",
+      "quote": "is also an Aeroplan economy award via Hong Kong, departing at the same time and arriving at 10:35 a.m. January 17, 45 minutes later; listed at 65,000 points plus CAD 107.40.",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "observation_id": "023e2e9d3b4ff866f33cb212abf73ad277f1b286591737d260db060ac7587dfc",
+      "expected_fact": "Referenced J17 is SFO–TPE–BKK: departure January 15, 2027 at 23:30 local; arrival January 17 at 11:30 local; 65,000 Aeroplan points plus CAD 116.50 (11,650 minor units). Relative to J14 it departs 15 minutes later and arrives 100 minutes later. The quoted route, times, 45-minute difference and CAD 107.40 belong to J1 (28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82), not the linked J17.",
+      "impact": "Material journey identity, schedule, comparison and monetary association error in the sole narrated alternative."
+    },
+    {
+      "id": "U1",
+      "axis": "U",
+      "severity": "hard",
+      "quote": "If you prefer a later arrival,",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "expected_fact": "The comparison that follows must describe the exact referenced alternative. Its linked itinerary has the route, schedule and taxes recorded in H1.",
+      "impact": "The primary choice, fastest-duration reason and cash benchmark are supported, but the sole award comparison is not coherent with its selected reference. This fails the coherent brief-comparison part of the useful-core rubric; it is not a failure merely for omitting other variants."
+    },
+    {
+      "id": "C1",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "the quickest surfaced award",
+      "source_id": "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+      "expected_fact": "J14 is indeed shortest at 1,175 minutes. J8 (cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a) takes 1,180 minutes, has the same reported program/cabin/points/taxes, and arrives January 16 at 22:25, 11 hours 25 minutes before J14.",
+      "impact": "A useful earlier-arrival tradeoff is absent and the answer mainly lists facts. This limits decision richness, but does not falsify the shortest-duration claim and is not itself an H failure."
+    }
+  ],
+  "notes": {
+    "scope": "Read only answer.md, document.json, evidence.json and references.json. No campaign, model, timing, usage, prior review, or external information inspected.",
+    "protocol": "Canonical document has a valid selected primary journey and selected benchmark, both present in their corresponding reference blocks. All three reference IDs resolve in the expected workspace collections; the extra journey is a comparison. No unresolved reference or unrecoverable selection/role failure is visible. Factual association failure is scored separately under H.",
+    "supported": "Primary J14 facts and its minimum elapsed-time claim match the source. C1 benchmark is USD 440, Singapore Airlines, SFO–SIN–BKK, January 15 09:40 to January 17 08:25 local, with unknown price scope. No cabin preference was supplied. Partial award prices and limited coverage are supported; no complete party-total or verified-bookability claim is made.",
+    "verification": "Compared all 258 workspace journeys with the complete source comparison pool (exact ID-set equality): 26 admitted and 232 conditional. Recomputed all 258 elapsed durations from UTC instants, checked selected local calendars and J14/J17 departure/arrival differences, checked all 10 cash benchmarks, source component minor-currency units, coverage reasons and reference mappings. An initial datetime parse rejected Z on the local Python version; reran successfully after normalizing Z to +00:00.",
+    "grading": "C basic acknowledges a correctly grounded primary award and cash comparison. U fails specifically because the sole award comparison is attached to a different exact journey; omitted stronger variants are only a C consideration.",
+    "uncertainty": "No uncertainty about the material J17 mismatch. Protocol clean describes the visible canonical structure, not a runtime checker result. No live availability or broader source truth was tested.",
+    "escalation": "No escalation required for this source-quality verdict."
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "cases": {
+    "admitted": {
+      "journeys": 258,
+      "journey_profiles": 142,
+      "components": 86,
+      "component_profiles": 65,
+      "leads": 143,
+      "benchmarks": 10,
+      "coverage_limits": 1,
+      "timed_leads": 0,
+      "zero_seat_leads": 2,
+      "finding_codes": [
+        "seats_program_unsupported",
+        "seats_zero_ambiguous",
+        "taxes_minor_units",
+        "taxes_program_unavailable"
+      ],
+      "wire_bytes": 108822,
+      "packet_sha256": "ce57bc6e2b6ae3dc959dfc7c7df16150d4ccda7089329b37eb466c456468c33e",
+      "rough_tokens_bytes_div_4": 27205,
+      "synthetic_unknown_zero_quote_association": "passed",
+      "synthetic_leg_cabin_scope_and_mixed_pct": "passed",
+      "synthetic_unknown_relation_guard": "passed"
+    },
+    "conditional": {
+      "journeys": 232,
+      "journey_profiles": 116,
+      "components": 52,
+      "component_profiles": 33,
+      "leads": 167,
+      "benchmarks": 6,
+      "coverage_limits": 3,
+      "timed_leads": 5,
+      "zero_seat_leads": 7,
+      "finding_codes": [
+        "seats_program_unsupported",
+        "seats_zero_ambiguous",
+        "taxes_minor_units",
+        "taxes_program_unavailable"
+      ],
+      "wire_bytes": 98608,
+      "packet_sha256": "335593ff8ab01ce63f82d661f47b435ba9e9935ae88eefcd7c4baa9595bd6ecb",
+      "rough_tokens_bytes_div_4": 24652,
+      "synthetic_unknown_zero_quote_association": "passed",
+      "synthetic_leg_cabin_scope_and_mixed_pct": "not_run",
+      "synthetic_unknown_relation_guard": "not_run"
+    },
+    "incomplete": {
+      "journeys": 0,
+      "journey_profiles": 0,
+      "components": 5,
+      "component_profiles": 5,
+      "leads": 378,
+      "benchmarks": 5,
+      "coverage_limits": 4,
+      "timed_leads": 0,
+      "zero_seat_leads": 8,
+      "finding_codes": [
+        "seats_program_unsupported",
+        "seats_zero_ambiguous"
+      ],
+      "wire_bytes": 87430,
+      "packet_sha256": "86d80485bc1ba8600ebba3874cc2758d9f756300ee8cd8f26bc9420e6f8a4a39",
+      "rough_tokens_bytes_div_4": 21857,
+      "synthetic_unknown_zero_quote_association": "passed",
+      "synthetic_leg_cabin_scope_and_mixed_pct": "not_run",
+      "synthetic_unknown_relation_guard": "not_run"
+    }
+  },
+  "edge_controls": {
+    "valid_empty_source_workspace": "passed",
+    "valid_missing_date_lead": "passed"
+  },
+  "token_note": "Byte/4 is a rough size proxy, not an API token count.",
+  "omission_inventory": {
+    "intentional": [
+      "passed reason prose other than traveler/seat outcomes",
+      "provider query lineage",
+      "per-alias retrieval timestamps (range retained)",
+      "per-leg flight numbers and times (airport sequence, whole schedule, and each leg cabin state retained)",
+      "duplicate lead-only component profiles",
+      "full explorer metadata",
+      "completed coverage-group detail (all incomplete groups retained)"
+    ],
+    "retained_locally": "Original prepared input and canonical workspace/source in each artifact."
+  }
+}

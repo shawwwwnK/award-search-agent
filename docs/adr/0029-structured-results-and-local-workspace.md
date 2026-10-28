@@ -9,7 +9,202 @@
 
 ## 2026-10-25 amendment: complete-answer composition
 
+### 2026-10-26 under20 interactive revision
+
+Status: owner-invoked implementation and bounded evaluation; final settings and
+performance qualification require measured evidence. Source: the owner requests
+below20seconds while retaining Luna and directs a higher-level reassessment of
+quality, inputs, parsing and architecture using architects/investigators/advisors.
+See the [session log](../build-log/2026-10-26-results-under20.md) and
+[declared campaign](../../evidence/results-stage/m2/structured/2026-10-26-under20/campaign.json).
+
+Options examined: compress the entire old machine-facing authoring view; replace
+it with a complete writer-only semantic decision packet; or code-select a smaller
+shortlist. Choose the semantic packet. Do not adopt a shortlist, new Ranking score
+or narrower eligible explorer. The model retains every eligible exact choice and
+editorial/selection ownership. Full source evidence remains canonical locally;
+the packet omits duplicated passed-validation prose, raw lineage and detailed leg
+records only after auditing retained decision facts and caveats. It retains dates,
+timezones, scope/units, cabin-evidence scope, traveler/seat support, ambiguous-zero
+finding semantics, timed leads, Ranking hints and acquisition limitations. Small
+source-bound relation groups describe schedule/cabin/buffer facts, not winners.
+
+The interactive wire derives selection once from explicit highlight, alternative,
+benchmark and lead roles, then expands to the existing canonical structured
+document and factual resolver. Repeated highlights stay selected; alternatives
+never deselect them. Wrong source roles/unknown refs and multiple distinct
+benchmark roles are explicit invalid-wire failures, never silently repaired.
+Invalid wire is a generation/schema failure under the existing no-retry policy;
+recoverable checked documents retain existing at-most-one correction/selection.
+This profile deliberately omits optional model-declared claim annotations and
+expands empty claims; existing legacy paths/checks are unchanged. It narrows
+optional annotation checking, not a new claim of factual prose verification.
+
+The new prepared/artifact versions preserve old replay dispatch. The interactive
+run computes validated source/request/check/resolution bindings once and does not
+immediately rebuild/replay its own just-constructed artifact. Exact independent
+offline replay remains available and is tested, including raw-response-to-wire,
+wire-to-canonical-document, request, source and digest tampering. Consequence:
+independent reconstruction is an archival/verification action rather than an
+extra mandatory pass on the live return path; this is an explicit integrity-gate
+allocation, not silently removed validation.
+
+Prospective evaluation separates H (truth/scope/identity) and U (useful completed
+answer), both hard, from C (basic versus decision-rich comparative coverage).
+Omission fails H when it makes the asserted central argument false/misleading;
+missing an otherwise stronger representative is graded coverage, not automatically
+a fabricated fact. Exact evaluated alternatives, cash context and applicable
+limitations remain required for U; no fixed cabin/style quota or exhaustive
+frontier. This clarifies the interactive experiment's evaluation and does not
+retroactively relabel prior evidence or automatically qualify M2 presentation/M3.
+
+The performance target is each final saved-case completion below20s including
+source parsing, preparation, counting, actual correction, checks/resolution and
+artifact construction; first JSON text and a sub20 median are insufficient.
+Luna reasoning/processing are explicit per request. Fast is premium processing
+on the same model, and its actual returned tier is recorded; no project-wide
+service setting is changed. Final configuration is selected only after source
+review and at least two unchanged-configuration confirmation cohorts. A small
+development result is not a percentile/SLA guarantee. Revisit if decision fields
+are missing, counterexamples invalidate prose, measured latency misses the target,
+or owner review rejects usefulness/coverage.
+
+2026-10-27 iteration: the first frozen indexed-packet confirmation cohort missed
+the target (two answers at or above20s and one material identity error). Preserve
+that cohort as failed evidence. A joined packet places named whole-journey and
+component facts together, with no eligibility reduction. Its low-effort scouts
+still exposed identity/role errors; a medium conditional scout took38.57s. These
+results motivate a separately versioned `decision-joined-v3` candidate: readable
+source-derived reference identities, an exact reversible alias registry, and
+source-role-specific output grammar. Absent complete journeys cannot acquire a
+highlight role. The grammar is an expression of existing reference validity,
+not a repair, factual prose verifier or deterministic recommendation policy.
+Large-source schema limits must use an explicit unrestricted-string grammar
+with the same exact decoder, never trim the eligible reference registry. Saved
+v1/v2 packet requests and replay retain their original instructions and schemas.
+The v3 instruction favors interpretation alongside source-resolved cards over
+redundant numerical transcription. It preserves per-choice reasons, downsides,
+relevant alternatives, cash context and limitations; the frozen H/U/C rubric is
+unchanged. Candidate status and final confirmation outcomes belong in the
+linked session evidence; this paragraph does not assert performance success.
+
+The v3 scouts then completed below11s but retained two material prose defects:
+`direct_award` was presented as a direct flight despite a connection, and a
+different-arrival alternative was described as sharing the selected arrival.
+The separately versioned v4 candidate presents that internal assembly topology
+as `award_only` (connections remain possible), binds arrival date/time into exact
+journey handles, and omits the old-ID lookup registry from the writer payload
+while retaining it locally for decoding/replay. All facts and references remain
+reversible to v3 except this documented equivalent topology vocabulary. This is
+source presentation repair, not a new Ranking policy or relaxed quality bar.
+
+The v4 scouts still failed route/program association on two cases despite7–12s
+completion. The next versioned experiment separates selection from composition
+inside the same Results application workflow, using Luna for both. A `none`/Fast
+selector sees the complete indexed decision packet and returns only validated
+source identities. Code resolves those model choices into a bounded authoring
+bundle; a `low`/Fast composer writes against those exact facts. No code-ranking,
+top-K, eligibility pruning or agent framework is introduced. The first model owns
+the authoring pool; the second owns final highlights, order and prose among it.
+The complete canonical workspace/explorer remains independent.
+
+The authoring-bundle budget is eight total references including alternatives,
+leads and a benchmark, not eight recommendations. Over-budget selections fail
+explicitly; no silent truncation. Global comparison/coverage context remains
+available, but ordinary comparative claims must be scoped to shown choices;
+subset evidence cannot establish a globally fastest/only/necessary option.
+Stage1 failure stops immediately. Stage2 uses checked annotated/unavailable
+delivery as appropriate. Selection plus composition consume the existing two-
+generation ceiling: **there is no third correction call** in this profile.
+This is the explicit recovery tradeoff; the V7 initial/correction route remains.
+
+Artifact V8 records distinct selection/composition requests, settings, counted
+inputs, raw outputs, receipts, validated selection, focused source bundle and
+final document/resolution. Replay reconstructs and verifies both stages against
+the canonical source. Source preparation is reused across stages. Older artifact
+versions retain their dispatch. The experiment must pass three saved-case scouts
+then two unchanged confirmation cohorts, including all local work and both calls,
+under the existing48generation/48count ceiling. Earlier analyst/composer failures
+remain evidence; the new hypothesis differs by emitting only typed identities
+first and authoring from a small resolved bundle. This is an authorized technical
+experiment, not owner presentation acceptance or a faster-default decision.
+
+The first V8 scout completed10.08s with independent H/U pass (basic comparative
+depth). The other two selectors returned nine references and correctly stopped
+before composition. Focused-v2 therefore uses a single typed choices array with
+schema `maxItems=8`, preserving exact role/duplicate/benchmark checks and the
+same total budget. It is a ceiling, not a target or recommendation quota. A
+saved selector-format marker preserves markerless V8's original requests/replay.
+This changes the expression of the existing bound, not the quality rubric.
+Unknown component airport sequences also remain an explicitly unknown derived
+path; absence must not become a new eligibility requirement for trusted journeys.
+
+Focused-v2 delivered all three scouts in6.70–10.06s. Conditional and incomplete
+passed source/usefulness review; admitted reversed two whole-journey duration
+comparisons. The final focused-v3 input therefore adds code-computed temporal
+comparison facts for the selected journey pool: exact elapsed differences and
+offset-aware departure/arrival differences, preserving unknowns. It does not rank
+or establish whole-inventory optimality. The composer still owns its words;
+these facts are an input reliability aid, not mechanical verification of prose.
+The selector request remains roles-v2; a composer-format marker preserves older
+replay. Within the original budget, one composition-only diagnostic reuses a
+validated selector receipt and is explicitly excluded from full-runtime claims,
+then six unchanged full runtime confirmations supply the actual target evidence.
+The H/U/C rubric, per-run two-generation ceiling and each-answer sub20 target
+remain unchanged. All earlier failures and sandbox-blocked reservations remain.
+
+2026-10-28 measured disposition: the fixed focused-v3 pipeline completed all six
+full confirmations in 6.72–8.46s (median 7.63s); both settings and 30 source hashes
+match the frozen manifest. H/U review passed 5/6 and 6/6respectively, with basic
+comparative depth throughout. The last admitted answer misstates reported seats
+as one instead of two. The temporal comparison fix does not close general
+prose-to-source binding. The combined acceptance gate therefore fails despite
+the measured speed pass. Keep implementation/evidence available as an explicit
+candidate; no faster-default, owner presentation acceptance or M3 qualification
+is recorded. Remaining prerequisites are fresh source-correct cohorts and owner
+acceptance of the comparative-depth tradeoff. See the
+[final report](../../evidence/results-stage/m2/structured/2026-10-26-under20/README.md).
+
+2026-10-28 subsequent owner direction: commit this checkpoint; the owner intends
+to make the new fast profile the default after further inspection and iteration
+in another session. Record that direction without treating it as a completed
+default switch or acceptance of the remaining factual error. This supersedes
+the otherwise unspecified next direction, not the measured evidence or open
+qualification boundaries. See the
+[continuation handoff](../handoffs/2026-10-28-results-fast-profile-next-session.md).
+
 ### Subsequent Luna latency experiment disposition
+
+2026-10-26 experiment disposition: the invoked next-cut campaign closed at
+40 generations/40 counts. Smaller V1 input at medium reduced observed Results
+wall time but failed its repeat cohort's source/composition review; V2 low improved
+some exact identities without meeting the complete-answer target, and parallel
+analysis added latency without demonstrated quality gain. V2 medium retained
+roughly original median latency. No faster runtime default/topology or acceptance
+decision is adopted. Data-preserving request ergonomics do not prove accurate
+model interpretation. The existing numerical-prose trust and annotated bounded
+recovery policy are unchanged; experimental review is not a new delivery gate.
+See the [decision report](../../evidence/results-stage/m2/structured/2026-10-25-latency-next-cut/README.md).
+Owner keep/cut disposition and interactive acceptance remain open. This records
+experimental execution/evidence, not a new policy requiring further approval.
+
+2026-10-25 next-cut invocation: the owner subsequently approved the
+[updated handoff](../handoffs/2026-10-25-results-m2-luna-latency-next-cut.md) and
+requested live experiments, iteration, subagent orchestration and a decision report
+to shorten latency without sacrificing too much quality. After the requested
+checkpoint commit, an isolated campaign declares at most 60 generations and 60
+counts, including bounded corrections and parallel analysis calls. Options compared
+are original/revised single-composer input at medium, revised input at low, and
+two parallel low-effort analysts followed by one low-effort composer. This accepts
+the experiment's execution only. Its outputs are noncanonical diagnostics; no
+runtime topology or default, new source authority, eligibility, Ranking, semantic
+verification or delivery/recovery policy is adopted. The composer retains full
+eligible source access and selection/editorial ownership. The parallel hypothesis
+revisits the earlier one-composer decision experimentally, without superseding it
+for runtime. See the [campaign and limits](../../evidence/results-stage/m2/structured/2026-10-25-latency-next-cut/campaign.json)
+and [session log](../build-log/2026-10-25-results-m2-latency-next-cut.md).
+Revisit adoption on source-reviewed complete Results wall time, cost and failures;
+owner responsiveness/presentation acceptance and M3 remain separate.
 
 Recording/decision date:2026-10-25. The owner requested investigation and experiments
 while retaining Luna. The bounded eight-generation diagnostic tested lower effort

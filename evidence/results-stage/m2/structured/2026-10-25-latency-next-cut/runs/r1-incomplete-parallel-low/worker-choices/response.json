@@ -1,0 +1,137 @@
+{
+  "id": "resp_02043f677d87589e016adf8781713887d1947940c8a73659cd",
+  "created_at": 1793034113.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Read every relevant eligible journey in the supplied prepared Results evidence. Return a short JSON list of decision-changing comparisons with exact J aliases. Look across cabin choices, especially equal-schedule economy/business options, and distinguish same schedule from identical flight or booking facts. Check full arrival dates and points programs. Do not select an exclusive shortlist or author prose.\n\nExact-choice reading guide: each journey group's facts give the whole-journey route, full dated departure/arrival, duration, cabin and booking obligation for every member in that group. Each member's choice.award_quote and choice.cash_quote copy only its exact referenced component's reported facts; state=unknown or absent and unknown price_scope remain unknown. Never move a quote, cabin, seat or booking fact between J members. reasons_ref, cost_ref, assessments_ref and positioning_reason_ref are zero-based indexes into the same-named journey_fact_catalog arrays; use each full indexed value as the group fact. same_schedule lists all J members by matching reported route, full timestamps, duration and transfer facts. An unknown schedule is listed alone and proves no timing relationship; matching does not prove the same physical flights, price, cabin, booking or availability. Compare cabins and arrival timing separately across meaningful alternatives, especially an economy option matching a business option's schedule. Do not assume a schedule improvement is purchased by a cabin upgrade when an eligible same-schedule economy choice exists.\n",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_02043f677d87589e016adf8784bf1887d1a5db8bee5d69611e",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq34eFj6y5X-GwCZqFYee4GFfZH15Ko7wP7DLx4yNrxPwzrbra8f4UIOIXlZ-RhzLlTVC_XZ0Y0VOi2SdKgdHt_tiVls-mFKMT7AlP8meYIo964eT_oNiJYIWx7lRB4TTdxfWiwk8JU4lEzBqkiUxWRKe7U90iAFXNaZFNq00XV6rrO2ASTkNzOi2Ni0-vSNykrelUh4fJViuiutVXBlFIf0kAOpjA2fNejBfDnac4R_ZmKeRYOM8ynjCfuCxaLY3TPAHVLTorkSKcIt1u-7-8QLvnacc1ppIRP-X-WG06GkXLsYRfUL2oqzk9VtJUNXTfdYGzoVOdqtNUlC-l_FQFxOsK0lksLHORLJuRGDiwkD3o1sZN8KZG41L04rrM2SuiCaHbXlaJ8yyJpoSNE19AGtw1enFniuokKvpqOhrGs99klvA4GPBUj9zVUM3MrO4Ayk0ikrtK4xBamGX2jlma3Ki8uSK8GmrX4DG7SDyoOzv0QSAeEKZV-HaTiBXcqaaOpkwFVDLiYYvn1XcNTdPVECEgBqJsAS8bf_4cXIpqQYTmTGVu7pwmrC9yKxYnPcry893DScJpLmWxSEmnn1Ly2f1jeDPbCD_EXRVo9j9FJI4mQ7bpI4kIHwLxatIHOizG1_e14YNpSog1a3vGzVaDtLZ864-IZ9_4cxkBVK4jQV3m9WQTlea1ov568rzXzVEs1puZO4xVBr_liAl-cc_q1EchSLsivlf53Io8SMpw5BaRcHyCqzkU1lpuVR22IPWEVKcZpkERESyEpeOOiScc21JiLQuCZe2vwdjTtZGClsg4Fjkt7UOYTdkUV_36kkhsSG-v3_Z93SWSlxIjRr8Z1FVxMTqXyBqyH94ZUx0lyCPe91OyaY8WOQOrG9iFJkRORpCaFIFlVaGegrwe-jL1ROtHIuyX1C5DKC4XEXq0jmEoiz20523nCY4fEFIfj-a4NEgywVgiOB5mtjXpN0PUWEwP1sE6Qc-6QFVwGHLbbk1Ti6LnJiNXQqI6vkoTmi1PUF0aClD5_ms-_9LYXZ0EiCwYWea_79EZLBXrxeYf5piTNB6wcc9BpfFi9ewE0NthZJH3xaS6LMu1n2HO8kpx1322Jd-Ey1KF2jlishSfsU-Zy69HyL2ZFhga0082CCTUhXTfn1Lfgic4HdtXAnYUXswaA1QFYrj_d9vlBjCTbYGl4VG52RjVE-4L2Mp7hYhz61KlBeelqdo3NOhW7M5-WI2qOt30uMill8jSsVh27KH9IUptq-nB1qTF5goLmz413aLls84jjUq3fR4Ff5b16fMHSkszbjz7Ml1N-_DvTrtpmPNtr5jso9ivkbI-EEcWazm3qloQOKF7bEEAeA-pdHDajJ2dIvgSCuJ81kMt_cf7yCqSM6VEbTcEq6TLSo14y-Ul6YTmpX_5BPq1QZMj3mC5g1d8TWX4nsAFk04q2odmWE4O4lR3Q-SXT-lm7uAKwe3u0VibYY8P2Kh78LL1zPkTSeD7vyvxYg_87ZMpxENwS-4GCvuwf45ES1Mv7BMB-Lc4woQ1VzyubX9BkQ7IYnMQeBaSbPE6P0pM8ox58LFNP19nnj6VOGxP8r04Zun0bjPgY8cGprrQnbesNqhU2EeXJpinIUuhx0XaobAOuvZqG2OfvKWnR4buP1P-gL1b6PsYFOs1_Jh2CmoF8F7dMDY_TzWP8UFeiHTsPSInv_qUAeQIxJic1lgJm7uqECfMVt6V50Y8RlSOqYdSsm2HuzRgYQYJVfkPVCqxOhYfkmY6x1mr92cmhsji61HXv8woeu-1O0XvYQaoBBMN4AmbOwtf2hKr1TAbqqoJuFtg8RQOnhJavN7fzESo__EI04RJ7mK-iSBVim72WysJPanzBv2CniBZFdvUDFmXEN4QPdtN1n-B5zhekLFR6sr9wCrsyEjbmSALKlRGNriPeFyMKrT_zEryl8pZA8pJlbQQhhXGGYnwoztqKDAwCeI5dqcpFnks-2TR9TRIiHpjtOwj_uhKpmaw18rMNR-YflK49Aeg2fqDdEqCiF4_sImdH8rAOez6UQ9JdImwFj7I_GuYJR3wR0I2_LXCe2Ljl9NTH7IS011HXABTp3FEdjQpAzGEIgvs4KkG2am4ds2fubCC-r1I0v63Rq3Ji3OaiutvkZf7WWpw2R1z7WwUuHCqmZp9UU6AkCQmX9rp05CKEttYVYf1YriDVAQ7wrRpNE-rWpVSZR2Zlj_88XqoRVkO1WrYrc1P7W6I0_pDurejGRFKJwjasp1qkZ6AV8d_r0KYiQOuMtMOtYSVNTdeOR878qzav6SN9lMbq_70AMeY-ltWxSXKsc-sNlCdVWF09gYBcM-1ezkqunlhJO-qsr9UoHMmNM1Hxk_cHfVN0bY0Mzy25CqeK7FsCpIhpbSKpcv0u9_Z0Jw8QkDkerROzLZo6ifmhDwfl3A8i2UwRUDTTRTROjYNtJmC86GAcXTxrv5tlLwn0h-JEnaEb5Oa-RumKvFxBuK8",
+      "status": null
+    },
+    {
+      "id": "msg_02043f677d87589e016adf8785993087d19bc659e788fa7fb9",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"findings\":[]}",
+          "type": "output_text",
+          "logprobs": []
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 4096,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "AnalysisFindings",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "finding": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "refs",
+                "finding"
+              ]
+            }
+          }
+        },
+        "required": [
+          "findings"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 169981,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 169978
+    },
+    "output_tokens": 92,
+    "output_tokens_details": {
+      "reasoning_tokens": 76
+    },
+    "total_tokens": 170073
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793034117,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

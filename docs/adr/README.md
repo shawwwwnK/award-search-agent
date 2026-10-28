@@ -1,5 +1,34 @@
 # ADRs
 
+2026-10-28 owner continuation: commit the fast-profile checkpoint; the owner
+intends to make it the default after next-session inspection and iteration.
+ADR0029 records this direction, with the actual switch and quality acceptance
+still pending. See the [handoff](../handoffs/2026-10-28-results-fast-profile-next-session.md).
+
+2026-10-28 under20 disposition: ADR0029 records the two-task Luna V8 experiment
+and deterministic selected-pool temporal facts. All six frozen full runs took
+6.72–8.46s; independent factual/usefulness reviews passed 5/6 and 6/6, all basic depth.
+The strict combined gate fails on one incorrect seat count. Implementation is
+an explicit candidate; default adoption and owner acceptance remain open. See the
+[final report](../../evidence/results-stage/m2/structured/2026-10-26-under20/README.md).
+
+2026-10-26 under20 revision: ADR 0029 records the owner-invoked semantic writer
+packet, role-derived compact wire, versioned interactive runtime, explicit
+construction-versus-offline-replay integrity allocation and prospective H/U/C
+evaluation. Luna remains fixed; final performance/settings are measured, not yet
+qualified. See the [session log](../build-log/2026-10-26-results-under20.md).
+
+2026-10-26 decision experiment: ADR 0029 records closeout at40generations/40counts.
+Faster configurations retain source/composition failures; parallel analysis has
+no demonstrated benefit. No new runtime default/topology or acceptance decision.
+See the [decision report](../../evidence/results-stage/m2/structured/2026-10-25-latency-next-cut/README.md).
+
+2026-10-25 next-cut invocation: ADR 0029 records the owner's authorization for
+the input/effort and optional parallel-analysis feasibility campaign, bounded at
+60 generations/60 counts. This is isolated experimentation; runtime ownership,
+defaults and recovery remain unchanged. See the
+[session log](../build-log/2026-10-25-results-m2-latency-next-cut.md).
+
 2026-10-25 latency experiment: ADR0029 records the subsequent owner-authorized
 Luna-only diagnostic. Eight saved-input probes preserve every option under exact
 factoring, but none passes both mechanical and semantic review. No runtime default,

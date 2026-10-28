@@ -1,0 +1,43 @@
+# Blinded source review — b020
+
+H: **pass**. U: **pass**. C: **basic**. Protocol: **clean**.
+
+No material hard-factual failure found.
+
+## scope
+
+Only b020 answer/document/evidence/references and frozen HUC rubric; no settings/timings/profiles/runtime/other reviews or live calls.
+
+## H_evidence
+
+- J63/0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee contains Turkish business award 14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8, arriving BKK January 10 04:15, with separate American SFO-LAX cash observation c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388. It is conditional and unverified for separate-ticket protection, with unknown award taxes and seats.
+- J115/018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 contains distinct Turkish business award d34f03239f17a5ecf12fe3d00b95363508cdc0046af9ecd5b9601bf0ff3096ac, arriving January 10 08:50, with separate Alaska cash observation bd251472ff574960a50024728ca496172652d0c105703753dac70129e3b2a85e. The later-arrival comparison is correct: 4h35 later, and 1990 versus 1719 total minutes.
+- Both award records are journey-level business; the answer does not assert a particular cabin on the cash feeder or every award leg. No current booking guarantee, complete cost, per-person price or flight-protection claim is made.
+- Cash f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2 is Delta/Korean SFO-SEA-ICN-BKK, USD 452 major units, two stops, January 10 00:20 local arrival. The 12:20 a.m. rendering is correct. Quote scope is unknown and expressly preserved.
+- Eligible business arrival groups are January 10 04:15, 08:50 and 15:05. The primary early-arrival preference is supported and does not claim earliest across cash and award together. Coverage groups explicitly include omitted cash, detail and positioning-dependency work due to resource_budget_exhausted, supporting omitted source coverage.
+
+## U_evidence
+
+- Exact choice and reason: "I’d favor the business-award option below if comfort and an early Bangkok arrival matter" is connected to J63 and its correct 04:15 arrival.
+- Principal downside: "a separate SFO–LAX cash positioning leg" creates "planning and separate-ticket exposure; the connection is not verified as protected." Unknown taxes/fees, seat availability and bookability are explicitly stated.
+- A useful exact alternative is given for a more convenient 08:50 arrival, plus a supported USD 452 cash reference with unknown scope and a warning against an all-in comparison.
+
+## C_reason
+
+Basic: coherent early-versus-later arrival choice and separate-ticket caveats. Lost dimensions include the 275000 Turkish miles and USD 59 positioning quotes, outbound schedule, total elapsed/transfer times, program/carrier names, explicit leg-cabin and traveler-count uncertainty. These reduce depth but do not falsify the stated scoped choice; no fixed cabin/style quota imposed.
+
+## protocol
+
+Clean: document parses; primary, alternative and benchmark references resolve correctly. No visible failure annotation.
+
+## verification
+
+Matched WorkspaceEvidence and source.view exact journey/component identities and condition flags. Recomputed complete elapsed intervals 1719/1990 minutes and cash 1635 minutes; verified midnight-vs-noon rendering, arrival groups, benchmark membership and coverage omissions.
+
+## uncertainty
+
+No material source mismatch found. Journey-level business is not taken to establish business on every segment; the prose could state that distinction more explicitly. Live availability and provider truth remain unverified.
+
+## escalation
+
+Not recommended.

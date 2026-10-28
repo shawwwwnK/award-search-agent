@@ -1,0 +1,46 @@
+{
+  "status": "frozen before confirmation; launch requires all three scout H/U passes",
+  "frozen_at_utc": "2026-10-27T23:08:23.792503+00:00",
+  "settings": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "low",
+    "service_tier": "fast",
+    "packet_profile": "joined-v4",
+    "max_output_tokens": 8192,
+    "timeout_seconds": 240,
+    "max_retries": 0
+  },
+  "runs": [
+    "confirm-v4-1-admitted",
+    "confirm-v4-1-conditional",
+    "confirm-v4-1-incomplete",
+    "confirm-v4-2-incomplete",
+    "confirm-v4-2-conditional",
+    "confirm-v4-2-admitted"
+  ],
+  "cases_per_cohort": 3,
+  "cohorts": 2,
+  "acceptance": "Every planned run delivered, mechanically/protocol clean, independent H/U pass and outer source-parse-through-artifact completion strictly below20s. No selective replacement. Coverage separately graded. Exact settings/code must match archived snapshots.",
+  "timing_scope": "Includes saved-source parse, preparation, count, actual authoring/correction, checks/resolution and artifact construction; excludes persistence and independent offline replay.",
+  "quality_version": "under20-HUC-v1",
+  "scout_reviews": [
+    "b019",
+    "b020",
+    "b021"
+  ],
+  "code_sha256": {
+    "src/award_agent/results/interactive.py": "352b7176b20b41eb8656612e34900684c0238665b861e474940d770526677828",
+    "src/award_agent/results/interactive_adapter.py": "88dac291d6842363e999e2602a1d7ff4f6d7630f2b92d285de97795820d5b17e",
+    "src/award_agent/results/interactive_contracts.py": "6af5924786df78f28cc8cb86af4af649acc3b691514773c0d2cf8fb121dcea50",
+    "src/award_agent/results/interactive_packet.py": "245a5cafd7fa1031abef6ce67cb31b1118c99de564bcb6e2d6244bd6e0f2b085",
+    "src/award_agent/results/interactive_packet_v2.py": "fcf8d3f3bd419161459f69229e70b5599c3ec4e1253c4343db7d8ee08eac5fe3",
+    "src/award_agent/results/interactive_packet_v3.py": "b1030cceed0122bb612fa908eab990bd3425ee730c9d690b9225f3c97e318232",
+    "src/award_agent/results/interactive_packet_v4.py": "6484ed640eba88c62d4ee77b13688fb31f5132b5a9e1581a47731bde08bec98e",
+    "src/award_agent/results/interactive_wire.py": "9d54fe675abf31ce5fa6468a6b9246e340cc384814eb50009f7761b470becc9e",
+    "src/award_agent/results/interactive_wire_v3.py": "f4c00691ca8a3e46bfad1fdf57100adcc9e5c6ba5b603e08047460f608478dbe",
+    "src/award_agent/results/interactive_wire_v4.py": "0cad9f2bb74c7902e53b4d9a0a102f2fe8e4b76adf5a2795b0766125d9ba3a37",
+    "src/award_agent/cli/results.py": "aefb71c62304300bfccb98761de5500ee5d8b823605e3661f261a4c88b742e1d",
+    "evidence/results-stage/m2/structured/2026-10-26-under20/runtime_runner.py": "e9c38c0386dd87a1cf1b15a607f804fc0379ddb0e4dcbd60322eaadd855f9daa",
+    "evidence/results-stage/m2/structured/2026-10-26-under20/harness.py": "56d4a6031f60a1175d98b1c498b595ba353150e917a3196f268103c78402d40e"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "rubric": "under20-HUC-v1",
+  "bundle": "b027",
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "dimension": "C",
+      "severity": "nonblocking",
+      "quote": "Also Aeroplan economy, via TPE; arrives 35 minutes after J1. Useful alternative, but not as quick.",
+      "source_ids": [
+        "28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+        "2df689e0ff0d8ad01708129eb8fb9ea5398c9accb14343c04ad99d2f6bc77dd6"
+      ],
+      "assessment": "A supported alternate route and timing downside meet the basic usefulness floor. However, calling it useful does not explain a positive reason to choose it. The answer gives three similar late-departing economy choices, with little decision guidance beyond timing order; no absolute schedules, reported points or readable tax amounts are explained in prose. This is basic composition, not a hard truth or mandatory cabin/style-coverage failure."
+    },
+    {
+      "dimension": "C",
+      "severity": "nonblocking",
+      "quote": "The shown cash itinerary is $452 USD for one traveler, via SEA and ICN. This gives origin-to-destination cash context, but its price scope and fee unit are unknown, so it is not a complete-cost comparison with the awards.",
+      "source_ids": [
+        "971d8426b8e475c5e41a01b168b977da0ae4fa53b2b1a8fbc73c62f2eb17a856"
+      ],
+      "assessment": "The itinerary supports one traveler and reports USD 452; the next sentence explicitly retains unknown price scope. Taken together this is not an asserted verified party total. Clearer wording would separate traveler support from the quoted amount. Cash fare units are known major USD; only taxes_fees_unit is unknown. Fee-unit terminology and unintroduced J1/J15 aliases reduce clarity without establishing a hard factual failure."
+    }
+  ],
+  "notes": [
+    "Blinded inputs were only b027 answer.md, document.json, evidence.json and references.json. No settings, timings, profiles, other run/history files, web/live calls or delegation.",
+    "H pass: exact-reference timelines support every stated timing relation. J1 departs SFO January 15 23:15-08:00 (January 16 07:15Z), arrives BKK January 17 10:35+07:00 (03:35Z), elapsed 1,220 minutes. J15 departs January 15 23:30-08:00 (January 16 07:30Z), arrives January 17 11:10+07:00 (04:10Z), elapsed 1,240 minutes. J17 has the same departure as J15, arrives January 17 11:30+07:00 (04:30Z), elapsed 1,260 minutes. UTC recomputation agrees with source durations. J1 is 20 minutes shorter than J15 and arrives 35 minutes earlier; J17 arrives 20 minutes after J15.",
+    "Full legs checked: J1 UA877/CX705 via HKG has 105-minute connection; J15 BR27/BR67 via TPE has 145-minute connection; J17 BR27/BR211 via TPE has 165-minute connection. All are admitted single-award economy itinerary records for SFO\u2013BKK January 15. No direct-award/nonstop conflation occurs. Each reports 65,000 Aeroplan points; per-leg cabins are unreported, with no explicit leg-by-leg certainty asserted.",
+    "Known support versus quote scope: requested travelers is one; J1 has two reported award seats and J15/J17 one each. Cash returned_travelers is one. All price scopes remain unknown. Award taxes are reported in CAD minor units: J1 10,740 (CAD 107.40), J15/J17 11,650 (CAD 116.50). No fabricated numerical party total or protection/bookability guarantee appears.",
+    "Whole-pool checks: admitted J8 cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a arrives January 16 22:25 and lasts 1,180 minutes. Admitted J14 eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669 shares J1 departure, arrives January 17 09:50 and lasts 1,175 minutes. They defeat an unqualified whole-pool earliest/quickest claim, but the actual prose says among these award choices and other shown awards. No omission-based H failure is assigned.",
+    "Cash 971d8426b8e475c5e41a01b168b977da0ae4fa53b2b1a8fbc73c62f2eb17a856 is SFO\u2013SEA\u2013ICN\u2013BKK, USD 452 major units, two stops, departing January 15 06:05-08:00 and arriving January 17 00:20+07:00, elapsed 1,635 minutes. The answer does not invent a relative cash-timing or value claim.",
+    "Coverage language is supported: provider_status is partial, and source.view.coverage_groups includes detail_query status omitted, reason resource_budget_exhausted, stream_complete false and pair_coverage not_attempted. Current availability and bookability are properly left unconfirmed.",
+    "U pass: exact lead, supported individual timing reason, real HKG-stop/incomplete-cost downside, relevant Taipei alternative, brief cash context and limitations are present. No exhaustive frontier or cabin/style quota is required; decision richness remains separate.",
+    "Protocol clean: JSON parses, selected identity and all four references resolve, and no visible recovery/annotation is supplied. This does not claim a runtime checker or renderer outcome; source resolution alone did not certify prose.",
+    "Verification: parsed the three JSON inputs, inspected full cited timelines and monetary/traveler fields, recomputed durations/arrival differences, compared whole-pool counterexamples, checked omitted coverage evidence and resolved canonical references. Review JSON was parsed back and Markdown checked nonempty. No runtime tests or live calls.",
+    "Uncertainty: external rendering and runtime annotation status are unavailable. Caveated cash wording has minor ambiguity, recorded without inferring a verified total. No escalation recommended."
+  ]
+}

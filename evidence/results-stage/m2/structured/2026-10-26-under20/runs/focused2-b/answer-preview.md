@@ -1,0 +1,19 @@
+For an earlier arrival among these award options, J63 reaches Bangkok before the two later-arriving alternatives. Its trade-off is a separate SFO–LAX cash leg and LAX–Istanbul–Bangkok Turkish award itinerary; the transfer is unverified, so don’t treat the connection as protected. The award is reported in business class, but cabin by leg, taxes, seat availability and full price are unknown.
+
+A Turkish award via Istanbul, paired with a separate cash flight to LAX. It arrives earlier than the other shown award choices, but entails an unverified separate-ticket connection. The award is 275,000 Turkish points; fees are unknown, and business class is the award-level cabin, not a confirmed cabin for every leg.
+
+[Display: Earlier arrival; journey; 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]
+
+Same Turkish award routing and points as J63, with a different cash positioning flight and a later Bangkok arrival. It still depends on a separate, unverified LAX connection.
+
+[Display: Later arrival; journey; 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]
+
+Another pairing to the same Turkish award routing and arrival time as J115; it gives a later SFO departure, but the separate-ticket transfer remains unverified.
+
+[Display: Later departure; journey; 1a3cb33b542f1e0dd3179dbf18ef330d4d45574dd9e17b70b9d371ded5974e0e]
+
+The shown cash itinerary is $452 USD from SFO to Bangkok, with two stops, arriving earlier than these award choices. Its price scope is unknown, so it is a context point, not a confirmed like-for-like total against points plus positioning cash.
+
+[Display: Cash context; benchmark; f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2]
+
+All award choices have unknown fees and seat support; their traveler support and full price are also unconfirmed. The positioning cash fares are not complete-trip totals. These assembled options are not confirmed bookable; availability and prices should be checked, and source coverage was partial.

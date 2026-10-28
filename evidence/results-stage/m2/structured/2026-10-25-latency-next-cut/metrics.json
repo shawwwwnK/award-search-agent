@@ -1,0 +1,2620 @@
+{
+  "campaign": {
+    "authorization": "2026-10-25 owner approves handoff, explicitly requests experiments/iteration using subagents and live runs; subsequent instruction requires checkpoint commit first (completed at b4a8084).",
+    "status": "closed after declared experiments; no further calls invoked",
+    "starting_commit": "b4a8084",
+    "scope": "Saved admitted/conditional/incomplete sources; Luna-only isolated input/effort/topology comparison. No providers, FX, request mutation, runtime defaults or frontend changes.",
+    "model": "gpt-6-luna",
+    "maximum_generation_calls": 60,
+    "maximum_input_count_calls": 60,
+    "per_run_maximum_final_generations": 2,
+    "parallel_analysis_workers": 2,
+    "worker_corrections": 0,
+    "automatic_retries": 0,
+    "timeout_seconds": 240,
+    "max_output_tokens": 32768,
+    "worker_max_output_tokens": 4096,
+    "context_limit_tokens": 1050000,
+    "max_input_tokens": 922000,
+    "planned_arms": [
+      "original-medium",
+      "candidate-medium",
+      "candidate-low",
+      "parallel-low"
+    ],
+    "planned_repetitions": 2,
+    "cases": [
+      "admitted",
+      "conditional",
+      "incomplete"
+    ],
+    "execution": "Start matched original/candidate medium admitted and conditional sentinels; independently review before continued low/topology. Interleave arms and reverse order on repeat; log actual order and cache conditions. Candidate changes are versioned and consume this same envelope. Stop a clearly unhelpful variant with explicit evidence; preserve failed calls. No automatic extension.",
+    "recovery": "Use shared run_attempts: one initial final-document generation plus at most one correction for recoverable failed checks; better recoverable draft, correction wins ties; preserve annotated findings. Worker failure is explicit topology failure, no silent fallback or worker repair allowance.",
+    "quality": "Independent source/composition review before timing-based recommendation. Material: wrong factual/date/price comparison, misleading eligible landscape, reference identity mismatch, invented completeness/booking protection or material missing uncertainty. Minor wording is separately reported. Mechanical checks do not prove narrative truth.",
+    "timing": "Actual Results-only wall time includes source parsing, preparation/workspace, exact counting, worker critical path, composition, checking/resolution and actual correction; first text is not first usable display. Per-call timeout is not a whole-workflow deadline.",
+    "cost_basis": "Estimate using recorded 2026-10-25 Luna rates: ordinary input0.10, cached0.01, cache-write0.125, output0.50 USD per million. Count billing/native Codex excluded; estimate not invoice.",
+    "claim_limits": "Small development comparison; no SLA threshold supplied, statistical reliability/holdout, M2 owner presentation acceptance, frontend delivery, M3 qualification or runtime multi-agent adoption. Diagnostic artifacts are noncanonical; source evidence preserved. Owner decides what to keep/cut.",
+    "closeout": {
+      "generation_calls_reserved": 40,
+      "input_count_calls_reserved": 40,
+      "run_directories": 26,
+      "final_answers": 23,
+      "worker_failures_before_composition": 2,
+      "transport_failures_without_response": 1,
+      "known_response_generation_cost_usd": "0.919395920",
+      "cost_limit": "Recorded Oct25 rates,39 usage receipts; timed-out generation cost unknown. Excludes count billing and native Codex. Not an invoice.",
+      "stopping": "Stop V1 low after material failures on all3cases; stop V2 parallel after its sentinel still fails schedule interpretation; finish V2 single low and medium cohorts without further prompt additions. V1 original/revised medium have2cohorts each; V2 single arms1cohort each; topology comparisons stopped early. Unused ceiling is not an ongoing campaign or a future session budget.",
+      "decision": "Report candidates and uncertainty for owner keep/cut decision; no runtime defaults or topology adopted."
+    },
+    "iteration_disposition_2026_10_26": {
+      "calls_reserved_before_iteration": {
+        "generation": 21,
+        "count": 21
+      },
+      "observations": "V1 revised-medium full cohort source-reviewed with minor weaknesses; original medium admitted/conditional have material omitted alternatives. V1 revised-low has material defects in all three cases. V1 parallel-low admitted has source errors and conditional/incomplete fail worker alias validation. All failures retained, including one earlier unknown-duration transport timeout.",
+      "v1_repeats": "Retain planned second original/revised medium cohort with reversed pair order. Stop repeating failed V1 low/topology protocols; new V2 comparisons are labeled independently, not pooled as V1 repeats.",
+      "v2_hypothesis": "More exact per-reference identity and traveler/seat evidence locality plus a targeted comparison brief, despite larger input, may let low effort compose correctly. Clarify exact worker aliases and permit existing whole-pool P1 only for true whole-pool findings; never normalize ranges or retry workers.",
+      "next_schedule": "Within the same unchanged 60/60 envelope: one matched three-case V2 single-low/parallel-low cohort, then repeat the more promising configuration on all three cases. Additional topology repeats only if remaining bound and evidence justify. Do not launch a run without headroom for its full bounded path (single<=2, parallel<=4 generations/counts). No automatic budget extension.",
+      "attribution": "V2 input/brief is a new bundle. Worker protocol changes are labeled V2; do not attribute differences from V1 solely to reasoning effort or parallelism. Compare V2 single/parallel using the same V2 input and final output contract.",
+      "v2_sentinel_disposition": "Single-low admitted facts improved but omitted material business/separate-ticket alternatives (source pass, composition failure after adjudication). Parallel-low admitted still reverses departure timing. Stop further V2 parallel calls: added analysis has not established quality benefit and adds a sequential phase. Finish single-low three-case cohort to characterize tradeoff.",
+      "fixed_effort_v2_check": "Declare V2 single-composer medium as the next bounded comparison on the same three cases; no new prompt mechanisms. Exact identity locality might reduce medium reasoning burden without lowering effort. It consumes the unchanged 60/60 envelope. Repeat the more promising single-composer configuration only if evidence and full-run headroom justify it; do not claim an unrun complete comparison."
+    }
+  },
+  "campaign_call_counts": {
+    "generation": 40,
+    "count": 40
+  },
+  "arms": [
+    {
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v1",
+      "runs": 3,
+      "answers_available": 3,
+      "completed_answer_wall_seconds": {
+        "n": 3,
+        "median_seconds": 19.621751375030726,
+        "minimum_seconds": 18.915779792238027,
+        "maximum_seconds": 28.96057266695425
+      },
+      "quality_passing_answer_wall_seconds": null,
+      "worker_failures": 0,
+      "failed_or_unavailable_runs": [],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    },
+    {
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v2",
+      "runs": 3,
+      "answers_available": 3,
+      "completed_answer_wall_seconds": {
+        "n": 3,
+        "median_seconds": 21.86434437474236,
+        "minimum_seconds": 21.51220391690731,
+        "maximum_seconds": 31.92666658293456
+      },
+      "quality_passing_answer_wall_seconds": null,
+      "worker_failures": 0,
+      "failed_or_unavailable_runs": [],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    },
+    {
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "runs": 7,
+      "answers_available": 6,
+      "completed_answer_wall_seconds": {
+        "n": 6,
+        "median_seconds": 30.53128279163502,
+        "minimum_seconds": 25.48990241624415,
+        "maximum_seconds": 65.02342395763844
+      },
+      "quality_passing_answer_wall_seconds": {
+        "n": 3,
+        "median_seconds": 32.47641545813531,
+        "minimum_seconds": 25.48990241624415,
+        "maximum_seconds": 65.02342395763844
+      },
+      "worker_failures": 0,
+      "failed_or_unavailable_runs": [
+        {
+          "run_name": "r1-conditional-candidate-medium",
+          "status": "uncaught_stream_transport_timeout",
+          "worker_failure": null
+        }
+      ],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    },
+    {
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v2",
+      "runs": 3,
+      "answers_available": 3,
+      "completed_answer_wall_seconds": {
+        "n": 3,
+        "median_seconds": 75.96342691686004,
+        "minimum_seconds": 29.11415912490338,
+        "maximum_seconds": 82.12242133310065
+      },
+      "quality_passing_answer_wall_seconds": {
+        "n": 3,
+        "median_seconds": 75.96342691686004,
+        "minimum_seconds": 29.11415912490338,
+        "maximum_seconds": 82.12242133310065
+      },
+      "worker_failures": 0,
+      "failed_or_unavailable_runs": [],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    },
+    {
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "runs": 6,
+      "answers_available": 6,
+      "completed_answer_wall_seconds": {
+        "n": 6,
+        "median_seconds": 73.96367093757726,
+        "minimum_seconds": 45.336744958069175,
+        "maximum_seconds": 138.41343812504783
+      },
+      "quality_passing_answer_wall_seconds": {
+        "n": 1,
+        "median_seconds": 45.336744958069175,
+        "minimum_seconds": 45.336744958069175,
+        "maximum_seconds": 45.336744958069175
+      },
+      "worker_failures": 0,
+      "failed_or_unavailable_runs": [],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    },
+    {
+      "variant": "parallel",
+      "effort": "low",
+      "candidate_version": "v1",
+      "runs": 3,
+      "answers_available": 1,
+      "completed_answer_wall_seconds": {
+        "n": 1,
+        "median_seconds": 42.48556387517601,
+        "minimum_seconds": 42.48556387517601,
+        "maximum_seconds": 42.48556387517601
+      },
+      "quality_passing_answer_wall_seconds": null,
+      "worker_failures": 2,
+      "failed_or_unavailable_runs": [
+        {
+          "run_name": "r1-conditional-parallel-low",
+          "status": "worker_failure",
+          "worker_failure": {
+            "type": "ValueError",
+            "elapsed_seconds": 15.196395959239453
+          }
+        },
+        {
+          "run_name": "r1-incomplete-parallel-low",
+          "status": "worker_failure",
+          "worker_failure": {
+            "type": "ValueError",
+            "elapsed_seconds": 10.469525416847318
+          }
+        }
+      ],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    },
+    {
+      "variant": "parallel",
+      "effort": "low",
+      "candidate_version": "v2",
+      "runs": 1,
+      "answers_available": 1,
+      "completed_answer_wall_seconds": {
+        "n": 1,
+        "median_seconds": 33.062169999815524,
+        "minimum_seconds": 33.062169999815524,
+        "maximum_seconds": 33.062169999815524
+      },
+      "quality_passing_answer_wall_seconds": null,
+      "worker_failures": 0,
+      "failed_or_unavailable_runs": [],
+      "cost_limit": "Included in per-run totals; not inferred for no-response timeouts."
+    }
+  ],
+  "runs": [
+    {
+      "run_name": "r1-admitted-candidate-low",
+      "case": "admitted",
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 19.621751375030726,
+      "preparation_seconds": 2.077725375071168,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.50537075009197,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5018507912755013,
+      "check_seconds": 0.0039077503606677055,
+      "resolution_seconds": 0.015613457653671503,
+      "final_generation_seconds_sum": 16.925485833082348,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 7.846141374669969,
+          "full_response_seconds": 16.925485833082348,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 198629,
+            "output_tokens": 1315,
+            "cached_tokens": 0,
+            "cache_write_tokens": 198626,
+            "reasoning_tokens": 409
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        198629
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 198629,
+          "endpoint_seconds": 0.5018507912755013
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 198629,
+        "output_tokens": 1315,
+        "cached_tokens": 0,
+        "cache_write_tokens": 198626,
+        "reasoning_tokens": 409
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.02548605",
+      "known_generation_cost_usd": "0.02548605",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-admitted-candidate-medium",
+      "case": "admitted",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass_minor",
+      "results_completion_seconds": 65.02342395763844,
+      "preparation_seconds": 2.075285082682967,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5425104587338865,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5386282918043435,
+      "check_seconds": 0.08880908414721489,
+      "resolution_seconds": 0.08945495868101716,
+      "final_generation_seconds_sum": 62.1528366249986,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 53.52751599997282,
+          "full_response_seconds": 62.1528366249986,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 198629,
+            "output_tokens": 7824,
+            "cached_tokens": 0,
+            "cache_write_tokens": 198626,
+            "reasoning_tokens": 6516
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        198629
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 198629,
+          "endpoint_seconds": 0.5386282918043435
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 198629,
+        "output_tokens": 7824,
+        "cached_tokens": 0,
+        "cache_write_tokens": 198626,
+        "reasoning_tokens": 6516
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.02874055",
+      "known_generation_cost_usd": "0.02874055",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-admitted-original-medium",
+      "case": "admitted",
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 67.76206362526864,
+      "preparation_seconds": 2.012209167238325,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.9227799591608346,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.9168988335877657,
+      "check_seconds": 0.0037845843471586704,
+      "resolution_seconds": 0.008603957947343588,
+      "final_generation_seconds_sum": 64.75385812483728,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 51.640291957650334,
+          "full_response_seconds": 64.75385812483728,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 207324,
+            "output_tokens": 4839,
+            "cached_tokens": 0,
+            "cache_write_tokens": 207321,
+            "reasoning_tokens": 3597
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        207324
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 207324,
+          "endpoint_seconds": 0.9168988335877657
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 207324,
+        "output_tokens": 4839,
+        "cached_tokens": 0,
+        "cache_write_tokens": 207321,
+        "reasoning_tokens": 3597
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.028334925",
+      "known_generation_cost_usd": "0.028334925",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-admitted-parallel-low",
+      "case": "admitted",
+      "variant": "parallel",
+      "effort": "low",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 42.48556387517601,
+      "preparation_seconds": 2.0963366250507534,
+      "worker_critical_path_seconds": 23.22557537537068,
+      "final_count_phase_seconds": 0.44486174965277314,
+      "worker_count_endpoint_seconds_sum": 1.0645495005883276,
+      "final_count_endpoint_seconds_sum": 0.4366504168137908,
+      "check_seconds": 0.0059157079085707664,
+      "resolution_seconds": 0.010125332977622747,
+      "final_generation_seconds_sum": 16.596160958055407,
+      "worker_generation_seconds_sum": 32.674383792094886,
+      "generation_call_details": [
+        {
+          "label": "worker-choices",
+          "first_text_seconds": 6.923246167134494,
+          "full_response_seconds": 10.047288292087615,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 197139,
+            "output_tokens": 845,
+            "cached_tokens": 0,
+            "cache_write_tokens": 197136,
+            "reasoning_tokens": 362
+          }
+        },
+        {
+          "label": "worker-limits",
+          "first_text_seconds": 9.17082962486893,
+          "full_response_seconds": 22.62709550000727,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 197129,
+            "output_tokens": 2098,
+            "cached_tokens": 0,
+            "cache_write_tokens": 197126,
+            "reasoning_tokens": 422
+          }
+        },
+        {
+          "label": "final-01",
+          "first_text_seconds": 8.134214625228196,
+          "full_response_seconds": 16.596160958055407,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 200825,
+            "output_tokens": 1513,
+            "cached_tokens": 0,
+            "cache_write_tokens": 200822,
+            "reasoning_tokens": 516
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 3,
+      "generation_calls": 3,
+      "corrections": 0,
+      "input_count_receipts": [
+        200825
+      ],
+      "count_call_details": [
+        {
+          "label": "worker-limits",
+          "status": "complete",
+          "input_tokens": 197129,
+          "endpoint_seconds": 0.5344522087834775
+        },
+        {
+          "label": "worker-choices",
+          "status": "complete",
+          "input_tokens": 197139,
+          "endpoint_seconds": 0.5300972918048501
+        },
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 200825,
+          "endpoint_seconds": 0.4366504168137908
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 595093,
+        "output_tokens": 4456,
+        "cached_tokens": 0,
+        "cache_write_tokens": 595084,
+        "reasoning_tokens": 1300
+      },
+      "worker_generation_usage": {
+        "input_tokens": 394268,
+        "output_tokens": 2943,
+        "reasoning_tokens": 784
+      },
+      "estimated_generation_cost_usd": "0.07661440",
+      "known_generation_cost_usd": "0.07661440",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 3,
+      "generation_first_text_count": 3,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-conditional-candidate-low",
+      "case": "conditional",
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 18.915779792238027,
+      "preparation_seconds": 1.8217379171401262,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5150207499973476,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5102881249040365,
+      "check_seconds": 0.007782999891787767,
+      "resolution_seconds": 0.02448633313179016,
+      "final_generation_seconds_sum": 16.426665041130036,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 6.789595458190888,
+          "full_response_seconds": 16.426665041130036,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 180600,
+            "output_tokens": 1332,
+            "cached_tokens": 1824,
+            "cache_write_tokens": 178773,
+            "reasoning_tokens": 369
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        180600
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 180600,
+          "endpoint_seconds": 0.5102881249040365
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 180600,
+        "output_tokens": 1332,
+        "cached_tokens": 1824,
+        "cache_write_tokens": 178773,
+        "reasoning_tokens": 369
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.023031165",
+      "known_generation_cost_usd": "0.023031165",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-conditional-candidate-medium-replacement",
+      "case": "conditional",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass_minor",
+      "results_completion_seconds": 25.48990241624415,
+      "preparation_seconds": 1.8433181252330542,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5947057912126184,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5900201671756804,
+      "check_seconds": 0.0030906670726835728,
+      "resolution_seconds": 0.00857366668060422,
+      "final_generation_seconds_sum": 22.906249708961695,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 18.322242749854922,
+          "full_response_seconds": 22.906249708961695,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 180600,
+            "output_tokens": 3224,
+            "cached_tokens": 0,
+            "cache_write_tokens": 180597,
+            "reasoning_tokens": 2407
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        180600
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 180600,
+          "endpoint_seconds": 0.5900201671756804
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 180600,
+        "output_tokens": 3224,
+        "cached_tokens": 0,
+        "cache_write_tokens": 180597,
+        "reasoning_tokens": 2407
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.024186925",
+      "known_generation_cost_usd": "0.024186925",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-conditional-original-medium",
+      "case": "conditional",
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 99.63935733307153,
+      "preparation_seconds": 1.7745978329330683,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.9953312915749848,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.9801212074235082,
+      "check_seconds": 0.00997166708111763,
+      "resolution_seconds": 0.017960541881620884,
+      "final_generation_seconds_sum": 95.69366258429363,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 51.160443833097816,
+          "full_response_seconds": 59.616608125157654,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 189806,
+            "output_tokens": 5904,
+            "cached_tokens": 0,
+            "cache_write_tokens": 189803,
+            "reasoning_tokens": 4843
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 29.574497084133327,
+          "full_response_seconds": 36.07705445913598,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 190689,
+            "output_tokens": 3522,
+            "cached_tokens": 1444,
+            "cache_write_tokens": 189242,
+            "reasoning_tokens": 2749
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        189806,
+        190689
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 189806,
+          "endpoint_seconds": 1.496411916334182
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 190689,
+          "endpoint_seconds": 0.48370929108932614
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 380495,
+        "output_tokens": 9426,
+        "cached_tokens": 1444,
+        "cache_write_tokens": 379045,
+        "reasoning_tokens": 7592
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.052108665",
+      "known_generation_cost_usd": "0.052108665",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-conditional-parallel-low",
+      "case": "conditional",
+      "variant": "parallel",
+      "effort": "low",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "unavailable",
+      "answer_available": false,
+      "worker_failure_recorded": true,
+      "worker_failure": {
+        "type": "ValueError",
+        "elapsed_seconds": 15.196395959239453
+      },
+      "quality_review": "unavailable_worker_failure",
+      "results_completion_seconds": 15.196395959239453,
+      "preparation_seconds": null,
+      "worker_critical_path_seconds": null,
+      "final_count_phase_seconds": null,
+      "worker_count_endpoint_seconds_sum": 1.1845980826765299,
+      "final_count_endpoint_seconds_sum": 0,
+      "check_seconds": null,
+      "resolution_seconds": null,
+      "final_generation_seconds_sum": 0,
+      "worker_generation_seconds_sum": 22.330626125447452,
+      "generation_call_details": [
+        {
+          "label": "worker-choices",
+          "first_text_seconds": 10.448918499983847,
+          "full_response_seconds": 12.65777120925486,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 179110,
+            "output_tokens": 650,
+            "cached_tokens": 0,
+            "cache_write_tokens": 179107,
+            "reasoning_tokens": 360
+          }
+        },
+        {
+          "label": "worker-limits",
+          "first_text_seconds": 5.948803916107863,
+          "full_response_seconds": 9.672854916192591,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 179100,
+            "output_tokens": 611,
+            "cached_tokens": 0,
+            "cache_write_tokens": 179097,
+            "reasoning_tokens": 273
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 0,
+      "input_count_receipts": [],
+      "count_call_details": [
+        {
+          "label": "worker-choices",
+          "status": "complete",
+          "input_tokens": 179110,
+          "endpoint_seconds": 0.5575283328071237
+        },
+        {
+          "label": "worker-limits",
+          "status": "complete",
+          "input_tokens": 179100,
+          "endpoint_seconds": 0.6270697498694062
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 358210,
+        "output_tokens": 1261,
+        "cached_tokens": 0,
+        "cache_write_tokens": 358204,
+        "reasoning_tokens": 633
+      },
+      "worker_generation_usage": {
+        "input_tokens": 358210,
+        "output_tokens": 1261,
+        "reasoning_tokens": 633
+      },
+      "estimated_generation_cost_usd": "0.045406600",
+      "known_generation_cost_usd": "0.045406600",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "worker_failure",
+      "validation_outcome": null,
+      "selected_attempt": null,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-incomplete-candidate-low",
+      "case": "incomplete",
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 28.96057266695425,
+      "preparation_seconds": 0.9534869575873017,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.9699831241741776,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.9564180830493569,
+      "check_seconds": 0.02904712501913309,
+      "resolution_seconds": 0.011744250077754259,
+      "final_generation_seconds_sum": 26.778337833005935,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 4.008781916927546,
+          "full_response_seconds": 12.486736875027418,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171471,
+            "output_tokens": 756,
+            "cached_tokens": 1824,
+            "cache_write_tokens": 169644,
+            "reasoning_tokens": 0
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 5.055613874923438,
+          "full_response_seconds": 14.291600957978517,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 178868,
+            "output_tokens": 1025,
+            "cached_tokens": 1824,
+            "cache_write_tokens": 177041,
+            "reasoning_tokens": 220
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        171471,
+        178868
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171471,
+          "endpoint_seconds": 0.5786607079207897
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 178868,
+          "endpoint_seconds": 0.3777573751285672
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 350339,
+        "output_tokens": 1781,
+        "cached_tokens": 3648,
+        "cache_write_tokens": 346685,
+        "reasoning_tokens": 220
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.044263205",
+      "known_generation_cost_usd": "0.044263205",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-incomplete-candidate-medium",
+      "case": "incomplete",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass_minor",
+      "results_completion_seconds": 32.47641545813531,
+      "preparation_seconds": 0.8860846250317991,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.9878192078322172,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.9786638747900724,
+      "check_seconds": 0.0029600821435451508,
+      "resolution_seconds": 0.009243791922926903,
+      "final_generation_seconds_sum": 30.453632291406393,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 13.695246083196253,
+          "full_response_seconds": 18.910146000329405,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171471,
+            "output_tokens": 2455,
+            "cached_tokens": 1824,
+            "cache_write_tokens": 169644,
+            "reasoning_tokens": 1552
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 7.200643207877874,
+          "full_response_seconds": 11.543486291076988,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 172272,
+            "output_tokens": 1659,
+            "cached_tokens": 1824,
+            "cache_write_tokens": 170445,
+            "reasoning_tokens": 752
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        171471,
+        172272
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171471,
+          "endpoint_seconds": 0.539004874881357
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 172272,
+          "endpoint_seconds": 0.4396589999087155
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 343743,
+        "output_tokens": 4114,
+        "cached_tokens": 3648,
+        "cache_write_tokens": 340089,
+        "reasoning_tokens": 2304
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.044605205",
+      "known_generation_cost_usd": "0.044605205",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-incomplete-original-medium",
+      "case": "incomplete",
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass_minor",
+      "results_completion_seconds": 45.336744958069175,
+      "preparation_seconds": 1.046051582787186,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.3271796675398946,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.3164614997804165,
+      "check_seconds": 0.010990208014845848,
+      "resolution_seconds": 0.017405124846845865,
+      "final_generation_seconds_sum": 42.77127491729334,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 11.37028691638261,
+          "full_response_seconds": 22.08493100013584,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171065,
+            "output_tokens": 2393,
+            "cached_tokens": 1444,
+            "cache_write_tokens": 169618,
+            "reasoning_tokens": 1003
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 12.351452167145908,
+          "full_response_seconds": 20.6863439171575,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 172350,
+            "output_tokens": 2038,
+            "cached_tokens": 1444,
+            "cache_write_tokens": 170903,
+            "reasoning_tokens": 983
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        171065,
+        172350
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171065,
+          "endpoint_seconds": 0.7242072080262005
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 172350,
+          "endpoint_seconds": 0.592254291754216
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 343415,
+        "output_tokens": 4431,
+        "cached_tokens": 2888,
+        "cache_write_tokens": 340521,
+        "reasoning_tokens": 1986
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.044810105",
+      "known_generation_cost_usd": "0.044810105",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-incomplete-parallel-low",
+      "case": "incomplete",
+      "variant": "parallel",
+      "effort": "low",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "unavailable",
+      "answer_available": false,
+      "worker_failure_recorded": true,
+      "worker_failure": {
+        "type": "ValueError",
+        "elapsed_seconds": 10.469525416847318
+      },
+      "quality_review": "unavailable_worker_failure",
+      "results_completion_seconds": 10.469525416847318,
+      "preparation_seconds": null,
+      "worker_critical_path_seconds": null,
+      "final_count_phase_seconds": null,
+      "worker_count_endpoint_seconds_sum": 0.9979412499815226,
+      "final_count_endpoint_seconds_sum": 0,
+      "check_seconds": null,
+      "resolution_seconds": null,
+      "final_generation_seconds_sum": 0,
+      "worker_generation_seconds_sum": 13.840656624175608,
+      "generation_call_details": [
+        {
+          "label": "worker-limits",
+          "first_text_seconds": 4.497599875088781,
+          "full_response_seconds": 9.024415666237473,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 169971,
+            "output_tokens": 659,
+            "cached_tokens": 0,
+            "cache_write_tokens": 169968,
+            "reasoning_tokens": 172
+          }
+        },
+        {
+          "label": "worker-choices",
+          "first_text_seconds": 4.528020249679685,
+          "full_response_seconds": 4.816240957938135,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 169981,
+            "output_tokens": 92,
+            "cached_tokens": 0,
+            "cache_write_tokens": 169978,
+            "reasoning_tokens": 76
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 0,
+      "input_count_receipts": [],
+      "count_call_details": [
+        {
+          "label": "worker-limits",
+          "status": "complete",
+          "input_tokens": 169971,
+          "endpoint_seconds": 0.4876084588468075
+        },
+        {
+          "label": "worker-choices",
+          "status": "complete",
+          "input_tokens": 169981,
+          "endpoint_seconds": 0.5103327911347151
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 339952,
+        "output_tokens": 751,
+        "cached_tokens": 0,
+        "cache_write_tokens": 339946,
+        "reasoning_tokens": 248
+      },
+      "worker_generation_usage": {
+        "input_tokens": 339952,
+        "output_tokens": 751,
+        "reasoning_tokens": 248
+      },
+      "estimated_generation_cost_usd": "0.04286935",
+      "known_generation_cost_usd": "0.04286935",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "worker_failure",
+      "validation_outcome": null,
+      "selected_attempt": null,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r2-admitted-candidate-medium",
+      "case": "admitted",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 36.98919687513262,
+      "preparation_seconds": 2.4099872917868197,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.1889987923204899,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.184233957901597,
+      "check_seconds": 0.001989124808460474,
+      "resolution_seconds": 0.006307417061179876,
+      "final_generation_seconds_sum": 33.30527275009081,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 26.918197000399232,
+          "full_response_seconds": 33.30527275009081,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 198629,
+            "output_tokens": 4640,
+            "cached_tokens": 1824,
+            "cache_write_tokens": 196802,
+            "reasoning_tokens": 3500
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        198629
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 198629,
+          "endpoint_seconds": 1.184233957901597
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 198629,
+        "output_tokens": 4640,
+        "cached_tokens": 1824,
+        "cache_write_tokens": 196802,
+        "reasoning_tokens": 3500
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.02693879",
+      "known_generation_cost_usd": "0.02693879",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r2-admitted-original-medium",
+      "case": "admitted",
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "worker_effort": "low",
+      "mechanical_replay": "annotated",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail_reference_roles_narrative_pass",
+      "results_completion_seconds": 138.41343812504783,
+      "preparation_seconds": 2.2048642500303686,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.55752466712147,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.5461275409907103,
+      "check_seconds": 0.10037337522953749,
+      "resolution_seconds": 0.11908845789730549,
+      "final_generation_seconds_sum": 134.20524787483737,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 70.25195420812815,
+          "full_response_seconds": 82.41902899974957,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 207324,
+            "output_tokens": 7900,
+            "cached_tokens": 1444,
+            "cache_write_tokens": 205877,
+            "reasoning_tokens": 6458
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 40.25253291707486,
+          "full_response_seconds": 51.7862188750878,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 208539,
+            "output_tokens": 4682,
+            "cached_tokens": 1444,
+            "cache_write_tokens": 207092,
+            "reasoning_tokens": 3479
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        207324,
+        208539
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 207324,
+          "endpoint_seconds": 0.9833835829049349
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 208539,
+          "endpoint_seconds": 0.5627439580857754
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 415863,
+        "output_tokens": 12582,
+        "cached_tokens": 2888,
+        "cache_write_tokens": 412969,
+        "reasoning_tokens": 9937
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.057941605",
+      "known_generation_cost_usd": "0.057941605",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "annotated",
+      "selected_attempt": 0,
+      "failed_findings": [
+        {
+          "code": "unselected_reference",
+          "outcome": "failed",
+          "scope": "benchmark",
+          "reference_id": "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd",
+          "part_index": 7,
+          "claim_id": null,
+          "message": "Supporting result was not selected in the document.",
+          "supplied_fact": null
+        },
+        {
+          "code": "invalid_reference",
+          "outcome": "failed",
+          "scope": "benchmark",
+          "reference_id": "7d8b293e0b25ea18087dec28838570e8aebfb34ccaebe6c5679d26c7b5708903",
+          "part_index": 11,
+          "claim_id": null,
+          "message": "Reference kind or exact source association is unavailable.",
+          "supplied_fact": null
+        }
+      ],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r2-conditional-candidate-medium",
+      "case": "conditional",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 28.586150125134736,
+      "preparation_seconds": 1.9437726670876145,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5828544576652348,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5781649588607252,
+      "check_seconds": 0.0018784170970320702,
+      "resolution_seconds": 0.00675783259794116,
+      "final_generation_seconds_sum": 25.94183145929128,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 20.74874550011009,
+          "full_response_seconds": 25.94183145929128,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 180600,
+            "output_tokens": 3647,
+            "cached_tokens": 180597,
+            "cache_write_tokens": 0,
+            "reasoning_tokens": 2717
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        180600
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 180600,
+          "endpoint_seconds": 0.5781649588607252
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 180600,
+        "output_tokens": 3647,
+        "cached_tokens": 180597,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 2717
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.00362977",
+      "known_generation_cost_usd": "0.00362977",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r2-conditional-original-medium",
+      "case": "conditional",
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail_composition_selected_facts_pass",
+      "results_completion_seconds": 80.16527824988589,
+      "preparation_seconds": 2.0292782499454916,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5822957502678037,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5769758331589401,
+      "check_seconds": 0.08580116694793105,
+      "resolution_seconds": 0.07311129104346037,
+      "final_generation_seconds_sum": 77.32979679200798,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 67.73936645826325,
+          "full_response_seconds": 77.32979679200798,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 189806,
+            "output_tokens": 6290,
+            "cached_tokens": 189803,
+            "cache_write_tokens": 0,
+            "reasoning_tokens": 5317
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        189806
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 189806,
+          "endpoint_seconds": 0.5769758331589401
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 189806,
+        "output_tokens": 6290,
+        "cached_tokens": 189803,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 5317
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.00504333",
+      "known_generation_cost_usd": "0.00504333",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r2-incomplete-candidate-medium",
+      "case": "incomplete",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v1",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 25.81650674995035,
+      "preparation_seconds": 1.0392165840603411,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5576950837858021,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5529832500033081,
+      "check_seconds": 0.003313874825835228,
+      "resolution_seconds": 0.006585292052477598,
+      "final_generation_seconds_sum": 24.13125375006348,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 18.387821291107684,
+          "full_response_seconds": 24.13125375006348,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171471,
+            "output_tokens": 3397,
+            "cached_tokens": 171468,
+            "cache_write_tokens": 0,
+            "reasoning_tokens": 2385
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        171471
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171471,
+          "endpoint_seconds": 0.5529832500033081
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 171471,
+        "output_tokens": 3397,
+        "cached_tokens": 171468,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 2385
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.00341348",
+      "known_generation_cost_usd": "0.00341348",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r2-incomplete-original-medium",
+      "case": "incomplete",
+      "variant": "original",
+      "effort": "medium",
+      "candidate_version": "none",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 63.09859770908952,
+      "preparation_seconds": 0.9026996670290828,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.8014085423201323,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.7898102910257876,
+      "check_seconds": 0.009288208093494177,
+      "resolution_seconds": 0.013116082642227411,
+      "final_generation_seconds_sum": 61.234232999850065,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 17.641224624589086,
+          "full_response_seconds": 32.18171862466261,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171065,
+            "output_tokens": 2595,
+            "cached_tokens": 171062,
+            "cache_write_tokens": 0,
+            "reasoning_tokens": 1191
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 18.61569479200989,
+          "full_response_seconds": 29.052514375187457,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 172382,
+            "output_tokens": 2129,
+            "cached_tokens": 1444,
+            "cache_write_tokens": 170935,
+            "reasoning_tokens": 1127
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        171065,
+        172382
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171065,
+          "endpoint_seconds": 0.45724862487986684
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 172382,
+          "endpoint_seconds": 0.33256166614592075
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 343447,
+        "output_tokens": 4724,
+        "cached_tokens": 172506,
+        "cache_write_tokens": 170935,
+        "reasoning_tokens": 2318
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.025454535",
+      "known_generation_cost_usd": "0.025454535",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-admitted-candidate-low",
+      "case": "admitted",
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail_composition_source_pass",
+      "results_completion_seconds": 21.86434437474236,
+      "preparation_seconds": 2.1552602918818593,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.7359539167955518,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.7310736249201,
+      "check_seconds": 0.0031915828585624695,
+      "resolution_seconds": 0.006305625196546316,
+      "final_generation_seconds_sum": 18.852195125073195,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 11.071137540973723,
+          "full_response_seconds": 18.852195125073195,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 247402,
+            "output_tokens": 1438,
+            "cached_tokens": 0,
+            "cache_write_tokens": 247399,
+            "reasoning_tokens": 624
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        247402
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 247402,
+          "endpoint_seconds": 0.7310736249201
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 247402,
+        "output_tokens": 1438,
+        "cached_tokens": 0,
+        "cache_write_tokens": 247399,
+        "reasoning_tokens": 624
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.031644175",
+      "known_generation_cost_usd": "0.031644175",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-admitted-candidate-medium",
+      "case": "admitted",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass_minor",
+      "results_completion_seconds": 75.96342691686004,
+      "preparation_seconds": 2.125657625030726,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.0688930829055607,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.055137250572443,
+      "check_seconds": 0.17808025004342198,
+      "resolution_seconds": 0.08816229179501534,
+      "final_generation_seconds_sum": 72.28845874965191,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 46.25901062460616,
+          "full_response_seconds": 55.573622999712825,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 247402,
+            "output_tokens": 5899,
+            "cached_tokens": 0,
+            "cache_write_tokens": 247399,
+            "reasoning_tokens": 4618
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 16.643133624922484,
+          "full_response_seconds": 16.714835749939084,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 248468,
+            "output_tokens": 3906,
+            "cached_tokens": 2239,
+            "cache_write_tokens": 246226,
+            "reasoning_tokens": 2588
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        247402,
+        248468
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 247402,
+          "endpoint_seconds": 0.6313391672447324
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 248468,
+          "endpoint_seconds": 0.42379808332771063
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 495870,
+        "output_tokens": 9805,
+        "cached_tokens": 2239,
+        "cache_write_tokens": 493625,
+        "reasoning_tokens": 7206
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.066628615",
+      "known_generation_cost_usd": "0.066628615",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-admitted-parallel-low",
+      "case": "admitted",
+      "variant": "parallel",
+      "effort": "low",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 33.062169999815524,
+      "preparation_seconds": 2.5575456246733665,
+      "worker_critical_path_seconds": 14.665610208176076,
+      "final_count_phase_seconds": 0.3542074579745531,
+      "worker_count_endpoint_seconds_sum": 1.0149052496999502,
+      "final_count_endpoint_seconds_sum": 0.3460932499729097,
+      "check_seconds": 0.006050999742001295,
+      "resolution_seconds": 0.06004608375951648,
+      "final_generation_seconds_sum": 15.212167750112712,
+      "worker_generation_seconds_sum": 25.683807916007936,
+      "generation_call_details": [
+        {
+          "label": "worker-limits",
+          "first_text_seconds": 9.045182791072875,
+          "full_response_seconds": 11.641414165962487,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 245662,
+            "output_tokens": 486,
+            "cached_tokens": 0,
+            "cache_write_tokens": 245659,
+            "reasoning_tokens": 284
+          }
+        },
+        {
+          "label": "worker-choices",
+          "first_text_seconds": 10.411894291173667,
+          "full_response_seconds": 14.042393750045449,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 245672,
+            "output_tokens": 718,
+            "cached_tokens": 0,
+            "cache_write_tokens": 245669,
+            "reasoning_tokens": 443
+          }
+        },
+        {
+          "label": "final-01",
+          "first_text_seconds": 8.53429454099387,
+          "full_response_seconds": 15.212167750112712,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 247916,
+            "output_tokens": 1462,
+            "cached_tokens": 0,
+            "cache_write_tokens": 247913,
+            "reasoning_tokens": 620
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 3,
+      "generation_calls": 3,
+      "corrections": 0,
+      "input_count_receipts": [
+        247916
+      ],
+      "count_call_details": [
+        {
+          "label": "worker-limits",
+          "status": "complete",
+          "input_tokens": 245662,
+          "endpoint_seconds": 0.5103520839475095
+        },
+        {
+          "label": "worker-choices",
+          "status": "complete",
+          "input_tokens": 245672,
+          "endpoint_seconds": 0.5045531657524407
+        },
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 247916,
+          "endpoint_seconds": 0.3460932499729097
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 739250,
+        "output_tokens": 2666,
+        "cached_tokens": 0,
+        "cache_write_tokens": 739241,
+        "reasoning_tokens": 1347
+      },
+      "worker_generation_usage": {
+        "input_tokens": 491334,
+        "output_tokens": 1204,
+        "reasoning_tokens": 727
+      },
+      "estimated_generation_cost_usd": "0.093739025",
+      "known_generation_cost_usd": "0.093739025",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 3,
+      "generation_first_text_count": 3,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-conditional-candidate-low",
+      "case": "conditional",
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail_composition_selected_facts_pass",
+      "results_completion_seconds": 21.51220391690731,
+      "preparation_seconds": 1.9231257918290794,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.8511904580518603,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.8448862079530954,
+      "check_seconds": 0.0030512092635035515,
+      "resolution_seconds": 0.016194332856684923,
+      "final_generation_seconds_sum": 18.56848020805046,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 11.223084750119597,
+          "full_response_seconds": 18.56848020805046,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 224631,
+            "output_tokens": 1400,
+            "cached_tokens": 2239,
+            "cache_write_tokens": 222389,
+            "reasoning_tokens": 637
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        224631
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 224631,
+          "endpoint_seconds": 0.8448862079530954
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 224631,
+        "output_tokens": 1400,
+        "cached_tokens": 2239,
+        "cache_write_tokens": 222389,
+        "reasoning_tokens": 637
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.028521315",
+      "known_generation_cost_usd": "0.028521315",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-conditional-candidate-medium",
+      "case": "conditional",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass",
+      "results_completion_seconds": 82.12242133310065,
+      "preparation_seconds": 1.8401219579391181,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 0.5076525420881808,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 0.5021102079190314,
+      "check_seconds": 0.004236208274960518,
+      "resolution_seconds": 0.008186791092157364,
+      "final_generation_seconds_sum": 79.63033804111183,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 34.7077654581517,
+          "full_response_seconds": 79.63033804111183,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 224631,
+            "output_tokens": 4631,
+            "cached_tokens": 2239,
+            "cache_write_tokens": 222389,
+            "reasoning_tokens": 3362
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        224631
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 224631,
+          "endpoint_seconds": 0.5021102079190314
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 224631,
+        "output_tokens": 4631,
+        "cached_tokens": 2239,
+        "cache_write_tokens": 222389,
+        "reasoning_tokens": 3362
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.030136815",
+      "known_generation_cost_usd": "0.030136815",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-incomplete-candidate-low",
+      "case": "incomplete",
+      "variant": "candidate",
+      "effort": "low",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "fail",
+      "results_completion_seconds": 31.92666658293456,
+      "preparation_seconds": 0.8846962498500943,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.318739999551326,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.3090882082469761,
+      "check_seconds": 0.007575666066259146,
+      "resolution_seconds": 0.011429375037550926,
+      "final_generation_seconds_sum": 29.512538999784738,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 2.561542000155896,
+          "full_response_seconds": 16.77486970787868,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171886,
+            "output_tokens": 661,
+            "cached_tokens": 2239,
+            "cache_write_tokens": 169644,
+            "reasoning_tokens": 0
+          }
+        },
+        {
+          "label": "final-02",
+          "first_text_seconds": 5.705808041617274,
+          "full_response_seconds": 12.737669291906059,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 172692,
+            "output_tokens": 949,
+            "cached_tokens": 2239,
+            "cache_write_tokens": 170450,
+            "reasoning_tokens": 242
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 2,
+      "generation_calls": 2,
+      "corrections": 1,
+      "input_count_receipts": [
+        171886,
+        172692
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171886,
+          "endpoint_seconds": 0.9499939163215458
+        },
+        {
+          "label": "final-02",
+          "status": "complete",
+          "input_tokens": 172692,
+          "endpoint_seconds": 0.3590942919254303
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 344578,
+        "output_tokens": 1610,
+        "cached_tokens": 4478,
+        "cache_write_tokens": 340094,
+        "reasoning_tokens": 242
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.04336213",
+      "known_generation_cost_usd": "0.04336213",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 2,
+      "generation_first_text_count": 2,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 1,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "v2-r1-incomplete-candidate-medium",
+      "case": "incomplete",
+      "variant": "candidate",
+      "effort": "medium",
+      "candidate_version": "v2",
+      "worker_effort": "low",
+      "mechanical_replay": "clean",
+      "answer_available": true,
+      "worker_failure_recorded": false,
+      "worker_failure": null,
+      "quality_review": "pass_minor",
+      "results_completion_seconds": 29.11415912490338,
+      "preparation_seconds": 0.8699707500636578,
+      "worker_critical_path_seconds": 0.0,
+      "final_count_phase_seconds": 1.4792175414040685,
+      "worker_count_endpoint_seconds_sum": 0,
+      "final_count_endpoint_seconds_sum": 1.4744478343054652,
+      "check_seconds": 0.0012464998289942741,
+      "resolution_seconds": 0.005293958820402622,
+      "final_generation_seconds_sum": 26.650158459320664,
+      "worker_generation_seconds_sum": 0,
+      "generation_call_details": [
+        {
+          "label": "final-01",
+          "first_text_seconds": 20.057591416873038,
+          "full_response_seconds": 26.650158459320664,
+          "status": "complete",
+          "usage": {
+            "input_tokens": 171886,
+            "output_tokens": 2514,
+            "cached_tokens": 2239,
+            "cache_write_tokens": 169644,
+            "reasoning_tokens": 1738
+          }
+        }
+      ],
+      "worker_duration_interpretation": "Concurrent worker durations are reported separately and are not summed into Results wall time.",
+      "count_calls": 1,
+      "generation_calls": 1,
+      "corrections": 0,
+      "input_count_receipts": [
+        171886
+      ],
+      "count_call_details": [
+        {
+          "label": "final-01",
+          "status": "complete",
+          "input_tokens": 171886,
+          "endpoint_seconds": 1.4744478343054652
+        }
+      ],
+      "generation_usage": {
+        "input_tokens": 171886,
+        "output_tokens": 2514,
+        "cached_tokens": 2239,
+        "cache_write_tokens": 169644,
+        "reasoning_tokens": 1738
+      },
+      "worker_generation_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "estimated_generation_cost_usd": "0.02248519",
+      "known_generation_cost_usd": "0.02248519",
+      "unknown_cost_generation_calls": [],
+      "pricing_rates_usd_per_million": {
+        "ordinary_input": "0.10",
+        "cached_input": "0.01",
+        "cache_write_input": "0.125",
+        "output": "0.50"
+      },
+      "generation_response_count": 1,
+      "generation_first_text_count": 1,
+      "generation_outcome": "success",
+      "validation_outcome": "clean",
+      "selected_attempt": 0,
+      "failed_findings": [],
+      "archive_source_snapshot_verified": true
+    },
+    {
+      "run_name": "r1-conditional-candidate-medium",
+      "case": "conditional",
+      "variant": "candidate",
+      "candidate_version": "v1",
+      "effort": "medium",
+      "status": "uncaught_stream_transport_timeout",
+      "exception": "httpx.ReadTimeout",
+      "results_completion_seconds": null,
+      "estimated_generation_cost_usd": null,
+      "cost_status": "unknown_no_response_usage",
+      "first_text_seconds": null,
+      "mechanical_replay": "unavailable_no_document",
+      "quality_review": "unavailable_transport_timeout",
+      "archive_source_snapshot_verified": true,
+      "source_sha256_verified": true,
+      "failure_note": {
+        "outcome": "uncaught_stream_transport_timeout",
+        "exception": "httpx.ReadTimeout",
+        "where": "HTTP SSE iteration inside Endpoint.generate",
+        "settings": "240 second SDK read timeout, zero retries",
+        "observed": "The shell process exited 1 with a ReadTimeout traceback. Count and generation were both reserved before invocation. No final response, raw usage or selected answer was saved.",
+        "results_completion_seconds": null,
+        "measurement_limit": "Exact full wall time, first-event and first-text timings were lost because the harness caught APIError/ValueError but not httpx transport errors during iteration. Do not substitute 240s as measured Results wall time or infer usage/cost is zero.",
+        "disposition": "Retain as failed attempt. Fix transport-error capture with offline test; any replacement is a separately named manual sample under the same 60-generation/60-count ceiling, never an automatic retry. Original source snapshot and request remain unchanged."
+      },
+      "calls": [
+        {
+          "kind": "count",
+          "run_name": "r1-conditional-candidate-medium",
+          "label": "final-01",
+          "request_digest": "0292660c8f953851d732356773c5a281b0099f9ce833ec70032f31e270ebd9c8",
+          "reserved_at_utc": "2026-10-26T14:30:27.875486+00:00",
+          "status": "complete",
+          "input_tokens": 180600,
+          "seconds": 1.264613667037338
+        },
+        {
+          "kind": "generation",
+          "run_name": "r1-conditional-candidate-medium",
+          "label": "final-01",
+          "request_digest": "04bd4cb17a5ae4e03f91cf8b5ecbe31f9c1ff431737f31a2e61a8f6161fb8548",
+          "reserved_at_utc": "2026-10-26T14:30:29.155233+00:00",
+          "status": "failed_no_response",
+          "error": {
+            "type": "httpx.ReadTimeout"
+          }
+        }
+      ]
+    }
+  ],
+  "quality_passing_wall_seconds": [
+    65.02342395763844,
+    25.48990241624415,
+    32.47641545813531,
+    45.336744958069175,
+    75.96342691686004,
+    82.12242133310065,
+    29.11415912490338
+  ],
+  "quality_passing_wall_summary": {
+    "median_seconds": 45.336744958069175,
+    "minimum_seconds": 25.48990241624415,
+    "maximum_seconds": 82.12242133310065
+  },
+  "all_runs_have_quality_review": true,
+  "integrity_issues": [],
+  "verification_status": "passed",
+  "cost_estimate_limit": "Estimated from saved generation receipts only; count endpoint pricing and Codex work excluded; not an invoice.",
+  "quality_limit": "Mechanical replay/check outcomes are distinct from independent source/composition review. No verdict is inferred when reviews.json is absent.",
+  "latency_limit": "Results-only request path from saved projection; not intent/planning/provider workflow or a numerical SLA. First response text is not a rendered usable answer."
+}

@@ -1,0 +1,37 @@
+{
+  "status": "frozen planned confirmation; launch after scout H/U review",
+  "settings": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "medium",
+    "service_tier": "fast",
+    "max_output_tokens": 8192,
+    "timeout_seconds": 240,
+    "max_retries": 0
+  },
+  "runs": [
+    "confirm-1-admitted",
+    "confirm-1-conditional",
+    "confirm-1-incomplete",
+    "confirm-2-incomplete",
+    "confirm-2-conditional",
+    "confirm-2-admitted"
+  ],
+  "cases_per_cohort": 3,
+  "cohorts": 2,
+  "acceptance": "Each attempted confirmation run delivered, protocol clean, independent H/U pass and outer source-parse-through-artifact time <20 seconds; coverage separately graded. No selective replacement inside this cohort.",
+  "timing_scope": "Includes saved-source parse, preparation, counted input, actual authoring/correction, checking/resolution and artifact construction; excludes file persistence and offline independent replay.",
+  "code_sha256": {
+    "src/award_agent/results/interactive.py": "baac2ffbb668e6839bde4afc1a32366e92c2707e9a5da4f8fbe617c2dce9f875",
+    "src/award_agent/results/interactive_adapter.py": "bb767169c1c5d3b2b728ae9fe6292e9844dd7b30b0d9dc379aca01239562ca77",
+    "src/award_agent/results/interactive_contracts.py": "6af5924786df78f28cc8cb86af4af649acc3b691514773c0d2cf8fb121dcea50",
+    "src/award_agent/results/interactive_packet.py": "245a5cafd7fa1031abef6ce67cb31b1118c99de564bcb6e2d6244bd6e0f2b085",
+    "src/award_agent/results/interactive_wire.py": "9d54fe675abf31ce5fa6468a6b9246e340cc384814eb50009f7761b470becc9e",
+    "src/award_agent/cli/results.py": "3bd121f34d682eef7bbeb4baa7156bde2a748f46eb7cf5a69637b76b9bc3654b"
+  },
+  "quality_version": "under20-HUC-v1",
+  "scout_reviews": [
+    "b003",
+    "b004",
+    "b005"
+  ]
+}

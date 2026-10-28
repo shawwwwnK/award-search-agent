@@ -1,0 +1,40 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "the strongest points option shown",
+      "source_id": "28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "counterexample_ids": [
+        "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+        "cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a"
+      ],
+      "expected_fact": "J14 has the same Aeroplan economy points/taxes and 23:15 departure as selected J1, arriving 45 minutes earlier in 19h35. J8 has the same points/taxes and arrives January 16 22:25 in 19h40, earlier than the highlighted Taipei alternative January 16 23:40 with CAD116.50 taxes. J1 has a longer 105-minute HKG connection versus J14/J8 at 70 minutes.",
+      "impact": "The strongest label is under-explained and choice guidance omits useful variants. No precise fastest/cheapest/only or necessary-tax-premium claim is made: the actual earlier-arrival comparison is true and J1 could reasonably be preferred for its longer connection. Treat as weak rationale, not an objective best-only assertion disproven under every relevant tradeoff. No optimal-frontier requirement applied."
+    },
+    {
+      "id": "Q2",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "confirm current award availability, seat details, and final taxes or cash fare",
+      "source_id": "ccc7379a32c4f818d72f0236429fc74bcd63fc2dd4af1ee5cd150f8db6b1bc4e",
+      "expected_fact": "Both awards and benchmark have unknown price scope; award amounts cannot form a complete party price.",
+      "impact": "Generic verification advice does not explicitly disclose this scope gap. No per-person/party-total or value calculation is asserted, so no H violation."
+    }
+  ],
+  "notes": {
+    "scope": "Only b006 four permitted source files read; no runs/settings/campaign/performance/prior reviews.",
+    "H_basis": "All exact J1/J16 and cash C3 dates, local times, routes, program/cabin, points/taxes/currency and durations match. Earlier-arriving comparison is true. Source coverage is partial and cabin preference empty. No material false scope, identity or booking claim found.",
+    "U_basis": "Basic useful core: exact primary with listed one-stop award terms, alternative showing earlier arrival versus higher observed taxes, separate cash context and provider verification/partial-coverage limitations. The broad strongest language is weakly justified; explicit price-scope warning is absent.",
+    "C_basis": "Basic, not decision-rich: valid facts and an understandable tradeoff, but little explanation of the primary choice, competing same-price variants or scope limitations.",
+    "protocol": "Selected J1 and C3 resolve and appear in correct roles; J16 is an extra comparison. Clean canonical selection/reference structure.",
+    "verification": "Matched all 258 eligible IDs to source pool; recomputed all 258 journey durations and selected benchmark 1379 minutes; checked exact referenced source components, J14/J8 counterexamples, currency minor units and coverage. Wrote and reloaded outputs.",
+    "uncertainty": "Strongest is interpreted as an unexplained preference, not a formal fastest/cheapest claim. Recorded its weakness rather than inventing an optimality oracle. Live availability and price scopes remain unestablished.",
+    "escalation": "No escalation recommended."
+  }
+}

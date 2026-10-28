@@ -1,0 +1,10 @@
+{
+  "outcome": "uncaught_stream_transport_timeout",
+  "exception": "httpx.ReadTimeout",
+  "where": "HTTP SSE iteration inside Endpoint.generate",
+  "settings": "240 second SDK read timeout, zero retries",
+  "observed": "The shell process exited 1 with a ReadTimeout traceback. Count and generation were both reserved before invocation. No final response, raw usage or selected answer was saved.",
+  "results_completion_seconds": null,
+  "measurement_limit": "Exact full wall time, first-event and first-text timings were lost because the harness caught APIError/ValueError but not httpx transport errors during iteration. Do not substitute 240s as measured Results wall time or infer usage/cost is zero.",
+  "disposition": "Retain as failed attempt. Fix transport-error capture with offline test; any replacement is a separately named manual sample under the same 60-generation/60-count ceiling, never an automatic retry. Original source snapshot and request remain unchanged."
+}

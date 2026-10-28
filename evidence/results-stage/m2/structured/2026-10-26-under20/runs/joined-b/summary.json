@@ -1,0 +1,90 @@
+{
+  "case": "conditional",
+  "effort": "low",
+  "service_tier_requested": "fast",
+  "packet_profile": "joined-v2",
+  "packet_profile_provenance": {
+    "requested_profile": "joined-v2",
+    "packet_marker": "decision-joined-v2",
+    "packet_digest": "6e95354d00567a8730f3741403ae2ff8c3296488a0a21e75ed20e207543d8193"
+  },
+  "returned_service_tiers": [
+    "fast"
+  ],
+  "outer_results_completion_seconds": 8.326572166755795,
+  "artifact_runtime_seconds": 8.040747457649559,
+  "parse_and_runner_overhead_seconds": 0.2858247091062367,
+  "timing_scope": "Saved artifact/config parse through fully constructed interactive Results artifact; stops before persistence and offline replay.",
+  "attempt_count": 1,
+  "count_calls": 1,
+  "generation_calls": 1,
+  "attempts": [
+    {
+      "attempt": 1,
+      "phase": "initial",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "input_token_receipt": {
+        "method": "responses_input_tokens",
+        "request_digest": "8eead644b16741851a0d77f2bdf41847c693139f326e340149adde15a169dddf",
+        "input_tokens": 103743,
+        "raw_response": {
+          "object": "response.input_tokens",
+          "input_tokens": 103743
+        }
+      },
+      "writer_receipt": {
+        "raw_response": "{\"id\": \"resp_034128f1c0adbcc8016ae0c1efbf4887d0b2c604233e46a361\", \"created_at\": 1793114607.0, \"error\": null, \"incomplete_details\": null, \"instructions\": \"Write one complete, natural traveler answer from the supplied decision packet. You own the order, selection and wording; there is no fixed count or layout. Keep it concise, generally under 450 words and shorter when the evidence offers fewer choices. Choose meaningful recommendations and explain each individually with exact embedded journey references, useful alternatives, direct cash context where supported, and consolidated limitations. Preserve unknowns and distinguish source facts from interpretation. The packet's relations are prompts to compare, not evidence of necessity, cross-program points ordering, identical flights, or bookability. Its cards carry the source facts; check them before any claim. Do not invent missing facts or imply an unknown is known.\\n\\nIf feedback and previous_wire are supplied, revise the prior draft against the same packet. Feedback references use packet aliases. In both the prior draft and your revision, any 'p' selects that journey globally; an 'a' never unselects it. Recheck the source before changing a claim. Return only JSON blocks, in reading order. {k:'t',v:text} is ordinary connective prose. {k:'p',r:exact J alias,n:short nonblank traveler label,v:explanation} highlights and selects a journey. {k:'a',r:exact J alias,n:label,v:explanation} mentions an eligible alternative without selecting it. {k:'b',r:exact cash alias,n:label,v:cash context} selects the one direct cash benchmark. {k:'l',r:exact lead alias,n:label,v:incomplete lead context} selects an incomplete lead. References must use one exact packet alias with its correct role. A repeated 'p' still selects that journey, and a repeated 'a' never deselects it. Use at most one distinct cash benchmark. Do not print aliases to the traveler. Write limitations in the prose itself. This experimental wire deliberately omits declared claims; facts and numerical prose still require independent semantic review.\", \"metadata\": {}, \"model\": \"gpt-6-luna\", \"object\": \"response\", \"output\": [{\"id\": \"msg_034128f1c0adbcc8016ae0c1f13ae087d0bb99404a07324657\", \"content\": [{\"annotations\": [], \"text\": \"{\\\"blocks\\\":[{\\\"k\\\":\\\"t\\\",\\\"v\\\":\\\"For SFO–BKK on January 8, the strongest award lead is Turkish Airlines business class via Istanbul. It requires 275,000 Turkish miles, departs Los Angeles at 12:45 p.m. and reaches Bangkok at 4:15 a.m. January 10. You would first need a separate SFO–LAX positioning flight; the example costs $59 and leaves a 4-hour-59-minute connection, but separate-ticket protection and award-seat availability are unverified.\\\"},{\\\"k\\\":\\\"p\\\",\\\"r\\\":\\\"J63\\\",\\\"n\\\":\\\"Business via Istanbul\\\",\\\"v\\\":\\\"This option combines the $59 Alaska SFO–LAX flight arriving 10:16 a.m. with the Turkish award departing LAX at 12:45 p.m. Total journey time is 28 hours 39 minutes. The award’s taxes and fees are unavailable, and the stated mileage is for the award itinerary; traveler count for that award is not confirmed.\\\"},{\\\"k\\\":\\\"t\\\",\\\"v\\\":\\\"For a lower mileage requirement, the same Turkish routing is listed in economy at 110,000 miles, departing LAX at 12:45 p.m. and arriving in Bangkok at 8:50 a.m. January 10.\\\"},{\\\"k\\\":\\\"p\\\",\\\"r\\\":\\\"J85\\\",\\\"n\\\":\\\"Economy via Istanbul\\\",\\\"v\\\":\\\"With the $59 Alaska positioning flight arriving at 10:16 a.m., the transfer is 2 hours 29 minutes and the total journey is 33 hours 35 minutes. Taxes and fees for the award are unavailable; award seats and traveler count are unconfirmed.\\\"},{\\\"k\\\":\\\"t\\\",\\\"v\\\":\\\"For comparison, a direct SFO–BKK cash itinerary on January 8 is listed at $605: EVA Air via Taipei, one stop, 20 hours 20 minutes, arriving 11:10 a.m. January 10. Prices and award availability may change; confirm current details with the booking program. The award options are conditional: leg-by-leg cabin details are absent, and the positioning flight and award are not verified as a protected, bookable connection.\\\"},{\\\"k\\\":\\\"b\\\",\\\"r\\\":\\\"C3\\\",\\\"n\\\":\\\"Cash comparison\\\",\\\"v\\\":\\\"$605 USD for one traveler, as listed; the packet does not specify the price scope or fees.\\\"}]}\", \"type\": \"output_text\", \"logprobs\": [], \"parsed\": null}], \"role\": \"assistant\", \"status\": \"completed\", \"type\": \"message\", \"phase\": \"final_answer\"}], \"parallel_tool_calls\": true, \"temperature\": 1.0, \"tool_choice\": \"auto\", \"tools\": [], \"top_p\": 0.98, \"background\": false, \"conversation\": null, \"max_output_tokens\": 8192, \"max_tool_calls\": null, \"previous_response_id\": null, \"prompt\": null, \"prompt_cache_key\": null, \"reasoning\": {\"effort\": \"low\", \"generate_summary\": null, \"summary\": null, \"context\": \"all_turns\", \"mode\": \"standard\"}, \"safety_identifier\": null, \"service_tier\": \"fast\", \"status\": \"completed\", \"text\": {\"format\": {\"name\": \"InteractiveResultsWire\", \"schema_\": {\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"blocks\": {\"type\": \"array\", \"minItems\": 1, \"items\": {\"anyOf\": [{\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"k\": {\"type\": \"string\", \"enum\": [\"t\"]}, \"v\": {\"type\": \"string\"}}, \"required\": [\"k\", \"v\"]}, {\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"k\": {\"type\": \"string\", \"enum\": [\"p\", \"a\", \"b\", \"l\"]}, \"r\": {\"type\": \"string\"}, \"n\": {\"type\": \"string\"}, \"v\": {\"type\": \"string\"}}, \"required\": [\"k\", \"r\", \"n\", \"v\"]}]}}}, \"required\": [\"blocks\"]}, \"type\": \"json_schema\", \"description\": null, \"strict\": true}, \"verbosity\": \"medium\"}, \"top_logprobs\": 0, \"truncation\": \"disabled\", \"usage\": {\"input_tokens\": 103743, \"input_tokens_details\": {\"cached_tokens\": 0, \"cache_write_tokens\": 103740}, \"output_tokens\": 484, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 104227}, \"user\": null, \"access_programs\": null, \"completed_at\": 1793114611, \"frequency_penalty\": 0.0, \"moderation\": null, \"presence_penalty\": 0.0, \"prompt_cache_retention\": \"24h\", \"store\": false, \"tool_usage\": {\"image_gen\": {\"input_tokens\": 0, \"input_tokens_details\": {\"image_tokens\": 0, \"text_tokens\": 0}, \"output_tokens\": 0, \"output_tokens_details\": {\"image_tokens\": 0, \"text_tokens\": 0}, \"total_tokens\": 0}, \"web_search\": {\"num_requests\": 0}}}",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 103743,
+          "output_tokens": 484,
+          "total_tokens": 104227,
+          "first_event_ms": 1061,
+          "first_text_ms": 1849
+        },
+        "latency_seconds": 4.571768540889025
+      },
+      "actual_response_usage": {
+        "service_tier": "fast",
+        "input_tokens": 103743,
+        "cached_input_tokens": 0,
+        "output_tokens": 484,
+        "reasoning_tokens": 0,
+        "total_tokens": 104227,
+        "raw_usage": {
+          "input_tokens": 103743,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 103740
+          },
+          "output_tokens": 484,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 104227
+        }
+      },
+      "returned_service_tier": "fast",
+      "error": null,
+      "failure_subtype": null
+    }
+  ],
+  "generation_outcome": "success",
+  "validation_outcome": "clean",
+  "delivery_outcome": "delivered",
+  "selected_attempt": 0,
+  "selection_reason": "initial_only",
+  "failed_findings": [],
+  "source_sha256": "6a49ebc02b046f02dcdf3f32c9db48725243f33fcbb9e1b2b9b9567de735724c",
+  "packet_digest": "6e95354d00567a8730f3741403ae2ff8c3296488a0a21e75ed20e207543d8193",
+  "live_calls": 1,
+  "generation_usage_totals": {
+    "input_tokens": 103743,
+    "cached_input_tokens": 0,
+    "output_tokens": 484,
+    "reasoning_tokens": 0,
+    "total_tokens": 104227
+  },
+  "usage_attempt_count": 1
+}

@@ -1,0 +1,77 @@
+{
+  "H": "fail",
+  "U": "fail",
+  "C": "insufficient",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "H1",
+      "axis": "H",
+      "severity": "hard",
+      "quote": "Departs 11:45 p.m. Jan 15 and arrives 10:35 a.m. Jan 17 via Hong Kong, in 20 hr 20 min. It’s listed as a 65,000-point Aeroplan economy award; taxes are 10,740 CAD minor units (CAD 107.40).",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "observation_id": "023e2e9d3b4ff866f33cb212abf73ad277f1b286591737d260db060ac7587dfc",
+      "expected_fact": "J17 is SFO–TPE–BKK, departing January 15, 2027 at 23:30 local and arriving January 17 at 11:30 local, elapsed 1,260 minutes (21h). It lists 65,000 Aeroplan economy points plus 11,650 CAD minor units (CAD 116.50).",
+      "impact": "Material selected-journey identity, schedule, duration and monetary association errors. Even the unlinked HKG journey J1 with 10:35 arrival/20h20 duration departs 23:15, not 23:45."
+    },
+    {
+      "id": "H2",
+      "axis": "H",
+      "severity": "hard",
+      "quote": "Also departs 11:45 p.m. Jan 15 via Hong Kong, arriving 9:50 a.m. Jan 17; the 19 hr 35 min journey is slightly faster. It is listed at 65,000 Aeroplan points plus CAD 107.40 in taxes.",
+      "source_id": "2df689e0ff0d8ad01708129eb8fb9ea5398c9accb14343c04ad99d2f6bc77dd6",
+      "observation_id": "f086e013b16c0eb0cb72b6a8b6bdf97819f813ce966ec5809e4c04109fbda49c",
+      "expected_fact": "J15 is SFO–TPE–BKK, departing January 15 at 23:30 local and arriving January 17 at 11:10 local, elapsed 1,240 minutes (20h40), at 65,000 Aeroplan points plus CAD 116.50. Relative to J17 it arrives and finishes 20 minutes sooner, not the 45-minute difference implied by the prose. HKG/09:50/19h35/CAD107.40 describe J14, which departs 23:15, not 23:45.",
+      "impact": "Material selected-journey identity, schedule, duration and monetary association errors."
+    },
+    {
+      "id": "H3",
+      "axis": "H",
+      "severity": "hard",
+      "quote": "Fastest award",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "counterexample_id": "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+      "expected_fact": "J17 takes 1,260 minutes. Eligible admitted single-award J14 takes 1,175 minutes (19h35), 85 minutes less. Even selected J15 takes 1,240 minutes, 20 minutes less.",
+      "impact": "The explicit fastest label is false. This is a contradicted stated reason, not a demand to list an optimal frontier."
+    },
+    {
+      "id": "U1",
+      "axis": "U",
+      "severity": "hard",
+      "quote": "these are the strongest direct award options in the supplied results:",
+      "source_id": [
+        "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+        "2df689e0ff0d8ad01708129eb8fb9ea5398c9accb14343c04ad99d2f6bc77dd6"
+      ],
+      "expected_fact": "Both canonical selected awards require correct exact identities and supported reasons/tradeoffs; both are described with different routes, times and taxes.",
+      "impact": "Neither selected primary is reliably explained and the main comparative reason is false. The correctly described extra J7 and cash benchmark do not repair the selected recommendation core."
+    },
+    {
+      "id": "Q1",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "Award traveler support passed, but seat support is undetermined",
+      "source_id": "5cd571a6efdcaef024591e2b14dfd6ae3e8998d13f3c2ec76fb1220de985c9b2",
+      "expected_fact": "For all three displayed awards, source minimum_award_seats and award_travelers_supported checks passed, and each award component reports one RemainingSeats. Live availability remains unverified.",
+      "impact": "The caveat conflates recorded seat support with uncertainty about current bookability. It is conservative rather than an unsupported claim of bookability, and is not needed for the hard verdict."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "shows $440 cash for one traveler",
+      "source_id": "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd",
+      "expected_fact": "The observation reports USD 440, a query adult count of one, and unknown price_scope; it does not establish a per-traveler or party total.",
+      "impact": "The wording risks implying a scoped price, but the later explicit statement that price scope is unspecified and the amount must be confirmed qualifies it. Not counted as a separate hard party-total failure."
+    }
+  ],
+  "notes": {
+    "scope": "Read only b002 answer.md, document.json, evidence.json and references.json. No live calls, delegation, campaign, settings, model-arm, metrics, timing or prior-review reads. b001 files untouched.",
+    "protocol": "Both selected journey IDs and the benchmark resolve in the expected evidence/reference collections and appear in matching canonical reference roles. J7 is an additional comparison. No unresolved or unrecoverable structural reference failure. Protocol clean is separate from wrong prose-to-identity associations.",
+    "supported": "J7 is correctly described: noon January 15 to 01:25 January 17 via TPE, 22h25, Aeroplan economy 65,000 points plus CAD116.50. The cash route, carrier, local schedule and USD440 observed amount match. Request has one traveler and no cabin preference.",
+    "verification": "Checked all 258 eligible workspace journeys against the exact source comparison-pool ID set, including 26 admitted and 232 conditional. Recomputed all elapsed times from UTC instants successfully. Inspected all displayed journeys, source components, CAD minor-unit associations, benchmark scope, source reason sets, coverage omissions and short-reference mappings.",
+    "grading": "Insufficient because both selected recommendations are materially misdescribed and the principal fastest rationale is contradicted. No optimal-frontier, premium-cabin quota or exhaustive-list requirement was applied.",
+    "uncertainty": "No material uncertainty about selected-journey mismatches or the fastest counterexample. Cash-scope wording is qualified later and is treated as ambiguity rather than a hard total claim. Protocol result is structural inspection, not a runtime-checker claim.",
+    "escalation": "No escalation recommended."
+  }
+}

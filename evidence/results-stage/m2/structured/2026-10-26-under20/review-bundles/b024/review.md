@@ -1,0 +1,45 @@
+# Blinded quality review: b024
+
+H: **pass** · U: **pass** · C: **basic** · Protocol: **clean**
+
+The exact selected journey has a supported earlier arrival than the two displayed award alternatives, an individual rationale, separate-ticket downside, relevant alternatives, cash context and limitations. All actual numerical, identity and directional comparisons checked are supported. Composition is useful but thin on the magnitude and consequences of the alternatives.
+
+No hard failures found.
+
+Soft composition finding: This accurately distinguishes a later departure but leaves the material connection tradeoff implicit: J129 has 395 minutes at LAX and 60 at IST, while J115 has 149 and 420. The lead reaches BKK 4h35 earlier. These omissions reduce decision depth but do not invalidate the stated recommendation or trigger H/U failure.
+
+Verification and evidence:
+
+```json
+{
+  "request": "One traveler, SFO\u2013BKK, original departure 2027-01-08.",
+  "identities": {
+    "J63": "0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+    "J115": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+    "J129": "1a3cb33b542f1e0dd3179dbf18ef330d4d45574dd9e17b70b9d371ded5974e0e",
+    "cash": "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2"
+  },
+  "timeline": [
+    "J63 departs Jan 8 08:36 -08:00, arrives Jan 10 04:15 +07:00; elapsed 1719 min; LAX 150 min, IST 140 min.",
+    "J115 departs Jan 8 08:40 -08:00, arrives Jan 10 08:50 +07:00; elapsed 1990 min; LAX 149 min, IST 420 min.",
+    "J129 departs Jan 8 10:15 -08:00, arrives Jan 10 08:50 +07:00; elapsed 1895 min; LAX 395 min, IST 60 min.",
+    "Cash departs Jan 8 06:05 -08:00, arrives Jan 10 00:20 +07:00; elapsed 1635 min, two stops (SEA/ICN); earlier than all three award journeys."
+  ],
+  "money_and_support": "All displayed awards are Turkish business at award level, 275000 raw points, unknown award fees/seats/price scope and absent returned travelers; leg cabins absent. Each cash positioning observation quotes USD59 with unknown price scope and returned_travelers=1. Benchmark quotes USD452 with unknown price scope. No all-in party total or economic ordering is asserted.",
+  "checks": "Compared every referenced identity to references.json and source.view components. Python recomputed all three journey durations and every connection wait; verified all journey-leg UTC/local instants, named-zone offsets, day changes and benchmark endpoints. Source provider_status is partial. Initial system-Python ISO parser rejected Z; reran with explicit Z-to-+00:00 normalization and all assertions passed."
+}
+```
+
+Interpretation notes:
+
+- Earlier arrival is explicitly scoped to the shown choices; no global earliest/best assertion is inferred.
+- Same routing means the supported LAX–IST–BKK airport sequence, not identical flight numbers. J129 uses TK10/TK64, versus J115 TK180/TK64.
+- All award choices is read in the surrounding context as the displayed award itineraries, whose seat and fee amounts are unknown, not every award summary in the packet.
+- Positioning permission is unresolved in source. The answer explicitly describes separate positioning and unverified booking, and does not claim owner permission; this omission does not invalidate the conditional earlier-arrival argument.
+- Protocol clean refers to the supplied document and resolvable references. No delivery-status or model-run artifact was inspected.
+
+Read only answer.md, document.json, evidence.json and references.json in b024/b025. No settings, timings, other campaign files, web, live calls or delegation.
+
+Uncertainty: No material uncertainty under the frozen rubric; no independent current availability or bookability verification was attempted.
+
+Escalation recommended: no.

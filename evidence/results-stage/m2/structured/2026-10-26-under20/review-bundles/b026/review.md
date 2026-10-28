@@ -1,0 +1,42 @@
+# Blinded review: b026
+
+Rubric: under20-HUC-v1. **H pass; U pass; C basic; protocol clean.**
+
+The displayed duration, departure and arrival comparisons are correct for their exact references. The shortest/earliest claims explicitly concern the shown choices. Basic recommendation value, relevant alternatives, cash context and limitations are present; the prose remains coarse about actual schedules and observed award prices.
+
+## C — nonblocking
+
+> Via Taipei, it arrives earliest among these choices, but departs much earlier than the other two and takes longer than either. Consider it if arrival time matters more than a later start; downside: the early departure.
+
+The tradeoff is factual and useful, but remains coarse: J7 departs at noon, not early morning, and arrives Bangkok at 01:25 January 17; J1 departs at 23:15 and arrives 10:35 January 17. The word early is contextually relative and is not an H failure, but the prose omits the actual schedules and overnight-arrival implication that would make this materially richer decision guidance. Its later-departure alternative offers just a 15-minute shift.
+
+Source IDs: `46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3`, `28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82`, `1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325`.
+
+## C — nonblocking
+
+> The displayed cash itinerary is USD 456 for one traveler, with two stops via LAX and NRT, but its price scope and fee unit are unknown.
+
+Known traveler support and unknown quote scope are both preserved in the complete sentence: returned_travelers is 1, reported cash is USD 456, and scope is explicitly called unknown. I do not infer an asserted verified per-traveler/all-in total from this caveated sentence. Clearer prose would separate the one-traveler itinerary from the quoted amount. Fee unit is indeed unknown (taxes_fees_unit), while the cash fare itself is known to be in major USD units. This is potentially confusing technical detail, not a demonstrated false conversion.
+
+Source IDs: `ccc7379a32c4f818d72f0236429fc74bcd63fc2dd4af1ee5cd150f8db6b1bc4e`.
+
+## C — nonblocking
+
+> Award points from the same program are listed for these choices, but taxes remain incomplete; do not treat them as all-in prices.
+
+The limitations are conservative, but the narrative supplies no point amounts or human-readable observed tax amounts and leans on minor-unit terminology. The source supports 65,000 reported Aeroplan points for each, and observed taxes CAD 107.40 for J1 versus CAD 116.50 for J7/J17, all with unknown scope. Combined with the coarse schedule discussion and unintroduced J1 alias, this is basic rather than decision-rich composition. No requirement to show every eligible alternative or cabin/style is imposed.
+
+Source IDs: `28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82`, `46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3`, `1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325`.
+
+## Verification and limits
+
+- Only b026 answer.md, document.json, evidence.json and references.json were read as source inputs. No other campaign/settings/timing/history files, live calls, web access or delegation.
+- H pass: exact-reference comparisons are correct. J1 lasts 1,220 minutes (20h20m), J17 1,260 (21h), J7 1,345 (22h25m). J1 is shortest of the displayed three. J17 departs 15 minutes later, lasts 40 minutes longer, and arrives 55 minutes later than J1. J7 lasts longer than both and arrives earliest of the three.
+- Full timeline verification: J1 departs January 15 23:15-08:00 / January 16 07:15Z, arrives January 17 10:35+07:00 / 03:35Z; its HKG connection is 105 minutes. J17 departs January 15 23:30-08:00 / January 16 07:30Z, arrives January 17 11:30+07:00 / 04:30Z; TPE connection 165 minutes. J7 departs January 15 12:00-08:00 / 20:00Z, arrives January 17 01:25+07:00 / January 16 18:25Z; TPE connection 270 minutes. Full legs were inspected and UTC-derived durations agree with elapsed_minutes.
+- Whole-pool scope checked: J8 cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a lasts 1,180 minutes and arrives January 16 22:25; J14 eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669 lasts 1,175 minutes. These contradict a whole-pool shortest/earliest claim, but the answer expressly says of these three/among these choices. Their omission does not falsify the actual scoped central argument.
+- All three are admitted single-award SFO–BKK economy itinerary records, with one stop and Aeroplan identity; direct_award is correctly distinguished from nonstop. Requested travelers is one. J1 reports two award seats, J7/J17 one each. Per-leg cabin fields are absent; no assertion that every leg cabin is independently established is made.
+- Cash observation ccc7379a32c4f818d72f0236429fc74bcd63fc2dd4af1ee5cd150f8db6b1bc4e reports USD 456 major units, route SFO–LAX–NRT–BKK, two stops, returned travelers 1, and unknown quote scope. It departs January 15 08:51-08:00 and arrives January 16 22:50+07:00. No invented protection or confirmed-bookability claim is made. Provider status is partial.
+- U pass: exact supported shortest-elapsed choice with individual reason and real one-stop/price downside, relevant earlier-arrival versus later-start alternative, brief cash context and availability/coverage limitations. These meet the floor even though prose is not decision-rich.
+- Protocol clean is limited to the supplied document: parses, all four references and all selected journeys resolve, and no recovery or annotation is visible. Runtime checker or renderer behavior is not supplied and is not inferred; source resolution was not treated as prose verification.
+- Verification: parsed supplied JSON files; resolved references and selected identities; inspected full leg timestamps/zones, cabin/program, seats, money units/scope; recomputed durations and checked earlier/faster eligible counterexamples. Output JSON was parsed back and Markdown checked nonempty. No runtime tests or live calls.
+- Uncertainty: source documents cannot establish external rendering/runtime status. Caveated one-traveler wording is mildly ambiguous, recorded above without fabricating a party-total assertion. No escalation recommended.

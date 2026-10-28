@@ -1,0 +1,9 @@
+H: fail · U: fail · C: basic · Protocol: clean
+
+The sole award alternative has a material reference mismatch. The statement “is also an Aeroplan economy award via Hong Kong, departing at the same time and arriving at 10:35 a.m. January 17, 45 minutes later; listed at 65,000 points plus CAD 107.40.” is attached to J17 (`1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325`). Its actual source observation (`023e2e9d3b4ff866f33cb212abf73ad277f1b286591737d260db060ac7587dfc`) is via Taipei, departs January 15 at 23:30, arrives January 17 at 11:30, and costs 65,000 points plus CAD 116.50. It departs 15 minutes and arrives 100 minutes after J14. The prose instead describes J1. This fails H and the coherent-comparison requirement of U.
+
+J14 is correctly described and is the fastest of all 258 eligible journeys at 19h35. The USD 440 Singapore Airlines benchmark and its unknown price scope are also supported. Selection and reference roles are structurally recoverable and clean; the error is factual association.
+
+Decision richness is basic. J8 takes just five more minutes than J14, has the same reported award amounts, and arrives 11h25 earlier (January 16 at 22:25). Omitting it is a useful-tradeoff omission, not an H failure: the answer never claims J14 arrives earliest. Generic partial-price, coverage and availability caveats are present.
+
+Verification: exact equality between all 258 workspace journey IDs and the source eligible pool; recalculated all UTC elapsed times and relevant local-calendar differences; checked source component identities, CAD minor units, all 10 cash benchmarks, coverage omissions and references. An initial local Python Z-parsing failure was corrected and the calculations reran successfully. Only the four permitted source files were read. No live calls or runtime validation were performed. No unresolved material factual uncertainty; no escalation recommended.

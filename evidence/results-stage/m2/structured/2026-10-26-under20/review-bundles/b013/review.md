@@ -1,0 +1,61 @@
+# Blinded source review — b013
+
+H: **fail**. U: **fail**. C: **insufficient**. Protocol: **clean**.
+
+## wrong_transfer_duration
+
+> the example costs $59 and leaves a 4-hour-59-minute connection
+
+J63 arrives LAX January 8 10:15 and departs 12:45, a 150-minute (2h30) connection, not 299 minutes. Even the prose arrival 10:16 implies 149 minutes, not 299.
+
+Sources: 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee, c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388, 14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8
+
+## positioning_identity_mismatch
+
+> This option combines the $59 Alaska SFO–LAX flight arriving 10:16 a.m. with the Turkish award departing LAX at 12:45 p.m.
+
+Selected J63 uses American, SFO 08:36 to LAX 10:15, USD 59, total 1719 minutes. Alaska 08:40 to 10:16 belongs to cash observation fcfe48f1768f2cba6c31a68a60e7f354e8a89365bb58bd9714e59db5e927a82a and the business pairing J65, total 1715 minutes. This is a carrier/component association mismatch, not merely a one-minute rounding difference.
+
+Sources: 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee, c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388, 8f249ee807afa8524890aecc314063f0f1f9fa0c62965d2b001a0bc8cd13fa38
+
+## economy_arrival_and_duration_mismatch
+
+> For a lower mileage requirement, the same Turkish routing is listed in economy at 110,000 miles, departing LAX at 12:45 p.m. and arriving in Bangkok at 8:50 a.m. January 10.
+
+> With the $59 Alaska positioning flight arriving at 10:16 a.m., the transfer is 2 hours 29 minutes and the total journey is 33 hours 35 minutes.
+
+Selected J85 arrives January 10 04:15, not 08:50. Full elapsed time from January 8 08:40 SFO is 1715 minutes = 28h35, not 2015 = 33h35. Its 149-minute LAX connection is correct. A different eligible economy pairing J45/a6f303cbc450355f8f485c134f8b1728f6309aededa539b7b683720a310c420c arrives 08:50 with the Alaska flight, but totals 1990 = 33h10, and is not the selected reference.
+
+Sources: 2bbbf1062a234fafac9fdaa1900aecfa4e50af05c3f1f9105854f439adf06e30, 3c33a00d55016a29fb9773d9cddbe54140d8d6cddb3d2704c34c90cfb2d3e5d4
+
+## scope
+
+Only b013 answer.md/document.json/evidence.json/references.json plus explicitly permitted frozen campaign quality_version and quality keys were reviewed. No settings, timings, other reviews, runtime or live calls.
+
+## U_reason
+
+Fail: the intended comparison is recognizable, but neither evaluated award choice has a fully defensible exact description. The business choice mixes American reference identity with Alaska prose and invents a longer transfer; the economy choice is given the wrong arrival and total duration. The otherwise useful lower-mileage contrast (110000 versus 275000 Turkish miles), cash context and conditionality do not repair those exact-choice errors.
+
+## C_reason
+
+Insufficient as delivered: useful business/economy and cash structure, but the asserted scheduling contrast is not grounded in the selected choices. No cabin count or exhaustive frontier requirement was imposed.
+
+## preserved_strengths
+
+The USD 605 EVA/Taipei benchmark, January 10 11:10 arrival, 1220-minute duration and returned traveler count match source. Its price-scope caveat is explicit. Award taxes, seat/traveler uncertainty, separate-ticket protection and absent leg cabins are disclosed. The word direct is immediately qualified by via Taipei, one stop, so it is not treated as a nonstop claim.
+
+## verification
+
+Checked both WorkspaceEvidence and source.view alternatives/components. Independently recomputed J63 1719 minutes and 150-minute transfer, J85 1715 and 149, and cash 1220. Inspected all 232 eligible journey summaries for topology/status and shortest-time counterexamples; all are conditional cash-access-award journeys. Located alternative Alaska pairings to distinguish identity mixing from source ambiguity.
+
+## protocol
+
+Clean: valid document and resolvable canonical references; no visible failure annotation. Semantic failures are separate from protocol status.
+
+## uncertainty
+
+No material uncertainty in cited mismatches. Frozen evidence cannot establish live availability or provider truth. Broad strongest wording is not separately failed merely because a different representative might be preferred.
+
+## escalation
+
+Not recommended.

@@ -1,0 +1,40 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "Award prices are shown in points and CAD, not as a complete USD cost comparison.",
+      "source_id": [
+        "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+        "cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+        "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd"
+      ],
+      "expected_fact": "Award points_scope and tax scope are unknown, price_completeness is partial, and the cash benchmark price_scope is unknown. These observed amounts do not establish complete per-traveler or party prices.",
+      "impact": "The caveat truthfully declines a complete USD comparison, but does not explain the underlying price-scope gap and does not apply it explicitly to the USD440 cash quote. This weakens limitations/usefulness. It is not an H failure: amounts are described as listed, no per-person/party-total assertion or value arithmetic is made. The correctly identified choice, supported fastest reason, earlier-arrival downside/comparison, cash context and general verification limitations still meet the minimum useful core."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "Earlier-arriving award alternative",
+      "source_id": "cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+      "expected_fact": "J8 arrives 685 minutes (11h25) before J14 while taking only five more elapsed minutes; both list the same Aeroplan economy points and taxes.",
+      "impact": "The label and correctly dated schedules expose the principal tradeoff, but the prose leaves its magnitude and choice guidance implicit. Together with the incomplete price-scope explanation, the answer is useful/basic rather than decision-rich."
+    }
+  ],
+  "notes": {
+    "scope": "Read only b003 answer.md, document.json, evidence.json and references.json. No prior reviews, runs, campaign, settings, metrics, model-arm, timing or external sources read. No live calls or delegation.",
+    "H_basis": "All referenced dates, local times, durations, routes, program/cabin, points and currencies/amounts match their exact source identities. J14 is the minimum-duration award among all 258 eligible journeys at 1,175 minutes; J8 is 1,180 minutes and arrives January16 22:25, before J14 January17 09:50. USD440 benchmark is Singapore Airlines via SIN, January15 09:40 to January17 08:25, 1,905 minutes. Partial coverage is supported by omitted detail queries due to resource_budget_exhausted. No claim of verified bookability, protected connections, necessary tradeoffs or complete party price appears.",
+    "U_basis": "Canonical selection identifies J14, its label gives the supported fastest reason, and the earlier-arriving J8 reference with local dates supplies the principal schedule downside and a coherent brief comparison. The cash benchmark supplies amount and much longer elapsed duration; the closing text truthfully limits complete USD comparison and warns about partial search coverage and changing availability/prices. Considering the factual references/cards as available, this meets the basic useful-core threshold. Missing explicit unknown price-scope explanation is recorded as weakness rather than inventing a false per-person claim.",
+    "C_basis": "Basic: correct primary, meaningful earlier-arrival alternative, cash context and consolidated limitations. The answer mainly lists facts and leaves quantified tradeoff interpretation and price-scope explanation to the traveler. No exhaustive frontier, cabin coverage or optimal-choice quota was imposed.",
+    "protocol": "Selected journey and benchmark both resolve and occur in the matching canonical reference roles. The extra journey is a comparison. All reference IDs map correctly; no unresolved annotation or unrecoverable selection failure. Clean is a structural review verdict, not a claim about unseen runtime checker output.",
+    "verification": "Exact ID-set match for all 258 workspace journeys against the source eligible comparison pool (26 admitted,232 conditional); all 258 elapsed durations recomputed successfully from UTC instants; exact displayed-source component checks including CAD10740 minor units=CAD107.40; selected local-calendar comparison recomputed; benchmark 1,905-minute duration recomputed; all ten direct cash benchmarks inspected; reference roles, benchmark membership and coverage omissions checked.",
+    "uncertainty": "No unresolved material factual uncertainty. Minimum-useful-core pass accepts accurate reference labels/cards and schedule comparison as sufficient; the missing explicit price-scope warning remains a real limitation and prevents a decision-rich grade. Live availability/source truth and runtime behavior were not tested.",
+    "escalation": "No escalation recommended."
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "H": "fail",
+  "U": "fail",
+  "C": "insufficient",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "H1",
+      "axis": "H",
+      "severity": "hard",
+      "quote": "Fly SFO–HKG–BKK on Jan 15, departing 11:15 p.m. and arriving Jan 17 at 9:50 a.m. The listed journey takes 1,175 minutes and costs 65,000 Aeroplan points plus CAD 107.40 in taxes and fees.",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "observation_id": "023e2e9d3b4ff866f33cb212abf73ad277f1b286591737d260db060ac7587dfc",
+      "expected_fact": "Selected J17 is SFO–TPE–BKK, departing January 15 23:30 local and arriving January 17 11:30 local,1260 minutes,65,000 Aeroplan points plus CAD116.50. The quoted HKG route,23:15/09:50 schedule,1175 minutes and CAD107.40 belong to unselected J14.",
+      "impact": "Material primary journey identity/route, schedule, elapsed-duration and monetary association errors."
+    },
+    {
+      "id": "H2",
+      "axis": "H",
+      "severity": "hard",
+      "quote": "Fastest award",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "counterexample_id": "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+      "expected_fact": "J17 takes 1260 minutes. Eligible J14 takes 1175 minutes,85 minutes less; it is the actual minimum across258 eligible journeys.",
+      "impact": "The selected primary is falsely labeled fastest. This is a contradicted objective reason, not failure to enumerate an optimal frontier."
+    },
+    {
+      "id": "U1",
+      "axis": "U",
+      "severity": "hard",
+      "quote": "For a one-person award, the strongest fit I found is:",
+      "source_id": "1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325",
+      "expected_fact": "The exact selected recommendation must have a supported description and reason. Here both the description and fastest reason belong to another journey.",
+      "impact": "The core exact choice/reason is unreliable. Correct secondary Taipei and cash descriptions do not repair the selected recommendation."
+    },
+    {
+      "id": "Q1",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "If arriving earlier on Jan 17 matters more than the shortest journey:",
+      "source_id": "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "counterexample_id": "cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+      "expected_fact": "J7 correctly arrives January 17 01:25 in1345 minutes. J8 arrives still earlier on January 16 22:25 in1180 minutes with 65,000 points+CAD107.40.",
+      "impact": "J8 is a useful omitted variant, but the text specifies earlier on January 17 and does not claim J7 is the earliest or uniquely necessary. This omission alone is not an H failure."
+    },
+    {
+      "id": "Q2",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "Confirm the award space, fees and cash fare with the booking provider",
+      "source_id": "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd",
+      "expected_fact": "Award and cash price scopes are unknown.",
+      "impact": "The generic warning does not explain scope; however no full-party/per-person total is asserted. Separate from the decisive H/U mismatch."
+    }
+  ],
+  "notes": {
+    "scope": "Only b011 four permitted files read; no runs/settings/campaign/performance/index/prior reviews or live calls.",
+    "supported": "J7 route/01:25 arrival/1345 minutes/65,000 points/CAD116.50 are correct. Singapore cash USD440,Jan 15 09:40 to Jan 17 08:25 via SIN,1905 minutes matches; it is the lowest reported cash amount among ten benchmarks. Cash is explicitly not an award-value equivalent. Partial coverage and one-traveler request are supported.",
+    "C_basis": "Insufficient because the sole selected primary and its main reason are materially misbound; other correct facts cannot restore the selected answer. No exhaustive-cabin/frontier quota applied.",
+    "protocol": "Canonical selected journey and benchmark IDs resolve and occur in corresponding reference roles; J7 is a comparison. Structure clean; wrong facts attached to a valid ID are scored under H rather than structural unrecoverability.",
+    "verification": "Confirmed all 258 workspace IDs equal source eligible pool; recomputed every elapsed duration; checked raw source routes and exact selected J17,actual J14,J7 and J8 facts,minor-currency associations,all ten cash quote values,coverage and reference roles. Files written/reloaded.",
+    "uncertainty": "No material uncertainty about the primary mismatch or fastest counterexample. Earlier-on-Jan 17 comparison is not expanded into an unclaimed earliest-possible-arrival claim. Live availability/price scope remain unestablished.",
+    "escalation": "No escalation recommended."
+  }
+}

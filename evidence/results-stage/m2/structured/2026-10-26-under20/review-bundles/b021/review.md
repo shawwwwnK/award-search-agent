@@ -1,0 +1,49 @@
+# Blinded source review — b021
+
+H: **fail**. U: **pass**. C: **basic**. Protocol: **clean**.
+
+## wrong_award_program
+
+> A January 1 Flying Blue economy award summary lists 23,000 points plus 200,300 TWD minor-unit fees, but it starts at TPE, not SFO, and has only a date—not a timed itinerary.
+
+The exact TPE-BKK economy summary has program.state=value, program.value=qantas, source_field=Source in both WorkspaceEvidence and source.view. Its 23000 points belong to Qantas, not Flying Blue. January 1, endpoints and 200300 TWD minor units are otherwise correct. Program identity determines which miles/program can be used and is material even for an incomplete lead.
+
+Sources: a05d8ba950f834b8934371d5b00a5a1a2051aea13af153fe1b823aad24f3d7de
+
+## scope
+
+Only b021 supplied answer/document/evidence/references and frozen HUC rubric; no settings/timings/profiles/runtime/other reviews or live calls.
+
+## H_other_checks
+
+- A1/0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c is January 1 SFO-BKK Aeroplan economy, 65000 points, 11650 CAD minor units, BR. A2/cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044 is United economy, 60500 points, 2820 USD minor units, CA/UA/ZH. A3/0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b is Alaska economy, 42500 points, 5090 USD minor units, AS/JX. All exact aliases/date/endpoint/cabin tags match.
+- The fee numbers are correctly labeled minor units, not inflated major-currency prices: respectively CAD 116.50, USD 28.20, USD 50.90, and TWD 2003.00 for the TPE lead. Raw presentation is hard to read but no currency-unit hard error is present.
+- Both WorkspaceEvidence and source.view contain zero eligible complete journeys. All discussed award records are date-only summary leads with itinerary_schedule_incomplete. The TPE lead is not represented as a complete or connected SFO journey.
+- Cash benchmark 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630 is Cathay Pacific SFO-HKG-BKK, one stop, USD 640 major units, arrival January 4 10:35, unknown price scope. Recomputed full interval is 2680 minutes, January 1 22:55 SFO to January 4 10:35 BKK.
+- Coverage groups confirm omitted detail work for resource budget exhaustion and partial SFO-TPE/TPE-BKK logical/relationship/strategy groups from pagination exhaustion. The closing scope limitation is supported. Cross-program comparability and availability limitations are explicit.
+
+## U_evidence
+
+- Pass on the separate incomplete-result branch: "There are no complete eligible award journeys in this packet" is truthful, and the three correctly identified SFO-BKK leads provide relevant dates, programs, point and fee observations.
+- The gap is explicit: "the records give no timed itinerary, so they don’t establish a complete journey." Exact A1/A2/A3 aliases include date/endpoints/cabin and resolve canonically, although they lack separate display blocks.
+- Cash context and coverage/availability limits are supported. The additional TPE lead has a material program error under H, but the core no-complete-outcome explanation and the three original-endpoint leads remain useful.
+
+## C_reason
+
+Basic: truthful incomplete-result explanation with program/date leads and a source-backed coverage gap. Lost dimensions include human-readable fee denominations, distinct display references for the main SFO leads, known seat signals, and the cash departure/full duration. The additional lead must be corrected from Flying Blue to Qantas. No fixed quota or complete-frontier requirement applied.
+
+## protocol
+
+Clean: valid document, selected lead/benchmark IDs and all three prose aliases resolve. Program misattribution is semantic within a valid reference, not a parsing/delivery failure.
+
+## verification
+
+Checked every named award program, points/fee association, date/endpoints and alias against WorkspaceEvidence and source.view; independently converted minor fees, recomputed cash calendar interval, confirmed empty journey sets, benchmark membership and coverage-status reasons.
+
+## uncertainty
+
+No material uncertainty in the Qantas-versus-Flying-Blue mismatch. Frozen evidence does not establish live availability or external provider truth.
+
+## escalation
+
+Not recommended.

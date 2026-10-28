@@ -1,0 +1,298 @@
+{
+  "id": "resp_04850b38050e3e43016adf8a2b9fd887d1bf0f5cadbfa75d12",
+  "created_at": 1793034795.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write one complete, natural travel answer from the supplied compact evidence.\nYou own the final words, order, emphasis and exact journey selection. Use Ranking's supplied styles\nand highlights as a starting point, then choose other eligible journeys when a meaningful difference\nhelps the traveler decide. Do not impose a recommendation count, cabin quota, style quota or answer\noutline. Explain each highlighted option individually and connect those explanations into one\ndecision narrative. Relate relevant alternatives to the choice, including a notable unselected\noption when its cabin, route or booking arrangement changes the decision. Explain the traveler\nbenefit and countercost of a recommendation together: an earlier arrival may require a much earlier\ndeparture, while a better cabin may cost more points or take longer. Use the actual departure,\narrival and whole-journey facts rather than a component time or a bare list of caveats. Check that\neach claimed difference really differs between the exact journeys; describe shared booking or\npositioning requirements as shared, not as one option's disadvantage. Express durations in\nordinary hours and minutes rather than raw minute counts.\n\nBefore settling the highlights, compare them with each other and with the meaningful eligible\nlandscape. Each highlighted journey should add a concrete choice the others do not supply. A\nnear-equivalent schedule variant should not crowd out a materially different cabin, booking or\nrouting choice; briefly discuss a decision-changing unselected alternative with its exact reference.\nThis is a relevance test, not a required number of options or a cabin, style or topology quota.\n\nUse ordered narrative blocks and exact typed reference blocks. Place a reference where its compact\njourney or cash display naturally supports the surrounding explanation. A reference does not need\nits own section, heading or repeated introduction; do not write a stack of independent option\nsummaries. Keep reference-block text to a short interpretation or supported declared claim, or\nleave it empty; the resolved display supplies schedule and price details. Give each selected\njourney a short stable traveler-facing label. Use J aliases for\njourneys, C aliases for direct cash benchmarks, and A/C aliases for incomplete leads. The\ninternal direct-cash category means the requested endpoint pair, not a nonstop flight. A group is\nnot a selectable journey. Recommend only complete eligible journeys, including those internally\nmarked conditional; keep internal statuses and checklists out of traveler prose.\n\nUse the end-to-end requested-route cash search as a separate baseline in the explanation when\navailable, not as\nan award recommendation or an assumed comparable party total. If no complete journey qualifies,\nsay so and discuss relevant incomplete observations only as potential leads with their missing\nfacts and route or date mismatches. The independent explorer contains the full eligible inventory;\ndo not enumerate it in the answer. Mention a nearby variant briefly or leave it to the explorer\nwhen it adds little to the highlighted choices.\n\nBring material limitations together in a readable passage that identifies the affected options.\nPreserve separate-ticket risk, traveler and cabin uncertainty, incomplete or unknown-scope prices,\nand dated availability without repeating the same caveat after every option. Put a limitation\nearlier when it is needed to understand a specific comparison. Never claim current seats,\nprotected connections, complete unreported prices or confirmed booking availability. Distinguish\nunknown price scope from traveler or seat evidence: if the source supports the requested traveler\ncount, do not call that count unconfirmed merely because the party price is unknown. A returned\none-traveler search echo does not establish per-person price scope.\n\nUse numerical facts in prose when they explain a decision, checking dates, airports, time\ndifferences and price scopes against the evidence. Let resolved reference displays carry detailed\nschedules, price breakdowns, cabin and source facts instead of copying whole itineraries into\nprose. Source observations are dated, not real-time. Known original currency and USD conversion\nare factual; Ranking estimated comparison cost, points valuation and estimated taxes are heuristic,\nnever payable cash. Use full local dates for arrival comparisons and do not imply points from\ndifferent programs are directly comparable. Compare points as a cost only within one program;\nreport quotes from different programs separately.\n\nBefore finalizing, audit every selected and discussed reference against its exact member in the\nsupplied journeys or components. Match each narrative mention and friendly label to that same\nmember's route, date, program, cabin, points and price facts. Group facts belong only to that\ngroup's members; an alias for another similar-looking result is not interchangeable. Incomplete\nlead aliases carry their own compact identity next to each ref; use it for the same check even\nwhen a lead has no complete flight schedule.\n\nDeclared claims must copy their literal text into the exact typed reference block and use exact\nscope aliases; full-pool comparison uses P1. A visible claim sentence must sound like ordinary\ntravel language, never a claim-catalog definition, checker explanation or internal field name.\nOmit claims you cannot precisely support. Do not print internal IDs or aliases in traveler prose.\nOutput only the requested structured document.\n\n\nExact-choice reading guide: each journey group's facts give the whole-journey route, full dated departure/arrival, duration, cabin and booking obligation for every member in that group. Each member's choice.award_quote and choice.cash_quote copy only its exact referenced component's reported facts; state=unknown or absent and unknown price_scope remain unknown. Never move a quote, cabin, seat or booking fact between J members. reasons_ref, cost_ref, assessments_ref and positioning_reason_ref are zero-based indexes into the same-named journey_fact_catalog arrays; use each full indexed value as the group fact. same_schedule lists all J members by matching reported route, full timestamps, duration and transfer facts. An unknown schedule is listed alone and proves no timing relationship; matching does not prove the same physical flights, price, cabin, booking or availability. Compare cabins and arrival timing separately across meaningful alternatives, especially an economy option matching a business option's schedule. Do not assume a schedule improvement is purchased by a cabin upgrade when an eligible same-schedule economy choice exists.\nReference contract: journey references are exact J aliases from journey members. Direct cash benchmark references must be aliases listed in benchmarks, never a positioning component; select at most one benchmark and emit only that selected benchmark's reference. Incomplete lead references must be aliases listed in incomplete_leads; another component is not a lead. An eligible unselected J may appear as a supported alternative reference; every selected journey still needs its own labeled reference block. Every lead reference block must match a selected incomplete lead. Narrative blocks must have null reference_kind and reference_id and claims=[]. Empty claims are valid on reference blocks too. If a claim is declared, copy its literal into that reference block's text, use its exact supported scope aliases, and use P1 only for a supported full-pool comparison. Do not add an unsupported claim merely to describe a choice.\n\n\nExact-member check: choice.identity beside each J reference repeats that exact member's complete-journey origin, destination, full dated local departure and arrival, elapsed minutes, reported journey cabin and booking obligation. Before writing an introduction, comparison, supporting card or reference, check that every mentioned date, time, cabin and route belongs to the same exact J member. Nearby aliases are distinct even when their schedules look similar. Do not print J/A/C aliases or internal IDs in traveler prose. choice.award_quote.program is the points program; its raw carriers field is the award component's reported carrier list and its cabin field is the award component's reported cabin. A program is not a flight carrier; do not infer any carrier or leg cabin from a connection airport or program name. choice.traveler_seat_assessment copies the exact journey's reason code, state and detail for traveler and minimum award-seat evidence. Interpret this independently of award/cash price_scope: unknown price scope alone does not make supported traveler evidence unknown. Unknown traveler or seat evidence remains unknown; do not claim bookable seats from a dated observation.\nBefore saying an earlier arrival requires an earlier start, inspect eligible options with that same destination and full arrival timestamp for a later departure, elapsed time, quoted price scope and connection buffer. Explain a longer buffer if it is the actual reason to favor an earlier departure; separate-ticket protection remains unresolved. Do not presume a schedule variant dominates another merely from matching arrival.\nReport points quotes from different programs separately. Do not rank one program's mileage as lower, lowest or cheaper than another program's mileage, even if a later sentence says the currencies are incomparable. Compare points as a cost only within the same program.\nWhen there is no complete eligible journey, use incomplete_leads identities and the requested endpoint/date window to discuss the most relevant observed leads when useful. A different-origin or out-of-window component remains an incomplete observation; never present a known out-of-window positioning connection as a workable itinerary. Keep one connected natural answer with exact embedded references and no internal aliases in visible prose.\n",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_04850b38050e3e43016adf8a2dc3c887d1a07c7088b68ed2e2",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq34o4bIyv-fFkWqbCLnGTpqLsBvabfscsLHslPO6S5kTV-Fo62b7L45MO3vm5ivHs2WSZlGLtOoYtOsU56CIK40UgZBRTG5t4KKL3yHlXgsjd5mm0iHBoD-IcsYL1J5w4R7qF9X-uR_hnlYM6TKMHEaCErOMw1BHoVY4WMcQ_CaXUTPYppFI8U_Gti5J5umuIuA7Mt17iQM5KW19vQ9vtQ61DTHnx_EMWJXemiF70DA2_rTPy2e-YrPFi0R3Hh-Z03gUH9fXx8Ddf_tRFSmm35TZaTE3NozDKstXhZ7rSz2sXY8SQAHdg9_qEnaaLTLry4X5L4wtKPKsavcmuoSCBKWC-GbL_YmDgthNzbZ8KKAg25uJDR4yj8aVNmEwrClRZ-Dqvv15V6Lhzoma778YBlBuWT5a4RFIqUreBgzf88dKJjyaBQVFNPQ6uWJHiCZNEVjztDkh32GQa3tHpzWA-ggzaypndZNeF5GM4fj_lnRLrEYlBU6I3TxWAniHM2gH9UNhYhrCvB5bjwJmk-x-1tBB6LBkGPF84gY-RVGUjWkPGJzgU8T8L-Dp7doDIQsh--9Hy2bJBmd6IpSuZDXJ-vxXFOw36iR1cTO99H7aq69tWHN8MpC0UHjlJls2SCoRqZPSfRcOST0894E53CBPdgt1bLOUlHURDTtXCfNkP2cJyVVP04sMYndt0iVdysC-x0HcEV22hABPMuzs87bruHYF6UU_FRJoDE5nvOLIfKP_53swkBoXEKBOyOut3uiIW1zQ8opDD4DcCfEtTxZEsHhYg8cxu_4q29maSj_UOzTLTkQupwNxISCijkkj8xHzjVJsBj7mVUXKzTx5BYHiJihwurQujG6DxRgw9EIm0Dk_xkTvNjWxqKCmnfAZlJnMZCd9Nf5AegLK-rY45yk4vwaJ_P5nc8QS89-Inp6fycjv-ETZ6Si2T_UGL4JTxFoIamI6cYzm-8kXGGNGrKC8ScZYRs4menZ_wQMPeE6tma9tJDki_JZK9gaWGnMzVGkI7P4OG3Q2Iw2NxLLn32xz9GTX6l2JYc9nqrL1LKnXjqk6j9b_0bZ65crnL0S6i8QeAKdOmmTFREE9IT1HRmo_OdvaDYwTn9vt9x3BtotioeIPMOIRKp7Hfi8AmDDsHTWoRSSHt-tmcdTAoYJ9CX9OyLun7N-8XxAyw8CKDL6KEm0wqqQWUXM2PUbK6mFAn70dawet98zfieiNpH63QsKEWsqBgFtfgUarOe68VXWf_vMKng4T-dgxIvx2SiqXGOUOyTyszl4I1IzdGXOu2Oy7M7WXQYCnqdh70w-KLmpSQGVsJXdKgQCCbE79mQIDzag9omHVEZhLKMaj9kQO5eqQ-aoxxdDIQCQFScqbLV5OZKnEpNuAE2DmmTJ5n2vtU592Tl2m4WuZ3_vvGJPZLSABt3XYHyQRNrBDwxzHsQUdPzeamyaI2NYlg6V9wrTn9BcQbWYTgAElU6e6Zzkh-j3Z8XOdo-YxyFSmnyWmrSJ9yqp_-Ph6c5jSvc-fspUxW3BmGt2W0RepSNNyFxmyGmayyChCkoSK1xj2_4u-yKP_NvyjIqF2GrF32mxc8B3x-IrNKpujxQdQGkmahVrQ2OI1oQStpPFIAVqZ9zJG9j-IvXogQCMkuC8dIF9jruylhl_nUwWURcSlJHBSzkkRA-OFWqu5cBCB86jZMY0v9vwzKG-0pmbJkyN1aXCAsasE9pF45B5kptF_Ijwbr0Y7PWGmedHzrA4_gC73HvLiyFh1FR2B32Qj77g93RBVClwtONPmD8kaxtOvJr3pc1Eu3-qhLSb7Iza1rsa3ByvGMzuJOznztSp7dTF6Gf6C5P0h_VCqU-oRGP190ZvfzFcPckwEbjfaIPQfp_6jOLmZHuqR6jeHS9Dk5VHVAhDFM0igpuz60YJf8KlwzvIIAaXmGLrDpgP5uZejWXNQ2KsyOF1tIz7OE3kQ_Hg1MLUaShdM_dUHNvZk0pxSQBswxZJ1y65RLuY2GiDDz5KwZEgUL7OP6pAi1XYJYB0Yia5cKgpklzvbzScd1GH8VtcF3EDLotFbbCzCvtA5Ub5TzClQ6MCXula00bVu28w-h4myiLl7ZcNFSyx8AznbW5OzsgfMl-y3h9ofCq1ZOO6VxvCBhPIWYb83yZVMHxDDNJGVL9toPdJ2g69GRmlSxbClzFkCuKg4gWYoA3e7ohjtoq-hgMLPrZtYW9i5HzieYqrAooI1nYLxekE2ILihstfm1fguNrHs1incLiHejxuJwDNczoq6zDXiaTMFs7y4J6mMA0Sm2j8hg_0uhKqDPVsMP2i8fd76xjJX6tMqONM7g0e6FFTHIcuqvhkCwtEtuIXFyFxwZk3xzJ4fA42IA4pttIl81gJE8YEaUQzAMrubSaFiBE2oRvdGvGw0EXrMDbNBoLbyv4MQOjt0WvlZUoDtqcj7FtKtuRg6uYxZZO0dkDTqF6W98_bDCLLOKhJcGirJeFvFad8BXis1gHAf-FV8cyGGNvok9tqSk4clXw-G4oZZg-GwZSo5UHyamkD5goZPz0TsgvtswgDjY5tzMjLxzLaWrmhhd7ePjy7eF7zy0MNOa07C7OaHFOCM3oFURAfsn3pWUjqEV1sbHFZD2OfXJwSPTT_JM39BatRu-nAWHqc1pkYagnMFti9hxw6FBmu5eIBMMyrDYJ_xs0A6auSpypwhTYLVq5knZv9lBeGfsLYkDx9DCrvw_gn1dA9JYyTzdJabJLTl11E6DLezwN28kh57LtxYnT-K_pQr_bzG6QKWTXWBwPiSd6o7dJOCibuDPdRz7-RbfD0hayncbaeKqmclH5tY5vNPT9Zaoog__jxxecR3mwEKvpGZy4FF4wUPQkis2JvGVRHJ5I_87FliKQYiq3YAsS5Z-Iz2vMwuedJlHE5D0nAtDjcZoRfzFvwYHUJtMkBudEokkfitQ7FnFM3vQULCSK3nFEWMPchFbrZRCBiej8dwGibwWhFEAaZDW3U50NpP4tPgDPJmd-qmtFJWQTKreUgkgbj4RDKEEhItgzfT2zq_UFRHYYLXgOtzgaW7aBcuGeR-9wNkdCLyzT6sB4SwGbEjDETydBKfXpOLaqdy0k1TimdxmFp3qf_1lRs_Wq_F7nqFzEwXE_pkjcrXuF9UbpeYuPayhVZt3nMwib1EZXHeg58SGdL1VA_an6682Dmw-JDq2R6nEf62wGroR7qbSKYMqbyxo1zk7sTZfBTL4X7p7xaqdmYd7MR3hkLlFomqw4MyzOSFPc5eKmqoOCM-JkZa6fqkH4TOU2uulQoG0onO-kTnamQ4BlKKrA_fHND_t-M2RD9BvWuWwBKLr8yPfI_uYPuLcFXNfPyiZC9td4aCIUkIJIFY6Jh4JcbLn3ayigFwULjNFpEQPRzOx7HB-CXNmlsWH46--oCQBcQPlL6gy7bhA6CKE_U_sVO7QxAquikbG0jKOxSyBeUHK-76vKrDeF4yH96KdLbcO9-dLeYeyJL9WK1QN8ZH--K9X9snkk0jeQ6k8p-kkQ9PqFpNhkYRLmelXslz3ahziF32zf39zeiUp8XaDzMT5A35uQ64oNIzu8Sfs-u8XEDKYThEWdUqwBcNsmbaeR1mkzwwBzYCwAMelTkW-UYzMsKGj4WDaod4qQKWn0_GEYRFsyY4kfeCX-CQWvnh7IMdDwKfYeW1mvS9dfNdhkmgnbwMTZZNBaDZPD8NQ1mVVFwlc_jVm5ay8zXxtRZ8N1PySd_-lPVW_fgT9WRSvsmEIT2CXN88tB9fjUxkN4-KY93oHKV_XRcK1IHdfaZxNbmBvof2h0N6R2DKPO3_6vu-aAO3ntzeyIdWmSt_qmSeJQnhJfjm2RhJm2cAkwVD498POjvy173CsQjL139jI3NYRY-sP35NLJjpSGgJXngGx3g0kZ7hjgMTLMYRPgzkzJGWA9Boz6ISTBb_5-B2b_QYkPZzRBcV8VVOIZBKZEi5KEFyOqvdISA-zi0JhI4b8fZjJBr8NLWXeuEtixUT25Fv5dr59yz0zkdlFfdWe5xRyXEknowhIvZw-b18NMubm5MwX25-O6pea9m2KZHa_XO-Sl9seBGfCIB0V5HD5z06gl349p4MlkrL1QY2fimXYPXQNlVKYxiLCcJsYFsN6_Dt8UNC3Ppz_Fv5vNHuijXgNpjfqIoNjrgUfyfDpvuLuEjLhGhwuXnq8DniRIiZmgJb2Ifa4oOT3632-r9jQ7qOp5MqR7iLg_YVRw9KWgivss_zyV5mnXEPq1-bcPi-c4SuIlV8vWuQQguLb",
+      "status": null
+    },
+    {
+      "id": "msg_04850b38050e3e43016adf8a311fb087d194110609f1863ee1",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"contract_version\":\"results-document-v2\",\"selection\":{\"journey_ids\":[],\"benchmark_observation_id\":\"C1\",\"incomplete_observation_ids\":[\"A1\",\"A3\",\"A108\",\"A109\",\"A110\"]},\"blocks\":[{\"kind\":\"narrative\",\"text\":\"There are no complete eligible award journeys in the supplied results for San Francisco–Bangkok in January 2027, so I can’t recommend an award itinerary. The SFO–BKK award results are partial search leads: they lack flight times, elapsed journey duration, and connection details. A separate cash search did return a fare for the requested endpoint pair; it is a baseline for comparison, not an award option.\",\"reference_kind\":null,\"reference_id\":null,\"label\":null,\"claims\":[]},{\"kind\":\"reference\",\"text\":\"A $640 cash-search observation for the requested SFO–BKK route on January 1; the reported itinerary takes 44 hours 40 minutes. Its price scope is unspecified.\",\"reference_kind\":\"benchmark\",\"reference_id\":\"C1\",\"label\":\"SFO–Bangkok cash-search baseline\",\"claims\":[]},{\"kind\":\"narrative\",\"text\":\"Among the incomplete SFO–BKK award leads, the Alaska result has the smallest quoted points figure among the three January 1 leads shown here. It may be worth investigating, but it cannot establish a usable itinerary or a confirmed price for your trip.\",\"reference_kind\":null,\"reference_id\":null,\"label\":null,\"claims\":[]},{\"kind\":\"reference\",\"text\":\"An Alaska economy award-search lead for SFO–BKK dated January 1, quoted at 42,500 miles; no complete flight schedule is reported.\",\"reference_kind\":\"lead\",\"reference_id\":\"A3\",\"label\":\"Alaska SFO–Bangkok lead\",\"claims\":[]},{\"kind\":\"reference\",\"text\":\"An Aeroplan economy award-search lead for the requested route and date. Its points quote is from a different program and should not be compared directly with Alaska’s.\",\"reference_kind\":\"lead\",\"reference_id\":\"A1\",\"label\":\"Aeroplan SFO–Bangkok lead\",\"claims\":[]},{\"kind\":\"narrative\",\"text\":\"The Taipei–Bangkok leads add a possible cabin choice, but they do not cover the requested trip from San Francisco. You would need a separate SFO–Taipei journey, and the evidence does not establish that the flights can be connected or protected as one trip. The business-cabin lead is therefore only a potential lead—not a complete business-class recommendation. These award observations were dated October 9, 2026, and do not confirm current availability or bookable seats; the direct-route award leads also have unknown price scope.\",\"reference_kind\":null,\"reference_id\":null,\"label\":null,\"claims\":[]},{\"kind\":\"reference\",\"text\":\"A Taipei–Bangkok business award lead dated December 31; the San Francisco–Taipei segment is missing.\",\"reference_kind\":\"lead\",\"reference_id\":\"A108\",\"label\":\"Taipei–Bangkok business lead\",\"claims\":[]},{\"kind\":\"reference\",\"text\":\"A Taipei–Bangkok economy award lead on the same date, also missing the San Francisco positioning segment.\",\"reference_kind\":\"lead\",\"reference_id\":\"A109\",\"label\":\"Taipei–Bangkok economy lead\",\"claims\":[]},{\"kind\":\"reference\",\"text\":\"\",\"reference_kind\":\"lead\",\"reference_id\":\"A110\",\"label\":\"Aeroplan Taipei–Bangkok business lead\",\"claims\":[]}]}",
+          "type": "output_text",
+          "logprobs": []
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 32768,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "StructuredResultsDocument",
+      "schema_": {
+        "$defs": {
+          "DeclaredClaim": {
+            "additionalProperties": false,
+            "properties": {
+              "claim_id": {
+                "minLength": 1,
+                "title": "Claim Id",
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "cabin",
+                  "connection_protection",
+                  "price_scope",
+                  "comparison",
+                  "eligibility",
+                  "other"
+                ],
+                "title": "Kind",
+                "type": "string"
+              },
+              "proposition": {
+                "minLength": 1,
+                "title": "Proposition",
+                "type": "string"
+              },
+              "scope_ids": {
+                "default": [],
+                "items": {
+                  "type": "string"
+                },
+                "title": "Scope Ids",
+                "type": "array"
+              },
+              "text": {
+                "minLength": 1,
+                "title": "Text",
+                "type": "string"
+              }
+            },
+            "required": [
+              "claim_id",
+              "kind",
+              "proposition",
+              "scope_ids",
+              "text"
+            ],
+            "title": "DeclaredClaim",
+            "type": "object"
+          },
+          "StructuredBlock": {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "narrative",
+                  "reference"
+                ],
+                "title": "Kind",
+                "type": "string"
+              },
+              "text": {
+                "title": "Text",
+                "type": "string"
+              },
+              "reference_kind": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "journey",
+                      "benchmark",
+                      "lead"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Reference Kind"
+              },
+              "reference_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Reference Id"
+              },
+              "label": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Label"
+              },
+              "claims": {
+                "default": [],
+                "items": {
+                  "$ref": "#/$defs/DeclaredClaim"
+                },
+                "title": "Claims",
+                "type": "array"
+              }
+            },
+            "required": [
+              "kind",
+              "text",
+              "reference_kind",
+              "reference_id",
+              "label",
+              "claims"
+            ],
+            "title": "StructuredBlock",
+            "type": "object"
+          },
+          "StructuredSelection": {
+            "additionalProperties": false,
+            "properties": {
+              "journey_ids": {
+                "default": [],
+                "items": {
+                  "type": "string"
+                },
+                "title": "Journey Ids",
+                "type": "array"
+              },
+              "benchmark_observation_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Benchmark Observation Id"
+              },
+              "incomplete_observation_ids": {
+                "default": [],
+                "items": {
+                  "type": "string"
+                },
+                "title": "Incomplete Observation Ids",
+                "type": "array"
+              }
+            },
+            "title": "StructuredSelection",
+            "type": "object",
+            "required": [
+              "journey_ids",
+              "benchmark_observation_id",
+              "incomplete_observation_ids"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "results-document-v2",
+            "default": "results-document-v2",
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "selection": {
+            "$ref": "#/$defs/StructuredSelection"
+          },
+          "blocks": {
+            "items": {
+              "$ref": "#/$defs/StructuredBlock"
+            },
+            "minItems": 1,
+            "title": "Blocks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "contract_version",
+          "selection",
+          "blocks"
+        ],
+        "title": "StructuredDocument",
+        "type": "object"
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 172692,
+    "input_tokens_details": {
+      "cached_tokens": 2239,
+      "cache_write_tokens": 170450
+    },
+    "output_tokens": 949,
+    "output_tokens_details": {
+      "reasoning_tokens": 242
+    },
+    "total_tokens": 173641
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793034808,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

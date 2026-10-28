@@ -6,6 +6,7 @@ import argparse
 import json
 from collections.abc import Callable, Sequence
 from pathlib import Path
+from typing import Literal
 
 from award_agent.cli._atomic_output import write_new_atomic
 from award_agent.ranking.projection_contracts import SolutionProjection
@@ -95,6 +96,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         command.add_argument("--output", type=Path, required=True)
         command.add_argument("--structured", action="store_true",
                              help="Use the versioned structured Results channel.")
+        command.add_argument("--interactive", action="store_true",
+                             help="Use the explicit interactive Results channel.")
+        command.add_argument("--reasoning-effort", choices=("none", "low", "medium"))
+        command.add_argument("--service-tier", choices=("standard", "fast"))
+        command.add_argument("--packet-profile", choices=("indexed-v1", "joined-v2", "joined-v3",
+                                                        "joined-v4", "focused-v1", "focused-v2",
+                                                        "focused-v3"))
         if name == "author":
             mode = command.add_mutually_exclusive_group(required=True)
             mode.add_argument("--draft", type=Path, help="Offline frozen initial ResultsDocument.")
@@ -105,6 +113,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     replay.add_argument("--artifact", type=Path, required=True)
     replay.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
+    if args.command != "replay" and not args.interactive and (
+            args.reasoning_effort is not None or args.service_tier is not None or
+            args.packet_profile is not None):
+        parser.error("interactive settings require --interactive")
     if args.output.exists() or args.output.is_symlink():
         parser.error("output path must be new; existing evidence is immutable")
 
@@ -115,22 +127,76 @@ def main(argv: Sequence[str] | None = None) -> int:
         inputs[path] = content
         return content
 
+    summary: dict[str, object]
     if args.command == "replay":
         raw = read(args.artifact)
-        if json.loads(raw).get("contract_version") == "results-artifact-v6":
+        if json.loads(raw).get("contract_version") == "results-artifact-v8":
+            from award_agent.results.focused import replay_focused_results
+            from award_agent.results.focused_contracts import FocusedResultsArtifact
+
+            focused_artifact = FocusedResultsArtifact.model_validate_json(raw)
+            answer = replay_focused_results(focused_artifact)
+            rendered = "null" if answer is None else answer.model_dump_json(indent=2)
+            summary = {"delivery_outcome": focused_artifact.delivery_outcome,
+                       "resolved_digest": focused_artifact.resolved_digest}
+        elif json.loads(raw).get("contract_version") == "results-artifact-v7":
+            from award_agent.results.interactive import replay_interactive_results
+            from award_agent.results.interactive_contracts import InteractiveResultsArtifact
+
+            interactive_artifact = InteractiveResultsArtifact.model_validate_json(raw)
+            answer = replay_interactive_results(interactive_artifact)
+            rendered = "null" if answer is None else answer.model_dump_json(indent=2)
+            summary = {"delivery_outcome": interactive_artifact.delivery_outcome,
+                       "resolved_digest": interactive_artifact.resolved_digest}
+        elif json.loads(raw).get("contract_version") == "results-artifact-v6":
             from award_agent.results.structured import replay_structured_results
             from award_agent.results.structured_contracts import StructuredResultsArtifact
 
             structured_artifact = StructuredResultsArtifact.model_validate_json(raw)
             answer = replay_structured_results(structured_artifact)
             rendered = "null" if answer is None else answer.model_dump_json(indent=2)
-            summary: dict[str, object] = {"delivery_outcome": structured_artifact.delivery_outcome,
+            summary = {"delivery_outcome": structured_artifact.delivery_outcome,
                                           "resolved_digest": structured_artifact.resolved_digest}
         else:
             artifact = ResultsArtifact.model_validate_json(raw)
             rendered = replay_results(artifact)
             summary = {"delivery_outcome": artifact.delivery_outcome,
                        "rendered_digest": artifact.rendered_digest}
+    elif args.interactive:
+        if args.packet_profile in {"focused-v1", "focused-v2", "focused-v3"}:
+            from award_agent.results.focused import prepare_focused_selector, run_focused_results
+            from award_agent.results.interactive_adapter import OpenAIInteractiveResultsWriter
+
+            if args.structured or args.reasoning_effort is not None or args.service_tier is not None:
+                parser.error("focused Results owns reasoning and service tier; use --interactive only")
+            selection_format: Literal["roles-v1", "roles-v2"] = (
+                "roles-v2" if args.packet_profile in {"focused-v2", "focused-v3"} else "roles-v1")
+            projection = SolutionProjection.model_validate_json(read(args.projection))
+            config = ResultsConfig.model_validate_json(read(args.config))
+            if args.command == "measure":
+                focused_prepared = prepare_focused_selector(projection, config,
+                    selection_format=selection_format)
+                summary = {"prepared_version": focused_prepared.contract_version,
+                           "source_digest": focused_prepared.source_digest,
+                           "packet_digest": focused_prepared.packet_digest,
+                           "qualification": "Selector preparation only; no model context-fit qualification."}
+                rendered = json.dumps(summary, indent=2)
+            else:
+                if not args.live or args.correction:
+                    parser.error("focused author requires --live and no --correction")
+                focused_run = run_focused_results(projection, config,
+                    OpenAIInteractiveResultsWriter(), input_measurer=OpenAIResultsInputMeasurer(),
+                    selection_format=selection_format,
+                    composition_format="comparisons-v1" if args.packet_profile == "focused-v3"
+                    else "source-v1")
+                rendered = focused_run.model_dump_json(indent=2)
+                summary = {"generation_outcome": focused_run.generation_outcome,
+                           "validation_outcome": focused_run.validation_outcome,
+                           "delivery_outcome": focused_run.delivery_outcome,
+                           "passes": len(focused_run.passes),
+                           "runtime_seconds": focused_run.runtime_seconds}
+        else:
+            rendered, summary = _interactive_output(args, read, parser)
     elif args.structured:
         rendered, summary = _structured_output(args, read)
     else:
@@ -177,6 +243,47 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "author" and summary["delivery_outcome"] != "delivered":
         return 1
     return 0
+
+
+def _interactive_output(args: argparse.Namespace, read: Callable[[Path], bytes],
+                        parser: argparse.ArgumentParser) -> tuple[str, dict[str, object]]:
+    """Existing v7 route kept separate from the additive focused-v1 dispatch."""
+    from award_agent.results.interactive import (
+        prepare_interactive_results,
+        run_interactive_results,
+    )
+    from award_agent.results.interactive_adapter import OpenAIInteractiveResultsWriter
+    from award_agent.results.interactive_contracts import InteractiveSettings
+
+    if args.structured:
+        parser.error("--interactive and --structured are mutually exclusive")
+    if args.reasoning_effort is None:
+        parser.error("--interactive requires --reasoning-effort")
+    projection = SolutionProjection.model_validate_json(read(args.projection))
+    config = ResultsConfig.model_validate_json(read(args.config))
+    settings = InteractiveSettings(reasoning_effort=args.reasoning_effort,
+                                   service_tier=args.service_tier or "standard")
+    if args.command == "measure":
+        interactive_prepared = prepare_interactive_results(projection, config,
+            packet_profile=args.packet_profile or "indexed-v1")
+        summary: dict[str, object] = {"prepared_version": interactive_prepared.contract_version,
+                   "source_digest": interactive_prepared.source_digest,
+                   "packet_digest": interactive_prepared.packet_digest,
+                   "qualification": "Preparation only; no model context-fit qualification."}
+        rendered = json.dumps(summary, indent=2)
+    else:
+        if not args.live or args.correction:
+            parser.error("interactive author requires --live and no --correction")
+        interactive_run = run_interactive_results(projection, config, settings,
+            OpenAIInteractiveResultsWriter(), input_measurer=OpenAIResultsInputMeasurer(),
+            packet_profile=args.packet_profile or "indexed-v1")
+        rendered = interactive_run.model_dump_json(indent=2)
+        summary = {"generation_outcome": interactive_run.generation_outcome,
+                   "validation_outcome": interactive_run.validation_outcome,
+                   "delivery_outcome": interactive_run.delivery_outcome,
+                   "attempts": len(interactive_run.attempts),
+                   "runtime_seconds": interactive_run.runtime_seconds}
+    return rendered, summary
 
 
 if __name__ == "__main__":

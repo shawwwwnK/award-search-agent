@@ -1,0 +1,19 @@
+For January 8, these selected Turkish Airlines business-award options share a connection at Istanbul. The reported cabin is business, but cabin details for individual legs are absent.
+
+A reasonable pick if arriving earlier matters: it reaches Bangkok at the same time as J63, while the source comparison shows it has a 4-minute shorter elapsed journey. The tradeoff is that the award starts from LAX, so this choice also requires a separate $59 SFO–LAX ticket; the separate tickets are unverified, and the full price is incomplete.
+
+[Display: Earlier arrival; journey; 05047f23f37c857b4b9346e023632d880f246a6cbded49a29742793322df1945]
+
+Same award itinerary and Bangkok arrival as J75, but its listed journey is 4 minutes longer. Its separate SFO–LAX ticket is also $59; separate-ticket connection and booking details remain unverified.
+
+[Display: Same arrival; journey; 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]
+
+Another option with the same Turkish award and positioning ticket, but it arrives 4 hours 35 minutes after J75. Consider it only if that later arrival suits you.
+
+[Display: Later arrival; journey; 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]
+
+The selected SFO–BKK cash benchmark is $452 USD for one traveler, with two stops via SEA and ICN. Its price scope is unknown, so it is context—not a confirmed all-in comparison with the awards.
+
+[Display: Cash context; benchmark; f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2]
+
+All three awards require 275,000 Turkish-program points; points in different programs should not be compared as equivalent costs. Award taxes and fees, traveler support, seat availability and full price are unknown. The cash positioning fare is not the complete cost, and the separate tickets may leave connection responsibility unresolved. Results may not be real-time; confirm current availability and prices before booking. The source bundle is partial, so these are not a complete view of available options.

@@ -1,0 +1,36 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "decision-rich",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "no timed itinerary, confirmed routing, or reliable seat count",
+      "source_id": "bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594",
+      "expected_fact": "United summary reports seats state=value, value=9 from YRemainingSeats, with no provider unreliability finding. It lacks the timed itinerary and live/specific-flight confirmation.",
+      "impact": "The conservative caveat overstates the absence of seat evidence: say nine reported summary seats, unconfirmed against a complete/current itinerary. It does not fabricate available seats or promote the lead into a bookable result and does not invalidate the recommendation core."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "Faster, pricier positioning",
+      "source_id": "4a2ad78e800f373f698a2f8b5f012a4b90571e1cf1bb0baec59e42040c4c6f01",
+      "expected_fact": "Alternative positioning is observed USD139 versus primary USD59. All price scopes remain unknown; the full party total is not established.",
+      "impact": "The comparison of listed positioning amounts is supported. Stating the primary USD59 in prose and extending the explicit benchmark price-scope warning to positioning/award amounts would make the explanation easier to use."
+    }
+  ],
+  "notes": {
+    "scope": "Only b007 answer/document/evidence/references read; no forbidden runtime/model/campaign/metrics or prior reviews.",
+    "H_basis": "Exact primary is United SFO13:50–LAX15:24, Turkish award LAX18:30 via IST to BKK January 10 08:50,110,000 miles,1680 minutes,186-minute LAX wait. Alternative has the identical award observation and American14:05–15:46 positioning,1665 minutes,164-minute wait,USD139. Thus fifteen minutes faster,22 minutes less buffer and higher listed positioning fare are supported. Cash benchmark USD452,SEA/ICN,06:05 January 8 to00:20 January 10,1635 minutes matches. United lead is correctly dated/routed and priced at 55,000 miles+USD21.80, without a timed itinerary. No cross-program value ranking or promised bookability.",
+    "U_basis": "Exact primary with a specific buffer reason, explicit separate-ticket downside, quantified faster/more-expensive comparison, cash context with unknown-scope warning and a distinct incomplete lead. Turkish traveler-count/tax/positioning uncertainty is disclosed. Useful core passes.",
+    "C_basis": "Decision-rich: interprets the actual speed-versus-buffer/positioning-price tradeoff, distinguishes cash benchmark and research lead, and explains verification limits. More cabins or an optimal frontier are not required. Conservative United seat-count wording remains a recorded quality error.",
+    "protocol": "Selected primary, benchmark and incomplete lead resolve to corresponding roles; secondary journey shares the verified award observation. Canonical roles/selections clean.",
+    "verification": "Matched all 232 eligible IDs to source pool and recomputed every elapsed time; inspected selected source components/carriers and all reference identities; checked relevant same-award landscape for contradictory practical/buffer claims; recomputed186/164-minute waits and15-minute duration difference; verified USD minor units and the positive United summary seat field. Files written/reloaded.",
+    "uncertainty": "Most practical is subjective but is backed by the stated buffer tradeoff. No claim of uniquely optimal choice. Summary seat count versus confirmed availability should be worded more precisely. Live availability/complete price scope remain unverified.",
+    "escalation": "No escalation recommended."
+  }
+}

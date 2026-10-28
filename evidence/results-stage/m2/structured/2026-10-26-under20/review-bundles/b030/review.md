@@ -1,0 +1,443 @@
+# Blinded quality review: b030
+
+H: **pass** · U: **pass** · C: **basic** · Protocol: **clean**
+
+Truthful no-complete-award outcome with three relevant date-only leads and cash/coverage context. Exact programs, point amounts, dates, carrier lists, units and scope caveats match the source. Composition is basic; the same-program date tradeoff is left mostly implicit.
+
+No definite hard failures found.
+
+> It is another date-only lead, not a timed or complete itinerary; its listed fee scope is unknown.
+
+The Jan 2 United lead quotes 5500 fewer United points and USD24.50 observed fees versus USD28.20 on Jan 1. With the same reported nine seats, this is an available same-program date tradeoff worth explaining, while preserving unknown price scope. Merely repeating the date-only caveat leaves that decision value implicit.
+
+Interpretation and evidence notes:
+
+- All three displayed award fee observations are indeed USD minor units: Jan 1 United 2820, Alaska 5090, Jan 2 United 2450. No CAD lead is among these references.
+- Jan 1 United has 60500 points and CA/UA/ZH; Alaska has 42500 and AS/JX; Jan 2 United has 55000 and BR/ET/SQ/UA/ZH. All dates fall inside the requested January window.
+- Seat counts are United Jan 1=9, Alaska=8, United Jan 2=9. The United leads tie, but the answer makes no contrary seat ranking. All award returned_travelers are absent.
+- The Alaska comparison explicitly limits itself to a lower numeric figure and disclaims inter-program equivalence.
+- Cash USD686 is EVA Air, SFO–TPE–BKK, one stop, returned_travelers=1, unknown price_scope. The amount is not asserted as a confirmed all-in total. Cash_fare uses major units; tax fee unit is unknown.
+- Cash timeline is Jan 1 12:00 -08:00 to Jan 3 11:10 +07:00, 1930 min, +2 local days. The answer makes no unsupported same-day comparison.
+- No journey exists in the packet; missing detail queries and pagination limits support the stated coverage boundary.
+
+Verification:
+
+```json
+{
+  "request": {
+    "travelers": 1,
+    "departure_window": {
+      "start": "2027-01-01",
+      "end": "2027-01-31",
+      "precision": "window",
+      "raw_text": "January 2027"
+    }
+  },
+  "complete_journey_count": 0,
+  "referenced_components": [
+    {
+      "observation_id": "cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "kind": "award_summary",
+      "origin": "SFO",
+      "destination": "BKK",
+      "departure_date": "2027-01-01",
+      "departure": {
+        "instant": null,
+        "local_iso": null,
+        "timezone": "America/Los_Angeles"
+      },
+      "arrival": {
+        "instant": null,
+        "local_iso": null,
+        "timezone": "Asia/Bangkok"
+      },
+      "airport_sequence": [
+        "SFO",
+        "BKK"
+      ],
+      "program": {
+        "state": "value",
+        "value": "united",
+        "source_field": "Source"
+      },
+      "cabin": {
+        "state": "value",
+        "value": "economy",
+        "source_field": "YAvailable"
+      },
+      "points": {
+        "state": "value",
+        "value": 60500,
+        "source_field": "YMileageCost"
+      },
+      "taxes_fees": {
+        "state": "value",
+        "value": 2820,
+        "source_field": "YTotalTaxes"
+      },
+      "taxes_fees_unit": "minor",
+      "tax_currency": {
+        "state": "value",
+        "value": "USD",
+        "source_field": "TaxesCurrency"
+      },
+      "cash_amount": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "cash_currency": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "price_scope": "unknown",
+      "seats": {
+        "state": "value",
+        "value": 9,
+        "source_field": "YRemainingSeats"
+      },
+      "returned_travelers": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "duration_minutes": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "stops": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "carriers": [
+        "CA",
+        "UA",
+        "ZH"
+      ]
+    },
+    {
+      "observation_id": "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "kind": "award_summary",
+      "origin": "SFO",
+      "destination": "BKK",
+      "departure_date": "2027-01-01",
+      "departure": {
+        "instant": null,
+        "local_iso": null,
+        "timezone": "America/Los_Angeles"
+      },
+      "arrival": {
+        "instant": null,
+        "local_iso": null,
+        "timezone": "Asia/Bangkok"
+      },
+      "airport_sequence": [
+        "SFO",
+        "BKK"
+      ],
+      "program": {
+        "state": "value",
+        "value": "alaska",
+        "source_field": "Source"
+      },
+      "cabin": {
+        "state": "value",
+        "value": "economy",
+        "source_field": "YAvailable"
+      },
+      "points": {
+        "state": "value",
+        "value": 42500,
+        "source_field": "YMileageCost"
+      },
+      "taxes_fees": {
+        "state": "value",
+        "value": 5090,
+        "source_field": "YTotalTaxes"
+      },
+      "taxes_fees_unit": "minor",
+      "tax_currency": {
+        "state": "value",
+        "value": "USD",
+        "source_field": "TaxesCurrency"
+      },
+      "cash_amount": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "cash_currency": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "price_scope": "unknown",
+      "seats": {
+        "state": "value",
+        "value": 8,
+        "source_field": "YRemainingSeats"
+      },
+      "returned_travelers": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "duration_minutes": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "stops": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "carriers": [
+        "AS",
+        "JX"
+      ]
+    },
+    {
+      "observation_id": "f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e",
+      "kind": "award_summary",
+      "origin": "SFO",
+      "destination": "BKK",
+      "departure_date": "2027-01-02",
+      "departure": {
+        "instant": null,
+        "local_iso": null,
+        "timezone": "America/Los_Angeles"
+      },
+      "arrival": {
+        "instant": null,
+        "local_iso": null,
+        "timezone": "Asia/Bangkok"
+      },
+      "airport_sequence": [
+        "SFO",
+        "BKK"
+      ],
+      "program": {
+        "state": "value",
+        "value": "united",
+        "source_field": "Source"
+      },
+      "cabin": {
+        "state": "value",
+        "value": "economy",
+        "source_field": "YAvailable"
+      },
+      "points": {
+        "state": "value",
+        "value": 55000,
+        "source_field": "YMileageCost"
+      },
+      "taxes_fees": {
+        "state": "value",
+        "value": 2450,
+        "source_field": "YTotalTaxes"
+      },
+      "taxes_fees_unit": "minor",
+      "tax_currency": {
+        "state": "value",
+        "value": "USD",
+        "source_field": "TaxesCurrency"
+      },
+      "cash_amount": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "cash_currency": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "price_scope": "unknown",
+      "seats": {
+        "state": "value",
+        "value": 9,
+        "source_field": "YRemainingSeats"
+      },
+      "returned_travelers": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "duration_minutes": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "stops": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "carriers": [
+        "BR",
+        "ET",
+        "SQ",
+        "UA",
+        "ZH"
+      ]
+    },
+    {
+      "observation_id": "29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d",
+      "kind": "cash_itinerary",
+      "origin": "SFO",
+      "destination": "BKK",
+      "departure_date": "2027-01-01",
+      "departure": {
+        "instant": "2027-01-01T20:00:00Z",
+        "local_iso": "2027-01-01T12:00:00-08:00",
+        "timezone": "America/Los_Angeles"
+      },
+      "arrival": {
+        "instant": "2027-01-03T04:10:00Z",
+        "local_iso": "2027-01-03T11:10:00+07:00",
+        "timezone": "Asia/Bangkok"
+      },
+      "airport_sequence": [
+        "SFO",
+        "TPE",
+        "BKK"
+      ],
+      "program": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "cabin": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "points": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "taxes_fees": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "taxes_fees_unit": "unknown",
+      "tax_currency": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "cash_amount": {
+        "state": "value",
+        "value": 686,
+        "source_field": "price"
+      },
+      "cash_currency": {
+        "state": "value",
+        "value": "USD",
+        "source_field": "currency"
+      },
+      "price_scope": "unknown",
+      "seats": {
+        "state": "absent",
+        "value": null,
+        "source_field": null
+      },
+      "returned_travelers": {
+        "state": "value",
+        "value": 1,
+        "source_field": "query.adults"
+      },
+      "duration_minutes": {
+        "state": "value",
+        "value": 1930,
+        "source_field": "durationMinutes"
+      },
+      "stops": {
+        "state": "value",
+        "value": 1,
+        "source_field": "stops"
+      },
+      "carriers": [
+        "EVA Air"
+      ]
+    }
+  ],
+  "journeys": [],
+  "coverage": [
+    {
+      "kind": "cash_query",
+      "status": "completed",
+      "reason": "stream_complete",
+      "routes_and_dates": [
+        "SFO-BKK:2027-01-01..2027-01-01"
+      ]
+    },
+    {
+      "kind": "detail_query",
+      "status": "omitted",
+      "reason": "resource_budget_exhausted",
+      "routes_and_dates": [
+        "SFO-BKK:2027-01-01..2027-01-31"
+      ]
+    },
+    {
+      "kind": "logical_query",
+      "status": "completed",
+      "reason": "stream_complete",
+      "routes_and_dates": [
+        "SFO-BKK:2027-01-01..2027-01-31"
+      ]
+    },
+    {
+      "kind": "logical_query",
+      "status": "partial",
+      "reason": "pagination_budget_exhausted",
+      "routes_and_dates": [
+        "SFO-TPE:2027-01-01..2027-01-31",
+        "TPE-BKK:2026-12-31..2027-02-02"
+      ]
+    },
+    {
+      "kind": "mandatory_use",
+      "status": "completed",
+      "reason": "shared_award_query",
+      "routes_and_dates": [
+        "SFO-BKK:2027-01-01..2027-01-31"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "status": "partial",
+      "reason": "pagination_budget_exhausted",
+      "routes_and_dates": [
+        "SFO-TPE:2027-01-01..2027-01-31",
+        "TPE-BKK:2026-12-31..2027-02-02"
+      ]
+    },
+    {
+      "kind": "strategy_use",
+      "status": "partial",
+      "reason": "pagination_budget_exhausted",
+      "routes_and_dates": [
+        "SFO-TPE:2027-01-01..2027-01-31",
+        "TPE-BKK:2026-12-31..2027-02-02"
+      ]
+    }
+  ],
+  "checks": "Canonical references resolve in references.json and the corresponding journey/lead/benchmark pool. Python compared monetary, program, cabin, carrier, seat and returned-traveler fields between workspace and embedded source components; recomputed all referenced timed component durations; verified UTC/local endpoints and named-zone offsets. For complete journeys, also recomputed elapsed times, each connection wait, and each leg local day offset. All assertions passed. Date-only summaries have absent schedules; no timed itinerary inferred."
+}
+```
+
+Read only the four authorized answer.md/document.json/evidence.json/references.json inputs for this bundle. No settings/timing/profile/index/other runfiles, web, live calls or delegation.
+
+Clean denotes the supplied parseable document and resolvable canonical references; no runtime delivery artifact was inspected.
+
+Uncertainty: No material unresolved issue; no live availability or price confirmation attempted.
+
+Escalation recommended: no.

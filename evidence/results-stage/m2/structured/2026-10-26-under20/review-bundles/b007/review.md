@@ -1,0 +1,9 @@
+H: pass · U: pass · C: decision-rich · Protocol: clean
+
+The selected United-positioning/Turkish economy journey and American-positioning alternative are exact matches. The same award observation is used; their LAX buffers are186 versus 164 minutes, durations28h versus 27h45, and listed positioning amounts USD59 versusUSD139. The fifteen-minute speed gain and smaller separate-ticket buffer are correctly explained. Cash benchmark dates/route/USD452/27h15 and United lead date/route/55,000 miles+USD21.80 match.
+
+U passes: exact choice, supported buffer reason, separate-ticket downside, coherent comparison, cash context and Turkish taxes/seats/positioning limitations. C is decision-rich because it interprets the actual tradeoff and separates complete conditional journey, cash benchmark and date-only lead rather than just listing facts. No cabin/optimal-frontier quota was applied.
+
+Quality correction: the United lead statement “no timed itinerary, confirmed routing, or reliable seat count” overstates missing evidence. Source `bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594` reports nine summary seats (YRemainingSeats), with no unreliability finding. Those are not confirmed seats on a complete/current itinerary. This conservative wording error does not assert false availability or invalidate the core. The primary USD59 and unknown award/positioning price scopes could also be explicit in prose; benchmark scope already is.
+
+Verification used only four permitted b007 files: checked all 232 eligible identities/durations, selected source components/carriers, same-award nearby alternatives, exact buffers/time differences, cash facts, lead minor currency units/positive seat field and canonical roles. Outputs reloaded successfully. No material unresolved uncertainty or escalation recommended.

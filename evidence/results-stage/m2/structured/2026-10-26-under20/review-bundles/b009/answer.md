@@ -1,0 +1,17 @@
+For SFO–BKK in January 2027, these are award-search leads rather than confirmed, complete itineraries:
+
+The Jan 4 Alaska economy lead lists 42,500 miles plus $50.90 USD in fees, with AS and JX listed as carriers. The record is date-only; it doesn’t provide flight times or a complete itinerary.
+
+[Display: Lower-points lead; lead; 298e9fc3fa28627cc1ab28d956ab4682deece903365a89805c922c0c9eb502af]
+
+The Jan 13 United economy lead lists 50,600 miles plus $16.20 USD in fees, with B6, BR, CA, ET, NQ, SQ, UA and ZH listed as carriers. It is also date-only, not a confirmed itinerary.
+
+[Display: Lower-fee United lead; lead; 963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6]
+
+For a cash comparison, the Jan 1 EVA itinerary is $686 USD: one stop via TPE, departing SFO at 12:00 p.m. local and arriving in BKK Jan 3 at 11:10 a.m. local (32 hours 10 minutes).
+
+The award records don’t establish exact schedules, seats, or bookability. Search coverage is partial: detailed SFO–BKK queries were omitted, and connecting-route coverage was also limited. Confirm current availability and prices with the booking provider before making plans.
+
+$686 USD for the Jan 1, one-stop EVA itinerary via TPE; local departure and arrival times are stated above.
+
+[Display: Cash comparison; benchmark; 29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d]

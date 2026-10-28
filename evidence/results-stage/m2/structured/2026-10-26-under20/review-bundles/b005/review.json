@@ -1,0 +1,62 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "H",
+      "severity": "minor_nonblocking",
+      "quote": "connects in LAX for 2 hours 30 minutes",
+      "source_id": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+      "expected_fact": "The positioning component arrives LAX at 10:16 local and the award leaves at 12:45; source transfer and recomputation give 149 minutes (2h29).",
+      "impact": "One-minute overstatement. Record the exact correction, but it does not meet the frozen material-hard-error threshold and changes neither eligibility nor the substantive tradeoff."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "This SFO–LAX–BKK option",
+      "source_id": [
+        "1483429dce80d365a5f11b2cfc80132b8dbf37180a80eea541add5761cab0af2",
+        "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153"
+      ],
+      "expected_fact": "Both exact journeys are SFO–LAX–IST–BKK. J12 has 353 minutes at LAX and 60 at IST, totaling 30h45; J115 has 149 minutes at LAX and 420 at IST, totaling 33h10.",
+      "impact": "The text highlights positioning but omits the onward Istanbul connection and full elapsed-time comparison. The canonical factual references contain the legs, and the wording does not expressly claim nonstop LAX–BKK or only one stop, so this is treated as explanation weakness rather than a hard route assertion."
+    },
+    {
+      "id": "Q3",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "Two conditional award combinations stand out, depending on cabin preference:",
+      "source_id": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+      "counterexample_id": "39842c897dc6d8cdb9ad5672f2039d517c034373af6042a6400f8662c6f8c274",
+      "expected_fact": "Eligible business J130 uses the same 11:05 positioning and later award departure as economy J12, arriving at the same 08:50 January10, with 275,000 Turkish miles and USD59 positioning, in 30h45 rather than J115’s 33h10.",
+      "impact": "The selected business example is not the only business schedule; its early departure/long Istanbul wait is not explained. The answer never says business requires this schedule or that either choice is fastest/best/only, so this omission is not an H failure or a required optimal-frontier test."
+    },
+    {
+      "id": "Q4",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "the SFO–LAX positioning fare shown is $59, not the total trip cost.",
+      "source_id": [
+        "1483429dce80d365a5f11b2cfc80132b8dbf37180a80eea541add5761cab0af2",
+        "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+        "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2"
+      ],
+      "expected_fact": "Observed positioning fare, award points and benchmark price scopes are unknown. Cash positioning cabin is unreported; business cabin evidence attaches to the Turkish award component.",
+      "impact": "The answer correctly separates positioning fare from full cost and warns about unavailable award taxes/seats, but could explicitly state price scopes and that the cash access cabin is unknown. It does not make a per-person/party-total or explicit all-legs-business claim. These are clarity weaknesses, not additional H failures."
+    }
+  ],
+  "notes": {
+    "scope": "Read only b005 answer.md, document.json, evidence.json and references.json. No other bundle, campaign, settings, runtime modes, performance, model-arm, timing or prior-verdict files read. No live calls or delegation.",
+    "H_basis": "Exact selected journey IDs resolve correctly. J12 economy departs January8 11:05 and arrives January10 08:50, with 353-minute LAX wait, 110,000 Turkish miles and observed USD59 positioning. J115 business departs January8 08:40 and arrives January10 08:50, with observed 275,000 Turkish miles and USD59 positioning. The business LAX wait differs only by one minute from the prose (see Q1). Cash benchmark is USD452, Delta/Korean Air via SEA/ICN, two stops, 1,635 minutes and January10 00:20 arrival. Separate-ticket/positioning permission, one-traveler support and unknown taxes/seat-count caveats match the source. No cross-program value ranking, protected-connection claim, verified booking assertion or complete party total is made.",
+    "U_basis": "Pass: exact economy/business award choices offer a supported cabin distinction and mile amounts; the principal downside is clearly stated as separate positioning with unresolved permission, unsupported award traveler count and missing taxes, plus a full-price/availability verification request. Cash benchmark is explicitly separate from the award combinations and their partial positioning fares. With factual reference/card details available this is a coherent basic useful core. It would benefit from Istanbul/full-duration explanation and explicit price-scope/cash-cabin caveats.",
+    "C_basis": "Basic. Concrete alternatives, cash context and substantive conditional limitations are present, but the narrative does not explain total journey time, the business seven-hour Istanbul connection or why these particular schedule variants were selected. No cabin quota or optimality frontier is required.",
+    "protocol": "Both selected journey IDs appear in corresponding journey reference blocks; the selected benchmark is a direct cash benchmark and appears in that role. Mappings resolve to J12, J115 and the displayed benchmark. No unresolved or unrecoverable structure. Clean is structural inspection, not unseen runtime-checker output.",
+    "verification": "Verified exact ID-set equality for all 232 workspace journeys and source eligible pool, all conditional (116 economy,116 business); recomputed all 232 elapsed durations. Inspected selected raw source components, unknown-seat/tax findings and monetary associations. Recomputed LAX waits (353 and149 minutes), IST waits (60 and420), and benchmark duration (1635). Surveyed both cabin landscapes, including same-positioning counterparts and minimum durations; inspected all six direct cash benchmarks and uniform conditional reason sets. All selected references and source dates are consistent.",
+    "uncertainty": "No material identity/price/date uncertainty. One-minute connection error is classified as nonmaterial. SFO–LAX–BKK is interpreted as component-level shorthand with full reference/card legs available, not an explicit nonstop/complete-route promise; omission is recorded rather than ignored. Live bookability, complete price scopes and cash cabin remain unestablished.",
+    "escalation": "No escalation recommended."
+  }
+}

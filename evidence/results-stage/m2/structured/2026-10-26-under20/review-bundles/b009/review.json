@@ -1,0 +1,48 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "Lower-points lead",
+      "source_id": "298e9fc3fa28627cc1ab28d956ab4682deece903365a89805c922c0c9eb502af",
+      "expected_fact": "Alaska 42,500 and United 50,600 are different program currencies on different dates. The lower displayed numeral is true, but does not imply lower economic cost.",
+      "impact": "Program noninterchangeability should be explicit. The answer does not assert a conversion, dollar value or cheapest/best redemption, so the label is not treated as a hard cross-program value claim."
+    },
+    {
+      "id": "Q2",
+      "axis": "C",
+      "severity": "quality",
+      "quote": "The award records don’t establish exact schedules, seats, or bookability.",
+      "source_id": [
+        "298e9fc3fa28627cc1ab28d956ab4682deece903365a89805c922c0c9eb502af",
+        "963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6"
+      ],
+      "expected_fact": "Summary fields report eight Alaska seats and nine United seats, but no complete timed itinerary/current confirmation.",
+      "impact": "Better distinguish reported summary counts from confirmed seats on a specific complete itinerary. Conservative wording is imprecise but does not promote availability."
+    },
+    {
+      "id": "Q3",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "Confirm current availability and prices with the booking provider before making plans.",
+      "source_id": "29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d",
+      "expected_fact": "Lead/cash price scopes are unknown, and Jan 1 cash is not a same-date alternative to Jan 4/Jan 13 leads.",
+      "impact": "Explicit unknown price scope and comparison-date explanation would help; dates are accurately stated and no same-flight/same-date association or party price is claimed."
+    }
+  ],
+  "notes": {
+    "scope": "Only b009 four permitted files read; no forbidden runtime/performance/settings/index/campaign/prior reviews.",
+    "H_basis": "Exact Alaska Jan 4 and United Jan 13 identities, carriers, economy cabin, miles and USD fees match. Empty source/workspace journey pool and all 378 schedule-incomplete leads support no confirmed complete itineraries. EVA benchmark Jan 1 noon to Jan 3 11:10 via TPE,USD686,1930 minutes matches. Detail omissions/connecting pagination limits are supported. No material false itinerary, bookability or full-party price claim.",
+    "U_basis": "Pass no-complete-results branch: two relevant exact route/date leads, explicit missing schedules/booking evidence, separately dated cash context and real coverage/verification limits.",
+    "C_basis": "Basic: dates and facts useful but little interpretation, unexplained cross-program numeric label, carrier-code clutter, duplicated cash prose and incomplete price-scope explanation. Extra cabin/date breadth is optional.",
+    "protocol": "Empty journey selection; valid A12/A39 lead selections and C2 benchmark; canonical roles resolve. Cash narrative preceding its explicit reference is redundant but not a protocol failure.",
+    "verification": "Checked source pool/counts and all 378 lead gap categories; exact selected source/workspace records, minorUSD amounts, carrier sets, positive summary seats, A12/A39/C2 mappings, coverage reasons and cash 1930-minute calendar calculation. Outputs written/reloaded.",
+    "uncertainty": "No material factual uncertainty; lower-points label interpreted as numeric, not economic, with missing qualification recorded. Live seats/bookability/price scopes remain unverified.",
+    "escalation": "No escalation recommended."
+  }
+}

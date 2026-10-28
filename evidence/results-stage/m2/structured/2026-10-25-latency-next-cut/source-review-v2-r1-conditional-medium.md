@@ -1,0 +1,9 @@
+# V2 R1 conditional, candidate medium: independent source review
+
+**Verdict: source and composition pass.** Reviewed the final selected answer in `runs/v2-r1-conditional-candidate-medium/answer-preview.md`, resolved document and attempt against the original conditional saved source. Timing, usage, and run summary were not consulted.
+
+The answer gives a meaningful same-arrival economy choice: J80 leaves SFO January 8 at 07:00, arrives BKK January 10 at 04:15, takes 1,815 minutes, and allows 256 minutes at LAX; J86 leaves at 08:51, has the same arrival and award A171, takes 1,704 minutes, and allows 135 minutes at LAX. The 1h51 later start and 2h01 shorter transfer interval are correct. Both associated positioning observations C8 and C14 quote $59 USD with unknown scope. J60 correctly supplies business on J80's exact schedule at 275,000 Turkish miles versus J80's 110,000 Turkish miles in economy, a 165,000-mile difference with no schedule gain.
+
+The later-start J19 economy alternative departs at 14:05 and arrives January 10 at 08:50, takes 1,665 minutes, and uses C25's $139 USD positioning quote. Relative to J80 it departs 7h05 later, arrives 4h35 later, and saves 2h30 elapsed, as stated. The separate SFO–BKK benchmark C1 is $452 USD and is presented in its proper role. The answer consolidates the unresolved traveler/seat, price-scope, separate-ticket and observation-age limits. The selected set and embedded J86 alternative cover distinct tradeoffs without inventing bookability. Other early-arrival combinations exist, but none exposes a materially different choice omitted by this answer: the same-arrival later-start alternative is represented, and the business/economy comparison is on an exact shared schedule.
+
+The final attempt is marked recoverable by the scoped checker, with no listed failed findings. This review is independent source/composition judgment, not a claim that the checker proves semantic completeness.

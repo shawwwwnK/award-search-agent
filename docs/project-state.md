@@ -1,5 +1,79 @@
 # Project State
 
+## 2026-10-28 owner direction: iterate toward fast default
+
+The owner requested a commit checkpoint and stated the intention to make the new
+fast profile the default after reviewing details and iterating in another session.
+This establishes the next direction; this checkpoint does not switch runtime
+defaults or declare the remaining factual-quality gap accepted. Start with the
+[next-session handoff](handoffs/2026-10-28-results-fast-profile-next-session.md).
+
+## 2026-10-28 Luna under20 experiment complete
+
+Implemented the explicit `focused-v3` Results path on Luna: one typed
+`none`/Fast selector over the entire eligible inventory, a code-resolved small
+fact bundle with exact temporal comparisons, then one `low`/Fast composer.
+The model owns the authoring pool and final narrative; all canonical explorer
+evidence remains complete. ArtifactV8 binds and replays both calls. This profile
+uses at most two generations with no third correction; legacy routes remain.
+
+The six predetermined unchanged full confirmations all completed in 6.72–8.46s
+(median 7.63s), including preparation, both counts/calls, checks and resolution.
+Independent review passed usefulness 6/6, factual correctness 5/6, and graded every
+answer basic in comparative depth. The last admitted answer reports one award
+seat where the source reports two; both support the requested one traveler, but
+the factual failure remains. **The speed target is met on these cases; the strict
+combined quality/latency gate is not.** No owner presentation acceptance, default
+adoption, population reliability, full-application latency or M3 closure follows.
+
+See the [final decision report](../evidence/results-stage/m2/structured/2026-10-26-under20/README.md),
+[frozen manifest](../evidence/results-stage/m2/structured/2026-10-26-under20/confirmation-focused-v3.json)
+and [session log](build-log/2026-10-26-results-under20.md). The bounded campaign
+used 46 generation/47 count reservations within 48/48, including one externally
+interrupted count and one generation with unknown usage. All earlier failures
+remain. Full Results test scope: 221 passed; replay/ledger verification passes.
+The report recommends keeping the architecture as an opt-in fast candidate and
+holding factual/default qualification. Owner keep/cut disposition remains open.
+
+## 2026-10-27 Luna under20 implementation and live iteration
+
+The owner explicitly requires Results below20seconds, retains Luna and invokes
+architects, investigators and advisors to reassess the full authoring boundary.
+The [active session](build-log/2026-10-26-results-under20.md) implements a separate
+interactive API/CLI path with a complete semantic writer packet, lean role-derived
+wire and independent offline replay. Legacy Results routes remain available.
+The first six-run frozen confirmation failed: two latency misses and one material
+identity error. Joined-packet scouts remain diagnostic; implementation and live
+iteration continue under the [declared48/48campaign](../evidence/results-stage/m2/structured/2026-10-26-under20/campaign.json).
+No final configuration, sub20 acceptance or owner presentation acceptance is
+claimed by this progress entry. See ADR0029 for source/role/versioning policy.
+
+## 2026-10-26 Luna latency decision experiment
+
+The owner invoked the updated handoff with subagents, live experimentation and
+iteration, then requested checkpoint commits before execution (`d9c225a`,
+`b4a8084`). The isolated campaign is complete: 40 generations and 40 input counts
+within a declared 60/60 ceiling, 26 runs, 23 final answers, two worker failures and
+one retained transport timeout with unknown elapsed time/usage. No travel-provider
+or FX calls, runtime code/default or frontend changes.
+
+Original medium completed-answer median was 74.0s (six draws). V1 input at medium
+fell to 30.5s (six completed draws, plus one timeout), but all three repeated
+answers had material source/composition defects after its first passing cohort.
+V1/V2 low medians were 19.6/21.9s, with factual or complete-answer coverage failures.
+Parallel analysis added a sequential phase and did not establish a quality benefit.
+V2 medium's median was 76.0s, with a lower mean and a faster incomplete case;
+its single cohort does not establish a repeated general responsiveness improvement.
+These are Results-only checked/resolved timings,
+including counting and actual bounded correction, not full application latency.
+
+See the [decision report](../evidence/results-stage/m2/structured/2026-10-25-latency-next-cut/README.md)
+and [session log](build-log/2026-10-25-results-m2-latency-next-cut.md). Original and
+revised requests preserve every eligible option and unknown. Independent source
+reviews and explicit adjudication disagreements remain available. No new faster
+default, responsiveness acceptance, M2 owner presentation acceptance or M3 closure
+is inferred. Owner keep/cut disposition remains open.
+
 ## 2026-10-25 Luna latency investigation and bounded experiments
 
 Next-session continuation is captured in the

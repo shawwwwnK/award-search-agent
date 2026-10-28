@@ -1,0 +1,28 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "decision-rich",
+  "protocol": "clean",
+  "findings": [],
+  "notes": {
+    "scope": "Only b015 supplied answer, document, evidence and references, plus the explicitly authorized frozen quality_version/quality rubric keys; no settings, timings, other reviews, runtime or paid calls.",
+    "H_evidence": [
+      "J137/c5bd37d7dfca6a01666233de39e69813d8e5043f0ebb7ed2210978b28abd58ff pairs cash f445caeeaa6ee65165a0e531bc9dc088dcaa23b3e0efe759f53c5fde72849e56 (American, USD 139 major units, SFO January 8 14:05 to LAX 15:46) with award 44d992ea8cb67ed8ac2e6364714832ddf04487a3216f4a4d89fff35756448c54 (Turkish business, 275000 miles, LAX January 8 18:30 via IST to BKK January 10 08:50).",
+      "J19/4a2ad78e800f373f698a2f8b5f012a4b90571e1cf1bb0baec59e42040c4c6f01 pairs the identical American observation with distinct Turkish economy award 2d28b71ded0f2b29aede0189ee04bb205e60e8c8ee8fc8774753c38658c2b59d at 110000 miles. All endpoint, component and connection times match the business option. The comparison is within one program, with observations explicitly listed.",
+      "Each complete journey is 1665 minutes = 101 cash flight + 164 separate-ticket wait + 805 flight + 60 IST wait + 535 flight. Recomputed UTC elapsed and LAX transfer agree with both WorkspaceEvidence and source.view. Whole journey duration is correctly distinguished from 1400 award-component minutes.",
+      "Both awards have unknown seat counts, absent returned traveler counts and unknown taxes, with source findings seats_program_unsupported and taxes_program_unavailable. Conditional positioning permission, separate-ticket obligations and absent leg cabins match the closing disclosures. No party-total, protected-connection or bookability guarantee is asserted.",
+      "Cash benchmark 5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed records EVA, USD 605, one returned traveler, unknown price scope, January 8 23:50 SFO departure, January 10 11:10 BKK arrival, via TPE with one stop. Recomputed elapsed time is 1220 minutes. The explicit fare-scope caveat preserves price uncertainty.",
+      "Checked all 232 eligible journey summaries, including 116 business options. The selected premium journey ties the minimum elapsed time of 1665 minutes. Other equally fast or earlier-arriving options do not disprove this non-exclusive premium preference, and the answer does not claim lowest all-in cost, earliest arrival or unique optimality."
+    ],
+    "U_evidence": [
+      "Defensible exact recommendation: \"the strongest premium-cabin option I found is a conditional SFO\u2013LAX\u2013IST\u2013BKK journey\" is bound to J137, with business cabin, exact timing and mileage. Its principal downsides are spelled out: total cash cost unknown, positioning permission and separate-ticket protection unresolved, and award seats/traveler count unconfirmed.",
+      "Supported alternative: \"If economy is acceptable, this alternative uses fewer miles and has the same listed SFO/LAX and Bangkok timings\" correctly contrasts J19 and J137. It makes clear what is sacrificed (business cabin) and what is retained (schedule), and uses separate exact award identities.",
+      "Supported cash context: \"EVA Air offers a simpler SFO\u2013TPE\u2013BKK itinerary\" is borne out by one stop rather than the mixed journey through LAX and IST; the paragraph supplies USD 605, precise dates/times, 1220 minutes and price limitations."
+    ],
+    "C_reason": "Decision-rich: the answer connects a premium preference to an exact conditional journey, a same-timing lower-mileage economy alternative and a simpler cash itinerary, while consolidating the material booking and price uncertainties. Lost depth: it does not explicitly quantify the 165000-mile difference or 445-minute elapsed advantage of cash, discuss earlier-arriving award alternatives, or emphasize partial provider coverage. None is required for this scoped, non-exhaustive argument or changes the supported central choice.",
+    "protocol": "Clean: valid document, exact resolvable references for the primary journey, evaluated alternative and benchmark; no visible generation/failure annotation. Semantic judgments remain separate from protocol.",
+    "verification": "Parsed JSON, checked canonical alias associations, compared selected WorkspaceEvidence and source.view facts, independently recomputed flight/connection/whole-journey durations and cash calendar interval, verified benchmark membership and checked all eligible durations for counterexamples.",
+    "uncertainty": "No material source discrepancy found. The broad premium preference remains evaluative; frozen evidence does not establish live availability, actual ticket protection or provider truth.",
+    "escalation": "Not recommended."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "H": "pass",
+  "U": "pass",
+  "C": "basic",
+  "protocol": "clean",
+  "findings": [
+    {
+      "id": "Q1",
+      "axis": "U",
+      "severity": "weakness",
+      "quote": "verify current award availability, itinerary details, and prices with the booking programs",
+      "source_id": [
+        "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+        "cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+        "456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630"
+      ],
+      "expected_fact": "Both leads and the cash benchmark have unknown price scope. The benchmark lasts44h40 and covers January 1 rather than the whole month.",
+      "impact": "Price scope, the long cash duration and month-wide scope could be interpreted more helpfully. Exact dates/duration and lead gaps are already stated; no false per-person price, complete itinerary or whole-month cash coverage is claimed."
+    }
+  ],
+  "notes": {
+    "scope": "Only b008 four permitted files; no runtime/settings/performance/campaign/prior review reads or live calls.",
+    "H_basis": "Zero complete journeys/source alternatives;378 leads all lack schedules. Jan 1 SFO–BKK lead numeric points are42,500 Alaska,60,500 United,65,000 Aeroplan, so lowest points figure is accurate as a numeric statement. Answer expressly says programs are not interchangeable, preventing an unsupported cross-program value ranking. Alaska USD50.90 and United USD28.20 are exact minor-unit conversions; their dates/routes/cabins match. Cathay cash USD640,Jan 1 22:55 to Jan 4 10:35 via HKG,2680 minutes matches. Detail omissions and partial coverage are real.",
+    "U_basis": "Truthful no-complete-results branch with two relevant exact date-only leads, supported listed-fee comparison, explicit program noninterchangeability, distinct cash reference and missing-detail/verification guidance. Pass despite incomplete explicit price-scope wording.",
+    "C_basis": "Basic: more than a raw list, but point/fee differences and broad caveats dominate; little practical guidance beyond checking both programs and no explanation of the44h40 cash itinerary. Optional extra dates/cabins are not required.",
+    "protocol": "Empty journey selection, two valid lead references selected in incomplete_observation_ids, and valid selected direct cash benchmark. Canonical roles/mappings clean.",
+    "verification": "Checked all 378 lead missing-information categories and empty source pool; enumerated every Jan 1 SFO–BKK lead for the lowest-figure claim; compared exact raw/workspace selected components, USD minor units, date/route/cabin fields and seats; recomputed cash 2680-minute duration; checked coverage and A2/A3/C1 mappings. Files written/reloaded.",
+    "uncertainty": "No material unresolved factual uncertainty; numeric cross-program comparison is explicitly qualified and is not treated as a value ranking. Scope/live availability remain unestablished.",
+    "escalation": "No escalation recommended."
+  }
+}
