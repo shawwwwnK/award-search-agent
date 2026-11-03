@@ -1,0 +1,52 @@
+{
+  "bundle": "q031",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "familiarity": "Prior source/code/review familiarity disclosed. Current candidate mapping, metrics, checker verdicts and other current grades were not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Economy is both shorter and earlier than the displayed business option. Exact card identities, flight times, source quote units and unknown tax/support states match canonical evidence."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Defensible earlier/shorter economy choice versus business conditional on cabin preference and separate-ticket checks."
+    },
+    "M2": {
+      "verdict": "pass",
+      "reason": "Business-only support/tax/positioning checks remain local; common award/fee scope uncertainty appears once. Compact card status is not duplicate explanatory prose. No instruction leakage or internal category scaffolding."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Explains the tradeoff between lower elapsed travel/earlier arrival and business cabin with extra travel and booking conditions; no invented overall winner."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Four-journey optional pool becomes two cards while preserving true time and premium members. No cost member/possible cost exists and no cost winner is invented."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two actual joined journey cards carry facts and the explicit unknown-tax indicator. One brief source-bound USD440 cash sentence appears inline."
+    }
+  },
+  "findings": [],
+  "evidence": [
+    "evidence.json journeys[candidate_id=1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325]: elapsed_minutes1260;arrival2027-01-17T11:30:00+07:00;Aeroplan economy65000;TPE165min;taxes11650minorCAD scopeunknown;one reported award seat and award_travelers_supported;styles=[time].",
+    "evidence.json journeys[candidate_id=01df3955d0603fa6d54ec3522e0dd5d1cdf09b8555134f8c6eff07e8ad90ee7a]: elapsed2272;arrival2027-01-17T15:05:00+07:00;Turkish business275000;LAX407min/IST405min;award tax amountunknown,award_travelers_unknown,positioning_permission_unknown,separate_ticket_obligation;positioning121majorUSD scopeunknown;styles=[premium]. Economy is1012min shorter and215min earlier.",
+    "evidence.json components[observation_id=063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd].money: cash_fare440majorUSD,scopeunknown. Exactly one cash_sentence block.",
+    "selection-audit.json style_audit time=J17/null,premium=J82/null,cost=null/null; references.json maps both to actual source members and displayed cards. Pool J12/J25 are optional omitted economy variants, not omitted style perspectives.",
+    "Full source258journeys/143leads,11time,116premium,0cost/possiblecost,0time-premiumoverlap; all three factored cost assessments undetermined. Full journey groups, category/cost indexes and research directions inspected beyond chosen pool.",
+    "condition-applicability.json: eight exact condition rows verified against canonical objects and member-component aliases. Award scope/taxscope apply to four selected-pool journeys; local party/taxamount/positioning/separate-ticket conditions apply only to J82; benchmark scope only C1. Delivered prose correctly narrows common scope to the two shown options without discussing omitted J12/J25."
+  ],
+  "verification": [
+    "Read current rubric,answer.md,document.json,resolved.json,selection-audit.json,references.json,complete evidence.json and source-only condition-applicability.json.",
+    "All visible journey,award,cash and benchmark attachments exactly equal canonical evidence; calculated elapsed/arrival comparison and verified raw style witnesses.",
+    "Independently proved every condition row and exact member/component alias from canonical evidence; did not use the table as proof that prose was correct."
+  ],
+  "uncertainty": [
+    "Saved-source review does not establish live availability, population reliability or global optimality.",
+    "Reviewed supplied Markdown and structured cards, not browser visual layout.",
+    "The wording about unspecified quote scopes does not assert that unknown business tax amounts are known, nor claim an all-in total."
+  ],
+  "escalation": "not recommended"
+}

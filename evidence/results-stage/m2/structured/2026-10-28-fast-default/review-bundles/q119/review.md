@@ -1,0 +1,11 @@
+# Blind source review — q119
+
+- H: pass
+- U: pass
+- M2: pass
+- C: decision-rich
+- Sparse source exception: false
+
+## Reasoning
+
+The selected Hong Kong journey and displayed Taipei alternative are admitted direct awards. Their offset-aware endpoints support the 125-minute duration and 9-hour-10-minute arrival differences; the Hong Kong option departs 11 hours 15 minutes later. Both report 65,000 Aeroplan points in economy, with CAD 107.40 versus CAD 116.50 raw tax quotes of unknown scope. HKG/TPE waits are 105/270 minutes; observed seats are 2/1, traveler-return counts absent, and matching reason sets pass award support for the requested one traveler. Leg cabins are absent. The Singapore cash itinerary is a separate one-stop USD 440 baseline with unknown quote scope. The narrative provides a defensible choice and a meaningful local scheduling/tax tradeoff without implying a full-inventory optimum.

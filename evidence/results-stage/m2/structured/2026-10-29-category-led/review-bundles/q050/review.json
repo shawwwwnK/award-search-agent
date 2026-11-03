@@ -1,0 +1,73 @@
+{
+  "bundle": "q050",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "familiarity": "Prior source/code/profile/review familiarity,including indexed-selector review,is disclosed. This draw was independently graded without current profile mapping,metrics,checker verdicts or other current grades.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "The84-minute elapsed,4h35 arrival and165000 reported-point differences match canonical source. Shared paragraph explicitly preserves unknown quote scope and traveler support; wording precision is noted below."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Business cabin/earlier-shorter journey and fewer reported same-program points each provide a supported conditional reason."
+    },
+    "M2": {
+      "verdict": "pass",
+      "reason": "Concise connected explanation with shared obligations/support/tax/scope conditions once; opening phrasing is loose but captions assign benefits accurately."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Meaningful same-program reported-points versus cabin/timing tradeoff; no overall winner or cross-program economic claim."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Actual time and premium witnesses plus business overlap remain displayed; no cost member or material wider-source perspective omitted."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two actual source-resolved flight cards and one brief source-faithful USD452 unknown-scope cash sentence."
+    }
+  },
+  "findings": [
+    {
+      "severity": "minor_nonblocking",
+      "axis": "M2",
+      "claim": "trade points and cabin against schedule",
+      "evidence": [
+        "document.json blocks[0].text",
+        "document.json blocks[1:3]",
+        "evidence.json J63 has business cabin and both earlier arrival and shorter elapsed; J18 has the lower reported Turkish quote."
+      ],
+      "assessment": "Loose grouping obscures the direction of the tradeoff. Fewer reported points versus business cabin plus earlier/shorter travel would be clearer. It does not explicitly assign an incorrect benefit to a named option or assert an either/or cabin-versus-time choice; both captions correctly state ownership."
+    },
+    {
+      "severity": "minor_nonblocking",
+      "axis": "H",
+      "claim": "It requires275000 Turkish points / it requires110000 points,165000 fewer",
+      "evidence": [
+        "document.json blocks[1].text,blocks[2].text,blocks[3].text",
+        "evidence.json both journey money.points_scope=unknown,points_per_traveler=null;points_raw.value275000/110000 and points_program=turkish."
+      ],
+      "assessment": "Reported quote would be more precise than requires. In the complete answer, the shared paragraph explicitly says both award scopes and party support are unknown, so I interpret the arithmetic as a comparison of reported same-program figures,not a confirmed per-person,all-in or currently bookable requirement."
+    }
+  ],
+  "evidence": [
+    "evidence.json journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee] (J63):Turkish business275000,elapsed1719,arrival2027-01-10T04:15:00+07:00,LAX150/IST140,styles=[time,premium].",
+    "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669] (J18):Turkish economy110000,elapsed1803,arrival2027-01-10T08:50:00+07:00,LAX301/IST60,styles=[time].1803-1719=84min;arrival gap275min=4h35;275000-110000=165000 reported Turkish points.",
+    "Both canonical journeys have separate_ticket_obligation,positioning_permission_unknown,award_travelers_unknown,unknown award tax amount and quote scopes. Shared document block[3] explains the applicable conditions once; compact card indicators are permitted. Positioning amountsUSD59/109major,unknownscope.",
+    "Benchmark f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2 is cash_fare452majorUSD scopeunknown. Only one full-cash sentence appears.",
+    "Raw indexed choices[J18,J63],time0/premium1 resolve exactly to source memberships,even though displayed order reverses them. Business overlap remains visible. Full232journeys/8groups/167leads:116time,116premium,58overlaps,0costmembers,two factored cost assessments undetermined."
+  ],
+  "verification": [
+    "Read frozen rubric,full canonical source/request,wider groups/research directions,category/cost indexes and assessments,references,document,resolved,answer Markdown,raw indexed audit and choice/condition sidecars.",
+    "Exact source equality for all displayed journey/award/cash/benchmark attachments; independent elapsed,arrival and point arithmetic plus raw-index\u2192choice\u2192canonical witness checks.",
+    "Two choice rows/full connections and eight condition rows/member mappings independently source-verified; input correctness kept separate from semantic judgment."
+  ],
+  "uncertainty": [
+    "The two nonblocking phrasing interpretations above are explicit limits of this pass,not a general allowance for wrong ownership or confirmed price claims.",
+    "Source time-band membership is not absolute fastest;the answer explicitly compares these two choices and makes no overall-best claim.",
+    "Saved repeated evidence does not establish live availability,population reliability or browser-layout quality."
+  ],
+  "escalation": "not recommended"
+}

@@ -1,0 +1,140 @@
+{
+  "axes": {
+    "H": "fail",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "pass",
+    "P": "fail"
+  },
+  "reasons": {
+    "H": "The opening and first card label attribute the Aeroplan/UA/CX economy itinerary to Singapore Airlines.",
+    "U": "The earlier-arrival economy versus conditional business/separate-ticket choice is intelligible, despite the independently failing airline identity.",
+    "M2": "Opening and per-card paragraphs repeat the same reasons; incomplete pricing and availability caveats recur instead of being consolidated.",
+    "C": "Earlier arrival versus business cabin and separate-ticket risk is a supported, meaningful distinction.",
+    "K": "Full source has 11 time members, 116 premium members and no cost members; the answer preserves time and premium and correctly declines a lowest-total claim. There is no time/premium overlap to explain here.",
+    "P": "Real cards are present and full-cash context is one exact sentence, but the premium card omits the known SFO\u2013LAX component schedule and its airline; its flight list begins at LAX despite whole-journey SFO departure."
+  },
+  "findings": [
+    {
+      "id": "q001-H1",
+      "severity": "material",
+      "axes": [
+        "H"
+      ],
+      "claim": "Singapore Airlines economy award",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "identity": "1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c",
+          "fields": {
+            "program.value": "aeroplan",
+            "carriers": [
+              "CX",
+              "UA"
+            ],
+            "legs.flight_number.value": [
+              "UA877",
+              "CX705"
+            ]
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+          "fields": {
+            "label": "Time \u2014 Singapore Airlines economy award"
+          }
+        }
+      ],
+      "explanation": "Neither the source program nor reported carriers support Singapore Airlines. The correct factual card body does not repair the false caption and opening."
+    },
+    {
+      "id": "q001-P1",
+      "severity": "material",
+      "axes": [
+        "P"
+      ],
+      "claim": "Premium card Flights list contains only LAX\u2013IST and IST\u2013BKK",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "identity": "f21d646e6c2945ae684dca8be205471aab6e5e145d2be25ca50bc20b3db99e42",
+          "fields": {
+            "origin": "SFO",
+            "destination": "LAX",
+            "carriers": [
+              "Alaska"
+            ],
+            "legs[0].reported": false,
+            "legs[0].departure.local_iso": "2027-01-15T10:13:00-08:00",
+            "legs[0].arrival.local_iso": "2027-01-15T11:43:00-08:00"
+          }
+        }
+      ],
+      "explanation": "Unreported individual legs must not become invented flights, but the known component-level SFO\u2013LAX route and timing should still appear as component facts. The card suppresses that distinction rather than displaying it."
+    },
+    {
+      "id": "q001-M1",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Repeated incomplete-price/availability limitations and duplicated introductory and per-card reasons",
+      "evidence": [
+        {
+          "file": "answer.md",
+          "fields": {
+            "locations": [
+              "opening and first card explanation",
+              "premium introductory paragraph and its card explanation",
+              "Cost paragraph and final availability guidance"
+            ]
+          }
+        }
+      ],
+      "explanation": "Shared limitations and reasons recur across several paragraphs; the answer does not meet the accepted consolidated-limits composition."
+    },
+    {
+      "id": "q001-audit",
+      "severity": "note",
+      "axes": [],
+      "claim": "omitted_reasons lists time and premium despite selecting both",
+      "evidence": [
+        {
+          "file": "selection-audit.json",
+          "fields": {
+            "selected_members.time": [
+              "J1"
+            ],
+            "selected_members.premium": [
+              "J82"
+            ],
+            "omitted_styles": [
+              "time",
+              "cost",
+              "premium"
+            ]
+          }
+        }
+      ],
+      "explanation": "These are explanations of represented categories, not valid omission reasons. I did not trust this audit text as evidence; actual selected source memberships support K pass."
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 258,
+    "time_members": 11,
+    "premium_members": 116,
+    "cost_members": 0,
+    "time_premium_overlap": 0,
+    "notes": "Inspected full category indexes, distinct premium families and shortest time/premium variants; did not impose a global shortest-selection rule."
+  },
+  "bundle": "q001",
+  "review_contract": "results-category-blind-review-v1",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "blind_scope": "Only bundle answer/document/resolved/source/references/selection audit and reviewer instructions; no run summaries, prompts, timing, profile mapping or other grades consulted.",
+  "verification": "Offline source field comparison; no live calls.",
+  "uncertainty": "Semantic grades are independent judgments, not deterministic oracle results; stated limits and interpretation notes are preserved.",
+  "escalation_recommended": false
+}

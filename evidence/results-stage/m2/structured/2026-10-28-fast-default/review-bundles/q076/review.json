@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "I’d choose the later-departing Aeroplan award via Hong Kong if arriving sooner and keeping the connection short matter most.",
+      "canonical_reference": "evidence.json journeys candidate_id eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669 and 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3; comparison-registry.json T05",
+      "source_field": "journeys[].arrival.local_iso; T05.relation and difference_minutes",
+      "source_value": "Hong Kong arrives 2027-01-17T09:50:00+07:00; Taiwan arrives 2027-01-17T01:25:00+07:00, 505 minutes earlier",
+      "explanation": "The opening recommendation makes sooner arrival a reason to choose Hong Kong, although the displayed Taiwan alternative arrives 8 hours 25 minutes sooner. The following sentence acknowledges Taiwan's earlier arrival. The comparison target in the opening is unstated: Hong Kong does arrive before the later PEK choice, so this is a material scope ambiguity rather than an unambiguous numeric error. It should be adjudicated, not treated as a clean factual pass."
+    }
+  ],
+  "reasoning": "The exact Hong Kong recommendation has a supported short 70-minute connection and later departure, and its later arrival than Taiwan is disclosed, so U passes despite the opening ambiguity. The answer weaves three explained award journeys with embedded references, an independent one-stop USD 440 cash baseline of unknown price scope, and consolidated limitations; M2 passes. C is decision-rich: Hong Kong gains a later departure, shorter elapsed trip and shorter connection but loses Taiwan's earlier arrival; Taiwan has the earlier arrival with a longer trip and connection; PEK has the lowest reported CAD tax quote among these three but a much longer connection and trip. The displayed points, taxes, seats, traveler support, journey cabins, missing leg cabins, times, durations, cash stop count, and quote limitations match the canonical records. No global-optimum or exhaustive-coverage claim is inferred."
+}

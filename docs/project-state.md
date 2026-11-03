@@ -1,5 +1,123 @@
 # Project State
 
+**2026-10-31 new-session handoff:** Start with the
+[M2 closeout recommendations and execution handoff](handoffs/2026-10-31-results-m2-closeout-next-session.md).
+It carries the stopped campaign's evidence, a proposed condition-explanation
+ownership experiment, offline controls and a proposed five-iteration reassessment
+budget. This documentation request authorizes no implementation or live calls;
+the proposal remains unaccepted and current M2 acceptance remains open.
+
+**2026-10-29 category-led c20 stop:** The twenty-iteration campaign is complete
+without M2 qualification. Final c20 meets the timing gate but fails composition
+on q064's repeated separate-ticket warning; q065/q066 pass all six review axes.
+All66 saved draws verify with129 generation and129 exact-count receipts, zero
+integrity issues, no SDK retries or provider/live FX calls. The final candidate
+does not advance to confirmation or controlled repair. No c21 or unused-budget
+continuation is authorized. Source-resolved cards, category-preserving indexed
+selection and exact replay are implemented as opt-ins; latest is c20. Public V27
+remains provisional/unqualified. Current M2 revision acceptance, Frontend and M3
+remain open/separate. See [evidence](../evidence/results-stage/m2/structured/2026-10-29-category-led/README.md)
+and [build log](build-log/2026-10-29-results-category-led.md).
+
+The [mandatory final architect review](reviews/2026-10-29-results-category-led-c20-architect-review.md)
+completes all5/10/15/20 checkpoints. Its single next-cut recommendation is a
+future offline prototype of explicit condition-explanation ownership, with Luna
+choosing words/location. This is proposed only; no new contract, implementation,
+campaign, semantic guarantee or qualification is accepted.
+
+**2026-10-29 subsequent implementation invocation:** The owner confirmed the
+natural category-led response design and approved saved examples with flight
+facts in source-resolved cards. Implementation and live Luna evaluation are now
+explicitly authorized for a new campaign of up to twenty iterations, with architect
+reflection at5/10/15/20 and early stop only when evidence supports M2 closeout.
+This supersedes the documentation-only stop for this invocation; historical V30
+artifacts, grades and stopped ledger remain intact. No new qualification is yet
+claimed. See [plan](plans/2026-10-29-results-category-led-campaign.md),
+[ADR0029](adr/0029-structured-results-and-local-workspace.md) and
+[build log](build-log/2026-10-29-results-category-led.md).
+
+**2026-10-29 documentation closeout:** The owner stopped implementation and requested
+a new-session handover. Start with the [V3–V30 cycle summary and handover](handoffs/2026-10-29-results-m2-fast-profile-handover.md).
+No new runtime changes or live calls accompany this closeout; accepted category-led
+direction remains pending implementation, and no profile qualifies.
+
+## 2026-10-29 owner direction: restore Ranking categories; keep Luna prose
+
+The owner rejected comparison binding in favor of natural Luna wording. The
+full-cash origin-to-destination benchmark should be one brief comparison sentence.
+Recommendations must preserve Ranking's time/cost/premium categorization and
+multi-style overlap. The earlier standalone questions about selected contrasts
+are superseded; no answers or new lead-ranking policy are inferred.
+
+Tracing confirms the categories survive in source data but are optional in the
+Results selection/authoring brief, and the writer cannot recover category options
+that selection omitted. The next design focus is a category-led handoff, without
+new Ranking policy or fabricated categories for incomplete leads. This direction
+is recorded in [ADR0029](adr/0029-structured-results-and-local-workspace.md);
+runtime is not yet changed, no live calls occurred, and the V30 campaign remains
+stopped. Public default V27 is still provisional and unqualified. The old paired
+[prototype](../evidence/results-stage/m2/design/2026-10-28-comparison-prototype/review.html)
+is marked historical/superseded. See the [decision log](build-log/2026-10-29-results-ranking-led-direction.md).
+
+## 2026-10-28 offline comparison prototype (historical; resolved October29)
+
+This pending-decision record is superseded by the October29 owner direction above.
+The owner requested the advisor's zero-call prototype/calibration step after the
+V30 stop. [Four paired complete examples](../evidence/results-stage/m2/design/2026-10-28-comparison-prototype/review.html)
+and valid/invalid clause controls are available for product review. They are
+hand-authored and artifact-local; no model calls, production code changes or
+new latency/qualification claims. The proposed shared comparison-wording policy
+is not adopted. Current numerical-prose ownership, provisional V27 default and
+the stopped paid campaign remain unchanged. Owner questions cover wording(A/B),
+weak selection(C), and conditional date usefulness(D). See the
+[offline log](build-log/2026-10-28-results-offline-comparison-prototype.md) and
+[proposed ADR section](adr/0029-structured-results-and-local-workspace.md).
+
+## 2026-10-28 stopped after V30; no profile qualifies
+
+The owner authorized Luna-only iteration toward a fast Results default and M2
+closeout, with a 20-second target and a small overage acceptable, then set V30 as
+the hard stop and requested a full review against checkpoint `b7bedf5`. The
+campaign has stopped at V30: no V31, further paid calls, V30 frozen confirmation
+or V30 correction diagnostic will run. The public API/CLI default remains
+provisionally V27, using an owned shared client with explicit timeout, zero retries
+and close-on-exit; injected writer and measurer components remain available for offline execution. No candidate qualifies
+and this fast-profile work does not close M2.
+
+V30 was an opt-in experiment using lossless program-grouped source records. The
+complete branch used LOW selection/MEDIUM authoring (`roles-v28`/`complete-v26`);
+the incomplete branch used MEDIUM selection/LOW authoring
+(`roles-v30`/`complete-v28`). Each branch allowed up to two award references and
+one cash benchmark, three total. Correction remained one LOW call only after an
+actual recoverable mechanical failure. The three fresh scouts completed in
+16.38/12.29/11.06 seconds and passed H/U/M2; only q119 was decision-rich.
+q120's conditional preference gave no authored offsetting benefit, and q121
+recommended a single United lead despite plentiful alternatives. Both were basic
+without a sparse-source exception, so the unchanged scout gate failed and no
+frozen six-run cohort or actual V30 correction was attempted. The V30 correction
+latency is unmeasured.
+
+V23 remains the strongest earlier full cohort: 7.62–17.68 seconds (median11.22),
+H/U/M2 6/6 and decision-rich C 5/6, with q095 basic. Its controlled conditional
+correction passed review in18.73 seconds. V27's six-run confirmation had H3/6;
+its controlled correction passed H/U/M2/C in26.23 seconds. V29 scouts passed
+H/U/M2 3/3, with C-rich 2/3. V28's conditional NONE-selector phase reached44.78 seconds and ended with an
+API incomplete response. V29 and V30 were implemented and scouted afterward. The
+source instability on the unchanged V27 complete branch informed those later
+whole-profile experiments. All outcomes remain preserved. Ledger reservations are254/278, leaving
+24 unused. All 109 summarized artifacts replay identically; strict archive verification exited 1 with seven flags classified as four verifier-assumption bugs, not demonstrated artifact corruption; the earlier434-test
+Results baseline passed before V24, and later profiles received bounded checks.
+No full-repository green claim is made.
+
+Correction addresses detected mechanical defects; it does not check arbitrary
+prose. Comparative depth remains required core work, not optional deferred
+cleanup. Semantic clarification of the selector was tried in V30 but did not
+meet the depth gate. See the [current Results contract](results-m2.md),
+[ADR0029](adr/0029-structured-results-and-local-workspace.md),
+[session log](build-log/2026-10-28-results-fast-default.md), and [campaign evidence](../evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md).
+The October 8 M2 closeout applies to its declared historical scope; frontend,
+owner presentation acceptance and M3 remain separate.
+
 ## 2026-10-28 owner direction: iterate toward fast default
 
 The owner requested a commit checkpoint and stated the intention to make the new

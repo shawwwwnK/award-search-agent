@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "pass",
+  "U": "pass",
+  "M2": "fail",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "M2",
+      "answer_quote": "This Aeroplan economy award via HKG arrives 35 minutes before the later Taiwan option and has a 105-minute connection within the award itinerary.",
+      "canonical_reference": "evidence.json journeys candidate_ids 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82 (displayed HKG), 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3 (displayed TPE), and 2df689e0ff0d8ad01708129eb8fb9ea5398c9accb14343c04ad99d2f6bc77dd6 (undisplayed later TPE)",
+      "source_field": "arrival.local_iso; document.json blocks.reference_id",
+      "source_value": "HKG arrives January 17 at 10:35; the displayed TPE journey arrives at 01:25, 9 hours 10 minutes earlier; a different, undisplayed TPE journey arrives at 11:10, 35 minutes later than HKG.",
+      "explanation": "The 35-minute fact is supported only by an undisplayed Taiwan journey. With just one Taiwan journey embedded in the answer, this central comparison appears to contradict the later 9-hour-10-minute comparison. The traveler cannot identify the 35-minute comparator, so the recommendation is not coherent as presented. This is an identity/clarity failure rather than an invented source time."
+    }
+  ],
+  "reasoning": "The displayed HKG Aeroplan economy journey leaves SFO at 23:15 January 15, reaches BKK at 10:35 January 17, takes 1,220 minutes, and has a 105-minute HKG award connection, two observed seats, 65,000 points, and CAD 107.40 observed fees with unknown scope. The displayed TPE journey leaves at 12:00, reaches BKK at 01:25 January 17, takes 1,345 minutes, has a 270-minute TPE award connection and one observed seat, and reports 65,000 points plus CAD 116.50 with unknown scope. Their 9-hour-10-minute arrival and 2-hour-5-minute duration tradeoff is correct and decision-rich. The separate Singapore Airlines SFO-SIN-BKK cash benchmark is USD 440, one stop, unknown scope; its one-traveler echo does not establish quote scope. The late-departure recommendation is defensible, but M2 fails because its 35-minute comparison invokes another eligible TPE journey that is not displayed or identified, making the two Taiwan comparisons read as contradictory. Uncertainty: the 35-minute comparison is factually true for an undisplayed journey, so it is not scored as an H error."
+}

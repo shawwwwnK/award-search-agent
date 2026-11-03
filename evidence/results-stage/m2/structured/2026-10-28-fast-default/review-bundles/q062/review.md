@@ -1,0 +1,13 @@
+# Blind review: q062
+
+**Verdict:** H pass; U pass; M2 pass; C decision-rich. Sparse source exception: no.
+
+The selected recommendation is a complete conditional SFO–LAX–IST–BKK journey. Canonical `evidence.json` journey `0286e918...` and its components support the January 8 8:36 a.m. SFO departure, January 10 4:15 a.m. BKK arrival, 12:45 p.m. LAX award departure, 150-minute LAX wait, 140-minute IST connection, business award cabin, 275,000 Turkish-mile quote, and USD 59 positioning quote. Its `internal.status` is `conditional`; `booking_obligation` is `separate_tickets_unverified`. The answer gives a useful earlier-arrival reason while disclosing unknown award taxes, seats, traveler coverage, and transfer protection.
+
+The later business and economy references match journeys `06c0db69...` and `010ec2ca...` and their award/cash components. The local comparisons are correct: the later business journey departs 314 minutes later, arrives 275 minutes later, and is 39 minutes shorter in elapsed time (`comparison-registry.json` T07–T09). The economy journey departs 191 minutes and arrives 275 minutes later than the recommendation (T01–T02), with a 110,000 versus 275,000 Turkish-mile quote and an economy rather than business award cabin. It arrives at the same time as the later business choice (T05). Its USD 109 positioning quote and 301-minute LAX wait match its component and connection records.
+
+The cash reference is a separate benchmark: `evidence.json` component `f1fcd665...` has SFO–SEA–ICN–BKK, two stops, Delta/Korean Air, January 8 6:05 a.m. departure, January 10 12:20 a.m. arrival, 1,635-minute duration, and a USD 452 quote with unknown scope. The answer avoids a cash-versus-points value claim and consolidates limitations after its authored comparisons. The narrative and embedded references form a coherent recommendation with several supported gains and losses.
+
+**Recorded uncertainty:** All displayed award `money.points_scope` fields are `unknown`. I read “using fewer miles” as comparing the two explicitly reported, same-program point quotes, not asserting the miles needed for the requested traveler. The answer also says traveler coverage is unestablished. No factual contradiction requires an H finding. Another journey could be a stronger representative, but this local argument does not claim global optimality.
+
+**Checks:** Read only the assigned answer, selected document, canonical evidence, references, comparison registry, and reviewer instructions. Inspected the selected journeys, their award and positioning components, cash benchmark, request, and T01–T09 comparison facts. No live calls. No unresolved issue requires escalation.

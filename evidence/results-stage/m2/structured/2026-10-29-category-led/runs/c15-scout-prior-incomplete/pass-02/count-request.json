@@ -1,0 +1,114 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": {
+    "effort": "medium"
+  },
+  "instructions": "Write a concise, natural traveler answer from the exact authoring_records. They are a candidate pool, not a list to display in full. Show the smallest useful subset that explains materially different choices while representing each selected Ranking category perspective. A selected journey may cover several perspectives; no category requires a separate card or fixed quota. Omit a pool member if it adds no distinct traveler decision, and never refer to an omitted member in prose. Every concrete option discussed needs its own exact source-resolved block: k=p or a for a complete journey, k=l for a research lead. Put its short decision reason in v and a natural label in n. Cards provide itinerary details. Use selected_choice_facts and exact records to explain why each shown option is worth considering. Briefly reuse a fact when it explains that reason; avoid narrating the card. The table does not rank options. A reason may depend on a program, cabin, date or connection preference without assuming the traveler has that preference. For complete journeys, explain the supported benefit that distinguishes each shown choice, such as a shorter trip, cabin or connection buffer. Use Ranking's time/cost/premium memberships as source facts, but describe the traveler benefit in ordinary language, with no empty category notices or mandatory headings. Time membership means a qualifying duration band, not earlier arrival or dominance over another selected journey. Use selected_temporal_relations for relative departure, arrival or duration claims; preserve equal arrivals as equal and do not substitute one metric for another. Category overlap does not create an overall winner. When no complete eligible journey exists, say so once. For every k=l lead, use v for its supported conditional reason to check the program, date, cabin or useful same-program quote difference. The source card already identifies research status and shows its reported gaps. Discuss shared gaps once; add a lead-specific condition only if it changes the next check. A date or quote alone is a card fact, not a reason. Do not assume the traveler owns program points or prefers a date or cabin. Do not force same-program pairs, a lowest-points rule, or cross-program economic ranking. Preserve each quote's scope: incomplete or unknown-scope amounts do not establish a per-person fare, all-in trip cost or cheapest-overall choice. The condition_applicability table gives source condition codes, states and exact selected-pool aliases, not words to copy. Consider only the choices you actually show; explain each relevant condition once in natural language, locally when it changes that choice's next action or together when it applies across shown choices. Do not repeat a condition in both places or infer one from a missing field. Keep any opening sentence consistent with shown choices, or omit the comparison if unsupported. Do not repeat generic availability advice; display adds it separately. Use one k=b SOURCE-BOUND INLINE CASH SENTENCE with the exact benchmark r: plain source origin-to-destination route, quoted amount and material uncertainty. Do not copy this sentence into k=t prose or a card reason, extend the quote to connecting cities, or invent stop descriptors. A loyalty program is not an operating airline; do not guess a missing carrier or borrow one from another record. Never print internal J/A/C aliases. Output JSON blocks in reading order. For cash context rely on its quote.kind, quote.display and quote.source_unit; fee metadata does not describe the cash fare unit. The display already supplies the canonical availability reminder, so leave generic current-availability warnings out of authored prose.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "input": "{\"packet\":{\"authoring_records\":{\"A1@2027-01-01/SFO>BKK/E\":{\"facts\":{\"airports\":[\"SFO\",\"BKK\"],\"cabin\":\"economy\",\"carriers\":[\"BR\"],\"cash\":\"absent\",\"cash_currency\":\"absent\",\"date\":\"2027-01-01\",\"fee_currency\":\"CAD\",\"fee_unit\":\"minor\",\"fees\":11650,\"findings\":[],\"in_departure_window\":true,\"kind\":\"award_summary\",\"leg_cabins\":\"absent\",\"points\":65000,\"price_scope\":\"unknown\",\"program\":\"aeroplan\",\"request_route_match\":true,\"returned_travelers\":\"absent\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"schedule_state\":\"date_only\",\"seats\":2,\"timing\":\"-\"},\"member\":{\"ref\":\"A1@2027-01-01/SFO>BKK/E\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"CAD 116.50\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"role\":\"lead\"},\"A2@2027-01-01/SFO>BKK/E\":{\"facts\":{\"airports\":[\"SFO\",\"BKK\"],\"cabin\":\"economy\",\"carriers\":[\"CA\",\"UA\",\"ZH\"],\"cash\":\"absent\",\"cash_currency\":\"absent\",\"date\":\"2027-01-01\",\"fee_currency\":\"USD\",\"fee_unit\":\"minor\",\"fees\":2820,\"findings\":[],\"in_departure_window\":true,\"kind\":\"award_summary\",\"leg_cabins\":\"absent\",\"points\":60500,\"price_scope\":\"unknown\",\"program\":\"united\",\"request_route_match\":true,\"returned_travelers\":\"absent\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"schedule_state\":\"date_only\",\"seats\":9,\"timing\":\"-\"},\"member\":{\"ref\":\"A2@2027-01-01/SFO>BKK/E\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 28.20\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"role\":\"lead\"},\"A3@2027-01-01/SFO>BKK/E\":{\"facts\":{\"airports\":[\"SFO\",\"BKK\"],\"cabin\":\"economy\",\"carriers\":[\"AS\",\"JX\"],\"cash\":\"absent\",\"cash_currency\":\"absent\",\"date\":\"2027-01-01\",\"fee_currency\":\"USD\",\"fee_unit\":\"minor\",\"fees\":5090,\"findings\":[],\"in_departure_window\":true,\"kind\":\"award_summary\",\"leg_cabins\":\"absent\",\"points\":42500,\"price_scope\":\"unknown\",\"program\":\"alaska\",\"request_route_match\":true,\"returned_travelers\":\"absent\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"schedule_state\":\"date_only\",\"seats\":8,\"timing\":\"-\"},\"member\":{\"ref\":\"A3@2027-01-01/SFO>BKK/E\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 50.90\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"role\":\"lead\"},\"C3@2027-01-01T11:45-08:00/SFO>BKK\":{\"facts\":{\"airports\":[\"SFO\",\"ICN\",\"BKK\"],\"arrival\":{\"local_iso\":\"2027-01-02T23:05:00+07:00\",\"timezone\":\"Asia/Bangkok\"},\"carriers\":[\"Korean Air\"],\"cash\":958,\"cash_currency\":\"USD\",\"date\":\"2027-01-01\",\"departure\":{\"local_iso\":\"2027-01-01T11:45:00-08:00\",\"timezone\":\"America/Los_Angeles\"},\"duration_minutes\":1220,\"findings\":[],\"kind\":\"cash_itinerary\",\"price_scope\":\"unknown\",\"returned_travelers\":1,\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"stops\":1},\"member\":{\"ref\":\"C3@2027-01-01T11:45-08:00/SFO>BKK\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 958.00\",\"kind\":\"cash_fare\",\"price_scope\":\"unknown\",\"source_unit\":\"major\"},\"role\":\"benchmark\"}},\"category_landscape\":{\"available_counts\":{\"cost\":0,\"premium\":0,\"time\":0},\"meaning\":\"Ranking memberships are source facts; counts are journey variants, not discoveries.\",\"possible_cost_count\":0,\"selected_members\":{\"cost\":[],\"premium\":[],\"time\":[]}},\"comparison\":{\"cost_reference_usd\":null,\"eligible_count\":0,\"full_pool\":\"P1\",\"time_reference_minutes\":null},\"composition_format\":\"complete-v18\",\"condition_applicability\":[{\"applies_to\":[\"C3@2027-01-01T11:45-08:00/SFO>BKK\"],\"code\":\"benchmark_cash_quote_scope\",\"state\":\"unknown\"},{\"applies_to\":[\"A1@2027-01-01/SFO>BKK/E\",\"A2@2027-01-01/SFO>BKK/E\",\"A3@2027-01-01/SFO>BKK/E\"],\"code\":\"lead_award_tax_quote_scope\",\"state\":\"unknown\"},{\"applies_to\":[\"A1@2027-01-01/SFO>BKK/E\",\"A2@2027-01-01/SFO>BKK/E\",\"A3@2027-01-01/SFO>BKK/E\"],\"code\":\"lead_schedule\",\"state\":\"date_only\"}],\"editorial_plan\":[],\"finding_meanings\":{\"seats_program_unsupported\":{\"field\":\"seats\",\"message\":\"program does not supply reliable seat-count evidence\",\"severity\":\"unknown\"},\"seats_zero_ambiguous\":{\"field\":\"seats\",\"message\":\"zero may mean seat count is unavailable\",\"severity\":\"unknown\"}},\"format\":\"focused-authoring-records-v3\",\"legend\":{\"award_only\":\"One award itinerary without a separate cash positioning component; it may contain connecting flights. Read award stops, airports, and flights for the actual connection pattern.\",\"eligibility\":\"Every J member is eligible; benchmarks and incomplete leads have separate roles.\",\"findings\":\"Finding codes remain next to their source facts; finding_meanings gives the source's severity, field and meaning.\",\"grouping\":\"Only complete byte-equal facts share a group; each member remains an exact source reference.\",\"lead_window\":\"The lead flag compares its own departure date with the request window, not complete journey compatibility.\",\"observed_airport_path\":\"Ordered airport sequence joined only at an equal cash/award boundary when both source component sequences exist; null means the full observed sequence is unknown. It does not prove same aircraft, ticket protection or bookability.\",\"raw\":\"A missing component field means source absent/empty. Explicit null/unknown and zero remain present. A lead's '-' means absent/empty.\",\"relations\":\"Schedule matches are source timing evidence, not physical-flight identity or a selection.\",\"scope\":\"Journey cabin does not prove all leg cabins; leg_cabins follows successive airport pairs.\",\"timeline\":\"A component departure/arrival value same_as_journey inherits that exact whole-journey time in the same record.\"},\"outcome_mode\":\"no_complete_journey\",\"policy\":{\"fx\":{\"as_of\":\"2026-09-29\",\"rates_to_usd\":{\"CAD\":\"0.7048209754722300535663941359\",\"USD\":\"1\"},\"source\":\"https://www.bankofcanada.ca/valet/observations/FXUSDCAD/json?start_date=2026-09-29&end_date=2026-09-29\"},\"ranking\":{\"cost_factor\":\"2\",\"points_per_usd\":\"100\",\"time_factor\":\"1.2\",\"unknown_tax_usd\":\"150\",\"version\":\"ranking-m2-v1\"}},\"record_legend\":\"Exact source aliases. award_connections belong to the award itinerary; journey_connections retain separate-booking/cash waits per journey. wait_minutes=null means unknown, never zero. Quotes are original-currency major units with source unit and price scope; unknown scope is neither per traveler nor party total.\",\"request\":{\"cabins\":[],\"conflicts\":[],\"departure_window\":{\"end\":\"2027-01-31\",\"precision\":\"window\",\"raw_text\":\"January 2027\",\"start\":\"2027-01-01\"},\"destinations\":[{\"kind\":\"airport\",\"raw_text\":\"BKK\",\"value\":\"BKK\"}],\"hard_constraints\":[],\"origins\":[{\"kind\":\"airport\",\"raw_text\":\"SFO\",\"value\":\"SFO\"}],\"repositioning_allowed\":null,\"search_modes\":[\"award\"],\"travelers\":1,\"unknowns\":[{\"detail\":\"No cabin preference was stated.\",\"evidence\":[],\"field\":\"cabin\",\"raw_text\":null,\"reason\":\"missing\"}]},\"selected_choice_facts\":[{\"alias\":\"A1@2027-01-01/SFO>BKK/E\",\"component_kind\":\"award_summary\",\"date\":\"2027-01-01\",\"points\":65000,\"price_scope\":\"unknown\",\"program\":\"aeroplan\",\"reported_cabin\":\"economy\",\"reported_leg_cabins\":\"absent\",\"role\":\"lead\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"}},{\"alias\":\"A2@2027-01-01/SFO>BKK/E\",\"component_kind\":\"award_summary\",\"date\":\"2027-01-01\",\"points\":60500,\"price_scope\":\"unknown\",\"program\":\"united\",\"reported_cabin\":\"economy\",\"reported_leg_cabins\":\"absent\",\"role\":\"lead\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"}},{\"alias\":\"A3@2027-01-01/SFO>BKK/E\",\"component_kind\":\"award_summary\",\"date\":\"2027-01-01\",\"points\":42500,\"price_scope\":\"unknown\",\"program\":\"alaska\",\"reported_cabin\":\"economy\",\"reported_leg_cabins\":\"absent\",\"role\":\"lead\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"}}],\"selected_temporal_relations\":[],\"selection_format\":\"roles-v20\",\"selection_scope\":{\"benchmark_selected\":true,\"journey_count\":0,\"lead_count\":3,\"meaning\":\"These are the model-selected facts only; comparisons and superlatives must be limited to shown choices, not the unseen eligible pool.\"},\"source_context\":{\"availability_guidance\":\"Some results aren't real-time. Confirm availability and current prices on the official booking sites before booking.\",\"coverage_limits\":[{\"kind\":\"detail_query\",\"reason\":\"resource_budget_exhausted\",\"routes_and_dates\":[\"SFO-BKK:2027-01-01..2027-01-31\"],\"status\":\"omitted\"},{\"kind\":\"logical_query\",\"reason\":\"pagination_budget_exhausted\",\"routes_and_dates\":[\"SFO-TPE:2027-01-01..2027-01-31\",\"TPE-BKK:2026-12-31..2027-02-02\"],\"status\":\"partial\"},{\"kind\":\"relationship\",\"reason\":\"pagination_budget_exhausted\",\"routes_and_dates\":[\"SFO-TPE:2027-01-01..2027-01-31\",\"TPE-BKK:2026-12-31..2027-02-02\"],\"status\":\"partial\"},{\"kind\":\"strategy_use\",\"reason\":\"pagination_budget_exhausted\",\"routes_and_dates\":[\"SFO-TPE:2027-01-01..2027-01-31\",\"TPE-BKK:2026-12-31..2027-02-02\"],\"status\":\"partial\"}],\"observed_at_range\":[\"2026-10-09T06:44:24.081093Z\",\"2026-10-09T06:44:37.824074Z\"],\"provider_status\":\"partial\"},\"source_scope\":{\"full_direct_cash_benchmark_count\":5,\"full_selectable_journey_count\":0,\"full_selectable_lead_count\":378,\"selected_benchmark_count\":1,\"selected_journey_count\":0,\"selected_lead_count\":3}}}",
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "CategoryDocument",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C3@2027-01-01T11:45-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "l"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "A1@2027-01-01/SFO>BKK/E",
+                        "A2@2027-01-01/SFO>BKK/E",
+                        "A3@2027-01-01/SFO>BKK/E"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string",
+                      "description": "Supported conditional reason to check this lead's program, date or cabin. Its source card shows research status and reported gaps; shared gaps belong once in surrounding prose."
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      }
+    }
+  }
+}

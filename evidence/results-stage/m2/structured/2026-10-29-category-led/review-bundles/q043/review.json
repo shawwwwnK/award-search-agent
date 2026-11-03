@@ -1,0 +1,89 @@
+{
+  "bundle": "q043",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "familiarity": "Prior source/code/profile/review familiarity disclosed. This draw was independently graded without current profile mapping, timing, checker verdicts or other current grades.",
+  "axes": {
+    "H": {
+      "verdict": "fail",
+      "reason": "Comparative prose refers to other shown economy awards and a shown Turkish economy option that are absent from the delivered answer. The only visible economy arrives 10:35, not the business arrival 08:50."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "The shorter economy and conditional business-cabin/separate-ticket choices remain defensible despite the erroneous comparison referents."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "Comparisons depend on omitted optional-pool choices; shared unknown award price scope is separately repeated in both captions. The economy caption also recites several card facts."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "A supported shorter-journey versus business-cabin/separate-ticket choice remains explained. The erroneous extra arrival comparisons are H/M2 failures, not a lack of all useful tradeoff content."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Displayed J1 time and J217 premium retain the available category perspectives. No cost member or overlap is available; the omitted pool choices need not be shown."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Both flight cards exactly join canonical journeys/components and one USD440 unknown-scope cash sentence appears inline. Captions contain useful reasons, though some factual recap is unnecessary."
+    }
+  },
+  "findings": [
+    {
+      "severity": "material",
+      "axes": [
+        "H",
+        "M2"
+      ],
+      "claim": "arrives at the same time as the shown Turkish economy option",
+      "evidence": [
+        "document.json blocks[2].text",
+        "document.json selection.journey_ids contains only J1 and J217",
+        "evidence.json journeys[candidate_id=e175113d74a221d8a83f5f4fc8a9ccf9b27716f3506737752d7407d66d32e7b4].arrival.local_iso=2027-01-17T08:50:00+07:00",
+        "evidence.json journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82].arrival.local_iso=2027-01-17T10:35:00+07:00",
+        "selection-audit.json includes J124 (84c741f8deabaffd0e2ff0a6d2565828f39e8a8e2a3c10b6e792fbdb959bf5b9) in the optional pool, but it is not in document/resolved displayed references."
+      ],
+      "assessment": "The same-arrival relation belongs to an omitted Turkish economy record, not any shown economy card. If read against the only visible economy, it is false by105 minutes. Optional-pool presence does not make a choice shown."
+    },
+    {
+      "severity": "material",
+      "axes": [
+        "H",
+        "M2"
+      ],
+      "claim": "arrives earlier than the other shown economy awards",
+      "evidence": [
+        "document.json blocks[1].text",
+        "document.json blocks[1:3] shows one economy and one business journey",
+        "selection-audit.json optional pool has J11,J13,J124; only J1 is shown as economy"
+      ],
+      "assessment": "There are no other shown economy awards. Even treating the full optional pool as the comparator does not save the universal claim: omitted J124 arrives08:50 before J1 at10:35."
+    },
+    {
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "the quote\u2019s scope is unspecified / its price scope is unspecified",
+      "evidence": [
+        "document.json blocks[1].text and blocks[2].text",
+        "condition-applicability.json award_price_scope and award_tax_quote_scope apply to both visible J1 and J217",
+        "canonical award component price_scope and both journey award-tax scopes are unknown"
+      ],
+      "assessment": "The same shared award quote limitation is repeated in both captions instead of consolidated once. The benchmark is a separate quote role and its cash-scope sentence is not counted as this duplication."
+    }
+  ],
+  "verification": [
+    "Read frozen rubric, full canonical source/request, all34 journey groups across258 journeys,143 research leads/directions, category/cost indexes, style audit, both factual sidecars, reference map, document,resolved and answer Markdown.",
+    "Exact equality of all visible journey/award/cash/benchmark attachments; all five choice rows and complete connection partitions source-checked; eight condition rows verified against canonical fields/reasons.",
+    "J1 elapsed1220/HKG105,65000 Aeroplan/CAD10740minor; J217 elapsed2132/LAX644/IST60,275000 Turkish/unknown taxes/support and separate-positioning obligations. USD440 major unknown-scope benchmark exact.",
+    "Source categories11 time,116 premium,0 cost,0 overlap. Actual displayed witnesses J1/J217 match; no material category omission found."
+  ],
+  "uncertainty": [
+    "Minimizing travel time is read as a conditional reason for a source time-band member, not an absolute shortest-in-source claim.",
+    "Saved-source review does not establish live availability or population reliability; browser layout not tested."
+  ],
+  "improvement_direction": "Keep optional-pool selection separate from displayed referents when writing comparisons, and explain shared quote scope once. No forced additional cards, pair quota or numerical comparison requirement follows.",
+  "escalation": "Parent integration required for failed draw; no deeper code review escalation requested."
+}

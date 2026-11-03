@@ -1,0 +1,76 @@
+{
+  "bundle": "q059",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": {
+      "verdict": "fail",
+      "reason": "Qualified wording failure: shared paragraph says to clarify points and tax amounts and their scope because these details are unknown, but both source point amounts are explicitly known values110000/275000. Tax amount and scopes are unknown; the sentence conflates those states. Earlier reported-quote comparison and4h35 arrival arithmetic are otherwise exact."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Two defensible conditional choices: lower reported same-program economy quote versus business cabin plus earlier arrival, with party/ticket caveats."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "Shared quote scope is explained in economy caption for both choices and then repeated in the shared points/tax-scope checklist. The second occurrence adds no new award-scope condition. Own reasons and natural comparison otherwise work."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Source supports lower reported Turkish economy quote and earlier-arriving business cabin, with explicit unknown quote scope; no different-program valuation or fabricated either/or."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Actual J18 time and J63 time+premium cards preserve full-source perspectives and overlap.116 time/116 premium/58 overlap,zero cost/possible-cost; no cost winner invented."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two canonical source-resolved flight cards carry exact facts. One inline USD452 cash sentence preserves unknown scope; no full cash card or duplicate cash prose."
+    }
+  },
+  "findings": [
+    {
+      "axis": "H",
+      "severity": "material",
+      "qualification": "Ambiguous wording; strongest literal reading fails known-versus-unknown preservation.",
+      "delivered_evidence": "document.json blocks[3].text: clarify the points and tax amounts and their scope ... these details are unknown.",
+      "source_evidence": [
+        "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669].award_points={state:value,value:110000};money.points_scope=unknown;money.award_taxes.raw_amount.state=unknown",
+        "evidence.json journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee].award_points={state:value,value:275000};money.points_scope=unknown;money.award_taxes.raw_amount.state=unknown"
+      ],
+      "reason": "Reported point amounts exist. Unknown scope prevents a confirmed per-person/all-in interpretation, not knowledge of the raw reported amount. The blanket unknown assertion does not specify a final payable amount."
+    },
+    {
+      "axis": "M2",
+      "severity": "material",
+      "delivered_evidence": [
+        "document.json blocks[1].text: both have unknown quote scope.",
+        "document.json blocks[3].text: clarify the points and tax amounts and their scope ... these details are unknown."
+      ],
+      "source_evidence": [
+        "Both actual journey money.points_scope and money.award_taxes.scope are unknown; both point/tax scopes project the same exact award component price_scope per journey",
+        "condition-applicability.json award_points_and_tax_quote_scope row applies to both J18 and J63"
+      ],
+      "reason": "The same shared award-scope uncertainty is stated locally for both choices and again in the shared paragraph. Distinct unknown tax amount, party support and ticket obligations are not counted as repetition; compact card indicators are not counted either."
+    }
+  ],
+  "familiarity": "Prior source/code/profile-development/review familiarity disclosed. Current metrics, checker verdicts, profile mapping and other current grades were not inspected.",
+  "evidence": [
+    "Frozen reviewer-instructions.md; full evidence.json request,232 journeys,8 groups,247 components,167 leads, all eligible groups/research directions/source indexes/cost assessments",
+    "document.json all blocks;resolved.json all attachments;answer.md actual cards",
+    "references.json;selection-audit.json raw indexed binding/membership/visibility",
+    "condition-applicability.json seven rows/aliases and selected-choice-facts.json both records/connections"
+  ],
+  "uncertainty": [
+    "H is qualified: a charitable reading takes clarify the points as confirming the final payable amount, especially because earlier text correctly labels reported quotes. The delivered sentence itself broadly says those details are unknown without that distinction; source truth requires preserving known reported values.",
+    "M2 local scope qualifier is appropriate to the comparison; the later repetition is the problem. No requirement to remove the comparison qualifier or invent local conditions is implied.",
+    "Repeated historical source; no unseen/provider-fresh or broader reliability claim. No browser rendering test."
+  ],
+  "checks": [
+    "Canonical equality for both journey/award/cash attachments and benchmark",
+    "275-minute arrival delta independently recomputed",
+    "Raw indexed source membership/actual visibility and overlap checked",
+    "All selected-choice fields/connections compared to canonical sources"
+  ],
+  "escalation_recommended": false
+}

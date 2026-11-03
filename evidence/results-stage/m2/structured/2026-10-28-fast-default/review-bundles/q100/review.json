@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "If you prefer the carrier shown on the other January 1 economy lead, check Aeroplan as an alternative; its reported seat count is lower. The points totals are from different programs and should not be compared as equivalent costs.",
+      "canonical_reference": "evidence.json components[observation_id=0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c] and components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]",
+      "source_field": "carriers; program; seats; cabin; departure_date; money.quoted_usd",
+      "source_value": "Aeroplan: BR, 2 seats, economy, January 1, ~USD 82.11 converted tax quote; United: CA/UA/ZH, 9 seats, economy, January 1, USD 28.20 tax quote; all price scopes unknown",
+      "explanation": "A different carrier or program is offered only as a conditional preference the traveler did not state. The answer does not explain a concrete offsetting gain against the lower seat count or compare the quote amounts on a qualified basis. Alaska gives a cabin/date difference but no developed cost or timing tradeoff."
+    }
+  ],
+  "reasoning": "The source contains zero complete award journeys, 378 incomplete award leads, five direct cash benchmarks, and partial provider coverage. The answer accurately labels its three selected award choices as date-level leads, separates reported seats from unverified returned traveler support, distinguishes journey premium economy from leg cabin, preserves unknown quote scope, and describes the one-stop cash baseline with correct local dates and times. It gives a defensible United verification lead with downside, embeds references in coherent explanations, offers alternatives and cash context, and consolidates limits. Comparative depth is basic because the Aeroplan alternative's gain is preference-conditional and undeveloped, while the Alaska discussion lists a different date/cabin and points program without a fuller gains/losses account. This does not require a globally strongest representative or a fixed number of options."
+}

@@ -1,0 +1,137 @@
+{
+  "review_contract": "results-category-blind-review-v1",
+  "bundle": "q005",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "pass",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "Both selected timing comparisons and LAX buffer contrast agree with source; cabin/program, quotes and common unknown seat/tax/party/protection conditions remain correctly qualified.",
+    "U": "A traveler can choose the shorter business trip or the longer economy trip with a larger separate-ticket LAX buffer; the latter is now a real supported reason rather than merely accepting a worse trip.",
+    "M2": "Natural short explanations introduce each option once; common missing evidence and booking uncertainty are consolidated after both choices.",
+    "C": "Business/shorter total versus economy/larger LAX buffer is a meaningful source-supported tradeoff. Numerical point arithmetic is not required to make it useful.",
+    "K": "The business option is explicitly time plus premium and appears once; economy is time-only. Zero source cost members are not promoted from undetermined costs.",
+    "P": "Code-resolved cards show actual award legs and separate known SFO\u2013LAX component schedules with individual flight details unreported. Cash context is one accurate source-bound sentence."
+  },
+  "findings": [
+    {
+      "id": "q005-note1",
+      "severity": "note",
+      "axes": [],
+      "claim": "Neither is a Cost-category recommendation",
+      "explanation": "Factually correct but slightly internal wording. The final shared paragraph provides its practical meaning: missing comparable complete prices. This does not defeat otherwise natural concise composition.",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "fields": {
+            "source.view.indexes.cost": [],
+            "source.view.indexes.possible_cost": []
+          }
+        },
+        {
+          "file": "selection-audit.json",
+          "fields": {
+            "omitted_reasons": []
+          }
+        }
+      ]
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "fff964eebddab3b7f802bd5d74ff1807953c3e3402dcdff3c6325ae11510fcc9",
+      "fields": {
+        "elapsed_minutes": "1700",
+        "styles": [
+          "time",
+          "premium"
+        ],
+        "LAX_wait_minutes": 134,
+        "IST_wait_minutes": 140,
+        "award_points.value": 275000,
+        "booking_obligation": "separate_tickets_unverified",
+        "internal.status": "conditional"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+      "fields": {
+        "elapsed_minutes": "1803",
+        "styles": [
+          "time"
+        ],
+        "LAX_wait_minutes": 301,
+        "IST_wait_minutes": 60,
+        "award_points.value": 110000,
+        "booking_obligation": "separate_tickets_unverified",
+        "internal.status": "conditional"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "7b69397208b17fea873fefaef7df38b0a81e5024936a2a19fa05980678c2a105",
+      "fields": {
+        "origin": "SFO",
+        "destination": "LAX",
+        "legs[0].reported": false,
+        "legs[0].departure.local_iso": "2027-01-08T08:55:00-08:00",
+        "legs[0].arrival.local_iso": "2027-01-08T10:31:00-08:00",
+        "cash_amount.value": 59,
+        "price_scope": "unknown"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "feb4769d10abda4aa6364b67cb1e3c25550f99b11521a4fb2ab19dfe070e3f4e",
+      "fields": {
+        "origin": "SFO",
+        "destination": "LAX",
+        "legs[0].reported": false,
+        "legs[0].departure.local_iso": "2027-01-08T11:47:00-08:00",
+        "legs[0].arrival.local_iso": "2027-01-08T13:29:00-08:00",
+        "cash_amount.value": 109,
+        "price_scope": "unknown"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "cash_amount.value": 452,
+        "cash_currency.value": "USD",
+        "price_scope": "unknown",
+        "airport_sequence": [
+          "SFO",
+          "SEA",
+          "ICN",
+          "BKK"
+        ]
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 232,
+    "time_members": 116,
+    "premium_members": 116,
+    "cost_members": 0,
+    "possible_cost_members": 0,
+    "time_premium_overlap": 58,
+    "time_families": 6,
+    "premium_families": 4,
+    "notes": "Inspected full category inventory and selected per-style assessments; both complete available perspectives survive. Full-source count is not treated as a distinct-flight count. No omitted category is excused by a rationale."
+  },
+  "independence": "Current profile, timing, prompts, checker verdicts and other reviews were not read. Reviewer is familiar with prior draws from these source cases and reviewed code; this is source-familiar independent review rather than fully source-blind.",
+  "uncertainty": "Semantic pass is scoped to this saved answer. It does not establish population quality, latency or M2 qualification. Conditional source observations are not booking confirmation.",
+  "verification": "Offline comparison of full source/indexes, selected document, component schedules/quotes, resolved cards and omission audit. No live calls or code changes.",
+  "escalation_recommended": false
+}

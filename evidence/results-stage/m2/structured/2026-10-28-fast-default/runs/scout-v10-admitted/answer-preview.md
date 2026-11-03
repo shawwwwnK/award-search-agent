@@ -1,0 +1,15 @@
+I’d investigate the HKG award first: among these shown options it has the earliest arrival and a shorter elapsed journey than the later HKG alternative. Its tradeoff is a 70-minute connection; choose the other HKG itinerary if a longer connection buffer matters more.
+
+This Aeroplan economy award via HKG arrives 40 minutes earlier than the other HKG choice and has a 40-minute shorter elapsed journey. It reports 9 seats, versus 2 on that alternative. The downside is its 70-minute HKG award connection. The search returned 65,000 points plus CAD 107.40 in fees; quote scope is unknown, so neither amount is established as per-person or party total.
+
+[Display: Earlier-arriving HKG award; journey; cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a]
+
+Consider this Aeroplan economy award if a 105-minute HKG connection is preferable to the earlier HKG option’s 70 minutes. The cost is a later arrival and a journey 40 minutes longer; it reports 2 seats. Its search also returned 65,000 points plus CAD 107.40 in fees, with unknown quote scope.
+
+[Display: HKG option with a longer connection; journey; 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]
+
+The cash search returned USD 440 for a one-stop Singapore Airlines itinerary via SIN. The quote scope is unknown, so this is context—not a per-person fare, party total, or like-for-like all-in comparison with points and award fees. The search returned support for 1 traveler, which does not establish the quote’s price scope.
+
+[Display: Cash-search baseline; benchmark; 063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd]
+
+Both award choices are single award itineraries with one stop, not nonstop flights; their stated connection times are within the award itinerary. Award amounts and cash quotes have unknown scope, and the award leg cabins are not specified beyond the journey’s reported economy cabin. These assembled results are not confirmed bookings; availability and current prices need checking with the provider. Coverage was partial and results may not be real-time.

@@ -1,0 +1,233 @@
+{
+  "bundle": "q051",
+  "review_type": "independent source-grounded incomplete-result review",
+  "rubric": "../../reviewer-instructions.md, frozen including owner-approved Q3 clarification",
+  "overall": "fail",
+  "axes": {
+    "H": "fail",
+    "U": "pass",
+    "M2": "pass",
+    "C": "fail",
+    "K": "pass",
+    "P": "pass"
+  },
+  "axis_reasons": {
+    "H": "All literal displayed card and cash facts match the source. However, the Alaska caption gives its lower points quote as a reason to check it, with United as the only other displayed lead. That is an unsupported cross-program comparative advantage; the raw numerical inequality itself is accurate.",
+    "U": "Conditional usefulness of Alaska or United provides defensible next research directions. The answer preserves incomplete status, unknown monetary scope and the need to confirm on official booking sites, without inventing balances or preferences.",
+    "M2": "A concise opening consolidates shared missing schedules and unknown award-tax scope. Captions are connected to two actual cards; availability appears once. Compact repeated card indicators are permitted; there is no repeated common-limits prose.",
+    "C": "Conditional program access is a sufficient research reason under Q3, but the additional lower-points rationale implies advantage between unlike program currencies. Useful truthful program conditions do not validate that added comparison. No forced pair, numeric minimum, cabin or program quota is applied.",
+    "K": "No eligible journeys or source style memberships exist. Null indexed style references, no indexed witnesses and research-lead labels accurately preserve that absence.",
+    "P": "Two exact source-resolved lead cards and one brief labeled source-faithful cash sentence are present. The cash sentence appears once across all blocks. Full 378-award/5-cash references and the canonical population are intact; interactive explorer behavior is untested."
+  },
+  "findings": [
+    {
+      "id": "q051-F1",
+      "axes": [
+        "H",
+        "C"
+      ],
+      "severity": "material",
+      "location": "document.json blocks[2].text; Alaska caption in answer.md and answer.html",
+      "claim": "If Alaska is a useful program for you, check this lead for its lower points quote.",
+      "issue": "The displayed alternatives are Alaska and United. The caption uses the lower raw point count as an affirmative research advantage across program currencies. A conditional program-usefulness reason is supported on its own, but does not establish that numerical order as an economic advantage. Unknown tax scope is correctly preserved elsewhere and does not repair this comparison.",
+      "source_evidence": [
+        {
+          "file": "evidence.json",
+          "path": "source.view.components[observation_id=0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]",
+          "fields": {
+            "program.value": "alaska",
+            "points.value": 42500,
+            "departure_date": "2027-01-01",
+            "cabin.value": "economy",
+            "price_scope": "unknown"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "path": "source.view.components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]",
+          "fields": {
+            "program.value": "united",
+            "points.value": 60500,
+            "departure_date": "2027-01-01",
+            "cabin.value": "economy",
+            "price_scope": "unknown"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "path": "source.view",
+          "fields": {
+            "assessments": [],
+            "comparison_pool_ids": [],
+            "indexes.cost": [],
+            "cost_reference_usd": null
+          }
+        }
+      ],
+      "uncertainty": "The caption never explicitly says cheapest or best value and could be read as merely noting a raw count. The comparator is unstated; in the delivered two-lead answer United is the natural comparator. I judge the explicit phrase check this lead for its lower points quote to turn the count order into an unsupported advantage. This is semantic framing uncertainty, not an arithmetic error.",
+      "recommended_change": "Retain the conditional Alaska-program research reason and remove the lower-points rationale, or give a supported explicitly scoped comparison if one is useful. No extra lead or numerical pair is mandatory."
+    }
+  ],
+  "source_binding": {
+    "source_digest": "6397a1ee6673820f4c2fb38bc10d81a3d67e42b766770ce40bac4182a1aabbd6",
+    "view_digest": "0f6169759effc12665625783ab2e8215c87162ff916627f40fd4e03292e4b0c9",
+    "fx_snapshot_digest": "ce21f1ccdaa9672385f3b4646999498dec698ea9007626780b794870822d1f5a",
+    "provider_run_id": "harness:384cea799efb41c7a2967c4c10156f8c"
+  },
+  "source_truth_checks": [
+    {
+      "alias": "A3",
+      "observation_id": "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "route": "SFO-BKK",
+      "date": "2027-01-01",
+      "program": "alaska",
+      "cabin": "economy",
+      "points": 42500,
+      "tax_minor_units": 5090,
+      "tax_currency": "USD",
+      "seats": 8,
+      "price_scope": "unknown",
+      "reported_legs": []
+    },
+    {
+      "alias": "A2",
+      "observation_id": "cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "route": "SFO-BKK",
+      "date": "2027-01-01",
+      "program": "united",
+      "cabin": "economy",
+      "points": 60500,
+      "tax_minor_units": 2820,
+      "tax_currency": "USD",
+      "seats": 9,
+      "price_scope": "unknown",
+      "reported_legs": []
+    },
+    {
+      "alias": "C3",
+      "observation_id": "96629958e5753581d7384b09cbfffe1b6fc3bd743135f0e3e32467ceac8e1bae",
+      "route": "SFO-BKK",
+      "date": "2027-01-01",
+      "cash_amount_major_units": 958,
+      "currency": "USD",
+      "price_scope": "unknown"
+    }
+  ],
+  "full_source_examination": {
+    "components": 383,
+    "award_summaries": 378,
+    "cash_itineraries": 5,
+    "endpoint_award_summaries": 106,
+    "sfo_tpe_awards": 105,
+    "tpe_bkk_awards": 167,
+    "journeys": 0,
+    "groups": 0,
+    "method": "Traversed every canonical/evidence component; compared 14 core fields for all records; examined every route/program/cabin group, all endpoint award date/quote/seat rows and all cash records. All award schedules incomplete and price scopes unknown."
+  },
+  "sidecar_checks": {
+    "selected_choice_rows_verified": 3,
+    "condition_alias_memberships_verified": 7,
+    "reported_leg_cabins": "absent verified against canonical legs=[]"
+  },
+  "audit_observation": {
+    "optional_pool": [
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "actual_cards": [
+      "A3",
+      "A2"
+    ],
+    "benchmark": "C3",
+    "style_choice_indexes": "all null",
+    "indexed_witnesses": {},
+    "judgment": "Actual cards form a valid subset of the optional pool. Benchmark alias/canonical ID and raw selection wire agree; no fabricated index witness or mandatory-card omission."
+  },
+  "omission_assessment": {
+    "judgment": "No separate material omission or optional-pool quota failure.",
+    "facts": [
+      {
+        "observation_id": "0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c",
+        "fields": {
+          "program.value": "aeroplan",
+          "departure_date": "2027-01-01",
+          "cabin.value": "economy",
+          "points.value": 65000,
+          "taxes_fees.value": 11650,
+          "tax_currency.value": "CAD",
+          "seats.value": 2,
+          "price_scope": "unknown"
+        }
+      },
+      {
+        "observation_id": "a8dad3774d9e11df4c6a4a282520a7b66bca6c5736c576e527b48257efdfe6ae",
+        "fields": {
+          "program.value": "united",
+          "departure_date": "2027-01-09",
+          "points.value": 55000,
+          "taxes_fees.value": 1620,
+          "tax_currency.value": "USD",
+          "price_scope": "unknown"
+        }
+      },
+      {
+        "observation_id": "963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6",
+        "fields": {
+          "program.value": "united",
+          "departure_date": "2027-01-13",
+          "points.value": 50600,
+          "taxes_fees.value": 1620,
+          "tax_currency.value": "USD",
+          "price_scope": "unknown"
+        }
+      },
+      {
+        "observation_id": "8481df166f5c373c7dd06fe625f39e17b1b38990c3050535a8aaafcaac562a93",
+        "fields": {
+          "program.value": "alaska",
+          "departure_date": "2027-01-17",
+          "cabin.value": "premium_economy",
+          "points.value": 55000,
+          "taxes_fees.value": 5090,
+          "tax_currency.value": "USD",
+          "seats.value": 1,
+          "price_scope": "unknown"
+        }
+      }
+    ],
+    "explanation": "The request is one award seat SFO-BKK during January, no program/cabin preference. Other programs, dates and reported cabins can supply useful follow-up directions, but no fixed coverage quota applies. The two selected Jan1 program directions are defensible. No source-wide best or exhaustive-selection claim is made. Partial SFO-TPE/TPE-BKK observations cannot establish a complete journey."
+  },
+  "blind_scope": {
+    "read": [
+      "AGENTS.md instructions already supplied/read",
+      "frozen campaign reviewer-instructions.md",
+      "q051 answer.md and answer.html",
+      "q051 document.json and resolved.json",
+      "q051 evidence.json including complete canonical source/projection",
+      "q051 references.json",
+      "q051 selection-audit.json including indexed audit and raw selection wire",
+      "q051 selected-choice-facts.json and condition-applicability.json"
+    ],
+    "withheld": "Current profiles/settings/mapping, prompts, timing/token metrics, checker verdicts, run summaries/index and other current grades were not inspected.",
+    "prior_familiarity": "Repeated canonical-source and earlier-answer/review familiarity from q006, q009, q012, q015, q018, q024, q027, q030, q033, q036, q042, q045 and q048 is disclosed. This is a new-draw assessment, not a fresh source-blind review. No previous verdict was used as proof.",
+    "incidental_prior_exposure": "During q042 preparation an orchestration status listing exposed generic implementation/archive-verification status, not q051 author configuration, metrics or semantic grade."
+  },
+  "verification": [
+    "Parsed bundle JSON artifacts.",
+    "All 383 canonical identities and 14 core fields agree with evidence projections.",
+    "378 award/5 cash references complete; all lead missing-schedule fields checked.",
+    "Two exact resolved lead component dictionaries and one cash component equal evidence records.",
+    "Three selected-choice rows and seven condition alias memberships checked against canonical source.",
+    "Indexed audit, raw selection wire, optional selected subset and benchmark binding verified.",
+    "Two HTML card articles and one cash sentence/reference/visible label verified in delivered Markdown/HTML.",
+    "Displayed prose independently assessed against full source, not inferred true from correct cards."
+  ],
+  "uncertainties": [
+    "The caption never explicitly says cheapest or best value and could be read as merely noting a raw count. The comparator is unstated; in the delivered two-lead answer United is the natural comparator. I judge the explicit phrase check this lead for its lower points quote to turn the count order into an unsupported advantage. This is semantic framing uncertainty, not an arithmetic error.",
+    "HTML inspected as markup/text, not browser-rendered; explorer completeness checked only at source/reference data boundary. Interactive behavior untested.",
+    "Selection optimality, provider-fresh holdout, population reliability, latency, current availability and bookability remain unclaimed."
+  ],
+  "escalation_recommended": false,
+  "escalation_note": "No deep escalation recommended. Parent integration should retain the explicit uncertainty around the comparative reading."
+}

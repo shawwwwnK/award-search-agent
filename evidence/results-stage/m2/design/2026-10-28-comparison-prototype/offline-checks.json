@@ -1,0 +1,205 @@
+{
+  "kind": "offline_clause_mechanics_only",
+  "source": "audited_saved_facts_plus_seeded_synthetic_controls",
+  "positive_clause_count": 9,
+  "synthetic_control_count": 20,
+  "saved_source_control_count": 2,
+  "controls": [
+    {
+      "name": "zero_quote_is_valid",
+      "input_kind": "synthetic_control",
+      "expected": "rendered",
+      "actual": "rendered",
+      "detail": "Alaska January 1 reports 7,500 fewer Alaska points than Alaska January 12. These are reported quotes with unknown price scope."
+    },
+    {
+      "name": "zero_fee_is_valid",
+      "input_kind": "synthetic_control",
+      "expected": "rendered",
+      "actual": "rendered",
+      "detail": "The reported award fee quote for Alaska January 1 is USD 50.90 lower than for Alaska January 12. These are reported quotes with unknown price scope."
+    },
+    {
+      "name": "correct_arrival_direction",
+      "input_kind": "synthetic_control",
+      "expected": "rendered",
+      "actual": "rendered",
+      "detail": "Alaska January 1 arrives 1 hour earlier than Alaska January 12."
+    },
+    {
+      "name": "wrong_arrival_direction",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "asserted relation disagrees with source values"
+    },
+    {
+      "name": "swapped_endpoints_unchanged_relation",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "asserted relation disagrees with source values"
+    },
+    {
+      "name": "wrong_expected_currency",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "expected currency disagrees with source"
+    },
+    {
+      "name": "different_points_program",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "points comparison requires one known program"
+    },
+    {
+      "name": "different_fee_currency",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "native fee comparison requires one known currency"
+    },
+    {
+      "name": "fee_claimed_total",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "native_fee requires reported_quote scope"
+    },
+    {
+      "name": "fee_claimed_per_person",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "native_fee requires reported_quote scope"
+    },
+    {
+      "name": "hidden_reference",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "both endpoints must be visible"
+    },
+    {
+      "name": "unknown_reference",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "both endpoints must be known source records"
+    },
+    {
+      "name": "date_only_clock",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "x.arrival must have a UTC offset"
+    },
+    {
+      "name": "unknown_metric_field",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "unsupported metric"
+    },
+    {
+      "name": "missing_value",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "x.points must be a nonnegative plain decimal string"
+    },
+    {
+      "name": "nonfinite_amount",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "x.points must be a nonnegative plain decimal string"
+    },
+    {
+      "name": "boolean_elapsed",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "x.elapsed_minutes must be nonnegative integer minutes"
+    },
+    {
+      "name": "negative_elapsed",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "x.elapsed_minutes must be nonnegative integer minutes"
+    },
+    {
+      "name": "negative_amount",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "x.native_fee must be a nonnegative plain decimal string"
+    },
+    {
+      "name": "award_fee_vs_cash_fare",
+      "input_kind": "synthetic_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "award fees and cash fares are incomparable"
+    },
+    {
+      "name": "C_cross_program_points",
+      "input_kind": "saved_source_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "points comparison requires one known program"
+    },
+    {
+      "name": "C_cross_currency_fee",
+      "input_kind": "saved_source_control",
+      "expected": "rejected",
+      "actual": "rejected",
+      "detail": "native fee comparison requires one known currency"
+    }
+  ],
+  "expected_limitations": [
+    {
+      "case": "correct_clause_plus_contradictory_opening",
+      "free_text": "Hong Kong is the earliest arriving award journey.",
+      "bound_clause_ids": [
+        "A_arrival_early_vs_hkg"
+      ],
+      "whole_answer_result": "Opening contradicts the valid bound clause; manual semantic review required.",
+      "mechanical_result": "all named clauses rendered; free text was not checked"
+    },
+    {
+      "case": "two_valid_clauses_plus_misleading_but_or_switched_endpoints",
+      "free_text": "The January 12 Alaska lead costs more points but has the lower award fee.",
+      "bound_clause_ids": [
+        "B_points_premium_vs_economy",
+        "B_fee_united_vs_alaska"
+      ],
+      "whole_answer_result": "The fee clause is about United versus Alaska, not January 12 versus January 1 Alaska; manual semantic review required.",
+      "mechanical_result": "all named clauses rendered; free text was not checked"
+    },
+    {
+      "case": "higher_quote_plus_unestablished_schedule_benefit",
+      "free_text": "The January 7 Alaska lead has a faster schedule, making its extra points worthwhile.",
+      "bound_clause_ids": [
+        "D_points_jan7_vs_jan1",
+        "D_fees_equal"
+      ],
+      "whole_answer_result": "Both leads are date-only; no schedule benefit is established. Manual semantic review required.",
+      "mechanical_result": "all named clauses rendered; free text was not checked"
+    },
+    {
+      "case": "lower_quote_with_conditional_date_alternative",
+      "free_text": "The January 1 Alaska lead uses fewer points at the same reported fee; January 7 remains a date choice only if that departure suits you.",
+      "bound_clause_ids": [
+        "D_points_jan7_vs_jan1",
+        "D_fees_equal"
+      ],
+      "whole_answer_result": "Mechanics pass; whether this is decision-rich enough is an unsettled manual usefulness judgment.",
+      "mechanical_result": "all named clauses rendered; free text was not checked"
+    }
+  ],
+  "evidence_limit": "Local functional controls only; no LLM, latency, whole-answer correctness, or quality proof."
+}

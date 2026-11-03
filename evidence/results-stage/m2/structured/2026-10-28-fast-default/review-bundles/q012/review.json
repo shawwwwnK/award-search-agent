@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Consider this if its later Bangkok arrival suits your plans: it has the same reported Turkish award route, cabin and 275,000-point amount, but arrives later and takes longer than the earlier option.",
+      "canonical_reference": "evidence.json journeys candidate_id 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 versus 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points; award_cabin; money.cash_fare.quoted_usd",
+      "source_value": "Later option departs SFO at 08:40 rather than 08:36, arrives BKK at 08:50 rather than 04:15 on January 10, takes 1,990 rather than 1,719 minutes, and has the same 275,000-point business award and USD 59 cash-access quote.",
+      "explanation": "The displayed alternative gains only four minutes of departure flexibility while losing 4 hours 35 minutes of arrival time and 4 hours 31 minutes of elapsed time. The answer does not explain a meaningful reason to choose it, so the comparison remains basic."
+    }
+  ],
+  "reasoning": "Both displayed options are conditional cash-access-plus-Turkish-award journeys via LAX and IST. The 150/149-minute separate-ticket LAX joins, 4-hour-35-minute arrival difference, and 4-hour-31-minute elapsed difference match the canonical times. Award points are 275,000 with unknown scope; award fees and seats are unknown, and traveler support and separate positioning permission are unresolved. The USD 59 access quotes have unknown scope. The separate USD 452 cash benchmark is SFO-SEA-ICN-BKK with two stops and unknown price scope. The selected earlier-arriving journey is a defensible lead to investigate with its separate-ticket downside plainly stated. The answer is coherent and consolidates limitations, but its displayed alternative has almost no positive tradeoff and does not make the comparison decision-rich. Uncertainty: conditional journeys require confirmation of positioning permission, traveler support, protection, award seats, fees, and current availability."
+}

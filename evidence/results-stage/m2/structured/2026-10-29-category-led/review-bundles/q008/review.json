@@ -1,0 +1,135 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q008",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": "fail",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "The opening presents earlier arrival versus business cabin as the distinguishing choice, although the same business option has both. Individual card facts and the subsequent body comparison are supported.",
+    "U": "The body still offers defensible choices: earlier arrival/business versus a longer separate-ticket LAX buffer in economy, with booking and price checks.",
+    "M2": "The opening decision frame conflicts with the card explanations immediately below. Otherwise the answer is concise, connected and consolidates common limitations.",
+    "C": "The body contains a meaningful supported tradeoff: business and earlier arrival with a 134-minute LAX connection versus economy and later arrival with a 301-minute LAX connection. This axis passes for that actual content; it does not excuse the false opening on H/M2.",
+    "K": "Time/premium perspectives and their overlap survive on the business card; the economy card remains time-only. No invented cost category.",
+    "P": "Both real cards include award legs and separate positioning component schedules; uncertainty is preserved. The USD452 cash context is one correctly scoped, linked sentence."
+  },
+  "findings": [
+    {
+      "id": "q008-F1",
+      "severity": "material",
+      "axes": [
+        "H",
+        "M2"
+      ],
+      "claim": "Two separate-ticket options are worth considering; the better fit depends on whether you value an earlier arrival or a business cabin.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[0].text",
+          "fields": {
+            "opening": "earlier arrival or a business cabin"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "fff964eebddab3b7f802bd5d74ff1807953c3e3402dcdff3c6325ae11510fcc9",
+          "fields": {
+            "award_cabin.value": "business",
+            "arrival.local_iso": "2027-01-10T04:15:00+07:00",
+            "elapsed_minutes": "1700",
+            "connections[0].wait_minutes": 134,
+            "styles": [
+              "time",
+              "premium"
+            ]
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+          "fields": {
+            "award_cabin.value": "economy",
+            "arrival.local_iso": "2027-01-10T08:50:00+07:00",
+            "elapsed_minutes": "1803",
+            "connections[0].wait_minutes": 301,
+            "styles": [
+              "time"
+            ]
+          }
+        }
+      ],
+      "explanation": "The business journey arrives at04:15; the economy journey arrives at08:50 on the same local date. Both priorities in the opening favor the business journey, so they do not distinguish the two options. The next paragraph correctly states business and earlier arrival together, exposing the internal contradiction. This is a misleading comparative frame, not an allegation that the numeric card times are wrong.",
+      "improvement_direction": "Frame the actual choice as earlier arrival/business versus the longer LAX transfer buffer, with economy/later arrival as the latter downside. No new ranking policy or fixed category template is required."
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+      "fields": {
+        "cash_amount.value": 452,
+        "cash_currency.value": "USD",
+        "price_scope": "unknown",
+        "origin": "SFO",
+        "destination": "BKK"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "7b69397208b17fea873fefaef7df38b0a81e5024936a2a19fa05980678c2a105",
+      "fields": {
+        "legs[0].reported": false,
+        "legs[0].departure.local_iso": "2027-01-08T08:55:00-08:00",
+        "legs[0].arrival.local_iso": "2027-01-08T10:31:00-08:00",
+        "cash_amount.value": 59
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "feb4769d10abda4aa6364b67cb1e3c25550f99b11521a4fb2ab19dfe070e3f4e",
+      "fields": {
+        "legs[0].reported": false,
+        "legs[0].departure.local_iso": "2027-01-08T11:47:00-08:00",
+        "legs[0].arrival.local_iso": "2027-01-08T13:29:00-08:00",
+        "cash_amount.value": 109
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 232,
+    "category_counts": {
+      "time": 116,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 58,
+    "possible_cost_members": 0,
+    "omission_audit": "Read selection-audit.json; omitted_reasons is empty. Compared all source journey families and memberships, including unselected members. Both materially distinct perspectives and business overlap are retained. No category omission failure found.",
+    "cost_assessments": "Both factored cost assessments are undetermined. The answer does not promote point counts or partial cash quotes to a complete cost winner."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false,
+    "qualification": "Independent source review with prior source/code familiarity, not a fresh blind-source review."
+  },
+  "uncertainty": [
+    "The opening could be dismissed as loose phrasing, but it is the primary comparison presented to the traveler and conflicts with the actual identities; judged material on source comparison and connected composition.",
+    "Body usefulness and meaningful tradeoff remain independently supported; they are not failed solely because the opening fails.",
+    "Saved repeated source with partial provider coverage; no current availability or population reliability established.",
+    "Card content inspected through supplied Markdown and structured joins; no browser layout qualification."
+  ],
+  "verification": [
+    "Read reviewer-instructions.md, answer.md, document.json, resolved.json, full source journey families, assessments and selection-audit.json.",
+    "Verified exact equality of every resolved selected journey, award component, cash component and benchmark attachment with its canonical source object.",
+    "Cross-checked selected award legs, component schedules, currencies, scope, cabin, arrival, elapsed times, connections and seat evidence.",
+    "No live calls, product edits or review of q009; no test suite needed for review-only files."
+  ],
+  "escalation_recommended": false
+}

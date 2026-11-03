@@ -1,0 +1,51 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "The two results otherwise share the displayed schedule and award details; their positioning flights differ: Alaska on one, United on the other.",
+      "canonical_reference": "evidence.json journeys 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 3c65e686cf851aa336e16d216c56b8f7bca3050a020f5b2d4207a1f79c458dc7; cash components bd251472ff574960a50024728ca496172652d0c105703753dac70129e3b2a85e and fcfe48f1768f2cba6c31a68a60e7f354e8a89365bb58bd9714e59db5e927a82a",
+      "source_field": "cash_observation_id; components[].carriers",
+      "source_value": "Both 08:40 journeys' separate SFO-LAX cash components list carriers ['Alaska']",
+      "explanation": "The purported United-versus-Alaska carrier choice is not present in the canonical source. The two journeys have distinct cash observation IDs but the same reported carrier."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "The separately booked SFO–LAX positioning flight is on United, followed by a 2-hour-29-minute wait at LAX; the award itinerary connects at Istanbul for 7 hours.",
+      "canonical_reference": "evidence.json journey 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and component bd251472ff574960a50024728ca496172652d0c105703753dac70129e3b2a85e",
+      "source_field": "cash_observation_id; component.carriers",
+      "source_value": "['Alaska']",
+      "explanation": "The referenced 08:40 positioning component reports Alaska, not United. The 149-minute LAX and 420-minute Istanbul waits are supported."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "The displayed advantage over the United-positioning result is the carrier choice for the positioning flight, not a timing difference.",
+      "canonical_reference": "evidence.json journeys 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 3c65e686cf851aa336e16d216c56b8f7bca3050a020f5b2d4207a1f79c458dc7; their cash components",
+      "source_field": "components[].carriers; departure.local_iso; arrival.local_iso; elapsed_minutes",
+      "source_value": "Both cash components report ['Alaska']; both journeys depart 08:40, arrive 08:50 on January 10, and have 1990 elapsed minutes",
+      "explanation": "The timing equivalence is correct, but the asserted carrier distinction is unsupported."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "Journey duration: Morning departure, United positioning flight (SFO–BKK; departs 2027-01-08T08:40:00-08:00; arrives 2027-01-10T08:50:00+07:00) — 1990 minutes; Earlier arrival (SFO–BKK; departs 2027-01-08T08:36:00-08:00; arrives 2027-01-10T04:15:00+07:00) — 1719 minutes.",
+      "canonical_reference": "evidence.json journeys 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153, 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee, and selected 06c0db693422d5181b7614cd31f36f1a8e98dde3036e04bd2253d1ce523293da",
+      "source_field": "elapsed_minutes; departure.local_iso; arrival.local_iso",
+      "source_value": "The displayed 1990 and 1719 minutes are correct for those two alternatives; the selected recommendation is 1680 minutes",
+      "explanation": "The raw comparison lines interrupt the traveler narrative and shift the target away from the selected recommendation without explanation. Together with a fictitious carrier contrast, they make the answer an incoherent recommendation despite otherwise useful local tradeoffs."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "[Display: Direct SFO–Bangkok cash baseline; benchmark; 5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed]",
+      "canonical_reference": "evidence.json cash component 5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed",
+      "source_field": "airport_sequence; stops.value",
+      "source_value": "['SFO', 'TPE', 'BKK']; 1 stop",
+      "explanation": "The surrounding prose correctly states one stop, so 'Direct' is a clarity concern in the display label rather than a second hard factual failure."
+    }
+  ],
+  "reasoning": "The selected 13:50 departure is a defensible conditional recommendation: it reaches Bangkok at 08:50 after 1680 elapsed minutes, versus 1990 for the 08:40 options, and the answer warns about separate bookings, unverified protection and availability, and incomplete price. The 08:36 option is correctly described as arriving 4 hours 35 minutes earlier with 39 minutes more elapsed time. These are supported local gains and losses, so C is decision-rich. The answer invents a United-versus-Alaska positioning distinction for the two 08:40 journeys; both source cash components report Alaska. The cash benchmark's USD 605 quote, one stop, and unknown scope are supported. The additional raw comparison blocks are arithmetically correct for their own endpoints but disrupt the central comparison and composition. No global-best or coverage quota was imposed."
+}

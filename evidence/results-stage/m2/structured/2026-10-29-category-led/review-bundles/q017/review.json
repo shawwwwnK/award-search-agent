@@ -1,0 +1,100 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q017",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "pass",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "The 275-minute earlier arrival, 103-minute shorter duration and 134 versus301 minute LAX buffers are correct. Card identities, quote scopes and unknown seat/tax evidence agree with source.",
+    "U": "Defensible business/earlier/shorter versus economy/larger separate-ticket buffer choice, conditional on the traveler preference and unconfirmed evidence.",
+    "M2": "Clear opening followed by concise comparative reasons. Shared missing seat/fee evidence and money scope are stated together; local separate-ticket mentions explain the actual buffer contrast rather than repeat generic warnings.",
+    "C": "Meaningful supported cabin/time versus transfer-buffer tradeoff. Numerical relations help this answer without being a mandatory format.",
+    "K": "Source time/premium perspectives and business overlap are preserved; no overall winner or cost member is invented.",
+    "P": "Actual source-resolved cards contain the flight details, including known positioning schedules. One brief source-faithful USD452 unknown-scope cash sentence appears."
+  },
+  "findings": [],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "fff964eebddab3b7f802bd5d74ff1807953c3e3402dcdff3c6325ae11510fcc9",
+      "fields": {
+        "arrival.local_iso": "2027-01-10T04:15:00+07:00",
+        "arrival.instant": "2027-01-09T21:15:00Z",
+        "elapsed_minutes": "1700",
+        "award_cabin.value": "business",
+        "styles": [
+          "time",
+          "premium"
+        ],
+        "connections[0].wait_minutes": 134,
+        "booking_obligation": "separate_tickets_unverified"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+      "fields": {
+        "arrival.local_iso": "2027-01-10T08:50:00+07:00",
+        "arrival.instant": "2027-01-10T01:50:00Z",
+        "elapsed_minutes": "1803",
+        "award_cabin.value": "economy",
+        "styles": [
+          "time"
+        ],
+        "connections[0].wait_minutes": 301,
+        "booking_obligation": "separate_tickets_unverified"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+      "fields": {
+        "cash_amount.value": 452,
+        "cash_currency.value": "USD",
+        "money.unit": "major",
+        "price_scope": "unknown",
+        "origin": "SFO",
+        "destination": "BKK"
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 232,
+    "category_counts": {
+      "time": 116,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 58,
+    "possible_cost_members": 0,
+    "cost_assessments": "Two factored cost assessments, both undetermined.",
+    "omission_audit": "Read empty omitted_reasons, selected pool and full source journey-family/category landscape. Both meaningful perspectives and overlap survive; no material category omission found."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false,
+    "qualification": "Independent current-answer source review with prior source/code familiarity; not a fresh blind-source review."
+  },
+  "uncertainty": [
+    "Business-class itinerary is read in the context of the card explicitly saying business award and a separately booked positioning component; it is not credited as proof of every leg or positioning cabin.",
+    "Specific unknown award-seat evidence is distinct from general canonical live-availability guidance. Local separate-ticket wording explains the compared buffer, not an invented guarantee of protection.",
+    "Saved partial coverage does not establish current availability or population reliability.",
+    "Card content and exact structured joins inspected; no browser layout qualification."
+  ],
+  "verification": [
+    "Read current rubric, answer, document, resolved blocks, full source landscape and selection audit.",
+    "Cross-checked both selected award/positioning schedules, flight identifiers, cabin, points, seats, fees and money scope.",
+    "Independently computed arrival delta275 minutes and elapsed delta103 minutes from source values.",
+    "Programmatic exact resolved journey/component/benchmark equality checks passed.",
+    "No current metrics/checker/other grades/q018 inspection, live calls or product edits."
+  ],
+  "escalation_recommended": false
+}

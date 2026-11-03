@@ -1,0 +1,35 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "fail",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "I’d investigate the Aeroplan economy itinerary via Hong Kong first: among these shown awards, it arrives earlier than the other late-departing option below and has lower observed fees than the Taiwan-routing alternatives.",
+      "canonical_reference": "evidence.json journeys[candidate_id=9da66ddcc065a36499ceb2bdb170d8fcfe956f2834fa800b5145895e8d71fc81] (references.json J19)",
+      "source_field": "departure.local_iso",
+      "source_value": "2027-01-15T11:45:00-08:00",
+      "explanation": "The only other displayed award departs at 11:45 a.m. local time. Calling it the 'other late-departing option below' misstates that option's timing. The lead's earlier arrival and the observed CAD fee comparison with TPE alternatives are otherwise supported."
+    },
+    {
+      "dimension": "U",
+      "answer_quote": "I’d investigate the Aeroplan economy itinerary via Hong Kong first: among these shown awards, it arrives earlier than the other late-departing option below and has lower observed fees than the Taiwan-routing alternatives.",
+      "canonical_reference": "evidence.json journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669] (references.json J14) and components[observation_id=21a21683189fff51812e5066e867f544a11286a905875aef66039629732109e7]",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.award_taxes.raw_amount.value/unit/scope; components.seats.value; connections.wait_minutes",
+      "source_value": "J14: SFO 2027-01-15 23:15 -08:00 to BKK 2027-01-17 09:50 +07:00, 1175 minutes, 65,000 Aeroplan points, CAD 10,740 minor units with unknown scope, 9 observed seats, 70-minute HKG connection. Chosen J1: same departure, BKK 10:35 +07:00, 1220 minutes, same points and observed fees, 2 observed seats, 105-minute HKG connection.",
+      "explanation": "An eligible single-award Hong Kong option has the same departure and observed price but arrives 45 minutes earlier and has a shorter elapsed time and more observed seats. Its 70-minute transfer is tighter than the chosen option's 105-minute transfer, so it is not an unqualified winner. The answer does not mention that tradeoff or otherwise give a source-grounded reason to investigate J1 before J14. The stated lead rationale is therefore insufficiently defensible."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "Its January 17 arrival and shorter elapsed time are useful; the tradeoff is that it leaves late on January 15, and the points’ price scope is unknown.",
+      "canonical_reference": "evidence.json journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669] (references.json J14)",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; connections.wait_minutes",
+      "source_value": "J14 shares J1's 23:15 SFO departure and arrives 09:50 rather than 10:35; 1175 rather than 1220 elapsed minutes; HKG wait 70 rather than 105 minutes.",
+      "explanation": "The displayed J1/J19 comparison is useful, but it misses the more direct same-departure tradeoff between earlier arrival and connection buffer. The answer gives basic rather than decision-rich comparative depth."
+    }
+  ],
+  "reasoning": "The displayed J1 and J19 identities, Aeroplan economy itinerary scope, 65,000 points, CAD 10,740 minor units (CAD 107.40), 2 versus 6 observed seats, 10-hour-20-minute arrival difference, 70-minute elapsed difference, unknown award price scope, and separate two-stop USD 456 cash baseline with unknown quote scope match the canonical records. TPE Aeroplan alternatives inspected show CAD 11,650 minor-unit fees, above J1's observed CAD 10,740; this is an observed quote comparison, not an all-in per-traveler comparison. The award cabin is journey-level and leg cabins are absent, as the limitation states. One traveler was requested, while the seat counts are observations. Provider status is partial. M2 composition passes because the answer has embedded individual journey explanations, a supported J1/J19 timing comparison, cash context, and consolidated limitations. H fails for the false 'other late-departing' label. U fails because the unaddressed J14 alternative defeats the stated lead rationale except for a tighter connection, which the answer does not discuss. C is basic for the same omission."
+}

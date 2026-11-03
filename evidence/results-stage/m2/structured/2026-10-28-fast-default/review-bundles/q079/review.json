@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "The main tradeoff is between a lower reported United points quote on January 2 and a still lower one on January 3; neither lead includes a schedule.",
+      "canonical_reference": "evidence.json components f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e and a7af2ffba298ae7fd372cdc19bbb1276d9a59968de8683e2666d0259af2e0a1b",
+      "source_field": "departure_date; program.value; points.value",
+      "source_value": "January 2, 2027: United 55,000 miles; January 3, 2027: United 60,500 miles",
+      "explanation": "The January 3 United quote is 5,500 miles higher, not still lower. This reverses the central comparison in the opening, despite the later paragraphs stating the direction correctly."
+    }
+  ],
+  "reasoning": "No complete award journey exists in evidence.json journeys; the selected award observations are date-only leads with missing schedules. The body gives useful next checks and correctly compares the two selected United quotes as 55,000 miles/USD 24.50 versus 60,500 miles/USD 19.00, with unknown price scope. The Alaska quote is kept separate across programs, and the one-stop Cathay Pacific cash itinerary is presented as a separate USD 640 baseline. Requested traveler count, absent returned award traveler counts, observed seats, partial provider status, and availability limits are accurately distinguished. The false opening comparison makes H fail. U passes because the answer truthfully explains the absence of complete journeys and directs checks of specific leads. M2 passes for woven lead explanations, embedded references, cash context, and consolidated limits. C is decision-rich on the local same-program miles-versus-tax tradeoff; no global optimum or option quota is inferred."
+}

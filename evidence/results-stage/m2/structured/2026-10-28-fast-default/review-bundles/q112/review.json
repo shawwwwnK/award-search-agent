@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "It is earlier-departing than the award journeys but arrives after the recommended award.",
+      "canonical_reference": "evidence.components[observation_id=f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2] versus evidence.journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]",
+      "source_field": "cash component legs[0].arrival.local_iso and recommended journey arrival.local_iso",
+      "source_value": "Cash baseline arrives 2027-01-10T00:20:00+07:00; recommended award arrives 2027-01-10T04:15:00+07:00. Cash arrives 3h55 before, not after, the recommended award.",
+      "explanation": "The comparison direction is reversed, even though the preceding cash-baseline sentence gives the correct 12:20 a.m. arrival."
+    }
+  ],
+  "reasoning": "The award journeys, 4h35 arrival and 4h31 elapsed comparisons, 165000-mile same-program cabin tradeoff, USD 59 positioning quotes, unknown award seats/taxes, separate-ticket obligations, and two-stop USD 452 cash quote match the canonical records. The reversed cash-versus-award arrival statement is a material hard factual error. The recommendation remains exact and defensible with disclosed separate-ticket risk; the composition remains coherent. C is decision-rich because the lower-miles economy choice gives a real cabin/points/time tradeoff. The later business option itself offers no clear gain at equal miles, but that does not erase the economy comparison."
+}

@@ -1,0 +1,161 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": {
+    "effort": "medium"
+  },
+  "instructions": "Edit the complete traveler answer using the SAME frozen source records, editorial plan, and temporal comparison registry. The plan is unverified; every factual or comparative claim must agree with the exact referenced authoring record. Check the opening against the body and every visible option; remove false earliest, lowest, cabin, fee, traveler, or scope claims. Preserve supported gains and real downsides, improve weak comparison reasoning, and keep applicable shared limits. Numerical prose is allowed when accurate. The numbered draft contains original block positions. Return ONLY {edits:[{start,end,blocks}]} where each edit replaces original blocks in [start,end) with complete valid wire blocks. Use sorted, distinct, nonoverlapping original positions; start=end inserts, blocks=[] deletes, [0,N) may rewrite all. Prefer local edits. Empty edits mean no change, not a verified approval. Do not return a score, review prose, clean bill of health, or a full document wrapper. The supplied feedback contains only actual mechanical findings and may be empty.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow.",
+  "input": "{\"draft_digest\":\"71baa3e5b878cb98aa68f3f29dc062ea94579b6f0600b8d19a69abe6daee0dce\",\"feedback\":[],\"numbered_draft\":[{\"block\":{\"k\":\"t\",\"v\":\"I’d choose the Aeroplan award departing at noon if reaching Bangkok earlier and spending less time en route matter most. The tradeoff is that both awards require 65,000 Aeroplan points plus a quoted CAD 116.50 in taxes and fees, and the fee quote’s scope is unspecified; neither is a confirmed all-in total.\"},\"index\":0},{\"block\":{\"k\":\"p\",\"n\":\"Earlier-arriving Aeroplan award\",\"r\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"v\":\"Departs SFO Jan 15 at 12:00 and arrives BKK Jan 17 at 01:25 local, via TPE. The award is listed in economy, with one seat shown, 65,000 Aeroplan points and CAD 116.50 in quoted taxes and fees (scope unspecified). The itinerary has one stop and a 4h 30m connection at TPE; its elapsed time is 22h 25m. Leg-by-leg cabin details are not provided. Choose this over the later departure if an earlier Bangkok arrival is useful; it arrives 15h 25m earlier and takes 3h 55m less elapsed time than the other shown award. Downside: the midday departure is 11h 30m earlier, and the results do not establish the fee’s total scope.\"},\"index\":1},{\"block\":{\"k\":\"x\",\"r\":\"T02\"},\"index\":2},{\"block\":{\"k\":\"x\",\"r\":\"T03\"},\"index\":3},{\"block\":{\"k\":\"a\",\"n\":\"Later-departing Aeroplan award\",\"r\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"v\":\"Departs SFO Jan 15 at 23:30 and arrives BKK Jan 17 at 16:50 local, via TPE. It is also listed as an economy award with one seat shown, costing 65,000 Aeroplan points plus a quoted CAD 116.50 in taxes and fees, with scope unspecified. It has one stop and an 8h 15m TPE connection; elapsed time is 26h 20m. Leg-by-leg cabin details are not provided. Consider it if departing later is more important than arriving early. Compared with the noon award, it arrives 15h 25m later and takes 3h 55m longer.\"},\"index\":4},{\"block\":{\"k\":\"x\",\"r\":\"T01\"},\"index\":5},{\"block\":{\"k\":\"b\",\"n\":\"Cash-fare baseline\",\"r\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"v\":\"The shown Singapore Airlines cash itinerary departs SFO Jan 15 at 09:40 and arrives BKK Jan 17 at 08:25 local, with one stop via SIN. The quoted fare is USD 440 for one returned traveler; price scope is unspecified, so it should not be assumed to be an all-in or party total. This is a cash reference, not a like-for-like cost comparison with the awards: points and the award-fee quote have different, incompletely specified scopes.\"},\"index\":6},{\"block\":{\"k\":\"t\",\"v\":\"These are selected search results, not a guarantee of current availability. Confirm seats and current prices with the booking provider before deciding. The search coverage was partial, so these shown choices do not establish the best option across all possible results.\"},\"index\":7}],\"packet\":{\"authoring_records\":{\"C1@2027-01-15T09:40-08:00/SFO>BKK\":{\"facts\":{\"airports\":[\"SFO\",\"SIN\",\"BKK\"],\"arrival\":{\"local_iso\":\"2027-01-17T08:25:00+07:00\",\"timezone\":\"Asia/Bangkok\"},\"carriers\":[\"Singapore Airlines\"],\"cash\":440,\"cash_currency\":\"USD\",\"date\":\"2027-01-15\",\"departure\":{\"local_iso\":\"2027-01-15T09:40:00-08:00\",\"timezone\":\"America/Los_Angeles\"},\"duration_minutes\":1905,\"fee_unit\":\"unknown\",\"findings\":[],\"kind\":\"cash_itinerary\",\"price_scope\":\"unknown\",\"returned_travelers\":1,\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"stops\":1},\"member\":{\"ref\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 440.00\",\"kind\":\"cash_fare\",\"price_scope\":\"unknown\",\"source_unit\":\"major\"},\"role\":\"benchmark\"},\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\":{\"award_component\":{\"award_itinerary_connections\":[{\"airport\":\"TPE\",\"kind\":\"award_connection\",\"unknown_reason\":null,\"wait_minutes\":495}],\"quote\":{\"amount_state\":\"value\",\"display\":\"CAD 116.50\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"ref\":\"A164@2027-01-15T23:30-08:00/SFO>BKK/E\"},\"cash_component\":null,\"facts\":{\"arrival\":{\"local_iso\":\"2027-01-17T16:50:00+07:00\",\"timezone\":\"Asia/Bangkok\"},\"award\":{\"airports\":[\"SFO\",\"TPE\",\"BKK\"],\"arrival\":\"same_as_journey\",\"cabin\":\"economy\",\"carriers\":[\"BR\",\"TG\"],\"date\":\"2027-01-15\",\"departure\":\"same_as_journey\",\"duration_minutes\":1580,\"fee_currency\":\"CAD\",\"fee_unit\":\"minor\",\"fees\":11650,\"findings\":[\"taxes_minor_units\"],\"kind\":\"award_itinerary\",\"leg_cabins\":[\"absent\",\"absent\"],\"points\":65000,\"price_scope\":\"unknown\",\"program\":\"aeroplan\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"seats\":1,\"stops\":1},\"award_cabin\":\"economy\",\"booking\":\"single_award\",\"cash\":null,\"caveats\":[{\"code\":\"price_incomplete\",\"state\":\"unknown\"}],\"date\":\"2027-01-15\",\"departure\":{\"local_iso\":\"2027-01-15T23:30:00-08:00\",\"timezone\":\"America/Los_Angeles\"},\"elapsed_minutes\":\"1580\",\"heuristic_cost\":{\"complete_usd\":null,\"completeness\":\"unavailable\",\"known_subtotal_usd\":null,\"missing_parts\":[\"points\",\"award_taxes\"]},\"observed_airport_path\":[\"SFO\",\"TPE\",\"BKK\"],\"premium_economy_addon\":false,\"price_completeness\":\"partial\",\"ranking_memberships\":[\"other_alternatives\"],\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"seat_support\":\"passed\",\"status\":\"admitted\",\"styles\":{\"cost\":\"undetermined\",\"premium\":\"not_member\",\"time\":\"not_member\"},\"topology\":\"award_only\",\"transfer\":{\"airport\":null,\"local_day_offset\":null,\"minutes\":null},\"traveler_support\":\"passed\"},\"journey_connections\":[],\"member\":{\"award_ref\":\"A164@2027-01-15T23:30-08:00/SFO>BKK/E\",\"cash_ref\":null,\"ref\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\"},\"role\":\"journey\"},\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\":{\"award_component\":{\"award_itinerary_connections\":[{\"airport\":\"TPE\",\"kind\":\"award_connection\",\"unknown_reason\":null,\"wait_minutes\":270}],\"quote\":{\"amount_state\":\"value\",\"display\":\"CAD 116.50\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"ref\":\"A158@2027-01-15T12:00-08:00/SFO>BKK/E\"},\"cash_component\":null,\"facts\":{\"arrival\":{\"local_iso\":\"2027-01-17T01:25:00+07:00\",\"timezone\":\"Asia/Bangkok\"},\"award\":{\"airports\":[\"SFO\",\"TPE\",\"BKK\"],\"arrival\":\"same_as_journey\",\"cabin\":\"economy\",\"carriers\":[\"BR\"],\"date\":\"2027-01-15\",\"departure\":\"same_as_journey\",\"duration_minutes\":1345,\"fee_currency\":\"CAD\",\"fee_unit\":\"minor\",\"fees\":11650,\"findings\":[\"taxes_minor_units\"],\"kind\":\"award_itinerary\",\"leg_cabins\":[\"absent\",\"absent\"],\"points\":65000,\"price_scope\":\"unknown\",\"program\":\"aeroplan\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"seats\":1,\"stops\":1},\"award_cabin\":\"economy\",\"booking\":\"single_award\",\"cash\":null,\"caveats\":[{\"code\":\"price_incomplete\",\"state\":\"unknown\"}],\"date\":\"2027-01-15\",\"departure\":{\"local_iso\":\"2027-01-15T12:00:00-08:00\",\"timezone\":\"America/Los_Angeles\"},\"elapsed_minutes\":\"1345\",\"heuristic_cost\":{\"complete_usd\":null,\"completeness\":\"unavailable\",\"known_subtotal_usd\":null,\"missing_parts\":[\"points\",\"award_taxes\"]},\"observed_airport_path\":[\"SFO\",\"TPE\",\"BKK\"],\"premium_economy_addon\":false,\"price_completeness\":\"partial\",\"ranking_memberships\":[\"time\"],\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"seat_support\":\"passed\",\"status\":\"admitted\",\"styles\":{\"cost\":\"undetermined\",\"premium\":\"not_member\",\"time\":\"member\"},\"topology\":\"award_only\",\"transfer\":{\"airport\":null,\"local_day_offset\":null,\"minutes\":null},\"traveler_support\":\"passed\"},\"journey_connections\":[],\"member\":{\"award_ref\":\"A158@2027-01-15T12:00-08:00/SFO>BKK/E\",\"cash_ref\":null,\"ref\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\"},\"role\":\"journey\"}},\"comparison\":{\"cost_reference_usd\":null,\"eligible_count\":258,\"full_pool\":\"P1\",\"time_reference_minutes\":\"1175\"},\"composition_format\":\"complete-v14\",\"editorial_plan\":[{\"compare_to\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"purpose\":\"Use as the direct-award timing reference; compare its same-day arrival and itinerary length with the earlier-arriving option.\",\"ref\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"role\":\"journey\",\"status\":\"unverified_editorial_suggestion\"},{\"compare_to\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"purpose\":\"Show the tradeoff of arriving the prior evening while departing earlier than the timing reference.\",\"ref\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"role\":\"journey\",\"status\":\"unverified_editorial_suggestion\"},{\"compare_to\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"purpose\":\"Provide a direct SFO–BKK cash-fare context alongside the award options; fare scope remains unconfirmed.\",\"ref\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"role\":\"benchmark\",\"status\":\"unverified_editorial_suggestion\"}],\"finding_meanings\":{\"seats_program_unsupported\":{\"field\":\"seats\",\"message\":\"program does not supply reliable seat-count evidence\",\"severity\":\"unknown\"},\"seats_zero_ambiguous\":{\"field\":\"seats\",\"message\":\"zero may mean seat count is unavailable\",\"severity\":\"unknown\"},\"taxes_minor_units\":{\"field\":\"taxes_fees\",\"message\":\"Seats.aero TotalTaxes is in minor currency units\",\"severity\":\"info\"},\"taxes_program_unavailable\":{\"field\":\"taxes_fees\",\"message\":\"program does not supply reliable taxes and fees\",\"severity\":\"unknown\"}},\"format\":\"focused-authoring-records-v2\",\"legend\":{\"award_only\":\"One award itinerary without a separate cash positioning component; it may contain connecting flights. Read award stops, airports, and flights for the actual connection pattern.\",\"eligibility\":\"Every J member is eligible; benchmarks and incomplete leads have separate roles.\",\"findings\":\"Finding codes remain next to their source facts; finding_meanings gives the source's severity, field and meaning.\",\"grouping\":\"Only complete byte-equal facts share a group; each member remains an exact source reference.\",\"lead_window\":\"The lead flag compares its own departure date with the request window, not complete journey compatibility.\",\"observed_airport_path\":\"Ordered airport sequence joined only at an equal cash/award boundary when both source component sequences exist; null means the full observed sequence is unknown. It does not prove same aircraft, ticket protection or bookability.\",\"raw\":\"A missing component field means source absent/empty. Explicit null/unknown and zero remain present. A lead's '-' means absent/empty.\",\"relations\":\"Schedule matches are source timing evidence, not physical-flight identity or a selection.\",\"scope\":\"Journey cabin does not prove all leg cabins; leg_cabins follows successive airport pairs.\",\"timeline\":\"A component departure/arrival value same_as_journey inherits that exact whole-journey time in the same record.\"},\"outcome_mode\":\"complete_choices\",\"policy\":{\"fx\":{\"as_of\":\"2026-09-29\",\"rates_to_usd\":{\"CAD\":\"0.7048209754722300535663941359\",\"USD\":\"1\"},\"source\":\"https://www.bankofcanada.ca/valet/observations/FXUSDCAD/json?start_date=2026-09-29&end_date=2026-09-29\"},\"ranking\":{\"cost_factor\":\"2\",\"points_per_usd\":\"100\",\"time_factor\":\"1.2\",\"unknown_tax_usd\":\"150\",\"version\":\"ranking-m2-v1\"}},\"record_legend\":\"Exact source aliases. award_connections belong to the award itinerary; journey_connections retain separate-booking/cash waits per journey. wait_minutes=null means unknown, never zero. Quotes are original-currency major units with source unit and price scope; unknown scope is neither per traveler nor party total.\",\"request\":{\"cabins\":[],\"conflicts\":[],\"departure_window\":{\"end\":\"2027-01-15\",\"precision\":\"window\",\"raw_text\":\"January 15, 2027\",\"start\":\"2027-01-15\"},\"destinations\":[{\"kind\":\"airport\",\"raw_text\":\"BKK\",\"value\":\"BKK\"}],\"hard_constraints\":[],\"origins\":[{\"kind\":\"airport\",\"raw_text\":\"SFO\",\"value\":\"SFO\"}],\"repositioning_allowed\":null,\"search_modes\":[\"award\",\"cash\"],\"travelers\":1,\"unknowns\":[{\"detail\":\"No cabin preference was stated.\",\"evidence\":[],\"field\":\"cabin\",\"raw_text\":null,\"reason\":\"missing\"}]},\"selected_comparisons\":{\"arrival_instant\":[{\"difference_display\":\"15h 25m\",\"difference_minutes\":\"925\",\"first\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"relation\":\"earlier_than\",\"second\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\"}],\"departure_instant\":[{\"difference_display\":\"11h 30m\",\"difference_minutes\":\"690\",\"first\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"relation\":\"earlier_than\",\"second\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\"}],\"elapsed_minutes\":[{\"difference_display\":\"3h 55m\",\"difference_minutes\":\"235\",\"first\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"relation\":\"shorter_than\",\"second\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\"}]},\"selection_format\":\"roles-v16\",\"selection_scope\":{\"benchmark_selected\":true,\"journey_count\":2,\"lead_count\":0,\"meaning\":\"These are the model-selected facts only; comparisons and superlatives must be limited to shown choices, not the unseen eligible pool.\"},\"source_context\":{\"availability_guidance\":\"Some results aren't real-time. Confirm availability and current prices on the official booking sites before booking.\",\"coverage_limits\":[{\"kind\":\"detail_query\",\"reason\":\"resource_budget_exhausted\",\"routes_and_dates\":[\"ICN-BKK:2027-01-14..2027-01-17\",\"LAX-BKK:2027-01-14..2027-01-17\",\"SFO-BKK:2027-01-15..2027-01-15\",\"SFO-ICN:2027-01-15..2027-01-15\",\"SFO-TPE:2027-01-15..2027-01-15\",\"TPE-BKK:2027-01-14..2027-01-17\"],\"status\":\"omitted\"}],\"observed_at_range\":[\"2026-10-09T07:07:50.876576Z\",\"2026-10-09T07:08:05.429479Z\"],\"provider_status\":\"partial\"},\"source_scope\":{\"full_direct_cash_benchmark_count\":10,\"full_selectable_journey_count\":258,\"full_selectable_lead_count\":143,\"meaning\":\"Authoring records are selected examples; these counts describe source roles, not exhaustive availability or date coverage.\",\"selected_benchmark_count\":1,\"selected_journey_count\":2,\"selected_lead_count\":0},\"temporal_comparisons\":[{\"difference_minutes\":\"690\",\"first_ref\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"id\":\"T01\",\"metric\":\"departure\",\"relation\":\"second_earlier\",\"second_ref\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\"},{\"difference_minutes\":\"925\",\"first_ref\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"id\":\"T02\",\"metric\":\"arrival\",\"relation\":\"second_earlier\",\"second_ref\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\"},{\"difference_minutes\":\"235\",\"first_ref\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"id\":\"T03\",\"metric\":\"elapsed\",\"relation\":\"second_shorter\",\"second_ref\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\"}]},\"previous_wire\":{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the Aeroplan award departing at noon if reaching Bangkok earlier and spending less time en route matter most. The tradeoff is that both awards require 65,000 Aeroplan points plus a quoted CAD 116.50 in taxes and fees, and the fee quote’s scope is unspecified; neither is a confirmed all-in total.\"},{\"k\":\"p\",\"n\":\"Earlier-arriving Aeroplan award\",\"r\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"v\":\"Departs SFO Jan 15 at 12:00 and arrives BKK Jan 17 at 01:25 local, via TPE. The award is listed in economy, with one seat shown, 65,000 Aeroplan points and CAD 116.50 in quoted taxes and fees (scope unspecified). The itinerary has one stop and a 4h 30m connection at TPE; its elapsed time is 22h 25m. Leg-by-leg cabin details are not provided. Choose this over the later departure if an earlier Bangkok arrival is useful; it arrives 15h 25m earlier and takes 3h 55m less elapsed time than the other shown award. Downside: the midday departure is 11h 30m earlier, and the results do not establish the fee’s total scope.\"},{\"k\":\"x\",\"r\":\"T02\"},{\"k\":\"x\",\"r\":\"T03\"},{\"k\":\"a\",\"n\":\"Later-departing Aeroplan award\",\"r\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"v\":\"Departs SFO Jan 15 at 23:30 and arrives BKK Jan 17 at 16:50 local, via TPE. It is also listed as an economy award with one seat shown, costing 65,000 Aeroplan points plus a quoted CAD 116.50 in taxes and fees, with scope unspecified. It has one stop and an 8h 15m TPE connection; elapsed time is 26h 20m. Leg-by-leg cabin details are not provided. Consider it if departing later is more important than arriving early. Compared with the noon award, it arrives 15h 25m later and takes 3h 55m longer.\"},{\"k\":\"x\",\"r\":\"T01\"},{\"k\":\"b\",\"n\":\"Cash-fare baseline\",\"r\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"v\":\"The shown Singapore Airlines cash itinerary departs SFO Jan 15 at 09:40 and arrives BKK Jan 17 at 08:25 local, with one stop via SIN. The quoted fare is USD 440 for one returned traveler; price scope is unspecified, so it should not be assumed to be an all-in or party total. This is a cash reference, not a like-for-like cost comparison with the awards: points and the award-fee quote have different, incompletely specified scopes.\"},{\"k\":\"t\",\"v\":\"These are selected search results, not a guarantee of current availability. Confirm seats and current prices with the booking provider before deciding. The search coverage was partial, so these shown choices do not establish the best option across all possible results.\"}]},\"revision_trigger\":\"editorial_revision\"}",
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "FocusedResultsEditorialPatch",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "integer"
+                },
+                "blocks": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "t"
+                            ]
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "p",
+                              "a"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50",
+                              "J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "b"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "C1@2027-01-15T09:40-08:00/SFO>BKK"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "x"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "T01",
+                              "T02",
+                              "T03"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "start",
+                "end",
+                "blocks"
+              ]
+            }
+          }
+        },
+        "required": [
+          "edits"
+        ]
+      }
+    }
+  },
+  "max_output_tokens": 8192,
+  "store": false,
+  "truncation": "disabled",
+  "stream": true,
+  "service_tier": "fast"
+}

@@ -1,0 +1,67 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "insufficient",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "For an earlier Bangkok arrival, investigate the HKG-routing award that arrives first among these shown options; choose the later-arriving HKG alternative only if its shorter elapsed journey and larger reported seat count matter more.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82] and their award_observation_id components",
+      "source_field": "elapsed_minutes; components[award_observation_id].seats.value",
+      "source_value": "Earlier HKG: 1180 elapsed minutes and 9 reported seats. Later HKG: 1220 elapsed minutes and 2 reported seats.",
+      "explanation": "The later-arriving HKG journey is 40 minutes longer, with seven fewer reported seats; neither stated reason supports choosing it over the lead. The lead's earlier arrival is correct."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "The tradeoff is a 70-minute HKG award connection and just 1 reported seat.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and evidence.json#components[observation_id=796d0acf7c82baf1e0b6dab0ed8858d910f3c09e795eb764ebbe4b97425f1e2d]",
+      "source_field": "connections[0].wait_minutes; components[award_observation_id].seats.value",
+      "source_value": "HKG award connection is 70 minutes; its award itinerary reports 9 seats, not 1.",
+      "explanation": "The connection is correct, but the scarcity claim assigns the TPE alternative's one-seat observation to the lead."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Consider this Aeroplan economy award via TPE if its earlier departure and 9 reported seats are more useful than the HKG option.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3], evidence.json#components[observation_id=8c9922b158150fbc3599f2e4bbb4313f8f91cd597b5032150915045c8e447fb9], and evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a]",
+      "source_field": "departure.local_iso; components[award_observation_id].seats.value",
+      "source_value": "Displayed TPE departs SFO Jan 15 at 12:00 and reports 1 seat. Immediately preceding HKG departs at 11:45 and reports 9 seats.",
+      "explanation": "Against the immediately preceding HKG reference, TPE leaves 15 minutes later and has eight fewer reported seats. If 'the HKG option' meant the later 23:15 HKG reference, TPE does leave earlier, but still reports 1 seat versus that journey's 2; the nine-seat claim is wrong either way."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "This Aeroplan economy award via HKG is the shortest elapsed option shown, 2 hours 5 minutes shorter than the TPE alternative, and reports 2 seats.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82], evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a], and evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]",
+      "source_field": "elapsed_minutes; components[award_observation_id].seats.value",
+      "source_value": "Later HKG: 1220 minutes and 2 seats; earlier HKG: 1180 minutes; TPE: 1345 minutes.",
+      "explanation": "The later HKG is 2 hours 5 minutes shorter than TPE and has 2 reported seats, but it is not shortest shown; the earlier HKG is 40 minutes shorter still."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "The cash search returned USD 440 for a one-stop Singapore Airlines itinerary via SIN, arriving before the shown awards.",
+      "canonical_reference": "evidence.json#components[observation_id=063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd] and evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3] and evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]",
+      "source_field": "cash legs[0].arrival.local_iso; cash_amount.value; cash_currency.value; airport_sequence; stops.value; carriers; journeys[].arrival.local_iso",
+      "source_value": "Cash arrives BKK Jan 17 at 08:25, after earlier HKG Jan 16 at 22:25 and TPE Jan 17 at 01:25; it arrives before only later HKG Jan 17 at 10:35. Cash is USD 440, one stop via SIN, carrier Singapore Airlines.",
+      "explanation": "The cash route and quote are correct, but its arrival is not before all shown awards."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "For an earlier Bangkok arrival, investigate the HKG-routing award that arrives first among these shown options; choose the later-arriving HKG alternative only if its shorter elapsed journey and larger reported seat count matter more.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]",
+      "source_field": "elapsed_minutes; components[award_observation_id].seats.value",
+      "source_value": "Earlier HKG 1180 minutes and 9 seats; later HKG 1220 minutes and 2 seats.",
+      "explanation": "The central comparative action is inverted, and subsequent paragraphs contradict the lead's duration and seat claims. Although the prose has embedded references and consolidated limits, its traveler comparison is not coherent or supported."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "Consider this Aeroplan economy award via TPE if its earlier departure and 9 reported seats are more useful than the HKG option.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3] and evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a]",
+      "source_field": "departure.local_iso; components[award_observation_id].seats.value",
+      "source_value": "TPE departs at noon with 1 reported seat; earlier HKG departs at 11:45 with 9 reported seats.",
+      "explanation": "The stated reason to consider TPE reverses both departure order and observed seats relative to the preceding HKG option. Together with the false HKG alternative and cash-arrival comparisons, this prevents a reliable decision comparison despite some correct interval arithmetic."
+    }
+  ],
+  "reasoning": "The earliest-arriving selected HKG award is a defensible exact lead: among the three shown it arrives first, and its 70-minute HKG connection is a real downside. U therefore passes independently of H. H fails because the answer swaps the lead and TPE seat counts, incorrectly assigns shorter elapsed time and more seats to the later HKG journey, calls that journey shortest shown, and says the cash baseline arrives before all awards. Correct source comparisons are lead HKG 1180 versus later HKG 1220 minutes (40 minutes), later HKG 1220 versus TPE 1345 minutes (2 hours 5 minutes), and TPE arrival 3 hours after lead HKG. The award programs, journey-level economy, 65000-point quotes, CAD 107.40/116.50 fees from minor units, unknown price scopes, one-stop USD 440 SIN cash baseline, single-award connections, and one-traveler request are otherwise represented accurately. M2 fails and C is insufficient because the central comparative advice is internally inconsistent and would misdirect a traveler. The phrase 'the HKG option' in the TPE paragraph could refer to either HKG journey; its seat count is wrong under either reading. Current bookability and all-in prices remain unknown."
+}

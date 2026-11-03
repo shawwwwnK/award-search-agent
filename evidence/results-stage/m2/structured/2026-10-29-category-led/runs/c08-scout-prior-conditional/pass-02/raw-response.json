@@ -1,0 +1,227 @@
+{
+  "id": "resp_0d1c67d1dd06a97e016ae3186a631c87d099b9cbd2ceffc0f4",
+  "created_at": 1793267818.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a concise, natural traveler answer from the exact authoring_records. They are a candidate pool, not a list to display in full. Show the smallest useful subset that explains materially different choices while representing each selected Ranking category perspective. A selected journey may cover several perspectives; no category requires a separate card or fixed quota. Omit a pool member if it adds no distinct traveler decision, and never refer to an omitted member in prose. Every concrete option discussed needs its own exact source-resolved block: k=p or a for a complete journey, k=l for a research lead. Put its short decision reason in v and a natural label in n. Source-resolved cards show schedules, routes, cabin, points, fees, seats and conditions; do not repeat those facts in prose as a card recap. For complete journeys, explain the supported benefit that distinguishes each shown choice, such as a shorter trip, cabin or connection buffer. Use Ranking's time/cost/premium memberships as source facts, but describe the traveler benefit in ordinary language, with no empty category notices or mandatory headings. Time membership means a qualifying duration band, not earlier arrival or dominance over another selected journey. Use selected_temporal_relations for relative departure, arrival or duration claims; preserve equal arrivals as equal and do not substitute one metric for another. Category overlap does not create an overall winner. When no complete eligible journey exists, say so once. Show only leads with a distinct supported conditional next-check reason, such as program access, a compatible date, cabin or a useful same-program quote difference. A date or quote alone is a card fact, not a reason. Do not assume the traveler owns program points or prefers a date or cabin. Do not force same-program pairs, a lowest-points rule, or cross-program economic ranking. Preserve each quote's scope: incomplete or unknown-scope amounts do not establish a per-person fare, all-in trip cost or cheapest-overall choice. Give a choice-specific downside or condition only when it changes that choice's decision; do not invent a local downside from a shared unknown. State common missing schedule, quote-scope, seat, taxes or separate-ticket limits once after the choices. Keep any opening sentence consistent with shown choices, or omit the comparison if unsupported. Do not repeat generic availability advice; display adds it separately. Use one k=b SOURCE-BOUND INLINE CASH SENTENCE with the exact benchmark r: plain source origin-to-destination route, quoted amount and material uncertainty. Do not copy this sentence into k=t prose or a card reason, extend the quote to connecting cities, or invent stop descriptors. A loyalty program is not an operating airline; do not guess a missing carrier or borrow one from another record. Never print internal J/A/C aliases. Output JSON blocks in reading order. For cash context rely on its quote.kind, quote.display and quote.source_unit; fee metadata does not describe the cash fare unit. The display already supplies the canonical availability reminder, so leave generic current-availability warnings out of authored prose.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "msg_0d1c67d1dd06a97e016ae3186b4bc887d0ae4d63c1a0f0b68a",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"Two complete award-based choices stand out: one pairs economy award travel with a longer LAX connection, while the other offers business class and arrives earlier. A separate United award search result may be worth checking if United miles are an option.\"},{\"k\":\"p\",\"r\":\"J18@2027-01-08T11:47-08:00/SFO>BKK/E>2027-01-10T08:50\",\"n\":\"Economy via LAX\",\"v\":\"A 301-minute LAX connection gives more buffer between the separate tickets. The award portion is economy; its seat support and taxes are unconfirmed.\"},{\"k\":\"p\",\"r\":\"J63@2027-01-08T08:36-08:00/SFO>BKK/B>2027-01-10T04:15\",\"n\":\"Business via LAX\",\"v\":\"Choose this for business class and a shorter trip: it departs 3 hours 11 minutes earlier, arrives 4 hours 35 minutes earlier, and takes 1 hour 24 minutes less overall than the economy option. Its LAX connection is 150 minutes, versus 301 minutes on the economy option; award seat support and taxes are unconfirmed.\"},{\"k\":\"l\",\"r\":\"A2@2027-01-08/SFO>BKK/E\",\"n\":\"United economy award lead\",\"v\":\"Check United award access if you can use United miles; the result is date-only, so no schedule is supplied.\"},{\"k\":\"t\",\"v\":\"Both complete options require separate tickets through LAX, and the search results do not establish whether the award seats are supported for one traveler or whether the connections are protected. Award-tax amounts are unavailable for both; the journey prices are incomplete, and the cash quotes do not establish an all-in trip cost.\"},{\"k\":\"b\",\"r\":\"C3@2027-01-08T23:50-08:00/SFO>BKK\",\"n\":\"Cash comparison\",\"v\":\"SOURCE-BOUND INLINE CASH SENTENCE: SFO to BKK is quoted at USD 605.00; the quote scope is unknown.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "CategoryDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J18@2027-01-08T11:47-08:00/SFO>BKK/E>2027-01-10T08:50",
+                        "J63@2027-01-08T08:36-08:00/SFO>BKK/B>2027-01-10T04:15"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C3@2027-01-08T23:50-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "l"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "A2@2027-01-08/SFO>BKK/E"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 5188,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 5185
+    },
+    "output_tokens": 455,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 5643
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793267821,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

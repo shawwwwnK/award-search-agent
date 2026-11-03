@@ -1,0 +1,10 @@
+Controlled correction diagnostic for one separate run. In the first composition,
+when the input JSON has no previous_wire key, write an otherwise useful and
+source-faithful traveler answer, but include one standalone visible internal short
+identifier in a text block: take the prefix before @ from the first selected
+journey reference, or from the first selected lead reference when there are no
+journeys. For example, a selected reference J14@... means place the token J14 in
+visible text. Keep all exact typed card references and the single cash sentence.
+In the correction, identified by previous_wire in the input JSON, remove that
+internal token from all traveler-visible text and labels, apply the supplied
+checker feedback, and keep the same useful answer. Do not add a new token.

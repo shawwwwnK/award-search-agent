@@ -1,0 +1,23 @@
+If business class and an earlier Bangkok arrival are priorities, I’d verify the January 8 Turkish award via LAX and Istanbul first. Compared with the other shown business-class award, it reports the same 275,000 points and a USD 59 SFO–LAX quote (scope unspecified), but arrives 4 hours 35 minutes earlier and has 4 hours 31 minutes less elapsed time. Award-seat support for your one traveler and award taxes are unverified, and the LAX positioning flight is on a separate booking. These are selected search results, not the full eligible inventory.
+
+The journey departs SFO at 8:36 a.m. on American to LAX, then continues on Turkish via Istanbul, arriving BKK at 4:15 a.m. January 10. The Turkish award is reported as business class and costs 275,000 Turkish Miles&Smiles points; taxes and fees are unknown. The award seat count and support for your one traveler are also unverified. The SFO–LAX cash component is quoted at USD 59, with price scope unspecified. The LAX join is a separate-booking connection, and protection or bookability across the tickets is not established.
+
+[Display: Earlier-arriving business-class award; journey; 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]
+
+Journey duration: Later business-class alternative (SFO–BKK; departs 2027-01-08T08:40:00-08:00; arrives 2027-01-10T08:50:00+07:00) — 1990 minutes; Earlier-arriving business-class award (SFO–BKK; departs 2027-01-08T08:36:00-08:00; arrives 2027-01-10T04:15:00+07:00) — 1719 minutes. Earlier-arriving business-class award (SFO–BKK; departs 2027-01-08T08:36:00-08:00; arrives 2027-01-10T04:15:00+07:00) is shorter by 4 hours 31 minutes.
+
+This also uses 275,000 Turkish Miles&Smiles points for a reported business-class award via Istanbul, but arrives at 8:50 a.m. The SFO–LAX cash component is quoted at USD 59, with unspecified scope; it is on Alaska rather than American. Award seats and taxes remain unknown, and the LAX connection is also a separate-booking join without established protection or bookability.
+
+[Display: Later business-class alternative; journey; 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]
+
+Arrival: Later business-class alternative (SFO–BKK; departs 2027-01-08T08:40:00-08:00; arrives 2027-01-10T08:50:00+07:00) — 2027-01-10T08:50:00+07:00; Earlier-arriving business-class award (SFO–BKK; departs 2027-01-08T08:36:00-08:00; arrives 2027-01-10T04:15:00+07:00) — 2027-01-10T04:15:00+07:00. Earlier-arriving business-class award (SFO–BKK; departs 2027-01-08T08:36:00-08:00; arrives 2027-01-10T04:15:00+07:00) is earlier by 4 hours 35 minutes.
+
+If you would trade cabin and an earlier arrival for a lower reported points amount, this Turkish award is 110,000 Turkish Miles&Smiles points in economy and arrives at 3:05 p.m. January 10. Its SFO–LAX cash component is quoted at USD 139, scope unspecified. Award seats and taxes are unknown, and its LAX join is a separate-booking connection with protection and bookability unverified.
+
+[Display: Lower-points economy alternative; journey; 03a26619f6c82e8412d4c893d316bb4f3a73e27604a526c5ab4e1fcc29cd2edc]
+
+A separate cash itinerary is quoted at USD 605, scope unspecified. EVA Air flies SFO–TPE–BKK, departing 11:50 p.m. January 8 and arriving 11:10 a.m. January 10. This is a one-stop cash option, not an award comparison.
+
+[Display: Cash baseline; benchmark; 5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed]
+
+Across the three shown award journeys, award seat counts and taxes are not reliably reported; none verifies support for your one traveler. Each award also has an LAX positioning flight on a separate booking, so check ticketing and connection arrangements before relying on the join. The cash quotes have unspecified scope, and the award tax amounts are unknown, so the figures do not establish all-in trip costs or like-for-like savings. Search coverage was partial; confirm current availability and prices with the booking providers.

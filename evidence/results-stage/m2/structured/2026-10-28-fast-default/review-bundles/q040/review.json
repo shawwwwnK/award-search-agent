@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "This is another date-only lead for 42,500 Alaska miles, with 8 seats reported and award taxes of USD 50.90.",
+      "canonical_reference": "award observations a8dad3774d9e11df4c6a4a282520a7b66bca6c5736c576e527b48257efdfe6ae and 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "source_field": "components[].departure_date, program, points, money.raw_amount, money.scope, seats",
+      "source_value": "United: January 9, 55,000 miles, USD 16.20 quoted fee of unknown scope, 9 observed seats; Alaska: January 1, 42,500 miles, USD 50.90 quoted fee of unknown scope, 8 observed seats; request is for one traveler.",
+      "explanation": "The January 1 versus January 9 departure date is a meaningful local distinction, but the answer does not explain the earlier date as Alaska's gain or connect it to the higher fee and different program. Aeroplan is another mostly factual card without an authored benefit. The alternatives therefore give basic context rather than a decision-rich tradeoff."
+    }
+  ],
+  "reasoning": "The selected United January 9 lead, Alaska and Aeroplan January 1 leads, and EVA Air cash baseline match their canonical component IDs. Points, taxes, currencies, seat observations, unknown quote scope, stop count, duration, and offset-aware cash times are accurate. Economy refers to the award summaries while leg cabins and routing remain unknown. The source has zero complete journeys, 378 leads and partial coverage. The answer truthfully names a lead for a next check, embeds explanatory text with the references, treats cash separately, and consolidates limitations. Its alternative analysis is thin: it does not state why a traveler might prefer the earlier Alaska date or Aeroplan."
+}

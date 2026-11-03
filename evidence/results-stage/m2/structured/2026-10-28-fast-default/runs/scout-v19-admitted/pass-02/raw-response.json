@@ -1,0 +1,236 @@
+{
+  "id": "resp_06a0bf34d72cdeca016ae21372c4bc87d092ffeaccdd466219",
+  "created_at": 1793201010.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The editorial_plan contains selected identities and comparison targets only; it is nonfactual intent, not a reason to recommend every record. No selector purpose prose is supplied. Read comparison_pairs side by side and bind every claim to the exact left or right record. Pair values distinguish award from cash carriers, award connections from separate-booking joins, and elapsed from arrival time. A card ID supports only its bound metric and endpoints; it does not verify surrounding prose. Compare numeric points only within the same program. Quoted amount direction across unknown or unequal scopes is only a raw reported quote comparison, never total or like-for-like trip cost. Never compare distinct currencies without source FX. Keep the answer a connected decision argument; omit weak alternatives instead of inventing a benefit. Write the full final traveler answer in this pass.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_06a0bf34d72cdeca016ae21373a55c87d096720f6134d29eec",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4hN41HpviUHQ3IZmkyMG2w03XcyXXDfTmbrugzUMuCvYSwTRn6r69NWNgWT8S5001AhqoCQ-UHSyo8FxVjKATuq9TkZ46VvfzO7-tBzsDSWyBbPEc_m0HodFVHCPdbcs1KPFhYkpBMih1Rq_8qS8P0XiWNgTktooTZ6IVvEAlp2o8LK7GvxuNGFff7aPyPpwUFSH0v4NicviQRcZvOZExwpt0BJjSOrm_nAevUr1IKcmBZPJT8ExJXNmG3QcRP-9FoufAjL7jf_M0alZewNAVRInvnwQDzxeNgeG7ztmY6Fcnj5B4TCZEH0TR2Jp20XYs69GXfPDWh0UOMkV9Ud8mR3fHpWvtBILH0eLgNqiuokWWGPFEP6DKoU25WGWWHfTmdpl-rVkRJ6AIkQE2FjxHTpy2cLI-UbHaG2g0xgkpND0NBH0oLmgpbTDt0376V2XyrDNs9nLV6bTGlU8I24d2eZ86tc4FCLgr2mVMwrgV6SkvbGgjdDvMHksUZhwUDrat6D1cpIi6eIEiWV4Z-FSW-jqBlfCsp34CN2gKfYZiJRqPbIafLJ6Cy21047CXUCrHYeksYLx15OkBbiE9KX03bvfrKKodsps0mKJpdLzQ52VBtXGiNAmLxRCRsKCJG5_njIC9pLXVy4Yj-_eeeVM7Hit455DPZZqzO86krP-B9WvSjsBBExwiC9Id5PcgQnshlb_HgV79JVzFDasclbXAvFJcmZVyy2FetbskuTu3_lJDToQ-WbkWoclxlIOFsaX2wgJ7pzspZAKmmwkViVffMu8JEgeMv5fLaXQrh_aKUBQeXOeZssreLgKqiM0OroeyOu-Ap1JU3dK40J-jlHiEAlz_33iAWjPle37lAwc9CyBYJwp08Arqafr9vAf5m60k7TDIDamG92ACYg5KYaoqVx-hUNA8PGZM--BOL-Yv34Se-rxMBAml4mQXpX1cC4gTGAMTnz3pclaxRYgFnR1GW8PYo3FcqX1T3DiDqDnZEVkM_V7oW7GLYWO1-tdAu8tA4XTDmb8YJcjwP7W3Kr4aRvIEQh73pw_aYUXsYmAmhxsRdnmwQB3dFYGyooOlABaVy3q5C69Knszhm5AvUs_WVpBqJuB1OYRdpMw_5WQBHw_tq2tAT2y3_TVA9JBcSh-62Knw9KeVb6oroaxPqKrDZvv12A39lM6rpW0MusKODZmC9-cmiT2Mm0lwh0ahG-QA-SxHYwCCgF-pZ7hZkT8jFG_wP3GEOrRssv_1d5L8_r-np4r4QGIMp9WREKucsYz5TsuflgtBHIEpKfW9KtAyVY9cIt2ebkT8F3R1TuWwmDJdKL73D-dNl1o4uDcgy55EkmOf5RV3NQusAD6g3slvW15BPUFE9YD9DL-QKG2Ow-FJkEfr-J2Cprmaky2HWhQvvQu649vx26g9EkajJnuMAxUzprY5fzql3QyMPpejnDieTOUNtvV-w756Nbq1IH9BQTI8UsdX2u1e8nUOoEYH6L1cB8eFuS5OF36AldMN6gSi2hkuFMxqgLAx_jxYV2sMnBOp3iKVsgTR1wfZmRNDBH81J4UNX0JWrT2rNYcCSCOXr5m1pYGdHh_NcM_ymA2Ew8TDgTx1mf4NOARRrc6-o-IU27Ftem0vNA12xEhllEgXQkHGNNC_9Pciy1lqfBxEbLVY2PGLs9NXpMCKgylDcPWFo0akX6uC4MqpYA7GgGs3d3uFz5t9TGx2iLWGHr6g2uzeHxULtOpy6saosw2zOEYqTTrEy65GvIkL18Qdv9gSzDHDe4gyB4tZPh30PFjz4oYPQpojuoyiOSjODu3VspUjHxQWialGQay_kEsWr5FsKNZHf8UtfDiao4mkv6Tu3TShLjxoEZ0dExFDgxwrOloAxXO6wMBUm_rPwIxDyCyoOg3Ym10gfj01vqXg7x4sTwUD58L5mWks5dhnCoQnofwZwkgRk06VzT-_PiUpgCXnXzJUpL8SgsjLN94Yxaqw5Kwitee6RYZEId2LVjcvdv03TNuKsn6r88FqjYRTRsjrDA3YZpXTaoiqnenhX_vK6DatW9uLbEFQNyIguxHR0E3ZWYN7g6K0DM28jgc3UbHADcI-Uqn1oVekXf8G-Thh0e5pdf7OMfERtM7VQlUxUgsbEsrCPVNenGPacXTOUvg2zWWeRw0hHzKMBLrv4GnmTO3hzwMifnHM1aSxXpbzA9aLKRciNvD8P40iYFNifqzTqt-jPGVh878P8QxFwaZMqEa1B_Rt7189MLs8aOzHuZuXZ1fXWwxsHJJ6jK1vh-OeFwrPg5m2ccyWOvO4iVrlWydv5dClJe2tjS_3CQL8CFWtnNRK_Nl7Qv1OYqLy7NYkYfA4L5MDrJfhzLeI7yfBcxtCGlNLzcWTdE9gNHgnlW2u7PKDtxUTFBGSQppVXwTadbrg1zKX-Ne0nwBQP3TUcBxPrDCo_XvDtBqwTecwYEcAD3rwrJEsDIfBPd8o94wQfvx0aDSjCBsA5rO8_2LPQFsM-dDh_YDtbM4Cth5OoawuNUSPnky4WB_1bpOurWm7-4UTqlgYHLL9m_Pq-mr-ZF7JpaW5pFyLkpRTiYAXb8o8Op5whPUM2Dvj-vgscqeLRjFNMAsJnuSiYvoHWZNg54XkYIyrgo6BlWwyjgyveAyuhJuM_2Ga4TRBJWu_Po2K90NrqXOtvT_gUOjKwpmgKdHCoomWPguJIfud-Nd7GS4O2AoJPN9ooVV1jlBC_7jv_2jVhkW7ao984NrSj6CbDtiCqR8qPB_RtnUiuFTJkW9PvZT8BSzkXmPYLniXq5Jqwkly0s9aVbQOOGdi2NIrJBL4nbrvv283irFAfaJAuBJt8t-k5kDFY0TtK9R4tR3Z_ikUMvGjoldny3WWBvdnqPCnKdO19lNzzQXKr173tbjPz2uUBez1KLJPzvIxoITAlnTIdRYq2aYTCh6OQk7YmPCqjX825zX6edhZsrlDgMLTWNplaOuGPaEVChN0t6P4I2t8xeXp0V2BwKq-fgPQwquVlr2yE8RtlJPG_52Mz_UuDl7-v_r0oPatnCjDs-52PHhGD8pGDzoVos6JR3ybeaD2qO76xA82ABqnp8goTPiLj1Wcnc1qm8qIQmkvnWNhRDdYmToEFD2jxrgNNkiSrIefGprmmGXj-KkoeGo-gekKy1F7WcS9MK6icQC3fcxZXajjNI2J0QZrc8E4SxCNtxKRhM_lRNCVGuhtpyHp4S_eEWioHxKc0syVDgPsjRDFu9c7D5Ab1nvYTmxQuhch9ZAPT-Z0YC-yWfsf6jX8Hq2n90jef5BLXyQiGl4mrMlkT-WjqKXji2NyvaHMLejMQ79f223tnumE11wwP2cK79l6abJ58qB1JqCMzBGX-CdWozhtU8CTHfExTz9IKSlRxcXY7oCiDeCgXax5tY3J5SE7g7LMr920E7W652Q9E1zSZLlNZBEQoIbB_sjp1eRFsStEUL5vMakoGa1RoMF0OEx56BJ5wyfXeGvNDGKn0BxXsP-FUNhr2__sXLXt-ZKS9bfHGJXq3K6dTDxTjxY_I7lduo0nsClzRIzCJplt7cn-2HLPOEGsRDsQ6T8wEq-LGYfVZ5wdI6tcYm70fDCrKl8UqzBlEvMo3ljl-0XuqgH9zEkmnaD2a6CWbY6gQvHABh8Kef0FBHeKqRH9KqogZ23FnjM6BKvuJ_8BoiXVKFf6W7X0yFq73UF8ZxzJK16tUTPRKcBLnofXG3XSNRb-3UY8Vk6zX1FRSB196I7lzgirAY=",
+      "status": null
+    },
+    {
+      "id": "msg_06a0bf34d72cdeca016ae21374ee2087d0b4f893654680f120",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the January 15 Aeroplan award arriving January 17 at 09:50: among these shown choices, it combines the shortest elapsed time with a later departure and more reported seats than the other late-departing award. The tradeoff is an overnight arrival and a CAD tax quote whose scope is unspecified. These are selected search results, not the full inventory; availability and prices can change, so confirm them with the booking provider.\"},{\"k\":\"p\",\"r\":\"J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50\",\"n\":\"Recommended: late Aeroplan award\",\"v\":\"Departs SFO January 15 at 23:15 and arrives BKK January 17 at 09:50, with 19 hours 35 minutes elapsed via HKG. The award is economy on Aeroplan, quotes 65,000 Aeroplan points and CAD 107.40 in taxes (scope unspecified), and reports 9 seats. The award itinerary lists a 70-minute HKG connection. Leg-by-leg cabin information is absent, so economy should not be taken to establish every leg’s cabin.\"},{\"k\":\"t\",\"v\":\"Compared with the other award departing at the same time, this arrives 45 minutes earlier and has 7 more reported seats; it also has 45 minutes less elapsed time. The reported points and CAD tax quotes match, but the tax quote scope is unknown.\"},{\"k\":\"x\",\"r\":\"T05\"},{\"k\":\"x\",\"r\":\"T06\"},{\"k\":\"a\",\"r\":\"J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35\",\"n\":\"Same-departure alternative\",\"v\":\"Also departs at 23:15 and is an Aeroplan economy award via HKG, but arrives at 10:35 and takes 20 hours 20 minutes—45 minutes later and longer than the recommendation. It reports 2 seats, versus 9 on the recommended choice. Its quote is 65,000 Aeroplan points plus CAD 107.40 in taxes, with scope unspecified; the HKG connection is 105 minutes. Leg-by-leg cabin information is absent.\"},{\"k\":\"a\",\"r\":\"J8@2027-01-15T11:45-08:00/SFO>BKK/E>2027-01-16T22:25\",\"n\":\"Earlier departure, earlier arrival\",\"v\":\"Choose this instead if arriving the previous evening matters: it departs SFO January 15 at 11:45 and arrives BKK January 16 at 22:25, with 19 hours 40 minutes elapsed via HKG. That is 11 hours 30 minutes earlier than the recommended departure and 11 hours 25 minutes earlier at arrival, while elapsed time is only 5 minutes longer. It is an Aeroplan economy award with 9 reported seats and quotes 65,000 Aeroplan points plus CAD 107.40 in taxes (scope unspecified); its HKG connection is 70 minutes. Leg-by-leg cabin information is absent.\"},{\"k\":\"x\",\"r\":\"T07\"},{\"k\":\"x\",\"r\":\"T08\"},{\"k\":\"x\",\"r\":\"T09\"},{\"k\":\"t\",\"v\":\"For a cash baseline, the shown Singapore Airlines itinerary has one stop and takes 31 hours 45 minutes; its quoted fare is USD 440. The quote scope is unspecified, so it cannot be treated as a per-traveler or all-in total, or directly compared with the award points and tax quotes as a like-for-like trip cost.\"},{\"k\":\"b\",\"r\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"n\":\"Cash baseline: Singapore Airlines\",\"v\":\"Departs SFO January 15 at 09:40, arrives BKK January 17 at 08:25, and has one stop. The source fare quote is USD 440; its price scope is unspecified.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50",
+                        "J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35",
+                        "J8@2027-01-15T11:45-08:00/SFO>BKK/E>2027-01-16T22:25"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C1@2027-01-15T09:40-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "x"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "T01",
+                        "T02",
+                        "T03",
+                        "T04",
+                        "T05",
+                        "T06",
+                        "T07",
+                        "T08",
+                        "T09"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 7736,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 7733
+    },
+    "output_tokens": 1065,
+    "output_tokens_details": {
+      "reasoning_tokens": 198
+    },
+    "total_tokens": 8801
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793201016,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

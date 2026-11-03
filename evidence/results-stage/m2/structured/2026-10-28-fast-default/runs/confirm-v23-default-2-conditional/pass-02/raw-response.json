@@ -1,0 +1,236 @@
+{
+  "id": "resp_0134da5bd0be1a7a016ae22a30a6a087d0b7a09fe0a68814f7",
+  "created_at": 1793206832.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The editorial_plan contains selected identities and comparison targets only; it is nonfactual intent, not a reason to recommend every record. No selector purpose prose is supplied. Read comparison_pairs side by side and bind every claim to the exact left or right record. Pair values distinguish award from cash carriers, award connections from separate-booking joins, and elapsed from arrival time. A card ID supports only its bound metric and endpoints; it does not verify surrounding prose. Compare numeric points only within the same program. Quoted amount direction across unknown or unequal scopes is only a raw reported quote comparison, never total or like-for-like trip cost. Never compare distinct currencies without source FX. Keep the answer a connected decision argument; omit weak alternatives instead of inventing a benefit. Each journey's traveler_evidence separates the known requested party size from award and cash component evidence. Award support for the requested party, minimum seats check, reported seats, and returned traveler counts have distinct states. An absent returned traveler count is neither zero nor proof of failure; a cash component echo does not establish award support. Say which component remains unverified without saying the request's traveler count is unknown. This evidence does not change quote scope or prove current availability. When only incomplete leads exist, give a conditional reason to check one lead first if exact dates, programs or comparable original quotes support it. For example, frame a date or program as an if-preference, not a known traveler balance or access. A raw same-currency quote contrast with unknown scope is not total savings. Neither a surplus seat count above the requested party nor a shared missing schedule is by itself a lead advantage. Keep limits clear; do not invent a complete itinerary or a preference. Write the full final traveler answer in this pass.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_0134da5bd0be1a7a016ae22a31c0a887d08f28b2bd747f43b4",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4io7kacSLz3ucoXu2Rw3rDnGt_GAXLAUyHC6xA4pThcZnKAI-AOmBVSLfHc4tWIY9t6rXY95okjeyEQ1hfRuY1nSy3ipQgQc31_VJ8DOCb59Em2ZUlV6xWYgYsBRbA54_ftxUJAas_GbZ3KRXFlT_AajfoeXs5XXBR2m1_N2AZdYDbu9zrJ8GeLoFAOiXf_gX3wTZa3PLT24j_nEyTIRagYmCQViYoLIKf_AzmfdYwndi4-MvSs1XxoCgbudf_e066Dz1bOYiX_Rd7c6jqbE7IYvwd3mRdnVv6pt6F7yEG_h9YAu3g07bDigtZ-S-GAiDkxVcXORIb6n7Y5M2Inscv5SJsae90LepB78aAoot4hTNzDjeTZNK12xIVeOMxC-i96gh5w2uYCQufJXxfkorpYFb7p_wJgT9DwUyC0p6gDFzol5H1B7rapZAZmu2irJAHcvG-pVf6sLa3I7n2ECzL65XaMYbWUB2xhayP8aAfMLg7ernPhEJ0CPikMychHPCynzMKFGto7S5N5heaE_R3eSJcpEK4FvJLpLIaAS36c2Q9cOV-47fkIWOAmPKMqWQ_bJqDGA6DJvDGqAZjEWvsu2G3VRRM4q-rlfDk5JQPJuM7un8EK3VtXPpyldjPrKe4X0UiSFtwvdh17pp725IwxilqhqaTPxWtgvn4SGmnhOp9MGbrEQutwEroX7-8xFiS2LbJ5FStEUc6ZhFggW3fi0xlw5nd4qXLWPHZhy_p8ucbiVcNikJFM7ePK6BQ-vE49skguhZtWZu_lT1waoDO9_lKy0QYN0yZml1phra0XwcNQk4sWNoXVJ4ynwl1wK_M62XU0Jw9Dqm7h4JZIAGPbsfjxQKze0DbB_4ejpBldVevXBipN7m15BxbiRqUmIqyxnrrwoJ_spB_ddJu06AvU1z9DYmWNpZtZeVuFKJDQJm5VONVTvCOkqljB2-fERBbbiLkFSySJ-2nJxJ2pNZ3wB8XnDH81iC-sVpg163ij8Wk-fNKmZW9WWdMx876-IyUe8Rr_ThdQH0CtdEn_sRPYle12fLWCUPSebq_7E7y25VA1HwzM2KFF0TvldHRTgJefUnEjcO0oLj_V0azwJQrqMzxgKmOYg5iO6brpST_p1PuuP9ck8N3VVe-xj5cWSaGGpr4TPVOaOnKOPmWsVBTZs7oRx6Idj1ivYE2MJO_jxFIIa0SXwJBHXWA7CzzdGhwGqs4nUOL_7_WWPXCHH1c2xgsilQFa92E2LdXZBn9qOtVg3X0t--Er0AuzH89D2TdU3BV-71v7_wuiEoUFxXaAMtejmWrT5Z7OgM-mkVeWd8KT-yYNZGXq7CSdHolOw0HI5XVe7Q-NugAR3gSi6vNjIfE6hYAk7yzavZxkIxkVXgFgCtiVTKWQoJjVsPoZVP25bshouZWJc-uDIW2XaaO1_J4kbhOD1b6b9ehXAqgsu1guI72p71VYNP4ivf860ZamzGT771JqXVbZ0kZzzdLHgJlIvWsI6QBPTxFya6wFdBiY_HgUpTsuiWJMJ0Gl5KHbNIvIDy9zD6VU5tbkJ6c-Ne5588XVYNs8iUep3r4DkCl7pBVoWDixSRD_Jv8WbWed1NLoJqo1f4h-XXDAC838mQsJcD6o49nwSRWES6d_HhSLJ7R5Wa9rpNxVI6guYSGHoCRBHyqMJ9DGyyWPZM6dRBfVqkG-TewBb_EYjoA_9m-aTOQf_1FgUfVsMIm-BYvxlVU1XtjwQdbZtT9LLQk5CgBvs-k-DJgQ0ge1hM_2nbcXWRvkhiWgrfrA2c1ZWevTdVezlNA5vgY1nVQrU55CzGgaumI0wQVHb9HLmPqJKBYlDRfh0_DFXn3nf0wZHhQZAGwPVLb9ftbS3LPBsd0zbIa37EJFUIU6IXZ8YJbD15wyyA-T5tpOy_IJYkI1q4qXPqq7A3UYr6p8G6-Z1IadggxQ4q25XQBD9ikXvXMpRI4PM6W6IctauLrgpRuop8B1K9wViNfOg9y2vJc_RHQYagQ8F4GU45v8FiL1uaRl1s11hXfCGTkPb7XcQW3sRg_0n6S8YvDcLxHYcosOLpABWJRtIm8nlP6fdYomS6fgId6KEriTw7Uxn3QHg5C6Nmy3ntIYYiDUnu0fjVM39Zi2UUy1HnzqfwT5zyM7skLwdsAPt3ZKgUH1XDFRfORm8W8NVPRVXzAmeCMPu6YfVege0lvMG9a4PRfaTM17pG0gFZxOjhftCaDDbu-WAaXOxCWF--154LrsDBYek4ZohjEyAZb1fE0M5530ySwANpLDfGxbDV0h2qJ03PkNpetxRmejoH7BmTM1vtPGk3s3IJ34LfD3nyfXOkUBLCG1UqnYhXVrsYn8NcwIiUcbz-csyC3o_rhltiNxEkDG6tDpZ28k1dhynrXRqfFjITOMo_Rqbnx0_gVmfvr4CMkAL3Tw_BJr5EZlC9t3LK8ZlO6vQUZ8d4fzIi8A36Fk_-2CkES6VlJLrE1ZK1AGTahcmlwx8yTlPmTo4bKbtlNDrRRk3aT9PzGpbecoSHfmx48YmwlG8Mbps3QRdAqO82hPX3Wr0GrnxNBE0ekEHKpH2HiLXvO9lluVM7HvyHRDW4N0cBL9EepPHeWcGFk-HZL0Oc6VA0oY0LdTJER9gxBfu4_9voF5U0Z3LHxNCkMplQN1ahqsb4CagnA0WMGZQQgkSdeeL-IrZUmSTq7NagwexMuEG3LhCXr7R7yQ7rmEYrqUifd40d8BSmcVcuFLG5EpFXdsHDVKwPkLz_g8ClkddqEpGke6nkvWyvK6y2XdZI_VDOSMbNfYaohbo03_5NzlUjHJOru0VDv7D2ZLmH3FHgdzxFUg1ZR3if-ytB6yQFauYdD4bCWqrWKbphoF5U5QCtpAQ0o7TzNC2Mz7jIjT8gxBOw20b0tVEb9myjDTHBGlJeFOk-hCbCtzKZG0go0EvL_0ha4M10NJJFzNNs0NgIqqfwyT0PANS6pe0Lvj7rRCeZVD7G29Ll0bdX_sRWZk0NlmztO8oW4vRKEQInuqL2YfblPTW8Z7NILhkT3WtMhg6DSfrwo565lV63M8kVvSq-GS0AObyH7hSQcvb7QRfk42yvPOqXPFBozPOI4yiRwdvr4VWObtvFIJj7hSRdHQwdFkw5DYiixGdFH12CTqptAX0LUewDWb7T77YPI1fGEW5PAccffMn-wets3eQ7a5PZWA38dCy1YWm8dJ-rNLJvweAJXaVwJpjFuBg2hCW5htul8Z1X1PSHAjHF-SvFhVUgh8xUXODKqXvHjpGjZVF0_BLL-MZKP5Ztx0GLEUeYFZ7LfGTrrBYm9GIEVgVfIGNcSsm6ezc6VkzYjE3OtfxrH-9CK6nF164EFoa0loygOwtEabvWTUWaOXjPRcylH_D4UIriaaHOgi3PJWv5huKNIyOnYe-4PFG2vq6EQCkIiavT93JF5-5IWuYtBhcog8xqiuOjYSTaw4L3JQ8_6JtYkALvdGbLx-6PJLXRBipuXypfLO3U_j8iwO4xuQWKftByeBojXkuMtewQruhieiL0NQ6HEPvv499cmlcyzuK23dX938uVhWOYqHBEPE1F43ORYrbGINvwqTIngbPLrq631S_f0S5MDYw5tMCPlmXroiKN8fpLb4qSVUFFH8TWseP40Elek-OyJ4E4YIuMA6CGxH3ygorT--FHj6lKpn-1OG60sR1EbTm8AL8D4f6iXrmoRBD6WZFeiP9mXnpybgcJix8p5YGaCIm57Nt0RjT7F3Mce1T6yI9BtZdERFyT9l_CYxYAYBPutpbyZar36NiP-mcgmTjDOmSTv0TxgoQMB6tAYZ2IT0Ey7oGIye3K_w4hqdctbPTimc3hSFMdpmKIFYAB59Tnxg1yAu32TG71BXf1HzPgtRw_zXcDwolWalXyS79i--sbA0h4q2U1Rl_V-M4yFsccTYo1BkJWl01Rh3HcOixf36foisk6Dl5Rfu1FRaowhRi7OPL9HDQbsu77UGsvweC0sUOYNJpKCJSLZRHJZ7Mv0CtkDZUCS9muyheDHi36LMtDafwQfXE_eCVpEagO2fI9XpfnKKEzx_iAOiPBUti98fLXcJ91C_6siUhjTc_p7eX5u7xCnDGSdgsxaXYberO1k2EX6zKeVVE2_efrBznW2Q6y-ypd25mqKnZdxhfeWEi3c0o8RIK5jvyK1ULDf9RFvNcN--pdsiSXKIwfOdfE0pnfq3FV-HeDxsItE6Ny_JMxHObuYg-jtDGbeDdviAeSaEpE6FfTekOVNo2r5NPLUqZ60_tgtpNwnUrryzVclJwfuqoIQNjaXtKHRxJjbnXaw86gQyYaHfqQBDQTt_0_fom_rvTh1JYvFCaKUmFp7s_Uiq3_OWHt7Z1TKdnrKWLutLFHy4L15FT4YoBvF57NFudl4WkxT7VIK0lHPke7P8lw_JR0pEyjiE9K8B4tUCTDgE5hDUU9aHM-vKaiClMPADzm8217KflwcYNFVix5e5KWx2x3qxYcfGSDHxUvjFEpzLNoUFIcAmBqQ9gtLELC_BJKlEbHgEsaYPIeonmsPNCdq0NKnhsiaTchwFVlK6zq0YiF4pwea1q_qTcLKYW5rhVIT87G84hSz4UD01iwpNs51uP2w1zmqDDW_jnLQjPW8reBVaJbPnh4oQqP8XoqJ1W9wRwBhN7MOyAesP8gqJNF5MwxtroEcPd52fyg1HCzemM1yYDcYGO4UCSvdG2R9Z9uHGlRMwztGSOu5Sar1co3VuQx0woC0PDUYu_zr9PP_aX0UI7KH9VEtTNXNDiZEZsHE0xzNaPfcnlH2nureLPAgD8hOQrQFFingT6yHOqDOWB37_lA6xFYx2IQvQw35yDzzuZxqlc0aZtv5u6BecxMwQmM8NAS1um5Gi1o4ME2jIXQ0NlpG_BGqb9C8skD5HWUv4u7O9potaTvduoBc7MHUyMtqaumXylSKPd1ZWmLQYsFgtGhIM5CzkbLSbMVVLcNHlropP4QND1ojLCnyMbC1e-TXTVBXMCebi82mi76jojj0mqrq8fP62FKvGPmpQ=",
+      "status": null
+    },
+    {
+      "id": "msg_0134da5bd0be1a7a016ae22a34771487d0a4e01941cdbd7b2c",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the business-class award via Los Angeles and Istanbul that arrives in Bangkok at 4:15 a.m. on January 10: among these shown choices, it keeps the same reported Turkish-program points as the later-arriving business option while getting in earlier. The tradeoff is an early arrival and a separately booked SFO–LAX segment; that connection is not verified as protected.\"},{\"k\":\"p\",\"r\":\"J63@2027-01-08T08:36-08:00/SFO>BKK/B>2027-01-10T04:15\",\"n\":\"Earlier-arriving business award\",\"v\":\"Departs SFO at 8:36 a.m. January 8, reaches BKK at 4:15 a.m. January 10, and is reported as business class on the Turkish award itinerary for 275,000 Turkish-program points. The award connects at Istanbul (140 minutes); the SFO–LAX American segment is separately booked, with a 150-minute LAX wait. The reported USD 59 cash quote for that positioning segment has unknown scope. Award taxes, reliable seat count, and support for the requested one traveler are unknown; the separate-ticket connection and bookability are unverified.\"},{\"k\":\"x\",\"r\":\"T09\"},{\"k\":\"t\",\"v\":\"Compared with the later business option below, this choice has a reported elapsed time 271 minutes shorter; that is an elapsed-time difference, not an arrival-time difference. Both report 275,000 Turkish-program points and a USD 59 positioning quote, but the positioning carriers differ. The later option instead allows a later Bangkok arrival and has a shorter LAX wait.\"},{\"k\":\"a\",\"r\":\"J115@2027-01-08T08:40-08:00/SFO>BKK/B>2027-01-10T08:50\",\"n\":\"Later-arriving business award\",\"v\":\"Also reported as 275,000 Turkish-program points in business class, this option departs SFO at 8:40 a.m. January 8 and arrives at BKK at 8:50 a.m. January 10. Its separately booked SFO–LAX positioning segment is on Alaska, with a reported USD 59 quote of unknown scope and a 149-minute LAX wait; the award connection at Istanbul is 420 minutes. Award taxes, reliable seat count, support for the requested one traveler, and protection or bookability across the separate tickets are unverified.\"},{\"k\":\"t\",\"v\":\"If using fewer reported points matters more than business class or the earlier arrival, the economy award below is a meaningful alternative: it reports 110,000 Turkish-program points and reaches BKK at the same time as the later business option. Its separate positioning quote is higher, though the quote scopes are unknown, so this is only a comparison of reported amounts—not a like-for-like total trip cost.\"},{\"k\":\"a\",\"r\":\"J18@2027-01-08T11:47-08:00/SFO>BKK/E>2027-01-10T08:50\",\"n\":\"Lower-points economy award\",\"v\":\"The Turkish award itinerary is reported as economy for 110,000 Turkish-program points, departing LAX at 6:30 p.m. January 8 and arriving BKK at 8:50 a.m. January 10. It connects at Istanbul with a 60-minute wait. The American SFO–LAX positioning segment is separately booked, with a 301-minute LAX wait and a reported USD 109 cash quote of unknown scope. Award taxes, reliable seat count, support for the requested one traveler, and separate-ticket protection or bookability are unverified. Compared with the recommended business option, it arrives later and takes 84 minutes longer in elapsed time.\"},{\"k\":\"x\",\"r\":\"T06\"},{\"k\":\"t\",\"v\":\"For a cash-only reference, the selected SFO–BKK itinerary is on EVA Air via Taipei, with one stop. Its USD 605 quote also has unknown scope, so it is a source quote rather than a confirmed party total or a directly comparable total against the award-plus-positioning combinations.\"},{\"k\":\"b\",\"r\":\"C3@2027-01-08T23:50-08:00/SFO>BKK\",\"n\":\"Cash reference via Taipei\",\"v\":\"EVA Air itinerary from SFO at 11:50 p.m. January 8 to BKK at 11:10 a.m. January 10, with one stop at TPE; reported duration is 20 hours 20 minutes. Source quote: USD 605, scope unknown.\"},{\"k\":\"t\",\"v\":\"Shared cautions: the requested party is one traveler, but award support for that traveler and the minimum-seat check are unknown for each award choice; the returned traveler count is absent, not evidence of zero or failure. Award taxes and reliable award seat counts are not supplied. Confirm current availability, prices, and the separate-ticket arrangements before booking. These are selected examples from search results, not the full eligible inventory; the provider reported partial coverage.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J115@2027-01-08T08:40-08:00/SFO>BKK/B>2027-01-10T08:50",
+                        "J18@2027-01-08T11:47-08:00/SFO>BKK/E>2027-01-10T08:50",
+                        "J63@2027-01-08T08:36-08:00/SFO>BKK/B>2027-01-10T04:15"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C3@2027-01-08T23:50-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "x"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "T01",
+                        "T02",
+                        "T03",
+                        "T04",
+                        "T05",
+                        "T06",
+                        "T07",
+                        "T08",
+                        "T09"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 9952,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 9949
+    },
+    "output_tokens": 1380,
+    "output_tokens_details": {
+      "reasoning_tokens": 301
+    },
+    "total_tokens": 11332
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793206843,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

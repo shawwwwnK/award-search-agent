@@ -1,0 +1,75 @@
+{
+  "bundle": "q044",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "familiarity": "Prior source/code/profile/review familiarity disclosed. Current profile mapping, metrics, checker verdicts and other current grades were not inspected; this draw was independently graded.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Elapsed and arrival comparisons, source quote amounts/units, identity and incomplete-lead status are correct; no all-in or per-traveler price claim."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Defensible complete economy/business choices plus conditional Alaska/United program-access research reasons."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "Shared traveler support,tax/total-price and separate-booking checks repeat in both journey captions; shared date-only schedule and quote-scope gaps repeat in both lead captions and date-only status also appears in the opening."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Economy shorter elapsed versus business earlier arrival/cabin is supported; both lead programs have valid conditional access reasons. No mandatory numeric contrast or extra options imposed."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Actual time/premium witnesses and business overlap survive; research leads are not assigned styles and no unsupported cost winner is asserted."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Four actual source-resolved cards carry flight/lead facts; one USD452 unknown-scope full-cash sentence is correctly displayed inline."
+    }
+  },
+  "findings": [
+    {
+      "severity": "material",
+      "axis": "M2",
+      "claim": "Check one-traveler award support, taxes and total price, and separate-booking/connection requirements in both journey captions.",
+      "evidence": [
+        "document.json blocks[1].text and blocks[2].text",
+        "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669].internal.reason_codes and .money",
+        "evidence.json journeys[candidate_id=eb95a4e1a79f494a3affe3b05144c3f99196d4640d52500f35e08e6a2e5fa65e].internal.reason_codes and .money",
+        "condition-applicability.json award_party_support,award_tax_amount,award_price_scope,positioning_permission_unknown,separate_ticket_obligation apply to both J18 and J59."
+      ],
+      "assessment": "The same source conditions are repeated as local checklists. Saying Like the other option acknowledges shared applicability but still repeats the whole warning. Distinct wait values do not justify duplicating generic booking requirements."
+    },
+    {
+      "severity": "material",
+      "axis": "M2",
+      "claim": "Both leads give only the date,not a schedule; confirm itinerary and tax-quote scope.",
+      "evidence": [
+        "document.json blocks[0].text,blocks[3].text,blocks[4].text",
+        "evidence.json leads[reference_id=42dd038be15aeed81be50301b92baa2b22ac2072d02c32e7f54c43089d34a7f4].missing_information=itinerary_schedule_incomplete",
+        "evidence.json leads[reference_id=bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594].missing_information=itinerary_schedule_incomplete",
+        "Both lead components have null schedule instants and money.scope=unknown; condition-applicability.json lead_schedule/lead_award_tax_quote_scope applies to A2 and A3."
+      ],
+      "assessment": "Shared lead schedule and scope explanations should appear once. Different fee amounts do not change the shared uncertainty. Compact card gap indicators themselves are allowed and are not counted as the failure."
+    }
+  ],
+  "evidence": [
+    "J18 Turkish economy110000,elapsed1803,arrival2027-01-10T08:50:00+07:00,LAX301/IST60; J59 Turkish business275000,elapsed1857,arrival2027-01-10T04:15:00+07:00,LAX299/IST140.1857-1803=54 minutes;arrival difference275 minutes=4h35. Earlier arrival is correctly separated from shorter elapsed.",
+    "Alaska A3:42500 points,USD5090minor taxes,6reportedseats; United A2:55000 points,USD2180minor taxes,9reportedseats. Both SFO-BKK January8 economy date-only leads with unknown quote scope. Conditional program usefulness is not an invented traveler preference.",
+    "Benchmark f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2:USD452major,scopeunknown. One cash_sentence and no repeated full-cash comparison.",
+    "Full232journeys,8groups,167leads;116time,116premium,58overlap,0costmembers. Actual shown J18 is time; J59 is time+premium. No material category omission or forced cost member."
+  ],
+  "verification": [
+    "Read frozen rubric, full canonical source/request,population groups,research directions,category/cost assessments,style audit,choice/condition sidecars,references,document,resolved and answer Markdown.",
+    "All displayed journey/award/cash/lead/benchmark attachments exactly match canonical source. Independently calculated temporal differences and checked all four choice rows/connections plus ten condition rows."
+  ],
+  "uncertainty": [
+    "Complete award-based options is interpreted as complete mixed journey schedules,not guaranteed bookable single-ticket awards; caption/card separate-booking disclosures are explicit.",
+    "Reported points are quoted without per-person or all-in interpretation; no cross-program value claim.",
+    "Saved-source review does not establish live availability,population reliability or browser-layout quality."
+  ],
+  "improvement_direction": "Retain the useful distinct timing/cabin/program reasons while consolidating each shared journey or lead condition once; no extra comparison,card quota or per-card downside is required.",
+  "escalation": "Parent integration required for the failed composition draw; no deeper review escalation requested."
+}

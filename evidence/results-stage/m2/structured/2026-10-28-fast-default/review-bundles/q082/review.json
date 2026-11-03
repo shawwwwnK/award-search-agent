@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "A separate-ticket Turkish option is an earlier-departure, earlier-arrival possibility, but it is less certain and does not offer like-for-like pricing against the Aeroplan awards.",
+      "canonical_reference": "evidence.json journeys c37c0ca25094efa418ea7d71bb277cb2b4571709e6f99f3195cca2cb85f100eb, 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3, 3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9",
+      "source_field": "departure.local_iso; arrival.local_iso",
+      "source_value": "Turkish departs January 15 06:18 and arrives January 17 04:15; recommended Aeroplan arrives January 17 01:25, while the next Aeroplan arrives January 17 16:50.",
+      "explanation": "The comparison target is implicit. Turkish arrives before the later Aeroplan alternatives but after the recommended noon Aeroplan. The surrounding passage makes a local comparison plausible, so this is recorded as scope ambiguity rather than a definite source contradiction."
+    }
+  ],
+  "reasoning": "The answer recommends the noon Aeroplan journey with a supported reason and downside, and accurately distinguishes observed seat count from requested-traveler support. It weaves the journey references into a traveler-facing argument, states same-program quote/date/time trades, explains that the BR-only option costs 6 hours 50 minutes of arrival and elapsed time unless the carrier routing is preferred, and frames the Turkish economy/business possibilities with separate-ticket, points, seat, tax, and cabin tradeoffs. Cash is a separate one-stop baseline with unknown scope. These comparisons give decision-rich local depth without requiring an exhaustive inventory or global winner."
+}

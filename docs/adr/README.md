@@ -1,5 +1,60 @@
 # ADRs
 
+2026-10-29 c20 execution closeout: [ADR0029](0029-structured-results-and-local-workspace.md)
+retains the accepted natural category/card ownership decision. The bounded
+c01–c20 campaign stopped without qualification; final c20 repeats a local
+condition in q064. No default adoption, M2/M3 closeout or c21 follows. See
+[evidence](../../evidence/results-stage/m2/structured/2026-10-29-category-led/README.md)
+and [build log](../build-log/2026-10-29-results-category-led.md). Engineering
+profile/representation refinements do not introduce a new Ranking or trust policy.
+
+The [mandatory c20 review](../reviews/2026-10-29-results-category-led-c20-architect-review.md)
+proposes a future offline output-ownership prototype only. It is not an accepted
+ADR decision or continuation authorization; any adoption needs prospective
+contract/decision recording and new qualification evidence.
+
+2026-10-29 new invocation: [ADR0029](0029-structured-results-and-local-workspace.md)
+records the confirmed natural category-led/card response design and explicit
+implementation/live evaluation authorization for up to twenty new iterations,
+with architect reflection at versions5/10/15/20. The historical V30 campaign stays
+stopped. See the [new campaign plan](../plans/2026-10-29-results-category-led-campaign.md)
+and [build log](../build-log/2026-10-29-results-category-led.md). No qualification
+or M3 closure is inferred from authorization.
+
+2026-10-29 documentation closeout: the owner explicitly stopped implementation.
+[New-session handover](../handoffs/2026-10-29-results-m2-fast-profile-handover.md)
+records the main cycles through V30 and pending category-led work. ADR0029 is
+amended for the already-stated product decisions; no new workflow policy is
+introduced by the handover.
+
+2026-10-29 accepted owner direction: [ADR0029](0029-structured-results-and-local-workspace.md)
+keeps Luna wording, rejects comparison binding as the next cut, restores Ranking-led
+recommendation categories and limits the full-cash benchmark to one brief sentence.
+Implementation remains pending; the V30 campaign and default qualification remain unchanged.
+
+2026-10-28 offline proposal: [ADR0029](0029-structured-results-and-local-workspace.md)
+records the historical comparison-clause prototype; October29 disposition above
+supersedes its pending owner calibration.
+The numerical-prose policy is unchanged; binding is not adopted, no new model
+calls occurred, and the V30 campaign remains stopped. See the
+[prototype](../../evidence/results-stage/m2/design/2026-10-28-comparison-prototype/review.html).
+
+2026-10-28 final Results M2 campaign disposition: [ADR0029](0029-structured-results-and-local-workspace.md)
+records the Luna fast-default experiments and correction boundary. Public API/CLI
+remains provisionally V27; its fixed six-run cohort had H3/6 and a 26.23-second
+controlled correction. V30 was opt-in and stopped at scouts: 16.38/12.29/11.06s,
+H/U/M2 3/3, but C-rich 1/3, with q120 (conditional) and q121 (incomplete) basic; q119 (admitted) was rich.
+No V30 confirmation or correction diagnostic followed. V23 remains the best earlier full cohort but
+q095 was basic. V28 was implemented and scouted; its conditional NONE-selector
+phase reached44.78s and ended with an API incomplete response. V29 and V30 were
+subsequently implemented and scouted. No profile qualifies and this work does not close M2. At254/278 reservations, the campaign is stopped at V30; no V31 or further paid calls. All109summarized artifacts replay identically; strict verification remains red
+with seven flags classified as four verifier bugs. No full-repository pass is claimed.
+The owner requested a full WIP review against checkpoint b7bedf5; the public
+default remains provisionally V27. See the
+[session log](../build-log/2026-10-28-results-fast-default.md) and [campaign evidence](../../evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md).
+The October 8 M2 closeout remains limited to its declared scope; frontend, owner
+presentation acceptance and M3 remain separate.
+
 2026-10-28 owner continuation: commit the fast-profile checkpoint; the owner
 intends to make it the default after next-session inspection and iteration.
 ADR0029 records this direction, with the actual switch and quality acceptance

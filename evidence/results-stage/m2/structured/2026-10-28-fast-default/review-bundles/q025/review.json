@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "This Jan. 1 SFO–BKK summary reports 9 seats and USD 60,500 points, with USD 28.20 in fees shown.",
+      "canonical_reference": "evidence.json components observation_id cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "source_field": "points.value, money.points_raw.value, money.points_program, money.award_taxes.raw_amount.value, money.award_taxes.raw_currency.value, money.award_taxes.unit",
+      "source_value": "The United award summary reports 60500 award points (YMileageCost), program united. The separate tax/fee observation is 2820 USD minor units, or USD 28.20. The points have no USD currency unit.",
+      "explanation": "The visible 'USD 60,500 points' assigns a cash currency to an award-points quantity. This materially conflates two different units in the lead's primary numerical fact; only the fee quote is denominated in USD."
+    }
+  ],
+  "reasoning": "The packet has zero assembled journeys, so the no-complete-award statement and request for timed details are accurate. Apart from the United points-unit error, the selected January 1 date-only award summaries match canonical components: United economy 9 seats/60500 points/USD 28.20 observed fees, Alaska economy 8 seats/42500 points/USD 50.90 fees, and Aeroplan economy 2 seats/65000 points/CAD 116.50 fees, all with unknown price scopes and absent returned award traveler counts. The separate SFO-TPE-BKK cash observation quotes USD 686 of unknown scope, one stop, 1930 minutes (32h 10m), January 3 local arrival, and one returned traveler; the answer does not assert a per-person cash fare. Coverage records support omitted SFO-BKK detail queries and partial connection-route results. The response gives a defensible United lead to investigate based on observed seats and fees, specific alternatives with program/seat/fee tradeoffs, separate cash context, and consolidated limitations. Comparative depth is decision-rich for date-only leads, despite the independent hard-factual unit failure. The source contains many additional summaries, and no exhaustive frontier is claimed."
+}

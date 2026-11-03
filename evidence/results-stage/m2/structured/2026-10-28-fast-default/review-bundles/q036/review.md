@@ -1,0 +1,9 @@
+# q036 blind review
+
+- Rubric: `fast-default-M2-v1.2-calibrated`
+- H: **pass**. The selected journey `0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee` departs SFO 2027-01-08 08:36 -08:00, reaches BKK 2027-01-10 04:15 +07:00, and lasts 1719 minutes. Its American positioning component `c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388` reaches LAX 10:15 for a 150-minute separate-booking wait. Award component `14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8` reports Turkish business cabin, 275000 points, unknown point scope, unknown taxes and seats, and a 140-minute IST connection; individual-leg cabin is absent. The later Alaska journey `018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153` reaches BKK 08:50, lasts 1990 minutes, and has a 420-minute IST connection. Registry T02/T03 confirm 275 minutes earlier arrival and 271 minutes shorter elapsed time. Cash component `f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2` has two stops, 1635 minutes, and a USD 452 quote of unknown scope; it is correctly separate.
+- U: **pass**. The answer gives a specific recommended journey and its booking/price downside.
+- M2: **pass**. Narrative surrounds embedded references, uses a supported local comparison, includes the cash benchmark, and consolidates limitations.
+- C: **basic**. The later displayed award has the same 275000-point quote and USD 59 positioning quote, while arriving 4h35 later and taking 4h31 longer. Its SFO departure is only four minutes later and the answer does not present that as an offsetting benefit. Quote: “Departs SFO January 8 at 8:40 a.m. and arrives in Bangkok January 10 at 8:50 a.m.” No sparse-source exception applies; the canonical evidence has numerous eligible alternatives.
+
+Uncertainty: None material to the local claims. Availability, fees, price scope, and protection remain unknown in the canonical evidence and are disclosed.

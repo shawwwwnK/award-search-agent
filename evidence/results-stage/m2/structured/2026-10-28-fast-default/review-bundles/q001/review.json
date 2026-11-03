@@ -1,0 +1,43 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "fail",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "The shown Singapore Airlines cash itinerary is a useful origin-to-destination reference at USD 440 for one traveler, with one stop via SIN.",
+      "canonical_reference": "evidence.json components[observation_id=063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd]",
+      "source_field": "money.scope; money.per_traveler_usd; returned_travelers",
+      "source_value": {
+        "money.scope": "unknown",
+        "money.per_traveler_usd": null,
+        "returned_travelers": 1,
+        "returned_travelers.source_field": "query.adults"
+      },
+      "explanation": "The USD 440 is an observed quote with unknown pricing scope. The one-adult query echo does not establish that USD 440 is a one-traveler fare. The following sentence acknowledges unknown price scope but does not remove the preceding implication."
+    },
+    {
+      "dimension": "U",
+      "answer_quote": "For a simpler award structure, investigate the Aeroplan option first: it is one award itinerary from SFO via Taipei, avoiding a separate cash positioning ticket.",
+      "canonical_reference": "evidence.json journeys[candidate_id=1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325] and journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]",
+      "source_field": "topology; award_program; award_points; departure.local_iso; arrival.local_iso; elapsed_minutes; money.award_taxes.raw_amount.value; internal.status; components[].seats",
+      "source_value": {
+        "selected_TPE": "admitted direct_award; Aeroplan economy; 65,000 points; SFO 23:30; BKK 11:30; 1,260 minutes; CAD 116.50 observed fees; 1 observed seat",
+        "omitted_HKG": "admitted direct_award; Aeroplan economy; 65,000 points; SFO 23:15; BKK 10:35; 1,220 minutes; CAD 107.40 observed fees; 2 observed seats"
+      },
+      "explanation": "Avoiding a positioning ticket supports the Aeroplan category but does not explain why this exact Aeroplan journey should be investigated first. An admitted same-program one-award alternative arrives 55 minutes earlier, takes 40 minutes less, has lower observed fees, and shows more seats, for a 15-minute earlier SFO departure. The selected TPE join has a longer 165-minute connection versus 105 minutes at HKG, which could justify a preference, but the answer never gives that reason."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "Aeroplan economy on BR via TPE is the only shown choice that does not require a separate SFO–LAX cash leg.",
+      "canonical_reference": "evidence.json journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]",
+      "source_field": "topology; award_program; award_points; arrival.local_iso; elapsed_minutes; money.award_taxes.raw_amount.value; connections[].wait_minutes",
+      "source_value": "admitted direct_award via HKG; Aeroplan economy; 65,000 points; 10:35 BKK arrival; 1,220 minutes; CAD 107.40 observed fees; 105-minute connection",
+      "explanation": "The shown Turkish comparisons explain simplicity versus earlier arrival, but the answer does not compare the selected Aeroplan journey with a meaningful same-program direct-award alternative or explain the selected journey's longer connection buffer. This leaves the exact lead choice at basic comparative depth. The quoted 'only shown choice' is literally true of the displayed subset and is not counted as an H error."
+    }
+  ],
+  "reasoning": "The three referenced journey identities, program/cabin scopes, point and raw fee amounts, offset-aware arrival differences (2h40), elapsed-time difference (4h23), positioning fares, separate-ticket uncertainty, and one-stop cash route match the canonical records. H fails on the cash quote's unsupported one-traveler price implication. The answer has coherent individual explanations, embedded journey references, useful cash context, and consolidated limitations, so M2 composition passes. U fails because its specific first lead is not defended against a materially stronger admitted Aeroplan alternative; C is basic for the same missing within-category tradeoff. A longer selected connection could support a different choice, but the answer does not say so."
+}

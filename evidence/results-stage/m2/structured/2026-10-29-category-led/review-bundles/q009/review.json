@@ -1,0 +1,340 @@
+{
+  "bundle": "q009",
+  "review_type": "independent_current_profile_timing_blind_source_review_with_prior_source_familiarity",
+  "overall": "fail",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "fail",
+    "K": "pass",
+    "P": "fail"
+  },
+  "axis_reasons": {
+    "H": "No material source mismatch found. All selected dates, points, taxes, seats, endpoints and unknown scopes match source; carrier-list counts match the summary carriers arrays. Conditional program/date phrasing does not invent traveler preferences or balances. The research-lead framing avoids confirmed itinerary claims.",
+    "U": "Pass at the limited no-complete threshold: identifies actual endpoint/program/date leads, explicitly marks incomplete schedules on cards and directs current availability/price checks on official booking sites. It is weak comparative guidance, assessed separately under C.",
+    "M2": "The cash paragraph is duplicated verbatim; captions give generic compatibility conditions rather than connected individual reasoning. Aeroplan repeats an unknown-scope caveat that applies to every award and is repeated in the closing limits. The duplicate cash paragraph alone is a clear composition failure.",
+    "C": "No substantive supported comparison or tradeoff is explained. A different program/date and number of listed carriers are offered as distinctions without explaining why they change the research choice; full source contains usable same-program date/cabin quoted distinctions.",
+    "K": "No style categories or overlap invented. The source has zero eligible alternatives, assessments, comparison-pool members or style-index members; answer and resolved blocks preserve that.",
+    "P": "Actual cards resolve exactly to evidence, and the full component/reference population remains present, but two visible cash paragraphs violate the one brief bound cash sentence requirement. The first cash paragraph is unbound narrative; the second is the bound reference."
+  },
+  "findings": [
+    {
+      "id": "q009-P-1",
+      "axes": [
+        "P",
+        "M2"
+      ],
+      "severity": "material",
+      "claim": "Full-cash context appears twice verbatim, violating the one brief bound cash sentence requirement and interrupting the answer.",
+      "answer_fields": [
+        "document.json blocks[4].text (unbound narrative)",
+        "document.json blocks[5].text (benchmark reference)",
+        "resolved.json blocks[4] (text)",
+        "resolved.json blocks[5] (cash_sentence)",
+        "answer.md: two identical adjacent cash paragraphs",
+        "answer.html: two identical adjacent cash paragraphs"
+      ],
+      "source_fields": [
+        "evidence.json components[observation_id=456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630].cash_amount.value=640",
+        ".cash_currency.value=USD",
+        ".price_scope=unknown"
+      ],
+      "interpretation": "Both statements are factually correct; duplication is a composition/display defect, not a price error."
+    },
+    {
+      "id": "q009-C-1",
+      "axes": [
+        "C"
+      ],
+      "severity": "material",
+      "claim": "The three captions offer program/date compatibility and carrier-list counts, but do not explain any meaningful source-supported choice or contrast. Later January dates alone are not an explained benefit to a request already covering all January.",
+      "answer_fields": [
+        "document.json blocks[1].text",
+        "document.json blocks[2].text",
+        "document.json blocks[3].text"
+      ],
+      "source_fields": [
+        "evidence.json source.view.request.departure_window.start=2027-01-01/end=2027-01-31",
+        "evidence.json source.view.request.cabins=[]",
+        "evidence.json components[observation_id=a8dad3774d9e11df4c6a4a282520a7b66bca6c5736c576e527b48257efdfe6ae]: program.value=united, departure_date=2027-01-09, points.value=55000, taxes_fees.value=1620 minor USD, price_scope=unknown",
+        "evidence.json components[observation_id=963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6]: program.value=united, departure_date=2027-01-13, points.value=50600, taxes_fees.value=1620 minor USD, price_scope=unknown",
+        "evidence.json components[observation_id=0aa3d4441f10eae5043d7b904dde287ed8c48b9297fd183765267fc666be9ad5]: alaska, 2027-01-24, economy, points.value=42500, taxes_fees.value=4250 minor USD, price_scope=unknown",
+        "evidence.json components[observation_id=56f45654bb6058d1107f734851027e51c3448b6f5b627c2a56519fe1a52859ef]: alaska, 2027-01-24, premium_economy, points.value=55000, taxes_fees.value=5090 minor USD, price_scope=unknown"
+      ],
+      "interpretation": "Same-program date/quoted-point differences or cabin research contrasts are available. These examples show potential meaningful distinctions, not mandatory selections or an obligation to add alternatives. Any such comparison must preserve dates, incomplete schedules and unknown scope; no total-cost saving, economic cross-program ranking or guaranteed cabin benefit is established."
+    }
+  ],
+  "source_truth_checks": [
+    {
+      "observation_id": "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "kind": "lead_card",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-01",
+        "program": {
+          "state": "value",
+          "value": "alaska",
+          "source_field": "Source"
+        },
+        "cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "YAvailable"
+        },
+        "points": {
+          "state": "value",
+          "value": 42500,
+          "source_field": "YMileageCost"
+        },
+        "taxes_fees": {
+          "state": "value",
+          "value": 5090,
+          "source_field": "YTotalTaxes"
+        },
+        "taxes_fees_unit": "minor",
+        "tax_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "TaxesCurrency"
+        },
+        "seats": {
+          "state": "value",
+          "value": 8,
+          "source_field": "YRemainingSeats"
+        },
+        "carriers": [
+          "AS",
+          "JX"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cash_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        }
+      }
+    },
+    {
+      "observation_id": "0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c",
+      "kind": "lead_card",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-01",
+        "program": {
+          "state": "value",
+          "value": "aeroplan",
+          "source_field": "Source"
+        },
+        "cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "YAvailable"
+        },
+        "points": {
+          "state": "value",
+          "value": 65000,
+          "source_field": "YMileageCost"
+        },
+        "taxes_fees": {
+          "state": "value",
+          "value": 11650,
+          "source_field": "YTotalTaxes"
+        },
+        "taxes_fees_unit": "minor",
+        "tax_currency": {
+          "state": "value",
+          "value": "CAD",
+          "source_field": "TaxesCurrency"
+        },
+        "seats": {
+          "state": "value",
+          "value": 2,
+          "source_field": "YRemainingSeats"
+        },
+        "carriers": [
+          "BR"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cash_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        }
+      }
+    },
+    {
+      "observation_id": "a8dad3774d9e11df4c6a4a282520a7b66bca6c5736c576e527b48257efdfe6ae",
+      "kind": "lead_card",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-09",
+        "program": {
+          "state": "value",
+          "value": "united",
+          "source_field": "Source"
+        },
+        "cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "YAvailable"
+        },
+        "points": {
+          "state": "value",
+          "value": 55000,
+          "source_field": "YMileageCost"
+        },
+        "taxes_fees": {
+          "state": "value",
+          "value": 1620,
+          "source_field": "YTotalTaxes"
+        },
+        "taxes_fees_unit": "minor",
+        "tax_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "TaxesCurrency"
+        },
+        "seats": {
+          "state": "value",
+          "value": 9,
+          "source_field": "YRemainingSeats"
+        },
+        "carriers": [
+          "B6",
+          "BR",
+          "CA",
+          "ET",
+          "SQ",
+          "UA",
+          "ZH"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cash_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        }
+      }
+    },
+    {
+      "observation_id": "456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630",
+      "kind": "cash_sentence",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-01",
+        "program": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cabin": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "points": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "taxes_fees": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "taxes_fees_unit": "unknown",
+        "tax_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "seats": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "carriers": [
+          "Cathay Pacific"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "value",
+          "value": 640,
+          "source_field": "price"
+        },
+        "cash_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "currency"
+        }
+      }
+    }
+  ],
+  "full_source_examination": {
+    "source_digest": "6397a1ee6673820f4c2fb38bc10d81a3d67e42b766770ce40bac4182a1aabbd6",
+    "components": 383,
+    "award_summary_leads": 378,
+    "cash_observations": 5,
+    "complete_journeys": 0,
+    "method": "Parsed complete source/evidence and examined every component in groups covering endpoints, programs, cabins, dates, points, taxes and scopes; all lead gaps, empty Ranking landscape and request; examined five cash observations and specific omitted date/cabin contrasts. Programmatically checked all source/component IDs and 14 shared factual fields, complete reference populations and exact selected resolved-component equality."
+  },
+  "blind_scope": {
+    "read_this_review": [
+      "q009/answer.md",
+      "q009/answer.html",
+      "q009/document.json",
+      "q009/resolved.json",
+      "q009/evidence.json",
+      "q009/references.json",
+      "q009/selection-audit.json"
+    ],
+    "rubric": "AGENTS.md and campaign reviewer-instructions.md read during q006; reused without reading further campaign material.",
+    "prior_familiarity": "This reviewer previously reviewed q006 using the same canonical source and remembers that review and its outcome. This is not an entirely fresh independent-source review. Current q009 profile, generation timing, token metrics and checker verdicts were withheld.",
+    "not_read": [
+      "q009 profile/model configuration",
+      "generation timing/token metrics",
+      "prompts",
+      "current checker verdicts",
+      "other current grades",
+      "run summaries",
+      "campaign index",
+      "docs/reviews"
+    ],
+    "limits": "HTML markup/content reviewed without browser rendering. No product/runtime edits, live calls, outside-source research or delegation."
+  },
+  "verification": [
+    "All seven assigned source/answer artifacts inspected or parsed.",
+    "All 383 IDs and 14 common factual fields match canonical source.",
+    "All 378 award references equal award-summary component IDs and lead IDs; all five cash references match benchmark IDs.",
+    "Selected resolved lead/benchmark components exactly equal evidence components.",
+    "Identical cash sentence verified twice in Markdown and twice in HTML.",
+    "Written review.json reparsed and six-axis values validated."
+  ],
+  "uncertainties": [
+    "This is a repeated saved-source review with disclosed q006 familiarity, not a fresh holdout or provider qualification.",
+    "Carrier counts are supported summary lists; operating-carrier wording is accepted in the explicit research-summary context, not as verified leg or itinerary operation.",
+    "Full explorer data/reference retention checked; interactive explorer UI was not supplied or exercised.",
+    "C and the nonduplicate aspects of M2 are qualitative usefulness/composition judgments."
+  ],
+  "escalation_recommended": false
+}

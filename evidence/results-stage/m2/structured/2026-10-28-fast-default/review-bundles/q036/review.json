@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Departs SFO January 8 at 8:40 a.m. and arrives in Bangkok January 10 at 8:50 a.m.",
+      "canonical_reference": "journey 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 versus journey 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee; comparison-registry T01–T03",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.cash_fare.quoted_usd; connections",
+      "source_value": "Later option 08:40 SFO, 08:50 BKK, 1990 minutes, 275000 Turkish points, USD 59 positioning quote, LAX wait 149 minutes, IST wait 420 minutes; recommended option 08:36 SFO, 04:15 BKK, 1719 minutes, same points and positioning quote, LAX wait 150 minutes, IST wait 140 minutes.",
+      "explanation": "The later option is materially worse on arrival and elapsed time, and the answer does not explain an offsetting traveler benefit. Its four-minute later SFO departure is present in the data but not framed as a useful gain. The displayed comparison therefore remains basic."
+    }
+  ],
+  "reasoning": "The selected American-positioning journey and Alaska-positioning alternative match their canonical dates, local times, joins, Turkish business award quote, unknown seat/tax/price scopes, and separate-ticket limits. T02 and T03 support the 4h35 earlier arrival and 4h31 shorter journey. The two-stop USD 452 cash itinerary is correctly kept as a separate benchmark. The answer has a defensible recommendation, embedded journey references, cash context, and consolidated limits, but its alternative lacks an authored gain."
+}

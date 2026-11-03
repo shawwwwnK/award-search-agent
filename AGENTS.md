@@ -58,6 +58,53 @@ If a conflict is significant or changes product behavior, report it rather than 
 
 ## Current milestone
 
+**2026-10-29 category-led campaign stopped at c20:** All twenty authorized
+iterations ran; no candidate qualified for the current Results M2 revision.
+Final c20 scouts met timing but q064 failed composition on a repeated
+separate-ticket condition; q065/q066 passed all six review axes. The campaign
+records66 saved draws,129 generation and129 exact-count calls, zero SDK retries
+and no provider/live FX calls. No c20 confirmation or controlled repair followed.
+Do not continue to c21 or spend unused campaign headroom. Latest category opt-in
+is c20; public V27 remains provisional/unqualified, with no default adoption.
+M2 acceptance remains open; Frontend and M3 retain separate gates. See the
+[campaign evidence](evidence/results-stage/m2/structured/2026-10-29-category-led/README.md)
+and [build log](docs/build-log/2026-10-29-results-category-led.md).
+
+**2026-10-29 subsequent category-led invocation:** The owner confirmed natural
+Ranking-led response design with source-resolved flight cards, then explicitly
+authorized implementation/review and live Luna evaluation for up to twenty new
+iterations, with architect reflection and goal stewardship at5/10/15/20. See the
+[new campaign plan](docs/plans/2026-10-29-results-category-led-campaign.md) and
+[build log](docs/build-log/2026-10-29-results-category-led.md). This supersedes the
+handover-only implementation stop for this invocation; historical V30 evidence
+and stopped ledger remain intact. Qualification/default adoption is pending
+measured evidence. Frontend and M3 remain separate.
+
+**2026-10-29 handover-only closeout:** The owner stopped implementation and requested
+a [new-session handover](docs/handoffs/2026-10-29-results-m2-fast-profile-handover.md),
+including the main V3–V30 cycles. Keep Luna wording, Ranking recommendation
+categories/overlaps and a one-sentence full-cash comparison; inline comparison
+binding is rejected. Implementation remains pending. The V30 campaign is stopped;
+public V27 remains provisional/unqualified, and current M2 revision acceptance
+is open. No runtime changes or live calls accompany this documentation closeout.
+
+**2026-10-28 V30 stop:** The owner authorized Luna-only fast Results iteration,
+then set a hard stop at V30 and requested a full change review against checkpoint
+`b7bedf5`. Iteration stopped at 254 generation and 254 exact input-count calls,
+with no travel-provider or live FX calls and zero SDK retries. V30's three saved
+cases completed16.38/12.29/11.06s and independently passed factuality, usefulness
+and M2 composition, but only one was decision-rich. No V30 confirmation cohort or
+live correction diagnostic followed the failed scout gate. No candidate earned
+combined default/M2 qualification; presentation acceptance and M3 remain open.
+Latest opt-in is V30; the public API/CLI remains provisionally wired to V27, whose
+confirmation failed source review and whose controlled correction took26.23s.
+Do not describe that wiring as adoption. See the [final campaign](evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md),
+[current contract](docs/results-m2.md), [ADR0029](docs/adr/0029-structured-results-and-local-workspace.md)
+and [session log](docs/build-log/2026-10-28-results-fast-default.md). The owner stop
+supersedes continued experimentation in this session; no V31 or use of leftover
+campaign headroom. Historical closeouts below retain their declared scope.
+
+
 **2026-10-25 latency gap:** The owner considers the measured Results delay too long
 for an interactive step. Composition/cost success does not establish latency acceptance.
 See the [latency measurement and proposed investigation](docs/plans/2026-10-25-results-m2-latency-investigation.md).

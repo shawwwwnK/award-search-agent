@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "If you prefer Alaska and January 1, the other economy lead is a meaningful alternative: it reports fewer points within the same program, but one fewer seat and a higher USD tax quote.",
+      "canonical_reference": "evidence.json components observation_id cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044 (United January 1), 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b (Alaska January 1), and 42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97 (Alaska January 12)",
+      "source_field": "components[].program.value, points.value, seats.value, money.raw_amount.value, money.scope, departure_date",
+      "source_value": "United January 1 economy: united, 60,500 points, 9 seats, USD 28.20 tax quote. Alaska January 1 economy: alaska, 42,500 points, 8 seats, USD 50.90 tax quote. Alaska January 12 premium economy: alaska, 140,000 points, 9 seats, USD 50.90 tax quote. All price scopes unknown.",
+      "explanation": "The surrounding passage compares the January 1 Alaska lead with the January 1 United lead for one fewer seat and a higher tax quote, but those points are from different programs. Its explicit same-program point comparator can only be the later Alaska lead, against which the tax quote is equal, not higher. The sentence mixes comparison endpoints without identifying them, making its combined tradeoff materially misleading. The following 'two Alaska leads' clarification does not resolve the higher-tax contradiction."
+    }
+  ],
+  "reasoning": "There are zero complete journeys in the canonical evidence and the full request window is January 1–31, so an incomplete-lead recommendation with conditional date fit is appropriate. The United first-check advice is defensible on reported seats and lower raw January 1 economy tax quote, with seat support and price scope explicitly unverified. The three selected lead facts and cash benchmark otherwise match, and the answer has coherent lead references, conditional alternatives, cash context, and consolidated limitations. The mixed-endpoint Alaska comparison prevents a clean H pass; its distinct date/cabin, seat, and same-program point tradeoffs still give comparative depth if the faulty sentence is corrected."
+}

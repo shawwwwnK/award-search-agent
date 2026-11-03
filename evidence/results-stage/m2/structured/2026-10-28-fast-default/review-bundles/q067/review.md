@@ -1,0 +1,13 @@
+# Blind review: q067
+
+Rubric: `fast-default-M2-v1.2-calibrated`
+
+- H: **pass**
+- U: **pass**
+- M2: **pass**
+- C: **decision-rich**
+- Sparse-source exception: **no**
+
+## Reasoning
+
+The selected business journey and both displayed alternatives match the canonical journey times, offset-aware arrival dates, LAX/IST waits, elapsed durations, Turkish award cabins and mileage, and USD positioning quotes. The 4h35 arrival and 4h31 elapsed comparisons reconcile with the exact endpoints; the economy alternative trades 165,000 quoted Turkish miles and USD 50 more quoted positioning cash for economy cabin and later arrival. Award taxes, seat count, quote scope, leg cabins, and separate-ticket protection are properly qualified. The two-stop USD 452 cash itinerary is separately labeled as a benchmark with unknown price scope. The main recommendation has a reason and downside; the economy alternative gives a meaningful local cabin/points/time tradeoff. The later business option offers no explained material gain over the selected business option, which weakens that paragraph, but does not erase the supported central choice or economy tradeoff. No full-inventory optimality claim is made.

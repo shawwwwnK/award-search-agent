@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "I’d choose the Aeroplan economy award via Hong Kong: among these shown award choices, it arrives earliest and has the shortest elapsed time, while matching the others at 65,000 Aeroplan points.",
+      "canonical_reference": "evidence.json journeys candidate_id 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82 and 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3; comparison-registry.json arrival fact for J1/J7",
+      "source_field": "journeys[].arrival.local_iso; comparison-registry.json facts[metric=arrival, first_journey_id=J1, second_journey_id=J7].relation/difference_minutes",
+      "source_value": "Hong Kong arrives 2027-01-17T10:35:00+07:00; displayed earlier Taipei option arrives 2027-01-17T01:25:00+07:00, 550 minutes earlier (relation second_earlier).",
+      "explanation": "The opening's explicit 'among these shown award choices' scope includes the displayed earlier Taipei option, which arrives 9 hours 10 minutes before Hong Kong. The shortest-elapsed and equal-points portions are supported, but the earliest-arrival reason is false."
+    }
+  ],
+  "reasoning": "The Hong Kong journey has the shortest elapsed time of the three shown (1220 vs 1345 and 1580 minutes), so the exact recommendation still has a defensible reason and clear downside. The answer also presents the Taipei departure/arrival/elapsed tradeoffs, raw CAD quote differences with unknown scope, separate cash baseline, and consolidated limitations. Its opening reverses the displayed arrival ordering and requires correction before a clean factual pass."
+}

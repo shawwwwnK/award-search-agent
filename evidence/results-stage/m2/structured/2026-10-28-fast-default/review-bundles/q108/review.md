@@ -1,0 +1,8 @@
+# q108 blind answer review
+
+- H: **fail**. The opening says, “I’d choose the Aeroplan economy award via Hong Kong: among these shown award choices, it arrives earliest and has the shortest elapsed time, while matching the others at 65,000 Aeroplan points.” Canonical `evidence.json` journey `28b5a832...` has `arrival.local_iso = 2027-01-17T10:35:00+07:00`, while the displayed Taipei journey `46ff8814...` has `arrival.local_iso = 2027-01-17T01:25:00+07:00`. The J1/J7 arrival fact in `comparison-registry.json` says `second_earlier`, difference 550 minutes. Shortest elapsed and equal points are supported; earliest arrival is false within the expressly stated displayed scope.
+- U: **pass**. The Hong Kong choice is 1220 elapsed minutes versus 1345 and 1580 for the shown Taipei choices, and the answer states uncertainty about quote scope, leg cabins, and current availability.
+- M2: **pass**. It reads as a recommendation with embedded journey references, explained alternatives, separate cash context, and consolidated limitations.
+- C: **decision-rich**. The displayed choices expose shorter elapsed travel versus an earlier Taipei arrival, departure timing, connection length, and scoped raw tax quotes. The opening's arrival error is a material H defect despite this depth. No sparse-source exception.
+
+I checked the three referenced journeys, award observations, cash benchmark, request date, and offset-aware comparison facts. No additional source contradiction was found in the selected claims. The earliest-arrival error may affect a traveler's choice and warrants correction; the surrounding comparison still describes the earlier Taipei arrival. No architecture escalation is needed.

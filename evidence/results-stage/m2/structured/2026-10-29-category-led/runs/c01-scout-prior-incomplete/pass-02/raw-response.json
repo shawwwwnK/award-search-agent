@@ -1,0 +1,199 @@
+{
+  "id": "resp_088d1228ee3376be016ae2ff07b9ac87d09423df9bc446b2c5",
+  "created_at": 1793261319.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write one natural traveler answer around Ranking's time, cost, and premium perspectives from the selected exact authoring_records. Make the category labels visible in prose, but choose an organic order. Explain each useful journey's supported reason to consider it, meaningful downside and local tradeoff. Show overlapping category strengths once, with one journey card. A reference block is a SOURCE-RESOLVED CARD: write the short reason in v and a natural label in n; do not copy flight schedules, routes, seats, points or taxes into prose just to fill a card. Code renders card facts. Use k=p or a for journey cards, k=l for research lead cards, and k=t for connecting prose. The k=b block is a SOURCE-BOUND INLINE CASH SENTENCE, not a cash itinerary card: its v must contain exactly one brief sentence with the source's true origin-to-destination quote and material uncertainty; choose the exact benchmark r. Do not imply the quote covers other connecting cities. For no complete journey, compare supported research directions, not invented styles or itineraries. Explain shared missing evidence once, with choice-specific risks near the affected choice. Do not claim cheapest overall from incomplete or unknown-scope amounts, or compare points from different programs as economic value. Use only exact references in authoring_records. Every concrete option discussed needs its own visible exact card or cash sentence. Never print internal J/A/C aliases. Output JSON blocks in reading order.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "msg_088d1228ee3376be016ae2ff08410887d09e492e095ab65937",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"No complete award journey is shown in these search results, so there isn’t enough evidence to rank a bookable choice by time, cost, or premium cabin. The leads below are research directions, not confirmed itineraries. Their displayed dates are within January 2027, but schedules are date-only; flight times and connection details aren’t provided. Points and taxes are for different programs and shouldn’t be treated as directly comparable value. The search was partial, and availability and prices need confirmation.\"},{\"k\":\"t\",\"v\":\"**Cost:** For an SFO–BKK economy award, the United lead on January 1 has the lowest displayed points total among these SFO–BKK economy leads; the Alaska lead that day uses fewer points, but its tax quote is higher. Neither quote has a stated price scope, so don’t assume it is per traveler or a total for the party.\"},{\"k\":\"l\",\"r\":\"A2@2027-01-01/SFO>BKK/E\",\"n\":\"United economy award lead — SFO to BKK, January 1\",\"v\":\"A research lead to consider for its 60,500-point award and low displayed tax quote; exact flights and schedule are not supplied.\"},{\"k\":\"l\",\"r\":\"A3@2027-01-01/SFO>BKK/E\",\"n\":\"Alaska economy award lead — SFO to BKK, January 1\",\"v\":\"A research lead with a lower points total than the United lead, but a higher displayed tax quote; confirm the award details before comparing.\"},{\"k\":\"t\",\"v\":\"**Time:** No award lead includes a usable schedule, so none can be recommended as faster. The cash search result at least gives a departure and arrival time, but its price scope is also unknown.\"},{\"k\":\"b\",\"r\":\"C1@2027-01-01T22:55-08:00/SFO>BKK\",\"n\":\"Cash benchmark\",\"v\":\"The source quotes USD 640 for SFO–BKK cash travel, with price scope unknown.\"},{\"k\":\"t\",\"v\":\"**Premium:** The January 12 Alaska premium-economy lead is the only SFO–BKK premium-economy option shown. It may suit a traveler seeking that cabin, but it requires 140,000 points and has no schedule or flight-by-flight cabin details here.\"},{\"k\":\"l\",\"r\":\"A37@2027-01-12/SFO>BKK/P\",\"n\":\"Alaska premium-economy award lead — SFO to BKK, January 12\",\"v\":\"The sole SFO–BKK premium-economy lead shown; verify the itinerary and cabin details.\"},{\"k\":\"t\",\"v\":\"Other SFO–BKK economy research leads include the January 4 Aeroplan result, which has the highest displayed points total among the SFO–BKK economy leads and a CAD tax quote, and the January 4 TPE–BKK Alaska result. The latter starts at TPE rather than SFO, so it is not a complete SFO–BKK journey; no positioning flight or connection is confirmed. Search coverage was partial, including omitted detail results and limited results for SFO–TPE and TPE–BKK, so these leads cannot establish the best available option.\"},{\"k\":\"l\",\"r\":\"A10@2027-01-04/SFO>BKK/E\",\"n\":\"Aeroplan economy award lead — SFO to BKK, January 4\",\"v\":\"A route-matching research lead, but its displayed points total is higher than the other SFO–BKK economy leads shown.\"},{\"k\":\"l\",\"r\":\"A164@2027-01-04/TPE>BKK/E\",\"n\":\"Alaska economy award lead — TPE to BKK, January 4\",\"v\":\"A possible direction for further research, not a complete SFO–BKK journey; no positioning segment is established.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "CategoryDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C1@2027-01-01T22:55-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "l"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "A10@2027-01-04/SFO>BKK/E",
+                        "A164@2027-01-04/TPE>BKK/E",
+                        "A2@2027-01-01/SFO>BKK/E",
+                        "A37@2027-01-12/SFO>BKK/P",
+                        "A3@2027-01-01/SFO>BKK/E"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 3078,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 3075
+    },
+    "output_tokens": 830,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 3908
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793261324,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

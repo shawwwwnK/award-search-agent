@@ -1,0 +1,15 @@
+If arriving earlier matters most, I’d investigate the Hong Kong Aeroplan award first: it reaches Bangkok on the evening of January 16, while the later-departing Hong Kong option arrives the next morning. The tradeoff is leaving SFO earlier; the two have nearly the same elapsed time.
+
+This one-stop HKG award has 9 reported seats, and its arrival is 11 hours 25 minutes earlier than the later Hong Kong award. It takes 5 minutes longer, though, and leaves SFO at 11:45 a.m. The returned award amount is 65,000 Aeroplan points plus CAD 107.40 in fees; its price scope is unknown, and the fee was reported in minor currency units.
+
+[Display: Earlier-arriving Hong Kong award; journey; cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a]
+
+Also a one-stop HKG Aeroplan award with 9 reported seats and the same returned points and fee amounts as the earlier option. Choose it to leave SFO at 11:15 p.m.; the downside is arriving the next morning rather than the prior evening. Its price scope is unknown, and the fee was reported in minor currency units.
+
+[Display: Later-departing Hong Kong award; journey; eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669]
+
+The cash search returned a USD 456 quote for a two-stop SFO–LAX–NRT–BKK itinerary. Its price scope is unknown, so it is context—not an all-in or like-for-like comparison with the award points and fees. The search request was for 1 traveler; that does not establish the quote’s scope.
+
+[Display: Cash-search baseline; benchmark; ccc7379a32c4f818d72f0236429fc74bcd63fc2dd4af1ee5cd150f8db6b1bc4e]
+
+These are assembled search results, not confirmed bookings or guaranteed current availability; verify details and prices with the providers. Award seat counts are search evidence, not guarantees, and the award leg cabins are not specified. The cash and award quote scopes are unknown, and search coverage was partial.

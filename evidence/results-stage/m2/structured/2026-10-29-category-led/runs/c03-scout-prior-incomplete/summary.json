@@ -1,0 +1,61 @@
+{
+  "case": "prior-incomplete",
+  "candidate": "category-c03",
+  "mode": "live",
+  "recovery_diagnostic": false,
+  "outer_results_completion_seconds": 11.29483904177323,
+  "timing_scope": "Saved source parse through checked/resolved Results artifact before disk persistence and offline replay.",
+  "artifact_runtime_seconds": 10.851579875219613,
+  "count_calls": 2,
+  "generation_calls": 2,
+  "passes": [
+    {
+      "phase": "selection",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 76369,
+      "usage": {
+        "input_tokens": 76369,
+        "input_tokens_details": {
+          "cached_tokens": 1550,
+          "cache_write_tokens": 74816
+        },
+        "output_tokens": 429,
+        "output_tokens_details": {
+          "reasoning_tokens": 374
+        },
+        "total_tokens": 76798
+      }
+    },
+    {
+      "phase": "composition",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 2802,
+      "usage": {
+        "input_tokens": 2802,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 2799
+        },
+        "output_tokens": 796,
+        "output_tokens_details": {
+          "reasoning_tokens": 460
+        },
+        "total_tokens": 3598
+      }
+    }
+  ],
+  "generation_outcome": "success",
+  "validation_outcome": "clean",
+  "delivery_outcome": "delivered",
+  "selection_failed_findings": [],
+  "selected_pass_index": 1,
+  "failed_findings": [],
+  "diagnostic_fault_observed": false,
+  "source_sha256": "cbb1c1afd445df66cb368d3666773b684afaa8bf2ba84fc9307974ded8a77437",
+  "snapshot_drift": false,
+  "live_calls": 4
+}

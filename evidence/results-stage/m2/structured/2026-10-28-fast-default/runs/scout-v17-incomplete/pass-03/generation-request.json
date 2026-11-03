@@ -1,0 +1,137 @@
+{
+  "model": "gpt-6-luna",
+  "reasoning": {
+    "effort": "medium"
+  },
+  "instructions": "Edit the complete traveler answer using the SAME frozen source records, editorial plan, and temporal comparison registry. The plan is unverified; every factual or comparative claim must agree with the exact referenced authoring record. Check the opening against the body and every visible option; remove false earliest, lowest, cabin, fee, traveler, or scope claims. Preserve supported gains and real downsides, improve weak comparison reasoning, and keep applicable shared limits. Numerical prose is allowed when accurate. The numbered draft contains original block positions. Return ONLY {edits:[{start,end,blocks}]} where each edit replaces original blocks in [start,end) with complete valid wire blocks. Use sorted, distinct, nonoverlapping original positions; start=end inserts, blocks=[] deletes, [0,N) may rewrite all. Prefer local edits. Empty edits mean no change, not a verified approval. Do not return a score, review prose, clean bill of health, or a full document wrapper. The supplied feedback contains only actual mechanical findings and may be empty.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow.",
+  "input": "{\"draft_digest\":\"1d1bbcc8429e2c6351fb53ed755ca4dbcdf687e9724b05a04127c40c82b7ff29\",\"feedback\":[],\"numbered_draft\":[{\"block\":{\"k\":\"t\",\"v\":\"There is no complete award itinerary in these selected search results, so I can’t recommend a bookable award route yet. The useful next step is to verify the date-only award leads with the programs: each reports plenty of seats, but none gives a schedule, so connections and arrival times remain unknown. The main tradeoff among them is reported mileage versus reported fees—not a confirmed itinerary or a like-for-like total.\"},\"index\":0},{\"block\":{\"k\":\"l\",\"n\":\"Alaska award lead — January 4\",\"r\":\"A12@2027-01-04/SFO>BKK/E\",\"v\":\"Reports economy between SFO and BKK on Alaska for 42,500 Alaska miles and USD 50.90 in award taxes; 8 seats are reported. This is the lowest mileage figure among these three selected leads, but it is a different program from the United options and has the highest reported USD fees among them. The result is date-only: verify the actual schedule, connections, availability, and exact quote scope before deciding.\"},\"index\":1},{\"block\":{\"k\":\"l\",\"n\":\"United award lead — January 3\",\"r\":\"A8@2027-01-03/SFO>BKK/E\",\"v\":\"Reports economy between SFO and BKK on United for 60,500 United miles and USD 19.00 in award taxes; 9 seats are reported. Its reported fees are lower than the other two leads, but it requires more miles than the January 2 United lead. The result is date-only, with no schedule or connection details; confirm those and the current quote with United.\"},\"index\":2},{\"block\":{\"k\":\"l\",\"n\":\"United award lead — January 2\",\"r\":\"A5@2027-01-02/SFO>BKK/E\",\"v\":\"Reports economy between SFO and BKK on United for 55,000 United miles and USD 24.50 in award taxes; 9 seats are reported. Compared with the January 3 United lead, it reports 5,500 fewer United miles but USD 5.50 more in fees. Neither result provides a schedule, so this mileage-versus-fee tradeoff does not establish which is the better trip; verify routing, timing, availability, and quote scope.\"},\"index\":3},{\"block\":{\"k\":\"b\",\"n\":\"Cash baseline — January 1\",\"r\":\"C1@2027-01-01T22:55-08:00/SFO>BKK\",\"v\":\"A separate cash option reports one stop via HKG on Cathay Pacific, departing SFO January 1 at 10:55 p.m. local and arriving in BKK January 4 at 10:35 a.m. local; elapsed time is 44 hours 40 minutes. The fare is USD 640.00, but its price scope is unknown, so it cannot be treated as a per-person or all-in comparison with the award fees. This provides one fully timed cash reference, not evidence that its price is the lowest across all cash fares.\"},\"index\":4},{\"block\":{\"k\":\"t\",\"v\":\"All three award leads fall within the requested January 2027 window, but they are partial results rather than complete itineraries. Points belong to their stated programs, and the USD award-tax quotes have unknown scope; don’t assume they are per traveler or party totals. Seat counts are reported, not a guarantee of current availability. The search was partial, with some route/date detail queries omitted and other queries limited, so these selected results do not establish the full set of available options. Confirm current award availability, schedules, routing, and fees directly with the relevant program before booking.\"},\"index\":5}],\"packet\":{\"authoring_records\":{\"A12@2027-01-04/SFO>BKK/E\":{\"facts\":{\"airports\":[\"SFO\",\"BKK\"],\"cabin\":\"economy\",\"carriers\":[\"AS\",\"JX\"],\"cash\":\"absent\",\"cash_currency\":\"absent\",\"date\":\"2027-01-04\",\"fee_currency\":\"USD\",\"fee_unit\":\"minor\",\"fees\":5090,\"findings\":[],\"in_departure_window\":true,\"kind\":\"award_summary\",\"leg_cabins\":\"absent\",\"points\":42500,\"price_scope\":\"unknown\",\"program\":\"alaska\",\"request_route_match\":true,\"returned_travelers\":\"absent\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"schedule_state\":\"date_only\",\"seats\":8,\"timing\":\"-\"},\"member\":{\"ref\":\"A12@2027-01-04/SFO>BKK/E\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 50.90\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"role\":\"lead\"},\"A5@2027-01-02/SFO>BKK/E\":{\"facts\":{\"airports\":[\"SFO\",\"BKK\"],\"cabin\":\"economy\",\"carriers\":[\"BR\",\"ET\",\"SQ\",\"UA\",\"ZH\"],\"cash\":\"absent\",\"cash_currency\":\"absent\",\"date\":\"2027-01-02\",\"fee_currency\":\"USD\",\"fee_unit\":\"minor\",\"fees\":2450,\"findings\":[],\"in_departure_window\":true,\"kind\":\"award_summary\",\"leg_cabins\":\"absent\",\"points\":55000,\"price_scope\":\"unknown\",\"program\":\"united\",\"request_route_match\":true,\"returned_travelers\":\"absent\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"schedule_state\":\"date_only\",\"seats\":9,\"timing\":\"-\"},\"member\":{\"ref\":\"A5@2027-01-02/SFO>BKK/E\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 24.50\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"role\":\"lead\"},\"A8@2027-01-03/SFO>BKK/E\":{\"facts\":{\"airports\":[\"SFO\",\"BKK\"],\"cabin\":\"economy\",\"carriers\":[\"BR\",\"CA\",\"SQ\",\"UA\",\"ZH\"],\"cash\":\"absent\",\"cash_currency\":\"absent\",\"date\":\"2027-01-03\",\"fee_currency\":\"USD\",\"fee_unit\":\"minor\",\"fees\":1900,\"findings\":[],\"in_departure_window\":true,\"kind\":\"award_summary\",\"leg_cabins\":\"absent\",\"points\":60500,\"price_scope\":\"unknown\",\"program\":\"united\",\"request_route_match\":true,\"returned_travelers\":\"absent\",\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"schedule_state\":\"date_only\",\"seats\":9,\"timing\":\"-\"},\"member\":{\"ref\":\"A8@2027-01-03/SFO>BKK/E\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 19.00\",\"kind\":\"award_taxes\",\"price_scope\":\"unknown\",\"source_unit\":\"minor\"},\"role\":\"lead\"},\"C1@2027-01-01T22:55-08:00/SFO>BKK\":{\"facts\":{\"airports\":[\"SFO\",\"HKG\",\"BKK\"],\"arrival\":{\"local_iso\":\"2027-01-04T10:35:00+07:00\",\"timezone\":\"Asia/Bangkok\"},\"carriers\":[\"Cathay Pacific\"],\"cash\":640,\"cash_currency\":\"USD\",\"date\":\"2027-01-01\",\"departure\":{\"local_iso\":\"2027-01-01T22:55:00-08:00\",\"timezone\":\"America/Los_Angeles\"},\"duration_minutes\":2680,\"fee_unit\":\"unknown\",\"findings\":[],\"kind\":\"cash_itinerary\",\"price_scope\":\"unknown\",\"returned_travelers\":1,\"route\":{\"destination\":\"BKK\",\"origin\":\"SFO\"},\"stops\":1},\"member\":{\"ref\":\"C1@2027-01-01T22:55-08:00/SFO>BKK\"},\"quote\":{\"amount_state\":\"value\",\"display\":\"USD 640.00\",\"kind\":\"cash_fare\",\"price_scope\":\"unknown\",\"source_unit\":\"major\"},\"role\":\"benchmark\"}},\"comparison\":{\"cost_reference_usd\":null,\"eligible_count\":0,\"full_pool\":\"P1\",\"time_reference_minutes\":null},\"composition_format\":\"complete-v14\",\"editorial_plan\":[{\"compare_to\":\"A8@2027-01-03/SFO>BKK/E\",\"purpose\":\"Check whether the lower United mileage quote is worth its higher reported fees versus A8; schedule details remain unconfirmed.\",\"ref\":\"A5@2027-01-02/SFO>BKK/E\",\"role\":\"lead\",\"status\":\"unverified_editorial_suggestion\"},{\"compare_to\":\"A5@2027-01-02/SFO>BKK/E\",\"purpose\":\"Compare the United lead’s lower reported fees against A5’s lower mileage quote; neither date-only result establishes a timed itinerary.\",\"ref\":\"A8@2027-01-03/SFO>BKK/E\",\"role\":\"lead\",\"status\":\"unverified_editorial_suggestion\"},{\"compare_to\":\"A5@2027-01-02/SFO>BKK/E\",\"purpose\":\"Check Alaska as a different-program, lower-mileage lead versus A5, accepting higher reported fees; timing is still unknown.\",\"ref\":\"A12@2027-01-04/SFO>BKK/E\",\"role\":\"lead\",\"status\":\"unverified_editorial_suggestion\"},{\"compare_to\":null,\"purpose\":\"Use the lowest reported cash fare as a separate baseline; its price scope is unknown.\",\"ref\":\"C1@2027-01-01T22:55-08:00/SFO>BKK\",\"role\":\"benchmark\",\"status\":\"unverified_editorial_suggestion\"}],\"finding_meanings\":{\"seats_program_unsupported\":{\"field\":\"seats\",\"message\":\"program does not supply reliable seat-count evidence\",\"severity\":\"unknown\"},\"seats_zero_ambiguous\":{\"field\":\"seats\",\"message\":\"zero may mean seat count is unavailable\",\"severity\":\"unknown\"}},\"format\":\"focused-authoring-records-v2\",\"legend\":{\"award_only\":\"One award itinerary without a separate cash positioning component; it may contain connecting flights. Read award stops, airports, and flights for the actual connection pattern.\",\"eligibility\":\"Every J member is eligible; benchmarks and incomplete leads have separate roles.\",\"findings\":\"Finding codes remain next to their source facts; finding_meanings gives the source's severity, field and meaning.\",\"grouping\":\"Only complete byte-equal facts share a group; each member remains an exact source reference.\",\"lead_window\":\"The lead flag compares its own departure date with the request window, not complete journey compatibility.\",\"observed_airport_path\":\"Ordered airport sequence joined only at an equal cash/award boundary when both source component sequences exist; null means the full observed sequence is unknown. It does not prove same aircraft, ticket protection or bookability.\",\"raw\":\"A missing component field means source absent/empty. Explicit null/unknown and zero remain present. A lead's '-' means absent/empty.\",\"relations\":\"Schedule matches are source timing evidence, not physical-flight identity or a selection.\",\"scope\":\"Journey cabin does not prove all leg cabins; leg_cabins follows successive airport pairs.\",\"timeline\":\"A component departure/arrival value same_as_journey inherits that exact whole-journey time in the same record.\"},\"outcome_mode\":\"no_complete_journey\",\"policy\":{\"fx\":{\"as_of\":\"2026-09-29\",\"rates_to_usd\":{\"CAD\":\"0.7048209754722300535663941359\",\"USD\":\"1\"},\"source\":\"https://www.bankofcanada.ca/valet/observations/FXUSDCAD/json?start_date=2026-09-29&end_date=2026-09-29\"},\"ranking\":{\"cost_factor\":\"2\",\"points_per_usd\":\"100\",\"time_factor\":\"1.2\",\"unknown_tax_usd\":\"150\",\"version\":\"ranking-m2-v1\"}},\"record_legend\":\"Exact source aliases. award_connections belong to the award itinerary; journey_connections retain separate-booking/cash waits per journey. wait_minutes=null means unknown, never zero. Quotes are original-currency major units with source unit and price scope; unknown scope is neither per traveler nor party total.\",\"request\":{\"cabins\":[],\"conflicts\":[],\"departure_window\":{\"end\":\"2027-01-31\",\"precision\":\"window\",\"raw_text\":\"January 2027\",\"start\":\"2027-01-01\"},\"destinations\":[{\"kind\":\"airport\",\"raw_text\":\"BKK\",\"value\":\"BKK\"}],\"hard_constraints\":[],\"origins\":[{\"kind\":\"airport\",\"raw_text\":\"SFO\",\"value\":\"SFO\"}],\"repositioning_allowed\":null,\"search_modes\":[\"award\"],\"travelers\":1,\"unknowns\":[{\"detail\":\"No cabin preference was stated.\",\"evidence\":[],\"field\":\"cabin\",\"raw_text\":null,\"reason\":\"missing\"}]},\"selected_comparisons\":{\"arrival_instant\":[],\"departure_instant\":[],\"elapsed_minutes\":[]},\"selection_format\":\"roles-v16\",\"selection_scope\":{\"benchmark_selected\":true,\"journey_count\":0,\"lead_count\":3,\"meaning\":\"These are the model-selected facts only; comparisons and superlatives must be limited to shown choices, not the unseen eligible pool.\"},\"source_context\":{\"availability_guidance\":\"Some results aren't real-time. Confirm availability and current prices on the official booking sites before booking.\",\"coverage_limits\":[{\"kind\":\"detail_query\",\"reason\":\"resource_budget_exhausted\",\"routes_and_dates\":[\"SFO-BKK:2027-01-01..2027-01-31\"],\"status\":\"omitted\"},{\"kind\":\"logical_query\",\"reason\":\"pagination_budget_exhausted\",\"routes_and_dates\":[\"SFO-TPE:2027-01-01..2027-01-31\",\"TPE-BKK:2026-12-31..2027-02-02\"],\"status\":\"partial\"},{\"kind\":\"relationship\",\"reason\":\"pagination_budget_exhausted\",\"routes_and_dates\":[\"SFO-TPE:2027-01-01..2027-01-31\",\"TPE-BKK:2026-12-31..2027-02-02\"],\"status\":\"partial\"},{\"kind\":\"strategy_use\",\"reason\":\"pagination_budget_exhausted\",\"routes_and_dates\":[\"SFO-TPE:2027-01-01..2027-01-31\",\"TPE-BKK:2026-12-31..2027-02-02\"],\"status\":\"partial\"}],\"observed_at_range\":[\"2026-10-09T06:44:24.081093Z\",\"2026-10-09T06:44:37.824074Z\"],\"provider_status\":\"partial\"},\"source_scope\":{\"full_direct_cash_benchmark_count\":5,\"full_selectable_journey_count\":0,\"full_selectable_lead_count\":378,\"meaning\":\"Authoring records are selected examples; these counts describe source roles, not exhaustive availability or date coverage.\",\"selected_benchmark_count\":1,\"selected_journey_count\":0,\"selected_lead_count\":3},\"temporal_comparisons\":[]},\"previous_wire\":{\"blocks\":[{\"k\":\"t\",\"v\":\"There is no complete award itinerary in these selected search results, so I can’t recommend a bookable award route yet. The useful next step is to verify the date-only award leads with the programs: each reports plenty of seats, but none gives a schedule, so connections and arrival times remain unknown. The main tradeoff among them is reported mileage versus reported fees—not a confirmed itinerary or a like-for-like total.\"},{\"k\":\"l\",\"n\":\"Alaska award lead — January 4\",\"r\":\"A12@2027-01-04/SFO>BKK/E\",\"v\":\"Reports economy between SFO and BKK on Alaska for 42,500 Alaska miles and USD 50.90 in award taxes; 8 seats are reported. This is the lowest mileage figure among these three selected leads, but it is a different program from the United options and has the highest reported USD fees among them. The result is date-only: verify the actual schedule, connections, availability, and exact quote scope before deciding.\"},{\"k\":\"l\",\"n\":\"United award lead — January 3\",\"r\":\"A8@2027-01-03/SFO>BKK/E\",\"v\":\"Reports economy between SFO and BKK on United for 60,500 United miles and USD 19.00 in award taxes; 9 seats are reported. Its reported fees are lower than the other two leads, but it requires more miles than the January 2 United lead. The result is date-only, with no schedule or connection details; confirm those and the current quote with United.\"},{\"k\":\"l\",\"n\":\"United award lead — January 2\",\"r\":\"A5@2027-01-02/SFO>BKK/E\",\"v\":\"Reports economy between SFO and BKK on United for 55,000 United miles and USD 24.50 in award taxes; 9 seats are reported. Compared with the January 3 United lead, it reports 5,500 fewer United miles but USD 5.50 more in fees. Neither result provides a schedule, so this mileage-versus-fee tradeoff does not establish which is the better trip; verify routing, timing, availability, and quote scope.\"},{\"k\":\"b\",\"n\":\"Cash baseline — January 1\",\"r\":\"C1@2027-01-01T22:55-08:00/SFO>BKK\",\"v\":\"A separate cash option reports one stop via HKG on Cathay Pacific, departing SFO January 1 at 10:55 p.m. local and arriving in BKK January 4 at 10:35 a.m. local; elapsed time is 44 hours 40 minutes. The fare is USD 640.00, but its price scope is unknown, so it cannot be treated as a per-person or all-in comparison with the award fees. This provides one fully timed cash reference, not evidence that its price is the lowest across all cash fares.\"},{\"k\":\"t\",\"v\":\"All three award leads fall within the requested January 2027 window, but they are partial results rather than complete itineraries. Points belong to their stated programs, and the USD award-tax quotes have unknown scope; don’t assume they are per traveler or party totals. Seat counts are reported, not a guarantee of current availability. The search was partial, with some route/date detail queries omitted and other queries limited, so these selected results do not establish the full set of available options. Confirm current award availability, schedules, routing, and fees directly with the relevant program before booking.\"}]},\"revision_trigger\":\"editorial_revision\"}",
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "FocusedResultsEditorialPatch",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "integer"
+                },
+                "blocks": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "t"
+                            ]
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "b"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "C1@2027-01-01T22:55-08:00/SFO>BKK"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "l"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "A12@2027-01-04/SFO>BKK/E",
+                              "A5@2027-01-02/SFO>BKK/E",
+                              "A8@2027-01-03/SFO>BKK/E"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "start",
+                "end",
+                "blocks"
+              ]
+            }
+          }
+        },
+        "required": [
+          "edits"
+        ]
+      }
+    }
+  },
+  "max_output_tokens": 8192,
+  "store": false,
+  "truncation": "disabled",
+  "stream": true,
+  "service_tier": "fast"
+}

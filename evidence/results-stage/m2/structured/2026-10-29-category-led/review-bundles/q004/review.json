@@ -1,0 +1,119 @@
+{
+  "review_contract": "results-category-blind-review-v1",
+  "bundle": "q004",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "pass",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "Aeroplan identity, selected-relative duration/arrival, Turkish award cabin and separate-ticket unknowns, exact quote units and cash reference match source. No unsupported carrier is introduced.",
+    "U": "The answer offers a useful shorter-economy versus longer-business choice and identifies the material separate-booking/seat conditions.",
+    "M2": "Each choice has one compact explanation; shared pricing uncertainty is consolidated after the cards and generic availability guidance appears once.",
+    "C": "Shorter elapsed trip/earlier arrival and economy versus business/separate-ticket risk form a supported meaningful choice. No cross-program value inference is made.",
+    "K": "The full source has time and premium members but no cost members; selected time and premium perspectives both survive, with truthful cost uncertainty and no overlap to duplicate.",
+    "P": "Both real cards expose source flight facts; the positioning component now has its known route/local times and explicit unreported individual-flight boundary. Full-cash comparison remains one source-linked sentence."
+  },
+  "findings": [
+    {
+      "id": "q004-note1",
+      "severity": "note",
+      "axes": [],
+      "claim": "There is no selected Cost-category journey",
+      "explanation": "Accurate, though internal category vocabulary is less natural than simply stating that the available prices cannot establish a lowest total. The following consolidated explanation supplies that meaning; this is not a material failure.",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "fields": {
+            "source.view.indexes.cost": [],
+            "source.view.indexes.possible_cost": []
+          }
+        },
+        {
+          "file": "selection-audit.json",
+          "fields": {
+            "omitted_reasons": []
+          }
+        }
+      ]
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "fields": {
+        "elapsed_minutes": "1220",
+        "arrival.local_iso": "2027-01-17T10:35:00+07:00",
+        "styles": [
+          "time"
+        ],
+        "award_program.value": "aeroplan",
+        "award_points.value": 65000
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "01df3955d0603fa6d54ec3522e0dd5d1cdf09b8555134f8c6eff07e8ad90ee7a",
+      "fields": {
+        "elapsed_minutes": "2272",
+        "arrival.local_iso": "2027-01-17T15:05:00+07:00",
+        "styles": [
+          "premium"
+        ],
+        "booking_obligation": "separate_tickets_unverified",
+        "award_points.value": 275000,
+        "IST_wait_minutes": 405
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "f21d646e6c2945ae684dca8be205471aab6e5e145d2be25ca50bc20b3db99e42",
+      "fields": {
+        "origin": "SFO",
+        "destination": "LAX",
+        "legs[0].reported": false,
+        "legs[0].departure.local_iso": "2027-01-15T10:13:00-08:00",
+        "legs[0].arrival.local_iso": "2027-01-15T11:43:00-08:00",
+        "cash_amount.value": 121,
+        "price_scope": "unknown"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "cash_amount.value": 440,
+        "cash_currency.value": "USD",
+        "price_scope": "unknown",
+        "airport_sequence": [
+          "SFO",
+          "SIN",
+          "BKK"
+        ]
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 258,
+    "time_members": 11,
+    "premium_members": 116,
+    "cost_members": 0,
+    "possible_cost_members": 0,
+    "time_premium_overlap": 0,
+    "time_families": 11,
+    "premium_families": 4,
+    "notes": "Inspected full inventory/index coverage and both selected source assessments; the answer scopes shorter/earlier to selected choices and does not claim global fastest. Empty omission audit agrees with represented categories."
+  },
+  "independence": "Current profile, timing, prompts, checker verdicts and other reviews were not read. Reviewer is familiar with prior draws from these source cases and the reviewed code, so this is source-familiar independent review, not fully source-blind.",
+  "uncertainty": "Pass is scoped to this saved answer and source; it establishes neither repeatability nor latency/qualification. The source itself is partial, and comparisons remain selected-relative.",
+  "verification": "Offline full-source/index, selected component, document, card and audit comparison. No live calls or code edits.",
+  "escalation_recommended": false
+}

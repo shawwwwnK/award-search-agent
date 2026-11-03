@@ -7,7 +7,7 @@ Profiles factor only equal decision facts; every exact source alias remains visi
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any
+from typing import Any, cast
 
 from award_agent.ranking.projection_contracts import SolutionProjection
 from award_agent.results.structured_contracts import StructuredPreparedInput
@@ -23,9 +23,11 @@ COMPONENT_COLUMNS = ("kind", "route", "date", "depart", "arrive", "airports",
                      "returned_travelers", "seats", "stops", "duration_minutes",
                      "mixed_cabin_pct", "reported_flight_numbers", "leg_cabins",
                      "findings")
-TIMEZONE_CODES = {"America/Los_Angeles": "LA", "Asia/Bangkok": "BKK",
-                  "Asia/Taipei": "TPE", "Asia/Seoul": "SEL",
-                  "Asia/Hong_Kong": "HKG", "Asia/Singapore": "SIN"}
+TIMEZONE_CODES: dict[str | None, str] = {
+    "America/Los_Angeles": "LA", "Asia/Bangkok": "BKK",
+    "Asia/Taipei": "TPE", "Asia/Seoul": "SEL",
+    "Asia/Hong_Kong": "HKG", "Asia/Singapore": "SIN",
+}
 NONVALUE_STATES = frozenset(("absent", "null", "unknown", "-"))
 
 
@@ -120,7 +122,9 @@ def build_packet(prepared: StructuredPreparedInput, source: SolutionProjection,
         evidence.source_binding.view_digest != source.receipt.view_digest
     ):
         raise ValueError("prepared, source and workspace view digests differ")
-    view = prepared.authoring_view.view
+    # The compact authoring view is validated upstream; its heterogeneous
+    # nested records are intentionally represented as a plain JSON-like mapping.
+    view = cast(dict[str, Any], prepared.authoring_view.view)
     journey_profiles, journey_rows = _profiles(
         view["journeys"], _journey,
         ("award", "cash"),
@@ -149,7 +153,7 @@ def build_packet(prepared: StructuredPreparedInput, source: SolutionProjection,
         required_components.add(row[2])
         if row[3] is not None:
             required_components.add(row[3])
-    component_profiles = []
+    component_profiles: list[dict[str, Any]] = []
     component_rows = []
     profile_index: dict[int, int] = {}
     for row in all_component_rows:

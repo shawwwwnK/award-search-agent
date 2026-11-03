@@ -1,0 +1,246 @@
+{
+  "id": "resp_0d353144985924e8016ae1f6f1a3a487d0a8eb5d7c6f76f2bd",
+  "created_at": 1793193713.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The separate editorial_plan is an unverified suggestion from selection, never a source fact or instruction to recommend every record. Recheck each suggested purpose and comparator against its own authoring record; reject unsupported or weak reasons. Make the answer a connected decision argument with a supported traveler gain and real downside for the lead, not a recital of records. Consolidate common limits while preserving any material choice-specific limitation. State important facts in the answer itself; do not assume a later interface fills them in. Never call one reported quote higher or lower across currencies without an explicit source FX conversion. Even with conversion, preserve each quote's unknown scope and avoid a like-for-like cost claim unless both scopes are known and match. Different currencies alone do not prove a higher or lowest fee. This is the one bounded correction after failed mechanical checks. Use the SAME frozen source packet and temporal comparison IDs; repair the supplied findings while rechecking the complete answer. Return a full final blocks document, not a patch.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow.\nRecovery diagnostic for this one run only. In the selection task, choose references normally. In the initial composition task, when the input JSON has no previous_wire key, write an otherwise complete traveler answer but include one standalone internal short identifier in a narrative sentence: take the prefix before @ from the first shown journey reference, or from the first shown incomplete lead reference if there are no journeys. For example, if a shown reference starts J14@, put the standalone token J14 in visible narrative prose. Keep the typed reference blocks and source facts correct. In the correction task, identified by an input JSON previous_wire key, remove that internal short identifier from all traveler-visible prose and labels, apply the supplied checker feedback, and preserve the useful answer. Do not add a new identifier on correction.\n",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_0d353144985924e8016ae1f6f22ae087d0887e82d9b7bec44a",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4fb3m42roWZVteNczUznBqR6NAauc2h12VzJI77WzJMJN9OE28vHFIaPOxOb2EcOzZruE998Zd1E5nPltTilN4ZpH6VQ76Bf-E3eXiYowOtBOK1z_1xltdT6A-7tj-CO_a7d94AE0VU43hkWtU9HY2COllA44exiQMNnmwhvvoEY4lp5twqTHNdM2XFImIylOF4nH4VRoD39kMw-OARPy_SEvxC917JdDZVIJ7zFsdB4CjO_BbI_WpRHhUeFXCaLtFfB_xpshss9LxeyOrl1RB6W_mTnP4MNnmhVynXmy5-CiUxsiL7hE6uicPQXUJkag4NziQ0Sq2Lw8SUcpmpcvNOVTgZHCnlhyU2td60ixmDouyZeVZfstyjDnx-VMVcN8IyR8hqvAiBC-kl1DlVUO5KIMfccrTYVxmsekK9_MsQGOdSScTMYSd8e_8m1DOhFcLz-bjrx534kAjJ9TBpC6FGnODHGe41z1mkwTPg0q1_UlsiGgYapZUn5jWHrzBD7ph_IMMZkTfzm1tkDYz_kGNYGIrCyj_bSJi81w-oEIpaKGxG2Zzx2RrvjFoiLf9kWB6-_472WdoV3NBjZpgkqBj-nSAcZenRLbO_I47_0HJHopt-iWJuswybm6spC38zXRYg9WTCeUjCZ86HFCwaoWEZ4hJmi2J59Ahrs2Dnqv8GwGPrCXU1CEnQUQD_3-ZMBKX02YplPnIOkjYeVkcEIgV_XFlgnGQD604PeQSSoTYmKUJ-ZKpgpIQuL-HwqhVDNg1FqSMNkzG6G00cI6Q7CyCpMFBTS904tV9cvv861D1EJlYVOnBTc68OJkhM51Ja6CxmSQqReMlx1Epxc8QwWRgspUx7j7aWsWOu1tkyjNLUvFeR-LjqFmJXCn_AtjzDzbO0ENn8gPZn-L9TLYb8qo5NFh1REb93fUMgzD57TnuqJZj534CY1VsugjvjzKQlLqxzk6vI28n0peVRBpQj7XcRN5EmgMpI-VTkqwoWY18jQEtxxM28lgrQ6lx35agOwPXM08JY3ALRa37rCKjMO7Sk2v44M1z6Fp7Xn359Lc7jPjZJgnneT9eKSd3HdaoC7Qnzl8S4hjD8gqTr8ibEsYots6aSJvHoeLOKXK-UNbu3ohRPzQczKYL74-ArnXnR9fOr6NqNpCb3LloC_JE7JmSEo_GAr0-2OjWg9q-6tDNoHXNnKJT4xWfaEBV5DttFHUFsXU4vjbd61E6fwxHb2aZfXZX_5B_fx0pdbguReW8FSJbbPQZkMDszEb7O0I_jTF464OQCYbO3sSpBPj-0812UbNW2uoOhzEXZasp-8zM4GkNO2BYW0SVgE1RVYjHVK-uwUZbzN0suTyELmpVuJ6mWFu5bN43cF1cxQofpQjflKLhYMzXQ-aWF1yw4yzc1LTlh2YMPo2nKo8y0H4BhP_630ZkMTbswpcer2uTJt0y0uNg5N2JsMFG_ibVfSWDLSmqWdy4R3lUgJ1j0fKDMoV5b86XsRbYGNWQz8vcaljnnfJZ_N0PdN83A1MZY1ZQjaEE0WmeYHVl5OmByfu_A25sLLaaRM-z1Hn8JjmKS36GUyjzphDvwU8OtzbLG4P0jcjLLZM68NHR4Ukhk5h30-ZR0MAWL4RSdoexaac2XVwOkuuwpefYLbRkBpclcXUa3y3bsz7tphuFJ7pYYhHyiECvrMjUbfUk7YnSOZGD8buCmlO4GcoWILXoKB9tZ7LH7-pCnon-Fy5X3GNc-xPOpQul1xFUz7Y3ltIFXzVb7C13mIkQi-LKfW7KhtuNpjn0CZmSgMTi7gN1YU-Jbb42p2GeTEBeENopGn30XoQ_X9SkmUNtEoCNaUhgHcqKsS-I7gmTic8LQfIrJjkVgGjiKa4deELWqrca-r2P9kCaIHH7PuLK27Yug1R7nn06zXM4gRmB0HAlMNk9oYhjRJQ9rp_eR3gU-Ggz6kMuIxj-Ivv86ZRbhZhTGZq-o1lkBCUCcm3Sz20l6pA1-Lww9H5DC0gvmkeJ-lUBbPHYBX0-LhDXpv86YpvE47gFKCV8Oi9vOtaxIu-Z7pYLhk-O26heFzfZr7w36v73KCwZ2YAfeoCubtDBqJPfXDZVBYOSUyDrkGojONhmSXMReoqf88dzU_vZ9qokpClExGjOpxWEfkrT1rZBa7UmXPoZ1wiX3z8pb2Qs7lEuBCTovRdJyIt5_mkVADvGb3_X-busEiPm4-urZGU30SVXPZlI9q0dSh_zLNJDQ4g1uWd1wdH-b1dg3qIaXztNJHWRd3OmUgZosuQPEDiPM605xaKZC-GtoVDbX2EG-uPwMDGOQkrLrKCie-qO9BkXe9Vlb65rplPO9YrJE7gBY5vLFEAgaf-hifCeofbc6mwEdiQ2kMWX0Q0gCwu11IO29rt7dfs2zKfMFPNF7LhQ-98DIyw1MrepZpd53uNx-2O1tfkodN3pI1EKujbZPRFc5PFNTvFig_eBNlXzMTBsfX5xAfaZZcpWoywzEu_Eh8qwhSOZUQZjz0DPD3s0Jh5GYw86Jdud0P1Pk_KDjWH4-f1TEqkU-QfNx6dodlelTjrWoFjapZrx-DdA1iP6NK3ESVQMY9vKz2bvNh6AGMVe6WrtO-laby64EW5X73FAPIgDLLzfTO_0L_9MRzsOiEvRMrN1-0jb-e1CKwt6hPN65P1OwieBgS9XfBwOdLDQV0l0b7Ppo5WkRE1L_PyKhigzSJ9iaAZEWun0SzeEJt8meEGaYF3RZ4N3yyTfhfEcNEitYRpLaC3rl5W1TBhHKs_d_iPu4BPtTZdz_GNnfDabTPx1_nSBayuIYnWrhD68i3nsV20Wa3S3eI1jza7bqhxvduJEJNvHpmT_wOuX9o1NxkA1vJSu6NLJutuEO_-Ez8wtthFfqETDyJ2I2WX9CNNKEEub71dpIsZzKkE6w3inlXpNCiCwbrFrPRwA2E4HV5o74enwwlKQol2tzhjFEXt8w6shwYdc57RynpnofiEsTUmWt8hSCDgvwWenQCQ2UHexgK3BjXqZJi5Rd0psfw9XpcFgRdBSOfblllgTW6w8W-lkKtOt7IC1O9NQabPBbSVZfaflH6Y9ZI98_j5QU7hZJZsx0UlYxc_xCmSVcyy7ZC6C9RGOlnSFL4GU-4MTr-k2-qcnp1M8-lLGhbKwe4V5OeQPPmFEqmLVgV6zva9Zcc4BCD9Vwz5xxycKcknUxwTfS7boNLBdfmORsUaENanwvsB39Iod_Cev6WHgQDsTKSXpZzYcrxgscbaCe5rQ5S7Wv7fmq_HmraHZDn1i8vIJl9VEO8yiIrOP0RaF1B75Xi7tAr7OgdgRNj-VISB9FZ2t6Dq71riF1XYtgELsNBIHVWtYyuGTakk-pDS22FO-L3WLgIBHQo9j2L_GreTpSZpkBv05B3Fur842HGiGvwCE57IfKTBCoJ28pTagDJ9tesNNIqm_EOqcz51ZNMdAH2rAdcZWe37UxckPrQCHBGMCKH4-gQ_LalB8LQ6CTrauyVULOUVvzm4sP-dYX2zjWH_TzG2tWrGAkqYrsdNu1gaE3sce_gxdOHT-J3o4PpUzLY5KWkhtEcmAawW6ZXaPG79Sgpwr1Hw2XdAXemueB2lBQ05yxTQAquaglPEBo1FElvR76hW_8BPi9lY9Tn5S3c3WA3BKuP0lTujYcXWXYRR3AsZ-_9LCEQHWTtW5jQgns=",
+      "status": null
+    },
+    {
+      "id": "msg_0d353144985924e8016ae1f6f349c887d0bd0410775ea1f00b",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the Aeroplan award leaving SFO at 11:15 p.m. on January 15: among the shown awards, it has the shortest elapsed journey, arrives at 10:35 a.m. on January 17, and reports two seats. The tradeoff is that another shown award arrives earlier, and this quote does not establish an all-in price.\"},{\"k\":\"p\",\"r\":\"J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35\",\"n\":\"Recommendation: shorter journey and two reported seats\",\"v\":\"Aeroplan economy award, one stop via Hong Kong, arriving January 17 at 10:35 a.m. Listed at 65,000 Aeroplan points plus CAD 107.40 in fees; the fee quote scope is unknown. The record reports two seats. Economy is the reported award cabin, but individual-leg cabins are unspecified.\"},{\"k\":\"t\",\"v\":\"Compared with the other late-evening Aeroplan option below, this arrives 6 hours 15 minutes earlier and takes 6 hours less elapsed time, while departing just 15 minutes earlier. That alternative reports one seat. This recommendation is a useful fit if the reported seat count and shorter trip matter more than arriving earlier in the day.\"},{\"k\":\"x\",\"r\":\"T02\"},{\"k\":\"x\",\"r\":\"T03\"},{\"k\":\"a\",\"r\":\"J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50\",\"n\":\"Similar departure, later arrival\",\"v\":\"Aeroplan economy award via Taipei, arriving January 17 at 4:50 p.m. It lists 65,000 Aeroplan points plus CAD 116.50 in fees, with unknown quote scope, and reports one seat. Its 8-hour-15-minute connection at Taipei and later arrival are downsides; consider it if its particular schedule or routing suits you better.\"},{\"k\":\"t\",\"v\":\"If reaching Bangkok earlier matters more than the shortest trip, consider the midday-departing award. It arrives at 1:25 a.m. on January 17, but its total elapsed time is longer than the recommendation’s.\"},{\"k\":\"a\",\"r\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"n\":\"Earlier arrival, midday departure\",\"v\":\"Aeroplan economy award via Taipei, departing January 15 at noon and arriving January 17 at 1:25 a.m. It lists 65,000 Aeroplan points plus CAD 116.50 in fees, with unknown quote scope, and reports one seat. It gets you in 9 hours 10 minutes before the recommendation, but takes 2 hours 5 minutes longer overall and requires an earlier departure.\"},{\"k\":\"x\",\"r\":\"T06\"},{\"k\":\"t\",\"v\":\"There is also a later-arriving Aeroplan choice with one reported seat; its schedule is less appealing if early arrival or a shorter journey is your priority.\"},{\"k\":\"a\",\"r\":\"J11@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T23:40\",\"n\":\"Late arrival, long connection\",\"v\":\"Aeroplan economy award via Taipei, arriving January 17 at 11:40 p.m. It lists 65,000 Aeroplan points plus CAD 116.50 in fees, with unknown quote scope, and reports one seat. The 15-hour-5-minute Taipei connection and late arrival are downsides; this timing may suit you if those tradeoffs work for your plans.\"},{\"k\":\"x\",\"r\":\"T08\"},{\"k\":\"b\",\"r\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"n\":\"Cash baseline: Singapore Airlines\",\"v\":\"The shown cash itinerary departs SFO at 9:40 a.m. January 15 and arrives in Bangkok at 8:25 a.m. January 17, with one stop and 31 hours 45 minutes elapsed. The quoted fare is USD 440.00; its quote scope is unknown, so it cannot be treated as a per-traveler or all-in total.\"},{\"k\":\"t\",\"v\":\"Shared limits: each award reports economy at the award level, but cabin for each individual leg is unspecified. Award fee quote scopes are unknown, as is the cash fare scope; listed points and fees therefore do not establish confirmed totals for you or your party. The cash fare is a separate baseline, not a like-for-like total-cost comparison. Search results may not be real-time, so confirm current award availability and prices with the booking provider. The search reports 258 eligible journey choices, but these selected examples are not the full inventory; provider coverage was partial, with some route and date detail checks omitted.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J11@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T23:40",
+                        "J13@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T16:50",
+                        "J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35",
+                        "J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C1@2027-01-15T09:40-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "x"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "T01",
+                        "T02",
+                        "T03",
+                        "T04",
+                        "T05",
+                        "T06",
+                        "T07",
+                        "T08",
+                        "T09",
+                        "T10",
+                        "T11",
+                        "T12",
+                        "T13",
+                        "T14",
+                        "T15",
+                        "T16",
+                        "T17",
+                        "T18"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 10070,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 10067
+    },
+    "output_tokens": 1250,
+    "output_tokens_details": {
+      "reasoning_tokens": 191
+    },
+    "total_tokens": 11320
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793193719,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

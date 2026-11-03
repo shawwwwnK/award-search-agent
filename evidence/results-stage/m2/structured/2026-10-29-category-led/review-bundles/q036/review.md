@@ -1,0 +1,24 @@
+# q036 independent new-draw review
+
+**Overall: PASS.** H, U, M2, C, K and P pass for this supplied source/answer boundary. The new answer was checked anew; no prior pass was reused as evidence.
+
+The two economy leads give conditional United/Alaska program-access checks. The third lead adds a real later-date premium-economy research direction, explicitly conditional on cabin interest. No balance, preference, complete itinerary, guaranteed cabin experience or cross-program value advantage is invented. Shared schedule/tax-scope limits are explained once in the opening. Repeated compact card indicators are permitted factual indicators, not repeated missing-information prose.
+
+Selected source checks:
+
+- United `cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044`: SFO–BKK January 1, 2027 economy, 60,500 points, USD 28.20 tax quote, 9 reported seats.
+- Alaska economy `0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b`: same route/date/cabin, 42,500 points, USD 50.90, 8 reported seats.
+- Alaska premium economy `42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97`: SFO–BKK January 12, 2027, `cabin.value=premium_economy`, `points.value=140000`, `taxes_fees.value=5090`, `taxes_fees_unit=minor`, `tax_currency.value=USD`, `seats.value=9`, `price_scope=unknown`. January 12 is genuinely later than January 1.
+- Cash `96629958e5753581d7384b09cbfffe1b6fc3bd743135f0e3e32467ceac8e1bae`: SFO–BKK, `kind=cash_itinerary`, `cash_amount.value=958`, `cash_currency.value=USD`, `price_scope=unknown`.
+
+The common award citations are `evidence.json components[observation_id=…]` fields `origin`, `destination`, `departure_date`, `program.value`, `cabin.value`, `points.value`, `taxes_fees`, `tax_currency`, `seats`, `price_scope`, and missing schedule instants/durations. Every selected resolved component matches evidence. One clearly labeled, bound cash sentence appears once with its unknown scope and no cash card; current availability/price guidance appears once. Three HTML flight-card articles are present.
+
+Full-source omission check: the request is for one SFO–BKK seat in all January, no cabin/program preference. Later Alaska premium-economy summaries quote 55,000 points and USD 50.90 with one reported seat on January 17/18/23/24/25/26. For example `8481df166f5c373c7dd06fe625f39e17b1b38990c3050535a8aaafcaac562a93` is January 17 (`departure_date`), 55,000 (`points.value`), premium economy (`cabin.value`), one seat (`seats.value`), unknown scope. These could improve a follow-up, but differ from the selected January 12 date. The answer does not claim cheapest/best-value selection, and Q3 does not demand every research direction or a numerical pair. No material omission failure is assigned; this pass is not a claim of optimal selection.
+
+The condition sidecar was checked against canonical source rather than trusted as a verdict. All 11 memberships agree: A110/A1/A2/A37/A3 share date-only schedules and unknown award-tax scope; C3 has separate unknown cash scope. The selected subset A2/A3/A37 is properly covered by the opening award limitation. Omitted A110 is December 31 TPE–BKK business, not a selected endpoint itinerary. Style audit references are null and source alternatives/assessments/style indexes empty. Premium economy is a cabin here, not invented Ranking Premium membership.
+
+Verification examined all 383 components, 378 award leads, five cash records, every endpoint/program/cabin/date/quote/scope group, all lead gaps, request and empty Ranking landscape. Every January endpoint premium-economy observation was additionally inspected by ID/date/quote/seats. All source identities and 14 common factual fields match evidence; complete award/lead and cash references remain present; free choices normalize correctly. Interactive explorer behavior was not supplied/tested; only the retained data boundary is verified.
+
+Blindness disclosure: I previously reviewed q006/q009/q012/q015/q018/q024/q027/q030/q033 against this source and remember their answers/outcomes. This is not a fresh source-blind review. This task read only the latest rubric and q036's eight assigned artifacts, including its condition sidecar; AGENTS.md was read previously. Current profile mapping/model settings, other prompts, generation timing, token metrics, checker verdicts, other current grades, campaign summaries/index and docs/reviews remained unread. No runtime code inspected. HTML content/markup inspected without browser rendering.
+
+Files written: `q036/review.json` and `q036/review.md`. JSON/six axes, 11 condition memberships, audit normalization, three cards and one labeled cash sentence validated. No live calls, product edits, external research or delegation. No population, provider-fresh, latency or bookability qualification follows. No escalation recommended.

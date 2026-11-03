@@ -1,0 +1,184 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q016",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "fail",
+    "P": "fail"
+  },
+  "reasons": {
+    "H": "Displayed itinerary, elapsed/arrival, seat and same-program quoted-fee comparisons are supported. The ambiguous fee-unit wording is bounded as a presentation issue rather than an unambiguous false cash-unit assertion.",
+    "U": "The shorter economy option is defensible and the second option exposes a modest quoted-fee versus duration tradeoff. Both support the one requested traveler.",
+    "M2": "Generic current-availability warning is authored again immediately before canonical availability guidance, contrary to consolidated shared limitations. Several prose details recap card facts.",
+    "C": "A supported shorter-trip versus slightly lower same-program fee quote comparison exists; reported nine seats is not credited as proof of greater bookability for this one-traveler request.",
+    "K": "All 116 available premium members disappear from the selector pool and displayed answer, with an empty omission audit. Optional display subsets do not excuse losing this materially distinct cabin perspective.",
+    "P": "Actual cards and joins are correct and cash appears once, but the cash sentence adds unknown fee-unit metadata from an absent tax/fee field to a cash quote whose monetary unit is known major USD, obscuring the relevant uncertainty."
+  },
+  "findings": [
+    {
+      "id": "q016-F1",
+      "severity": "material",
+      "axes": [
+        "K"
+      ],
+      "claim": "Only economy choices are represented; selection audit reports no omitted perspectives.",
+      "evidence": [
+        {
+          "file": "selection-audit.json",
+          "identity": "category_landscape and omitted_reasons",
+          "fields": {
+            "available_counts.premium": 116,
+            "selected_members.premium": [],
+            "omitted_reasons": []
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "a316562e6ff774051f4f4376011ebce2f364eb3dc7d40da706f3016a05c5a4a7",
+          "fields": {
+            "award_cabin.value": "business",
+            "styles": [
+              "premium"
+            ],
+            "booking_obligation": "separate_tickets_unverified"
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "selection.journey_ids",
+          "fields": {
+            "shown": [
+              "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+              "10f14cd6e60006603aa596ff1d4e66231dba0f2f4e080281d8f518bb35a81a19"
+            ],
+            "shown_cabins": [
+              "economy",
+              "economy"
+            ]
+          }
+        }
+      ],
+      "explanation": "The full source contains a meaningful business-cabin perspective among eligible conditional journeys. All five selected pool members are economy; the writer cannot recover an absent premium record. No omission rationale is supplied. This is category coverage failure, not a requirement to display every pool member."
+    },
+    {
+      "id": "q016-F2",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "The search results do not confirm current availability or bookability.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[4].text",
+          "fields": {
+            "authored_warning": "The search results do not confirm current availability or bookability."
+          }
+        },
+        {
+          "file": "answer.md",
+          "identity": "final availability guidance",
+          "fields": {
+            "guidance": "Some results aren't real-time. Confirm availability and current prices on the official booking sites before booking."
+          }
+        }
+      ],
+      "explanation": "The authored generic availability warning repeats the supplied canonical warning rather than consolidating it. Distinct quote-scope limitations can remain in shared prose; this extra availability sentence is unnecessary."
+    },
+    {
+      "id": "q016-F3",
+      "severity": "material",
+      "axes": [
+        "P"
+      ],
+      "claim": "For SFO to BKK, the source quotes USD440; the price scope and fee unit are unknown.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[3].text",
+          "fields": {
+            "phrase": "the price scope and fee unit are unknown"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd",
+          "fields": {
+            "money.kind": "cash_fare",
+            "money.unit": "major",
+            "money.raw_amount.value": 440,
+            "money.raw_currency.value": "USD",
+            "money.scope": "unknown",
+            "taxes_fees.state": "absent",
+            "taxes_fees_unit": "unknown"
+          }
+        }
+      ],
+      "explanation": "The quoted cash amount has a known major USD unit. The unrelated absent tax/fee field carries unknown unit metadata, but no fee is being quoted. Adding that metadata to the cash sentence creates confusing qualification. Because fee unit can literally refer to that absent field, this is graded as P ambiguity/misbinding, not an unambiguous H falsehood."
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "fields": {
+        "arrival.local_iso": "2027-01-17T01:25:00+07:00",
+        "elapsed_minutes": "1345",
+        "connections[0].wait_minutes": 270,
+        "money.award_taxes.raw_amount.value": 11650,
+        "money.award_taxes.unit": "minor",
+        "money.award_taxes.raw_currency.value": "CAD"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "10f14cd6e60006603aa596ff1d4e66231dba0f2f4e080281d8f518bb35a81a19",
+      "fields": {
+        "arrival.local_iso": "2027-01-17T09:50:00+07:00",
+        "elapsed_minutes": "1865",
+        "connections[0].wait_minutes": 755,
+        "money.award_taxes.raw_amount.value": 10740,
+        "money.award_taxes.unit": "minor",
+        "money.award_taxes.raw_currency.value": "CAD"
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 258,
+    "category_counts": {
+      "time": 11,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 0,
+    "possible_cost_members": 0,
+    "pool_journeys": 5,
+    "shown_journeys": 2,
+    "cost_assessments": "Three factored cost assessments are undetermined.",
+    "omission_audit": "Read full source category/family landscape and all five selected records. Premium perspective absent upstream of authoring; empty audit supplies no justification."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false,
+    "qualification": "Independent current-answer review with prior source/code familiarity; not fresh blind-source review."
+  },
+  "uncertainty": [
+    "P fee-unit wording is ambiguous, not treated as proof of false arithmetic or a false known-unit field.",
+    "Nine versus one reported seats is factually supported but does not establish current availability or greater suitability for one traveler; C rests on fee/duration contrast.",
+    "Saved partial coverage does not establish current availability or population reliability.",
+    "Cards inspected as Markdown and exact source joins, not browser layout."
+  ],
+  "verification": [
+    "Read current rubric, source family/category landscape, selection audit, answer, document and resolved objects.",
+    "Compared both displayed card identities, flight schedules, seats, quote units and scope, time claims and benchmark.",
+    "Exact resolved journey/component/benchmark equality checks passed.",
+    "No current metrics/checker/other grades/q018 inspection, live calls or product edits."
+  ],
+  "escalation_recommended": false
+}

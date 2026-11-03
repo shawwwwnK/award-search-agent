@@ -1,0 +1,17 @@
+For the shown choices, investigate the earlier-arriving Aeroplan option first if getting to Bangkok sooner matters; the later HKG routing is a useful timing alternative. A cash search provides context, but its unknown price scope means it is not a like-for-like all-in comparison.
+
+This Aeroplan economy award via HKG is the useful choice if arrival timing is your priority: it reaches BKK on Jan 16, before the other shown HKG option. The itinerary reports 9 seats and a 70-minute HKG award connection. Tradeoff: it leaves earlier, and its 65,000 Aeroplan points plus CAD 107.40 in award taxes have unknown price scope; the leg cabins are not reported.
+
+[Display: Earlier-arriving HKG award; journey; cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a]
+
+This is a useful alternative if a late Jan 15 departure suits you better: it follows the same reported HKG route, with the same Aeroplan points, reported seats and taxes as the earlier-arriving HKG award. It arrives 11 hours 25 minutes later, while its elapsed time is only 5 minutes shorter. It still involves an HKG connection and the quote scope remains unknown.
+
+[Display: Later HKG award; journey; eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669]
+
+Arrival: Earlier-arriving HKG award (SFO–BKK; departs 2027-01-15T11:45:00-08:00; arrives 2027-01-16T22:25:00+07:00) — 2027-01-16T22:25:00+07:00; Later HKG award (SFO–BKK; departs 2027-01-15T23:15:00-08:00; arrives 2027-01-17T09:50:00+07:00) — 2027-01-17T09:50:00+07:00. Earlier-arriving HKG award (SFO–BKK; departs 2027-01-15T11:45:00-08:00; arrives 2027-01-16T22:25:00+07:00) is earlier by 11 hours 25 minutes.
+
+The search returned USD 456 for a two-stop itinerary via LAX and NRT, on United and ANA, with a 22h 59m duration. Its price scope is unknown, so do not treat it as a per-person fare or an all-in award comparison. The request was for one traveler; that does not establish this quote’s scope.
+
+[Display: Cash-search baseline; benchmark; ccc7379a32c4f818d72f0236429fc74bcd63fc2dd4af1ee5cd150f8db6b1bc4e]
+
+The award options are assembled search results, not confirmed bookings or proof of current availability. Award taxes and the cash quote both have unknown scope, and the reported leg cabins are absent. Search coverage was partial and some results may not be real-time; confirm current availability, itinerary details and prices with the booking providers.

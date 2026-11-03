@@ -1,0 +1,21 @@
+I’d choose the earlier-arriving Aeroplan award: it reaches Bangkok sooner and has a shorter TPE connection than the later award. The tradeoff is departing San Francisco earlier. These are selected examples from partial search results, not a complete view of availability; confirm current award availability and prices before booking.
+
+Departs SFO at 12:00 p.m. on January 15 and arrives at BKK at 1:25 a.m. on January 17. This economy award has one stop at TPE, with a reported 4-hour-30-minute connection, and lists BR as carrier. Its reported award is 65,000 Aeroplan points plus CAD 116.50 in taxes; the quote scope is unknown, so that amount is not established as a per-person or party total. The reported one seat and minimum-seat check support the requested one traveler in the search evidence, but returned-traveler data is absent and current availability is not guaranteed. The award cabin is reported as economy; cabin details for the individual legs are absent.
+
+[Display: Earlier-arriving Aeroplan award; journey; 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]
+
+Arrival: Later-departing Aeroplan award (SFO–BKK; departs 2027-01-15T23:30:00-08:00; arrives 2027-01-17T16:50:00+07:00) — 2027-01-17T16:50:00+07:00; Earlier-arriving Aeroplan award (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) — 2027-01-17T01:25:00+07:00. Earlier-arriving Aeroplan award (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) is earlier by 15 hours 25 minutes.
+
+Journey duration: Later-departing Aeroplan award (SFO–BKK; departs 2027-01-15T23:30:00-08:00; arrives 2027-01-17T16:50:00+07:00) — 1580 minutes; Earlier-arriving Aeroplan award (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) — 1345 minutes. Earlier-arriving Aeroplan award (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) is shorter by 3 hours 55 minutes.
+
+Compared with the later award below, this option arrives 15 hours 25 minutes earlier and has 3 hours 55 minutes less elapsed travel time. It also departs SFO 11 hours 30 minutes earlier. Those are distinct schedule differences, not a claim about arrival difference based on elapsed time.
+
+If a later SFO departure matters more, this award leaves at 11:30 p.m. on January 15 and arrives at BKK at 4:50 p.m. on January 17. It has one stop at TPE with a reported 8-hour-15-minute connection, and lists BR and TG as carriers. The reported award is also 65,000 Aeroplan points plus CAD 116.50 in taxes, with unknown quote scope. The search evidence reports one seat and a passed minimum-seat check for the requested one traveler; returned-traveler data is absent, and this does not confirm current availability. Economy is the reported award cabin, but individual-leg cabin details are absent.
+
+[Display: Later-departing Aeroplan award; journey; 3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9]
+
+The selected cash itinerary is on Singapore Airlines, with one stop via SIN. It departs SFO at 9:40 a.m. on January 15 and arrives at BKK at 8:25 a.m. on January 17; its reported duration is 31 hours 45 minutes. The source quote is USD 440.00, but its scope is unknown, so it cannot be treated as a per-person or party total. This is a separate cash-fare reference, not a like-for-like total-cost comparison with the award quotes, whose points and CAD fees have different units and unknown scope.
+
+[Display: Cash-fare baseline; benchmark; 063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd]
+
+For either award, verify the current itinerary, cabin details by leg, and the full fees and booking terms with the booking provider before deciding.

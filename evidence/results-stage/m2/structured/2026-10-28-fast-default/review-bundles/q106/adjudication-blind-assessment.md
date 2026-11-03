@@ -1,0 +1,11 @@
+# Initial independent q106 assessment — before other reviews/calibration answer
+
+Rubric: fast-default-M2-v1.2-calibrated. Read reviewer-instructions.md and only q106 answer.md, document.json, references.json, evidence.json. No review, run settings, timing, or q098 content read before this record.
+
+H pass; U pass; M2 pass; C decision-rich (narrow local same-program date/quote comparison); sparse_source_exception false.
+
+The opening conditionally recommends January 1 if that date works; the final paragraph explicitly offers January 7 if it does not. The intervening comparison prices that actual calendar choice at 7,500 more reported Alaska points, same reported fees and seats. This goes beyond merely listing feasible leads: it gives the reader a concrete consequence of choosing the later displayed date. It does not assert that the owner prefers a date, that later is inherently better, or that either is globally best. No extra cabin/option/frontier requirement is justified by the fixed calibration, which expressly allows a meaningful same-program quote/date tradeoff.
+
+Evidence: components[2] / A3 / 0c1f9d... = 2027-01-01, alaska, economy, points 42500, fees 5090 minor USD, seats 8; components[20] / A21 / eed8e1... = 2027-01-07, same program/cabin/fee/seats, points 50000. Both price_scope unknown, returned_travelers absent, itinerary schedule incomplete (leads[2], leads[20]). components[106] / C1 / 456ce0... = Cathay Pacific, SFO-HKG-BKK, stops 1, USD 640 unknown scope, returned travelers 1, local departure Jan 1 22:55 -08, arrival Jan 4 10:35 +07, duration 2680 minutes. Source request is one traveler SFO-BKK January 2027, without a date preference; provider_status partial; journeys empty. The answer keeps these evidence limits explicit and provides a useful verification next action.
+
+Uncertainty: C is near the basic/rich boundary because the prose labels shared incompleteness as the main tradeoff rather than explicitly calling later departure a gain. Nevertheless the opening plus closing authors the conditional calendar choice; judging their surrounding context matters. Unknown timing prevents actual elapsed-time or arrival claims and unknown price scope prevents totals; none are asserted. No exhaustive inventory claim or review performed.

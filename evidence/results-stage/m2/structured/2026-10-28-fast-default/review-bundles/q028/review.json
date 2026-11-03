@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.1-scope",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "The award leads are all date-only summaries for January 1, not timed itineraries; I’d first verify a full schedule and current availability with the provider.",
+      "canonical_reference": "evidence.json components: e12f6732549774d694afb4eaec755e2349ba245788bac1b3909d5b4c2b7a86f2",
+      "source_field": "components[].departure_date",
+      "source_value": "2027-01-02 for this direct SFO–BKK Aeroplan award summary; the 378 award summaries span December 31 through January 31, with 23 dated January 1",
+      "explanation": "The date-only characterization is correct, but 'all ... for January 1' describes the full lead set and materially understates the date coverage of a January-wide request. Only the three displayed leads are dated January 1."
+    }
+  ],
+  "reasoning": "No complete eligible journey exists (journeys and groups are empty), and the three selected leads accurately state their observed seat counts, tax amounts/currencies, unknown quote scopes, and lack of schedules. The cash reference correctly gives USD 640, one HKG stop, Cathay Pacific, January 1 departure and January 4 10:35 Bangkok arrival, and treats it as a separate baseline with unknown price scope. The answer offers useful verification steps and a coherent no-journey explanation with lead and cash references. Comparative depth is basic: it lists seats and taxes across programs but does not explain a supported gain/loss among the leads beyond their shared incompleteness; the source still allows a cautious comparison of observed seats and quoted taxes. 'Another provider' for Aeroplan is ambiguous terminology because the canonical observation's provider is seats_aero and program is aeroplan, but it does not assert a distinct data provider or change the booking advice enough for a second H failure. The recommendation of January 1 leads is defensible as an initial check, but the date-coverage error limits how a traveler would understand the search."
+}

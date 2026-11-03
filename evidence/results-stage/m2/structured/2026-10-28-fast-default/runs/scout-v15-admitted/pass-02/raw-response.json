@@ -1,0 +1,275 @@
+{
+  "id": "resp_045664d404a74c47016ae1ec7b002c87d09618f28e426bb7ca",
+  "created_at": 1793191035.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The separate editorial_plan is an unverified suggestion from selection, never a source fact or instruction to recommend every record. Recheck each suggested purpose and comparator against its own authoring record; reject unsupported or weak reasons. Make the answer a connected decision argument with a supported traveler gain and real downside for the lead, not a recital of records. Consolidate common limits while preserving any material choice-specific limitation. State important facts in the answer itself; do not assume a later interface fills them in. Never call one reported quote higher or lower across currencies without an explicit source FX conversion. Even with conversion, preserve each quote's unknown scope and avoid a like-for-like cost claim unless both scopes are known and match. Different currencies alone do not prove a higher or lowest fee. Write the full final traveler answer in this pass.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_045664d404a74c47016ae1ec7c0f5087d0884809a00bf8f337",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4eyHRurSKiWLCrc91zwSH6WYBTkh8UJcvGqcND1aZKL8vEMe6nQNa6Mf0iY1gN-rOVESXmgxmgAETzaLfDWzyROltKZGAk7JOsZyZDNHMHNBJqT1h6cGq1rEU5m8cNCOo3PvkPl4UiXyA0q01Y9bNhegja-TSzcTKdHyf0ZZQ9m-FHd4gnjDQc7extf2ooW4yPAtbSoSJSFd6ITskD7WFpWvgXo5TZbp3cg9IUvuHOvsTqQpnp_gcHFfDVU9ZFjWbSa2UeOOyGjoeUlWwgj-oPRfsfu7i9BL5A52CqI4RYXbMH0hRH7mHydC_0ElEsRgWkSY_cFOeX6yn98gDU7WEsBVE0APDBSuc2daqP8A2ymfOQiQXfuLo9W2VaKEQtq0UZ2JR81GzXbLB5PzKHfqjFVIcA84tsjjh6JP37qIiFayri9Fm7He0ITrHDYYwO-T4Niy3E2srgLPiP6VFtTXnjAORJ6dB4aWqz9IG1wMfyS2cp2vplssBanLu96_dRZds3dpf7SkNkQp8yjNaLKw46Cii1_03W2Fx20efeDaOkeDdY_I96UsX3FNC9xfJvEpnOKw223rwkVrhjEmh63t-0Ssso7PwNlQ7z_YxQ8O4_mzoT-4vxUYZdHLy7eazLYfmd65ZPEhET5ojOaddRkIpi7OZBbJaHWb7ZbFC4BsWBC3sZ2EvuyN_d85sX8OXO_Y8qfK_y89R6_gleHzlFK7UKOTP7MY8GDOUHp1NrchmGGMPGTfZDrjKFla6kgWsoBpp80qe7ZJioHZ1Xu7p_AzvnDJNef5_Z_1okJPLnfD8pfYNMxwT38fbyS7mpv7weFJr7jZZY4c-aCSpRZBXe9BmvcFI0Pms-CBRFcqbV8sqqYKrWHdkF2bkomGKwB9sYRFwT5fVaHcaLiPfBndRvxiIZHIqG1HOBIAPWjSlrZUIMEoVGnsYp4SJo7mr4_P5K6MQTQeFKXel6fbtfoy5bYDpmplhS7oi26VG5kmfyGZEUr3bZX-0Lp4_AtLr0AdLxixrO9Ar3-dpNe3WMztdPwgM7sd25QC3WcTlMsdoviC-L4qYDRRNQ9jpPjcaLQK40WEvxXo3Rq3mx7Ggv6wozpQ-mQfB5VGR-fjA-sz10jvoVPprIB45MeGDTekGGKapRVOiFlc57xyJm5djAMl6Wp4HUMZ_YupT6p6V-MGMkNKVkYXh6SBclZUW9LZrduITiWigVjOdv5JXNGwgyF5nkDIvPy9rdxrEGc1HWVDCbqSqaC9lb5qAJUvvov7CGEQbANIC6IlZ0klA9lXsU8ZLR2NncPwTU7hnKgQbkDDM8YTaOC1vuKUGDHKaSTEdJP6pG3_9UIzlurYK5MMKQZLKgb8wuuMJX2x1xtzJumaLjdKg2aLyaKEmGXXc-1wReZSOqO9GVVt73b84u0JuBjvVbV9pw5nCZ0x10HV-kcBFntqfc6OE_sQVJn3vpsWCVmsh9-0WiAysO_Ryvyr6dNs_6V87ckSkgvpvW1g6WLKLmEK--dTRCrvyO_O-tV3cI6vJcaiLXMMey-FkoP-R87eXv88ACLfunFDeKoqp3xbRy44PfpUhjphg8fh0JpXpzsPm98dAN20lAPAgQxPHqfDAYaiZdKywzygHHtGRgyxI8nxSKWGdXUu0qcLn8mdUtAWIg4dw5plrGi0Zzxl1JGHSJMXsIon5FYL6ICeLapEoe5ZC7lVmtuZwWhM6Y9XmwpoFWH66a_xj0NZv5nykkdRoKLmtlkOdeTgGzSJ6_jmwD-ULayfG7jgxy6TG1aqM9VkWRLX9Axlv6htzsF8BfL6lxu-0enOpCLwYshAYpEjTTRLA4JEc0GhwTt4axW2ICNwJ9Rq7JiaNVaDnPJ7AHVJDNIRFDeoajUP97HbQFwEvQyV7YUL8dXOUKeQHcD6x0Mvh_V16rr7aFf_DeXnhn8lCXGiOE5bY17hcwT8jfQWaHiWagdK1rvinpDxI83MDYpqt29U9tOUtqEVHDKXPl3hQEyFoOk7KHFEOet2vHLdWqzTmDMg6oSIKqRGWCLP6zpcVAc-vvko0HD7UOD05nmgxSSnCjm5iXyk3_wkmlCl-Cvhs_b05fRuunDnkuKtjsNU9nYnpxUtVWJbRChIP6adRIf4_a9477YgouJZljI7lp3stjnitDYH7eCyS1U89pFgR_WMLoLSb59nEARMYu5yr4Hk_moHV4_eFS4OkP6m1yczPZZ_d8ERGY5ZiASv90OR8wXUPC0OJOouDEdAo3z00B5sMM-F0QxRW-4puVyKOiCW6vgg-_cNoHTCu7u-Ud8IUjQmSSgmw7zruS6Hc6u-MswJugHnLEWnz7z_oC7W-hwx0VIkli2HfEZHidLf55LhtFsTgd6Lz0q6-e5hBlPdCgmFqZ5-EdiTb6xYUOYYB8jN441xus75DyN3UP3-PpPcv7MGX_SMsw6oDWwRqva6xG0X316sTZh5reYMeWwjMWO18HwqWy4j6qGryEHkzyTduvwVl3RWVr7hcgqrJmqkaiCI3MTmBDNDD72CCxlF5tl536eQV1KXbo0qQ_-p74N8ZmIpWrxYfPsvd7F4c0bETYeKgEBrQWAopQpwwvTpxqHmpHtIPZnVRIfTNYc5C_eGZtheJfFh9l1Zp_R0gcELLelYsXbZu3qVbtpm1v3R-79nhsF_AuZ6jB1HAz43YRPkiWclwP5kyBrQf9knOJq_s1RANInEL9SUVOrQae8tj89xVERPzBL5OrerqGo5p4VrA7ZLKpU5I-LhUnsYw7MWgolddnQqxWzf7tgcWrMsADBQZe7i71l1kPxKRjUVOMzOXkqglAuO58lG1dOR2gJaV7RMzO7ipB9S3aIJm6fJCgvNc2R0pJ-Q9un2I7Iduv8IjvQImHwIDWrw3IJpaxJj5qCh2QWya3eLwRVTVcC_TtphmvKLZcaMBt_wtNaVSbbEb7t7-lX-o47ifLcWtOPuO2YQSwCIdMyGd17JghqrQIJkcIPMk59B3w-PoCszwjQIUqqUZTfOiWxPI7RLTHGp2L3499WY3QEbUR3jw_-iClgo8mIeOAE01FEymWIdM31EHo_JuepnAvi2XTJu0kXrDzzoupmfRwnDRdrVV7PZvOVw1Va_AV1-Q-M-b7D4GrcAobZiUlzEvSIeVn3BqQBfqI-9D1zlBhQkRChnr8oPYtKcVHKWkcs6KHubMP55bYC_gbbINhjW8hOG_I1gfAWnkR7CEIVCWl79TrAM5djaipZUMEaYLMR95xCJui0XwvFFWfCGjBoaGspsVwjGZBKBx9V7gKJcosPtnqtCjBJFDyp9PWAm0BBMh96CXEwvUN2d6QIesKv7VDb1B2ChZDxWfdtIHBvwmalswYFGRx97XZVFhHjoiPAWeEZlzAGkJPcKvw9gLimP-qxSESVmzLyCYU5c2QyBcpj_XJ8bvkCrQtSC30XLL_9wz5gO39E6z_JtaaPU2xM3moap7YIAanCN-gF6H1KYICc8n7tSCnlE-53O9RhDBCZ8Ed4Zc3sM5uUj0Xhd52BEFETzo4LcOm4SvL5OtuBeeFO-LzUJAZj779q7hUgOuURZkL81hsbOnr3YKEr5yxFS_zv2YBb8mUpTpLDmnGbw9e0a-RD7fZGRdp8z3fT1x_WD77owIrRmHdFf7BKOjIoCWiKYkBDkLO6BoCpl6u9nPlaQNVPgvj4odZsEenaoycIWVnLJraYdvPtldnRGc84Ti4_JeDGiIPHboNcFa9z9sS-CahK1oo_N3UYRAF9vhEp9vb46WADxqAtSte76nY8fuETy3f7R_c1CWPjqKnl51K8tMaVomaxhEOvBEgywzVN8MOlErNuQTxiSuaLhKmpft8LzuPrshzVFCZ62UfVHhpqDVz07uYVukwM_Y3FKxWVrxiAUF4y0Sj_xokpGF-J3uWpQRV9RSFMHHzSyg6fQ6TnUfrNc81ZnUV1xVRva820p01uuBiNO0mA9A-Jp4wKW7gisdiNsFn6D4DKHyRoeTw9-QJAOKRjtAwy8TB_956PFYcRxNtqd69qf06tMfTRNLbEtpwVYEflgz6aoYCl4d41qx8v_gcux9FYURgtAkVd-UFOK4QWXJyiHb8pArnYb6hfoWYlWPdVTn_BcAsdvTrjw5NUNB1gN3mCBnBybU2qoO4DzayulPzLrZ37uQ39NIQ5cJbVD5U8JUNO0_tz6PJmQbmrP9cMLrudJBI5Ti3f5UiylqX3li7UAYb8JA0VEP7F-EoQYx0K_skza41c3wMT8IdYXg3edDCrwHo_pLOa2eMOMNBQHkgCzpOvL7dh002YfH88FgUbkJ-Kz4-Lowqal67NqVHkThQ3alrrX1vjKxJxz-upSqchr0SX2k9sp3iNWz0WyMAg7LJOQgQ47APthLpCAmyyE4Ao6oz8X1iouy9k1GAtrJlXBdX8iCZvTZb221A-DG-gtPqdRYb38yiQau5Q2yNtr5r3Sk2gZIayfjZVIsAp68F1ylgQtBsDET1OcPRk7HJEUBJu_S2SPuwTOQ_dWEIPHMfn3KI9EJ0GWuak7k1sIJI5SWWOiaBv6uzG8YPlINxXlPcWibhvpJRi2xwMUCj3V4cestzS6Kuc4ILUH3mdb_lrp0VQcQ_dVqfR2_RlCfauS_vzoiCXkeW2bvAho-dqTI4nGfKWt74FRMy-YeH0NeDVmgASmFRfmhWUapXUL_Re4dL8ORHJssjqWwlaqA0L5g4eddFTekEE8EU6RFaAX1u9uT8csRFH8oCsFyGZ1Xo1FmZnkJ4u8c9rJ2MKXEbHgciaewrV0ZT-IC9K3cHfIs6In-oF118MJs4IOF0JIqYh8No3kymBO1Tfe-5-mvTHEuviYgoTsD6QPGfUfGng_5GjNtWg1pJ2-b0Kuu9csiRklLQmYPD37UaaCTCy0JuvGCbiQqvyscBB8fEkKu7Ys5ogxT3TXtHy-HNOCsBPmbq19Y4qWCIa-QiSb8k3wrXMAiwRquygduVDxU_5Qe_x4kov38xV9hEsauW-INeArgM2t_keKW10VxlolKBST_pO6zsebFA2qQcfGc4C24f9q742CywtmBSdjQSOSHrXuNy4TmRXZkP-TJ3H28mygeqDfGsP9KApQDXy9UGhUdYbMkQOIxgMRcPJiKYrksov7mBCedIKNYHFCORvR_C4V5dC4r3XS3i8TijruJP9vz_2HVdwDwLgtbLHqA7rqAhhDyTqCXcbjJhfyhUtSxfnT3mLxF9qeKknyzKEGwKryWk2kZ9Ji3VyqV_gk2Z22xe2Hxa68z807DRQyL45xGlshqxne-X3aIE1ZWehQi4ScMqiUzSRdVw_QINbJ5TG4ZCfpFyu7sKy-a9kWWI6Hh-0ztpcRmrAXnQ1bVIlCHmxZJ7ydIWvDcxKHdW_v1WT7mjpIPGKCa2WzSpuXZcVqtIBLnUfwxyofuyDD23hvY7OZqP0AyRneIM_3pTyEPaO6jxfSv4q9mEjIQvwgDN42NerqokLF8AnKGk0NATGVjQxm8V21oCnyWPxeQ_uHEiAgWpqWvygEeFD27CaJnve-mtfecrsL5QI6oe2SwJeUKQU4jNzz-q7NoYS1cDVtspKYcfMhTOeWpTRO2KD1DdGBtQBOFGkdkiUmFytIvBn8c7ijU2Sez9FJ_S3fwaJQ4INpf5KBNEmYhv4R603GiUBHccLh1Zwkew_v6VOEn75UciPue7liguRMjhwS1SQeCV9BzUPxUTT7ZF4CNkJtp0csLObEHeigg1PIar4Qdiyf17TBr3G87huvSB7SptXq-DBrSOkZgEGVpAMFiUaeyvGbskuSOS2guoMt_AEv0s2EB6xeaLoZwrdFKJT-Ub8_yBkQMKcS0ZR8nGHb5V8dLu3_lX3zAWzUllFX3ncihgEWDGaWzoU_AVT0kP8FDRS5VYGe3PJTLCuVhnyfPTfC5t2EDo_ywgefcmAxjbEwrYxXg7hgNRStHHEOPwvdvz-Zut8zLQEQmGjIYBD3WZ_2vwEN3G_jWT-XwqrlWI51mAFs-X6Wp8qJNtyjnnu_SVeVvIlz2XXSxZ7ydjYrOCIb7qZWzbRICnYrASrXB8Jt0C7T5Ff87acsoTXV3GNbA0AH8_JTF9oQ9qqDXIXBt7ueTePWRvHxfgrsaLEBr_liUfpYWykMptcMIO806iocs_Tfn7B_YygoAlEM3-XNrG4YGgd1SmHkQ5OftsBe3z_aNvBDCuSbzMo1o_o475vwA7UV54MzV3bGZTObkFhq2EYk-P8g8sth275geXA20A9bZGCwJis-q8EUIfvlaNLVR8zoe7Nku3JgmHsnYHPiVkxefovQfxF2qCx4dgekELX6dlSxOAqwkHVJwqLV3eHfRFZdaMAWlsm9b3NlsnK4rlXeV3iXpGWb7bYHOaIkg3ciCsEIgZaao3kJNZuBwjpGtygVt0N9Tv3Hd5I6m6dBDtTYMziVCXJZcHqLH-6IE_rku2Ne78f2b-Ej9GG7n7tIuQ82ACYg0JU0K9lgQkNK4qkcsD-exkVEFFbEbNIr_-3YFR0-GNoMXZ9nBLSzflTqQCB0dlv6A19TE-Gd12ASVvlks05_Fh2hyunLiwM0wAexKPsc0W5BSVenQ6zHyL-riogcAOc5tPtsCu1CnBmnyVe_8CdT-UH41YGUVrqYbxNJvJTm8dEhr3dc6w7vIGymj21PrEePHOZmkAl2LrjmQpa2mGwh7cEnoqx29UNYf3nk0RcnFwvns1Kd2dgPosKDytFYnDDnXxfLxKgxlW3Sf8SbYnXYJvnFkqrzXCMjTGY5rLy8sOvq3hOs4N9grq9qpyixFa_p5WBxs1-mUBs-ajfa4UFDOhRlj6WzJtQM0wkvih7i2LMBXeTHW2B4WTP2X_moJrrdCeBvR7RhrPN1ExhiEx3Rufor6SIxX839HmCBP3bff4wcfjm-gEv1aG3C6UmIBJJqZ3nU271QSg5cbpdpS3wwEtGLNtT4Ca3Mmxy6KylFufvBn4jg-wIvsMXXPDOLfpYlorB7rH3F8BpOVCrjm-dTqcFAloxbF0S94Ac0BHVAQf306zAX8GfNZcpArEJUIKVZliqGDAwtDwzpCpimdIVw8oT4NQx88r1KrRTR3T_Bi0swtWBSeRm9j8P6RZTfJQ4Pz-kRtm_WE-RfctC_snhK-YdaNCPGcBB0nTBuGhKtjsNu1uK1UcOGS1W9kOkCGyghqbjkOOhe1l3U6gE6ZJfKN4v8QHGx56gfieZL71WQUf1Nt9P5mGXyFT1hrfqUgW6zO9HAvaa4qAKQcSdsv9lC_AgyLMfd8SCzqscALwyP49Ho1WyEi2tjAFUgRPLz4RjR5VyorlUonxy8cibEGVBJ-NqTToqN-8t2v4tGWjS4KF0mxugigTxmOtbrul3hGnqEZy6H8KuQAfwPj_eE0wQqh7WRDRRcER5VnU30unNSAbF0yATT9CRwTNnVuUalDXg59r3ymwijYJWyuNeKqDcMWLIFgOjoxtP-Z70Wu3Ws2YXyWRrwD_Na7TY7TEafUfdCQ3_txqBS21w8GCkyWItsaYAr5tQf3XDw5b_tvTWSD_zEwNWTq_e09vGdwDinV3wnANFKuB7ItS12VpqkhsGxDzM1NLTC5gY0eLG-9AYFDEAM2o7YzV_r0XYXc-Vu32zSHLOSzrMgP_WezUnEFA==",
+      "status": null
+    },
+    {
+      "id": "rs_045664d404a74c47016ae1ec7f0ee887d08badab9587fb67c4",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4eyHrXQGTo0sd8AzUYCTOgFGBnFY-Yn-Xj5t9rXixQE6R8EFGO72P6UhdRdF-xVvGJxVjbIKqHagKiVUP-PMFJ3KfoKgjJIeG6N41ym_xj-qwxbRLc7JfCW5HZmb2kXrGJyLSLHpICuRCpNwd5CRcj_YlgQjOj468y6NJV3hOloSUdLmhKEtF5VLe7gJJls8htmlHCDKA4I4o74p7NK9wo1kkGCyTjpOZsKXEOJADSYiUo9RSo1iG7KGHuSb1a6QzpOnM2HTllL8IocmpMlNjGk-03Av4uXRgOXhttQJ_ZRIkKApyQXwtfrWsT7Hemrm2kEEBuu9O7EwdJR9q7EbMVRKGKcQqkEdHkcPgZi_C-NPzt9VVicMD8UAgza_n4106Lcre0pjstjjCUvDXFTYj8Pk4Xk0O3QvZe7kliBts0jQtop-Wl3tyg2ghnMoTmQVp5Qi2YdgrREJg07XHhn7fIMuuORtFf_3nGZ4flHgNrb7ZvaVNlsuIHY70pVDtaQNN943RiEph2xvTWeMklv4dMxAmKRKCb1APDGIGdOvc5jQdhUsnxqJps0wukc5pNYSfl7ojye983VEbzzryXTk2DJXgQ2SEVDwnmNOZMd-ZkEaYJ_bBaw_H_2928XfKpqfTr7ibPd2lL28CP4b5uAVsqUpPeeW5JSA6K3kT4Id1l1FDokGl43v9z2iaQ5sNGs0aX7R7gmzbh6MfQBpHpd07zUBKJiLrPu_BBbqbEXU-kh8vPfdIBB8vr3goPgTDHuzyRwjXacbG8kg0LQ-sCCK1l2o2l8SqHUJS8Jg3mTgyHnUnua0fQB5kslpcPqQkWeUzToHitgtUt45GN3KZRu3vL7XbbLqHYl2bx4lWYvstu3OvW7Ex1kLKxzqBmxOMikugtxswBSzUxiwTVM9xBRyYIO0NTPncWpqNdEcB2L4rNj6HUS7WjdkBQ9MJQ_EXfUoQyJaS8XYVSHtucSYv38zUCeEwL4eLhT6zM2T6mUJyOXxZgHWYx2F61EpXIXNqPJ7ErLYPDoZWKyilLeb_jPrT94LTqEjv1MpNNpbmLotrPNzd9j3Xfj_9SHLQIdvy7Ut0SZPucGu24BF_MQcuWlHzwte8bz1uqNnHlXzdM60xBiul6DXOAf6JaT973qPhmTD-vyGvkobGMZhArrQgaW36ELD09F-eKSGzJmTI9IJL27mFdN5BmdlOwFOMxoiDq21eYaGC5l62ghzLD4a06EjPgk8n3b67uyPZK_gCmrPkcDo0RYeb6-4RO_JoNaQQwiyPdxGOevV324Gi0N2qRz1oshWkX5B2CAyJwPvsi75-tzP6yAs33enfzrFIxy1vjf_zoNqwEohXrKXshwWWjbUpTUfkHqE6RAWrI3rCWu0RWK_4Gkc5qK-_FICTvd422m5hig-zainwuoNWrorHlYCMhHNDe5rfhRNvYwLh3IOXfm1AXQkmFgY2vyl6wi-fMlswHk2YcP6rkBN1QaPZ0vP3s5oxRG5ebu9H6FyMq87L20FIwELM8x8BScCwuIHSV-dgpiUUNzs81MQhiieQ49nDBmKO1MlENSsVsF5pqDIbdFFtvkavTe_buSYQSR-wnl026lTRbHApqVYj4p3RuMU9H5KBRZF0KQ4tlbuKSI2nc-07Th7nJARrRNN5HjsNKw_-c0nEbUs3tJODXi-XYEtfxCxMHKk2MmIcxRMC9a_vPcRlrFrR0lGS0r899rGsA5vggf95wpJ-567ITpQdh1ur6P05YErUAOSnv5jH-TZ4x_RaOaUoGO8RZ1QKg81OPD-wUQMwqBF5czoPihuqd36q624OXVCYFoAsS10CmD_Rw1ZZ5rcmGAJXH-YHx9ltu3_CPl_LNlr86xEVVW_IWMDPLzMZNkbiqwOc4fK0aRPstyoWBcimVq7ZmyQULxYDQJNt5CZJ7qtR8aGphdK1xrNBQjCj-Qu7MyhHudeRMRgH9V5dUbwbUWPw1GdhQhZ2x5I8nj0dVefZcM2E8WE91hx2vvHS9RS1E4uxnC8mmEZxKQ1YtGe0ABMtdSBvj7w2g1tTDBLKPIdcGMU8V1fL2szNgCj4_oBAq6IEf06wUFCYY6qW_HZPxRDOjTeYyXy6n4aiEyKEc4mJIAU3ARN4elXrn51QUQ4DvRBoLDLAIK9JDyBstNx54CIgx54DRc5-8ANIb2rRs2udvRcrPQE0E1mYCpfy19CaLvwgJc7ROSJMoxju9T2KSbrpSjtXjU8ReiadJZ3FUunWfxRZ3Cv5vVXGHlIoOmYIbNkl3FmLYYod6CSMPe03BfyytnJsq1osMotjBVop6ZR2a_THVi7qJbf2mIy5UAWMZIhJ2N-rFlKC77WUOpIp0NZtUO3H-butsiHP-CRNJCcYEG69ExSs2UNsb2d7M0Hg8DofdORzhv99iLyEwPctIjb40FIwDsWoNUJU1TINaQDWh4JvFIVkr6mRW81M3rlVKs14T8408V-hqco0FUpV8o88FKQOCxdPJOXq0WAF9TdANp5tp1_G07mznKWLus9uHIhZMiyTvGRxsH0gbcxtFTPkUkX9GN6l5AR9ktZxlgJZnc9REMRI_5EmXySntk-dIOJQ8T3go6ITeiWToPUg_SM9VnnLuuhfp2SwniJaI-cRi904L0UvjIa_83TtTj4YUoAN-g3UtgTI2bSe4Hhrk7e0WI0qTwQFkvV_xSKpUodcyrF3x4nOyjO3IZ0al88STzX8K3RMTY9ZzC6usi5PO7UGCVubYtx7t1wPQqBw6jxelwUff_IXU1UGBn_0I2nZLTz9Ba6eTDjLRm-nH_vU1Es9NsCLwBUJaBjsRlB5RIp_bHFCHmk_fBQgthmzvzedZGQ41tt45lg3gpg51ED2Lqa1welOgpkoGsP9wciLCaqmb9hAPFHdNZ1IL8wG5JRjsbmg8_NsZXVU8QHvzD4QFcBCd9RTd6JBvtb4IFa5gNPNNsyKCd_DFcsth9N3XxsUSF_0hEICs58TctQgQuu3_rnxhl17XXgcLoe78z3Pgkhsbra1p729ESyIRt54-tu34RttYYDGK2nbtY8BpxGweOIUM-W8otkZnqXKbvp_w4OM2cAYpAq2eOvrNUDCO5Em-SUldUd8sf9s2JxTxkg7FPUG_rRxUUgYH-qiBhgCZynUQCR5r63ifcRe5dOFcrSpl8YVsax4-0_rfq1x0hvI8oXcJD__cUKRrTcz6xzLS7OyMYhIqkdse6Wq1XYvUNZ9FKW9wi9tIpcLC25K36TAyb96bCteH2t8u9fX2Motql6O6gw7Nq3uJku2zPYWplLe8fSjp4yx9JY8ETLVY0uSFSEcxuBV_qCv9IGwNF8RHmk1loXJ9ZjgEiQU4gZY9gw99ia-eTziUao0rpj6AxJmXOiYDjnJbp-sAYsEgHS1zu_LfRT2ZGEU4IXtDb4lqMCQaom7rbaqcNATwv5RsiSdW7vj1g9RJd10_Ie4IfYOack11bnV4pF-xkZyanc6Su8C5XzKyyfvzVdQqI0r5Sx2Ep-c1FINu34GLz2mmOv_M7uWYgWGLFc39HnZE-7p5z1ESMoVrOeOuZ9d6nQjKt3S_54awnuypWeRs6oEQv0yDSMnj5n74DNQLQsd3HPsVeIqMQV695e5-28MRL3Rgxv3d3e-FCf35L6h-Qr0kGUcZMWZaPhMlYMbw_KsHkXcYIzHSXp8MuyLQcFkdmNURW-8MDrtpjlS64JQaWxGnoVHL1gbMAyRNWXJBhkcQqFoKakvLvs1K8WxQH2NUIZGOe9ZgVTw-JGU64i8zL4lHhklrJRFs8hx1BtxWeWngL8n0UwkC63IlLVBo1PlC30BeIjmb2cMQIMDdANY5eVx_hs_rA5jlEsf6XOPmtwBjqoy1Mva7FbJLQ-morBlOqYeQWOiaxvEZkVjw6EokE9F5D3_KNpW0KvtD_rz1cYdkqHsMb6WqPRMV-vfWrkdU_cOKvZ3z_6tUPi-b07aIyoZ6PL-sbaCiZXiglhyJ8u76sosU4cxe5btR1uWeXmJvfynMvGII6YwBMgZoJDxXSPb0i-eErJpkpamQRmbsFPX_a1LF3cSH5YSfMXP6nR5qGSbcuvYb2nAv3drahZmf2aeg4z84gbBA8IWVkzt91JGtaRE56Fil1l86RMLV5NAq8XMf7bhpKAHyBvrAHUhAPgYx3S5GQY4rc3nd0uL7LF-IjyCKshT1n0McxsQrjFT0Nq0pW9YNQfIPpH82X1lVC7m2BTSFYAbXmdv33czul1SmZMopxeXL60FpE55aq_BlkVLrssNzujf8cSzfFuXoDh3gk0m4Iy3A9vbNdJbw0_Ya4O5bKOpEj9xt2kudOvlGA6H9Z7oAmqbQuUg7IMeji6nkoalWoK2Hlif3trLzCzUBBzjckIvPhLVvhSDPP5CeXbcCOoZAa2Mi6pJXTLqPOj5m_lmGrx2KjhFAkHEkwojsIqR4XYBvu8qrjR_UgkPTWffiEbwF81MCfL5mYGWpb3HqjrUQOpkDQCEwTK1wwZuqL0fEe1majTL3unBBm6iMiieMGUIdmFg7qs-iU1aGFg5rVMIE2r9McGAXgmFpxHmTpVa6OtKHjV0suVm3bMW9DnEzZE67qsF4K4SlsKQlRQEdi0yQV2P0Yo4UPu92Hy-3m2ZhDSEIgYN6mZVaW5GMJlCGO-rza7T1v0K-0xchehFcS1BW3JvrUQJv8c5M-tByrQvqm0DMUuzgYDJhcnB6u-43u07Fe7HwPMNlFRpi4VFFz_MRERez1gFL7jdUclJeIhzeTUvwcvRUjU27iyVx-VWH-y-uCkkvWVdZnVwtW668nRCiJDgJ2_3zNxhFLqIFUP1hHEreabI8Q8llYgRf_d-o-WZo_qM6BNFA6usW5du-Saz5jZICR2cMaolgBL814E2zfzmysi4O2jv3ZqYt-foeMWvHvxQn104Zsl-aISEnyX7Lsy7UKwf9xZtlBby-NW8b88GJcDat-D7UWKIKxo4XhR_o_mqeqqRRjjURCUMra-ENYNiMuQbDmeItV1sBoFImP4m6Mv_U76Q5uDfovrsWj_-vTJj1dh4Unf5iRYswbttZneKO3X5TDeRW_JmOIrRt5z0pTLdpQZZIjRoGcHRVRztyTsxIU9U_y83QZ8ADbuqfXDLaakS9MywckKyufzL7cnnXOO1XQBLtBE3eh4kDj6IH05qUPDi7_aOlMV4R9Q52R1qVlf8fy_9kj3QWXZyoSrY3liWV9voT6S45hWBFfoC_ACs_EP_ulIvrTG6zmLENYo6PzaG6fIy7s2z5aN6BtATfQyyFkX3rkn3en0rAPK3C2_P3jE2_eJvDJqg7POrop-GfNXdUTHyHgZ0qS_Rn0A8vFz7zCUR_uFG2nWSpvG89uorPyPB1ZdN0F6M8MLnKVDa5U-adkUMoOPYJ7X2qcWlGQ5XZc38nPL4rHKgqQvTKHlB5EhLsXBXmIb5PSGOyH6f4oFeaAZUBWsXHXYJwtSzjLlg8qVwApZV6nrVpHhQeFvJdFq2CmhHmzpArOKeFbM85yCGOfL-JStxSfvBfN10AVyGFSHKr2FzCGYXK7Vu9-6dU28gDtvrW8TfxYUYBY_7EXkuufjgNRrIhScqsDbwDmIr_NccA56aCav6pQydjTbUfeBtki3H0XssaYwCRpgT4zPFospdHwtARRGJQveEUrwpLNBuntb3r_5whI7z24WSHkxFPQUsuA1x9QPVIxiMLJw8eNnFqoJkFRKvObPweAA0hz0TB-IK9JvrJLwFlLH5C47JSzcNbVUVysVEpprLNXDyRb-XqNWjrAwr6qoBmLsHHI4u_NCqDmLLfskfcUlsf4HHX7fe30TI41JR2L6hZQOVMe12lw3GPjiFXYFUwRR9ztqzSTJeuKYH7EJm1WNvD3fHttiS8JkeNhBrZC9cwLMDTOhdkznne6Qh7pgqTrw8vh7A5SywORCzt04MM4egWog-yk7Zgqpya5ZTKWWLpn2bztGqxs74gYX_Tcc2erGAKQLCQ6y0rJ-Yfzez3nMqL58bYDcoEIoHQhWb_6T5UPBcZki7nbVxVS_mvnicg5SpD5k81Kl2KggiLNj0y3sReZPGqDqZ3K0PHSNZnvw4Br8WKNmMVvokLKLJ7ig9JimGx44ZuAU7LnhJiNRadE4x5HJdgfdQ6J9YEZ5lEMfchYCnP4BZbDc-QxqbgudpRcYgoyWTebStMVUzEEUqPnNWbPauLQtT6PJEh_MEiLtQVQTFYSidMFpZaM5_ygZxEoQkQlWyGu-6XRKoqWbhBq-uO6021LT-tpOVaGmZUr-ykqq9_2HQzvLOGOaaMiC5ZK5xWZlyakP2ul7bZz3Qw7eu5JpXWxrY59VdLwU3XfwraC_fIXefAyH3MpU5pUAP-WKqdZPW_ToCEAs7kyr6n2OUXlS3taXdV1pgn2gQpJTJIAK2SDNOPXaVRme4uIMxFf6n0VmJ-fTHxFYE-V_DarAtG5mF7w7YbgoFExOQD_I-1Vqzxno5VuDn1jLvviWPJHJnmwesjoWyrjz_QsSfJWR5kbqvl4JLaF-8TasZpaRdhsgcNPFNryOQ-WLSjMia8xa9FqLGrk0bVEF-Mml_cCBwNPH0aZv-ku0rEYjB6AM_qS6zF8agQXbdmZc5hAg8Ei5SvPqPp5zxUE_OZyJyfI9F_K_MO0GmAcITmGY7CAPRbH8ZByzwxK6u3w1pKk7ZDpgwmDFZgQ1O8rQJB60yr7CFfKUedSBJQTXURGpVEW28jn1kPvTbb8u4nKCd7tIpzwxeNRiZgK3eu1ucwPQjgu3bH1JBPI2ulU4Dktpjme8k75hyxDuBHzbrIvBI8hFdzIhiT6OJ0cjPF0FkhWUp2FiDp-LXSMg88v9EaE_ltBg0oXMZFd2mhbcIFDUwYGw1oFr8v5SXHyMozisAEeI_15TcaiFuooC5Jqh7HFkJA49NThLZ9e7UuGLHyI_oTS4aQgr1_0n0g6QSLxRIihcavF1lG1xLyNAfzEqrNvaewt-UxwS2y_ux8VKEMVp9LaJqhNYB4DgFgrl0IjajDgKdXZ4_K1ICJtTS_hxaFp8nZ9tTDNpYYi4kuvac8qkmI5QAGhZ--J-Q7PZrZNDPKv7gvFKkr3jzg5RXHFyIS5S4c4xVruPaBvHUt4bIUtKljG_Akoo98jsJ_fb83AMMw9Of8_mKekmY3eA5B_TZipNOOxgzyOM3-MVA4M3LD4Gfh4w_HpJzVGCrUi1Fxd9l1nlkbUfw2SSblr5WY5iJL6mrU7JzQbaP7GG7nkqOHUlem0InFgDbRt4j5rWlMbgwnHJbz1G9hJ5qYDEWLB5tMPt502drITKXwytE26XPg_2c9tPzSeK2bLntbeZ0BTQFqEEfeqsVYGvG9cvMoracYpbMdyruBe7nyGr_9qcFyxZ26pM7C_W9-aOZOO7Pip2c1Yzk_kovnU56TLbjb2F27CpPTFxm5IFIL2S_tbPncw1lQX_8rENmje_T4molytGOqAeCilex_h8x63nkcw4A3DvEmMkDAFNvWwMKOcLb7i9uz2EvkfeSuPO1Iey0DtnZl6Umq6lX-KVsW1nw5wH2m3_LolQGNrJ60NiLz3MYOD9mu3EpC7dwumLCFA3gFPeQEUIDMUWb7MNraLJnWY4Ae2PSo1guUsNI3yhbS2IzSvSChT51qLBZA7_lja3KpizL3QAG4_8A7A4cv6YV6ZRlyKrJOvwWPtkx2NcFhcrvYzdzIH9edlbu6iX5cC2Rh--uAy49mTK6rKUvk5yxGjUEtem",
+      "status": null
+    },
+    {
+      "id": "rs_045664d404a74c47016ae1ec81f5f087d0a0d881007101a00f",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4eyHdPB1KOS-R-pyOSIU-Le5BP0wWAnhLsp1RNG_NrzVTBjFISLRuyWW9yFvrUINsRyPNJyhynberR-UOnEjcgTbda7t0BzY_3pWZNcEVpIFPX1Zgdn_HaS20RlFk5u-zwLNxTIqba6CaaEPPXpFONgzV-YRAcitMu6AS5OI4aC2yGqCrVrI3oqxswuu1gCC2Y_ACUgBhDzQsTnY6DJlNGuVUdpfa-rHBKg_3qIYIvPpd85SkgaxCKBcE6_yZiTdsTNN9as1PAJh7Pi6OfQqd7-y1IOr0S52SZ6qm5ZbPSLy1Shp84CuNxcemBxYKEm1al7GT7x58GKyDEZXPvIOhiOphXLdGDFYOmJZAXOQN6xeAuJgSX1PJ7dYbF16I-H_cciSbS3lruKtOrvB9b5HdWiQdJaJJJso_S5TN0bmTFIO-cn_Bj2yVkkL4Fm5lbsNgeV1UNB0kfcBJhuwZbCP1TMs6UK6VjsdkqDQLDErToEFAkhA2827lvKDmOuoFQZ7fL8YS2j7KGvtCi5d_S_2ZlN8HStW-u11qbwsRBBV4chomPjfAgH00kKhZ6qhk8ZGv9oBqhmjWt1G1F_jfPOptQz5SvsqTh_fa_BwbuGsABRWHen7tFrwsNefijytBpYx3axUHpGEFV0DmC51C9Zs009z_9sErYCJjmg4b1Gz2KX0aFm_Ktrj_YcxxF_2nWZZCNAeaoQd7JyBhtu0TnNvTxns635s3STddFTeJVFSGUw9ok7SW1iq5bDpjPgBTjclKZciMqdxmBMe-8wydcshIh48SwTGsHnDEQoqDfvcudQIuK77-pmHZvYwJrUitR8M57Vp5MnQ0pRXkIBL8BctAb34uaxV2Egb3rcmliT2txxV4RLpnC8G5RI3YW4xVjuFvm6JbOubEd6XiFKp5VEfj5s5n1a63RmEeJU0cYEoT04j-jV2AeTl_ahkM3hcCcnnrcDve42CHiXaGGC7GLTI1zdlOonEXQms0H7KweWSCgfMMVV_X2QOND1k1KfYTVrADYEU1f4aokCBZgOE55W_dGNUSj4-fjS7Z_HqN5OYZj7RKZv6WkvtO_LVjCw1HZNlwMQsseIaWXEZL2G0DkglC9PwEmyv8vSEmQ5yL7Ia9PhzbG0lBrGO1VAWmtx91qwDrDAnWtiLRIfmKY0NWaHx0V7fvSGK8eAaaoBEWJfLFv9wRi8e8NI5lgxVQJU7XDmCUB9D_7XDPwjucoSiLMIV_n0xNBnMWodZnFes6s9TZOyx3EYm8KTrJHSPyh5vf5ctn9R0dBUGYcydaYuL_UncjRz9PDrVYXcx1N7RplMW9r0XYrJfbrKOFtkVnaLBDR4VdltWPLBU3mm-AbGUNFhkTN98apAWASSzGjdWNhWFRq9AJrfegP3AVdXKiMgy7y8i1KApKeyNZfoWq3LfMvBtb8VqLZkcu-35gDtMKCWwoIbHuD5Hvy5yQzhFrBC5a_8aLZsSEmTjfDbac4PdTPf0srLKGEWbWimmGxtjfYlmd6WdA3_P5eP5MEqKqQLmQU2pLZtjjA5_wJj92EpxhHZsDXRqSbus6CValnIawdRCUGdkMn16E001KEwS3UysW6_nODOEVbNa9dTAVxO5U4MDj7BDsI_TeYEvIKYCfsKRLmlJbkuE0-cCz5wS_bLeqJLdmBuXmYJkM9-zxuGYkbAvg3pvcwHiNaPfS-nt3xdarlQi8a1p4ASC3wlKShpD7M8GytfG9IC0d6o5awNlX3PEk2Je0lociPk3jVI8AwwynI59DSpKanT8NP_BIeS6JcbjWpHmb4-OhMzEXHqWngeg0kb4GI8aKQ7VPtVJ6os8cPAGlcD583ktvVKUSszqnATT0T6QqUz9mqSweZP7b_gNGb73hb4Qescs5s6qUFevcnGZzeLVBuShJAWFLLOz9PpYQL6-AEVU9DQFVO666gJMteugNfAGfYnestiAZNBzdigxLXL6eJvSzyPv8WGfI6ZamZDa7NapHS7vIozNYAN3EnSOTlImBrrlXow0JIlB-BZvR78iLnqb1iP0kDsHOppN_dfRqyqddjiwHkUCVjUPQyl7U30VSGOgDaOPrrNC5OZeN-QSp-KZbYT8NyCE4CcAIiRHaUM054e0tzUybI9VgLZaGgaJ78lBuUwK1CvysXNJcARm1AKD-e8eMLA0SBW6Kg6AjBubZiZdg_7itvPtoj9im8g1gZI5Ad5Ci5TvqLVNXdUCuFXC683yum_ZYqNOJGdIdpU72f-c4FfR27TeboVqbStSb1T6mRC9O8kCI5ftZ_LHzRl6LrrDWU9ZFsH0D0he4YDG5CeheLx6tUNNKmrc2oTDP02jCSJHJ7aAud0Gx-S6CxquC7EdQveAUBYY_3Im3gjn6Im2EsnfdjJO3nYXowRGd3Cj7I87ceD6_4Yiw3SIkVvKUXPe0ckLXctgcYO4m7uinsHspZ3aLk2hKjpPSw-xiJjwYHEFxdTjEIWxIVEc8--McPrzScrKudH2A1vUMqd5FQXndqPIXnGPeJ1YSA3Q9morfyO2cAg3Wr1G5Zl-Bq443okosmXcNQj7lTEXQ7ksetuVN-yP1NIntAY9Ii2SxHJecOeSJqHsS4rqp8V4JHxP2kO_fRoW0WQfe1K0TDf-QmAmQyWiT8ne6wU-45IAQHf4c5ueAHe26T1JAN45BxnfruQ6lruB1KTKgiXgV5CcdWcYeglwGBzx6IgUOizMktxL_1ZjBbEk_G07sBV1KCwDItF7Pb-NWu13c4gWcWIZJ29_T0CPGj2COQ67l0uSEyBv-Q3o49191AIpeAJyh57Yt2ybHaFiFEVFKQszdR94xM79TQPLwRym57YuG2392s6ZVmBhMvbfyzWTkxBk4_79avlhkNJn49UTcFrMtZ5tb-h97GHDxVBd5t3HOFaGOTFhf3gamBtPgTCUlI0bsJvftwEq_n2H2dgzalqK9eLVZlScuobhAGxduCwp_UW6yTACHS9UmEuFOZokrHSTJikxg1YMxFvn5zTzKrv363YzvY8n-8jKs4TdglRfzqiF-oXrZM0Uedt94G3FHNCr-5yJH1ju8UzqjdglwF6_i1xqgGKsFULf621gDba8JaHg0ZolZQOF3kEugr0AzrP1_pqQJmpGNtzhFcDMvvMDIi1hwV4eXrEXluD0zbxVPP4VcS92D1qrXnwV1nk9Xm8d9PVyUFXx6ls2G0pAc1ENAcKoDReFkvsFWmvsfDQ8RENXZ8y3s4gDTp27jI686WP6JNPms0GWiBv0Akpz1vQh6xqIHjr1QvKNY-Nt4_ScYRpNPgPZXhx1G56LVCMFJdXXe_JFFJFjDTYiynRiy0fzBJ7LRQ8MmvpVtew3lhyHGZtUw8tlh_6Enn6wSP7KgLAIquXny0jJISlO-aqvh4yVaWjgx7EDrGIdjavcVceklOFKbLEtAcAEki4zqZNT2E1228npHUxViX8wXJ7pEhRubt41ULbIOecLA69NlI2th-Qr3oKHIlwuiSGUIOHH63EvAAWjdultSrYEDiIhGdnf9qy9Sm-zt5JaB1yXqy1YtV7m4PK4RFyQ4ffOV5R-plvOYmNRrXlR7R6u5lWj65JL07IsOS-kajP5lweigHzcD1bZ0yV3C9Q1k3lR03FYDOml9o5hb_N7qFh67BmVOkpUwzIiL3535PUFtb3abIjQ1dcMU4d6xr6_ejSktSD4Ul_scvZhaeYDa2Nlm6MFPKF3hL471q-cbRCgBYty8yozrgRQCTtvlfqi1rtpZvWzVBJ7l4H0VXlDYqu_knrMTO8b7qEdT01b9RuakBM2m57r-25oU-rRlZEZ_X4XHJ_1CgLJ6r_xvEFmGEQrY7H7YW8XovRqmUKPgCrSw2NFn2JQ2dd_j18_WUCUhKydqQxPa0RXyqQzWSdR96P5CSelyIJga-pFreRGWKCNAjupQSXVpjqCSQK22cUuhk4bqLxIIDTENAgNTFtxAsXYZG1-kiCaTD_2OaejryMrqj3u3ARapAh7rVG2ELo0Dm3NfesHD9wyGwIrk87ymlQPt_udn5QNl5XFZsoFRm8yfoUnVlXEvHZdCXM73j4BD7ViMR53aUrqvIbWh6-CcCJnZERLTBeOzw29d5xN2wKJSWltqlJ6IjTSNzzSUuf3t7lhYdKNi-XnPH9w2tmc84d3A0-mzbkHJ0YdgP4X4zZA_tiNqiBVJDIv85yMyIfjp1zGTpjETyHVoV__-03RNQpT_Li8qCwK5jvpD_ESGkoGvchi6vYrQBXn5iiWjtZ9T3LK_rLdr3ic9pt_S3wCvQf6ESKa7KxdFCnRXvAV8WGsIjg_Ww9P7XpfBl2bV7I697pfXtMacAcqGhvCN-6aXlHV5xjNvnDRLdldQhJVFzDxJuvhRs1U7-7Vfrn1-TB_QxOLXQA-VuYWDrlXAXFuagr7roSuKH9FEc622yTYU3GjaPoM-J0Fu3w9SI7Pmh_iNqyet3Hu79a8SI1w9QJYPXlU8uI4zAt3QDZkQ0W6bkw313XkYI9d1Z2oboD-ZaIjFY7KQY7sNPbGMyCtEwSCxWd1mRaYa6HIo-6vhXquJNN8SNkMNH_RT9KofdQbg0cJhqNdkKKGo6WlU8fh7M2n8dtbNCD8eh5A2VIb7NJtTB19s0F2AkeeS2M0dcf74zpMzoCUaNyRq_5LkJwTmEYGWx3W9Ze04GEF-Th15RBQgU4x0VKiU9wcqOXy5HGi4ibZ0tk9KNpib68dgUpLm79bg6ihQ4cmo_QBldbJy1UtRdKApLAgY7HOM2MGGW280kB8CkmHc29AVgO0NrntqtivTs4WtmR9CbkRyH7YK4g7GTERa3k3_gWpCnPOOMSaWfvPw0YZ8tC6VFsDctmwJCo4GpcaEkYkhct-c1x-yYbXoTOM5YM0r0ibRRlAA9tXf6c3-BbbagxfPojgwnzXEt0lsoKP3Pj7RBBXs9h1n97BSfgdOpdQ09hS4bVa6NYT7_CJYXXcJySttB-TUD4WEKzVeA4Rhn8nB9gs6VnuWnwfkZiRIonLG4JYc3LV97lhuNKt01HPX66b2yHrTfrMqiCNdfYJOL4kB8LFB_wpNqP0wGlRnn1uK4aynNdPGxG0yR2iB7rcLIpAzBh3X7SoAz0dJ7VuyMvQWzsjev8PwzR3IM7bMmqhKe_4ZSi7W6sRlF3M2jMAWCXjqprvSIwSrrhytStF4vScy6QtGei8kKIdl1iiLgteNKB3vh2mTgv_LUgoxmGVenRYKOgnqtwst6I0JiTmhu3yIpbIehL2GR6UXbFKbyIuOFgpCXPupmWLKLwgqOpWARWI_I4k6WetsBqF8CSTW5rCURUOXPGBwLL3g5XB3QZAjW2LoLOYto1geVLq17Gg6cQVAX4-dRNFnEkygnmZppEJ4MANSKBNB0H1YRE1O_lBnjQZ8eh-ZBOqzyC-MS7REYq21OZmb2vv1Yt7wbuY1J4dAO6gDFZqDSUMqgIE0UsEvHUoLc27TfpOau1Yjxk_fskYxFexkVRhmKuAXClWdDbUaAPgj4USi4uGV2BJdMG_oQHvsONVI9srbAka3EH9rU-d-1y-Yt7QuRGZmHWjOlCoNvm0QjRWoxot9AFzQvEeRknRxnhkcopUqqZufxA2-D2dPTH7HpBd4W2s0n3gROeqbCGM4J6qUq6rAN4kaaw36QUVzH45C2X5Wy7vHeQ-O4n-KnRWalE8MY998xx4FweC9veYoCnqNaDYgwmayD-g6agOwkNqHj3ytHoNepUYTzdeq_Jq-2jvqjshuaW_jaQw4Idn0IQAixEVTTaWDIFpTOtYXS7OaMAwv6hH14STaAHn3jvn1rEnPEzXmnOe8vNyszwwgekXvqv8v_9019G99pRxWyY41pzFF5aH6HorEBUhFx7_CQ8DFp1obMQTepSBWeounHb9t_eu390EtILnHn7R4q9Lh98k88PQ9YBlDc0atNOtP_dcIWe6CmP5eidvpIobbo0kxS3lTa1SKEY96uD7L7_lWNKsHFqqysk50wNItjiz04bn9wr5QpcJ9UHVuFBEOB6-fmyLfz3zp2IxDk8ftR-xR04rOABGSojkzzOtS48Kz_3TrpfB_PXU8JBdaQTP7C6UFkWX-0k2d4XuN_EsNvk33rbHMI4qArHHNGfIQZqT8PzV4syZhi0mP68ksjUjM_L-OFj3bVPkQkMNBscOMvEmGAs5neI9syO-SzUPFcCr0vnGUlmMiMDhvORp6XR32FusAT6gVRt_v-Hv2aJqsi-_eSSsY6fnzl2iXjEmMqk=",
+      "status": null
+    },
+    {
+      "id": "msg_045664d404a74c47016ae1ec84334c87d081db739774fc1781",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the January 15 Aeroplan award via Hong Kong if reaching Bangkok sooner matters most: it arrives at 10:25 p.m. on January 16. The tradeoff is a daytime departure from San Francisco and an economy award whose reported cabin does not establish the cabin of each flight leg.\"},{\"k\":\"p\",\"r\":\"J8@2027-01-15T11:45-08:00/SFO>BKK/E>2027-01-16T22:25\",\"n\":\"Recommended: earlier arrival via Hong Kong\",\"v\":\"This single Aeroplan award is 65,000 points, with a displayed CAD 107.40 in taxes and fees; the quote scope is unknown, so it is not a confirmed all-in or per-traveler amount. It departs SFO at 11:45 a.m. January 15 and arrives BKK at 10:25 p.m. January 16, with one stop at HKG and a reported 70-minute connection. The award cabin is economy, but leg cabins are not specified. The search reports 9 seats; verify availability and current pricing before booking.\"},{\"k\":\"x\",\"r\":\"T29\"},{\"k\":\"t\",\"v\":\"The arrival comparison below is between the recommended itinerary and the later-departing Hong Kong option; it compares arrival times, not elapsed travel time.\"},{\"k\":\"a\",\"r\":\"J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50\",\"n\":\"Alternative: later departure via Hong Kong\",\"v\":\"This is also a 65,000-point Aeroplan economy award via HKG, with 9 reported seats, a 70-minute connection, and a displayed CAD 107.40 in taxes and fees (scope unknown). Its 11:15 p.m. departure may suit you better than leaving at 11:45 a.m., but it arrives at 9:50 a.m. January 17. It is only five minutes shorter in elapsed time than the recommendation, and gives up the earlier arrival.\"},{\"k\":\"a\",\"r\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"n\":\"Alternative: BR via Taipei\",\"v\":\"Consider this if you prefer the BR-operated award routing via TPE: it is 65,000 Aeroplan points, with a displayed CAD 116.50 in taxes and fees (scope unknown), one stop and a reported 4-hour-30-minute connection. It arrives at 1:25 a.m. January 17, three hours after the recommendation, and the search reports 1 seat. The award cabin is economy; individual leg cabins are not specified.\"},{\"k\":\"x\",\"r\":\"T23\"},{\"k\":\"b\",\"r\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"n\":\"Cash baseline via Singapore\",\"v\":\"The search shows a USD 440 cash fare for SFO–BKK on Singapore Airlines, with one stop at SIN, departing 9:40 a.m. January 15 and arriving 8:25 a.m. January 17 (31 hours 45 minutes elapsed). The quote scope is unknown, so do not treat it as a per-traveler or party total. This is a separate cash baseline, not a like-for-like total-cost comparison with the awards.\"},{\"k\":\"t\",\"v\":\"For the awards discussed, the reported cabin is economy and each is a single award with one connection; that does not confirm every flight leg’s cabin or establish ticket protection beyond the single-award record. Points and fees are reported separately, and the fee quote scope is unknown, so none of the award figures establishes an all-in cost. Search results are selected examples, not the full eligible inventory; provider coverage was partial, and availability and prices may change. Confirm current details with the booking program before deciding.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "medium",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50",
+                        "J17@2027-01-15T23:30-08:00/SFO>BKK/E>2027-01-17T11:30",
+                        "J25@2027-01-15T10:45-08:00/SFO>BKK/E>2027-01-17T15:00",
+                        "J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25",
+                        "J8@2027-01-15T11:45-08:00/SFO>BKK/E>2027-01-16T22:25"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C1@2027-01-15T09:40-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "x"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "T01",
+                        "T02",
+                        "T03",
+                        "T04",
+                        "T05",
+                        "T06",
+                        "T07",
+                        "T08",
+                        "T09",
+                        "T10",
+                        "T11",
+                        "T12",
+                        "T13",
+                        "T14",
+                        "T15",
+                        "T16",
+                        "T17",
+                        "T18",
+                        "T19",
+                        "T20",
+                        "T21",
+                        "T22",
+                        "T23",
+                        "T24",
+                        "T25",
+                        "T26",
+                        "T27",
+                        "T28",
+                        "T29",
+                        "T30"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 11726,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 11723
+    },
+    "output_tokens": 2295,
+    "output_tokens_details": {
+      "reasoning_tokens": 1439
+    },
+    "total_tokens": 14021
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793191047,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

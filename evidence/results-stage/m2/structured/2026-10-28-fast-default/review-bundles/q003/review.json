@@ -1,0 +1,35 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "If you’re open to positioning and want a business-cabin award, investigate this option first: it offers a clear cabin advantage over the cash benchmark, but depends on separate tickets and leaves key costs and availability unconfirmed.",
+      "canonical_reference": "evidence.json components f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2 (cash benchmark), 14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8 (award), and c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388 (positioning cash)",
+      "source_field": "components[benchmark].cabin.state/value; components[award].cabin.state/value; components[positioning].cabin.state/value",
+      "source_value": "The benchmark cabin is absent/null; the LAX–BKK award itinerary cabin is business; the SFO–LAX positioning flight cabin is absent/null.",
+      "explanation": "The source supports a business cabin label for the award itinerary, but it cannot establish a cabin advantage over the cash benchmark or for the full SFO–BKK journey because the comparator and positioning cabins are unreported. This is the answer's central reason to investigate the option first."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "If you’re open to positioning and want a business-cabin award, investigate this option first: it offers a clear cabin advantage over the cash benchmark, but depends on separate tickets and leaves key costs and availability unconfirmed.",
+      "canonical_reference": "evidence.json components f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+      "source_field": "cabin.state/value",
+      "source_value": "absent/null",
+      "explanation": "The answer otherwise connects a journey reference, cash baseline, and consolidated limitations, but its lead uses an unsupported comparative selling point. The composition rubric rejects unsupported sales prose."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "The returned cash itinerary is $452 USD, with two stops via Seattle and Seoul and a Bangkok arrival at 00:20—earlier than the award option’s 04:15 arrival.",
+      "canonical_reference": "evidence.json components f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2 and journeys 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "components[benchmark].legs[0].arrival.local_iso; journeys[selected].arrival.local_iso; journeys[selected].internal.status/reason_codes",
+      "source_value": "Cash benchmark arrives 2027-01-10 00:20 +07:00; conditional selected journey arrives 2027-01-10 04:15 +07:00 and has unknown award traveler support and positioning permission.",
+      "explanation": "The arrival comparison is accurate and the answer gives useful separate-ticket cautions, but after removing the unsupported cabin advantage it offers little supported comparative upside for the conditional lead. This is basic rather than decision-rich."
+    }
+  ],
+  "reasoning": "The exact SFO–LAX cash positioning plus LAX–IST–BKK Turkish award journey is conditional, with a 150-minute separate-ticket join, business cabin reported for the award itinerary only, 275,000 Turkish miles, unknown award fees, unknown award traveler support, and incomplete price. The cash benchmark is a separate two-stop itinerary quoted at USD 452 in major units with unknown scope, arriving at BKK at 00:20 +07:00 on January 10; the selected journey arrives at 04:15 +07:00 the same day. The positioning cash quote is USD 59 in major units with unknown scope. These claims and the caveats are supported. The benchmark and positioning cabins are absent, so the asserted cabin advantage is not supported. Despite that error, the answer gives an exact conditional lead to investigate and names the principal downside and checks, meeting U narrowly. Its central unsupported comparison fails H and M2, while its remaining comparative detail is basic. The source cannot establish that the benchmark is economy, that the full mixed journey is business, that the award has a seat for the traveler, or an all-in price."
+}

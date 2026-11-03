@@ -1,0 +1,26 @@
+# q042 independent new-draw review
+
+**Overall: PASS.** H, U, M2, C, K and P pass for this supplied answer/source boundary. This verdict comes from inspecting q042 anew, not from prior passes.
+
+The answer gives actual January 1/January 12 Alaska economy research directions and a conditional January 12 premium-economy direction. These date/cabin reasons are supported under Q3 without requiring a numerical pair or one lead per program. No balance, preference, complete itinerary, raw cross-program value advantage or guaranteed leg cabin is asserted. “The premium-economy option among these leads” is true of the three displayed leads; it is not presented as uniqueness across the full source.
+
+Exact source checks:
+
+- Alaska economy January 1 `0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b`: SFO–BKK, 42,500 points, USD 50.90 tax quote, 8 reported seats.
+- Alaska economy January 12 `c9b04ce51d19ceae5104b0fdc7e749c59a3e50be7f5867e82b8136aff7aeedd7`: SFO–BKK, 42,500 points, USD 44.50 tax quote, 5 reported seats.
+- Alaska premium economy January 12 `42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97`: SFO–BKK, 140,000 points, USD 50.90 tax quote, 9 reported seats.
+- Cash `456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630`: SFO–BKK, `kind=cash_itinerary`, `cash_amount.value=640`, `cash_currency.value=USD`, `price_scope=unknown`.
+
+Award citations are `evidence.json components[observation_id=…]` fields `origin`, `destination`, `departure_date` (2027), `program.value=alaska`, `cabin.value`, `points.value`, `taxes_fees.value`, `taxes_fees_unit=minor`, `tax_currency.value=USD`, `seats.value`, `price_scope=unknown`, and absent schedule instants/durations. All selected resolved components equal evidence exactly.
+
+Common date-only/scope limits appear once in the opening. Each caption gives its own date/cabin reason; repeated compact card uncertainty indicators are permitted, not repeated prose explanations. One visibly labeled “Cash comparison:” sentence is bound to USD640 and appears once, with no cash card. Official-site availability/price confirmation appears once. Three actual HTML flight-card articles are present.
+
+Both sidecars were independently checked rather than treated as verdicts. All 11 condition memberships match source: five optional award aliases share unknown tax scope and date-only schedules; C1 has separate unknown cash scope. All five selected-choice fact rows match canonical route/date/program/points/cabin/scope. `reported_leg_cabins=absent` agrees with empty canonical legs, and the author does not upgrade reported summary cabin into confirmed leg-by-leg cabin coverage. The delivered three-of-five subset is allowed. Null style audit agrees with empty source alternatives/assessments/style indexes; the premium-economy cabin is not fabricated Ranking Premium membership.
+
+Wider-source omission assessment: United/Aeroplan endpoint alternatives and later Alaska premium-economy dates were examined. January 17/18/23/24/25/26 premium-economy summaries quote 55,000 Alaska points and USD50.90 with one reported seat; e.g. `8481df166f5c373c7dd06fe625f39e17b1b38990c3050535a8aaafcaac562a93` has `departure_date=2027-01-17`, `points.value=55000`, `cabin.value=premium_economy`, `seats.value=1`, `price_scope=unknown`. Those are useful possible follow-ups. The current answer conditions its January1/12 checks on suitability and claims neither exhaustive nor best/cheapest selection. Date differences remain material. No omission failure or quota is imposed; this pass does not certify optimal selection.
+
+Full-source review covered all 383 components, 378 award-summary leads and five cash observations, every endpoint/program/cabin/date/point/tax/scope group, request, all lead gaps and empty Ranking landscape; all endpoint premium-economy observations were additionally inspected by ID/date/quote/seats. All source identities and 14 common factual fields match evidence. Award/lead and cash reference populations remain complete. Interactive explorer was not supplied/tested; only retained data/reference preservation is verified.
+
+Blindness disclosure: I previously reviewed q006/q009/q012/q015/q018/q024/q027/q030/q033/q036 on this source and remember their answers/outcomes. This is not a fresh-source review. During preparation, an agent-status listing exposed generic implementation/archive-verification status, not q042 semantic grades or author settings. The actual assessment read only q042's nine artifacts and the already-read frozen rubric; AGENTS.md was read previously. Current q042 profile/model settings and mapping, other prompts, timing, token metrics, checker verdicts, other current semantic grades, campaign summaries/index and docs/reviews remained unread. No runtime code inspected. HTML content/markup reviewed without browser rendering.
+
+Files written: `q042/review.json` and `q042/review.md`. JSON/six axes, 11 condition memberships, five selected-fact rows, audit normalization, three cards and one visible bound cash sentence validated. No live calls, product/runtime edits, external research or delegation. No population, provider-fresh, latency, availability or bookability qualification follows. No escalation recommended.

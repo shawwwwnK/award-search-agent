@@ -1,0 +1,10 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [],
+  "reasoning": "The displayed SFO-HKG-BKK Aeroplan economy journeys match canonical evidence: the earlier-departing journey arrives 2027-01-16 22:25 +07:00, reports 9 seats, a 70-minute HKG award connection, 65000 points and CAD 107.40 observed taxes of unknown scope, while the late-January-15-departing journey arrives 2027-01-17 09:50 +07:00 with the same observed route, seats, connection wait, points and taxes. Both have unknown leg cabins. The rendered T08 arrival comparison uses the correct SFO-BKK endpoints and offset-aware arrival instants: 685 minutes, or 11 hours 25 minutes, with the first journey earlier. Canonical elapsed values are 1180 and 1175 minutes, making the later-arriving journey five minutes shorter. The separate SFO-LAX-NRT-BKK cash observation reports United and ANA, two stops, USD 456, unknown price scope, one returned traveler, and 1379 minutes (22h 59m). The answer offers an exact, defensible earlier-arrival lead, its earlier-departure and unknown-scope downsides, a meaningful later-departure alternative, cash context, and consolidated booking/freshness limits. Its comparative advice is expressly scoped to the shown choices. Source-selection limitation: document.selection.journey_ids names only the first journey although the second journey appears in a reference block and in the rendered answer; the second is still a canonical admitted journey, so no visible factual contradiction follows."
+}

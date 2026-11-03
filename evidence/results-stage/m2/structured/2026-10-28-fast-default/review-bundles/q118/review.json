@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "If you want to investigate an award first, choose by the program you prefer; the point amounts are not comparable across programs.",
+      "canonical_reference": "evidence.json components cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044 and 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "source_field": "departure_date, cabin, points, money.raw_amount, money.scope, seats, returned_travelers, legs",
+      "source_value": "Both January 1 economy summaries have no flight schedules or returned traveler count; United reports 60,500 miles, USD 28.20 taxes, and 9 seats; Alaska reports 42,500 miles, USD 50.90 taxes, and 8 seats; both quote scopes are unknown.",
+      "explanation": "The displayed leads lack a supported date, schedule, or cabin tradeoff. The answer's only proposed reason to choose one program over the other is an unspecified reader preference. Its accurate USD 22.70 raw fee contrast does not supply an authored offsetting gain for the Alaska lead or establish comparable savings, so comparative depth is basic."
+    }
+  ],
+  "reasoning": "No complete journey exists in the source. The two correctly identified January 1 economy award summaries have the stated points, fee quotes, and observed seats, with no flight schedule, returned traveler count, or known quote scope. The USD 22.70 raw fee difference is arithmetically correct and appropriately disclaimed. The one-stop Cathay Pacific USD 640 cash result is a separate baseline with one returned traveler and unknown quote scope. Source coverage shows omitted SFO-BKK detail work and partial TPE relationship work. The answer truthfully explains the lack of bookable awards and gives usable leads and limitations, but the lead comparison remains basic."
+}

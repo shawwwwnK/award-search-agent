@@ -1,0 +1,65 @@
+{
+  "bundle": "q041",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "familiarity": "Prior source/code/profile/review familiarity disclosed. This draw was independently graded; current profile mapping,metrics,checker verdicts and other current grades were not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Same-program reported point figures,103-minute elapsed and275-minute arrival differences,connection waits,lead identity and cash/tax units match canonical source. Transfer wording is imprecise but source cards make the LAX wait interpretation clear."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Useful economy lower reported points versus business cabin/earlier-shorter journey,with conditional booking checks and an Alaska-access research option."
+    },
+    "M2": {
+      "verdict": "pass",
+      "reason": "Connected comparison with individual reasons,shared journey conditions once,and separate Alaska schedule/scope context once. The lead caption supplies a program-access reason rather than repeating its gaps."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Explains a supported same-program reported-points versus cabin/time choice and different connection waits; conditional Alaska access supplies a research reason without cross-program valuation."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "True time and premium overlap remains visible alongside economy time; optional lead subset does not erase a source category or imply a cost winner."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two exact source-resolved journey cards plus an actual research card carry facts; one brief USD452 source-bound cash sentence appears inline."
+    }
+  },
+  "findings": [
+    {
+      "severity": "minor_nonblocking",
+      "axis": "H",
+      "claim": "Its SFO\u2013LAX transfer is2h14,versus5h01 for economy.",
+      "evidence": [
+        "document.json blocks[2].text",
+        "evidence.json journeys[candidate_id=fff964eebddab3b7f802bd5d74ff1807953c3e3402dcdff3c6325ae11510fcc9].connections[airport=LAX].wait_minutes=134",
+        "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669].connections[airport=LAX].wait_minutes=301"
+      ],
+      "assessment": "These are LAX connection waits after positioning,not SFO-LAX flight durations. Prefer LAX connection buffer. In the supplied answer/card context transfer can reasonably mean that wait; I do not interpret it as an unambiguous false flight-duration claim."
+    }
+  ],
+  "evidence": [
+    "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669]:Turkish economy110000,elapsed1803,arrival2027-01-10T08:50:00+07:00,LAX301/IST60min,styles=[time].",
+    "evidence.json journeys[candidate_id=fff964eebddab3b7f802bd5d74ff1807953c3e3402dcdff3c6325ae11510fcc9]:Turkish business275000,elapsed1700,arrival2027-01-10T04:15:00+07:00,LAX134/IST140min,styles=[time,premium].1803-1700=103min=1h43;arrival gap275min=4h35. Award point/price scope unknown;comparison is of reported numerals,not total economic cost.",
+    "Both journey internal.reason_codes include separate_ticket_obligation,positioning_permission_unknown,award_travelers_unknown;tax amounts and scopes unknown;cash positioning quotes109/59majorUSD unknownscope.",
+    "evidence.json components[observation_id=42dd038be15aeed81be50301b92baa2b22ac2072d02c32e7f54c43089d34a7f4]:Alaska economy SFO-BKK2027-01-08,42500points,6reportedseats,5090minorUSD taxes unknownscope;unreported legs with null flight instants;lead.missing_information=itinerary_schedule_incomplete.",
+    "evidence.json components[observation_id=f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2].money:cash_fare452majorUSD,scopeunknown;one cash_sentence.",
+    "selection-audit.json raw timeJ18/premiumJ77 witnesses match actual source members and visible cards. Full232journeys/167leads,116time,116premium,58overlaps,0cost/possiblecost;factored cost assessments undetermined. All full journey groups,research directions and category/cost indexes inspected.",
+    "condition-applicability.json ten rows with exact alias-member mappings independently verified. selected-choice-facts.json five rows independently verified for source program/cabin/points/scope/componentkind and all journey connection kinds/waits. Three optional leads in the input become one conditional-program lead; no program/card quota imposed."
+  ],
+  "verification": [
+    "Read frozen rubric,complete canonical evidence/source request,full populations,style audit,choice/condition sidecars,reference maps,document,resolved and answer Markdown.",
+    "Exact equality of all displayed journey/award/cash/lead/benchmark attachments;temporal arithmetic,source witnesses,condition rows and choice-table records independently checked."
+  ],
+  "uncertainty": [
+    "Complete award itineraries is read as complete award-led journey schedules,not guaranteed bookable single-ticket awards;both cards and shared paragraph explicitly disclose separate positioning.",
+    "Lower-point wording is read as a comparison of reported same-program numbers with unknown quote scope,not a per-traveler or all-in cost claim.",
+    "Transfer wording can be improved as noted;the correct LAX wait is explicit in both cards.",
+    "Saved-source review does not establish live availability,population reliability or global optimality;browser layout not tested."
+  ],
+  "escalation": "not recommended"
+}

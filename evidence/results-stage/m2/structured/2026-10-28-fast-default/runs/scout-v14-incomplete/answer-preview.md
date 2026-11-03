@@ -1,0 +1,21 @@
+The search results show no selectable complete award journey, so none of the award leads is ready to book as an itinerary. For a first verification, I’d check the January 1 Alaska lead: it matches the start of your travel window and reports 8 seats. The tradeoff is that it gives only a date—not departure time, arrival time, or connection details—so it is not yet possible to assess whether the trip works for you. The search was partial, and availability and prices need confirmation with the booking provider.
+
+Reports 42,500 Alaska points, economy, 8 seats, and taxes of USD 50.90 (quote scope unknown). The carriers listed are AS and JX, but the result does not show the flights or connection pattern. Treat the seat count and quote as search-result details to verify, not current availability or a confirmed total.
+
+[Display: Alaska lead · January 1; lead; 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]
+
+Two other leads change the verification choice, but neither fills in the missing itinerary details. The Aeroplan result is also for January 1 and lists BR; United is for January 9 and lists several possible carriers. Their points belong to different programs, so the point amounts are not directly comparable. Across all three leads, economy is reported at the itinerary-summary level only; individual leg cabins and schedules are absent. Each fee quote has unknown scope, so it cannot be treated as a per-traveler, party, or all-in amount.
+
+Reports 65,000 Aeroplan points, economy, 2 seats, and taxes of CAD 116.50 (quote scope unknown), with BR listed as carrier. It shares the January 1 date with the Alaska lead, but its schedule and actual connection pattern are not shown. Verify the itinerary and current award details before deciding.
+
+[Display: Aeroplan lead · January 1; lead; 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]
+
+Reports 55,000 United miles, economy, 9 seats, and taxes of USD 16.20 (quote scope unknown). The listed carriers are B6, BR, CA, ET, SQ, UA, and ZH; the result does not identify the actual flights or connections. It is another date within January, but without a schedule you cannot judge its timing or routing.
+
+[Display: United lead · January 9; lead; a8dad3774d9e11df4c6a4a282520a7b66bca6c5736c576e527b48257efdfe6ae]
+
+For a paid-fare reference, the selected cash itinerary is timed and shows one stop via Hong Kong. Its quote is USD 640.00, but the price scope is unknown; do not assume it is a per-traveler or party total, or compare it as a like-for-like total with the award fee quotes. It is a useful routing and timing baseline, not proof that an award lead is bookable or protected.
+
+Cathay Pacific itinerary from SFO at 10:55 p.m. local time on January 1, one stop via HKG, arriving BKK at 10:35 a.m. local time on January 4; reported duration 44 hours 40 minutes. Fare quote: USD 640.00, with unknown price scope.
+
+[Display: Cash baseline · January 1; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]

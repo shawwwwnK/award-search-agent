@@ -1,0 +1,19 @@
+There are no complete award itineraries among these selected search results, so I can’t recommend a bookable award route yet. The useful next step is to check the date-only award leads against current schedules and availability. The main tradeoff is between a lower reported United points quote on January 2 and a still lower one on January 3; neither lead includes a schedule.
+
+This SFO–BKK economy award summary reports 55,000 United miles, 9 seats, and USD 24.50 in award taxes. It lists BR, ET, SQ, UA, and ZH, but gives no flight times or connections. Compared with the January 3 United lead, it reports 5,500 fewer United miles but USD 5.50 more in taxes; both quotes have unknown scope, so this is only a comparison of reported amounts, not trip totals. Check this date first if using fewer United miles matters more than the reported tax quote.
+
+[Display: United award lead · January 2; lead; f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e]
+
+This SFO–BKK economy award summary reports 60,500 United miles, 9 seats, and USD 19.00 in award taxes. It lists BR, CA, SQ, UA, and ZH, with no schedule or connection details. It has the lower reported tax quote of the two United leads, but costs 5,500 more United miles than the January 2 lead. Check it first if the lower reported tax amount is the priority.
+
+[Display: United award lead · January 3; lead; a7af2ffba298ae7fd372cdc19bbb1276d9a59968de8683e2666d0259af2e0a1b]
+
+This SFO–BKK economy award summary reports 42,500 Alaska miles, 8 seats, and USD 50.90 in award taxes, with AS and JX listed as carriers. It provides only a date, not flight times or connections. Its miles are not directly comparable with the United figures because the programs differ. The reported tax quote is higher than either United lead, but all award quote scopes are unknown, so that does not establish a higher total trip cost.
+
+[Display: Alaska award lead · January 1; lead; 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]
+
+The cash search shows a Cathay Pacific itinerary from SFO via HKG to BKK, departing January 1 at 10:55 p.m. and arriving January 4 at 10:35 a.m. local time. The reported cash-fare quote is USD 640.00, with unknown scope; it is a separate cash baseline, not a like-for-like total against the award-tax quotes.
+
+[Display: Cash baseline · January 1; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]
+
+The requested party size is one, but the award leads do not report returned traveler counts, so award support for that traveler remains unverified. Seat figures are reported counts, not confirmation of current availability. The cash itinerary reports one returned traveler, which does not verify award availability. Search coverage was partial, and some results may not be real-time; confirm schedules, award availability, and current prices with the booking providers before relying on any option.

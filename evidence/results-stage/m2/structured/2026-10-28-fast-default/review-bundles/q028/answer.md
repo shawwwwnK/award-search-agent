@@ -1,0 +1,19 @@
+There are no complete eligible award journeys in these search results, so none is ready to book or compare as a full itinerary. The award leads are all date-only summaries for January 1, not timed itineraries; I’d first verify a full schedule and current availability with the provider. The request was for one traveler, but that does not establish the scope of any quoted points or fees.
+
+Worth checking first: it reports 9 seats and USD 28.20 in taxes, with both quote scopes unknown. The tradeoff is that it gives no departure or arrival times, and the carrier list does not establish the flight sequence or connections.
+
+[Display: United lead; lead; cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]
+
+A useful alternative to check: it reports 8 seats and USD 50.90 in taxes, also with unknown quote scopes. It is likewise only a date-level summary, so the actual timing and routing remain unknown; its point total is from a different program and should not be treated as directly comparable with United’s.
+
+[Display: Alaska lead; lead; 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]
+
+Another provider to verify: it reports 2 seats and CAD 116.50 in taxes, with unknown quote scopes. It names BR, but supplies no timed itinerary or leg details, so that does not establish the routing or flight schedule.
+
+[Display: Aeroplan lead; lead; 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]
+
+The search returned a USD 640 cash itinerary quote for January 1, arriving January 4 at 10:35 a.m. in Bangkok, with one stop via HKG on Cathay Pacific. Its price scope is unknown, so use it only as a cash-search baseline—not as a per-person or all-in comparison with the award leads.
+
+[Display: Cash reference; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]
+
+Availability and current prices need confirmation. The search coverage was partial, including omitted detail results for SFO–BKK and partial results for SFO–TPE/TPE–BKK, so check those routes too if you are flexible about positioning; the results do not establish a complete alternative itinerary or protected connection.

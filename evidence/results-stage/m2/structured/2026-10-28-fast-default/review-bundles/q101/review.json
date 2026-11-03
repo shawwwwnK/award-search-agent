@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Consider checking it if the Alaska program or those carriers are preferable to the United lead.",
+      "canonical_reference": "award observations 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b and cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "source_field": "program, carriers, points, taxes_fees, tax_currency, price_scope, seats, departure, arrival, legs",
+      "source_value": "Alaska: 42,500 miles, USD 50.90 reported taxes, 8 seats, AS/JX; United: 60,500 miles, USD 28.20 reported taxes, 9 seats, CA/UA/ZH. Both have unknown quote scope and no schedule or legs.",
+      "explanation": "The conditional program or carrier preference is allowed and factually grounded. The answer develops United's lower raw USD quote and higher reported seat count, but gives Alaska no explained offsetting travel or usable cost gain; its lower number of miles belongs to a different program and is correctly said to be incomparable. The Aeroplan option is likewise an optional program or carrier check without a developed gain. The displayed choice remains basic rather than decision-rich."
+    }
+  ],
+  "reasoning": "No complete award journey exists in the canonical source. The three cited January 1 economy summaries have the stated programs, 60,500/42,500/65,000 points, 9/8/2 observed seats, and USD 28.20/USD 50.90/CAD 116.50 taxes respectively. Their returned traveler counts, schedules, leg cabins, and price scopes are unconfirmed, which the answer discloses. The separate Cathay Pacific cash baseline has SFO-HKG-BKK, one stop, January 1 22:55 -08:00 departure, January 4 10:35 +07:00 arrival, 2,680 minutes elapsed, and USD 640 with unknown scope. Partial provider coverage is disclosed. The answer gives a defensible conditional next lead, individual woven explanations, cash context, and consolidated limits. Comparative depth is basic because alternative gains are little more than optional program/carrier fit, not a developed supported tradeoff."
+}

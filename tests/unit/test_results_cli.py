@@ -49,7 +49,7 @@ def test_offline_author_and_exact_replay(tmp_path: Path) -> None:
 def test_measure_records_complete_input_without_authoring(tmp_path: Path) -> None:
     config, _, output = _inputs(tmp_path)
     assert results.main(["measure", "--projection", str(SOURCE), "--config", str(config),
-                         "--output", str(output)]) == 0
+                         "--output", str(output), "--legacy"]) == 0
     measurement = json.loads(output.read_bytes())
     assert measurement["alternatives"] == 123
     assert measurement["input_bytes"] > 1000
@@ -84,7 +84,7 @@ def test_cli_rechecks_inputs_before_atomic_publish(tmp_path: Path,
     monkeypatch.setattr(results, "prepare_results", changing_input)
     with pytest.raises(ValueError, match="changed during processing"):
         results.main(["measure", "--projection", str(SOURCE), "--config", str(config),
-                      "--output", str(output)])
+                      "--output", str(output), "--legacy"])
     assert not output.exists()
 
 

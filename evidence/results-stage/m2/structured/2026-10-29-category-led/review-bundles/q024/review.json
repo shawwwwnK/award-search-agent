@@ -1,0 +1,295 @@
+{
+  "bundle": "q024",
+  "review_type": "current_profile_timing_blind_source_review_with_disclosed_prior_familiarity",
+  "rubric": "Latest reviewer-instructions.md with Q3 and assigned no cross-program numerical value ranking; optional useful subset allowed",
+  "overall": "fail",
+  "axes": {
+    "H": "fail",
+    "U": "pass",
+    "M2": "pass",
+    "C": "fail",
+    "K": "pass",
+    "P": "fail"
+  },
+  "axis_reasons": {
+    "H": "Raw displayed facts match source, but the opening/caption uses a lower point count across Alaska and United as a research advantage unsupported by common program value or traveler valuation. This is a misleading comparative rationale, not an arithmetic mismatch. USD tax-quote amounts are correctly compared as reported quotes and the answer disclaims a lower full-trip cost.",
+    "U": "At the limited no-complete threshold, the named program/date cards and conditional booking access still identify usable checks; official-site availability/current-price confirmation is explicit. This does not excuse the H/C comparative problem.",
+    "M2": "Composition is connected: opening, two lead reasons/cards, one benchmark-shaped sentence and one shared gap paragraph with availability guidance. Common schedule/scope limitations are consolidated; benefit and trip-cost caveat restatement is stylistically repetitive but not an independent material M2 failure. Content failures are assigned to H/C/P.",
+    "C": "Conditional program access would independently satisfy Q3. The actual explanation adds an unsupported cross-program lower-points advantage, making the comparison misleading. No same-program pair, extra lead or numerical tradeoff was required.",
+    "K": "Source has no complete eligible journeys, assessments or style memberships; new style_audit has null references, normalized landscape is empty, and answer invents none.",
+    "P": "Actual source-resolved cards and one bound cash sentence exist and full references remain intact, but the visible sentence does not disclose that USD686 is a cash benchmark. The document label is not rendered, so the full-cash context requirement is not met for a reader."
+  },
+  "findings": [
+    {
+      "id": "q024-HC-1",
+      "axes": [
+        "H",
+        "C"
+      ],
+      "severity": "material",
+      "claim": "Alaska is presented as worth checking because of its lower points quote in a contrast with United, turning distinct-program raw point counts into a comparative advantage.",
+      "answer_fields": [
+        "document.json blocks[0].text: The Alaska lead may be worth checking if its lower points quote fits your program access",
+        "document.json blocks[1].text: A lower points quote makes this worth a conditional check if you can book through Alaska."
+      ],
+      "source_fields": [
+        "evidence.json components[observation_id=0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b].program.value=alaska; .points.value=42500; .price_scope=unknown",
+        "evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044].program.value=united; .points.value=60500; .price_scope=unknown",
+        "evidence.json source.view.alternatives=[]; .assessments=[]; .comparison_pool_ids=[]; .request contains no program balance or valuation preference"
+      ],
+      "interpretation": "The displayed numbers are accurate and 42500 is numerically below 60500. The failure is using that raw count across two program currencies as the reason the Alaska lead is preferable to investigate. Program-access conditionality alone is valid under Q3 and could stand without the lower-points advantage. The trip-cost caveat addresses taxes/total cost but does not explain that different programs points are not an interchangeable value scale."
+    },
+    {
+      "id": "q024-P-1",
+      "axes": [
+        "P"
+      ],
+      "severity": "material",
+      "claim": "The sole USD686 benchmark sentence never identifies the quote as cash in the delivered answer; its Cash benchmark label is present only in the structured document and not displayed.",
+      "answer_fields": [
+        "document.json blocks[3]: reference_kind=benchmark, label=Cash benchmark, text=For SFO to BKK, the source quotes USD 686.00; the quote scope is unknown.",
+        "resolved.json blocks[3]: kind=cash_sentence, label=null",
+        "answer.md / answer.html: bare source-quotes sentence without cash/fare/benchmark identification"
+      ],
+      "source_fields": [
+        "evidence.json components[observation_id=29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d].kind=cash_itinerary; .cash_amount.value=686; .cash_currency.value=USD; .price_scope=unknown"
+      ],
+      "interpretation": "The amount, route and unknown scope are correct, and the bound sentence occurs once. Nevertheless the traveler is not told this is the separate full-cash reference rather than another award fee/quote; hidden binding metadata does not supply visible comparison meaning."
+    }
+  ],
+  "source_truth_checks": [
+    {
+      "source_path": "evidence.json components[observation_id=0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]",
+      "resolved_kind": "lead_card",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-01",
+        "program": {
+          "state": "value",
+          "value": "alaska",
+          "source_field": "Source"
+        },
+        "cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "YAvailable"
+        },
+        "points": {
+          "state": "value",
+          "value": 42500,
+          "source_field": "YMileageCost"
+        },
+        "taxes_fees": {
+          "state": "value",
+          "value": 5090,
+          "source_field": "YTotalTaxes"
+        },
+        "taxes_fees_unit": "minor",
+        "tax_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "TaxesCurrency"
+        },
+        "seats": {
+          "state": "value",
+          "value": 8,
+          "source_field": "YRemainingSeats"
+        },
+        "carriers": [
+          "AS",
+          "JX"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cash_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        }
+      }
+    },
+    {
+      "source_path": "evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]",
+      "resolved_kind": "lead_card",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-01",
+        "program": {
+          "state": "value",
+          "value": "united",
+          "source_field": "Source"
+        },
+        "cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "YAvailable"
+        },
+        "points": {
+          "state": "value",
+          "value": 60500,
+          "source_field": "YMileageCost"
+        },
+        "taxes_fees": {
+          "state": "value",
+          "value": 2820,
+          "source_field": "YTotalTaxes"
+        },
+        "taxes_fees_unit": "minor",
+        "tax_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "TaxesCurrency"
+        },
+        "seats": {
+          "state": "value",
+          "value": 9,
+          "source_field": "YRemainingSeats"
+        },
+        "carriers": [
+          "CA",
+          "UA",
+          "ZH"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cash_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        }
+      }
+    },
+    {
+      "source_path": "evidence.json components[observation_id=29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d]",
+      "resolved_kind": "cash_sentence",
+      "fields": {
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-01",
+        "program": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cabin": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "points": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "taxes_fees": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "taxes_fees_unit": "unknown",
+        "tax_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "seats": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "carriers": [
+          "EVA Air"
+        ],
+        "price_scope": "unknown",
+        "cash_amount": {
+          "state": "value",
+          "value": 686,
+          "source_field": "price"
+        },
+        "cash_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "currency"
+        }
+      }
+    }
+  ],
+  "audit_observation": {
+    "free_choice_count": 6,
+    "optional_lead_pool_count": 5,
+    "delivered_lead_count": 2,
+    "style_audit": {
+      "time": {
+        "r": null,
+        "omission_reason": null
+      },
+      "cost": {
+        "r": null,
+        "omission_reason": null
+      },
+      "premium": {
+        "r": null,
+        "omission_reason": null
+      }
+    },
+    "detail": "A1/A2/A3/A110/A123 normalize to the five audit lead IDs; C2 normalizes to the selected USD686 cash observation. Delivered document/cards use A3 and A2 only. Optional subset is allowed; no omission or quota failure assigned. Null style audit references agree with empty source categories."
+  },
+  "full_source_examination": {
+    "source_digest": "6397a1ee6673820f4c2fb38bc10d81a3d67e42b766770ce40bac4182a1aabbd6",
+    "components": 383,
+    "award_summary_leads": 378,
+    "cash_observations": 5,
+    "complete_journeys": 0,
+    "method": "Parsed full source/evidence; examined request, empty Ranking landscape, every endpoint/program/cabin/date/points/tax/scope group, all lead gaps and all five cash records. Verified all 383 source/component identities and 14 common factual fields, complete reference populations, exact selected resolved-component equality and free-choice normalization."
+  },
+  "blind_scope": {
+    "read_this_review": [
+      "latest campaign reviewer-instructions.md",
+      "q024/answer.md",
+      "q024/answer.html",
+      "q024/document.json",
+      "q024/resolved.json",
+      "q024/evidence.json",
+      "q024/references.json",
+      "q024/selection-audit.json including free_choices/style_audit/normalized selected IDs"
+    ],
+    "prior_familiarity": "AGENTS.md read previously; reviewer has reviewed q006, q009, q012, q015 and q018 against this same source and remembers those answers/outcomes. Not a fresh source-blind review; no runtime code read for these assignments.",
+    "withheld": [
+      "current candidate/profile/model settings",
+      "prompts",
+      "generation timing",
+      "token metrics",
+      "current checker verdicts",
+      "other current grades",
+      "campaign run summaries/index",
+      "docs/reviews"
+    ],
+    "limits": "HTML content/markup inspected without browser rendering. Source retrieval timestamps visible only as evidence. No live calls, product/runtime edits, external research or delegation."
+  },
+  "verification": [
+    "All seven assigned artifacts read/parsed; latest rubric read.",
+    "383 source/component IDs and 14 common factual fields match.",
+    "378 award references equal award-summary and lead IDs; five cash references equal benchmark IDs.",
+    "Selected resolved components exactly equal evidence.",
+    "Free choices normalize correctly; two delivered leads form a subset of five optional pool leads.",
+    "One bound cash sentence occurs once in each artifact; hidden Cash benchmark label is absent from visible HTML/Markdown.",
+    "Written review JSON reparsed and six axes validated."
+  ],
+  "uncertainties": [
+    "H/C finding concerns the reader-facing comparative inference; literal quote numbers are accurate and the phrase never explicitly says better economic value. The reason-giving lower-points phrasing in the two-program contrast is the basis for failure.",
+    "The USD tax-quote comparison is not itself failed: both are USD quoted amounts, with no complete-cost claim.",
+    "Full explorer data/reference preservation verified; interactive UI not supplied or tested.",
+    "Prior repeated-source familiarity disclosed; no population, provider-fresh, latency or bookability claim follows."
+  ],
+  "escalation_recommended": false
+}

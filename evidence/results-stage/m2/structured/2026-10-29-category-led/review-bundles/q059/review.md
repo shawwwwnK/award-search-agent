@@ -1,0 +1,19 @@
+# q059 independent source review
+
+**H: qualified FAIL. M2: FAIL. U/C/K/P: PASS. Overall: FAIL.**
+
+Prior source/code/profile-development familiarity is disclosed. This draw was judged afresh without current metrics, checker verdicts, profile mapping or other current grades. It uses repeated historical evidence, not a provider-fresh holdout.
+
+The shared paragraph says “clarify the points and tax amounts and their scope” and concludes “these details are unknown” (`document.json blocks[3]`). That conflates reported point amounts with their unknown scope and unknown taxes. Economy J18, `010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669`, has `award_points.state=value,value=110000`; business J63, `0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee`, has `award_points.state=value,value=275000`. Both have unknown `money.points_scope`, unknown `money.award_taxes.scope` and unknown tax raw amounts. The underlying award components `2d28b71ded0f2b29aede0189ee04bb205e60e8c8ee8fc8774753c38658c2b59d` and `14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8` preserve the same distinctions.
+
+This H finding is qualified: “clarify” could charitably mean confirm the final payable amount, and the earlier caption correctly calls the numbers reported quotes. Nevertheless, the delivered blanket statement calls the points amounts unknown without saying final/per-person/all-in. Unknown scope must not turn known source quotes into missing amounts. The source values, quoted comparison and card arithmetic themselves are correct.
+
+M2 also fails consolidation. The economy caption already says “both have unknown quote scope” (`blocks[1]`), appropriately qualifying the same-program comparison. The shared paragraph repeats that same points/tax-scope uncertainty for both options. The exact source has one shared award-scope condition per journey, visible in the seven-row applicability sidecar. Distinct unknown tax **amount**, party support and separate-ticket obligations are not duplicates and are not penalized; compact card indicators are also allowed. The repeated authored scope warning is the issue, not its valid placement beside a comparison.
+
+Own choice reasons otherwise work. The economy caption gives the lower reported Turkish quote while the business caption owns business cabin and earlier arrival. Actual arrival times January10 08:50 and04:15 differ by275 minutes/4h35. The opening says different cabin/timing tradeoffs without assigning an exclusive benefit falsely. U and C pass: no cross-program value comparison, cheapest-overall conclusion or unsupported per-person total is claimed. Reported scoped same-program comparison is valid.
+
+Full-source review covered232 journeys,8 groups,247 components and167 leads, including all eligible groups and wider research directions. Indexes contain116 time,116 premium and58 overlap members, with zero cost/possible-cost members. Raw indexed witnesses point to J18 and J63, both actually shown; J63 also retains its time overlap. Other useful variants exist, but no fixed pair/card count or global optimality requirement is imposed. K passes.
+
+Both resolved cards and their award/cash components equal canonical source objects. Choice sidecar program/cabin/points/scopes and all connection records match source (economy LAX301/IST60 minutes; business LAX150/IST140). Benchmark `f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2` reports USD452 major units and unknown scope and is a canonical cash reference. It appears once in a brief inline sentence, without a cash card. P passes.
+
+No live calls, product edits or browser-rendering test. No additional escalation recommended; the qualified H interpretation is explicitly retained for integration. This review does not establish broader reliability, availability, latency or default qualification.

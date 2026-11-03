@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "For a later departure and slightly earlier arrival than the late-night option below, this choice leaves SFO 11 hours 30 minutes earlier and reaches Bangkok 11 hours 25 minutes earlier. Its elapsed time is 5 minutes longer.",
+      "canonical_reference": "J8 cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a; J14 eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+      "source_field": "evidence.json journeys[].departure.local_iso; comparison-registry.json facts for J8 versus J14",
+      "source_value": "J8 departs 2027-01-15T11:45:00-08:00; J14 departs 2027-01-15T23:15:00-08:00; J8 departs 11h 30m earlier, not later",
+      "explanation": "In context 'this choice' is the recommended J8 above this sentence, and the late-night option is J14 below. The sentence contradicts both those exact endpoints and its own '11 hours 30 minutes earlier' clause. The arrival and five-minute elapsed differences are correct."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "[Display: Alternative: depart later, arrive the same night; journey; c559213003ec943dd700f59c7813a457b52988433ba469978634ffb2a6a72954]",
+      "canonical_reference": "J16 c559213003ec943dd700f59c7813a457b52988433ba469978634ffb2a6a72954; J8 cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+      "source_field": "evidence.json journeys[].departure.local_iso, arrival.local_iso, elapsed_minutes, award_points.value, money.award_taxes.raw_amount.value; components[].seats.value; comparison-registry.json T01-T03",
+      "source_value": "J16 leaves 15 minutes later, arrives 75 minutes later, takes 60 minutes longer, uses the same 65000 points, quotes CAD 116.50 versus J8's CAD 107.40, and reports 2 versus 9 seats; both arrive the same night",
+      "explanation": "The noon alternative has only a 15-minute later departure and no explained offsetting gain. The late-night J14 does give a meaningful schedule tradeoff, so comparative advice is present, but the overall treatment is basic rather than decision-rich."
+    }
+  ],
+  "reasoning": "Recommended J8 is an admitted single Aeroplan award that arrives earliest among the shown awards, with 9 observed seats. Its HKG stop, 70-minute connection, economy award cabin, 65000 points, CAD 107.40 unknown-scope fees, and 19h 40m duration are supported; unknown individual-leg cabins are disclosed. J14's 11h 30m later SFO departure for 11h 25m later BKK arrival at the same quoted points and fees is a useful local comparison. The prose inverts its departure direction, an H failure. The J16 noon alternative is effectively worse aside from a 15-minute later departure, which is not explained as a meaningful gain, so C is basic. The exact recommendation and downside still support U; woven references, separate accurately scoped one-stop SIN cash baseline, and consolidated limitations support M2. No full-inventory optimum is assumed and no unresolved source uncertainty changes the verdict."
+}

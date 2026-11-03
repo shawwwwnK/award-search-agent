@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "This is another SFO–BKK economy lead for January 1, reporting 42,500 Alaska miles, USD 50.90 in award taxes, and 8 seats.",
+      "canonical_reference": "A3 compared with A2",
+      "source_field": "components[*].money.quoted_usd; components[*].seats.value; components[*].program.value",
+      "source_value": "A3: Alaska, USD 50.90, 8 reported seats; A2: United, USD 28.20, 9 reported seats; both award-tax quote scopes unknown",
+      "explanation": "The alternative has a higher raw USD award-tax quote and fewer reported seats. Its separate mileage program may matter to a traveler with relevant balances, but the answer identifies no supported gain beyond that possible preference. This gives a basic comparison rather than a meaningful gain-and-loss tradeoff."
+    }
+  ],
+  "reasoning": "The canonical source has zero complete journeys and provider_status partial. A2 and A3 are date-only award summaries for January 1; their program, cabin, points, raw USD award-tax quotes, seat counts, unknown quote scope, and absent returned-traveler evidence match the answer. C2 is a separate one-stop EVA Air cash itinerary with USD 686 of unknown scope, 1,930 minutes elapsed, and the stated offset-aware local dates and times. The answer gives a conditional first check, an alternative, a cash baseline, and consolidated limitations. The request window is January 1–31, and the source contains other leads across that window; their omission alone is not a hard factual error or a strongest-representative requirement. The comparative depth remains basic because the displayed alternative offers no established offsetting gain."
+}

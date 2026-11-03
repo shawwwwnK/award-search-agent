@@ -1,0 +1,95 @@
+{
+  "case": "admitted",
+  "profile": "focused-v18",
+  "mode": "live",
+  "comparison_registry_digest": "6746cfcfdd5b425a8b2975b7d04460e2125fa1a9e2e90e8db9a0688e68887bfe",
+  "comparison_cards": [],
+  "recovery_diagnostic": true,
+  "editorial_revision": true,
+  "revision_trigger": "editorial_revision",
+  "recovery_triggered": false,
+  "diagnostic_fault_observed": true,
+  "initial_composition_failed_findings": [
+    {
+      "code": "visible_internal_alias",
+      "outcome": "failed",
+      "scope": "shared",
+      "reference_id": null,
+      "part_index": 0,
+      "claim_id": null,
+      "message": "Remove internal J/A/C identifiers from traveler prose and labels.",
+      "supplied_fact": null
+    }
+  ],
+  "outer_results_completion_seconds": 15.011844915803522,
+  "timing_scope": "Saved source parse through checked/resolved Results artifact, before disk persistence and offline replay.",
+  "artifact_runtime_seconds": 14.7141651250422,
+  "count_calls": 3,
+  "generation_calls": 3,
+  "passes": [
+    {
+      "phase": "selection",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 84061,
+      "usage": {
+        "input_tokens": 84061,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 84058
+        },
+        "output_tokens": 217,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 84278
+      }
+    },
+    {
+      "phase": "composition",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 8961,
+      "usage": {
+        "input_tokens": 8961,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 8958
+        },
+        "output_tokens": 1074,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 10035
+      }
+    },
+    {
+      "phase": "editorial_revision",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 9914,
+      "usage": {
+        "input_tokens": 9914,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 9911
+        },
+        "output_tokens": 355,
+        "output_tokens_details": {
+          "reasoning_tokens": 233
+        },
+        "total_tokens": 10269
+      }
+    }
+  ],
+  "generation_outcome": "success",
+  "validation_outcome": "clean",
+  "delivery_outcome": "delivered",
+  "selected_pass_index": 2,
+  "failed_findings": [],
+  "source_sha256": "d11d8a550093b26313ee07170c98c9bbfc24eb00a73e6bec232c05f6f0c911e0",
+  "live_calls": 6
+}

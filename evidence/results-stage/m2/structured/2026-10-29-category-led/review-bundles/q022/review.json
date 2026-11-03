@@ -1,0 +1,137 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q022",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "Displayed identities, earlier/shorter and later-departure comparisons, money scope and seat evidence match source.",
+    "U": "Useful shorter/earlier economy, later-departure economy and conditional business-cabin choices.",
+    "M2": "Business seat-support and separate-ticket uncertainty is authored in the opening, local explanation and closing limitations. Qualifying shorter-duration wording is also more internal than traveler-oriented.",
+    "C": "Supported timing preference and cabin-versus-separate-ticket tradeoffs without a forced numerical comparison.",
+    "K": "Exact J7 time and J217 premium witnesses map to source members and both are visible. No cost member or overall winner invented.",
+    "P": "All three actual cards exactly join source journeys/components; known positioning schedule is preserved. Cash appears once as a correct USD440 unknown-scope sentence."
+  },
+  "findings": [
+    {
+      "id": "q022-F1",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Business award-seat support and separate-ticket uncertainty repeated three times.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[0].text",
+          "fields": {
+            "excerpt": "unverified award-seat support and separate-ticket arrangements"
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[3].text",
+          "fields": {
+            "excerpt": "requires a separate SFO\u2013LAX ticket and the award-seat support is unknown"
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[5].text",
+          "fields": {
+            "excerpt": "The separate-ticket connection and award-seat support are unverified"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "e175113d74a221d8a83f5f4fc8a9ccf9b27716f3506737752d7407d66d32e7b4",
+          "fields": {
+            "booking_obligation": "separate_tickets_unverified",
+            "internal.status": "conditional"
+          }
+        }
+      ],
+      "explanation": "The conditions are true but repeatedly authored rather than allocated once to the affected option/shared limitations. This finding concerns explanatory prose, not compact factual card indicators."
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "fields": {
+        "departure.local_iso": "2027-01-15T12:00:00-08:00",
+        "arrival.local_iso": "2027-01-17T01:25:00+07:00",
+        "elapsed_minutes": "1345",
+        "styles": [
+          "time"
+        ]
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9",
+      "fields": {
+        "departure.local_iso": "2027-01-15T23:30:00-08:00",
+        "arrival.local_iso": "2027-01-17T16:50:00+07:00",
+        "elapsed_minutes": "1580",
+        "styles": []
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "e175113d74a221d8a83f5f4fc8a9ccf9b27716f3506737752d7407d66d32e7b4",
+      "fields": {
+        "award_cabin.value": "business",
+        "elapsed_minutes": "2132",
+        "styles": [
+          "premium"
+        ],
+        "money.award_taxes.raw_amount.state": "unknown"
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd",
+      "fields": {
+        "cash_amount.value": 440,
+        "cash_currency.value": "USD",
+        "money.unit": "major",
+        "price_scope": "unknown"
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 258,
+    "category_counts": {
+      "time": 11,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 0,
+    "possible_cost_members": 0,
+    "audit": "Read raw nullable style_audit, free choices, normalized omissions and full source families. J7 maps to the time record and J217 to the premium record through references.json; both have visible exact cards. No material missing perspective."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false
+  },
+  "uncertainty": [
+    "document.selection and resolved.selected_journey_ids contain two economy IDs while three journey blocks/cards are visible. Coverage is evaluated from all actual visible references; this may distinguish primary selections from alternatives and is not graded as a missing card. Parent notified for contract interpretation.",
+    "Closing seat uncertainty is read in its preceding business-option context; the two economy cards correctly show support for one traveler.",
+    "Saved partial provider coverage does not establish current availability or population reliability; browser layout not qualified."
+  ],
+  "verification": [
+    "Read current rubric, full source family/category landscape, raw/normalized audit, references, document, resolved blocks and answer.",
+    "Checked every visible card, including the business reference outside document.selection, against canonical source journey/components. Exact joins passed.",
+    "Checked times, cabins, points/tax units, seats, positioning facts and cash quote. No live calls/product edits/current metrics/q024 inspection."
+  ],
+  "escalation_recommended": false
+}

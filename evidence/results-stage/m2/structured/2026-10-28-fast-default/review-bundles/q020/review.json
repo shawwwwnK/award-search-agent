@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "Choose this Aeroplan economy award via TPE if arriving earlier matters most; it reaches Bangkok at 01:25 and has a 4-hour-30-minute award connection.",
+      "canonical_reference": "evidence.json journeys candidate_id cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a; components observation_id 796d0acf7c82baf1e0b6dab0ed8858d910f3c09e795eb764ebbe4b97425f1e2d; groups representative_id cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+      "source_field": "journeys[].arrival.local_iso, elapsed_minutes, internal.status, award_points.value, money.award_taxes.raw_amount.value, connections[].wait_minutes; components[].seats.value",
+      "source_value": "Admitted representative Aeroplan economy SFO-HKG-BKK arrives 2027-01-16T22:25:00+07:00, three hours before the selected TPE journey's 2027-01-17T01:25:00+07:00; 1180 versus 1345 elapsed minutes; 9 versus 1 reported seats; both quote 65000 points, with CAD 107.40 versus CAD 116.50 fees of unknown scope; both have a connection (70 versus 270 minutes).",
+      "explanation": "The answer presents TPE as the choice when earlier arrival matters most without limiting that advice to the two displayed journeys. The canonical admitted representative offers an earlier arrival and better observed seat, duration, and fee-quote facts. The TPE time and its relative arrival order against the displayed Hong Kong journey are themselves correct."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "Choose this Aeroplan economy award via TPE if arriving earlier matters most; it reaches Bangkok at 01:25 and has a 4-hour-30-minute award connection.",
+      "canonical_reference": "evidence.json journeys candidate_id cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+      "source_field": "arrival.local_iso, elapsed_minutes, internal.status, connections[].wait_minutes",
+      "source_value": "Admitted representative arrives 2027-01-16T22:25:00+07:00 with 1180 elapsed minutes and a 70-minute HKG connection; the selected TPE journey arrives 2027-01-17T01:25:00+07:00 with 1345 elapsed minutes and a 270-minute TPE connection.",
+      "explanation": "The selected pair has a real, quantified duration and seat comparison, but the arrival-first branch omits a materially stronger arrival choice. The reader cannot use that branch to choose among the available arrival options."
+    }
+  ],
+  "reasoning": "The displayed HKG and TPE records, the rendered 170-minute duration comparison, the one-stop USD 440 Singapore Airlines cash baseline, and the unknown quote scopes agree with canonical evidence. The lead HKG journey is a defensible exact next investigation: it is the shortest admitted representative, reports 9 seats, and the answer gives its later-arrival downside against the displayed TPE option. The answer is connected prose with embedded journey references, cash context, and consolidated limitations. Its arrival-first advice is misleading across the eligible evidence because another admitted representative dominates the selected TPE option on arrival, reported seats, duration, and the observed fee quote. The H finding depends on reading 'if arriving earlier matters most' as advice across available options; if confined to only the two displayed journeys, their relative timing is accurate, but that restriction is not stated. No all-in or per-traveler price comparison is inferred from the unknown scopes."
+}

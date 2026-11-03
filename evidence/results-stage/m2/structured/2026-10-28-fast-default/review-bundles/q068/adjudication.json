@@ -1,0 +1,50 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "scope": "Independent narrow adjudication of the sole original H finding; not a new complete answer review.",
+  "original_H": "fail",
+  "recommended_final_H": "pass",
+  "disposition": "Overturn the disputed H failure; retain the original review and a wording-ambiguity concern.",
+  "confidence": "moderate",
+  "answer_quote": "It may suit you if using fewer miles matters more than the higher quoted taxes; you give up the lower tax quote on the United lead.",
+  "canonical_evidence": [
+    {
+      "canonical_reference": "evidence.json components[observation_id=0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]",
+      "source_fields": {
+        "program.value": "alaska",
+        "points.value": 42500,
+        "money.quoted_usd": "50.9",
+        "price_scope": "unknown",
+        "money.scope": "unknown",
+        "money.per_traveler_usd": null
+      }
+    },
+    {
+      "canonical_reference": "evidence.json components[observation_id=f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e]",
+      "source_fields": {
+        "program.value": "united",
+        "points.value": 55000,
+        "money.quoted_usd": "24.5",
+        "price_scope": "unknown",
+        "money.scope": "unknown",
+        "money.per_traveler_usd": null
+      }
+    }
+  ],
+  "rubric_grounds": [
+    "Evaluate a comparison target in the full surrounding passage.",
+    "An unknown price scope cannot establish a total, zero fees, or a cross-program value comparison.",
+    "For every H failure, quote the exact answer sentence and cite the canonical source record and field that contradict it.",
+    "Preserve genuine ambiguity rather than automatically giving an ambiguous statement a clean factual pass."
+  ],
+  "reasoning": "The surrounding paragraph explicitly names Alaska and United, describes reported miles and source tax quotes, and discloses unknown fee scope. The next United paragraph calls the Alaska advantage a lower miles figure. The opening limits action to verifying leads and expressly withholds booking recommendations. In that local context, the disputed conditional can reasonably mean that a reader who prioritizes the smaller nominal program quote may investigate that lead. It does not assert equal economic value of the program currencies, a conversion, superior redemption value, a total or per-traveler outlay, or a dollar value for the numerical difference. The source proves distinct programs and unknown scope, but those facts do not contradict this narrow nominal-quote reading. Conditional advice alone does not turn a quoted-count preference into a sourced economic-value claim. Accordingly the original finding does not establish an H failure under the fixed rubric.",
+  "uncertainty": {
+    "material_wording_ambiguity": true,
+    "alternative_reading": "Using fewer miles and gives up can imply conserved economic resources across programs. If interpreted as a claim of interchangeable mileage savings, the advice is unsupported; neither program conversion nor comparable complete outlay is established.",
+    "why_not_fail": "Reported miles, repeated quote language, explicit program identities, lower miles figure, unknown fee scope, and lead-verification framing favor the narrower reading. The text does not make the economic inference explicit enough to sustain the original hard-factual finding.",
+    "limit": "This is a judgment on implication, not a proof that every reader will understand the distinction. The recommended pass retains this concern and does not qualify cross-program value comparability."
+  },
+  "suggested_clarity_revision_not_applied": "The Alaska lead has the smaller reported mileage figure, but Alaska and United miles are different currencies, so these quotes do not establish better value. Verify the relevant program quote and fee scope before choosing.",
+  "other_dimensions": "Original U/M2/C judgments are not re-adjudicated.",
+  "verification": "Read the assigned rubric, answer, authored blocks, original review.json and selected canonical component fields. Verified 55,000 - 42,500 = 12,500 and USD 50.90 - USD 24.50 = USD 26.40. No other bundle, cohort settings, timing data, live calls or runtime edits.",
+  "escalation_recommended": false
+}

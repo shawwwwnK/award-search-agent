@@ -1,0 +1,43 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "If you’re looking on January 1, check the United lead first: it reports 9 seats for one traveler, versus 2 on the Aeroplan lead, and a lower USD award-tax quote.",
+      "canonical_reference": "evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044] and source.view.request",
+      "source_field": "seats; returned_travelers; requested_travelers; source.view.request.travelers",
+      "source_value": "seats=9; returned_travelers=absent; requested_travelers=1; request.travelers=1",
+      "explanation": "The source reports an observed seat count and separately records that the request is for one traveler. It does not establish returned traveler support. '9 seats for one traveler' implies that unsupported linkage. The number 9 itself is accurate."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "The result reports economy on CA, UA, and ZH, 60,500 United miles, 9 seats, and USD 28.20 in award taxes.",
+      "canonical_reference": "evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]",
+      "source_field": "cabin; carriers; legs[0].reported; legs[0].carrier; legs[0].cabin",
+      "source_value": "summary cabin=economy; carriers=[CA, UA, ZH]; only leg is unreported with absent carrier; no carrier-specific cabin evidence",
+      "explanation": "The sentence attributes economy cabin to each named carrier, although the source supplies only an award-summary cabin and a separate carrier list. Individual flight legs and their cabins are unreported."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "For cash context, a selected January 1 option is shown below. Its USD 640.00 fare has unknown scope, and it is a separate cash baseline—not an award alternative or a like-for-like total-cost comparison. Search coverage was partial, so these selected results do not represent all eligible inventory.",
+      "canonical_reference": "answer.md; evidence.json source.view.provider_status and selected components",
+      "source_field": "provider_status; lead missing_information; money.scope",
+      "source_value": "provider_status=partial; selected leads have itinerary_schedule_incomplete; selected award and cash quotes have scope=unknown",
+      "explanation": "The passage supplies cash and coverage limits, but the answer never gathers the selected leads' schedule, traveler-support, cabin-by-leg and quote-scope limits into a consolidated traveler-facing limitation. Its caveats remain scattered across the introduction and each lead."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "This date-only economy lead reports BR, 65,000 Aeroplan points, 2 seats, and CAD 116.50 in award taxes. It offers a different reported carrier and program from the United lead, but points across those programs are not directly comparable.",
+      "canonical_reference": "evidence.json components[observation_id=0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c] and components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]",
+      "source_field": "carriers; program; seats; money.quoted_usd; cabin; departure_date",
+      "source_value": "Aeroplan: BR, 2 seats, economy, January 1, CAD 116.50 (~USD 82.11); United: CA/UA/ZH, 9 seats, economy, January 1, USD 28.20",
+      "explanation": "The Aeroplan alternative has a different carrier and program, but the answer does not explain what that gains the traveler against its lower seat count and higher converted tax quote. The Alaska lead supplies a cabin/date/tax difference, yet the overall comparison remains thin."
+    }
+  ],
+  "reasoning": "There are zero complete journeys and partial source coverage, so recommending verification of a named lead is useful. The selected dates, programs, point figures, currencies, cash baseline stop, 44h40 duration, and offset-aware local times otherwise align with canonical evidence. H fails on unsupported traveler-support and carrier-specific cabin wording. M2 has an authored opening, embedded lead references, alternatives, and cash context but lacks a consolidated limitations statement. C is basic: some local cabin/date/tax differences are shown, while the Aeroplan alternative's gain is not explained. The 'lower USD award-tax quote' comparison is directionally supported by the frozen CAD-to-USD conversion (~USD 82.11 for Aeroplan), though the wording does not make that conversion clear."
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "You give up the four-minute-earlier departure on American; the LAX wait is the same, and both use the same reported award routing.",
+      "canonical_reference": "evidence.json journeys 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee and 05047f23f37c857b4b9346e023632d880f246a6cbded49a29742793322df1945",
+      "source_field": "journeys[].connections[airport=LAX].wait_minutes",
+      "source_value": "American feeder: 150 minutes; Alaska feeder: 149 minutes",
+      "explanation": "The two LAX waits differ by one minute, so the unqualified claim that they are the same contradicts the exact source fields. The shared award observation and four-minute departure difference are otherwise supported."
+    }
+  ],
+  "reasoning": "The three displayed journey identities match the selected references and canonical journeys. Their date, local times, 275,000 Turkish-program points, business award-cabin scope, Istanbul waits, 4-minute elapsed difference, and 4-hour-35-minute arrival difference match the source. Each is conditional, with an unverified separate-ticket join, unknown award seats/taxes and price scope; the answer preserves those limits. The cash benchmark is a separate SFO-BKK result via HKG with one stop, USD 457 quoted at unknown scope, and 32 hours 45 minutes duration. The phrase 'direct SFO–Bangkok cash result' is awkward, but the same sentence explicitly says it has one stop, so it does not assert nonstop travel. U passes because the early-arriving identified journey has an explained reason and connection downside. M2 passes for woven journey references, alternatives, separate cash context, and consolidated limits. C is decision-rich because the later-arriving option exchanges a 4-hour-35-minute later arrival for a 7-hour versus 2-hour-20-minute Istanbul connection; the two early-arriving options also expose the local departure/elapsed difference. No global optimality or exhaustive-option claim was inferred."
+}

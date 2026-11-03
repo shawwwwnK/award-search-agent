@@ -8,6 +8,34 @@ execution: code
 
 # Structured Results and local flight workspace
 
+**2026-10-29 category-led closeout:** The later owner-authorized campaign ran
+c01–c20 and stopped at its ceiling without qualification. Category-preserving
+selection, source-resolved cards and replay are implemented as opt-ins; the final
+candidate still repeats a condition in one saved answer. No default adoption or
+current M2 acceptance follows; U4–U7/Frontend/M3 remain separate. See the
+[campaign](../../evidence/results-stage/m2/structured/2026-10-29-category-led/README.md)
+and [implementation/evaluation log](../build-log/2026-10-29-results-category-led.md).
+No c21 or unused-budget continuation is authorized.
+
+**Earlier 2026-10-29 handover (historical):** Implementation stopped at the owner's request; see the
+[new-session handover](../handoffs/2026-10-29-results-m2-fast-profile-handover.md)
+for V3–V30 cycles and pending Ranking-led authoring direction. Luna wording stays;
+inline comparison binding was rejected; full-cash context is one brief sentence.
+No default qualification, frontend milestone or M3 closeout follows.
+
+## 2026-10-28 backend fast-profile disposition
+
+The owner-invoked Luna iteration stopped at the owner's V30 ceiling. V30's three
+saved cases meet the approximately20-second normal timing goal and pass H/U/M2,
+but two remain basic in comparative depth. No new confirmation or live V30 repair
+followed that failed gate. The public API/CLI V27 default wiring remains provisional
+and failed qualification; V30 remains opt-in. Neither a qualified default nor M2
+owner closeout follows. See the [campaign](../../evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md)
+and [session log](../build-log/2026-10-28-results-fast-default.md) for original
+failures, exact requests, offline checks and the requested whole-change review.
+U4–U7, frontend integration, owner presentation acceptance and M3 keep their
+separate milestones. No upstream Ranking or provider boundary changes.
+
 ## Goal Capsule
 
 **Objective:** Travelers can understand the highlighted flight choices, compare their tradeoffs, and inspect the other options found without parsing dense itinerary paragraphs.

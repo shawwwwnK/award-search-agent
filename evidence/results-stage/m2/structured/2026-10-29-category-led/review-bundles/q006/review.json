@@ -1,0 +1,130 @@
+{
+  "bundle": "q006",
+  "review_type": "independent_profile_timing_blind_source_review",
+  "overall": "fail",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "fail",
+    "K": "pass",
+    "P": "pass"
+  },
+  "axis_reasons": {
+    "H": "Selected prose, captions and displayed card facts agree with canonical observations. Date-only status, reported seats and unknown price scope are preserved. No confirmed itinerary, cross-program value ordering, invented balances or availability is asserted.",
+    "U": "Pass at the no-complete threshold: names real endpoint research leads and explicitly directs the traveler to verify complete itineraries and applicable charges with each program, then current availability/prices on official booking sites. This does not establish strong comparative usefulness.",
+    "M2": "Three consecutive captions largely repeat card prices and the identical date-only/unknown-scope caveat. United and Aeroplan are introduced only as another research lead; the answer does not explain why each adds a useful choice. Common limitations are repeated per card and again in the closing paragraph. The resulting sequence lacks connected individual reasoning despite a correct opening and closing.",
+    "C": "No meaningful supported comparison is developed. Cross-program points are correctly declared incomparable, but the full month source has same-program date and cabin contrasts that can guide a research check without claiming itinerary or economic superiority. Selecting three January 1 economy quotes and restating their fields does not explain a choice.",
+    "K": "No Ranking style is invented: source alternatives, assessments, comparison_pool_ids and style indexes are empty, as are selected journey IDs and resolved ranking_assessments.",
+    "P": "Three actual lead_card blocks exactly resolve to source components and HTML article cards; one cash_sentence is bound to the quoted USD 640 observation. All 383 canonical component identities remain in evidence; all 378 award references/leads and five cash references are retained. Pass is limited to the supplied artifact/data boundary; no interactive explorer UI was supplied or tested."
+  },
+  "findings": [
+    {
+      "id": "q006-M2-1",
+      "axes": [
+        "M2"
+      ],
+      "severity": "material",
+      "claim": "Repeated factual captions do not explain the individual role of the three selected leads; common limitations recur in each caption and the closing paragraph.",
+      "answer_locations": [
+        "document.json blocks[1].text",
+        "document.json blocks[2].text",
+        "document.json blocks[3].text",
+        "document.json blocks[5].text"
+      ],
+      "source_fields": [
+        "evidence.json leads[reference_id=0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b].missing_information",
+        "evidence.json leads[reference_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044].missing_information",
+        "evidence.json leads[reference_id=0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c].missing_information"
+      ],
+      "interpretation": "Composition finding, not a factual mismatch. A single well-explained lead can suffice; three leads are not required."
+    },
+    {
+      "id": "q006-C-1",
+      "axes": [
+        "C"
+      ],
+      "severity": "material",
+      "claim": "The answer provides no date-aware or cabin-aware research contrast although the request permits all January and the full source supports useful same-program quoted comparisons.",
+      "source_fields": [
+        "evidence.json source.view.request.departure_window: 2027-01-01 through 2027-01-31",
+        "evidence.json source.view.request.cabins: []",
+        "evidence.json components[observation_id=963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6]: united, 2027-01-13, economy, points.value=50600, taxes_fees.value=1620, taxes_fees_unit=minor, tax_currency.value=USD, price_scope=unknown, seats.value=9",
+        "evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]: united, 2027-01-01, economy, points.value=60500, taxes_fees.value=2820, taxes_fees_unit=minor, tax_currency.value=USD, price_scope=unknown",
+        "evidence.json components[observation_id=0aa3d4441f10eae5043d7b904dde287ed8c48b9297fd183765267fc666be9ad5]: alaska, 2027-01-24, economy, points.value=42500, taxes_fees.value=4250, tax_currency.value=USD, price_scope=unknown, seats.value=9",
+        "evidence.json components[observation_id=56f45654bb6058d1107f734851027e51c3448b6f5b627c2a56519fe1a52859ef]: alaska, 2027-01-24, premium_economy, points.value=55000, taxes_fees.value=5090, tax_currency.value=USD, price_scope=unknown, seats.value=1"
+      ],
+      "interpretation": "These are examples of available research distinctions, not mandatory selections or Ranking memberships. Unknown scope prevents total-cost/savings claims; date-only records prevent itinerary or actual comfort guarantees. There is no requirement to compare programs economically or fill a category quota."
+    }
+  ],
+  "source_truth_checks": [
+    {
+      "observation_id": "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "verified_fields": "SFO/BKK; 2027-01-01; alaska; economy; points=42500; taxes=5090 minor USD; seats=8; unknown scope; no schedule"
+    },
+    {
+      "observation_id": "cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "verified_fields": "SFO/BKK; 2027-01-01; united; economy; points=60500; taxes=2820 minor USD; seats=9; unknown scope; no schedule"
+    },
+    {
+      "observation_id": "0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c",
+      "verified_fields": "SFO/BKK; 2027-01-01; aeroplan; economy; points=65000; taxes=11650 minor CAD; seats=2; unknown scope; no schedule"
+    },
+    {
+      "observation_id": "456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630",
+      "verified_fields": "SFO/BKK; cash_amount=640 major USD; price_scope=unknown; direct cash benchmark identity"
+    }
+  ],
+  "full_source_examination": {
+    "component_count": 383,
+    "award_summary_count": 378,
+    "cash_count": 5,
+    "complete_journeys": 0,
+    "endpoint_component_counts": {
+      "SFO-BKK": 111,
+      "SFO-TPE": 105,
+      "TPE-BKK": 167
+    },
+    "method": "Parsed entire canonical source and evidence; examined request, empty Ranking landscape, full all-component grouping by endpoints/program/cabin/points/taxes/currency/scope with every date and seat count, all five cash observations, and all lead missing-information categories. Cross-checked source/component identity and displayed common fields for every component, all reference populations, and exact resolved selected component equality."
+  },
+  "blind_scope": {
+    "read": [
+      "AGENTS.md",
+      "campaign reviewer-instructions.md",
+      "q006/answer.md",
+      "q006/answer.html",
+      "q006/document.json",
+      "q006/resolved.json",
+      "q006/evidence.json",
+      "q006/references.json",
+      "q006/selection-audit.json"
+    ],
+    "excluded": [
+      "candidate/profile identity",
+      "model settings",
+      "prompts",
+      "latency",
+      "token counts",
+      "mechanical checker verdicts",
+      "campaign runs/summaries/index",
+      "docs/reviews",
+      "other bundle grades",
+      "prior reviews"
+    ],
+    "notes": "No live calls, runtime edits, outside-source research or delegation. Provider/source timestamps were visible solely as canonical evidence, not generation timing. HTML markup and content were inspected; no browser visual render was performed."
+  },
+  "verification": [
+    "All seven input artifacts read/parsed as appropriate.",
+    "All 383 source component IDs and 14 shared factual fields match evidence components.",
+    "378 award references equal award component IDs and lead IDs; five cash references equal direct benchmark IDs.",
+    "Every resolved selected lead/benchmark component exactly equals its evidence component.",
+    "review.json parsed and required six axes verified after writing."
+  ],
+  "uncertainties": [
+    "No live bookability or freshness established.",
+    "Review covers one saved source projection and cannot establish population reliability or provider-fresh holdout performance.",
+    "Explorer preservation verified at supplied data/reference boundary only; interactive explorer behavior is outside supplied artifacts.",
+    "M2 and C are qualitative composition/usefulness judgments; no factual or category error was found."
+  ],
+  "escalation_recommended": false
+}

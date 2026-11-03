@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "Compared with the recommended choice, it leaves 3 hours 11 minutes later and arrives 4 hours 35 minutes later; its elapsed time is 84 minutes shorter.",
+      "canonical_reference": "evidence.json journeys candidate_id 010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669 and 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "elapsed_minutes",
+      "source_value": "Later-departing economy: 1803; recommended business: 1719. Economy is 84 minutes longer, not shorter.",
+      "explanation": "The prose reverses a decision-relevant duration tradeoff. The adjacent comparison block gives the correct direction, creating an internal contradiction."
+    }
+  ],
+  "reasoning": "The exact selected business journey is defensible for its 04:15 Bangkok arrival and reported business award cabin, with a 275,000-point quote, unknown award seat and fee support, and unverified separate-ticket protection. The displayed economy alternative offers a supported 110,000-point quote and later SFO departure at the cost of economy cabin and later Bangkok arrival; the second economy option supplies a still later local schedule. The other displayed business journey is later and longer at the same reported points quote. These local gains and losses make C decision-rich without a global-optimum claim or option quota. Narrative, embedded journey references, separate one-stop cash baseline and consolidated limitations meet M2 composition, although the reversed duration sentence fails H. The cash-positioning quotes and baseline have unknown price scope, so no total-cost conclusion is inferred."
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "It uses fewer program points than the United lead, but the points are in a different program and shouldn’t be treated as directly comparable in value.",
+      "canonical_reference": "award observations 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b and cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "source_field": "components[].program, points, seats, money.raw_amount, money.scope, departure_date",
+      "source_value": "Alaska: January 1, 42,500 Alaska points, 8 observed seats, USD 50.90 quoted fee of unknown scope; United: January 1, 60,500 United miles, 9 observed seats, USD 28.20 quoted fee of unknown scope; request is for one traveler.",
+      "explanation": "The answer correctly cautions against treating points in different programs as equal value, but leaves no explained benefit for choosing the Alaska lead. The seat-count difference does not distinguish one-seat feasibility. Aeroplan is presented only as worse on listed seats and fees, with no offsetting gain. The comparison is useful at a basic level, not decision-rich."
+    }
+  ],
+  "reasoning": "The selected lead, other leads, and separate cash benchmark match their canonical observation IDs, amounts, currencies, cabin-summary scope, dates, stop count, and offset-aware cash timing. Unknown quote scopes are preserved. The source has zero complete journeys; its SFO–BKK detail coverage was omitted and SFO–TPE/TPE–BKK coverage was partial. The answer gives a specific next lead and verification steps, embeds references in individual prose, and consolidates limits. Its fee comparison is local to the three displayed leads; the CAD fee also exceeds the USD fees under the source FX snapshot. Comparative depth is limited because the displayed alternative has no authored offsetting benefit."
+}

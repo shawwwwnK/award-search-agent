@@ -1,0 +1,256 @@
+{
+  "id": "resp_09a6fb54366a2a7b016ae213791afc87d0a05c886fcd67b1a8",
+  "created_at": 1793201017.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Repair factual errors and answer coherence against the SAME frozen source records and comparison_pairs. The editorial_plan contains identities and comparison targets only, never source facts or a mandate to recommend every selected record. Recheck each sentence against the exact referenced option, including program, cabin, carriers, connection wait, time metric and original quote scope. A temporal card supports only its exact pair and metric, not surrounding prose. Remove unsupported claims and contradictions; keep useful supported tradeoffs and applicable limits. You may delete a weak or redundant option, but also repair or delete dependent comparison cards. Do not invent a benefit for every alternative. The previous_wire.blocks entries each carry an original index and one original block. Return ONLY {edits:[{start,end,blocks}]}: each edit must have end=start+1 and blocks containing zero or one complete replacement block. No insertion, multi-block replacement or multi-block range is allowed. Use original positions in sorted order. Empty edits mean no change, not factual approval. Keep internal J/A/C/T/JP/CP aliases out of traveler prose and labels; keep them only in wire reference fields. Feedback lists actual failed mechanical findings and may be empty.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_09a6fb54366a2a7b016ae21379c03887d081a7060350e4643a",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4hN8peuWIuc8VZ1S10Gi4vZVMnatY1NIQEgEfA-XasUkP3Al2sONIEgS5TdpHY1JYsITlHPIjUSw3SSWvid2OJRVz_mSgXXew8E9w-uAfxEEU9EUu2uq15I_6MQLfWr5oVAN_rzOoK9P1jC0bSvbBIpyDsVFtwERooDCk2CvXcJxaU_I3lKRFgZ75hFz1b8U79NiAZvu6MpLmwEqpwN3FCO1Wpk7zuxPcY08qzkmGckC3EWbI7_QMkiqtVMbyO924wVN7dRjCFSVFWlPWVzymfN9_ZY1aH2a4w1rSnE6rwSDfrqZ4CNEguSxjzR1HHp3MlRtvvmq1NLe_AAvLHVNJQweX-UrCa83z0kzGoNw-qDgvHkV8CCeU1zT_KZ8TzMo8zctMciQ8NVsxDJpAuJw4LNuRMQRU3fiiheMnB0ivPtAHa6PiFvZhFEbMv6mQzfgr2qWMGugq_Rg2npbuypl28gxG5DLr1p59ItZL1Esd8ghpwGuC7pW4DBG4DN4oZ5bBiEQ5hVVVa1SCVz6P8K42MuozwnTUioIm1IulNrLTHtRvZMUrY-c7ZfIPlIXAKlY_uX_C5F31tW_zbqCHvtekccTJ5ny0Io-C4km0NHx7_6fll_jFEzwea9oLDqBzg7_wli32W9SljRNCVg3g0aEJ_568_ykhEcUc9w925tbLYEstxHLPNU0N2czZgGpOHJxt8rn-X4V8XY8xurc6Q6Rx9rJbsVV6gWVnWu2PDpUJ-ALXW1KzwO0QPoD0jclIAkwE3s7aezO0jnOCm9f7tAgm_MUq5Uwh4jmWRE6CHT9qPK2KF_cEn2NfTT3EEWtfRI0wBczmiHjqOOseO3Ix6qcMcuAQ-bRpVb2OAiYOj0WvT8WEIvjbSq-d-2-ZF_RJoCxngBiiVOM8DkNm9CFAz8GCMgfxE6PuZB4RJtyVlHblXwH7VR_IfFA1zpfI-CLGBBIWWQXkMlPeA_jXWY-lP-TtmxgJNNgg-aDJig92ybMy8hF0o7NKqSGjJngx7haoTv03vLcSPspQdl1I1GBhy_Au0kb07f5Wda9oZvYwoJwFSF4Dx9sxzXWqFsejU1Pu1Yjur3sPk_yxVdbLI4sfOjN7DUWg54sWtgDkUsYRHhMHbFOxNRiYWovpuH9HBz5N6fe_Vb4GtkvEjjMaf-FLwYoMA65LezBRZpJe0g4uFDLPyNmttCR7C2TVa1wmd32COjSjIc4dQv-4ZIfdzpBZ-TLK_y3Jsp2yN3ioLOE7APH0CPacwKeUMhlRTbngb1TnpWLrWvsX6hSzVTfz8HpmU7vSjsGxs0SIsJkOuv1r59Q40u_7lc1mFMLNI4bpfLB7EQn_HfqDsWv0I0vxGDXm_tFjYn4ISLGzjZIEDXSvVwxx96HjGuYGFdw-wMwlJBxRJqKLbC-bu2orkumA5ohKTT7Olp70iwqIeZHFNjwaj7v5b20ihjV1Pj1zqOnrxhtYbLCHVNI5Bo9warlo_9Pb8PJ5WVEueC_ksZPvxwNjJJSb_u77myZyO71cm1x8VYIPaDkifWUkKl5qHcGxcbM18ff_IGkl27Axos76_N916CnszHOZgcsLDrKLUPN1xhvmnDGMHgzx3IDWplrykxhpeqvLwO_GfgRi-K6DUWvFr51vFxhefaHsM7rU7cJT_mIrAwH6_smRo5f8g1xDU-gBEG3DXbEmR9DDupKR_ax3Zj4T-1JoGy7_mwJshfNUNz2EtBxESXmXKiPXjiXudAbjv4AUZ8mJ2oT4R1r_TmTkh7IWqVXTsH-9VGmYjnQOipiDS31AvlFunmjKiZF8YdS-5ezkQR8DwYv4NKb6b99j2Gp7gRYELDLt_7eTp6-CpT6lvB4ZlwbWcXLi7tPzTd-RuvSZFKccYsjaQlQcVfhDjkM82aI0-_vkxuWoN6aBW7EWGQPV9dCg729bOc4aUYrdvmwylhM5lrXmGkmA3M97ZvJDRTXuyDDDOesAZyjKSuphcYZnFui20pZvXVXU-64K_cFEkWRmvEJsm1KePsEo3KzmRdu_Q1tMKMcklVuhGPJdPG5WytBcc17-mqPtW2_iV_4pziESrr0za0VhHEbh-ZS-40zrIS5UzpNfGPVXIU0uVBUmxAyhFcqcn5x4uXUAFyKLNJwMGxXLK_m9kmzXzHGe6jU0E9FsSW5jlaP3hU5TfTYlL_cJtzuFNNU_J6El4KycNOhsHrsdDnlRXwpGhe7mfrw0uRgZpkghvjGgA-Ukhyh_IV3RwSEAAhWDGX4mGgFZTgCkVcCVgtD-R-0d-TmY4Q6rKXdptls3-8N302hgotq8wVJhcVCMXdNBMQ722j5wFUoEmhE0MyRnfUWSpCyFp6YZEAHRceUGKWDu32dDrC573VDQWyGTKlxiscbk7E1v32u1vnMC1hPPovqprGf8pJrNB4Y6eMNza8U_rmnrt_fI8i6kiiNdn5hojh2ooEJqKsbOjJsBLuIAUgXQ5AoRcSEcdN_PttWqP0aVNhvtkXV8Eh0Ep_I-BfjRTCP2QosgnPaQKaE1iPimlXJ2c2nNfhoxtmFv25xTso-Z2X6NOUpDLw-gCm07IS8aMQjni3F4ATN40CZkM6J7MRYvIF-aYZwvUagi8EPJie76twTrWcXty5jTMSKAVdKGFigBJDCQHnFWzNKNpbjHuCKtVVrFZhIn6GLPLp2nChdjrv6dlrBuI-SwcAerZnOAC_zAJ-zwwHkmpLbfpsg93no1tmnChip-OBmFUYTu561gf0wkkyqt_iX2YAG2EwokxMcGM_Ogv-7RhKXqeIylT2tA9ICQuEH2Q6tb8IK28S3hfYyIT6g3-JKj1fQp7lgORLWQbtP65rnrl9P4hcFu9XsDJ-__sGQagExjhJ0iHxIQ7-Ocuo2leCOy5veXIxONoBATo-YOtn9tikMLCGClbD0tJTQgNQd1TJbHQhOOAXB6myO6rB5mDeVAM8J0I_DKcOBjtj9IkZ2p75XLzgnacqXEzb5OWxOzKB76659AZvp1_Kapy81LiEe_h-kUUcnAwrFGc8HhWqluxksF2VjfVqTrF21U91GCNKTvSewSfAYQPncoNNxnUbuNi5uzNbRhKC2O6jyyBgKOMVAQk8UOF4tvendlCJQmsUkRTB3gCxDLio1QGBE6trwuhWb7uI7FySHklHS5iaeRAWn_Kz9K6C-qzKE6pmDCYcXfpP8I1qqsKQPGCxYSqYMLpCB8aQhBEIqniRx6X63KOXFBvLKUJ9RV3vAKrpzPgFrgxAqyqSz7N-7Xda5y8vzXI1H7dzKVAAb-cHZ5mCN5u0iueXdpFaA37UZHTjJfO0FwjJHi-3XJ1dTOwEYSJYgV5wziJa-LUjWBrCeNwYIgzUSxiBJuH3z788V9tOwZM_EJrl-_XnoMWIiAk7akg_tb7apIxYUOAnErIXA28GNVldvfY2ZDjdiyQrgyG1URvInHVevO3r0XefflZuMM0zyIpd1HMSDelwwwHlFHPjGq0e56EdxHbRtElAMktk-DcvqOguvJp0EWyoPvDH4bochHnbLh0f2AGpFEjTbLwOp7mFSPZ5ebFq80s9CsTpchk-JSxZuLLYEC8aOI4-RgodghcL6vJb1WQUDQ9jcoE5r3rs7ALHhEw39lrNgcpuhzJ0UZE4wbHmixP9tBTgrhCgZimW4Jr7ZL7tTMI6EDF64Nl3QqMUJonwWnAgcmuSwaWGnZ-easyUfDh1epHOGcqtSqtgpxKz62TLhxIbcQnHRni4mepC0NzX9c2nZs3Mef4qPZ5w1e_lSncGYi1ahL0hLxt42ZyBt9erxMckxS6JjhmkGuwwzNE5slH695_V16XmDOZEARLI0tJ6LVNyrBDoAQ9mAd0Jm_Yx7chMBsSou3yim7H9U0kd4BhC1TE4o4Ntm_GdczOvce3IZ54-LXEmk4AEpYrs0RXvP42IOdSv2kYizbgIaQWO6JGwAktlilyIPaLwxEVXLD88mPHzQqsu42pMsLvDJPFS1nfg0GsXwkM5h4Mk2-BXqHsZAApmKmJ5zWe8Qhdhx9HzD8TQ83BVxX8ssdBFPbf67pvLJKU-tGORUpn-yV_rMC99hoQyHnakRaeNmL68RTY9_PqBTWr1m2UbIjHoYsAZCO-etOs9-LHaVS4JoC6cqQBaRy9Qk7NOUbNlyTlsa_Ys8xYALpBgIwVPQ3C1_nRUka1ufQC8Gl0MmPZO9Q4gr3hlSHwK6r9FgY-oLEzv5vXM_Mfdq0Wyp3Bl_BAtwUxkzcabDW6Yjppfs-IYy0pmA3z07LPYebdVw4xOPwVkyvJxIKORDRCGiOiKy6eK98SLFPJylD5sp8uVGVp-wxfHHxdidq1p8cQa2zMKRyMX4iT6Iwe9bmq65WZ48lSLLGPVisJJdd76vq7on6399FKIaHLbLM8MutBtCUi9wqjA5lFvRK9Kg_l1T",
+      "status": null
+    },
+    {
+      "id": "msg_09a6fb54366a2a7b016ae2137b53c887d0a249897dc683a4db",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"edits\":[{\"start\":0,\"end\":1,\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the January 15 Aeroplan award arriving January 17 at 09:50: among these shown choices, it has the shortest elapsed time and more reported seats than the other award departing at 23:15. Compared with the earlier-departing award, it leaves later and arrives the next morning rather than the previous evening. The tradeoff is an early-morning arrival and a CAD tax quote whose scope is unspecified. These are selected search results, not the full inventory; availability and prices can change, so confirm them with the booking provider.\"}]},{\"start\":1,\"end\":2,\"blocks\":[{\"k\":\"p\",\"r\":\"J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50\",\"n\":\"Recommended: late Aeroplan award\",\"v\":\"Departs SFO January 15 at 23:15 and arrives BKK January 17 at 09:50, with 19 hours 35 minutes elapsed via HKG. The award is economy on Aeroplan, quotes 65,000 Aeroplan points and CAD 107.40 in taxes (scope unspecified), and reports 9 seats. The award itinerary lists a 70-minute HKG connection. Leg-by-leg cabin information is absent, so economy should not be taken to establish every leg’s cabin.\"}]}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsEditorialPatch",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "integer"
+                },
+                "blocks": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "t"
+                            ]
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "p",
+                              "a"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50",
+                              "J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35",
+                              "J8@2027-01-15T11:45-08:00/SFO>BKK/E>2027-01-16T22:25"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "b"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "C1@2027-01-15T09:40-08:00/SFO>BKK"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "x"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "T01",
+                              "T02",
+                              "T03",
+                              "T04",
+                              "T05",
+                              "T06",
+                              "T07",
+                              "T08",
+                              "T09"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r"
+                        ]
+                      }
+                    ]
+                  },
+                  "maxItems": 1
+                }
+              },
+              "required": [
+                "start",
+                "end",
+                "blocks"
+              ]
+            }
+          }
+        },
+        "required": [
+          "edits"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 8318,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8315
+    },
+    "output_tokens": 569,
+    "output_tokens_details": {
+      "reasoning_tokens": 251
+    },
+    "total_tokens": 8887
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793201020,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

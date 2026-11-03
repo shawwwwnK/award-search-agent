@@ -1,0 +1,72 @@
+{
+  "bundle": "q028",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "familiarity": "Prior source/code/review familiarity disclosed. Current candidate mapping, metrics, checker verdicts and other current grades not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Exact912-minute elapsed and105-minute arrival contrasts, identities, taxes/cash units and unknowns match source; no false benefit ownership."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Defensible choice between substantially shorter economy and conditional business with earlier arrival."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "Business seat/tax and separate-ticket uncertainty is explained in its caption then repeated in the final paragraph; the15h12 elapsed comparison is also stated in both captions."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "The economy trip is15h12 shorter while business arrives1h45 earlier; cabin and separate-ticket conditions give a real tradeoff."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Optional pool3 becomes2 displayed journeys retaining time and premium; no cost member or overlap exists, and no cost winner is fabricated."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two exact source-resolved journey cards carry flight/component facts; one source-bound USD440 cash sentence appears inline."
+    }
+  },
+  "findings": [
+    {
+      "severity": "blocking",
+      "axis": "M2",
+      "claim": "Business caption requires confirming award seats/taxes and unverified separate-ticket positioning; final paragraph repeats missing seat/tax evidence and unverified separate-ticket arrangement.",
+      "evidence": [
+        "document.json blocks[2].text",
+        "document.json blocks[4].text",
+        "evidence.json journeys[candidate_id=2a98925e026c7c32d725820ee2261af30e14f86433240ab4f028ed671abc2c9e].booking_obligation=separate_tickets_unverified; money.award_taxes.raw_amount.state=unknown; attached award_component.seats.state=unknown"
+      ],
+      "assessment": "Same local limitation is explained twice without a distinct action-changing condition. Compact card indicators are not counted as the prose failure."
+    },
+    {
+      "severity": "minor",
+      "axis": "M2",
+      "claim": "15 hours12 minutes shorter/longer elapsed repeated in both journey captions.",
+      "evidence": [
+        "document.json blocks[1].text",
+        "document.json blocks[2].text"
+      ],
+      "assessment": "Correct comparison, but adds avoidable repetition alongside the blocking repeated limitations."
+    }
+  ],
+  "evidence": [
+    "evidence.json journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]: economy Aeroplan65000; elapsed_minutes1220; arrival2027-01-17T10:35:00+07:00; HKG105min; taxes10740minorCAD unknownscope;2reportedseats; styles=[time].",
+    "evidence.json journeys[candidate_id=2a98925e026c7c32d725820ee2261af30e14f86433240ab4f028ed671abc2c9e]: business Turkish275000; elapsed2132; arrival2027-01-17T08:50:00+07:00; LAX299/IST420min; cash86majorUSD unknownscope; styles=[premium].2132-1220=912min; arrival105min earlier.",
+    "evidence.json components[observation_id=063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd].money: cash_fare440majorUSD,scopeunknown.",
+    "selection-audit.json raw style_audit time=J1/null,premium=J43/null,cost=null/null. Exact references.json mapping verifies source membership; both witnesses displayed. Pool J13 omitted without dropping a category.",
+    "Full source258journeys,143leads,11time,116premium,0cost/possiblecost,0overlap; three factored cost assessments undetermined. Full source groups, all category indexes/cost states and research directions inspected beyond selected pool."
+  ],
+  "verification": [
+    "Read complete evidence.json,source request,category indexes/cost assessments,full journey/research inventory,selection-audit.json,references.json,document.json,resolved.json,answer.md.",
+    "All visible journey/award/cash/benchmark attachments exactly equal canonical source objects; source style witnesses verified.",
+    "Independently calculated912-minute elapsed and105-minute arrival differences; one cash block verified."
+  ],
+  "uncertainty": [
+    "Saved-source review does not establish current availability, population reliability or global optimality.",
+    "Markdown and structured cards inspected; browser visual layout not tested."
+  ],
+  "escalation": "not recommended"
+}

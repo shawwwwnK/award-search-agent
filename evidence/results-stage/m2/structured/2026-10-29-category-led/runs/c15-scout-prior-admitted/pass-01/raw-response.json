@@ -1,0 +1,701 @@
+{
+  "id": "resp_08123545e3db2ab2016ae33e51141487d0b4966101af50a086",
+  "created_at": 1793277521.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Select exact source references for a concise traveler answer. Ranking's time, cost and premium memberships are authoritative and can overlap. Return JSON with choices, benchmark_alias and style_audit. Choices contains at most three unique complete-journey or incomplete-lead references, never the cash benchmark; this is a ceiling, not a quota. Set benchmark_alias to one exact direct cash benchmark or null. For each available style, set choice_index to the zero-based index of a chosen journey that belongs to that style, or null with a specific omission_reason if that perspective adds no material traveler value. An index only points into choices and never adds a reference. One journey may serve several styles; use its same index and do not fill a quota. For an unavailable style use choice_index=null and omission_reason=null; for a chosen witness use omission_reason=null. Choices may include other useful exact journey or incomplete-lead references within the same three-reference ceiling. Do not choose near-identical variants without a distinct traveler decision. If no complete journey exists, choose useful different research leads without styles; inspect supported same-program, cabin and date contrasts without imposing pairs or quotas. A reported seat does not prove current availability. Preserve uncertain cost states and do not rank different programs by point totals. Omission reasons are audit-only and never authoring facts. The full explorer is separate.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_08123545e3db2ab2016ae33e52970487d0b896ecb9a1ba75e1",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4z5U9Hlrp0S-q5gfd0oSmjaDbfAiSLs7keIocMYOWQlG2QwMVevgWg8B2rsQUZ8Pn96wHS6lKplxts0z_hTfVIzXmCFporM78Zgeye1Hj1uhmflGv4ad2Zbpl8xVrQbuFEV5VWQ4GCyeAZHTc-Hv-7-NuFfijZo-_DuX7aNvl13s4dGf_pTQvNM9Lc0c0YNQ2-ZKx6bWp05M21B0pyvPoQDJDfz7IKWqMFvHkQR21QSlJbsbu9BRFJF3Ze02wh8738gaD43zBJg-e1ZZhxXkERDMPuC6nRfG4Oe-v-l0IVnmgTo4isrRrIQfF3TW_qTYdIw0vaAz668DsPR1Np0ZKiXjr1sKbgNJ6yJNQN1TuZ1OCuNgAUViui-LL5X-IIHane_7bsI-64Q3jz7tggxMv8QPd6LgIBztz4qUNl_vXEuz0LdZffbpz-h3pkEGqyck-bz1j2ZgoVISpbiHX7b8vyFoFMUhJStUNgMMiW0UcjJfxGuOtD9T4oShaFPQP6WtMcthBXyO6iRIQwtmt6jz7Ddv46P51qg1yDaLrdoSLFDqvTzuSRybS1oEMPLat7WLmZK3oc65wh572Ls7qfzv-lDQk_2BK1v2cRPNpkunxTTPjZMC37m8x_cdUynCaCmPpm725m6TQ-HCXx7vGpiic1znZXziw_jrOJoHDbq0ibkjqe60ODZqcM-WuKPZwALw798-6MpdukX1hY2VOCnTtcgbjbkrMoTvoGpVaJIVycneM2hQ8BYdS0adDfx-XkQHodutWyf0qX8LgbDSWSONsQpkXzDfp0RA-Tdz2jgV5BM-B2fLj7uNGJIYqpNTYFOIp40AhQB5xogyYeodvCXAh87X1zXovAPwjy-j0haFStBYVyuNaANthu0NaE33zwaKOyQp2omTKtxgtCFibnChagj876foL0xY_D64KQksYH3JnSJgVqJ1omIQCw-PATg7__aExHVgHnKfas5D9enOUSB0ft5JarD17jBVqfPFrDSNJ9jackIQONiPwq0mblHaHNNTkeYnP4CxvXMwpYVINUkaUblLhSKEg2cVHnMWJknDPtjCvDQbYq9_LuYHOIDAKMaumKWNT8Bm1w2RN1U-XQ8qna_FThmVV2IX4CYwOMZK_6yM-J3yKRfx2pSUZ30h1N5xba1kmsKHLSAcYvfl6nzgwaAPD1l3WDzxrcw0WhJwFeYOCH0HL63GUuxEh7uZbSznUbpHKSbqP3SqGtYFoNtDwpnoQxklsvuHFJmVTcn-o0FCd-qwArYCfBNFKxeSKDUQ2ryPkrSoIeqpfSC8_3ZZ_mZP1fMpBZ-odhaE5cAMOYQuJ9VhhjUzZLN1uPPXpkvGms9-6PfSs8dR8XpVX-kfuvdL67vrnpQy5TOGn7H2y_Ok43YiQNT4RboYJap5L-RSnhlwoDL0RdG4BvVbPrkU93C4xTXd3HNQ8cdipS9RSBqeCO-DvPDzM8Jb8BX0KknuSs3_71hfqeJ3zLmckSBZzMwI6nCjSK0kc9GuV1DTgI-tVkDz3BlcCFhYsraItCdvpopkEgA97XDhpRH-uc7ePC8GrVCvTPu09qo1Ix3kAxRiC95x2mbAJXQppyc3qnEBF3eRlvvYw2PFrFuXjyInKnVhz6Kyw09jtcZnAG9kdjbCUzj0wH2-cfjEEBOaty3cX7-IxKcWzAsBGChre2UlmW-AUi5go-C-6RHzeLdM7lio2m6V5RoFm3G2iEtdgmbf_gLLtwgqB-caYUs2MaAMnDJLstdFZh_nuFpR0_1yc8p0X8ZjhgsIncFNRe3NOD-sw4YBPdHpyAycF4-GKyekwosuK0Ok1ZMbOs_yyZ83ih_XMLiiZZAcHJBFIwsQfklOiqpglHDgTuoz7AAPJdUmYzsFKM4dL9fexj7sD11XP61veoI0Bu4dTqJikecBY5T9kehfiOLGy69Y3q2CakbsKbKptrIORmxWZ3gw5rX2HZ72OAWflVLmObeIf6IzlcvGtHsAI6pqh5sJFfgDGhOkUMEM2cyS_3TPxyGDShj8Wd6Oeq1A3xO3Xl6CK31beHU_c-OKLvMet1Led5mMFipAW931zcVJPvEGm0rkU28AzVowlTOzJt7dsEhgvvfb68jXcz12MMIbQGZAOQL3VVMzHlin1sDJZf0nEvcy1I2hQrsiEXe8HeQFkrNlSqUKIdscl7CZ5BidX1z2z8vEdetjM2QuoaLZd76aE1-DKnIltPxxbzCPGPMqS6uDfe5IJrppnDqK_dDb-JgjRUBw5G7an4ZvzHBnCveylu9MvqLjGkBID1Fg0wnqJ4RS8hZK91DreMxsTDGdhBH1AmuzZ4fJdWrEhL--KDXLMySYXneYqQz7xSotVQ2fZZjJt2J-vtzJpuuuG-BH-1U4IAYgM1mod7pwTYfQnfEVx2mrpXoMBYf4Sf1Qnr_ZFlWznm-CCT6MVyGUDGVr7dleiPrB9fiy6-Ij8oiMenQm6XWtpOsO7T7DmQ27dDdjLdCHofc6Ao6NRE5JTN6cwgP4ljlI2Csew8KaUJo4jr2OB3SrEdoVp8BxI9tv8r42RNmgO_7k-1yK6L5xHnphKD0wMvDmeT1L_Cnmo-7PsdsM7-5tsxCB1Cqqjm0pqs1hxDI-1_TC5gfsbRdK1-UnxSTJgPBAK9IFOqMgCWBAt3uvnUndJgo30UWME43mMRC1Pv7Eyi_olvScnlp_w1eNk9DL10tgvb_KbidgGho0O2qmERFkawANbXZigJS5AVwzcHRFEUYBROL8GioLWbyFlre-pAVf6Dt7voG46ZJF2eC3oGzPevopdADoaLGuFMjXzX8cqzFmSmO2QzoNnAt86YncS8EA0AHrfzHCd0zeznMGiAK42C0M03Zwb23LTzki2UJyBWevgo6gebNKsFKwFRJpaivexyRjtvxnALNG1Y6I1FTjd61Zd8LmZimu2Jhn44-sPHK7A0A-VgLLW6EbqsxVugQSO1WtMf1HL6iz0YnjNAD9h9jkGt97n41CKLHHmPGtIlqaBxIpdsgDq70IJ9o5eo0AHtpmdVMloFjrguNF1KCqH2p8KJ2KC7h2_rg08EKoB_TluUname1LYo3hSq9ZXGn6zbrkzG1kYEVjgmLLeAlS_SiPj0ET4G18BFTRqBrD0s-1vq5z45HGTn8fFqnDMo_ZAL86pLU9rx2XzNf4UuGQQzdidXGd78xOSu66uUS1kE0TTSbWSoOaNVDXmpuYQ2WEr_9xyxlZ-wN0pd9BMJRJd2F89JmKY1-0qtGKXaZw7COOvbdggLXY47w8aPEWwkOyaCCIOdYnb94RZRSkiO-S-su-GYbOOStkB_37lmrAK9tBs4aHUuukAL7wLjgdiAKXj3sUdQDW65uByaJ7zAlfNZobOb1NDrMLZX6CjEI4rY9-muE8E2H3Y-BVewnLxZ02IPg3ySqzc3VJtEARaqg3ipjXZ-Ij_vhUwXDM4sS78RLzVipGlrNrDYP8C2UKoFnmwRhb6diyZjE70nAA3h44LmbINvxAJJ1teNrp70srgU8DrQg0O4zBAjfqwNQqYdvw2Apl6wyyCr-59tcyqjUuq95suCBtkEWc3_XL2YssZxkFFxNiu2nmHIwwIQutMWILiRZ_nA5S3ILrBZju6T4CWVeZEYF9vmab4O08t470LFakD8F7m74nRwc_fnuBw4_9ytJBwmN1ArhKVJzJbr66HVm64QoqHrweZ8L8BLVIJlVBIIPR8RmtLM74mzIroWpN7LI7njPfjin-uvw3M16F7mGWRqrmbdrhB6Lk1VaSYVCSvqsE3W10M19jUuec4apleal5uQzoEV9hDCt_yJ7-yxeV_YQaQ1bTxfRpKduBEAUvPNdCWfZuW2EyLA7ND35cRyj-CLh4chwrZ1uxoEwaa69ZE4bq7_B0bjxwrGcmre9N0B79x8h-hIR1Lyja4sCqSPqnlTpCyN0OgdXLCUtgnIU4OS2giDxm1Oj4Ibx6g9cYNXB7XqNYnUdAWugDH7PCX-QHA4j7lEGj0dKvVso2T05PYlmappv1MiEOo8QrpasZzTnD5k-r8EQvrufQ3UMmZugz1Fa_QsndUjbICARf0pgdn7-DyjpvY73H6V-KbwDOVGcRPThwLyZOhtpzzQfMCmqyyRQ4igow0GKFGx_ZN-zG-p2I4rbD_zj91XuaIqAQlHHQk_RVvtCqI8qZP8NFtgHlNt9h4lxrhOSTDpEii9FhPcSjVs2wH7IoJPtvPZr9Xo8ktE_l3-x68kx2l_6IYma30dSJwf7mJkLT2z02PHVWlROXN5exano_EvrAQ6ehxp9ygqAvODE2ZgrZqg2BrJnTHEpTWgj5qCgzlast0xUGUXeqYisc8j2duSLOSX235yrFM6aQ5R6nszwSy_fZCMS68hmDLN7wQZ5N0L4myUyJoeQN5QqVJeNpWowhEwOMjF18xgllv2OlOJhoim1gNnvD2Zc_YkKzqHgxMCIrtE29c2FbRXi0ng3hgL5_fGy3JT_5n1Z1uxC1YnnmMYn8Qi7kZ21aRfgcuDq6N9elY-rYXzDh3DsaylDTGmwOwns2DXDb_9GrtruW5sRP2Foo-_s34Geeet1rVdPv2oDI4Vte8lIlqSVocjWp7ZjBB5ArLdjYJDj5GFAIQgjMrMY2NMG4jTJNRQRDRr5U7_zSzwDvEkVVQg0SxvYyxIdkW1MgUnjJzdNTSo_Pojs6KPZ-kL9Nq4aUvHB2XKjL8qAybTCnsVQk1oeaLWXPd3tUJ0XgZ96zVAknNdNB235uzvsA8Jvo0IRAgvN4SGteGcX105EyqCWXyU6TeZaxSXPdfftiXGa1_Myj5HgEErYI7nB3P4RgzRB6GJVzCsLSl46mM_fJPDkrVsDRFdsOHNaOd-EdK7d67ycjLG5ZoXqDKpbeiVU3bU6xqJjjKu0Hor4s8Au7uhyv5vpegMWuOTWMBgQr08GxPZTFZm1t3cw5nHevc0-Kl1-hbll1vH-VYHaJlF9y_C8QUYhtsQ3mqAtVhryltmTcwtIOkXlupCHerFUWLyrn_3yChxFrksADf1oTpkO4qbhqdnuKwhgblp-_XIdcr0VpMjjIcIFQm7zluKd_B1waAnMfbCuJ1oUjyN1u5SDhDZkOVWjJImesrbwTy9edK8sCAzat9zmLBwLPGEEr2-fc8o4LZ-gsO0a1oS2_kheV_rErS-7Fnk1hHdc_79gj2Sovk3sR7uRhKThEwBbetaDDyC6QImxrak6zOf8hHgLNHXY=",
+      "status": null
+    },
+    {
+      "id": "msg_08123545e3db2ab2016ae33e54812c87d0ba949f9621cad31e",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"choices\":[{\"k\":\"j\",\"r\":\"J1\"},{\"k\":\"j\",\"r\":\"J43\"}],\"benchmark_alias\":\"C1\",\"style_audit\":{\"time\":{\"choice_index\":0,\"omission_reason\":null},\"cost\":{\"choice_index\":null,\"omission_reason\":null},\"premium\":{\"choice_index\":1,\"omission_reason\":null}}}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "CategorySelection",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "choices": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "j"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J1",
+                        "J2",
+                        "J3",
+                        "J4",
+                        "J5",
+                        "J6",
+                        "J7",
+                        "J8",
+                        "J9",
+                        "J10",
+                        "J11",
+                        "J12",
+                        "J13",
+                        "J14",
+                        "J15",
+                        "J16",
+                        "J17",
+                        "J18",
+                        "J19",
+                        "J20",
+                        "J21",
+                        "J22",
+                        "J23",
+                        "J24",
+                        "J25",
+                        "J26",
+                        "J27",
+                        "J28",
+                        "J29",
+                        "J30",
+                        "J31",
+                        "J32",
+                        "J33",
+                        "J34",
+                        "J35",
+                        "J36",
+                        "J37",
+                        "J38",
+                        "J39",
+                        "J40",
+                        "J41",
+                        "J42",
+                        "J43",
+                        "J44",
+                        "J45",
+                        "J46",
+                        "J47",
+                        "J48",
+                        "J49",
+                        "J50",
+                        "J51",
+                        "J52",
+                        "J53",
+                        "J54",
+                        "J55",
+                        "J56",
+                        "J57",
+                        "J58",
+                        "J59",
+                        "J60",
+                        "J61",
+                        "J62",
+                        "J63",
+                        "J64",
+                        "J65",
+                        "J66",
+                        "J67",
+                        "J68",
+                        "J69",
+                        "J70",
+                        "J71",
+                        "J72",
+                        "J73",
+                        "J74",
+                        "J75",
+                        "J76",
+                        "J77",
+                        "J78",
+                        "J79",
+                        "J80",
+                        "J81",
+                        "J82",
+                        "J83",
+                        "J84",
+                        "J85",
+                        "J86",
+                        "J87",
+                        "J88",
+                        "J89",
+                        "J90",
+                        "J91",
+                        "J92",
+                        "J93",
+                        "J94",
+                        "J95",
+                        "J96",
+                        "J97",
+                        "J98",
+                        "J99",
+                        "J100",
+                        "J101",
+                        "J102",
+                        "J103",
+                        "J104",
+                        "J105",
+                        "J106",
+                        "J107",
+                        "J108",
+                        "J109",
+                        "J110",
+                        "J111",
+                        "J112",
+                        "J113",
+                        "J114",
+                        "J115",
+                        "J116",
+                        "J117",
+                        "J118",
+                        "J119",
+                        "J120",
+                        "J121",
+                        "J122",
+                        "J123",
+                        "J124",
+                        "J125",
+                        "J126",
+                        "J127",
+                        "J128",
+                        "J129",
+                        "J130",
+                        "J131",
+                        "J132",
+                        "J133",
+                        "J134",
+                        "J135",
+                        "J136",
+                        "J137",
+                        "J138",
+                        "J139",
+                        "J140",
+                        "J141",
+                        "J142",
+                        "J143",
+                        "J144",
+                        "J145",
+                        "J146",
+                        "J147",
+                        "J148",
+                        "J149",
+                        "J150",
+                        "J151",
+                        "J152",
+                        "J153",
+                        "J154",
+                        "J155",
+                        "J156",
+                        "J157",
+                        "J158",
+                        "J159",
+                        "J160",
+                        "J161",
+                        "J162",
+                        "J163",
+                        "J164",
+                        "J165",
+                        "J166",
+                        "J167",
+                        "J168",
+                        "J169",
+                        "J170",
+                        "J171",
+                        "J172",
+                        "J173",
+                        "J174",
+                        "J175",
+                        "J176",
+                        "J177",
+                        "J178",
+                        "J179",
+                        "J180",
+                        "J181",
+                        "J182",
+                        "J183",
+                        "J184",
+                        "J185",
+                        "J186",
+                        "J187",
+                        "J188",
+                        "J189",
+                        "J190",
+                        "J191",
+                        "J192",
+                        "J193",
+                        "J194",
+                        "J195",
+                        "J196",
+                        "J197",
+                        "J198",
+                        "J199",
+                        "J200",
+                        "J201",
+                        "J202",
+                        "J203",
+                        "J204",
+                        "J205",
+                        "J206",
+                        "J207",
+                        "J208",
+                        "J209",
+                        "J210",
+                        "J211",
+                        "J212",
+                        "J213",
+                        "J214",
+                        "J215",
+                        "J216",
+                        "J217",
+                        "J218",
+                        "J219",
+                        "J220",
+                        "J221",
+                        "J222",
+                        "J223",
+                        "J224",
+                        "J225",
+                        "J226",
+                        "J227",
+                        "J228",
+                        "J229",
+                        "J230",
+                        "J231",
+                        "J232",
+                        "J233",
+                        "J234",
+                        "J235",
+                        "J236",
+                        "J237",
+                        "J238",
+                        "J239",
+                        "J240",
+                        "J241",
+                        "J242",
+                        "J243",
+                        "J244",
+                        "J245",
+                        "J246",
+                        "J247",
+                        "J248",
+                        "J249",
+                        "J250",
+                        "J251",
+                        "J252",
+                        "J253",
+                        "J254",
+                        "J255",
+                        "J256",
+                        "J257",
+                        "J258"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "l"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4",
+                        "A5",
+                        "A6",
+                        "A7",
+                        "A8",
+                        "A9",
+                        "A10",
+                        "A11",
+                        "A12",
+                        "A13",
+                        "A14",
+                        "A15",
+                        "A16",
+                        "A17",
+                        "A18",
+                        "A19",
+                        "A20",
+                        "A21",
+                        "A22",
+                        "A23",
+                        "A24",
+                        "A25",
+                        "A26",
+                        "A27",
+                        "A28",
+                        "A29",
+                        "A30",
+                        "A31",
+                        "A32",
+                        "A33",
+                        "A34",
+                        "A35",
+                        "A36",
+                        "A37",
+                        "A38",
+                        "A39",
+                        "A40",
+                        "A41",
+                        "A42",
+                        "A43",
+                        "A44",
+                        "A45",
+                        "A46",
+                        "A47",
+                        "A48",
+                        "A49",
+                        "A50",
+                        "A51",
+                        "A52",
+                        "A53",
+                        "A54",
+                        "A55",
+                        "A56",
+                        "A57",
+                        "A58",
+                        "A59",
+                        "A60",
+                        "A61",
+                        "A62",
+                        "A63",
+                        "A64",
+                        "A65",
+                        "A66",
+                        "A67",
+                        "A68",
+                        "A69",
+                        "A70",
+                        "A71",
+                        "A72",
+                        "A73",
+                        "A74",
+                        "A75",
+                        "A76",
+                        "A77",
+                        "A78",
+                        "A79",
+                        "A80",
+                        "A81",
+                        "A82",
+                        "A83",
+                        "A84",
+                        "A85",
+                        "A86",
+                        "A87",
+                        "A88",
+                        "A89",
+                        "A90",
+                        "A91",
+                        "A92",
+                        "A93",
+                        "A94",
+                        "A95",
+                        "A96",
+                        "A97",
+                        "A98",
+                        "A99",
+                        "A100",
+                        "A101",
+                        "A102",
+                        "A103",
+                        "A104",
+                        "A105",
+                        "A106",
+                        "A107",
+                        "A108",
+                        "A109",
+                        "A110",
+                        "A111",
+                        "A112",
+                        "A113",
+                        "A114",
+                        "A115",
+                        "A116",
+                        "A117",
+                        "A118",
+                        "A119",
+                        "A120",
+                        "A121",
+                        "A122",
+                        "A123",
+                        "A124",
+                        "A125",
+                        "A126",
+                        "A127",
+                        "A128",
+                        "A129",
+                        "A130",
+                        "A131",
+                        "A132",
+                        "A133",
+                        "A134",
+                        "A135",
+                        "A136",
+                        "A137",
+                        "A138",
+                        "A139",
+                        "A140",
+                        "A141",
+                        "A142",
+                        "A143"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 3
+          },
+          "benchmark_alias": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "C1",
+                  "C2",
+                  "C3",
+                  "C4",
+                  "C5",
+                  "C6",
+                  "C7",
+                  "C8",
+                  "C9",
+                  "C10"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "style_audit": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "time": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "choice_index": {
+                        "type": "integer",
+                        "enum": [
+                          0,
+                          1,
+                          2
+                        ]
+                      },
+                      "omission_reason": {
+                        "type": "null"
+                      }
+                    },
+                    "required": [
+                      "choice_index",
+                      "omission_reason"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "choice_index": {
+                        "type": "null"
+                      },
+                      "omission_reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "choice_index",
+                      "omission_reason"
+                    ]
+                  }
+                ]
+              },
+              "cost": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "choice_index": {
+                    "type": "null"
+                  },
+                  "omission_reason": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "choice_index",
+                  "omission_reason"
+                ]
+              },
+              "premium": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "choice_index": {
+                        "type": "integer",
+                        "enum": [
+                          0,
+                          1,
+                          2
+                        ]
+                      },
+                      "omission_reason": {
+                        "type": "null"
+                      }
+                    },
+                    "required": [
+                      "choice_index",
+                      "omission_reason"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "choice_index": {
+                        "type": "null"
+                      },
+                      "omission_reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "choice_index",
+                      "omission_reason"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "time",
+              "cost",
+              "premium"
+            ]
+          }
+        },
+        "required": [
+          "choices",
+          "benchmark_alias",
+          "style_audit"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 83331,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 83328
+    },
+    "output_tokens": 404,
+    "output_tokens_details": {
+      "reasoning_tokens": 321
+    },
+    "total_tokens": 83735
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793277524,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

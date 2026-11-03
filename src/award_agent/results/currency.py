@@ -84,6 +84,21 @@ def _currency(raw: RawField) -> str | None:
     return None
 
 
+def original_quote_major(
+    amount: RawField, currency: RawField, unit: str = "major",
+) -> Decimal | None:
+    """Return a reported amount in its currency's major units, without FX."""
+    parsed = _decimal(amount)
+    code = _currency(currency)
+    if parsed is None or code is None:
+        return None
+    if unit == "major":
+        return parsed
+    if unit == "minor" and code in {"USD", "CAD"}:
+        return parsed / 100
+    return None
+
+
 def observed_money(
     component: SolutionComponent, kind: Literal["award_taxes", "cash_fare"],
     snapshot: CurrencyConversionSnapshot, travelers: int,
@@ -110,8 +125,9 @@ def observed_money(
         reason = "rate_unavailable"
     quoted: Decimal | None = None
     if reason is None and parsed is not None and rate is not None:
-        major = parsed / 100 if unit == "minor" else parsed
-        quoted = major * rate
+        major = original_quote_major(amount, currency, unit)
+        if major is not None:
+            quoted = major * rate
     per_traveler = quoted
     if quoted is not None and component.price_scope == "party":
         per_traveler = quoted / travelers

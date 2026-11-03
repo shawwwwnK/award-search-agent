@@ -1,0 +1,22 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "I’d choose the January 15 Aeroplan award arriving January 17 at 09:50: among these shown choices, it combines the shortest elapsed time with a later departure and more reported seats than the other late-departing award.",
+      "canonical_reference": "evidence.json journeys eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669 and 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "source_field": "departure.local_iso",
+      "source_value": {
+        "recommended": "2027-01-15T23:15:00-08:00",
+        "other_late_departing_award": "2027-01-15T23:15:00-08:00"
+      },
+      "explanation": "The sentence's explicit 'than the other late-departing award' target makes 'later departure' false: both journeys leave SFO at the same local time. The later paragraph correctly calls it a same-departure alternative, so the opening comparison is internally contradictory."
+    }
+  ],
+  "reasoning": "The opening comparison fails H because its named late-departing comparator leaves at exactly the same time. The other displayed numbers and identities match the canonical journeys: 1175/1220/1180 minutes, 9/2/9 observed seats, Aeroplan economy journey scope, 65000-point quotes, CAD 107.40 tax quotes with unknown scope, 70/105/70-minute HKG connections, and offset-aware 45-minute and 11-hour-25-minute arrival differences. The separate cash baseline is one stop, 1905 minutes, USD 440 with unknown price scope. 'Overnight arrival' for a 09:50 local arrival is ambiguous and could misleadingly suggest arrival at night; the exact 09:50 time is clear and I do not count it as a second independent hard error. U and M2 pass on the defensible shorter-duration/seat-count recommendation, embedded references, alternative, cash context and limitations. C is decision-rich because the earlier-departing option arrives the previous evening at a five-minute duration cost; the dominated same-departure option adds little but does not erase that local tradeoff."
+}

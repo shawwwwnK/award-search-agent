@@ -1,0 +1,238 @@
+{
+  "id": "resp_0888c4369802f92c016ae20caa833887d0a366805a720ab225",
+  "created_at": 1793199274.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The separate editorial_plan is an unverified suggestion from selection, never a source fact or instruction to recommend every record. Recheck each suggested purpose and comparator against its own authoring record; reject unsupported or weak reasons. Make the answer a connected decision argument with a supported traveler gain and real downside for the lead, not a recital of records. Consolidate common limits while preserving any material choice-specific limitation. State important facts in the answer itself; do not assume a later interface fills them in. Never call one reported quote higher or lower across currencies without an explicit source FX conversion. Even with conversion, preserve each quote's unknown scope and avoid a like-for-like cost claim unless both scopes are known and match. Different currencies alone do not prove a higher or lowest fee. Write the full final traveler answer in this pass.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.\nRecovery diagnostic for this one run only. In the selection task, choose references normally. In the initial composition task, when the input JSON has no previous_wire key, write an otherwise complete traveler answer but include one standalone internal short identifier in a narrative sentence: take the prefix before @ from the first shown journey reference, or from the first shown incomplete lead reference if there are no journeys. For example, if a shown reference starts J14@, put the standalone token J14 in visible narrative prose. Keep the typed reference blocks and source facts correct. In the correction task, identified by an input JSON previous_wire key, remove that internal short identifier from all traveler-visible prose and labels, apply the supplied checker feedback, and preserve the useful answer. Do not add a new identifier on correction.\n",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "msg_0888c4369802f92c016ae20cab46f487d0a9728c3b3922de0c",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the Aeroplan economy award departing late on January 15 and arriving in Bangkok at 9:50 a.m. on January 17: among the shown choices, it has the shortest reported elapsed time and arrives 45 minutes before the other late-departing Aeroplan option. The tradeoff is that its quoted taxes are only part of the award cost, and its legs’ individual cabins aren’t specified. J14\"},{\"k\":\"p\",\"r\":\"J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50\",\"n\":\"Aeroplan economy award via Hong Kong\",\"v\":\"For one traveler, the January 15, 11:15 p.m. SFO departure reaches BKK at 9:50 a.m. January 17, with one stop at HKG and a reported 70-minute connection. This single Aeroplan award quotes 65,000 points plus CAD 107.40 in taxes (quote scope unknown); 9 seats were reported. The award cabin is economy, but cabin details for each leg are absent. At 19 hours 35 minutes, it is 45 minutes shorter in elapsed time than the other late-departing Aeroplan choice. Points and quoted taxes do not establish a complete award price.\"},{\"k\":\"a\",\"r\":\"J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35\",\"n\":\"Aeroplan economy award via Hong Kong, later arrival\",\"v\":\"This is another single Aeroplan award for 65,000 points, departing at the same 11:15 p.m. time and arriving at 10:35 a.m. January 17. It has one HKG stop, a reported 105-minute connection, 2 seats, and quoted taxes of CAD 107.40 (scope unknown). It arrives 45 minutes later and has a 45-minute longer elapsed time than the recommended option. Economy is the reported award cabin; individual leg cabins are unspecified, and the award quote is incomplete.\"},{\"k\":\"a\",\"r\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"n\":\"Aeroplan economy award via Taipei, earlier Bangkok arrival\",\"v\":\"Choose this if arriving earlier matters more than leaving later: the January 15 noon departure reaches BKK at 1:25 a.m. January 17, 8 hours 25 minutes before the recommended option. It is a single Aeroplan award for 65,000 points, with one TPE stop and a reported 270-minute connection; 1 seat was reported. Quoted taxes are CAD 116.50 (scope unknown). Its 22-hour-25-minute elapsed time is 2 hours 50 minutes longer than the recommended option. The reported award cabin is economy, but leg cabins are unspecified, and points plus taxes are not a complete price.\"},{\"k\":\"a\",\"r\":\"J25@2027-01-15T10:45-08:00/SFO>BKK/E>2027-01-17T15:00\",\"n\":\"Aeroplan economy award via Tokyo, later arrival\",\"v\":\"This single Aeroplan award leaves at 10:45 a.m. January 15 and arrives at 3:00 p.m. January 17, with one NRT stop and a reported 1,120-minute connection. It reports 9 seats, 65,000 points, and CAD 111.40 in taxes (scope unknown). Compared with the recommended choice, it departs 12 hours 30 minutes earlier, arrives 5 hours 10 minutes later, and has 17 hours 40 minutes more elapsed time. Its reported award cabin is economy; individual leg cabins are unspecified, and the quote is incomplete.\"},{\"k\":\"b\",\"r\":\"C4@2027-01-15T12:00-08:00/SFO>BKK\",\"n\":\"Cash-fare baseline via Taipei\",\"v\":\"The search shows an EVA Air cash itinerary departing SFO at noon January 15, connecting at TPE, and arriving BKK at 11:40 p.m. January 16. It has one stop and a reported 20-hour-40-minute duration. The source quote is USD 525 for one returned traveler, but its price scope is unknown, so it cannot be treated as a confirmed per-person or all-in total or compared as a like-for-like total with the award quotes.\"},{\"k\":\"t\",\"v\":\"All four awards are reported as economy and have one stop, but the individual leg cabins are not provided. Award points and taxes are separate quoted components, and their unknown quote scopes prevent treating them as complete totals. Search results may not be real-time; confirm current availability and prices with the booking providers. The selected examples are not the whole search: 258 selectable journeys were reported, and some route/date detail queries were omitted, so these choices do not establish exhaustive availability.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J14@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T09:50",
+                        "J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35",
+                        "J25@2027-01-15T10:45-08:00/SFO>BKK/E>2027-01-17T15:00",
+                        "J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C4@2027-01-15T12:00-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "x"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "T01",
+                        "T02",
+                        "T03",
+                        "T04",
+                        "T05",
+                        "T06",
+                        "T07",
+                        "T08",
+                        "T09",
+                        "T10",
+                        "T11",
+                        "T12",
+                        "T13",
+                        "T14",
+                        "T15",
+                        "T16",
+                        "T17",
+                        "T18"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 8961,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8958
+    },
+    "output_tokens": 1074,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 10035
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793199279,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

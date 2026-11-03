@@ -1,0 +1,165 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q023",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "All departure/arrival/duration and buffer comparisons match the exact selected pair. United lead and USD605 cash quote are correctly sourced and scoped.",
+    "U": "Defensible economy-buffer versus earlier/shorter business choice, plus a conditional United-program research action without treating it as complete.",
+    "M2": "Common seat/tax gaps repeat beside both complete options and in the closing paragraph. Literal internal instruction SOURCE-BOUND INLINE CASH SENTENCE leaks into traveler prose.",
+    "C": "Useful supported cabin/time versus buffer contrast and conditional program-access research reason. No fixed numeric or same-program pair requirement applied.",
+    "K": "Exact time and premium witnesses survive; business overlap is preserved. The United lead is not assigned Ranking styles; no cost winner is invented.",
+    "P": "Source-resolved journey and lead cards are exact, including positioning schedules. Cash appears once with correct USD605 amount and unknown scope; its internal prefix is graded under M2 rather than falsely called a source error."
+  },
+  "findings": [
+    {
+      "id": "q023-F1",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Seat support and taxes are unconfirmed, repeated in both complete-option explanations and shared closing.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[1].text",
+          "fields": {
+            "excerpt": "its seat support and taxes are unconfirmed"
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[2].text",
+          "fields": {
+            "excerpt": "award seat support and taxes are unconfirmed"
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[4].text",
+          "fields": {
+            "excerpt": "do not establish whether the award seats are supported for one traveler ... Award-tax amounts are unavailable for both"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee and 010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+          "fields": {
+            "money.award_taxes.raw_amount.state": "unknown"
+          }
+        }
+      ],
+      "explanation": "These are common conditions. Repeating them three times does not add a local distinction; they belong in one shared explanation while card indicators remain intact."
+    },
+    {
+      "id": "q023-F2",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "SOURCE-BOUND INLINE CASH SENTENCE: SFO to BKK is quoted at USD605.00; the quote scope is unknown.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[5].text",
+          "fields": {
+            "internal_prefix": "SOURCE-BOUND INLINE CASH SENTENCE:"
+          }
+        }
+      ],
+      "explanation": "The literal authoring instruction appears in the traveler answer. Cash facts themselves are true and appear once, but this is not natural traveler composition."
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "fields": {
+        "departure.local_iso": "2027-01-08T08:36:00-08:00",
+        "arrival.local_iso": "2027-01-10T04:15:00+07:00",
+        "elapsed_minutes": "1719",
+        "connections[0].wait_minutes": 150,
+        "styles": [
+          "time",
+          "premium"
+        ]
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+      "fields": {
+        "departure.local_iso": "2027-01-08T11:47:00-08:00",
+        "arrival.local_iso": "2027-01-10T08:50:00+07:00",
+        "elapsed_minutes": "1803",
+        "connections[0].wait_minutes": 301,
+        "styles": [
+          "time"
+        ]
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594",
+      "fields": {
+        "program.value": "united",
+        "origin": "SFO",
+        "destination": "BKK",
+        "departure_date": "2027-01-08",
+        "points.value": 55000,
+        "money.raw_amount.value": 2180,
+        "money.raw_currency.value": "USD",
+        "money.unit": "minor",
+        "money.scope": "unknown",
+        "seats.value": 9,
+        "legs[0].departure.instant": null
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed",
+      "fields": {
+        "cash_amount.value": 605,
+        "cash_currency.value": "USD",
+        "money.unit": "major",
+        "price_scope": "unknown"
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 232,
+    "category_counts": {
+      "time": 116,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 58,
+    "possible_cost_members": 0,
+    "audit": "Read raw nullable style witnesses/free choices, normalized omissions and full journey families. J18/time and J63/premium resolve exactly through references.json and remain visible. Reviewed full lead family inventory and route/date scope of same-day United alternatives: lower-point component leads cover other routes and are not interchangeable with this SFO\u2013BKK lead. No material category omission found."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false
+  },
+  "uncertainty": [
+    "P passes source identity/card/cash-once requirements; the literal cash prefix is a separate M2 natural-composition failure.",
+    "The conditional United reason does not infer traveler balance or complete schedule; no minimum lead count or mandatory numeric comparison imposed.",
+    "Saved partial coverage does not establish current availability or population reliability; browser layout not qualified."
+  ],
+  "verification": [
+    "Read current rubric, full source landscape, lead inventory, raw/normalized audit, references, document, resolved objects and answer.",
+    "Checked exact visible journey/component/benchmark joins and lead component; temporal deltas191 departure/275 arrival/84 elapsed minutes agree with source.",
+    "Checked USD21.80 lead tax conversion from minor units and known cash major unit, preserving unknown scope.",
+    "No current metrics/checker/other grades/q024 inspection, live calls or product edits."
+  ],
+  "escalation_recommended": false
+}

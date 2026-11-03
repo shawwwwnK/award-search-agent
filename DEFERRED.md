@@ -772,6 +772,52 @@ inspection/iteration in another session, intending to make the fast profile the
 default. The switch and quality acceptance remain pending; retain the measured
 failure and prerequisites above. [Handoff](docs/handoffs/2026-10-28-results-fast-profile-next-session.md).
 
+2026-10-28 current invocation (G06/G08): the owner authorizes Luna-only fast
+implementation and live iteration toward default adoption and M2 closeout, with
+the 20-second goal and a little over acceptable. Required core work now includes
+restoring meaningful complete-answer composition and experimenting with bounded
+correction; it is not optional deferred cleanup. Fresh source-reviewed repeated
+cohorts, complete timing including actual correction, offline recovery/tamper
+controls and explicit default-entry-point validation remain the evidence for
+adoption. Arbitrary numerical prose, owner presentation acceptance, frontend
+integration, M3 and population reliability keep their distinct limits. See the
+[session log](docs/build-log/2026-10-28-results-fast-default.md). Final disposition
+will be appended after iteration; earlier failures stay intact.
+
+Same-session refinement: V4–V7 retained narrative association/selection defects;
+medium effort in both phases exceeded the goal. The next V10 experiment uses a
+bounded editorial revision even for mechanically clean recoverable drafts,
+without inventing failed findings or reopening M3 semantic-judge qualification.
+Its required evidence includes blinded draft-versus-revision review and full
+three-call latency, alongside final unchanged-profile confirmations. This remains
+required M2 responsiveness/content work; it does not close G06/G08 globally.
+
+2026-10-28 V18 checkpoint (G06/G08): the three low/Fast Luna phases restore
+actual failed-check correction within one editorial patch slot, with zero retries
+and V12 exact replay. The frozen six-run precision-guidance cohort took14.14–23.77s
+(median18.78), but q063/q064 source-association errors fail the combined gate.
+All six are useful and decision-rich; q068 retains an H-fail review and separate H-pass adjudication with a wording caveat.
+The public CLI/API default wiring remains provisional. A controlled actual
+alias-fault repair took15.01s within three calls; this is not a natural failure
+rate or semantic repair guarantee. Source fidelity remains required core M2 work,
+not deferred cleanup. The next grounded-authoring design is open. Strict campaign
+integrity passes66 runs/153 generation and count reservations with zero issues.
+Broader deadlines, unchecked-prose truth, owner acceptance, frontend and M3 retain
+their claim-specific prerequisites. See the same session log and ADR0029; original
+failed cohorts and reviews remain unchanged.
+
+2026-10-28 V19/V20 follow-up (G06/G08): V19 cold-input scouts improve source
+association and complete in21.50/18.89/10.43s, but disputed party wording and basic
+incomplete advice fail the combined gate. V20 implementation now adds canonical
+party-evidence colocation and narrow central next-check rationale repair, retaining
+all-low Luna three-call bounds, V19 dossiers and atomic edits. This remains required
+M2 source fidelity/content work, not optional deferred cleanup. No V20 live result,
+qualified default or M2 closeout yet; original reviews and separate q071 disputed
+adjudication remain. Corrected strict verification passes69 runs/162 calls of each
+kind with zero issues; prospective engineering cap192 leaves30 calls for the next
+bounded scout/confirmation/diagnostic sequence. Broader G06/G08 claims, owner
+presentation acceptance, frontend and M3 remain distinct.
+
 2026-10-27 under20 invocation (G06/G08) — the owner now explicitly sets a
 below20second Results goal, retains Luna and invokes architecture/input/parsing/
 quality reassessment with subagents and live iteration. This supersedes the
@@ -795,3 +841,130 @@ adoption, owner latency/presentation acceptance, semantic-verification guarantee
 composed deadline or gate closure. Revisit on the owner's keep/cut decision and
 evidence for the chosen quality/latency claim. See the
 [decision report](evidence/results-stage/m2/structured/2026-10-25-latency-next-cut/README.md).
+
+2026-10-28 Luna fast Results follow-up (G06/G08): The owner authorized continued
+Luna-only implementation and live iteration toward a default and M2 closeout,
+with a 20-second target and a small overage acceptable. This is active required
+core work, not deferred cleanup. `focused-v23` remains provisionally wired: six
+frozen answers took 7.62–17.68s (median11.22), all passed H/U/M2, five of six
+were decision-rich, and q095 was basic, so the declared combined gate failed. A
+separate real conditional-correction diagnostic took18.73s and passed independent
+review; it is not a correction-rate estimate. V24–V26 incomplete scouts remained
+C-basic despite H/U/M2 passes. V27 opt-in implementation tests medium selection
+and authoring on incomplete cases with one low correction after detected failed
+checks; it has not been called. V23 remains provisional and no M2 closeout is
+claimed. The campaign hard-stops at V30 for a full review against checkpoint
+`b7bedf5`; no later candidate is in scope. The 243/243 engineering cap has 216
+reservations. These case results do not close composed-deadline, population
+reliability, arbitrary-prose truth, owner presentation acceptance, frontend or M3
+prerequisites. See [Results M2 status](docs/results-m2.md), [ADR0029](docs/adr/0029-structured-results-and-local-workspace.md), [session log](docs/build-log/2026-10-28-results-fast-default.md) and [campaign evidence](evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md).
+
+
+2026-10-28 V27 Results disposition (G06/G08): The provisionally wired public
+API/CLI default now uses the owned shared-client lifecycle, explicit timeout and
+zero retries; injected clients remain usable offline. The complete V23 branch is
+unchanged and uses no-reasoning selection/low authoring; incomplete V27 uses
+medium selection/authoring and conditional low correction after actual failed
+checks. The fixed six-run frozen cohort completed10.21–22.14s (median11.5758):
+U/M2 passed6/6, H3/6 and Crich5/6. q108 reversed the displayed arrival comparison,
+q110 made a mixed Alaska/United comparison error, and q112 reversed the cash
+arrival comparison. The declared gate fails. The first frozen harness attempt
+stopped on a NameError after two calls but preserved its artifact; q107 passed
+source review. A new fixed-manifest cohort completed and does not replace that
+attempt. The controlled partial correction diagnostic passed H/U/M2/C but took
+26.23s, beyond allowed latency tolerance. V23 remains the strongest prior cohort
+for factual quality/latency but failed comparative depth on q095. V28 design is
+pending because source review also failed on the unchanged complete branch. No
+profile qualifies and M2 is not closed. At the latest checkpoint 237/243 calls
+are reserved. Stop no later than V30 and review all WIP against b7bedf5; no V31.
+These results do not close composed deadlines, population reliability, arbitrary
+prose truth, owner presentation acceptance, frontend or M3 prerequisites. See
+[status](docs/results-m2.md), [ADR0029](docs/adr/0029-structured-results-and-local-workspace.md),
+[session log](docs/build-log/2026-10-28-results-fast-default.md) and [campaign evidence](evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md).
+
+
+2026-10-28 final V30 disposition (G06/G08): The campaign stopped at the owner's
+V30 ceiling. No V31, further paid calls, V30 six-run confirmation or actual V30
+correction diagnostic will run. Public API/CLI remains provisional V27: H3/6 in
+its fixed confirmation, with a controlled actual correction taking26.23s. V30
+opt-in used complete LOW/MEDIUM (`roles-v28`/`complete-v26`) on the original source
+view and incomplete MEDIUM/LOW (`roles-v30`/`complete-v28`) on lossless groups of
+378 leads across 13 programs. The pool cap was up to two non-benchmark records
+(journeys or leads) plus one benchmark. Three scouts took16.38/12.29/11.06s, all
+H/U/M2-pass, but only one was C-rich. q120 (conditional) and q121 (incomplete) were basic without sparse exceptions;
+q119 (admitted) was decision-rich. The scout gate failed before confirmation or
+correction. V30 correction latency is unmeasured. V23 remains the best earlier full cohort (H/U/M2 6/6,
+C-rich5/6,7.62–17.68s), but q095 was basic. V28 also failed and V29 passed only
+two of three C gates; all original results remain preserved. Ledger254/278 leaves
+24 unused. All 109 summarized artifacts replay identically; strict archive verification exited 1 with seven flags classified as four verifier-assumption bugs, not demonstrated artifact corruption. The434-test Results
+baseline predates V24 and later profiles received bounded checks; no full-repo pass
+is claimed. Comparative depth remains required core work, not optional deferred
+cleanup; mechanical correction does not validate arbitrary prose. No profile
+qualifies and this iteration does not close M2. The owner-requested whole-WIP review
+against b7bedf5 completed with two Standards heuristics and four Spec P2 findings;
+source/depth/latency acceptance and verifier repair remain open. Historical October8 closeout scope,
+frontend, owner presentation acceptance and M3 remain distinct. See [status](docs/results-m2.md), [ADR0029](docs/adr/0029-structured-results-and-local-workspace.md),
+[session log](docs/build-log/2026-10-28-results-fast-default.md) and [campaign evidence](evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md).
+
+
+2026-10-28 offline prototype disposition (G06/G08): The owner requested the
+advisor's zero-model-call comparison/calibration package. Four paired, hand-authored
+complete answers and source-backed clause controls now exist under
+[evidence](evidence/results-stage/m2/design/2026-10-28-comparison-prototype/review.html).
+Proposed shared factual comparison wording remains unadopted pending owner
+questions; the ordinary-prose trust boundary and stopped V30 campaign remain.
+Nine clauses and22functional controls establish local mechanics only, not whole-
+answer truth, useful selection, Luna fluency or latency. Historical three-option
+stress examples do not prove value over current cap2. This does not close G06/G08,
+M2, frontend or M3 and creates no promise to implement another framework.
+Revisit the proposed wording boundary after explicit product disposition and a
+bounded experiment design with valid/invalid controls; preserve all historical
+grades and the old verifier's unresolved status. See the
+[offline log](docs/build-log/2026-10-28-results-offline-comparison-prototype.md).
+
+
+2026-10-29 owner disposition (G06/G08, Results presentation): The owner retains
+Luna wording and rejects comparison binding as the next cut. Ranking's existing
+categories must remain the recommendation frame; full-cash context is one brief
+sentence. Prototype questions C/D are superseded, not accepted grading-policy
+changes. Category-handoff preservation and evaluation are required M2 work, not
+optional new ranking or a reason to fabricate styles for research leads. The
+V30 campaign remains stopped; no new qualification or live execution follows.
+See [decision log](docs/build-log/2026-10-29-results-ranking-led-direction.md) and
+[ADR0029](docs/adr/0029-structured-results-and-local-workspace.md).
+
+
+2026-10-29 — new category-led M2 invocation (G06/G08): The owner confirmed the
+natural category-led/card design and authorized up to twenty new implementation
+and live-evaluation iterations, with architect reviews at5/10/15/20. Required
+work includes category-faithful selection, source-resolved flight cards,
+nonrepeated uncertainty, useful incomplete leads, independent factual review and
+checked workflow responsiveness including actual correction. See the
+[campaign plan](docs/plans/2026-10-29-results-category-led-campaign.md),
+[ADR0029](docs/adr/0029-structured-results-and-local-workspace.md) and
+[build log](docs/build-log/2026-10-29-results-category-led.md). Historical V30
+stop/evidence remains unchanged. No completion of G06/G08 or M3 is inferred from
+authorization; disposition will be updated from observed evidence.
+
+2026-10-29 — c20 stop (G06/G08, Results M2): All twenty new candidates ran;
+no combined source/composition/timing/confirmation/repair qualification was earned.
+Final c20 passes timing and two source answers but repeats a separate-ticket
+condition in q064. These remain required M2 acceptance gaps, not optional cleanup.
+The backend's indexed category selection, cards and replay are implemented;
+that does not close the presentation/behavior evidence. Public V27 remains
+provisional/unqualified; c20 is opt-in only. No c21 or spare-budget continuation.
+Revisit only under a new owner-authorized cut after the final architecture
+reflection; completion requires the unchanged full source/time gates, frozen
+confirmation and actual bounded-repair evidence, with frontend/M3 claims separate.
+See [campaign](evidence/results-stage/m2/structured/2026-10-29-category-led/README.md)
+and [build log](docs/build-log/2026-10-29-results-category-led.md). No G06/G08 or
+M3 completion is claimed by reaching the cap.
+
+Final architect recommendation (proposed, not accepted): prototype explicit
+model-declared condition-explanation ownership offline before another prompt
+campaign. Retain Luna wording/order and independent review of untagged prose;
+unique ownership alone does not prove no repetitions or numerical truth. This
+does not reopen implementation or authorize another paid campaign. See the
+[mandatory final review](docs/reviews/2026-10-29-results-category-led-c20-architect-review.md)
+for bounded controls and required new evidence. The G06/G08 acceptance gap
+remains required work until an owner-authorized cut satisfies the gates.

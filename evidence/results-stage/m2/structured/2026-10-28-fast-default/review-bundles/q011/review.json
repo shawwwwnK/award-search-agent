@@ -1,0 +1,43 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "For an Aeroplan award, the Hong Kong routing departing earlier is the strongest schedule fit among these shown choices: it has the shortest elapsed time and gets you to Bangkok the evening of January 16.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and evidence.json#journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669]",
+      "source_field": "elapsed_minutes",
+      "source_value": "Earlier-arriving HKG journey: 1180 minutes; later-departing HKG journey: 1175 minutes.",
+      "explanation": "The lead arrives earlier, but its elapsed time is five minutes longer than the shown later HKG journey, so it is not the shortest shown."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Its elapsed time is 5 minutes shorter than the later-departing Hong Kong alternative, and it arrives 11 hours 25 minutes before that option.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and evidence.json#journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669]",
+      "source_field": "elapsed_minutes; arrival.instant",
+      "source_value": "Lead: 1180 minutes, arrival 2027-01-16T15:25:00Z; later HKG: 1175 minutes, arrival 2027-01-17T02:50:00Z.",
+      "explanation": "The duration comparison is reversed: the lead is five minutes longer. The 11-hour-25-minute arrival advantage is correct."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Consider it if the later departure matters more than arriving earlier; it takes 5 minutes longer.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669] and evidence.json#journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a]",
+      "source_field": "elapsed_minutes",
+      "source_value": "Later HKG journey: 1175 minutes; lead HKG journey: 1180 minutes.",
+      "explanation": "The later-departing journey takes five minutes less, not five minutes more."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "It is a useful alternative if its earlier arrival suits you; it leaves SFO at noon and has the same returned points amount, with a higher reported CAD fee (also in minor units).",
+      "canonical_reference": "evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3] and evidence.json#journeys[candidate_id=c559213003ec943dd700f59c7813a457b52988433ba469978634ffb2a6a72954]",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.award_taxes.raw_amount.value; components[award_observation_id].seats.value",
+      "source_value": "Shown TPE: noon departure, Jan 17 01:25 arrival, 1345 minutes, 65000 points, 11650 CAD minor units, 1 seat. Other eligible TPE: noon departure, Jan 16 23:40 arrival, 1240 minutes, 65000 points, 11650 CAD minor units, 2 seats.",
+      "explanation": "The TPE suggestion lacks a clear gain over the lead, and another eligible TPE journey improves its arrival, elapsed time, and reported seats at the same returned points and fee amounts. This limits comparative depth; the source does not establish a price-scope-adjusted value winner."
+    }
+  ],
+  "reasoning": "The selected HKG award is a defensible exact lead: it has the earliest arrival among admitted SFO-BKK journeys, 9 reported seats for a one-traveler request, and the answer states its earlier-departure downside. However, the answer reverses the five-minute elapsed-time comparison in three places. Journey-level Aeroplan economy, observed seats, CAD 107.40 from 10740 minor units, unknown award price scope, the separate USD 456 two-stop cash baseline with unknown scope, and the consolidated availability limits otherwise match the canonical bundle. The prose is woven around journey references and gives a usable lead and cash context, so U and M2 pass independently of H. Comparative depth is basic because the false duration direction distorts the central tradeoff and the TPE option is weakly motivated against a stronger eligible TPE alternative. Leg cabins are unreported; the answer does not assert them. Live availability, bookability, and all-in price remain unknown."
+}

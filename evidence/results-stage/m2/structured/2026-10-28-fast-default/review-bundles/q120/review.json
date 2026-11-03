@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Consider it only if its later arrival better fits your plans; it takes longer and arrives later than the recommended choice.",
+      "canonical_reference": "evidence.json journeys 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee and 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.cash_fare.raw_amount.value; connections",
+      "source_value": "Earlier choice: Jan 8 08:36 SFO to Jan 10 04:15 BKK, 1719 minutes, 275000 Turkish points, USD 59 positioning quote, 150-minute LAX join and 140-minute IST connection. Later choice: Jan 8 08:40 SFO to Jan 10 08:50 BKK, 1990 minutes, same points and USD 59 quote, 149-minute LAX join and 420-minute IST connection.",
+      "explanation": "The displayed alternative is later and longer, with no explained offsetting gain. A generic preference for later arrival does not establish a source-supported tradeoff. This is a comparative-depth weakness, not a false numeric claim."
+    }
+  ],
+  "reasoning": "Both displayed journeys are conditional cash-access awards. Their offset-aware arrival/duration differences (4 hours 35 minutes and 4 hours 31 minutes), separate-ticket joins (150/149 minutes), Istanbul waits (140/420 minutes), Turkish business award quotes, unknown award seats/traveler support and fees, and USD 59 cash positioning quotes match canonical records. The selected cash baseline is a separate two-stop USD 452 itinerary. The answer is actionable as a first check with explicit booking and price cautions, and it reads as coherent prose. Comparative depth remains basic because the second option lacks an explained advantage. Additional uncertainty: the request leaves repositioning permission unresolved (request.repositioning_allowed is null; the reason set records positioning_permission_unknown). The answer discloses the separate cash booking, so I did not classify that omission as a contradictory factual claim; adjudication may consider whether that permission should be made more explicit."
+}

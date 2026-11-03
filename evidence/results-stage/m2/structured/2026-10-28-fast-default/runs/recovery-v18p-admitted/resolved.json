@@ -1,0 +1,957 @@
+{
+  "contract_version": "results-focused-resolved-v1",
+  "selected_journey_ids": [
+    "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669"
+  ],
+  "blocks": [
+    {
+      "kind": "narrative",
+      "text": "I’d choose the Aeroplan economy award departing late on January 15 and arriving in Bangkok at 9:50 a.m. on January 17: among the shown choices, it has the shortest reported elapsed time and arrives 45 minutes before the other late-departing Aeroplan option. The tradeoff is that its quoted taxes are only part of the award cost, and its legs’ individual cabins aren’t specified.",
+      "label": null,
+      "reference_kind": null,
+      "canonical_id": null,
+      "journey": null,
+      "component": null,
+      "lead": null,
+      "unavailable": false
+    },
+    {
+      "kind": "reference",
+      "text": "For one traveler, the January 15, 11:15 p.m. SFO departure reaches BKK at 9:50 a.m. January 17, with one stop at HKG and a reported 70-minute connection. This single Aeroplan award quotes 65,000 points plus CAD 107.40 in taxes (quote scope unknown); 9 seats were reported. The award cabin is economy, but cabin details for each leg are absent. At 19 hours 35 minutes, it is 45 minutes shorter in elapsed time than the other late-departing Aeroplan choice. Points and quoted taxes do not establish a complete award price.",
+      "label": "Aeroplan economy award via Hong Kong",
+      "reference_kind": "journey",
+      "canonical_id": "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+      "journey": {
+        "candidate_id": "eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+        "group_id": "3accc836e26bdefdfea75e57187ed58f826b83b378fc1606a94c45c6ec2eb6d4",
+        "topology": "direct_award",
+        "origin": "SFO",
+        "destination": "BKK",
+        "original_departure_date": "2027-01-15",
+        "departure": {
+          "instant": "2027-01-16T07:15:00Z",
+          "local_iso": "2027-01-15T23:15:00-08:00",
+          "timezone": "America/Los_Angeles",
+          "day_change": 0
+        },
+        "arrival": {
+          "instant": "2027-01-17T02:50:00Z",
+          "local_iso": "2027-01-17T09:50:00+07:00",
+          "timezone": "Asia/Bangkok",
+          "day_change": 2
+        },
+        "elapsed_minutes": "1175",
+        "award_observation_id": "21a21683189fff51812e5066e867f544a11286a905875aef66039629732109e7",
+        "cash_observation_id": null,
+        "legs": [
+          {
+            "observation_id": "21a21683189fff51812e5066e867f544a11286a905875aef66039629732109e7",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "SFO",
+            "destination": "HKG",
+            "departure": {
+              "instant": "2027-01-16T07:15:00Z",
+              "local_iso": "2027-01-15T23:15:00-08:00",
+              "timezone": "America/Los_Angeles",
+              "day_change": 0
+            },
+            "arrival": {
+              "instant": "2027-01-16T22:45:00Z",
+              "local_iso": "2027-01-17T06:45:00+08:00",
+              "timezone": "Asia/Hong_Kong",
+              "day_change": 2
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "UA877",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          },
+          {
+            "observation_id": "21a21683189fff51812e5066e867f544a11286a905875aef66039629732109e7",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "HKG",
+            "destination": "BKK",
+            "departure": {
+              "instant": "2027-01-16T23:55:00Z",
+              "local_iso": "2027-01-17T07:55:00+08:00",
+              "timezone": "Asia/Hong_Kong",
+              "day_change": 2
+            },
+            "arrival": {
+              "instant": "2027-01-17T02:50:00Z",
+              "local_iso": "2027-01-17T09:50:00+07:00",
+              "timezone": "Asia/Bangkok",
+              "day_change": 2
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "TG603",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          }
+        ],
+        "connections": [
+          {
+            "airport": "HKG",
+            "arriving_observation_id": "21a21683189fff51812e5066e867f544a11286a905875aef66039629732109e7",
+            "departing_observation_id": "21a21683189fff51812e5066e867f544a11286a905875aef66039629732109e7",
+            "wait_minutes": 70,
+            "kind": "award_connection",
+            "unknown_reason": null
+          }
+        ],
+        "award_program": {
+          "state": "value",
+          "value": "aeroplan",
+          "source_field": "Source"
+        },
+        "award_cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "Cabin"
+        },
+        "award_points": {
+          "state": "value",
+          "value": 65000,
+          "source_field": "MileageCost"
+        },
+        "money": {
+          "award_taxes": {
+            "kind": "award_taxes",
+            "raw_amount": {
+              "state": "value",
+              "value": 10740,
+              "source_field": "TotalTaxes"
+            },
+            "raw_currency": {
+              "state": "value",
+              "value": "CAD",
+              "source_field": "TaxesCurrency"
+            },
+            "unit": "minor",
+            "scope": "unknown",
+            "rate_to_usd": "0.7048209754722300535663941359",
+            "quoted_usd": "75.69777276571750775303073020",
+            "per_traveler_usd": null,
+            "conversion_snapshot_id": "bank-of-canada-usd-cad-2026-09-29-v1",
+            "conversion_as_of": "2026-09-29",
+            "approximate_conversion": true,
+            "reason": "scope_unknown"
+          },
+          "cash_fare": null,
+          "observed_cash_per_traveler_usd": null,
+          "points_raw": {
+            "state": "value",
+            "value": 65000,
+            "source_field": "MileageCost"
+          },
+          "points_per_traveler": null,
+          "points_program": "aeroplan",
+          "points_scope": "unknown",
+          "incomparable_reasons": [
+            "scope_unknown",
+            "points_incomparable"
+          ]
+        },
+        "booking_obligation": "single_award",
+        "price_completeness": "partial",
+        "styles": [
+          "time"
+        ],
+        "heuristic_cost_usd": null,
+        "internal": {
+          "status": "admitted",
+          "reason_codes": [
+            "original_endpoints_match",
+            "original_departure_in_window",
+            "award_travelers_supported",
+            "result_validation_minimum_award_seats",
+            "price_incomplete"
+          ],
+          "reason_details": [
+            "Complete journey meets its original airport pair.",
+            "Original departure falls within the requested local date window.",
+            "Award evidence supports the requested traveler count.",
+            "Compiled award result obligation minimum_award_seats evaluated.",
+            "Observed amounts cannot support an all-in party total."
+          ]
+        }
+      },
+      "component": null,
+      "lead": null,
+      "unavailable": false
+    },
+    {
+      "kind": "reference",
+      "text": "This is another single Aeroplan award for 65,000 points, departing at the same 11:15 p.m. time and arriving at 10:35 a.m. January 17. It has one HKG stop, a reported 105-minute connection, 2 seats, and quoted taxes of CAD 107.40 (scope unknown). It arrives 45 minutes later and has a 45-minute longer elapsed time than the recommended option. Economy is the reported award cabin; individual leg cabins are unspecified, and the award quote is incomplete.",
+      "label": "Aeroplan economy award via Hong Kong, later arrival",
+      "reference_kind": "journey",
+      "canonical_id": "28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "journey": {
+        "candidate_id": "28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+        "group_id": "52d1efc58af79f60e6c377595b9ff1b3cbe8c631fb034b05bcbb820ce9b49a0c",
+        "topology": "direct_award",
+        "origin": "SFO",
+        "destination": "BKK",
+        "original_departure_date": "2027-01-15",
+        "departure": {
+          "instant": "2027-01-16T07:15:00Z",
+          "local_iso": "2027-01-15T23:15:00-08:00",
+          "timezone": "America/Los_Angeles",
+          "day_change": 0
+        },
+        "arrival": {
+          "instant": "2027-01-17T03:35:00Z",
+          "local_iso": "2027-01-17T10:35:00+07:00",
+          "timezone": "Asia/Bangkok",
+          "day_change": 2
+        },
+        "elapsed_minutes": "1220",
+        "award_observation_id": "1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c",
+        "cash_observation_id": null,
+        "legs": [
+          {
+            "observation_id": "1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "SFO",
+            "destination": "HKG",
+            "departure": {
+              "instant": "2027-01-16T07:15:00Z",
+              "local_iso": "2027-01-15T23:15:00-08:00",
+              "timezone": "America/Los_Angeles",
+              "day_change": 0
+            },
+            "arrival": {
+              "instant": "2027-01-16T22:45:00Z",
+              "local_iso": "2027-01-17T06:45:00+08:00",
+              "timezone": "Asia/Hong_Kong",
+              "day_change": 2
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "UA877",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          },
+          {
+            "observation_id": "1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "HKG",
+            "destination": "BKK",
+            "departure": {
+              "instant": "2027-01-17T00:30:00Z",
+              "local_iso": "2027-01-17T08:30:00+08:00",
+              "timezone": "Asia/Hong_Kong",
+              "day_change": 2
+            },
+            "arrival": {
+              "instant": "2027-01-17T03:35:00Z",
+              "local_iso": "2027-01-17T10:35:00+07:00",
+              "timezone": "Asia/Bangkok",
+              "day_change": 2
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "CX705",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          }
+        ],
+        "connections": [
+          {
+            "airport": "HKG",
+            "arriving_observation_id": "1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c",
+            "departing_observation_id": "1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c",
+            "wait_minutes": 105,
+            "kind": "award_connection",
+            "unknown_reason": null
+          }
+        ],
+        "award_program": {
+          "state": "value",
+          "value": "aeroplan",
+          "source_field": "Source"
+        },
+        "award_cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "Cabin"
+        },
+        "award_points": {
+          "state": "value",
+          "value": 65000,
+          "source_field": "MileageCost"
+        },
+        "money": {
+          "award_taxes": {
+            "kind": "award_taxes",
+            "raw_amount": {
+              "state": "value",
+              "value": 10740,
+              "source_field": "TotalTaxes"
+            },
+            "raw_currency": {
+              "state": "value",
+              "value": "CAD",
+              "source_field": "TaxesCurrency"
+            },
+            "unit": "minor",
+            "scope": "unknown",
+            "rate_to_usd": "0.7048209754722300535663941359",
+            "quoted_usd": "75.69777276571750775303073020",
+            "per_traveler_usd": null,
+            "conversion_snapshot_id": "bank-of-canada-usd-cad-2026-09-29-v1",
+            "conversion_as_of": "2026-09-29",
+            "approximate_conversion": true,
+            "reason": "scope_unknown"
+          },
+          "cash_fare": null,
+          "observed_cash_per_traveler_usd": null,
+          "points_raw": {
+            "state": "value",
+            "value": 65000,
+            "source_field": "MileageCost"
+          },
+          "points_per_traveler": null,
+          "points_program": "aeroplan",
+          "points_scope": "unknown",
+          "incomparable_reasons": [
+            "scope_unknown",
+            "points_incomparable"
+          ]
+        },
+        "booking_obligation": "single_award",
+        "price_completeness": "partial",
+        "styles": [
+          "time"
+        ],
+        "heuristic_cost_usd": null,
+        "internal": {
+          "status": "admitted",
+          "reason_codes": [
+            "original_endpoints_match",
+            "original_departure_in_window",
+            "award_travelers_supported",
+            "result_validation_minimum_award_seats",
+            "price_incomplete"
+          ],
+          "reason_details": [
+            "Complete journey meets its original airport pair.",
+            "Original departure falls within the requested local date window.",
+            "Award evidence supports the requested traveler count.",
+            "Compiled award result obligation minimum_award_seats evaluated.",
+            "Observed amounts cannot support an all-in party total."
+          ]
+        }
+      },
+      "component": null,
+      "lead": null,
+      "unavailable": false
+    },
+    {
+      "kind": "reference",
+      "text": "Choose this if arriving earlier matters more than leaving later: the January 15 noon departure reaches BKK at 1:25 a.m. January 17, 8 hours 25 minutes before the recommended option. It is a single Aeroplan award for 65,000 points, with one TPE stop and a reported 270-minute connection; 1 seat was reported. Quoted taxes are CAD 116.50 (scope unknown). Its 22-hour-25-minute elapsed time is 2 hours 50 minutes longer than the recommended option. The reported award cabin is economy, but leg cabins are unspecified, and points plus taxes are not a complete price.",
+      "label": "Aeroplan economy award via Taipei, earlier Bangkok arrival",
+      "reference_kind": "journey",
+      "canonical_id": "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "journey": {
+        "candidate_id": "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+        "group_id": "9e7b8b1d847cc7cd2044f7d607cb7588c600e2c158ac77ad84efba5ed20dd4e7",
+        "topology": "direct_award",
+        "origin": "SFO",
+        "destination": "BKK",
+        "original_departure_date": "2027-01-15",
+        "departure": {
+          "instant": "2027-01-15T20:00:00Z",
+          "local_iso": "2027-01-15T12:00:00-08:00",
+          "timezone": "America/Los_Angeles",
+          "day_change": 0
+        },
+        "arrival": {
+          "instant": "2027-01-16T18:25:00Z",
+          "local_iso": "2027-01-17T01:25:00+07:00",
+          "timezone": "Asia/Bangkok",
+          "day_change": 2
+        },
+        "elapsed_minutes": "1345",
+        "award_observation_id": "8c9922b158150fbc3599f2e4bbb4313f8f91cd597b5032150915045c8e447fb9",
+        "cash_observation_id": null,
+        "legs": [
+          {
+            "observation_id": "8c9922b158150fbc3599f2e4bbb4313f8f91cd597b5032150915045c8e447fb9",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "SFO",
+            "destination": "TPE",
+            "departure": {
+              "instant": "2027-01-15T20:00:00Z",
+              "local_iso": "2027-01-15T12:00:00-08:00",
+              "timezone": "America/Los_Angeles",
+              "day_change": 0
+            },
+            "arrival": {
+              "instant": "2027-01-16T10:00:00Z",
+              "local_iso": "2027-01-16T18:00:00+08:00",
+              "timezone": "Asia/Taipei",
+              "day_change": 1
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "BR7",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          },
+          {
+            "observation_id": "8c9922b158150fbc3599f2e4bbb4313f8f91cd597b5032150915045c8e447fb9",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "TPE",
+            "destination": "BKK",
+            "departure": {
+              "instant": "2027-01-16T14:30:00Z",
+              "local_iso": "2027-01-16T22:30:00+08:00",
+              "timezone": "Asia/Taipei",
+              "day_change": 1
+            },
+            "arrival": {
+              "instant": "2027-01-16T18:25:00Z",
+              "local_iso": "2027-01-17T01:25:00+07:00",
+              "timezone": "Asia/Bangkok",
+              "day_change": 2
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "BR61",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          }
+        ],
+        "connections": [
+          {
+            "airport": "TPE",
+            "arriving_observation_id": "8c9922b158150fbc3599f2e4bbb4313f8f91cd597b5032150915045c8e447fb9",
+            "departing_observation_id": "8c9922b158150fbc3599f2e4bbb4313f8f91cd597b5032150915045c8e447fb9",
+            "wait_minutes": 270,
+            "kind": "award_connection",
+            "unknown_reason": null
+          }
+        ],
+        "award_program": {
+          "state": "value",
+          "value": "aeroplan",
+          "source_field": "Source"
+        },
+        "award_cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "Cabin"
+        },
+        "award_points": {
+          "state": "value",
+          "value": 65000,
+          "source_field": "MileageCost"
+        },
+        "money": {
+          "award_taxes": {
+            "kind": "award_taxes",
+            "raw_amount": {
+              "state": "value",
+              "value": 11650,
+              "source_field": "TotalTaxes"
+            },
+            "raw_currency": {
+              "state": "value",
+              "value": "CAD",
+              "source_field": "TaxesCurrency"
+            },
+            "unit": "minor",
+            "scope": "unknown",
+            "rate_to_usd": "0.7048209754722300535663941359",
+            "quoted_usd": "82.11164364251480124048491683",
+            "per_traveler_usd": null,
+            "conversion_snapshot_id": "bank-of-canada-usd-cad-2026-09-29-v1",
+            "conversion_as_of": "2026-09-29",
+            "approximate_conversion": true,
+            "reason": "scope_unknown"
+          },
+          "cash_fare": null,
+          "observed_cash_per_traveler_usd": null,
+          "points_raw": {
+            "state": "value",
+            "value": 65000,
+            "source_field": "MileageCost"
+          },
+          "points_per_traveler": null,
+          "points_program": "aeroplan",
+          "points_scope": "unknown",
+          "incomparable_reasons": [
+            "scope_unknown",
+            "points_incomparable"
+          ]
+        },
+        "booking_obligation": "single_award",
+        "price_completeness": "partial",
+        "styles": [
+          "time"
+        ],
+        "heuristic_cost_usd": null,
+        "internal": {
+          "status": "admitted",
+          "reason_codes": [
+            "original_endpoints_match",
+            "original_departure_in_window",
+            "award_travelers_supported",
+            "result_validation_minimum_award_seats",
+            "price_incomplete"
+          ],
+          "reason_details": [
+            "Complete journey meets its original airport pair.",
+            "Original departure falls within the requested local date window.",
+            "Award evidence supports the requested traveler count.",
+            "Compiled award result obligation minimum_award_seats evaluated.",
+            "Observed amounts cannot support an all-in party total."
+          ]
+        }
+      },
+      "component": null,
+      "lead": null,
+      "unavailable": false
+    },
+    {
+      "kind": "reference",
+      "text": "This single Aeroplan award leaves at 10:45 a.m. January 15 and arrives at 3:00 p.m. January 17, with one NRT stop and a reported 1,120-minute connection. It reports 9 seats, 65,000 points, and CAD 111.40 in taxes (scope unknown). Compared with the recommended choice, it departs 12 hours 30 minutes earlier, arrives 5 hours 10 minutes later, and has 17 hours 40 minutes more elapsed time. Its reported award cabin is economy; individual leg cabins are unspecified, and the quote is incomplete.",
+      "label": "Aeroplan economy award via Tokyo, later arrival",
+      "reference_kind": "journey",
+      "canonical_id": "0a7a5cb1340584e331fd93f7acdfc73c7307fa7a9b7da3da7dd5cc5d87342792",
+      "journey": {
+        "candidate_id": "0a7a5cb1340584e331fd93f7acdfc73c7307fa7a9b7da3da7dd5cc5d87342792",
+        "group_id": "0e68c6f516eec506fe524fcf63a34102760d2c65dea5bce3098315c0edf0b237",
+        "topology": "direct_award",
+        "origin": "SFO",
+        "destination": "BKK",
+        "original_departure_date": "2027-01-15",
+        "departure": {
+          "instant": "2027-01-15T18:45:00Z",
+          "local_iso": "2027-01-15T10:45:00-08:00",
+          "timezone": "America/Los_Angeles",
+          "day_change": 0
+        },
+        "arrival": {
+          "instant": "2027-01-17T08:00:00Z",
+          "local_iso": "2027-01-17T15:00:00+07:00",
+          "timezone": "Asia/Bangkok",
+          "day_change": 2
+        },
+        "elapsed_minutes": "2235",
+        "award_observation_id": "0144d43ed5c6a13080b92db97cab9e6b3c86ec8d08009bb8c62cff733999eaaa",
+        "cash_observation_id": null,
+        "legs": [
+          {
+            "observation_id": "0144d43ed5c6a13080b92db97cab9e6b3c86ec8d08009bb8c62cff733999eaaa",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "SFO",
+            "destination": "NRT",
+            "departure": {
+              "instant": "2027-01-15T18:45:00Z",
+              "local_iso": "2027-01-15T10:45:00-08:00",
+              "timezone": "America/Los_Angeles",
+              "day_change": 0
+            },
+            "arrival": {
+              "instant": "2027-01-16T06:05:00Z",
+              "local_iso": "2027-01-16T15:05:00+09:00",
+              "timezone": "Asia/Tokyo",
+              "day_change": 1
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "UA837",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          },
+          {
+            "observation_id": "0144d43ed5c6a13080b92db97cab9e6b3c86ec8d08009bb8c62cff733999eaaa",
+            "component_kind": "award_itinerary",
+            "reported": true,
+            "origin": "NRT",
+            "destination": "BKK",
+            "departure": {
+              "instant": "2027-01-17T00:45:00Z",
+              "local_iso": "2027-01-17T09:45:00+09:00",
+              "timezone": "Asia/Tokyo",
+              "day_change": 2
+            },
+            "arrival": {
+              "instant": "2027-01-17T08:00:00Z",
+              "local_iso": "2027-01-17T15:00:00+07:00",
+              "timezone": "Asia/Bangkok",
+              "day_change": 2
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "value",
+              "value": "TG641",
+              "source_field": "FlightNumber"
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          }
+        ],
+        "connections": [
+          {
+            "airport": "NRT",
+            "arriving_observation_id": "0144d43ed5c6a13080b92db97cab9e6b3c86ec8d08009bb8c62cff733999eaaa",
+            "departing_observation_id": "0144d43ed5c6a13080b92db97cab9e6b3c86ec8d08009bb8c62cff733999eaaa",
+            "wait_minutes": 1120,
+            "kind": "award_connection",
+            "unknown_reason": null
+          }
+        ],
+        "award_program": {
+          "state": "value",
+          "value": "aeroplan",
+          "source_field": "Source"
+        },
+        "award_cabin": {
+          "state": "value",
+          "value": "economy",
+          "source_field": "Cabin"
+        },
+        "award_points": {
+          "state": "value",
+          "value": 65000,
+          "source_field": "MileageCost"
+        },
+        "money": {
+          "award_taxes": {
+            "kind": "award_taxes",
+            "raw_amount": {
+              "state": "value",
+              "value": 11140,
+              "source_field": "TotalTaxes"
+            },
+            "raw_currency": {
+              "state": "value",
+              "value": "CAD",
+              "source_field": "TaxesCurrency"
+            },
+            "unit": "minor",
+            "scope": "unknown",
+            "rate_to_usd": "0.7048209754722300535663941359",
+            "quoted_usd": "78.51705666760642796729630674",
+            "per_traveler_usd": null,
+            "conversion_snapshot_id": "bank-of-canada-usd-cad-2026-09-29-v1",
+            "conversion_as_of": "2026-09-29",
+            "approximate_conversion": true,
+            "reason": "scope_unknown"
+          },
+          "cash_fare": null,
+          "observed_cash_per_traveler_usd": null,
+          "points_raw": {
+            "state": "value",
+            "value": 65000,
+            "source_field": "MileageCost"
+          },
+          "points_per_traveler": null,
+          "points_program": "aeroplan",
+          "points_scope": "unknown",
+          "incomparable_reasons": [
+            "scope_unknown",
+            "points_incomparable"
+          ]
+        },
+        "booking_obligation": "single_award",
+        "price_completeness": "partial",
+        "styles": [],
+        "heuristic_cost_usd": null,
+        "internal": {
+          "status": "admitted",
+          "reason_codes": [
+            "original_endpoints_match",
+            "original_departure_in_window",
+            "award_travelers_supported",
+            "result_validation_minimum_award_seats",
+            "price_incomplete"
+          ],
+          "reason_details": [
+            "Complete journey meets its original airport pair.",
+            "Original departure falls within the requested local date window.",
+            "Award evidence supports the requested traveler count.",
+            "Compiled award result obligation minimum_award_seats evaluated.",
+            "Observed amounts cannot support an all-in party total."
+          ]
+        }
+      },
+      "component": null,
+      "lead": null,
+      "unavailable": false
+    },
+    {
+      "kind": "reference",
+      "text": "The search shows an EVA Air cash itinerary departing SFO at noon January 15, connecting at TPE, and arriving BKK at 11:40 p.m. January 16. It has one stop and a reported 20-hour-40-minute duration. The source quote is USD 525 for one returned traveler, but its price scope is unknown, so it cannot be treated as a confirmed per-person or all-in total or compared as a like-for-like total with the award quotes.",
+      "label": "Cash-fare baseline via Taipei",
+      "reference_kind": "benchmark",
+      "canonical_id": "0a88cb580b74f623045d876bc5fbbc2d3da914620ff6f34825db8d24538dbb01",
+      "journey": null,
+      "component": {
+        "observation_id": "0a88cb580b74f623045d876bc5fbbc2d3da914620ff6f34825db8d24538dbb01",
+        "kind": "cash_itinerary",
+        "provider": "gfly",
+        "backend": "google",
+        "provider_version": "0.3.0+award-search-unpriced-party-echo-v2",
+        "provider_record_id": null,
+        "query_id": "cash-direct:76d477e1b56ceeeaca58d37f58cc6cea38631817892d98bca82051bd28bc3ce8",
+        "retrieved_at": "2026-10-09T07:07:51.131470Z",
+        "provider_updated_at": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "origin": "SFO",
+        "destination": "BKK",
+        "program": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cabin": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "points": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "taxes_fees": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "taxes_fees_unit": "unknown",
+        "tax_currency": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "cash_amount": {
+          "state": "value",
+          "value": 525,
+          "source_field": "price"
+        },
+        "cash_currency": {
+          "state": "value",
+          "value": "USD",
+          "source_field": "currency"
+        },
+        "money": {
+          "kind": "cash_fare",
+          "raw_amount": {
+            "state": "value",
+            "value": 525,
+            "source_field": "price"
+          },
+          "raw_currency": {
+            "state": "value",
+            "value": "USD",
+            "source_field": "currency"
+          },
+          "unit": "major",
+          "scope": "unknown",
+          "rate_to_usd": "1",
+          "quoted_usd": "525",
+          "per_traveler_usd": null,
+          "conversion_snapshot_id": "bank-of-canada-usd-cad-2026-09-29-v1",
+          "conversion_as_of": "2026-09-29",
+          "approximate_conversion": false,
+          "reason": "scope_unknown"
+        },
+        "price_scope": "unknown",
+        "mixed_cabin_pct": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "airport_sequence": [
+          "SFO",
+          "TPE",
+          "BKK"
+        ],
+        "stops": {
+          "state": "value",
+          "value": 1,
+          "source_field": "stops"
+        },
+        "duration_minutes": {
+          "state": "value",
+          "value": 1240,
+          "source_field": "durationMinutes"
+        },
+        "returned_travelers": {
+          "state": "value",
+          "value": 1,
+          "source_field": "query.adults"
+        },
+        "seats": {
+          "state": "absent",
+          "value": null,
+          "source_field": null
+        },
+        "carriers": [
+          "EVA Air"
+        ],
+        "reported_flight_numbers": {
+          "state": "value",
+          "value": [],
+          "source_field": "flightNumbers"
+        },
+        "legs": [
+          {
+            "observation_id": "0a88cb580b74f623045d876bc5fbbc2d3da914620ff6f34825db8d24538dbb01",
+            "component_kind": "cash_itinerary",
+            "reported": false,
+            "origin": "SFO",
+            "destination": "BKK",
+            "departure": {
+              "instant": "2027-01-15T20:00:00Z",
+              "local_iso": "2027-01-15T12:00:00-08:00",
+              "timezone": "America/Los_Angeles",
+              "day_change": 0
+            },
+            "arrival": {
+              "instant": "2027-01-16T16:40:00Z",
+              "local_iso": "2027-01-16T23:40:00+07:00",
+              "timezone": "Asia/Bangkok",
+              "day_change": 1
+            },
+            "carrier": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "flight_number": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            },
+            "cabin": {
+              "state": "absent",
+              "value": null,
+              "source_field": null
+            }
+          }
+        ],
+        "evidence": [
+          {
+            "sha256": "0480ca2bdc9ae21f9a561910e4ddb2523a1484c181d583e427eab929855301eb",
+            "relative_path": "0480ca2bdc9ae21f9a561910e4ddb2523a1484c181d583e427eab929855301eb.json",
+            "retrieved_at": "2026-10-09T07:07:51.131470Z",
+            "media_type": "application/json",
+            "sanitized": true,
+            "synthetic": false
+          }
+        ],
+        "departure_date": "2027-01-15"
+      },
+      "lead": null,
+      "unavailable": false
+    },
+    {
+      "kind": "narrative",
+      "text": "All four awards are reported as economy and have one stop, but the individual leg cabins are not provided. Award points and taxes are separate quoted components, and their unknown quote scopes prevent treating them as complete totals. Search results may not be real-time; confirm current availability and prices with the booking providers. The selected examples are not the whole search: 258 selectable journeys were reported, and some route/date detail queries were omitted, so these choices do not establish exhaustive availability.",
+      "label": null,
+      "reference_kind": null,
+      "canonical_id": null,
+      "journey": null,
+      "component": null,
+      "lead": null,
+      "unavailable": false
+    }
+  ],
+  "availability_guidance": "Some results aren't real-time. Confirm availability and current prices on the official booking sites before booking.",
+  "findings": []
+}

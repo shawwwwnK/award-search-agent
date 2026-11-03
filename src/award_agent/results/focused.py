@@ -12,6 +12,7 @@ from award_agent.ranking.projection_contracts import SolutionProjection
 
 from .authoring import verify_authoring_view
 from .contracts import (
+    CheckFinding,
     InputTokenReceipt,
     ResultsConfig,
     ResultsInputMeasurer,
@@ -20,7 +21,14 @@ from .contracts import (
 )
 from .core import prepare_results
 from .currency import FxAcquisition
-from .focused_contracts import FocusedPass, FocusedResultsArtifact
+from .focused_comparison_contracts import FocusedResultsArtifactV11, ResolvedFocusedComparisonAnswer
+from .focused_contracts import (
+    FocusedPass,
+    FocusedResultsArtifact,
+    FocusedResultsArtifactV9,
+    FocusedResultsArtifactV10,
+)
+from .focused_details import build_selected_details, build_selector_details
 from .focused_packet import (
     build_packet as build_focus_packet,
 )
@@ -29,11 +37,30 @@ from .focused_packet import (
     decode_selection_v2,
     selection_instructions,
     selection_instructions_v2,
+    selection_instructions_v3,
+    selection_instructions_v4,
+    selection_instructions_v5,
+    selection_instructions_v8,
     selection_schema,
     selection_schema_v2,
 )
+from .focused_patch_contracts import FocusedResultsArtifactV12
+from .focused_selection_plan import instructions as planned_selection_instructions
+from .focused_selection_plan import instructions_v15 as planned_selection_instructions_v15
+from .focused_selection_plan import instructions_v16 as planned_selection_instructions_v16
+from .focused_selection_plan import instructions_v20 as planned_selection_instructions_v20
+from .focused_selection_plan import instructions_v21 as planned_selection_instructions_v21
+from .focused_selection_plan import instructions_v22 as planned_selection_instructions_v22
+from .focused_selection_plan import instructions_v26 as planned_selection_instructions_v26
+from .focused_selection_plan import instructions_v27 as planned_selection_instructions_v27
+from .focused_selection_plan import instructions_v29 as planned_selection_instructions_v29
+from .focused_selection_plan import instructions_v30 as planned_selection_instructions_v30
+from .focused_selection_plan import schema as planned_selection_schema
+from .focused_selector_records import selector_packet
+from .focused_wire import alias_for_canonical as focused_alias_for_canonical
 from .focused_wire import decode as decode_focused_wire
 from .focused_wire import instructions as focused_instructions
+from .focused_wire import revision_instructions as focused_revision_instructions
 from .focused_wire import schema as focused_schema
 from .interactive import _response_text, _returned_tier, _validate_recoverable_response
 from .interactive_contracts import InteractivePreparedInput, InteractiveSettings, InteractiveWriter
@@ -65,16 +92,18 @@ def _prepared(packet: dict[str, object], structured: StructuredPreparedInput) ->
 
 def prepare_focused_selector(projection: SolutionProjection, config: ResultsConfig,
                              evidence: WorkspaceEvidence | None = None, *,
-                             selection_format: Literal["roles-v1", "roles-v2"] = "roles-v1",
+                             selection_format: Literal["roles-v1", "roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"] = "roles-v1",
                              ) -> InteractivePreparedInput:
     trusted = SolutionProjection.model_validate(projection.model_dump(mode="json"))
     workspace = evidence or resolve_workspace(trusted)
     structured = prepare_structured_results(trusted, config)
     packet = build_indexed_packet(structured, trusted, workspace)
-    if selection_format == "roles-v2":
-        packet["selection_format"] = "roles-v2"
+    if selection_format in {"roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"}:
+        packet["selection_format"] = selection_format
     elif selection_format != "roles-v1":
         raise ValueError("unknown focused selection format")
+    if selection_format in {"roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"}:
+        packet["exact_details"] = build_selector_details(structured, workspace)
     return _prepared(packet, structured)
 
 
@@ -82,40 +111,99 @@ def prepare_focused_composer(selection: StructuredSelection,
                              selector: InteractivePreparedInput,
                              projection: SolutionProjection,
                              evidence: WorkspaceEvidence, *,
-                             composition_format: Literal["source-v1", "comparisons-v1"] = "source-v1",
+                             composition_format: Literal["source-v1", "comparisons-v1", "complete-v1", "complete-v2", "complete-v3", "complete-v4", "complete-v5", "complete-v6", "complete-v7", "complete-v8", "complete-v9", "complete-v10", "complete-v11", "complete-v12", "complete-v13", "complete-v14", "complete-v15", "complete-v16", "complete-v17", "complete-v18", "complete-v19", "complete-v20", "complete-v21", "complete-v22", "complete-v23", "complete-v24", "complete-v25", "complete-v26", "complete-v27", "complete-v28"] = "source-v1",
                              ) -> InteractivePreparedInput:
     packet = build_focus_packet(selection, selector.structured, projection, evidence,
         selection_format=_selector_format(selector), composition_format=composition_format)
     if packet.get("format") != "focused-v1":
         raise ValueError("focused packet builder returned an unexpected format")
+    if composition_format in {"complete-v6", "complete-v7", "complete-v8", "complete-v9", "complete-v10", "complete-v11", "complete-v12", "complete-v13", "complete-v14", "complete-v15", "complete-v16", "complete-v17", "complete-v18", "complete-v19", "complete-v20", "complete-v21", "complete-v22", "complete-v23", "complete-v24", "complete-v25", "complete-v26", "complete-v27", "complete-v28"}:
+        expected = build_selector_details(selector.structured, evidence)
+        if selector.packet.get("exact_details") != expected:
+            raise ValueError("focused source detail index differs from selected source")
+        packet["selected_details"] = build_selected_details(expected, packet)
     return _prepared(packet, selector.structured)
 
 
-def _selector_format(prepared: InteractivePreparedInput) -> Literal["roles-v1", "roles-v2"]:
+def _selector_format(prepared: InteractivePreparedInput) -> Literal["roles-v1", "roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"]:
     value = prepared.packet.get("selection_format", "roles-v1")
-    if value not in {"roles-v1", "roles-v2"}:
+    if value not in {"roles-v1", "roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"}:
         raise ValueError("unknown focused selection format")
     return value
 
 
 def _request(prepared: InteractivePreparedInput, config: ResultsConfig,
-             settings: InteractiveSettings, phase: Literal["selection", "composition"],
-             projection: SolutionProjection) -> RequestEnvelope:
+             settings: InteractiveSettings, phase: Literal["selection", "composition", "correction", "revision"],
+             projection: SolutionProjection, *,
+             feedback: tuple[CheckFinding, ...] = (), previous_wire: str | None = None,
+             ) -> RequestEnvelope:
     if phase == "selection":
-        if _selector_format(prepared) == "roles-v2":
-            instructions = selection_instructions_v2(prepared.structured, projection)
+        if _selector_format(prepared) in {"roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"}:
+            instructions = (planned_selection_instructions_v30 if
+                            _selector_format(prepared) == "roles-v30" else
+                            planned_selection_instructions_v29 if
+                            _selector_format(prepared) == "roles-v29" else
+                            planned_selection_instructions_v27 if
+                            _selector_format(prepared) == "roles-v27" else
+                            planned_selection_instructions_v26 if
+                            _selector_format(prepared) in {"roles-v26", "roles-v28"} else
+                            planned_selection_instructions_v22 if
+                            _selector_format(prepared) in {"roles-v22", "roles-v23", "roles-v24", "roles-v25"} else
+                            planned_selection_instructions_v21 if
+                            _selector_format(prepared) == "roles-v21" else
+                            planned_selection_instructions_v20 if
+                            _selector_format(prepared) in {"roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"} else
+                            planned_selection_instructions_v16 if
+                            _selector_format(prepared) in {"roles-v15", "roles-v16", "roles-v17", "roles-v18"} else
+                            planned_selection_instructions_v15 if
+                            _selector_format(prepared) == "roles-v14" else
+                            planned_selection_instructions)(prepared.structured, projection)
+            schema = planned_selection_schema(prepared.structured, projection,
+                max_references=3 if _selector_format(prepared) in {"roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"} else
+                4 if _selector_format(prepared) in {"roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25"} else 8)
+        elif _selector_format(prepared) in {"roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12"}:
+            instructions = ({"roles-v2": selection_instructions_v2,
+                             "roles-v3": selection_instructions_v3,
+                             "roles-v4": selection_instructions_v4,
+                             "roles-v5": selection_instructions_v5,
+                             "roles-v6": selection_instructions_v5,
+                             "roles-v7": selection_instructions_v5,
+                             "roles-v8": selection_instructions_v8,
+                             "roles-v9": selection_instructions_v8,
+                             "roles-v10": selection_instructions_v8,
+                             "roles-v11": selection_instructions_v8,
+                             "roles-v12": selection_instructions_v8}[_selector_format(prepared)]
+                            (prepared.structured, projection))
             schema = selection_schema_v2(prepared.structured, projection)
         else:
             instructions = selection_instructions(prepared.structured, projection)
             schema = selection_schema(prepared.structured, projection)
-        payload = json.dumps({"packet": prepared.packet}, sort_keys=True,
+        selection_packet = (selector_packet(prepared) if _selector_format(prepared) in {"roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"}
+                            else prepared.packet)
+        payload = json.dumps({"packet": selection_packet}, sort_keys=True,
                              ensure_ascii=False, separators=(",", ":"))
         name = "FocusedResultsSelection"
     else:
-        instructions = focused_instructions(prepared)
+        instructions = (focused_revision_instructions(prepared) if phase == "revision"
+                        else focused_instructions(prepared))
         schema = focused_schema(prepared)
         packet = {key: value for key, value in prepared.packet.items() if key != "wire_aliases"}
-        payload = json.dumps({"packet": packet}, sort_keys=True,
+        input_data: dict[str, object] = {"packet": packet}
+        if phase in {"correction", "revision"}:
+            if previous_wire is None or (phase == "correction" and not feedback):
+                raise ValueError("focused correction requires a failed draft")
+            input_data["previous_wire"] = json.loads(previous_wire)
+            if phase == "revision":
+                input_data["revision_trigger"] = "editorial_revision"
+            rows = []
+            for finding in feedback:
+                row = finding.model_dump(mode="json")
+                if finding.reference_id is not None:
+                    row["reference_id"] = (focused_alias_for_canonical(prepared,
+                        finding.reference_id) or finding.reference_id)
+                rows.append(row)
+            input_data["feedback"] = rows
+        payload = json.dumps(input_data, sort_keys=True,
                              ensure_ascii=False, separators=(",", ":"))
         name = "FocusedResultsDocument"
     if config.authoring_guidance and config.authoring_guidance.strip():
@@ -155,12 +243,15 @@ def _new_pass(common: dict[str, object], **fields: object) -> FocusedPass:
     return FocusedPass.model_validate({**common, **fields})
 
 
-def _pass(phase: Literal["selection", "composition"], envelope: RequestEnvelope,
+def _pass(phase: Literal["selection", "composition", "correction", "revision"], envelope: RequestEnvelope,
           config: ResultsConfig, settings: InteractiveSettings, writer: InteractiveWriter,
           measurer: ResultsInputMeasurer | None,
           decode: Callable[[str], StructuredSelection | StructuredDocument],
           *, projection: SolutionProjection,
-          prepared: InteractivePreparedInput) -> FocusedPass:
+          prepared: InteractivePreparedInput,
+          checker: Callable[[StructuredDocument, SolutionProjection,
+                             InteractivePreparedInput], tuple[CheckFinding, ...]] | None = None,
+          ) -> FocusedPass:
     common: dict[str, object] = {"phase": phase, "request": envelope.request,
               "request_digest": content_digest(envelope.request),
               "input_bytes": envelope.input_bytes,
@@ -192,7 +283,8 @@ def _pass(phase: Literal["selection", "composition"], envelope: RequestEnvelope,
                 returned_service_tier=_returned_tier(receipt), raw_wire=raw, selection=parsed)
         if not isinstance(parsed, StructuredDocument):
             raise TypeError("composer returned a non-document selection")
-        findings = check_structured_document(parsed, projection, prepared.structured)
+        findings = (checker(parsed, projection, prepared) if checker else
+                    check_structured_document(parsed, projection, prepared.structured))
         return _new_pass(common, outcome="recoverable", writer_called=True,
             input_token_receipt=count, writer_receipt=receipt,
             returned_service_tier=_returned_tier(receipt), raw_wire=raw,
@@ -217,7 +309,38 @@ def run_focused_results(projection: SolutionProjection, config: ResultsConfig,
                         *, fx_acquisition: FxAcquisition | None = None,
                         selection_format: Literal["roles-v1", "roles-v2"] = "roles-v1",
                         composition_format: Literal["source-v1", "comparisons-v1"] = "source-v1",
-                        ) -> FocusedResultsArtifact:
+                        profile: Literal["focused-v4", "focused-v5", "focused-v6", "focused-v7", "focused-v8", "focused-v9", "focused-v10", "focused-v11", "focused-v12", "focused-v13", "focused-v14", "focused-v15", "focused-v16", "focused-v17", "focused-v18", "focused-v19", "focused-v20", "focused-v21", "focused-v22", "focused-v23", "focused-v24", "focused-v25", "focused-v26", "focused-v27", "focused-v28", "focused-v29", "focused-v30"] | None = None,
+                        ) -> FocusedResultsArtifact | FocusedResultsArtifactV9 | FocusedResultsArtifactV10 | FocusedResultsArtifactV11 | FocusedResultsArtifactV12:
+    if profile in {"focused-v17", "focused-v18", "focused-v19", "focused-v20", "focused-v21", "focused-v22"}:
+        from .focused_patch_runtime import run_focused_v17
+
+        if selection_format != "roles-v1" or composition_format != "source-v1":
+            raise ValueError("focused-v17 owns its selection and composition formats")
+        return run_focused_v17(projection, config, writer, input_measurer,
+                               fx_acquisition=fx_acquisition, profile=profile)
+    if profile in {"focused-v11", "focused-v12", "focused-v13", "focused-v14", "focused-v15", "focused-v16", "focused-v23", "focused-v24", "focused-v25", "focused-v26", "focused-v27", "focused-v28", "focused-v29", "focused-v30"}:
+        from .focused_comparison_runtime import run_focused_v11
+
+        if selection_format != "roles-v1" or composition_format != "source-v1":
+            raise ValueError("focused-v11 owns its selection and composition formats")
+        return run_focused_v11(projection, config, writer, input_measurer,
+                              fx_acquisition=fx_acquisition, profile=profile)
+    if profile in {"focused-v8", "focused-v9", "focused-v10"}:
+        from .focused_v8 import run_focused_v8
+
+        if selection_format != "roles-v1" or composition_format != "source-v1":
+            raise ValueError("focused-v8 owns its selection and composition formats")
+        return run_focused_v8(projection, config, writer, input_measurer,
+                              fx_acquisition=fx_acquisition, profile=profile)
+    if profile in {"focused-v4", "focused-v5", "focused-v6", "focused-v7"}:
+        from .focused_v4 import run_focused_v4
+
+        if selection_format != "roles-v1" or composition_format != "source-v1":
+            raise ValueError("focused-v4 owns its selection and composition formats")
+        return run_focused_v4(projection, config, writer, input_measurer,
+                              fx_acquisition=fx_acquisition, profile=profile)
+    if profile is not None:
+        raise ValueError("unknown focused Results profile")
     started = time.perf_counter()
     if config.model != "gpt-6-luna":
         raise ValueError("focused Results requires explicit gpt-6-luna model")
@@ -262,7 +385,25 @@ def run_focused_results(projection: SolutionProjection, config: ResultsConfig,
     return artifact.model_copy(update={"runtime_seconds": time.perf_counter() - started})
 
 
-def replay_focused_results(artifact: FocusedResultsArtifact) -> ResolvedStructuredAnswer | None:
+def replay_focused_results(artifact: FocusedResultsArtifact | FocusedResultsArtifactV9 |
+                           FocusedResultsArtifactV10 | FocusedResultsArtifactV11 | FocusedResultsArtifactV12,
+                           ) -> ResolvedStructuredAnswer | ResolvedFocusedComparisonAnswer | None:
+    if isinstance(artifact, FocusedResultsArtifactV12):
+        from .focused_patch_runtime import replay_focused_v17
+
+        return replay_focused_v17(artifact)
+    if isinstance(artifact, FocusedResultsArtifactV11):
+        from .focused_comparison_runtime import replay_focused_v11
+
+        return replay_focused_v11(artifact)
+    if isinstance(artifact, FocusedResultsArtifactV10):
+        from .focused_v8 import replay_focused_v8
+
+        return replay_focused_v8(artifact)
+    if isinstance(artifact, FocusedResultsArtifactV9):
+        from .focused_v4 import replay_focused_v4
+
+        return replay_focused_v4(artifact)
     if artifact.config.model != "gpt-6-luna" or artifact.selector_settings != SELECTOR_SETTINGS or \
             artifact.composer_settings != COMPOSER_SETTINGS:
         raise ValueError("saved focused model settings differ")
@@ -321,9 +462,32 @@ def replay_focused_results(artifact: FocusedResultsArtifact) -> ResolvedStructur
     return resolved
 
 
+def parse_focused_artifact(raw: bytes | str) -> (FocusedResultsArtifact |
+                                                 FocusedResultsArtifactV9 |
+                                                 FocusedResultsArtifactV10 |
+                                                 FocusedResultsArtifactV11 |
+                                                 FocusedResultsArtifactV12):
+    """Parse an immutable focused run without version coercion."""
+    value = json.loads(raw)
+    if value.get("contract_version") == "results-artifact-v12":
+        return FocusedResultsArtifactV12.model_validate(value)
+    if value.get("contract_version") == "results-artifact-v11":
+        return FocusedResultsArtifactV11.model_validate(value)
+    if value.get("contract_version") == "results-artifact-v10":
+        return FocusedResultsArtifactV10.model_validate(value)
+    if value.get("contract_version") == "results-artifact-v9":
+        return FocusedResultsArtifactV9.model_validate(value)
+    if value.get("contract_version") == "results-artifact-v8":
+        return FocusedResultsArtifact.model_validate(value)
+    raise ValueError("unknown focused Results artifact version")
+
+
 def _replay_pass(item: FocusedPass, envelope: RequestEnvelope, config: ResultsConfig,
                  decode: Callable[[str], StructuredSelection | StructuredDocument],
-                 projection: SolutionProjection, prepared: InteractivePreparedInput) -> None:
+                 projection: SolutionProjection, prepared: InteractivePreparedInput,
+                 checker: Callable[[StructuredDocument, SolutionProjection,
+                                    InteractivePreparedInput], tuple[CheckFinding, ...]] | None = None,
+                 ) -> None:
     if (item.request != envelope.request or item.request_digest != content_digest(envelope.request)
             or item.input_bytes != envelope.input_bytes or
             item.estimated_total_tokens != envelope.estimated_total_tokens or
@@ -359,8 +523,9 @@ def _replay_pass(item: FocusedPass, envelope: RequestEnvelope, config: ResultsCo
                 raise ValueError("saved focused selection differs from wire")
         else:
             if parsed != item.document or not isinstance(parsed, StructuredDocument) or \
-                    item.findings != check_structured_document(parsed, projection,
-                                                               prepared.structured):
+                    item.findings != (checker(parsed, projection, prepared) if checker else
+                                     check_structured_document(parsed, projection,
+                                                               prepared.structured)):
                 raise ValueError("saved focused document or checks differ from wire")
         return
     if item.selection is not None or item.document is not None or item.findings:

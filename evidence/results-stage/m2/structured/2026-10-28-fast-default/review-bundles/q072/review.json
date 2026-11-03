@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "Award seats and taxes/fees are unknown, and the results do not establish the traveler count or whether the separate-ticket combination is bookable.",
+      "canonical_reference": "evidence.json source.view.request and components c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388, 14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8",
+      "source_field": "source.view.request.travelers; components[].returned_travelers; components[].seats",
+      "source_value": "Request travelers = 1; positioning cash result returned_travelers = 1; award result returned_travelers = absent and seats = unknown.",
+      "explanation": "As written, 'the traveler count' implies the requested party size is unknown, although the request explicitly asks for one traveler. The award result does not confirm support or current seat availability for that traveler. Context may mean the latter; preserve this scope ambiguity for adjudication instead of treating the broad wording as a clean factual pass."
+    }
+  ],
+  "reasoning": "The two displayed journeys form a valid local comparison: the same 08:36 SFO cash positioning flight feeds Turkish-program award quotes of 275,000 and 110,000 miles; the business journey arrives 275 minutes earlier and has a 140-minute rather than 420-minute Istanbul wait. The program's canonical value is 'turkish' and its raw award quantity is MileageCost, so 'Turkish miles' does not assert an unsupported different program or per-traveler scope. The USD 59 positioning quote and USD 452 two-stop direct cash benchmark have unknown price scope; award taxes, seats, and separate-ticket protection remain unconfirmed. The answer gives a conditional recommendation with a clear gain and loss, embeds journey references, treats cash as a separate baseline, and consolidates limitations. The H failure is limited to the traveler-count wording. The displayed comparison is decision-rich without a global-best claim or an exhaustive-frontier requirement."
+}

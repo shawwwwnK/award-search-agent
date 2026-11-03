@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "I’d investigate the Aeroplan option via Hong Kong first: among these award choices, it arrives earlier and has the shorter elapsed time.",
+      "canonical_reference": "evidence.json journeys eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669 and cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.award_taxes.raw_amount.value; components[award_observation_id].seats.value",
+      "source_value": "The displayed HKG award departs 2027-01-15 23:15 -08:00, arrives 2027-01-17 09:50 +07:00, takes 1175 minutes, and reports 65,000 Aeroplan points, CAD 107.40 taxes, and 9 seats. Another admitted HKG award departs 2027-01-15 11:45 -08:00, arrives 2027-01-16 22:25 +07:00, takes 1180 minutes, and reports the same points, tax quote, and seats.",
+      "explanation": "The sentence is true within the two shown awards, so it is not an H failure. Yet an eligible same-route award arrives 11h 25m earlier at the cost of only 5 minutes of elapsed time. The answer does not explain this potentially decisive departure/arrival tradeoff or give a concrete gain for the TPE alternative, so comparative depth is basic. Unknown monetary scope precludes an all-in or per-traveler price conclusion."
+    }
+  ],
+  "reasoning": "The two displayed awards are admitted complete one-stop Aeroplan economy journeys for the requested one traveler. Their elapsed times are 1175 and 1260 minutes, a difference of 1h 25m; their Bangkok arrivals are 09:50 and 11:30 +07:00 on January 17, a difference of 1h 40m. Both report 65,000 points; observed seats are 9 and 1, distinct from traveler count. Individual leg cabins are absent. The cash benchmark is a separate one-stop Singapore Airlines itinerary with an observed USD 440 major-unit quote, one returned traveler, and unknown price scope. Award taxes are observed in CAD minor units with unknown scope, and provider coverage is partial. The answer gives an exact lead, reason, downside, embedded references, cash context, and consolidated caveats. It is useful and coherent, but its comparison is basic because it leaves out a materially earlier eligible HKG schedule and does not identify a concrete advantage of the TPE option. The source cannot establish an all-in price or that the earlier schedule is best for this traveler's unstated departure-time preference."
+}

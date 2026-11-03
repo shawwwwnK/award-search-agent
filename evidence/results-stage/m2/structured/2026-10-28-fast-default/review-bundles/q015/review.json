@@ -1,0 +1,43 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "Worth checking first if the reported nine seats are useful to your search; it lists 60,500 United miles and USD 2,820 in minor-unit fees.",
+      "canonical_reference": "evidence.json components observation_id cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "source_field": "taxes_fees.value; taxes_fees_unit; tax_currency.value; money.quoted_usd",
+      "source_value": "2820 minor USD units = USD 28.20; money.quoted_usd is 28.2, with unknown quote scope.",
+      "explanation": "USD 2,820 states a currency amount 100 times the reported fee. The raw 2,820 count must be converted from minor units before being written as USD."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "It reports USD 5,090 in minor-unit fees, and, like the other leads, gives no timed itinerary.",
+      "canonical_reference": "evidence.json components observation_id 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "source_field": "taxes_fees.value; taxes_fees_unit; tax_currency.value; money.quoted_usd",
+      "source_value": "5090 minor USD units = USD 50.90; money.quoted_usd is 50.9, with unknown quote scope.",
+      "explanation": "USD 5,090 states a currency amount 100 times the reported fee."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "This is another date-matched economy lead: 65,000 Aeroplan points, 2 seats shown, and CAD 11,650 in minor-unit fees.",
+      "canonical_reference": "evidence.json components observation_id 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c",
+      "source_field": "taxes_fees.value; taxes_fees_unit; tax_currency.value; money.raw_amount.value; money.unit",
+      "source_value": "11650 minor CAD units = CAD 116.50, with unknown quote scope.",
+      "explanation": "CAD 11,650 states a currency amount 100 times the reported fee."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "Worth checking first if the reported nine seats are useful to your search; it lists 60,500 United miles and USD 2,820 in minor-unit fees.",
+      "canonical_reference": "evidence.json components observations cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044, 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b, and 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c",
+      "source_field": "seats.value; taxes_fees.value; taxes_fees_unit; program.value; points.value",
+      "source_value": "United/Alaska/Aeroplan report 9/8/2 seats and USD 28.20/USD 50.90/CAD 116.50 in fees; point totals are across different programs.",
+      "explanation": "The answer gives seat and mileage facts but does not explain the fee-versus-seat differences accurately; the incorrect fee rendering distorts a useful comparison. It remains a basic lead summary."
+    }
+  ],
+  "reasoning": "There are zero complete journeys. The three selected SFO-BKK economy summary observations are date-only for January 1, with no timed itinerary or returned traveler count; their 9/8/2 reported seats, 60,500/42,500/65,000 program-specific points, and unknown price scopes are otherwise described correctly. The selected separate cash baseline is a one-stop Cathay Pacific itinerary via HKG at USD 640 with unknown quote scope. Advising the traveler to verify timed award itineraries is defensible, and the incomplete-result narrative and consolidated limitations are coherent. H fails because all three fee figures are presented as whole currency amounts while canonical amounts are minor units, overstating each fee by 100 times. C is basic because this prevents a sound fee/seat tradeoff among the three leads. Uncertainty: cross-program points cannot establish comparative value, and source date-only summaries cannot establish routing, timing, connection, traveler support, or bookability."
+}

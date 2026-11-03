@@ -1,0 +1,77 @@
+{
+  "contract": "results-v23-unchanged-authoring-source-evidence-v1",
+  "candidate": "focused-v23",
+  "source_markers": {
+    "selection": "roles-v21",
+    "composition": "complete-v19"
+  },
+  "scope": "All three separately reviewed V22 initial drafts are source-only scouts for byte-identical V23 first two model requests. They are not V23 runs or confirmation/latency evidence.",
+  "new_delivery_policy": "ArtifactV11 clean two-call stop; one low full-document correction only after actual failed mechanical checks; no fourth call or SDK retry.",
+  "offline_identity_proof": {
+    "status": "passed",
+    "test_file": "tests/unit/test_results_focused_v23.py",
+    "test_file_sha256": "eddba60fa2098f47f6ad67704bba7db9f5239984506e248597d7f6d83841d302",
+    "independent_commands": [
+      {
+        "command": ".venv/bin/pytest -q tests/unit/test_results_focused_v23.py tests/unit/test_results_focused_v11.py tests/unit/test_results_focused_v22.py",
+        "result": "31 passed in 191.60s"
+      },
+      {
+        "command": ".venv/bin/pytest -q tests/unit/test_results_default.py",
+        "result": "4 passed in 8.48s"
+      }
+    ],
+    "checks": [
+      "canonical selector/composer request bytes and digests identical",
+      "given retained selector response, source preparation and reviewed initial document/findings identical",
+      "clean two-call delivery and genuine failed-check correction",
+      "failed correction retention and unjustified-third replay rejection",
+      "historical V11 and V22/V12 replay preserved"
+    ]
+  },
+  "sources": [
+    {
+      "case": "admitted",
+      "run_name": "scout-v22-admitted",
+      "original_profile": "focused-v22",
+      "pass_index": 1,
+      "review_bundle": "q088",
+      "artifact_sha256": "04965695f11c8bc4c31b1bc7b119fb1765ac37f4e32753123fc17d5d2a9d23b6",
+      "review_document_sha256": "cd74faf6f8d41cb0cec63c6bff103bcdf474c657010a4e33e0b092953d36586c",
+      "review_sha256": "ace1a24b6c7864079e9003c3c3726a19b19fcc4a68f896578d59570bee94f8eb",
+      "selector_request_digest": "9d7b8d9c2564fc6d18b1cd9ba91c8fef58e275f6284881843c86f58581819f13",
+      "composition_request_digest": "b1c17bfbd90c7bb70714e0d3f86e34f92274424077923544ca869add85542e6a",
+      "original_three_call_delivery_seconds": 31.063889666926116,
+      "original_delivery_status": "failed latency gate; retained as V22, not V23 latency evidence"
+    },
+    {
+      "case": "conditional",
+      "run_name": "scout-v22-conditional",
+      "original_profile": "focused-v22",
+      "pass_index": 1,
+      "review_bundle": "q090",
+      "artifact_sha256": "e421d18aec9785bbc3437b3e81b54c80fd65d06d086b15c20bc064427e2677fe",
+      "review_document_sha256": "0b6ea0f0b875f0d8aaf2234485054483dd6957a14e2f57ff1b563fcecbc022e5",
+      "review_sha256": "545d1ca0cce9e669230f8773eb8426ae5a61f476fd565939724210e76541a246",
+      "selector_request_digest": "594e9cb124ad240478dac86856191a6b1fbab90c257f7b6f41f7c37896c7bd47",
+      "composition_request_digest": "86ac841b9970a65bf88cb0bbc16a2a5523dc7dae25938fb515a647c0a28212b9",
+      "original_three_call_delivery_seconds": 20.96305187512189,
+      "original_delivery_status": "failed latency gate; retained as V22, not V23 latency evidence"
+    },
+    {
+      "case": "incomplete",
+      "run_name": "scout-v22-incomplete",
+      "original_profile": "focused-v22",
+      "pass_index": 1,
+      "review_bundle": "q092",
+      "artifact_sha256": "4c1a379731f4f090169beb27f6ee886ee69c389f4caa082c76a040b45e0e03fa",
+      "review_document_sha256": "c26119d1409f186eccd11c639f4c75d165cab3f0032d1cc2ff6df4e329421b57",
+      "review_sha256": "d46e7b45556428e4f3d061be7742db81dad60c6aa9a082215418a5363c003fc4",
+      "selector_request_digest": "3fd9cf40b198c49dc17dcb349bb6e0fd1b0608fbb52e7228cc555fbeed5cb533",
+      "composition_request_digest": "1b78ca82b9d437181d9fc09c30c3c550b4f3abc4e9b30044f63be3e9ae2f505e",
+      "original_three_call_delivery_seconds": 26.930513333994895,
+      "original_delivery_status": "failed latency gate; retained as V22, not V23 latency evidence"
+    }
+  ],
+  "qualification": "pending six newly frozen V23 confirmations and a controlled conditional failed-check diagnostic with source review"
+}

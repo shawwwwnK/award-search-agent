@@ -1,0 +1,52 @@
+{
+  "bundle": "q034",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "familiarity": "Prior source/code/review familiarity disclosed. This draw was judged independently; prior passes were not inherited. Current candidate mapping, metrics, checker verdicts and other current grades not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Earlier arrival and shorter elapsed travel are correctly distinguished and scoped to shown options. Program/cabin identities, quote units, support and missing tax states agree with source."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Useful choice among earlier arrival, shorter economy elapsed travel and conditional business cabin."
+    },
+    "M2": {
+      "verdict": "pass",
+      "reason": "Distinct captions explain the economy timing tradeoff and business conditions; shared award scope and separate cash scope are stated once. Business tax-amount uncertainty is not duplicated in the caption."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Real arrival-versus-duration economy contrast plus conditional business preference, without global ranking or cross-program value inference."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Six-journey optional pool becomes three cards while retaining true time and premium perspectives; no cost member exists or is invented."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Three exact joined flight cards carry source facts and unknown-tax status. One source-bound USD440 cash sentence appears inline."
+    }
+  },
+  "findings": [],
+  "evidence": [
+    "evidence.json journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]: elapsed1345,arrivalJan17 01:25,BKK local,Aeroplan economy65000,taxes11650minorCAD unknownscope,one reported seat,styles=[time].",
+    "evidence.json journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]: elapsed1220,arrivalJan17 10:35,Aeroplan economy65000,taxes10740minorCAD unknownscope,two reported seats,styles=[time]. Second is125min shorter but550min later arriving.",
+    "evidence.json journeys[candidate_id=2f220b81264ef42305034a402d1e4c7fd73834e6c7d4ba89de10b8bbdcb2dd7c]: elapsed2282,arrivalJan17 15:05,Turkish business275000,LAX405/IST405min,cash223majorUSD unknownscope;award tax amountunknown,award_travelers_unknown,positioning_permission_unknown,separate_ticket_obligation;styles=[premium]. Both shown economy options are shorter.",
+    "evidence.json components[observation_id=063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd].money: cash_fare440majorUSD,scopeunknown; exactly one cash_sentence.",
+    "selection-audit.json raw witnesses time=J7/null,premium=J75/null,cost=null/null map to exact source members; both shown. Full258journeys/143leads,11time,116premium,0cost/possiblecost,0overlap; factored cost assessments undetermined.",
+    "condition-applicability.json eight rows independently source-verified, including exact journey/component aliases. Pool-only J124 shares local unknowns with J75, but only displayed J75 receives those explanations. Global award scope is correctly narrowed from six selected-pool journeys to three shown."
+  ],
+  "verification": [
+    "Read current rubric and complete assigned evidence/source request,all journey groups,research directions,source category/cost indexes,style audit,condition sidecar,reference mappings,document,resolved and answer Markdown.",
+    "Exact canonical equality for every visible journey,award/cash component and benchmark attachment; every style witness and condition/member alias source-checked.",
+    "Verified all temporal comparisons and single cash block independently of condition-table correctness."
+  ],
+  "uncertainty": [
+    "Saved-source review does not establish current availability,population reliability or global optimality.",
+    "Supplied Markdown/structured cards inspected; browser visual layout not tested.",
+    "No reported tax amount describes the explicit unknown amount without claiming a known zero or a known absent raw field."
+  ],
+  "escalation": "not recommended"
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Compared with the January 1 lead, it reports 7,500 more points in the same program, while the reported fee amount and seat count are the same.",
+      "canonical_reference": "A3 (0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b) and A21 (eed8e1e813efe23f2a87656c39948def8fcc93291351341db16b44e9a7219608)",
+      "source_field": "evidence.json components[].departure_date, program.value, points.value, money.quoted_usd, seats.value, carriers, cabin.value",
+      "source_value": "A3: January 1, Alaska, 42,500 points, USD 50.90 raw quote, 8 seats, AS/JX, economy. A21: January 7, Alaska, 50,000 points, USD 50.90 raw quote, 8 seats, AS/JX, economy. Both lack schedules and returned traveler counts.",
+      "explanation": "The numerical comparison is accurate, but the January 7 lead loses 7,500 points and has no explained offsetting gain beyond a date someone might prefer. The answer offers only a conditional date preference, not a decision-rich gain/loss tradeoff. This is a comparative-depth limitation, not a factual error."
+    }
+  ],
+  "reasoning": "The source request is one SFO–BKK award seat during January 1–31, 2027. Evidence has no complete award journeys. A3 and A21 are date-only Alaska economy summaries with unknown quote scope and absent returned-traveler counts; their points, USD 50.90 quotes, and 8-seat reports match the answer. C1 supports the separate one-stop Cathay Pacific cash reference, local dates/times, 44h40 duration, USD 640 raw quote, and one returned traveler without establishing price scope. The answer coherently recommends checking January 1 first and gives booking checks and limitations, so H, U, and M2 pass. C is basic because January 7 is worse on points and otherwise equal in stated decision facts, with only conditional date preference as a possible gain. The broader source has many award leads, so a sparse-source exception is unwarranted; no particular replacement option or strongest representative is required."
+}

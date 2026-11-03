@@ -1,0 +1,17 @@
+No complete award itinerary is shown, so I can’t recommend a bookable award journey yet. For the next availability check, start with the United lead if its reported seat count is useful for your one-traveler request: it shows 9 seats on January 1, 2027. Its schedule is date-only, however, and the reported seat count does not confirm current availability or that the award supports your request. The reported cabin is economy; cabin details for individual legs are not provided.
+
+This SFO–BKK economy award summary reports 60,500 United miles and USD 28.20 in award taxes, with quote scope unknown. Its reported 9 seats exceed the 2 reported for the Aeroplan lead, but returned traveler counts are absent, so award support for your one traveler remains unverified. The itinerary has no schedule beyond the date, and the reported seat count is not a confirmation of current availability. Check the exact routing and availability before relying on it.
+
+[Display: United award lead — January 1; lead; cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]
+
+The Aeroplan lead is another January 1 economy award possibility, but its different program means its 65,000 points cannot be compared numerically with United miles. It reports fewer seats than the United lead, while its CAD quote cannot be compared with the United lead’s USD quote as a like-for-like cost. Both award quotes have unknown scope.
+
+This SFO–BKK economy award summary reports 65,000 Aeroplan points, CAD 116.50 in award taxes with unknown quote scope, and 2 seats. Returned traveler counts are absent, so award support for your one traveler remains unverified. Only the date is shown; routing details and schedule are not provided. Confirm the itinerary and current availability before considering it further.
+
+[Display: Aeroplan award lead — January 1; lead; 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]
+
+As a cash baseline, the selected result below is a one-stop Cathay Pacific itinerary via HKG. Its USD quote also has unknown scope, so it is a source quote—not a confirmed all-in or per-traveler total. The search results are partial: they include no complete selectable award journey, and some detail and connection searches were limited or omitted. Confirm current prices and availability with the booking provider.
+
+The itinerary departs SFO on January 1, 2027 at 10:55 p.m. local time and arrives at BKK on January 4 at 10:35 a.m. local time, with one stop and a reported duration of 2,680 minutes. The source quote is USD 640.00; its scope is unknown, so it is not established as a per-traveler or all-in amount.
+
+[Display: Cash baseline — Cathay Pacific via HKG; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]

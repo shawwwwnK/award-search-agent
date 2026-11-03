@@ -1,0 +1,51 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "This is the earlier-arriving of the two shown business options, but its points quote is 165,000 higher than the later business option.",
+      "canonical_reference": "evidence.json journeys candidate_id 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee and 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+      "source_field": "award_points.value",
+      "source_value": "Both business journeys report 275000 Turkish points; difference is 0, not 165000.",
+      "explanation": "It invents a points penalty for the recommendation against the exact displayed business comparator. The 165000-point difference instead pertains to the displayed 110000-point economy journey."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Compared with the recommended choice, it leaves 3 hours 11 minutes later and arrives 4 hours 35 minutes later; its elapsed time is 84 minutes shorter.",
+      "canonical_reference": "evidence.json journeys candidate_id 010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669 and 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "elapsed_minutes",
+      "source_value": "Economy: 1803; recommended business: 1719. Economy is 84 minutes longer, not shorter.",
+      "explanation": "The prose reverses elapsed-time direction; the following comparison block correctly identifies the business journey as shorter."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "For a later arrival in the same reported award cabin as the recommendation, the other business option uses the same 275,000 Turkish Airlines Miles&Smiles points quote and reports an earlier SFO departure and a longer Istanbul wait.",
+      "canonical_reference": "evidence.json journeys candidate_id 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "departure.local_iso",
+      "source_value": "Other business: 2027-01-08T08:40:00-08:00; recommendation: 2027-01-08T08:36:00-08:00. Other business departs four minutes later.",
+      "explanation": "The asserted earlier SFO departure is reversed; the embedded comparison block reports the correct direction."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "It has an earlier Bangkok arrival, but takes longer overall than the recommended option.",
+      "canonical_reference": "evidence.json journeys candidate_id 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "arrival.local_iso",
+      "source_value": "Other business: 2027-01-10T08:50:00+07:00; recommendation: 2027-01-10T04:15:00+07:00. Other business arrives four hours 35 minutes later.",
+      "explanation": "It reverses the arrival comparison within the central business-option explanation and conflicts with its own adjacent comparison block."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "It has an earlier Bangkok arrival, but takes longer overall than the recommended option.",
+      "canonical_reference": "evidence.json journeys candidate_id 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee",
+      "source_field": "arrival.local_iso; elapsed_minutes",
+      "source_value": "The other business journey arrives 08:50 versus 04:15 and lasts 1990 versus 1719 minutes.",
+      "explanation": "The narrative is structurally composed, but its explanation of a displayed alternative relies on a contradicted gain, so the supported-comparison requirement is not met."
+    }
+  ],
+  "reasoning": "The exact selected recommendation remains defensible for early Bangkok arrival and reported business award cabin, with higher points than the displayed economy journey and explicit booking limits. However, four decision-relevant comparisons are wrong: the selected and other business journeys have equal points, economy is 84 minutes longer, and the other business journey departs and arrives later. The comparison blocks expose rather than resolve these contradictions. Although the answer has embedded journey references, relevant separate cash context and consolidated limitations, its alternative explanation is not source-supported, so M2 fails. C is basic: the business-versus-economy cabin/points/arrival tradeoff remains useful, but false schedule and points gains prevent decision-rich understanding of each meaningful shown choice. The cash quotes have unknown scope and are not treated as totals."
+}

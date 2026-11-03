@@ -1,0 +1,128 @@
+{
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "fail",
+    "K": "pass",
+    "P": "fail"
+  },
+  "reasons": {
+    "H": "The selected business journey is shorter than the selected economy journey; quoted amounts, unknown award seats/taxes and separate-ticket warnings agree with source.",
+    "U": "The business option offers a defensible shorter-journey/premium choice and prompts availability/cost checks, but the alternative explanation is weak.",
+    "M2": "The same seat/tax/total-price and separate-booking warnings repeat in both option paragraphs, the economy card explanation and the closing paragraph.",
+    "C": "The economy alternative is justified only by economy being acceptable and the longer journey working; its real differentiators are not explained.",
+    "K": "The business journey is a time/premium overlap shown once; the economy journey is time-only; no confirmed cost membership is invented.",
+    "P": "Actual cards and one brief quote are present, but both omit known SFO\u2013LAX component route/arrival/carrier facts from their flight details."
+  },
+  "findings": [
+    {
+      "id": "q002-C1",
+      "severity": "material",
+      "axes": [
+        "C"
+      ],
+      "claim": "Economy may suit you if economy is acceptable and the longer journey works",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "identity": "fff964eebddab3b7f802bd5d74ff1807953c3e3402dcdff3c6325ae11510fcc9",
+          "fields": {
+            "elapsed_minutes": "1700",
+            "award_program.value": "turkish",
+            "award_points.value": 275000,
+            "LAX_wait_minutes": 134
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+          "fields": {
+            "elapsed_minutes": "1803",
+            "award_program.value": "turkish",
+            "award_points.value": 110000,
+            "LAX_wait_minutes": 301
+          }
+        }
+      ],
+      "explanation": "The prose supplies no source-supported positive reason to accept the longer economy journey. A larger separate-ticket buffer or carefully scoped same-program reported points contrast could inform the choice; the answer leaves the useful comparison to the reader."
+    },
+    {
+      "id": "q002-M1",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Repeated unknown seats, taxes, full price and separate booking warnings",
+      "evidence": [
+        {
+          "file": "answer.md",
+          "fields": {
+            "locations": [
+              "business card explanation",
+              "economy introductory paragraph",
+              "economy card explanation",
+              "Cost paragraph",
+              "closing partial-results paragraph",
+              "final availability guidance"
+            ]
+          }
+        }
+      ],
+      "explanation": "Common missing evidence is repeatedly recited, and the second option is introduced twice without adding a decision."
+    },
+    {
+      "id": "q002-P1",
+      "severity": "material",
+      "axes": [
+        "P"
+      ],
+      "claim": "Flights lists start at LAX although both journeys originate SFO",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "identity": "7b69397208b17fea873fefaef7df38b0a81e5024936a2a19fa05980678c2a105",
+          "fields": {
+            "origin": "SFO",
+            "destination": "LAX",
+            "carriers": [
+              "Delta"
+            ],
+            "legs[0].reported": false,
+            "legs[0].arrival.local_iso": "2027-01-08T10:31:00-08:00"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "feb4769d10abda4aa6364b67cb1e3c25550f99b11521a4fb2ab19dfe070e3f4e",
+          "fields": {
+            "origin": "SFO",
+            "destination": "LAX",
+            "carriers": [
+              "American"
+            ],
+            "legs[0].reported": false,
+            "legs[0].arrival.local_iso": "2027-01-08T13:29:00-08:00"
+          }
+        }
+      ],
+      "explanation": "The card should distinguish known component-level schedules from unreported individual legs, preserving component facts without inventing flight numbers."
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 232,
+    "time_members": 116,
+    "premium_members": 116,
+    "cost_members": 0,
+    "time_premium_overlap": 58,
+    "notes": "Selected business belongs to both source indexes; selected economy belongs to time only. No omitted category is excused by selector rationale."
+  },
+  "bundle": "q002",
+  "review_contract": "results-category-blind-review-v1",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "blind_scope": "Only bundle answer/document/resolved/source/references/selection audit and reviewer instructions; no run summaries, prompts, timing, profile mapping or other grades consulted.",
+  "verification": "Offline source field comparison; no live calls.",
+  "uncertainty": "Semantic grades are independent judgments, not deterministic oracle results; stated limits and interpretation notes are preserved.",
+  "escalation_recommended": false
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Choose it only if its different carrier and routing suit you; it arrives later and has a long connection.",
+      "canonical_reference": "evidence.journeys[candidate_id=3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9] versus evidence.journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]",
+      "source_field": "arrival.local_iso; elapsed_minutes; connections[0].wait_minutes; award_points; money.award_taxes.raw_amount; linked award component seats",
+      "source_value": "Taipei: 2027-01-17T16:50:00+07:00, 1580 min elapsed, 495 min connection, 65000 Aeroplan points, CAD 116.50 quoted taxes, 1 seat. Hong Kong: 2027-01-17T10:35:00+07:00, 1220 min elapsed, 105 min connection, 65000 Aeroplan points, CAD 107.40 quoted taxes, 2 seats.",
+      "explanation": "The Taipei option has no supported advantage in the authored comparison beyond an unspecified carrier/routing preference. The Narita option supplies a possible earlier-departure versus much longer elapsed-time contrast, but the prose calls it weaker without clearly explaining when that departure would be useful. The overall comparison remains basic."
+    }
+  ],
+  "reasoning": "The Hong Kong recommendation is exact and well supported; the quoted 6h15 arrival, 15-minute departure and CAD 9.10 raw tax differences match their endpoints, with unknown scope disclosed. All three award cabin labels, seat reports, connections, cash benchmark, and partial coverage match the canonical records. The answer is coherent with embedded references, cash context and consolidated limitations. C is borderline because the Narita departure could matter to a traveler, but the authored argument gives no clear practical gain for an alternative."
+}

@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "I’d choose the Aeroplan award below as the best balance among these shown award choices: it has the earliest arrival of the three and the most reported seats.",
+      "canonical_reference": "evidence.json journeys J1 (28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82) and J7 (46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3); comparison-registry.json T05",
+      "source_field": "journeys[].arrival.local_iso; T05.relation and difference_minutes",
+      "source_value": "J1 arrives 2027-01-17T10:35:00+07:00; J7 arrives 2027-01-17T01:25:00+07:00, 550 minutes earlier",
+      "explanation": "The recommended J1 does not have the earliest arrival among the three shown awards. The noon-departing J7 arrives 9 hours 10 minutes earlier. This is an explicitly wrong displayed comparison, even though the next sentence and later passage acknowledge J7's earlier arrival."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "I’d choose the Aeroplan award below as the best balance among these shown award choices: it has the earliest arrival of the three and the most reported seats.",
+      "canonical_reference": "evidence.json journeys J1 and J7; comparison-registry.json T05",
+      "source_field": "journeys[].arrival.local_iso; T05.relation and difference_minutes",
+      "source_value": "J7 arrives at 01:25 on January 17, while recommended J1 arrives at 10:35 on January 17",
+      "explanation": "The opening rationale contradicts both the immediately following sentence and the later J7 card. This makes the traveler recommendation internally incoherent despite otherwise well woven references and limits."
+    }
+  ],
+  "reasoning": "J1 is an exact, defensible award choice for a traveler valuing a late departure, shorter elapsed journey and two observed seats; its later arrival versus J7 is acknowledged. The J1/J7 tradeoff is decision-rich: J7 arrives 9 hours 10 minutes earlier, while J1 leaves 11 hours 15 minutes later, takes 2 hours 5 minutes less, and has two observed seats rather than one. The J13 comparison is correctly local but offers no substantial authored offsetting gain. Journey/card identities, prices, unknown quote scopes, economy award cabin versus unknown leg cabins, stops/connections, and separate one-stop USD 525 cash baseline otherwise match the canonical source. The opening earliest-arrival statement is a material hard error and disrupts composition."
+}

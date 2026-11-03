@@ -1,0 +1,199 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q011",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": "fail",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "pass",
+    "P": "fail"
+  },
+  "reasons": {
+    "H": "Both opening and business-card explanation falsely claim the business option arrives earlier. Both selected journeys arrive at the same instant and local time.",
+    "U": "The remaining body still presents defensible cabin versus shorter trip/larger transfer buffer choices, with necessary uncertainty. This narrow usefulness pass does not excuse the false comparative benefit.",
+    "M2": "False earlier-arrival framing conflicts with the cards, and shared separate-ticket protection uncertainty is restated in both option explanations and the shared limitations paragraph.",
+    "C": "The body contains supported, useful distinctions: business cabin versus economy with a shorter elapsed journey and longer LAX buffer. No numerical contrast or new ranking requirement is imposed.",
+    "K": "Both source perspectives and business overlap survive exactly. Undetermined cost is not promoted into a winner.",
+    "P": "Actual flight cards and joins are correct and cash appears once, but the single cash sentence uses unsupported, confusing one-stop-free wording alongside the true two-stop fact. The full cash sentence is not a clear source-faithful comparison."
+  },
+  "findings": [
+    {
+      "id": "q011-F1",
+      "severity": "material",
+      "axes": [
+        "H",
+        "M2"
+      ],
+      "claim": "The business-cabin option also arrives earlier / it arrives earlier than the economy option.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[0].text and blocks[1].text",
+          "fields": {
+            "comparison": "business arrives earlier"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+          "fields": {
+            "arrival.instant": "2027-01-10T01:50:00Z",
+            "arrival.local_iso": "2027-01-10T08:50:00+07:00",
+            "elapsed_minutes": "1990",
+            "award_cabin.value": "business"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+          "fields": {
+            "arrival.instant": "2027-01-10T01:50:00Z",
+            "arrival.local_iso": "2027-01-10T08:50:00+07:00",
+            "elapsed_minutes": "1803",
+            "award_cabin.value": "economy"
+          }
+        }
+      ],
+      "explanation": "The chosen arrivals are equal, including exact UTC instants. Both arrive on the same TK64 onward flight. An earlier-departing business journey is not an earlier-arriving journey. The false advantage is repeated in the opening and local rationale."
+    },
+    {
+      "id": "q011-F2",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Separate-ticket protection is unconfirmed, repeated for each choice and again in shared limitations.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[1].text",
+          "fields": {
+            "text": "The Los Angeles connection is on separate tickets, and its protection is unconfirmed."
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[2].text",
+          "fields": {
+            "text": "Its Los Angeles connection is also on separate tickets, with protection unconfirmed."
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[3].text",
+          "fields": {
+            "text": "the separate Los Angeles tickets also have unconfirmed booking protection."
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+          "fields": {
+            "booking_obligation": "separate_tickets_unverified"
+          }
+        }
+      ],
+      "explanation": "This is a shared condition, not a unique risk requiring three authored repetitions. Compact source-card indicators may remain; shared prose should explain it once."
+    },
+    {
+      "id": "q011-F3",
+      "severity": "material",
+      "axes": [
+        "P"
+      ],
+      "claim": "a one-stop-free cash itinerary ... the itinerary has two stops",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[4].text",
+          "fields": {
+            "descriptor": "one-stop-free"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+          "fields": {
+            "stops.value": 2,
+            "airport_sequence": [
+              "SFO",
+              "SEA",
+              "ICN",
+              "BKK"
+            ],
+            "cash_amount.value": 452,
+            "cash_currency.value": "USD",
+            "price_scope": "unknown"
+          }
+        }
+      ],
+      "explanation": "One-stop-free is not a supported or clear source itinerary description. The sentence does correctly state two stops, amount and unknown scope, but its added route descriptor makes the required brief cash context confusing. This finding does not assume the ambiguous phrase necessarily means nonstop; it fails clear source-faithful presentation."
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153",
+      "fields": {
+        "styles": [
+          "time",
+          "premium"
+        ],
+        "connections[0].wait_minutes": 149,
+        "elapsed_minutes": "1990",
+        "award_points.value": 275000
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669",
+      "fields": {
+        "styles": [
+          "time"
+        ],
+        "connections[0].wait_minutes": 301,
+        "elapsed_minutes": "1803",
+        "award_points.value": 110000
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 232,
+    "category_counts": {
+      "time": 116,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 58,
+    "possible_cost_members": 0,
+    "cost_assessments": "Two factored cost assessments, both undetermined.",
+    "omission_audit": "Read selection-audit.json and empty omitted_reasons; inspected every source journey family and category membership beyond the selected records. No material omitted category perspective found."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false,
+    "qualification": "Independent current-answer source review with prior source/code familiarity, not a fresh blind-source review."
+  },
+  "uncertainty": [
+    "The one-stop-free phrase is ambiguous rather than an unambiguous nonstop assertion; the P finding is limited to unclear unsupported description. H failure rests independently on exact equal arrivals.",
+    "U and C pass for the supported cabin/elapsed-time/buffer choice in the body; this does not neutralize H or M2 failures.",
+    "Partial saved provider coverage; no live availability or population reliability established.",
+    "Markdown content and exact structured joins inspected; no browser layout qualification."
+  ],
+  "verification": [
+    "Read latest prospective reviewer instructions, answer, full source journey-family landscape, selection audit, document and resolved attachments.",
+    "Cross-checked selected schedules, flight identities, cabins, points, quote scopes, seats, connections and cash itinerary stops.",
+    "Programmatically checked exact equality of every resolved selected journey/component/benchmark with its canonical source object.",
+    "No live calls, product edits, q012 inspection or current metric/checker inspection."
+  ],
+  "improvement_directions": [
+    "Compare the actual selected arrival fields; do not carry an earlier-arrival benefit across a different selected journey.",
+    "Keep common separate-ticket uncertainty in one shared explanation while preserving distinct cabin, elapsed-time and transfer-buffer reasons.",
+    "Use the observed two-stop description or omit stop wording; avoid invented descriptors in the cash sentence."
+  ],
+  "escalation_recommended": false
+}

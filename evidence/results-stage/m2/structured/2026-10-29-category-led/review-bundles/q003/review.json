@@ -1,0 +1,169 @@
+{
+  "axes": {
+    "H": "fail",
+    "U": "fail",
+    "M2": "fail",
+    "C": "fail",
+    "K": "fail",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "United is called the lowest displayed points total while the same selected answer gives Alaska 42,500 versus United 60,500.",
+    "U": "Research directions are presented, but their main cost distinction is contradictory and cross-program; a materially useful same-program premium-economy alternative in the full monthly source is absent without explanation.",
+    "M2": "The answer repeatedly restates date-only schedules, unknown scope and partial coverage, and uses a rigid category structure despite no complete recommendations.",
+    "C": "The central points tradeoff compares different program units and contradicts itself; no reliable supported conditional preference replaces it.",
+    "K": "There are zero Ranking memberships, yet the body places these leads into Cost and Premium sections and puts premium economy under Premium; this fails the accepted research-directions-without-invented-categories boundary.",
+    "P": "Date-only lead cards preserve exact routes/dates/programs/points/taxes/seats and missing itinerary schedules without inventing legs. The cash quote itself is one source-faithful sentence."
+  },
+  "findings": [
+    {
+      "id": "q003-H1",
+      "severity": "material",
+      "axes": [
+        "H",
+        "C"
+      ],
+      "claim": "The United lead on January 1 has the lowest displayed points total among these SFO\u2013BKK economy leads",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "identity": "cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+          "fields": {
+            "program.value": "united",
+            "points.value": 60500,
+            "origin": "SFO",
+            "destination": "BKK",
+            "cabin.value": "economy"
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+          "fields": {
+            "program.value": "alaska",
+            "points.value": 42500,
+            "origin": "SFO",
+            "destination": "BKK",
+            "cabin.value": "economy"
+          }
+        }
+      ],
+      "explanation": "Even as a raw numerical comparison this is false. The next clause says Alaska uses fewer points; differing program units also cannot support the implied cost preference."
+    },
+    {
+      "id": "q003-K1",
+      "severity": "material",
+      "axes": [
+        "K"
+      ],
+      "claim": "Cost and Premium headings classify incomplete leads, with premium economy under Premium",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "fields": {
+            "journeys": [],
+            "source.view.indexes.time": [],
+            "source.view.indexes.cost": [],
+            "source.view.indexes.premium": []
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97",
+          "fields": {
+            "kind": "award_summary",
+            "cabin.value": "premium_economy"
+          }
+        }
+      ],
+      "explanation": "The opening correctly denies complete ranked choices, but the subsequent categorical framing contradicts that boundary. Cabin/program/date research directions would be appropriate without implying Ranking categories; premium economy is not Ranking premium."
+    },
+    {
+      "id": "q003-U1",
+      "severity": "material",
+      "axes": [
+        "U",
+        "C"
+      ],
+      "claim": "January 12 Alaska premium economy is the chosen premium research direction at 140,000 points",
+      "evidence": [
+        {
+          "file": "evidence.json",
+          "identity": "42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97",
+          "fields": {
+            "departure_date": "2027-01-12",
+            "program.value": "alaska",
+            "points.value": 140000,
+            "taxes_fees.value": 5090,
+            "tax_currency.value": "USD",
+            "seats.value": 9
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "8481df166f5c373c7dd06fe625f39e17b1b38990c3050535a8aaafcaac562a93",
+          "fields": {
+            "departure_date": "2027-01-17",
+            "program.value": "alaska",
+            "cabin.value": "premium_economy",
+            "points.value": 55000,
+            "taxes_fees.value": 5090,
+            "tax_currency.value": "USD",
+            "seats.value": 1
+          }
+        },
+        {
+          "file": "evidence.json",
+          "fields": {
+            "source.view.request.travelers": 1,
+            "source.view.request.departure_window.start": "2027-01-01",
+            "source.view.request.departure_window.end": "2027-01-31"
+          }
+        }
+      ],
+      "explanation": "The full source contains a same-program/cabin option on January17, within the stated window, with a much smaller reported points numeral, the same reported tax quote and a reported seat for the requested traveler. Unknown scope still prevents a total-saving claim. No date preference justifies excluding this useful research contrast while selecting weak extra leads."
+    },
+    {
+      "id": "q003-M1",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Date-only schedule, price-scope and coverage limitations repeated throughout",
+      "evidence": [
+        {
+          "file": "answer.md",
+          "fields": {
+            "locations": [
+              "opening",
+              "Cost paragraph",
+              "United explanation",
+              "Alaska explanation",
+              "Time paragraph",
+              "Premium paragraph and lead explanation",
+              "final other-leads paragraph",
+              "final availability guidance"
+            ]
+          }
+        }
+      ],
+      "explanation": "Shared limitations recur instead of being consolidated; several paragraphs merely repeat their card and prior caveat."
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 0,
+    "research_leads": 378,
+    "programs": 13,
+    "SFO_BKK_economy_leads": 93,
+    "SFO_BKK_premium_economy_leads": 13,
+    "notes": "Read all lead identities program/cabin/date/quote facts through full-source inventory. The phrase only premium-economy option shown may mean only selected; I do not grade it as a false global uniqueness claim. The failure is weak selection/comparison, not a forced quota."
+  },
+  "bundle": "q003",
+  "review_contract": "results-category-blind-review-v1",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "blind_scope": "Only bundle answer/document/resolved/source/references/selection audit and reviewer instructions; no run summaries, prompts, timing, profile mapping or other grades consulted.",
+  "verification": "Offline source field comparison; no live calls.",
+  "uncertainty": "Semantic grades are independent judgments, not deterministic oracle results; stated limits and interpretation notes are preserved.",
+  "escalation_recommended": false
+}

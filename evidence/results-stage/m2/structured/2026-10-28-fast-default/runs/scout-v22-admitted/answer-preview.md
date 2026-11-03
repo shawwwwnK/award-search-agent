@@ -1,0 +1,23 @@
+Among these shown awards, the Hong Kong option fits better if you prioritize shorter elapsed travel and the lower reported CAD tax quote; the Taiwan option arrives earlier. Both report 65,000 Aeroplan points. The tax-quote scopes are unknown, so they do not establish a per-person or total trip cost. Search results are partial; confirm availability and current prices with the booking provider.
+
+On January 15, this Aeroplan award is 65,000 points plus a reported CAD 107.40 in award taxes; the quote scope is unknown, so it is not established as a per-person or party total. The itinerary connects in Hong Kong, with a reported 105-minute connection, and arrives in Bangkok January 17 at 10:35. The award is reported in economy, though cabin details for each leg are absent. Seat support passed for the requested one traveler, with two seats reported; this does not establish current availability or bookability.
+
+[Display: Shorter elapsed trip — via Hong Kong; journey; 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]
+
+If an earlier arrival matters more, the Taiwan routing arrives 9 hours 10 minutes before the Hong Kong choice, but takes 2 hours 5 minutes longer in elapsed travel time. It also has a different carrier and a higher reported CAD tax quote; the unknown quote scopes prevent treating that difference as a confirmed trip-cost saving. Both awards report 65,000 Aeroplan points.
+
+Arrival: Shorter elapsed trip — via Hong Kong (SFO–BKK; departs 2027-01-15T23:15:00-08:00; arrives 2027-01-17T10:35:00+07:00) — 2027-01-17T10:35:00+07:00; Earlier arrival — via Taiwan (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) — 2027-01-17T01:25:00+07:00. Earlier arrival — via Taiwan (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) is earlier by 9 hours 10 minutes.
+
+Journey duration: Shorter elapsed trip — via Hong Kong (SFO–BKK; departs 2027-01-15T23:15:00-08:00; arrives 2027-01-17T10:35:00+07:00) — 1220 minutes; Earlier arrival — via Taiwan (SFO–BKK; departs 2027-01-15T12:00:00-08:00; arrives 2027-01-17T01:25:00+07:00) — 1345 minutes. Shorter elapsed trip — via Hong Kong (SFO–BKK; departs 2027-01-15T23:15:00-08:00; arrives 2027-01-17T10:35:00+07:00) is shorter by 2 hours 5 minutes.
+
+This Aeroplan economy award connects in Taipei, with a reported 270-minute connection, and arrives January 17 at 01:25. It costs 65,000 Aeroplan points plus a reported CAD 116.50 in award taxes, with unknown quote scope. Seat support passed for the requested one traveler, with one seat reported; leg-by-leg cabin details are absent. Choose it for the earlier arrival, accepting the longer elapsed journey and higher reported CAD tax amount than the Hong Kong award.
+
+[Display: Earlier arrival — via Taiwan; journey; 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]
+
+Cash baseline: a one-stop Singapore Airlines itinerary is quoted at USD 440, with unknown price scope, so the quote is not established as a per-person or all-in amount. Its reported schedule is January 15 at 09:40 from SFO to January 17 at 08:25 in BKK. This is a separate cash reference, not a like-for-like total-cost comparison with awards priced in points plus CAD taxes.
+
+One stop; quoted USD 440, with unknown price scope. The itinerary reports one returned traveler, but that does not establish the quote scope.
+
+[Display: Cash baseline — Singapore Airlines; benchmark; 063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd]
+
+Across the shown choices, the award cabin is reported as economy, but the leg cabins are unspecified. Award seat support is not a guarantee of current availability, and the search results do not establish final booking price or ticket conditions.

@@ -1,0 +1,23 @@
+No complete award itinerary is shown among these selected search results, so I can’t recommend a bookable award route yet. For January 1, United is the most useful first lead to verify if you want economy and a larger reported seat count; the tradeoff is that its schedule is only date-level, not a confirmed itinerary.
+
+Reports 60,500 United miles, 9 seats, and USD 28.20 in award taxes. Seat support for your one traveler is not verified by a returned traveler count. The exact flights, departure and arrival times, and connection details are not provided, so confirm the itinerary and current availability with United before relying on it.
+
+[Display: United economy award lead — January 1; lead; cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]
+
+If you prefer the carrier shown on the other January 1 economy lead, check Aeroplan as an alternative; its reported seat count is lower. The points totals are from different programs and should not be compared as equivalent costs.
+
+Reports 65,000 Aeroplan points, 2 seats, and CAD 116.50 in award taxes. Seat support for your one traveler is not verified by a returned traveler count. This is also only a date-level lead, with no specific schedule or connection details.
+
+[Display: Aeroplan economy award lead — January 1; lead; 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]
+
+For a different date and cabin, the January 12 Alaska lead reports premium economy. It may be worth checking if that date and cabin suit you, but its 140,000 Alaska miles are not directly comparable with points from the other programs, and the itinerary schedule remains unspecified.
+
+Reports 140,000 Alaska miles, 9 seats, and USD 50.90 in award taxes. Seat support for your one traveler is not verified by a returned traveler count. The source reports premium economy for the journey, but does not establish the cabin on every leg; no flight schedule or connection details are provided.
+
+[Display: Alaska premium-economy award lead — January 12; lead; 42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97]
+
+The selected cash comparison is a one-stop SFO–HKG–BKK itinerary, departing January 1 at 10:55 p.m. local time and arriving January 4 at 10:35 a.m. Bangkok time. Its source quote is USD 640.00, with quote scope unknown; it is not established as a per-person or party total. This gives a dated, scheduled cash option to compare, but it is not an award itinerary.
+
+[Display: Cash baseline — Cathay Pacific, January 1; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]
+
+Shared limits: the selected award results are incomplete leads, not confirmed itineraries, and their quoted taxes have unknown scope. Verify the full routing, cabin by leg, seat support, current availability, and applicable charges with the relevant program before booking. The search coverage was partial, so these selected results do not establish that no complete award options exist.

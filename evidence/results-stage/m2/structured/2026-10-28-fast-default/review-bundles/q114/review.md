@@ -1,0 +1,8 @@
+# q114 blind source review
+
+- **H:** Pass. `evidence.json` journeys J7 (`46ff8814…`) and J13 (`3f06b08a…`) and their award observations (`8c9922b1…`, `b14a4cf9…`) support the schedules, SFO–TPE–BKK routing, 270/495-minute connections, reported economy award cabin, absent leg cabins, carrier lists, one observed seat each, minimum-seat checks for the one-person request, and equal 65,000 Aeroplan points plus CAD 116.50 with unknown price scope. `comparison-registry.json` T01–T03 confirms the 11h30 departure, 15h25 arrival, and 3h55 elapsed differences using offset-aware instants. Cash observation `063df2b3…` supports the separate one-stop SFO–SIN–BKK Singapore Airlines baseline, USD 440 unknown-scope quote, and 1,905-minute duration.
+- **U:** Pass. The first journey is an exact recommendation with a schedule reason and an earlier-departure downside; the answer asks the traveler to verify current availability, leg cabins, and fees.
+- **M2:** Pass. The narrative wraps embedded journey and cash references and gives a supported local comparison and consolidated limitations. The rendered temporal registry lines repeat the prose but do not materially break it.
+- **C:** Decision-rich. The earlier arrival and shorter TPE wait are weighed against leaving SFO 11h30 earlier; both awards have the same reported program quote. This is a real displayed choice, without a global-best claim. No sparse-source exception.
+
+No H failure or material unresolved source ambiguity. Inspected only this assigned bundle and the shared reviewer instructions; no live calls or tests were run. Escalation is not recommended.

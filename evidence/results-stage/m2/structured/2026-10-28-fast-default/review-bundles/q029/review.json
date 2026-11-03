@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.1-scope",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "A close alternative on the same departure, also via Hong Kong, with the same reported points, taxes and 9 seats.",
+      "canonical_reference": "evidence.json components observation_id 1a1d383744d4dc2716b363cbef5d2be0ddd32f2d1bd0180184af265065086f5c, for journey 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "source_field": "components[].seats (source_field RemainingSeats)",
+      "source_value": {"state": "value", "value": 2, "source_field": "RemainingSeats"},
+      "explanation": "The same-departure alternative reports 2 seats, while the selected journey reports 9. The answer incorrectly says the alternative has the same 9 seats, which can affect a traveler's availability choice. The request is for one traveler, a separate fact from observed seat counts."
+    }
+  ],
+  "reasoning": "The selected Aeroplan economy journey, both alternatives, award connection waits, offset-aware arrival and elapsed comparisons, points, CAD tax amounts and unknown scopes match the canonical records except for the alternative's seat count. The USD 440 Singapore Airlines cash observation is a separate one-stop baseline with one returned traveler and unknown quote scope. The answer gives an exact recommendation with a reason and a 70-minute-connection drawback, embeds journey references, weighs arrival, duration, connection margin, seats and taxes, and consolidates limitations. Coverage is partial and current availability remains unverified."
+}

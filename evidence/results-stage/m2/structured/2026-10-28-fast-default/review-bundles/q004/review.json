@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "This economy summary is for January 13 and reports more seats than the Alaska summary, but it too is date-only, with no timed itinerary or confirmed connection details. The points totals across these programs do not establish which is better value.",
+      "canonical_reference": "evidence.json components c9b04ce51d19ceae5104b0fdc7e749c59a3e50be7f5867e82b8136aff7aeedd7 (Alaska) and 963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6 (United)",
+      "source_field": "seats.value; points.value; taxes_fees.value; taxes_fees_unit; tax_currency.value; price_scope; departure_date",
+      "source_value": "Alaska January 12: 5 reported seats, 42,500 Alaska points, USD 44.50 quoted taxes (4450 minor units), unknown price scope. United January 13: 9 reported seats, 50,600 United points, USD 16.20 quoted taxes (1620 minor units), unknown price scope.",
+      "explanation": "The answer accurately says United reports more seats and cross-program points do not determine value. It leaves out the observed tax-quote difference and the concrete counts, which would make the limited lead comparison more decision-useful while retaining unknown scope. The source is sparse on schedules but not on these quote and seat observations, so no sparse-source exception is warranted."
+    }
+  ],
+  "reasoning": "The source has zero complete journeys. The selected Alaska and United records are SFO–BKK economy award summaries on January 12 and 13 respectively, with no timed itinerary, stop count, or confirmed connection details. Their reported seats are 5 and 9, separate from the request for one traveler. Their 42,500 Alaska and 50,600 United point quotes cannot establish cross-program value. The separate January 1 SFO–BKK cash benchmark is one stop via HKG with a USD 640 major-unit quote, one returned traveler, and unknown price scope; it is not an award recommendation or same-date all-in comparison. The answer accurately explains why no bookable complete journey can be recommended, gives concrete leads and a next action, embeds references, and consolidates limitations. Comparative depth is basic because it omits a supported USD 44.50 versus USD 16.20 tax-quote tradeoff and numerical seat counts. Those tax quotes have unknown scope and cannot establish party totals or all-in prices."
+}

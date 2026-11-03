@@ -1,0 +1,11 @@
+# q025 independent source review
+
+**Pass: H / U / M2 / C / K / P. Overall pass.** Prior source/code/review familiarity is disclosed; current candidate mapping, metrics, checker verdicts and other current grades were not inspected.
+
+The answer gives three distinct reasons: earlier Bangkok arrival, shorter elapsed travel, and business cabin conditional on separate-ticket positioning. It preserves the time and premium perspectives while reducing the five-journey selector pool to three actual cards. The source has 258 journeys, 11 time members, 116 premium members, no cost members or possible costs, and no time/premium overlap. All cost assessments remain undetermined; no cost winner is asserted. Raw witnesses J17 and J49 map to their true source styles; no omission rationale is silently trusted.
+
+The timing claims are correctly scoped to shown options. Journey `46ff8814…` arrives Jan17 at01:25 and takes1345 minutes; `1bb2f997…` arrives11:30 and takes1260; business `ed5b1638…` arrives08:50 and takes1979. The business card preserves its135-minute LAX and420-minute IST connections, separate tickets, unknown award seat/taxes and USD235 positioning quote. All displayed journeys and award/cash component attachments exactly match evidence. The single inline cash comparison binds `063df2b3…`, whose source money is USD440 major units, unknown scope.
+
+Common quote-scope/cabin-detail limitations are consolidated. The local business seat/tax uncertainty and separate-ticket condition are distinct from the final protection caveat, rather than repeated common warnings. One minor editorial issue remains: “other economy choices” is plural although only one other economy card is displayed. Its intended timing comparison is true and clear, so this is nonblocking.
+
+Reviewed the full source groups, all time members, category/cost assessments and component research directions, not only selected records. Other source journeys can be earlier/shorter; this answer makes no global-optimum claim. Exact field citations and checks are in review.json. Saved-source correctness does not establish live availability, population reliability or browser layout. No live calls or product edits; no escalation recommended.

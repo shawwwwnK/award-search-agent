@@ -1,0 +1,92 @@
+{
+  "case": "prior-admitted",
+  "candidate": "category-c01",
+  "mode": "live",
+  "recovery_diagnostic": false,
+  "outer_results_completion_seconds": 16.221513874828815,
+  "timing_scope": "Saved source parse through checked/resolved Results artifact before disk persistence and offline replay.",
+  "artifact_runtime_seconds": 15.572677999734879,
+  "count_calls": 2,
+  "generation_calls": 2,
+  "passes": [
+    {
+      "phase": "selection",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 83076,
+      "usage": {
+        "input_tokens": 83076,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 83073
+        },
+        "output_tokens": 676,
+        "output_tokens_details": {
+          "reasoning_tokens": 555
+        },
+        "total_tokens": 83752
+      }
+    },
+    {
+      "phase": "composition",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 3857,
+      "usage": {
+        "input_tokens": 3857,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 3854
+        },
+        "output_tokens": 702,
+        "output_tokens_details": {
+          "reasoning_tokens": 273
+        },
+        "total_tokens": 4559
+      }
+    }
+  ],
+  "generation_outcome": "success",
+  "validation_outcome": "annotated",
+  "delivery_outcome": "delivered",
+  "selection_failed_findings": [
+    {
+      "code": "spurious_category_omission",
+      "outcome": "failed",
+      "scope": "shared",
+      "reference_id": null,
+      "part_index": null,
+      "claim_id": null,
+      "message": "time omission note contradicts selection",
+      "supplied_fact": null
+    },
+    {
+      "code": "spurious_category_omission",
+      "outcome": "failed",
+      "scope": "shared",
+      "reference_id": null,
+      "part_index": null,
+      "claim_id": null,
+      "message": "cost omission note contradicts selection",
+      "supplied_fact": null
+    },
+    {
+      "code": "spurious_category_omission",
+      "outcome": "failed",
+      "scope": "shared",
+      "reference_id": null,
+      "part_index": null,
+      "claim_id": null,
+      "message": "premium omission note contradicts selection",
+      "supplied_fact": null
+    }
+  ],
+  "selected_pass_index": 1,
+  "failed_findings": [],
+  "diagnostic_fault_observed": false,
+  "source_sha256": "d11d8a550093b26313ee07170c98c9bbfc24eb00a73e6bec232c05f6f0c911e0",
+  "snapshot_drift": false,
+  "live_calls": 4
+}

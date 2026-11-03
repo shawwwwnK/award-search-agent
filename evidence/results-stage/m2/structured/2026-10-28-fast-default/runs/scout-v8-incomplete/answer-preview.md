@@ -1,0 +1,19 @@
+There is no complete eligible award journey in this result set. The United lead is a reasonable first check because it reports the highest seat count shown, but that count is not a booking guarantee. All three award records are date-only, so none confirms a timed itinerary or connection. Their point and fee quote scopes are unknown; point totals from different programs are not directly comparable.
+
+It reports 9 seats and 60,500 United miles, with fees reported as 2,820 USD minor units. That may make it useful to verify first; the downside is that it gives no flight times or complete itinerary, and the quote scope is unknown.
+
+[Display: United date-only lead; lead; cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]
+
+This reports 8 seats and 42,500 Alaska miles, with fees reported as 5,090 USD minor units. It is another lead to check, but the date-only record confirms neither timing nor routing details; its mileage figure is not directly comparable with another program’s.
+
+[Display: Alaska date-only lead; lead; 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]
+
+It reports 2 seats and 65,000 Aeroplan points, with fees reported as 11,650 CAD minor units. Check it if Aeroplan is relevant to you, but it has the same date-only itinerary gap, and its points are not directly comparable with other programs’.
+
+[Display: Aeroplan date-only lead; lead; 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]
+
+The selected cash itinerary is a useful baseline: it is timed, goes via HKG with one stop, and returned a USD 640 quote. Its price scope is unknown, so it is not a per-person or all-in comparison with the award leads.
+
+[Display: Cash benchmark; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]
+
+Next, ask the award programs to confirm a complete itinerary, current availability, exact fees and their quote scope. The search provider reports partial coverage, including omitted SFO–BKK detail, and cautions that results may not be real-time; confirm directly with the booking provider before deciding.

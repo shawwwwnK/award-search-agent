@@ -1,0 +1,197 @@
+{
+  "id": "resp_03aa2d24cb26571b016ae21e3e478087d0a4dff3e9b7a39234",
+  "created_at": 1793203774.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The editorial_plan contains selected identities and comparison targets only; it is nonfactual intent, not a reason to recommend every record. No selector purpose prose is supplied. Read comparison_pairs side by side and bind every claim to the exact left or right record. Pair values distinguish award from cash carriers, award connections from separate-booking joins, and elapsed from arrival time. A card ID supports only its bound metric and endpoints; it does not verify surrounding prose. Compare numeric points only within the same program. Quoted amount direction across unknown or unequal scopes is only a raw reported quote comparison, never total or like-for-like trip cost. Never compare distinct currencies without source FX. Keep the answer a connected decision argument; omit weak alternatives instead of inventing a benefit. Each journey's traveler_evidence separates the known requested party size from award and cash component evidence. Award support for the requested party, minimum seats check, reported seats, and returned traveler counts have distinct states. An absent returned traveler count is neither zero nor proof of failure; a cash component echo does not establish award support. Say which component remains unverified without saying the request's traveler count is unknown. This evidence does not change quote scope or prove current availability. When only incomplete leads exist, give a conditional reason to check one lead first if exact dates, programs or comparable original quotes support it. For example, frame a date or program as an if-preference, not a known traveler balance or access. A raw same-currency quote contrast with unknown scope is not total savings. Neither a surplus seat count above the requested party nor a shared missing schedule is by itself a lead advantage. Keep limits clear; do not invent a complete itinerary or a preference. Write the full final traveler answer in this pass.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "msg_03aa2d24cb26571b016ae21e3ef29887d0b465a0ecbe3d997c",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"There is no complete award itinerary among these selected search results, so I can’t recommend a bookable award journey yet. The useful next check depends on your date flexibility: for January 1, United’s result is the stronger lead if you want more reported seats and a lower reported USD fee quote; for January 2, its result reports fewer United points than the January 1 United lead. These are partial, date-only results—not confirmed itineraries—and the points cannot be compared across programs.\"},{\"k\":\"l\",\"r\":\"A2@2027-01-01/SFO>BKK/E\",\"n\":\"United award lead · January 1\",\"v\":\"Reports 60,500 United miles, 9 seats, and an award cabin of economy, with carriers CA, UA, and ZH. The schedule is date-only, and the individual leg cabins are not reported. The source quote is USD 28.20 in award taxes, with scope unknown; it is not established as a per-person or party total. Compared with the January 1 Aeroplan lead, this reports 7 more seats, but different programs mean the points figures are not directly comparable.\"},{\"k\":\"l\",\"r\":\"A1@2027-01-01/SFO>BKK/E\",\"n\":\"Aeroplan award lead · January 1\",\"v\":\"Reports 65,000 Aeroplan points, 2 seats, and an award cabin of economy, with carrier BR. The schedule is date-only, and the individual leg cabins are not reported. The source quote is CAD 116.50 in award fees, with scope unknown. This is a distinct program and currency from the United lead, so neither points nor fee quotes provide a like-for-like comparison.\"},{\"k\":\"l\",\"r\":\"A5@2027-01-02/SFO>BKK/E\",\"n\":\"United award lead · January 2\",\"v\":\"If January 2 works, this United result reports 55,000 miles, 9 seats, and an award cabin of economy, with carriers BR, ET, SQ, UA, and ZH. Its schedule is date-only, and individual leg cabins are not reported. The source quote is USD 24.50 in award taxes, with scope unknown. Compared with the January 1 United lead, that is 5,500 fewer reported United miles and a USD 3.70 lower raw reported quote; neither quote is established as a per-person or party total, and the dates differ.\"},{\"k\":\"t\",\"v\":\"For context, the selected cash benchmark is a one-stop Cathay Pacific itinerary departing San Francisco on January 1 at 22:55 and arriving in Bangkok on January 4 at 10:35 local time. Its USD 640.00 source fare also has unknown scope, so it is not a confirmed total or a like-for-like cost comparison with the award fee quotes.\"},{\"k\":\"b\",\"r\":\"C1@2027-01-01T22:55-08:00/SFO>BKK\",\"n\":\"Cash baseline · Cathay Pacific\",\"v\":\"One stop via HKG; reported elapsed time is 2,680 minutes. The source quote is USD 640.00, with scope unknown, and the result reports one traveler. This is a cash reference, not a complete award option.\"},{\"k\":\"t\",\"v\":\"The request is for 1 traveler, but none of the award results reports a returned traveler count or confirms award support for that requested party. Seat figures are reported counts, not confirmation of current availability. The search source is partial; some results may not be real-time, so verify dates, schedules, award space, current prices, and booking details with the provider before relying on any lead.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C1@2027-01-01T22:55-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "l"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "A1@2027-01-01/SFO>BKK/E",
+                        "A2@2027-01-01/SFO>BKK/E",
+                        "A5@2027-01-02/SFO>BKK/E"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 4647,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 4644
+    },
+    "output_tokens": 784,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 5431
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793203778,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

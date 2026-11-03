@@ -1,0 +1,19 @@
+For a simpler award structure, investigate the Aeroplan option first: it is one award itinerary from SFO via Taipei, avoiding a separate cash positioning ticket. The tradeoff is a later arrival than the two Turkish-plus-positioning options, and its reported CAD fees are in minor units while the overall award price scope is unknown.
+
+Aeroplan economy on BR via TPE is the only shown choice that does not require a separate SFO–LAX cash leg. It arrives 2h 40m later than either Turkish option and is listed at 65,000 points plus CAD 116.50 in fees; the fee conversion does not make the full cost known.
+
+[Display: Single-award option; journey; 1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325]
+
+This Turkish economy award via IST, paired with an Alaska cash flight to LAX, arrives at the same time as the other Turkish choice and has a later SFO departure. It is 4h 23m shorter in elapsed time than the earlier-departing Turkish option, but still involves separate tickets; the transfer connection is unverified.
+
+[Display: Earlier arrival, later SFO start; journey; 04166f642586b72c6c87745d6a4703e067578179efd408782ed0d2f15e4a3b4d]
+
+This Turkish economy award via IST uses a United positioning flight to LAX and arrives at the same time as the Alaska-positioned choice. Its downside is an earlier SFO departure and a longer elapsed itinerary; the separate-ticket connection is unverified.
+
+[Display: Earlier SFO start; journey; 04bfc801825c2d6db4705e1527c8705440681bb7f3a952556997b2029883fa59]
+
+The shown Singapore Airlines cash itinerary is a useful origin-to-destination reference at USD 440 for one traveler, with one stop via SIN. Its price scope is unknown, so it is not an all-in or directly comparable award valuation.
+
+[Display: Cash baseline; benchmark; 063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd]
+
+The Turkish options each show 110,000 Turkish points plus a cash positioning fare ($121 on Alaska or $235 on United), but award fees, full pricing scope, and traveler/seat validation are unknown. Those points are not directly comparable with Aeroplan points. Separate tickets also leave positioning permission and connection protection unresolved. The source coverage is partial, results may not be real-time, and all availability and current prices should be confirmed with the relevant booking providers.

@@ -1,0 +1,36 @@
+{
+  "contract": "results-category-sources-v1",
+  "cases": {
+    "prior-admitted": {
+      "path": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/admitted/artifact.json",
+      "kind": "structured_artifact",
+      "provenance": "historical source; repeatedly used in V3–V30; regression only"
+    },
+    "prior-conditional": {
+      "path": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/conditional/artifact.json",
+      "kind": "structured_artifact",
+      "provenance": "historical source; repeatedly used in V3–V30; regression only"
+    },
+    "prior-incomplete": {
+      "path": "evidence/results-stage/m2/structured/2026-10-25-cost-experiments/luna-retest/round-1/incomplete/artifact.json",
+      "kind": "structured_artifact",
+      "provenance": "historical source; repeatedly used in V3–V30; regression only"
+    },
+    "ranking-positioning": {
+      "path": "evidence/ranking-stage/m2/solutions/sfo_to_bkk_positioning.json",
+      "kind": "ranking_projection",
+      "provenance": "distinct saved Ranking projection; 22 time members, no premium or cost members"
+    },
+    "ranking-mixed": {
+      "path": "evidence/ranking-stage/m2/solutions/mixed_access.json",
+      "kind": "ranking_projection",
+      "provenance": "distinct saved Ranking projection; 5 time and 120 premium members, no cost members"
+    },
+    "ranking-business": {
+      "path": "evidence/ranking-stage/m2/solutions/exact_business.json",
+      "kind": "ranking_projection",
+      "provenance": "distinct saved Ranking projection; 34 time and 106 premium members, 34 definite overlaps, no cost members"
+    }
+  },
+  "limitations": "There is no distinct saved no-complete source or observed full-cost-member source among these six. All six sources were used in the c11 campaign by 2026-10-29; future draws over them are regression repeats, not unseen holdouts. The three ranking sources are older saved projections, not new provider calls or independent holdouts. Synthetic controls must be labeled synthetic and cannot substitute for live source diversity."
+}

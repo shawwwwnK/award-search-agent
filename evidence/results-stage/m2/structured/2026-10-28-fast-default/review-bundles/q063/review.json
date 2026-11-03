@@ -1,0 +1,51 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "fail",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "Consider it if the earlier arrival and higher reported seat count appeal; compared with the noon Taiwan option it requires more points and arrives 5 hours 5 minutes later.",
+      "canonical_reference": "evidence.json journeys a8f358f504580d14978cb8934881c56c28a7312e288e108c8dffa2b161a8ebe3 and 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "source_field": "arrival.local_iso",
+      "source_value": "Vancouver arrives 2027-01-17 06:30 +07:00; noon Taiwan arrives 2027-01-17 01:25 +07:00",
+      "explanation": "The same sentence correctly says Vancouver is 5 hours 5 minutes later, so calling its arrival earlier reverses the displayed decision argument."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Choose it for the earliest arrival among the shown awards and the most reported seats; the downside is the points requirement, and the record does not specify the cabin of either leg.",
+      "canonical_reference": "evidence.json journeys a8f358f504580d14978cb8934881c56c28a7312e288e108c8dffa2b161a8ebe3 and 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "source_field": "arrival.local_iso",
+      "source_value": "Vancouver arrives 06:30; a shown Taiwan award arrives 01:25 on the same date",
+      "explanation": "Vancouver is not the earliest of the displayed awards. The nine reported seats and unknown leg cabins are supported."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Compared with the Vancouver option, it requires fewer points, has a lower fee quote, and a shorter connection, but arrives 4 hours 40 minutes later and reports one seat rather than nine.",
+      "canonical_reference": "evidence.json journeys 2df689e0ff0d8ad01708129eb8fb9ea5398c9accb14343c04ad99d2f6bc77dd6 and a8f358f504580d14978cb8934881c56c28a7312e288e108c8dffa2b161a8ebe3",
+      "source_field": "money.award_taxes.raw_amount.value, unit, raw_currency.value",
+      "source_value": "Taiwan: 11650 minor CAD = CAD 116.50; Vancouver: 4390 minor CAD = CAD 43.90; both scopes unknown",
+      "explanation": "The late-night Taiwan option has a higher raw fee quote. The points, connection, arrival, and seat comparisons in the sentence are supported."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Compared with the Vancouver option, it requires fewer points and has a lower fee quote, but arrives 10 hours 20 minutes later, has one reported seat rather than nine, and has a connection 278 minutes longer.",
+      "canonical_reference": "evidence.json journeys 3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9 and a8f358f504580d14978cb8934881c56c28a7312e288e108c8dffa2b161a8ebe3",
+      "source_field": "money.award_taxes.raw_amount.value, unit, raw_currency.value",
+      "source_value": "Later Taiwan: 11650 minor CAD = CAD 116.50; Vancouver: 4390 minor CAD = CAD 43.90; both scopes unknown",
+      "explanation": "The later Taiwan option also has a higher raw fee quote. The other stated differences are supported."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "Choose it for the earliest arrival among the shown awards and the most reported seats; the downside is the points requirement, and the record does not specify the cabin of either leg.",
+      "canonical_reference": "evidence.json journeys a8f358f504580d14978cb8934881c56c28a7312e288e108c8dffa2b161a8ebe3 and 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "source_field": "arrival.local_iso",
+      "source_value": "06:30 Vancouver versus 01:25 noon Taiwan, January 17",
+      "explanation": "The recommendation repeats the Vancouver card and gives mutually inconsistent arrival reasoning. This undermines a coherent traveler recommendation despite embedded references and a useful cash baseline."
+    }
+  ],
+  "reasoning": "The selected Vancouver award has a defensible conditional use: nine reported seats and the lower CAD fee quote against the earlier noon Taiwan award, with more points and later arrival as downsides. The answer includes several locally meaningful points, arrival, seat, departure, and connection tradeoffs, so C remains decision-rich; the false arrival and fee directions fail H and make the composition internally contradictory. The cash benchmark is correctly separate, one-stop, USD 440 with unknown scope. No full-inventory optimum is assumed."
+}

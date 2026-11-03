@@ -1,0 +1,68 @@
+{
+  "bundle": "q026",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "familiarity": "Prior source/code/review familiarity disclosed. Current candidate mapping, metrics, checker verdicts and other current grades were not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Exact temporal comparisons, identity, displayed points/taxes/cash and unknown quote scopes are source-faithful; no inferred cross-program value or guaranteed availability."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Defensible conditional business versus longer economy connection buffer, plus program-access research choices."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "Shared missing schedule information is explained in the common paragraph then repeated verbatim in both lead explanations. This violates the consolidated-limits requirement even though the core comparison and cards are useful."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Business is84 minutes shorter and arrives275 minutes earlier; economy provides301 versus150 minutes at LAX. United/Alaska research is conditional on program access, a valid original-Q3 reason."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "True time/premium overlap survives on the business journey, alongside the economy time perspective; no cost style is fabricated and research leads are not assigned styles."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two complete journey cards and two source-resolved research cards carry facts. One brief source-bound USD452 cash sentence is displayed inline with deterministic cash-role label."
+    }
+  },
+  "findings": [
+    {
+      "severity": "blocking",
+      "axis": "M2",
+      "claim": "The award leads below provide dates, not full schedules ... this is a lead, not a scheduled itinerary ... this is a lead, not a scheduled itinerary.",
+      "evidence": [
+        "document.json blocks[3].text shared lead schedule caveat",
+        "document.json blocks[4].text United lead caveat",
+        "document.json blocks[5].text Alaska lead caveat",
+        "evidence.json leads[reference_id=bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594].missing_information=[itinerary_schedule_incomplete]",
+        "evidence.json leads[reference_id=42dd038be15aeed81be50301b92baa2b22ac2072d02c32e7f54c43089d34a7f4].missing_information=[itinerary_schedule_incomplete]"
+      ],
+      "assessment": "The schedule limitation is common to both leads, already stated once for them, and repeated in each local explanation. Local program-access reasons are useful but do not make repeating the same downside necessary. Compact factual card indicators are not counted as the prose failure."
+    }
+  ],
+  "evidence": [
+    "evidence.json journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]: business Turkish275000,elapsed_minutes1719,arrival2027-01-10T04:15:00+07:00,LAX wait150,styles=[time,premium].",
+    "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669]: economy Turkish110000,elapsed_minutes1803,arrival2027-01-10T08:50:00+07:00,LAX wait301,styles=[time]. Elapsed difference84; arrival difference275; those metrics are not conflated.",
+    "Both source journeys booking_obligation=separate_tickets_unverified; internal.reason_codes include positioning_permission_unknown,award_travelers_unknown,price_incomplete. Local cash components have USD59 and USD109 major-unit quotes, unknown scope.",
+    "evidence.json components[observation_id=bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594]: SFO-BKK2027-01-08,economy,United55000,seats9,award_taxes2180minorUSD,scopeunknown.",
+    "evidence.json components[observation_id=42dd038be15aeed81be50301b92baa2b22ac2072d02c32e7f54c43089d34a7f4]: SFO-BKK2027-01-08,economy,Alaska42500,seats6,award_taxes5090minorUSD,scopeunknown.",
+    "evidence.json components[observation_id=f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2].money: cash_fare,raw_amount452,raw_currencyUSD,unitmajor,scopeunknown. Exactly one cash_sentence block.",
+    "selection-audit.json style_audit time=J18/null,premium=J63/null,cost=null/null; references.json and source.indexes verify exact witness membership. Full source232 journeys,116time,116premium,58overlap,0cost,0possible cost; factored cost assessments undetermined. Full167-lead inventory and component research directions inspected; no mandatory program quota applied."
+  ],
+  "verification": [
+    "Read answer.md,document.json,resolved.json,selection-audit.json,references.json and complete evidence.json.",
+    "All visible journey and award/cash component attachments exactly match canonical evidence; both lead attachments and lead components match; benchmark matches.",
+    "Calculated elapsed and arrival deltas independently, checked connection buffers, style witnesses and source overlap.",
+    "Reviewed full source groups, all cost assessments and component research inventory beyond selected records."
+  ],
+  "uncertainty": [
+    "This is a saved-source semantic review, not current availability or population reliability.",
+    "Supplied Markdown and structured card attachments inspected; browser visual layout not tested.",
+    "M2 failure is the explicit repeated shared prose caveat; factual card status indicators are appropriate and not the reason for failure."
+  ],
+  "escalation": "not recommended"
+}

@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1.1-scope",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "The most useful lead to check first is the United economy result for January 9: it reports 55,000 United miles and 9 seats, with the lowest listed USD fees among these three leads.",
+      "canonical_reference": "evidence.json:components[observation_id=963e988defe8bd3d4d9fa69d470614035e3af53df2d61ee1c160cda0e250d6e6]",
+      "source_field": "departure_date; program.value; cabin.value; points.value; taxes_fees.value; tax_currency.value; seats.value; price_scope; departure.instant; arrival.instant",
+      "source_value": "2027-01-13; united; economy; 50600; 1620 USD minor units; 9; unknown; null; null",
+      "explanation": "A same-program, same-cabin, same-fee, same-observed-seat January lead uses 4,400 fewer miles. The sentence's lowest-fee claim is explicitly local to its three displayed leads and is true. Because dates and itineraries differ and the schedules are unknown, the wider source does not prove which lead is best; it leaves the first-choice rationale comparatively thin."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "The listed fare is USD 640.00, but its quote scope is unknown, so it is not established as a per-traveler or all-in total.",
+      "canonical_reference": "evidence.json:components[observation_id=29289b6c9db95327ccdcc1ca2eda4a84c3cdf070c64a81ab5ab8465981720f1d]",
+      "source_field": "cash_amount.value; cash_currency.value; duration_minutes.value; stops.value; price_scope",
+      "source_value": "686; USD; 1930; 1; unknown",
+      "explanation": "The selected cash baseline is factual. Another one-stop baseline costs USD 46 more at the reported quote but is 12 hours 30 minutes shorter, illustrating available cash context the answer does not use. Unknown quote scope prevents a per-traveler or total-price conclusion."
+    }
+  ],
+  "reasoning": "No complete award journey is present, and all selected lead and cash facts, timing, reference roles, and limitations match canonical evidence. The answer gives a useful provisional check and reads coherently. Its comparisons are accurate within their stated local scope, but stronger same-program lead evidence and a faster cash baseline leave the decision support basic rather than decision-rich. The January 9 versus January 13 choice is underdetermined because dates differ and schedules are missing."
+}

@@ -1,5 +1,12 @@
 """Results M2 public API."""
 
+from .category import (
+    measure_category_results,
+    parse_category_artifact,
+    replay_category_results,
+    run_category_results,
+)
+from .category_contracts import CategoryAnswer, CategoryArtifact, CategoryBlock
 from .contracts import (
     CheckFinding,
     DeclaredClaim,
@@ -27,6 +34,26 @@ from .core import (
     replay_results,
     run_results,
 )
+from .default import DEFAULT_RESULTS_PROFILE, run_default_results
+from .focused import (
+    parse_focused_artifact,
+    prepare_focused_composer,
+    prepare_focused_selector,
+    replay_focused_results,
+    run_focused_results,
+)
+from .focused_comparison_contracts import (
+    FocusedComparisonDocument,
+    FocusedResultsArtifactV11,
+    ResolvedFocusedComparisonAnswer,
+)
+from .focused_comparison_wire import format_focused_comparison_block
+from .focused_contracts import (
+    FocusedResultsArtifact,
+    FocusedResultsArtifactV9,
+    FocusedResultsArtifactV10,
+)
+from .focused_patch_contracts import FocusedResultsArtifactV12
 from .structured import (
     StructuredBlock,
     StructuredDocument,
@@ -44,11 +71,22 @@ from .structured_contracts import (
 )
 
 __all__ = [
+    "DEFAULT_RESULTS_PROFILE",
+    "CategoryAnswer",
+    "CategoryArtifact",
+    "CategoryBlock",
     "CheckFinding",
     "DeclaredClaim",
+    "FocusedComparisonDocument",
+    "FocusedResultsArtifact",
+    "FocusedResultsArtifactV9",
+    "FocusedResultsArtifactV10",
+    "FocusedResultsArtifactV11",
+    "FocusedResultsArtifactV12",
     "InputTokenReceipt",
     "PreparedResultsInput",
     "RenderedFact",
+    "ResolvedFocusedComparisonAnswer",
     "ResolvedStructuredAnswer",
     "ResultsArtifact",
     "ResultsAttempt",
@@ -70,12 +108,23 @@ __all__ = [
     "authoring_payload",
     "check_document",
     "check_structured_document",
+    "format_focused_comparison_block",
+    "measure_category_results",
+    "parse_category_artifact",
+    "parse_focused_artifact",
+    "prepare_focused_composer",
+    "prepare_focused_selector",
     "prepare_results",
     "prepare_structured_results",
     "render_results",
+    "replay_category_results",
+    "replay_focused_results",
     "replay_results",
     "replay_structured_results",
     "resolve_structured_document",
+    "run_category_results",
+    "run_default_results",
+    "run_focused_results",
     "run_results",
     "run_structured_results",
 ]

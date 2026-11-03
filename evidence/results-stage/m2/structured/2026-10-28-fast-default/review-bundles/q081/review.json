@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Unlike the other 11:30 p.m. option, it uses BR only rather than BR and TG.",
+      "canonical_reference": "evidence.json journeys e1f3831953dd0bad5d6017daff4edb0a62a28acb6270fb18a3e6e9950ac7ae54 and 3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9",
+      "source_field": "arrival.local_iso; elapsed_minutes; connections[0].wait_minutes; components[award_observation_id].carriers",
+      "source_value": "BR-only: January 17 23:40 BKK, 1990 minutes elapsed, 905-minute TPE connection; BR/TG: January 17 16:50 BKK, 1580 minutes elapsed, 495-minute TPE connection. Both depart SFO at January 15 23:30 and quote the same Aeroplan points and CAD taxes.",
+      "explanation": "The sentence supplies a possible carrier preference but does not explain that this alternative gives up 6 hours 50 minutes of arrival and elapsed time at the same shown quote. The adjacent duration display gives the arithmetic, but the authored recommendation leaves this option's decision tradeoff underexplained."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "A separate-ticket Turkish option is an earlier-departure, earlier-arrival possibility, but it is less certain and does not offer like-for-like pricing against the Aeroplan awards.",
+      "canonical_reference": "evidence.json journeys c37c0ca25094efa418ea7d71bb277cb2b4571709e6f99f3195cca2cb85f100eb, 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3, 3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9",
+      "source_field": "departure.local_iso; arrival.local_iso",
+      "source_value": "Turkish departs January 15 06:18 and arrives January 17 04:15; recommended Aeroplan arrives January 17 01:25, while the next Aeroplan arrives January 17 16:50.",
+      "explanation": "The comparison target is implicit. Turkish arrives before the later Aeroplan alternatives but after the recommended noon Aeroplan. The surrounding passage makes a local comparison plausible, so this is recorded as scope ambiguity rather than a definite source contradiction."
+    }
+  ],
+  "reasoning": "The noon Aeroplan journey is a defensible exact recommendation among the displayed complete journeys, with a clear economy/connection downside. The selected award, positioning awards, and separate one-stop cash baseline match the canonical records on identities, timing, cabin scope, raw quotes, seat evidence, joins, and limitations. The answer has woven explanations and relevant cash context. Its third Aeroplan alternative lacks an authored explanation of the large time loss despite being shown at the same quote, so comparative depth is basic. No sparse-source exception applies."
+}

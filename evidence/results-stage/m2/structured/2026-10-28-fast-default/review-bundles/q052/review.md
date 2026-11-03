@@ -1,0 +1,10 @@
+# Blind answer review: q052
+
+- **H: pass.** The three selected award-summary records support the stated dates, SFO–BKK route, economy summary cabin, programs, points, observed seats, listed carriers, and USD fee quotes. Their schedules are incomplete and leg-level cabin and connection details are unavailable. The selected cash component supports USD 640, one returned traveler, one stop via HKG, January 1 22:55 SFO departure, January 4 10:35 BKK arrival, and 2,680 minutes (44 hours 40 minutes). Both award-fee and cash-fare scopes are unknown. The answer makes no unsupported total-price, transfer, or protection claim. No exact source contradiction found.
+- **U: pass.** It gives a defensible next check, the January 2 United lead, while explicitly saying that there is no complete selectable award journey and search coverage is partial. It tells the traveler what to verify before booking.
+- **M2: pass.** The recommendation, three lead explanations, embedded references, separate cash context, and consolidated limitations form a coherent answer.
+- **C: decision-rich.** The January 2 lead trades a later date for 5,500 fewer United miles than January 1; Alaska offers a different-program lead on January 4 with a numerically lower points quote but no cross-program value conclusion. These are supported local comparisons, with no asserted global optimum.
+
+**Source anchors:** `evidence.json` `journeys=[]`, `source.view.provider_status="partial"`, selected `leads[*].missing_information`, and selected `components[*]` (`departure_date`, `program`, `cabin`, `points`, `seats`, `carriers`, `money`, `legs`, `stops`, `duration_minutes`, `returned_travelers`). `document.json.selection` binds the displayed leads and benchmark; `references.json` maps them to A2, A5, A12, and C1. `comparison-registry.json.facts` is empty; no comparison-pool journey exists.
+
+**Remaining uncertainty:** The award summaries do not establish a leg-by-leg cabin, actual routing, transfer protection, bookability, or current availability. Unknown money scope prevents a per-person or full-cost comparison. The answer preserves those limits. No escalation recommended.

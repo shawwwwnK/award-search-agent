@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "I’d choose the Aeroplan award departing late on January 15: among the award choices shown, it has the shortest elapsed time and requires fewer points than the other two.",
+      "canonical_reference": "J14 eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669; J7 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "source_field": "evidence.json journeys[].award_points.value; journeys[].money.points_raw.value",
+      "source_value": "J14: 65000 Aeroplan points; J7: 65000 Aeroplan points; J12: 92144 Aeroplan points",
+      "explanation": "The recommendation uses the same quoted points as the midday option, so it does not require fewer points than both alternatives. Its shortest elapsed time claim is supported."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "Departs SFO at noon January 15 and arrives in Bangkok at 1:25 a.m. January 17 local time—5h 5m earlier than the recommended option.",
+      "canonical_reference": "J7 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3; J14 eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669",
+      "source_field": "evidence.json journeys[].arrival.local_iso; comparison-registry.json facts T05",
+      "source_value": "J7 arrives 2027-01-17T01:25:00+07:00; J14 arrives 2027-01-17T09:50:00+07:00; difference 8h 25m (505 minutes)",
+      "explanation": "5h 5m is the gap between the midday and afternoon alternatives, not the gap to the recommended late-night award. The rendered comparison immediately below correctly says 8h 25m."
+    }
+  ],
+  "reasoning": "The selected J14 is an admitted one-stop, single Aeroplan award with 19h 35m elapsed, 65000 points, CAD 107.40 quoted fees of unknown scope, and nine observed seats. Its shorter journey versus J7/J12 and later Bangkok arrival support a useful exact recommendation; J12 supplies a genuine lower-fee versus more-points and longer-time choice. The separate one-stop cash reference C at USD 525 is accurately scoped. The prose, embedded journey references, supported local alternatives, cash context, and consolidated limitations satisfy M2. The two explicit numerical/relative errors fail H. No global-best claim is inferred from the displayed-choice comparison; source coverage is partial. No unresolved source uncertainty changes these verdicts."
+}

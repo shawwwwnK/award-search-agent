@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.1-scope",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "It arrives before the awards, but is not a like-for-like valuation or an all-in award comparison; confirm what the quote covers.",
+      "canonical_reference": "evidence.json source.view.components observation 063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd; evidence.json journeys cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a and 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "source_field": "source.view.components[].arrival.local_iso; journeys[].arrival.local_iso",
+      "source_value": "Cash baseline: 2027-01-17T08:25:00+07:00; earlier Hong Kong award: 2027-01-16T22:25:00+07:00; Taipei award: 2027-01-17T01:25:00+07:00",
+      "explanation": "The cash flight arrives after two of the three displayed awards, by 10 hours and 7 hours respectively. The unqualified plural comparison reverses their arrival ordering. It arrives before only the late Hong Kong award."
+    }
+  ],
+  "reasoning": "The three selected award references are admitted SFO–BKK journeys. Their reported programs, economy cabin labels, points, CAD fees in minor units, unknown quote and point scopes, observed seats, transfer waits, and relative award timings match the canonical records. The late Hong Kong award gives a defensible late-departure lead; the answer explains the earlier-arrival alternatives, their time and fee/seat tradeoffs, and separate cash context. The cash arrival claim is a material H failure. Composition and comparative depth otherwise pass independently. The opening phrase 'earlier arrival still' for Taipei could be read as relative to the earlier Hong Kong award, but the later explicit comparison anchors it to the late-departure lead; record this as wording ambiguity, not an additional factual failure. No exhaustive-frontier claim is made."
+}

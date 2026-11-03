@@ -1,0 +1,64 @@
+{
+  "bundle": "q052",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "familiarity": "Prior source/code/profile/review familiarity disclosed. Current profile mapping,metrics,checker verdicts and other current grades were not inspected;this draw was independently graded.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "1052-minute elapsed,782-minute departure and270-minute arrival gaps are correct;source identities,quotes and unknown states preserved."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Shorter economy and conditional business-cabin choice each have a supported reason and relevant local booking checks."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "The common tax-quote-scope limitation is stated for both awards and immediately repeated for Aeroplan;no distinct condition justifies the second sentence."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Supported shorter/earlier economy versus business cabin at a longer itinerary;no cross-program point-count advantage is invented."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Displayed exact time/premium members retain available perspectives;no cost member or overlap omitted."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Actual flight cards source-join correctly,and one brief USD440 unknown-scope full-cash sentence appears inline."
+    }
+  },
+  "findings": [
+    {
+      "severity": "material",
+      "axis": "M2",
+      "claim": "Both award options have unknown tax-quote scope ... The Aeroplan option\u2019s CAD107.40 tax quote also has unknown scope.",
+      "evidence": [
+        "document.json blocks[3].text sentences1 and2",
+        "evidence.json journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82].money.award_taxes.scope=unknown",
+        "evidence.json journeys[candidate_id=01df3955d0603fa6d54ec3522e0dd5d1cdf09b8555134f8c6eff07e8ad90ee7a].money.award_taxes.scope=unknown",
+        "condition-applicability.json award_tax_quote_scope includes both J1 and J82."
+      ],
+      "assessment": "The first sentence already applies the same unknown scope to Aeroplan. Repeating its quoted amount does not add a new condition. This violates the unchanged shared-limits-once requirement. Business tax-amount/support uncertainty and positioning scope are distinct and are not counted as this duplicate."
+    }
+  ],
+  "evidence": [
+    "J1 (28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82):Aeroplan economy65000,elapsed1220,departure2027-01-15T23:15:00-08:00,arrival2027-01-17T10:35:00+07:00,HKG105min;CAD10740minor tax quote unknownscope,requested-party support passed.",
+    "J82 (01df3955d0603fa6d54ec3522e0dd5d1cdf09b8555134f8c6eff07e8ad90ee7a):Turkish business275000,elapsed2272,departure2027-01-15T10:13:00-08:00,arrival2027-01-17T15:05:00+07:00,LAX407/IST405min;USD121major positioning unknownscope;unknown award tax amount,party support,positioning permission and separate-ticket obligation.2272-1220=1052min=17h32;departuregap782min=13h02;arrivalgap270min=4h30.",
+    "Benchmark063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd:USD440major cash_fare,scopeunknown;one benchmark sentence.",
+    "Full258journeys/34groups/143leads:11time,116premium,0overlap,0costmembers;three cost assessments undetermined. Raw index0\u2192J1/time and1\u2192J82/premium bind actual displayed source members;no material category omission found."
+  ],
+  "verification": [
+    "Read frozen rubric,full source/request,wider population groups/research directions,category/cost indexes and assessments,references,document,resolved,Markdown cards,raw indexed audit and both factual sidecars.",
+    "All displayed journey/award/cash/benchmark attachments exactly equal canonical source;independent temporal arithmetic and raw index bindings checked.",
+    "Both choice rows/full connections and eight condition rows/member mappings independently verified. Input-table truth did not determine prose grade."
+  ],
+  "uncertainty": [
+    "Shorter and earlier comparisons refer to these displayed choices,not global optimality;the opening correctly separates economy time from business cabin.",
+    "No additional cards,comparison minimum or per-card downside is required.",
+    "Saved repeated-source review does not establish live availability,population reliability or browser-layout quality."
+  ],
+  "improvement_direction": "Remove the redundant Aeroplan tax-scope sentence or consolidate common scope once while retaining distinct business-only conditions.",
+  "escalation": "Parent integration required for failed M2 draw;no deeper escalation recommended by this source review."
+}

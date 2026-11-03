@@ -1,0 +1,225 @@
+{
+  "id": "resp_0ecd2ae337a947f1016ae2189ad83487d0a0d8d23d80c64f65",
+  "created_at": 1793202330.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Repair factual errors and answer coherence against the SAME frozen source records and comparison_pairs. The editorial_plan contains identities and comparison targets only, never source facts or a mandate to recommend every selected record. Recheck each sentence against the exact referenced option, including program, cabin, carriers, connection wait, time metric and original quote scope. A temporal card supports only its exact pair and metric, not surrounding prose. Remove unsupported claims and contradictions; keep useful supported tradeoffs and applicable limits. You may delete a weak or redundant option, but also repair or delete dependent comparison cards. Do not invent a benefit for every alternative. The previous_wire.blocks entries each carry an original index and one original block. Return ONLY {edits:[{start,end,blocks}]}: each edit must have end=start+1 and blocks containing zero or one complete replacement block. No insertion, multi-block replacement or multi-block range is allowed. Use original positions in sorted order. Empty edits mean no change, not factual approval. Keep internal J/A/C/T/JP/CP aliases out of traveler prose and labels; keep them only in wire reference fields. Feedback lists actual failed mechanical findings and may be empty. The requested traveler count is known from the request; use each selected journey's traveler_evidence to identify award versus cash component support that remains unverified. Missing returned travelers is not a failed seat check, and cash echo does not verify award support. Repair a missing central decision reason when the exact source supports one, especially a conditional next-check preference among incomplete leads by date, program, or comparable original quote. Do not invent program access, balances, total savings, or a benefit from surplus seats above the requested party. Preserve factual repair priority; one existing paragraph may be rewritten as one block.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_0ecd2ae337a947f1016ae2189bbb0c87d0b28fae4876ea7d6d",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4hidy7-YN2l243xZO5Jh1d1IrcFNRx4tiTSoLogNTcorCw4Ow3GY9vFL1XwPZWi3R4crp321PLIC64sxD_lFL51LXUDy8OcRHCWBqYFc08sHatDf4fJU3ezxPyCIVyWDt_VF50MLmfA1xpxoSEMCAUNYtucfJC7pCNEtJGVNdg5LqqB0zvlTaQeXEOqburvt0F5aGAxmKI_8rGTw-3YY_YsBjvhiY6uLeQ4KYCTVnl4mAAIkHApoAkMd4GknYQvU2whJ711sobsAgA1qT_sWk9zUQAKKsTCu7HY4nEimAh_JmXeUrXNXD79ek6C-Tzt0C4pZhsUm68z-ThcFPAd7nwsFHsAOcraNzwWORF0LGpsE7ALwhB4PYfzNKtHlF9vSblmHKCgA4Cw6COM_RKQxZ99xPMjYLhHnYlbO5wgMk8WOkjd3Wxwc0b6BtsWG_bEmh3T2m38lpJwH_-V_FEL9-qp5pZ5BULRSHO9_A4gF9hdSDcxlIA6MTPaUW6yc9vv-zxfGiADVs16efmtDuiIXxIlJFDTvgC1swMWvKse-Qqfmhl6ZSPZNJmiakLSBgIAkcv2ahRL_jCjU76IARC4nQ6jhzb5wycs2Sj-UPdJemXIcDTI2fYW4wvhog9VIEMVzABOuoEJ6hHnFVmKemsupPp1jU-19XTnR1NiBlpL4nocRNwpkHcCp6L2P7JkjbgPgUiKrls_x6nfPKgtBWN3Uaz3Lf8vQGUJUmUX96WUxzqr5M9P-3KFGB7-Xdf990pQ7-WKSowLL4ZEnfsXeLLtvAI1t8i44ZmqhXWI-F5JdQptSj698i4SMb91Mf8TWAvpdiGhfEgpArDg3_4PdMiKUP6rFrKywPRKr2cbJA7VLtDpp6QDMrOHH3EWbFCNrQCa2f5eiSKg0MnrInn5BR36JCkSYOPGERdj1GxJpEunKbL72tOV3Cy8WEoaDp7FvpjfOSsVvT_oHZeLFJRXqsReXzOAGTeItP_RyR7mreishhwxC66Lc7vpa3rHA76OubHucwPnJ27bAD3iIRPsxJaqbz2_Un_sTCv14ZhWdec19HposCFXFhq8CrKsaSoMGlSl3X88t0URYbtclxsnI2YTFefxKzOBsVW2TWz4GCWn8dPs4bqDJp0sZaydPgKDdt3Plk9aEdwrVTQNE4le-9hmL5AkvSCnvQ49gajEBY4LK4Rr6hg35tC4HC1hg7G93jrVcDznc-SyRiK-ShDvaUAGi--C8wBIIqQxDiyBkIzV412ZSkiHWDSrf-UewnYKpHGp7guLz7Xr3yK6DVIyf3oUDkEuuwKCRyTuHiCxeivMDWv8kjiFlfzT6be3_CreOyC06ZB-dgF4KzBFouR6UlBmtqtnqMTlsFo55qP6PVDHIch4J1_cXZiRXbWB0U6viD-kyoGDws0JqT4nwmvwxvTvNKsamETKtFY8LaHiKLmRnPmFpPO6ZGb7QhugUAKTTac39Byxh6hx5hYVBS-oTzGKvMbtatttIfDQeNdTp1YFvjRJ84d9Uut5CeCvp6voThty-RcYi80hVQT5kpUHi7x4YakMwCIEM4meiQ1UV0MjB8dFrzxYYwuJWcJdRwlDwWabErLyg5nQUvumzIxEtd5njqVqdGNbeIhMNHDDnQQzE--fePN0E2Hzk-cyRF82vl-fQ_OKpZJIed1mHA0Ivgcb92IgGoOV8JzqIPelboYhAxz6plvBff4gAWBqmXO7E-bj4zLjPgedf1a39esi8eOEs2KYddesDcG-85gEXg8wXESRUMyV6FwDNBL-6KFkDOgaidTupUjWsQLXo1EWon517oE20-q7MLV3pgV3hjcdecP1cwu3B0Bzbgzfs7yymMpSh9xdmHq8T_DEwF8M1qvNJY-tu_bJwcZbUCLUc5gqxhIpgWOcVDCw9KgWOzEMH2y_pGFvegiSKAoYvqm9e0G1Ca-LqLPf_8YDlXSnoaddYX5NEbqAzWolmbkpi5PGWZ0eJCedM66IiG6EbaRTtpSy7rzfS6jWrJw67rY-BchRFRrNb287IDEp-EAACVMKEoQZ69TFFqe5AlRgBDiT77Qp_dI1S4AMbYToMbu9TT55resogEg4jHBKhPenKG42i3L0KLB0Tzf9HLtxQBaKRFyvR8995e5rsHnwQYEpBlfFqyO69r9PzJLNkRs52la1mGbILmvWcD4XloD_dhUEFdB2dcn5jaJf3Tj4BLIOydSAwop3KFi3DwWAZ3CxXirfHugkbjTNUsuupe5FtsLGUK4KGbMbXZlY7ViNDesa6lKEURYkT4hl_vb3AwK7BGrObutv0MnFiDY8epVPuVB5pDCP5Awj5pVmAYUC9C2eyYVGuc0b2zB5FULt4R_a-BYHGLRMo_Z0mijWAEW_rkTR6mghmo4021VG-izJ6WIiJeafxUFec1ewx-W8cgjgFP4-WR2GQzXaTF_0MC-NP3DIMyg9gagW8Y7E3rSBlMVK8HiVC_sxdSaPE7gqQe1I3UGdwllLs1lUQ8FEhksnkypF7n6DZoQwtko9G9hodKAwfXV7EZdHtXwrncivBNQW874J9j6UL-GmIb1ljDM9PIEzMYr-99rtOX1QIq-V0qLzB09kYMtZXYw7gcz_1B8pi1WOz70KIRjg0XWDRQrPlJzlOrui6NI3iDn7ynJ5nSXRaMmIaYUsug4HM08er4hOZ-2QTvpc1wjgLz4wLk9oWDG2Ux7PCHxZ-XavOvFYP2D08DzFoftPEsVJwip8NGTYKrYJ8C9fQwDxWPNXJz8x_FTRVzlrJK-hOcElr1yEDAfu2ObmXXH4hSHTtbqQSsI4diVvM5vpA45r4ZAPE61AsXEVFwJGFjAhtpPo40INBPzhIR6JwAUl8h_R5aiqoK_0nmoksW82zLNqUpZJ6Tiaiz8aq-771faQl00gzYOa8XTm_8dV2pzolSYVX7ZZ5CN8w5lRce8rWEv08Lur-94LLPPrmZzJQyZ5fqBGpZA6iw5uLcU5R0YoWo0og-VabnrO0uFEPWAQ2Mfu-5vU0BXnZgv71cyMBF8UgD2gruTRn1aI94E2bqtc4V3vwcNfVDQ1h8yRCWj4XVOLFaiTMgnsz3HGYKfqR0AOOcQMHZnV3hhmCX3Z3TcxYn_BwAUCBE2yjipOWKG7jdw4zfQV2TvgkVZjZzghokMN79No1JlwoyyRYNp4fZrLA74HJyufyvhevwQAxwohkQUEqxyqkpI3puQvCZq8I-IjfTc5nQmmeh-mTvVczLElcFQcxf5AK8UsPkKKQhAM_mwHL_G22YsIY6-kDY2LDHQ8mXM4yYGU5CLf0mVpMSTmLEUV-dxTKFdTEKc2XKQz8AW9O3g2k1zQM4Pn1tETuUWgto1pWHsOPjWCFrqEqwjNwLTay8OVMN6qt9VOAPowIxIeduj33wbdzRfgC7FStsjCtewv5dv5CyP5M-f7qc9KhaZTjW3V1nZK7ObVRSzurmoJLgSP3xMRx4iiWpuRa0PCQm4LSxECU9PTUBDFQ8j9MVVjX8KI2TY5EMEis2GvvLBLQITOeqOqEr_FJswrRb1SKftLRXehKJaIuQ-JafQC9Ge7XlPDox0mwybml9x0meimEx4mwSLmglPDcukfBH2LSKz0rzzPL2fGxfCC1AQw6hI5wrJ27rZz9t5d423twGui-QXsxavUx87_FdshZ2mwISHdeAu0qlV8HwrpOiqp_QgjA0gSHpKAaVqc99YZ-pG1oreh8bFvGmdTsNCIamg5Rm8PGAZCFOYa4Eir1X17SapsXyn2qS-BArD8OaxMQmLEpcTx1wP1iGomdVx715801w8YbhKBiOVb9CTpmUWccE0QIY1EJB7uQ3JOyPvxR5KKDPZMWCYC8FaNQfKbCDEF4xxJd4jUEmdogkieM_BmqKEJTKKn6s21wJCynNusjSelfWAeGVUu_AQpMXFTP34YHuuweXZZtBvJtdmUKvKmFr43olPk44Z7BXNK2HXKJNjnkUbrctH451TGLtjJ_2R8NJY276MdmtQcTobx2xkd662cDo_r7LxItxURoC24fPIhutdM0NT0iQ8pjJY_bCTdQ0AO0kZd_Dr4mGQLXSzUNGb9t4TfYl0COk65ipQhrL1MTPvZUjRCOMY2kKqYQ8k1c4bw16TTsyhDSep2vm6LnjgbiCPlnmHUpTFiOxX9H7zDp8B6ytCELfq_scIy5yFpveNm2ODKZhLnyEdfZ10Dn1dMMtRAqS3jNeQ_x0HSl7n7zXZfGHwn8KGaZ1nFJJBcfnIPet9xhRytiH-w2KhSWuOyy7bIegh0B6P3DyxT9hPT7m8ghvWbl5exvYC5yzsc5qsUNy_9_jI05kuSC-Mmdn5nv_WFMrhvjiljW2pWyQfgpg_8qCWO320oLrV6pMKNTPOdnTpNm4E1V9C3-QDuFTcrokkYMR2gFiu9nDW4wBYHXGiDKq9RdRBpmuEUahb5uHUH1cGpqI-Ow_mPDTEXfzsxMMoREk6rwwNdF8zjFhgJ_x6SmmbVjitkA1Dqrd2zbD5IFfHQcIo97M81jlnfdwVsN6HUj5iDuj67-CyZQsFDlFdJ77MUPwBMUzz2j_A2JBMOz0lUKHXk-YVvoUFzuE0MVVMdTxbvcoU9h4bRnmr_xomZtphCXPrSbor8ES3Ih81HFjKF9X5aRMmCVo_VdL-sbBX3Zxb8TUUgS4uaKEzvrL4GH12pHTXDj9QrQ7dAnuxuFPL2jhCkFaTawwacX-ADAC6VjwcCZaRW8PIzPkrWBaKnpVFoyRJnQOHcB5h5JxemvIRfpYhuerZjQTVlwzg-Ys07sL5b9_5W5mOeuFFDBcPgzYHOd6f62rgpPTLRLcPE8lSaZf59eQrCSAvTOqMcsgrroSYZFlYZd-LorpfgoP2KUsRON5t-UfBH0Wwjbi2_HAvR_QRXoXtn92Yb3paEfuGonQQ-Drf8gaA-yadldQMHVE30X-3ajBboNRx5_kZ-Pv87FyNdSxVUulm75_hFba_0RxqEFEadI00mHs5fAOPWrTNq-8oziB3E58-jPme-RbI3hv0yMxE8c6Ry1xh7t8F2D_dnp4XpSNR3tJbZ7m7KqurDHav0LVmVcxhhBnoK5B4EHt6VOHQVTOACGaj4Zuk5Ro6ZkIOTEj7un-1Hs8cxZODXPv__Di0ntzQGBIdHElykB7e9GBpxqd3K2ivP_iDSiX7LFSD25Fywd8Ok_gpqCLQuoyVvvXlgJhCnK5m5hzDWQep_rWzx4VDFVY1pihfRauZOEHvsAdfBTso1wswhkpZeBtLOkSlAzcODEsy5EV_P2MMEdrqckbBdIAnDzRqqzGDowEFk83tYMNwdPZB4ZcnTf-_UlCa-6khZ2IZD3SQ40wkpoB7bYLye9Tk357C8hMla2_97bQmIZBKWJiPM5suHV_1idotE0bdcbMBoXH3YQEctCQlgpPW_t86XzfjIFwrJCKSImXJqvw2sWI_KIx_ID7GQwLzD7HkryZ1dkS1L9v0ePWg1-y9exN5Lk0wazUN6-pA9iJZsBxj1N-aKNibkeUW7z46-_2Vy-0aiTd8ZiBg18m5C8HASxgX6tx-AJxKmJHvwJ2Tyc8XlOKVDMNYwXdmCz2H4WfvHm_GtxMEQsmF32_5tBy0Abq05bCRcg1YjEFnnOFdyXcgbowDOR1NFDlyzT-S0t3cXrmiDG4Le-oC_HQRP5Ly5bk5Kefr5Ttc_JcZKMd06ip8xpAXglYGRTiRlrmP_YTQFYFNcDyeIg2PHI_XujzolC1pkY6PpOKB9qWIy8pddZlswlGzzRXFzaQIJ5NJvAnPlPfVBk1ZyEOJGdBscV3CzoEGvTIrscCenSlZvZXok4pCQ4eiQOOaN493Zk800_o_e0RjQvvTlQS_w3-w_di6KMzisjnG7QCEZ_ajLgM1woCZ5iZCT_wZm3oDKHBzaqt4BXYg==",
+      "status": null
+    },
+    {
+      "id": "msg_0ecd2ae337a947f1016ae2189dcfac87d0a4a3abc5ff2fb50d",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"edits\":[]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsEditorialPatch",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "integer"
+                },
+                "blocks": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "t"
+                            ]
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "b"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "C1@2027-01-01T22:55-08:00/SFO>BKK"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "l"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "A3@2027-01-01/SFO>BKK/E",
+                              "A5@2027-01-02/SFO>BKK/E",
+                              "A8@2027-01-03/SFO>BKK/E"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      }
+                    ]
+                  },
+                  "maxItems": 1
+                }
+              },
+              "required": [
+                "start",
+                "end",
+                "blocks"
+              ]
+            }
+          }
+        },
+        "required": [
+          "edits"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 5025,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 5022
+    },
+    "output_tokens": 342,
+    "output_tokens_details": {
+      "reasoning_tokens": 325
+    },
+    "total_tokens": 5367
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793202333,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

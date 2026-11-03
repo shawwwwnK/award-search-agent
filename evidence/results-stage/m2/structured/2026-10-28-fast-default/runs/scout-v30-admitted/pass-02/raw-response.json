@@ -1,0 +1,229 @@
+{
+  "id": "resp_08ca5c87ba83a500016ae25487444887d0a7dc2b5537a6f625",
+  "created_at": 1793217671.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Write a complete traveler answer from the selected authoring_records. Each exact record key owns every fact beneath it; read that record before stating its program, seats, schedule, cabin, points, fees or connections. The records are examples selected from the full search, not the full eligible inventory; use source_scope and source_context only for claims about the whole search. Open with a defensible choice and main tradeoff, then explain each useful choice around its exact visible reference with its own reason and downside. Include alternatives only when they change a meaningful decision, cash as a separate baseline, and consolidated shared limits. Similar routes, departure times or prices do not prove other fields equal. Attach points to their program and money to its currency, unit and quote scope. Unknown scope establishes neither a per-person nor party nor all-in amount. A reported award cabin does not prove every leg cabin; an airport join or separate-booking wait does not prove ticket protection or bookability. Compare only exact shown choices: 'both', 'all' and 'the awards' must be true for every included option. Temporal comparison T IDs each bind one selected journey pair and one metric; use {k:'x',r:exact T ID} when an exact computed time card helps. Both endpoints need visible journey references. Preserve metric and direction; an elapsed difference is not an arrival difference. Ordinary numerical prose remains yours and must agree with the exact records. If no complete journey exists, say so and explain which partial lead changes the next useful check using its reported date, program, seats or fees; a shared missing schedule is not a distinguishing benefit. Do not infer cross-program points value, traveler balances, current availability, quote totals or unseen routing. Return a full JSON blocks document in reading order: {k:'t',v:text} for prose; {k:'p'|'a',r:exact journey ref,n:natural label,v:explanation} for complete journeys; {k:'b',r:exact benchmark ref,n:label,v:cash context} for the origin-to-destination cash baseline, which may include stops; {k:'l',r:exact lead ref,n:label,v:lead context} for a partial lead. A p is the recommendation, a is an alternative, l is never a complete itinerary. Every concrete option discussed needs its own visible exact reference. Do not print internal J/A/C/T aliases in traveler prose or labels. If previous_wire and feedback are supplied, repair the same frozen source-bound full answer. The editorial_plan contains selected identities and comparison targets only; it is nonfactual intent, not a reason to recommend every record. No selector purpose prose is supplied. Read comparison_pairs side by side and bind every claim to the exact left or right record. Pair values distinguish award from cash carriers, award connections from separate-booking joins, and elapsed from arrival time. A card ID supports only its bound metric and endpoints; it does not verify surrounding prose. Compare numeric points only within the same program. Quoted amount direction across unknown or unequal scopes is only a raw reported quote comparison, never total or like-for-like trip cost. Never compare distinct currencies without source FX. Keep the answer a connected decision argument; omit weak alternatives instead of inventing a benefit. Each journey's traveler_evidence separates the known requested party size from award and cash component evidence. Award support for the requested party, minimum seats check, reported seats, and returned traveler counts have distinct states. An absent returned traveler count is neither zero nor proof of failure; a cash component echo does not establish award support. Say which component remains unverified without saying the request's traveler count is unknown. This evidence does not change quote scope or prove current availability. When only incomplete leads exist, give a conditional reason to check one lead first if exact dates, programs or comparable original quotes support it. For example, frame a date or program as an if-preference, not a known traveler balance or access. A raw same-currency quote contrast with unknown scope is not total savings. Neither a surplus seat count above the requested party nor a shared missing schedule is by itself a lead advantage. Keep limits clear; do not invent a complete itinerary or a preference. Write the full final traveler answer in this pass.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_08ca5c87ba83a500016ae25488377487d0aecacb107f20f3fa",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4lSOxw66V6DOxRqllO9Y9PEIlkUZjgu6v7QgPPcbYUywqv6eTQ4aM6Uy-x8ngLuGtenCKftVaHq69B7EIg2FXG4SUa_HIGTorSP4JDoeSYpCNQIWcksPPuDIprHSoQwGKbzvyW3DwzP8Sr-VIVqUAV-_W7gQs925O2f7bgi3IUgBOtBoaJdayKVJ0Q8uueJyN5GsDrK3PpupN0dZSm6CKfORRp22CCyB25NcBzyI_jLxh_VK27NPvVcer--2HYPFD2I0tY3K6JhfsnTFL1e79gu_Oz30QqKXr849doaz9JR-5Z9paDJSe0nwy13ARwFYDfDxPC44Be8-tA61_lpPkKR7s8SDxCHVluz3H2I__WiwJS68QIp_AISYlY6Vaxd0aRXyprAiQUCZqGkmRwpLO6YOnTEX8VqgQZdVZiBt359J6DNjH0bcvUVLCG0omHNnL1xLI8k2M-o0R7OMEotZYdOqHQ8j7oi9-qlK2_4CcCr-8kYYg8PYlAIpjeXoGMC17URUCEsbmWkLzzpNGNHkGim5UKKS1Ue1yc8KxByME96NEhBUzVHLtAWZ7qL1zUr_wTyZZ0Fu78fVOEtZUxvJcTnRWiXhk9FsvHTgAzGVQU99NCaTPLwQIX78MxaTdrzNnYnOaK2RnI8D1ff0dwvKuWHWo5of7YHod99UWECpLay4n540CNd4CaAmEA4hQ7CrqeobgfnZ6Du_AeiLRQHTZORPxuNDzmKVyVCIrgxg171qUn-Jwjo-L3zCpiTy3kWnxUpqIBRRlpius1xbtDqcbF7mE7phXp7V8Qv62RDW1LBMNnEQHjjmGnRUjNHkqegg2dW_063P3dY4o3LCe-PuDMoUZhvBffyre0a2dufVENdx0_VollRIwDL3hle5n_hz8bksUUl9-F_f_n_Y57Q04gvoAm0RQWucwmKPVGo-3Y8ayynLJ2h1nh5XRq1LnMZXCVxIa1sLqvzfE3P6E0Tgay_QvajpDISbxC7LIb9ljnpXaVSf9ABLUb1CNM4bESHvzKsXKje3akGln_hnoMM32detbS7KqPHBOi1Zz-ZAwj6WTyuvtLRHmYNJ02zGoPrK8yWmRj8YUMKSg3rcAPIFUANW9fWfz2WwHJ099AI8HApuCVFta2jy2M56RbqpdjPS3y_D39C0DeC_-PcVD8tuedhaRQ9z7j62L0YVbz3Kr7Eg87fp3NXkle0Aa2YytIFH4To70HgfVsLihgCiRr5vZq41lveKcJhvwvHgqVT69XQyQy3ote30PvCSND4tVGBlY-wjr1JEG3nw0ubmV7Mvt59f0a1TkyyerYy1HqQXL-w6f3gbtNWmvO3xTyBon9EU-0Vao7qbtvBYRY45RTZGJ-hoKLWEJld9L5S6vVFqAFqkzHG-tGprUD-977Hf29MF3YEk5txAyeC2XJ2i6XpGcQVSdqHKYsTL8eqBw82_3RWrwBDczXhVtXBowt-TRELaHh8ab4qKjLUJNjJNzZ3vhZO_G0-J77Slrs0w-IvChh3RUvDA98eG-XSoIbernpaqtlMvJeR7Ob8IItd9BZ17VfPtXJEJzqRMVgu-t2LvLJFe-oHHpfAahC5Ut_0erpHJ0DaGomQRmLzVdYHWRdnacX8Ott40gJzofZKLxpQRNqLeQ1Bs8v-KNwz7aFf3HHZFLqAWemIuQzVy0lTlZ3tIG-QT9onkzI2V5c3tEmD0Dzb-jENqPFL-GBSuLdiM7iNoWlFnV6By-2v8OTstYm0uGj1iHEAMRWrMNG8h32qgjOlNuiSjlrzm3MQ3H5ACwBDVR7XhuyMuewT98RSPHvEtkEYRHsvPE9m2CfQD8TzPpsnGvGyJVa7-XF1XNYNEFWrM_IVb4Yw0jbzXXTv8xeNeXoNJADEVqbFjEAYKW_G1lLB-lDjk5kQ6Fbhx5E5XElFNJp_IrZ6WToE44iiY6IUPbiPCqh6BfqptlFj_F6kj9xBU8C16Int6UgCWd-0i_rjGqWvahfU34X5irXTq3VUbx0CSgBsdNzBNntmAX1aey3BOVUBmRD7iPfEvfBUmWEcpvRySrOp4NjyhR3fNJC4S3oAZdZCeKlmQ5YHPtFaNPwt0ljRtyJyWBBNwcW0hsbVjTXuSUKVyoaW4iuhg3im7xmSXW0gegzOGgEpxTE8qxubVrDsh68zk8kLZqGsX2cwgcXy5cQPRqDuUFgNzzKr-I6LfguZphB177aoA79GqjSQki54gx3rfuJA20zrz2cM359JoQkeO6QlVqJ3E5kFQbOho88QDLAIYCNw5nanp_RdFjUmiDmPfpb0ltLTuHA-r9dD9SXXM2NXIbV8xRg9ZicvYmjTvz7BRkUxZIPfmgQYBQrquR39ytVWczy43rp_HkLYRClaLmHc3gLD9nNA594O4RaX1HhxVQbNmHjATBsdYSk6GYDZsXFcuOSSskBeoIGhT5Gieu-Cr4HCpdEYXoTZ9vZsFCGnGxaoYCbMO7YSP93-QKQ9F8swPvFXvD9oaaOwQpa16wMAqTKMU76pJai5AAtWNdNYKXjCw9ciugo5dSkKN3Svm36t85iaX7V2v2-TWqnL1ZgjXv4_j4JzyX8IjMD7ysEA-Hf2J_gbJuoM2FGvbjQ1ueDSnzJYXU1BZZhh5l7pR1NuLc9mcHGNHiCvJQqk8851X3fUnkQcwpdF9VZObFtrvOIsVbtIc3b3E5eXOPdje4TqCZZEvNANljG-i7HWfKFdtvmRfuocFjztxSZY3dgx_4VRQyvrC1OKUr-L1vq41le_fnCxSwSQsPBg1NPMb6uQL6RuACZt7-R0twRCAWDUp4ZK16BpteMGWALawi8fIhHu-8sIvCLVIY8gCMv0ptY7rKfvyNbP1uyPvQt25Uew1W47Pu78OEA-A0DJeLPHqfFrFMaEqI5ztu_yMY26zeZKvG4kd6sVMTpLP6Vh5P1EYTD4RmlQQe8uLwz4DD3KJOSIYNGvkWOuejBojDkE-Q_f6J9KEC5txg6qjzbgQ_qjc8SzENNUkmzAX4Olxt2OqiuiCeab7h_OPEMkqGQKWz0cOSrqqA1GmTRT38X1zNw1qDg6rnZ_nQJ6p6DkArvFEAM5RRiGNmQoeYICDdu8TJ80B5mW0ZhYF9-vL9K3MSZUDnenCx4CcvVo0ItlIKK4cjPdeqtDohkReT91XU4KfqrJUqSAllDy7vyN4uq0ZweaV2A_-Tlqrf09bGDgV02115BY4q-ybmB0B9-g3RSRg77RLFcZaR4eMRYyh05mQysLKpIqKD-X3mKdDoSZs4vuOvxLS9nbnPjNXkWCfbpyen_PVKyWgYXJVcYv9nKDMr2UVQ0Aql43aGiTzXd1h52BwBwCINXeFFQJ6hDHULBzS94sw9ov47tyrIPsKMno9ZOgk5OC4oEydhsfYJa5TMm1iX2wb_obleFQCyDNGj06LTyJZr7XE0dj8Cn2uNINOnmrJRTolsCBxuedSzs07G6vlWQY0barO-2pGT2MYoU5EtALtkbIaR3x9q_R4zAE4nd-IFjgydjiDq_TMi2v4yVoe8MHtCVnJV35XYVjsg5tSJfU_KKJRUyEaOX1-zCU5hXh5IJ6qYK1bZgpe8Hc1X9vA61A_1FMSYgaAr-RfpMzP_mkBh0NQUzxK2dm_yQmaD2qVLFGsNH0U3kwd9MmA-FDA6db9Y6TrbHIUKQlDMf-tHnu_Nd6ltgBeo5AtvslbHlbN-3XNFI6-U8r03AN9x7RYD1wdYxlnI7ewCYe-8q2hy0x2jd35sYT-RJZtgTvkW5ac2vFU5IvMSEmGD0RvYTHHRjNlDXljXc2ElvvEAe5sOq14ygy1AlTBZE45kmiNhjFZ1s6HzXM1QDbKST-VXTdKgfpnIvJuBRDj-G80j6_X4Xba3PG7nf0s8YLOfwJzzCLQU6OY_5pgivu0osWJhmKAVOqgrLZBrO4i8FEqAOWivslFb1ptiv2uFIknPLLcIyPIXAv9yUO0qz0Jypo6_Mr4BXqeU6_Pyx26xj2ae6cHAdTiaLGupRXd5jvvsn_mO8bgyusUSMtwlSpOHZvjbDLT8E8YHJevs96iPVNbC3-Z2ubTrDJcjWwMEBfI8lmWYZaMKZpi-5vs1Qpm9ZTu7jNyzKx-XWkepeSx5Q_MoBVMZ_paRCUaMUpqSUzWaTQ2s_ub3yi6QGPfAZ002VuHv2sUfLwqYZ9gEjh50rSK1ST8UblCSpqv0DEVQFyslDT9_geLhtEhZWlmcN_XPeiBve_x04NSJa3fulUQnrdx10vCdm8ALHqIbOd1vOaTkgjTh_Thko3a2ybvoOdc8zNTrPXwMvajw8nq9mh7Jn-LelnNJPB_lv0S_qwqGSAHNgPij8OTJ8_ZMYDmgqoYMI7CkxJAxoHEHGGWkMPoyeS5Aepeb7-zwX4F7hfe3MTDv3Wi6IU425-N3gbm6s57iow7uITa9MFy0GXxVSUz0WLt2_cDGElBPuxIgcY8Y6JkIG5hbimY-8TCNZbjs9tekptGxL5D3eoRNYR42ZrQtqcxUGCw5pEl7-ywI0MnAlAUog71MhSt2bPyPZVZVwcisfzbar-CsjnwGLTVCzinSkRO1_RTjpjBR3CEC1SRijVP3QBC-RKy_UQfbwQiaaMgMCUkroNOyhD6btvh-KpbqdrWIwCS-0WBAUVCjMn__9WdHZvwv4_hxS-YHRxfXfjhIPvWoMKugAMpqlbpf6lfBGiDIRdYwF1kuLS0C9wUwRwXERcIjlKeUjcP2rT5MKFRXZvR4ksr72IpSQ1NPO9iyquS2VOta-dj5dzz8efeX0kiBNQYPWqowhar-6qpQhodr9YmFB3BuxV5kAgtprCRPZZgSB2t3-EqO-FCXkA6tjk7AHXF9iHcfocmBmyl7bW6sNIArQUJMCmV71W9wfHNC0sGr-OHn7HgC9CiMo97k9pqvOMcpWvNiDUJkd3yjwonslM_YnHGl6VPdJ8UUpb_OSoe2AvIA-ACTILkJHfWy50ag92ckCgcktiGTgdexE_6IqPPuWe8HZf_36Wxe_9NQo3uQjiqrsEjrHCqSBQCnk69hzu0pEFdPjq8QZld-_XP-6YQB237Zdk4B5PjtGofqcRktLISZRW_cv_hYKCLkzN_TlnSeWKsDr7TBxCDgJ7NiEF1arlojZumFw93GhnCLi0CvB_L4RxRTp20RuqEe15bSfRRa_FAHJlshtzZfNbCP-_B4R2n09QgVGDFQjsKRJE31wQbbVwt5oHRJSLbKLqQEcE92BK-sJJir7yIrv8X9LWdxfdt3yNEinV3tL3rFomud_9dLZTgxlSqC8ol_m8rkNKhbf3G4QYCugyc6yOWX4u553A8do50FJOzYq-yfBzpZr04UDRd4iPtWi46x0LvH2VuOhiLJeUeW93xp19zZp3VBWChOl-ePQVsFUuaGsR14lBLbRBX-QB1ow9F--NwRQ15JQwGi3uV3PgHx2MVFK5PChF0wVLPcHnLBp3fKBZtG4egdvA9iK6owmEB5rcnafKZyHt_qBgEFwdbfB_NxS5lVlmNSczsh4EQAmaBRP3qqL1G2VEV4m4C3ggnjZv_T1KL_KHP5m7cnsQpRWp3I5HZtCNkTQFjRsyWglVVhW9K9kgf5y3E0lDO0bYCc1_P20uf36kjpZoUVNAYt-wiR35zKvxeZk-8jAukf0ifjp4WK8LQruKzjKDnYlD3ky6G7-6I8OPBkdXY8MJQ13jbhiRy4w_8bqf4Imn1BUoTOhRP5JpYkGzVu-AWgLDqnCa3YXDauu4Ftu9QCFem1EKJpueAGe3djwBKHZ1So0vkqaXgpjNh05LpDww4fUEgD14G--GDZNq-04OGhJcgoQjRVIIBZ0IxN0Z9uoEcJT9AbFIX6AnaJMcorhe1RB2WjHxbHFeB9sLSm2izkeiJng_9Qhvw1Wg5Y93r18gQS_8rrVdcGr5793B5U6c9i3uyFMC4JWJrBQJioPyjfGrw5OGasjsjJh4yGAf_DDrHDc7Avq4-cSBduSBn-cxYfuHv-3uko1Ntp4QF2O371H3tG4qs_P1JRtmaS4nbcPOa7DPjri7n56lOvykPh2P2dYFgWrziRGzORC8qUKgfFa6wGmY97zDmtU93ztSF8CX5fsv562J4QJIcqRqza8tuoX1kKgqh6R2XV-B05hZf2-KdSQeodVr4Ms9YPjSp8D1knoPKNm38x16UI1wlHFtVgXm-hbd9CXqZBoTe_qUlkWZykTukLDOU35xrH449fsskd6UxAr8ojGrJbv45RAtyFoGiQ_AyWGRqYru5fOoyn1RPuC9RTaRXTsZpNSOx6R8_QVXwXj6iuxNOVt7SjrNPkvc1imJb9kEJ-JQr71TMQgE-UTddqeBOkSSpMGEa2bS88gQBlYyr1AALbcObaM7wzB7t7Exr6XaSum3YCPixEaPXrlD8ebz5Mnxm2xvOGGd1u0VdURPxNYzsn44kUs3QDwDUlRNhzKj0jVvSnJepj9hFV9vDKoOTI5uMW_mYorrs-sPJL2vQCbB0dLzv_mN1S3lV8uzeua48jj-UC_xpEU2XNDwRBJ-T3zVRhxLvewODpIl-1RoZKbhdQOFIGy0dVTAS1Bo50payRYGClgiGO24TFxBbmJf3E1TGEfGIQhqsUWa6CNQdG2xPE6xnN-LYVLlv8sFFu4aeyTVXJaDAIQzK338odeuqW4QSlp63PcJKv3tiuQyJmXy8hiJsaCmz2_mbx6Ern2LlLbIiOYWJvsJuDREglAZpDkLR3lssI3S-rY8uMbiNxmTM6_xt0MgdsEtYMy1WR2Y5PbfHMVHUs5O73yTpQ4gHRkii5lnjtNnXXtMFm42pDnwLhyiEusEhLSkJY3yt5LEqBTHVuic1aN13BApTCz0sag49_icJfFfdbm1UIKi6XptxcHgQZCW_C0xAMG6McmCVuSC8c0o5s3xtP1BTol6F_EUhi1LEhR-InXXcKbX9dzZu2ycIzZP6vf0zbLvYGRN6A-pXs58ak0ETbUWy3nH3GRZDl3k41o_qD9rnLwuO_Yp_zZqkNfU3EuAXTT8XY5E02_lLMRtHYIcfyxihFGef7yKzCt2RD4UHEW8HhaQaayGWK3N74d3Lieqpd4yGPGXfXb7AnJLCd-AFrjTO8OBbXNIO5anR62-uuXY0DDiupzkrVVDhDwJbw6OuuezMOvymDQAqvhzMFOkPy_98Qb6HlC3VjQUltm_O7QkMh3x8OmIja-CDCjUJj2I-zYqMqTMKwiKQMkRBo4wuIT7ItC7I0HB0xnP2Sawm4DTyC3wHS_s_XNvcIZZtvtdmJ8AtfrMfjFwx8ml--eqbKafzEi_C3YwtfcfT-JB1K_W_V2eienpjOqXbn6YfUF8Y8_E8yCJzeIs1qcHJBgIBNXcsHyNjz2A_sxpjU3wePXXBU6sG1snvFSrrEtlAViQm71h2KV3uVwLe-O9lCQd2MGGeUE2i71VVT7fzAc0DYVGx2vnb76HUGmzzqOrPYSiZr0bPO-kAwXCy8NH-yzoyaztpemqddXjdDG3Wp19fWZayEM26fsqf95V_ikVKH_N_RXK-CiMTNM4oxp_QBSAXSJIDMZ3bb5PiO3h7I0xgLG-_FuJYEd3wzMA6jZ6cvCSL2ttcBZyN_ycHLYxup8339ZqybJXhGFx05ZeM0y63-Ae_zviHQ_i085fycTe6HCl2yFc1R_Izo-U0G34lq7Oa7muKX-GD1N7FS3Q517HkZna5R11sNA==",
+      "status": null
+    },
+    {
+      "id": "msg_08ca5c87ba83a500016ae2548afc3c87d08400571e5304aabb",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"blocks\":[{\"k\":\"t\",\"v\":\"I’d choose the January 15 Aeroplan award via Hong Kong if the shorter journey and lower reported CAD tax quote matter most. The tradeoff is a much later arrival than the Taipei option. These are the two selected award choices, not a complete view of the search results.\"},{\"k\":\"p\",\"r\":\"J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35\",\"n\":\"Aeroplan award via Hong Kong\",\"v\":\"Departs SFO at 11:15 p.m. January 15 and arrives in Bangkok at 10:35 a.m. January 17. It is an economy award, quoted at 65,000 Aeroplan points plus CAD 107.40 in taxes; the quote scope is unknown, so neither amount is established as per-person or all-in. The route connects in Hong Kong with a reported 1-hour-45-minute wait. For the requested one traveler, award support passed and 2 seats were reported, but the returned traveler count was absent; confirm current availability and the quote before booking. Leg-by-leg cabins were not reported.\"},{\"k\":\"x\",\"r\":\"T03\"},{\"k\":\"t\",\"v\":\"Compared with the Taipei award below, this Hong Kong option has a reported elapsed time 125 minutes shorter. It also has the lower raw CAD tax quote, but the quote scopes are unknown. The Taipei option arrives 9 hours 10 minutes earlier and departs 11 hours 15 minutes earlier.\"},{\"k\":\"a\",\"r\":\"J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25\",\"n\":\"Aeroplan award via Taipei\",\"v\":\"This is the better fit if an earlier Bangkok arrival matters more than the shorter journey: it arrives at 1:25 a.m. January 17, compared with 10:35 a.m. for the Hong Kong choice. It departs SFO at noon January 15 and connects in Taipei with a reported 4-hour-30-minute wait. The economy award is also 65,000 Aeroplan points, with a CAD 116.50 tax quote of unknown scope. One seat was reported and award support passed for the requested one traveler; the returned traveler count was absent. Confirm current availability and the quote. Leg-by-leg cabins were not reported.\"},{\"k\":\"b\",\"r\":\"C1@2027-01-15T09:40-08:00/SFO>BKK\",\"n\":\"Cash baseline via Singapore\",\"v\":\"The selected cash itinerary is quoted at USD 440, with unknown quote scope. It departs SFO at 9:40 a.m. January 15, connects in Singapore, and arrives in Bangkok at 8:25 a.m. January 17; reported duration is 31 hours 45 minutes. This is a separate cash baseline, not an established all-in or directly comparable cost against awards quoted in points plus CAD taxes.\"},{\"k\":\"t\",\"v\":\"For either award, the reported 65,000 points are Aeroplan points, and each award’s fee quote is in CAD; the cash quote is in USD. The unknown quote scopes prevent treating any of these amounts as a party total or a per-traveler amount. Search results may not be real-time, so verify availability and current prices with the booking provider before deciding.\"}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "medium",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsComparisonDocument",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "t"
+                      ]
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "p",
+                        "a"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "J1@2027-01-15T23:15-08:00/SFO>BKK/E>2027-01-17T10:35",
+                        "J7@2027-01-15T12:00-08:00/SFO>BKK/E>2027-01-17T01:25"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "b"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "C1@2027-01-15T09:40-08:00/SFO>BKK"
+                      ]
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "v": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r",
+                    "n",
+                    "v"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "k": {
+                      "type": "string",
+                      "enum": [
+                        "x"
+                      ]
+                    },
+                    "r": {
+                      "type": "string",
+                      "enum": [
+                        "T01",
+                        "T02",
+                        "T03"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "k",
+                    "r"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "blocks"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 5302,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 5299
+    },
+    "output_tokens": 1226,
+    "output_tokens_details": {
+      "reasoning_tokens": 494
+    },
+    "total_tokens": 6528
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793217678,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

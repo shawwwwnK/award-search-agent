@@ -1,0 +1,60 @@
+{
+  "bundle": "q025",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "familiarity": "Prior source/code/review familiarity disclosed. Current candidate mapping, metrics, checker verdicts and other current grades were not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "The displayed earliest-arrival and shortest-duration claims are explicitly scoped to shown options and correct. Quote amounts, units, dates, cabin/program identities and unknowns agree with canonical evidence."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Useful choice between earlier arrival, shorter elapsed travel, and conditional business cabin with separate-ticket positioning."
+    },
+    "M2": {
+      "verdict": "pass",
+      "reason": "Concise connected answer with distinct reasons, compact actual cards, one cash sentence and consolidated common limits. Business-specific missing seats/taxes and protection are distinct from shared quote-scope and cabin-detail gaps."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "The economy pair exposes arrival versus elapsed-time tradeoffs, while business is conditional on the traveler accepting positioning. No fabricated either/or or cross-program value comparison."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Both available meaningful time and premium perspectives survive the five-journey optional pool becoming three visible cards. Cost has no members or possible members; no cost winner is invented."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Three real journey cards exactly join source journeys and award/cash components; one source-bound USD 440 cash sentence with unknown scope appears inline."
+    }
+  },
+  "findings": [
+    {
+      "severity": "minor_nonblocking",
+      "axis": "M2",
+      "claim": "trading away the earlier arrival of the other economy choices",
+      "evidence": "document.json blocks[2]; only one other economy card is displayed (46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3).",
+      "assessment": "Plural choices is loose after shortlist reduction. The actual earlier-arrival comparison is true and its target is clear; this does not materially change the decision or fail the axis."
+    }
+  ],
+  "evidence": [
+    "evidence.json journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]: arrival.local_iso 2027-01-17T01:25:00+07:00; elapsed_minutes 1345; styles=[time].",
+    "evidence.json journeys[candidate_id=1bb2f997ac2dd9cd6cfb6d9b471449715f8b5e78c5c13fdc80b298a4191a6325]: arrival.local_iso 2027-01-17T11:30:00+07:00; elapsed_minutes 1260; styles=[time]. Both economy quotes 65000 Aeroplan, taxes11650 minor CAD, scope unknown, one reported seat.",
+    "evidence.json journeys[candidate_id=ed5b1638dd16986a6290278fbffa53f69bd3cb04bbbe35755f289490625897af]: business Turkish275000; arrival08:50 Jan17; elapsed1979; LAX135 and IST420 minutes; separate_tickets_unverified; unknown award seats/taxes; cash component34b55c7ac8acaeda1f3cdfe583404bbbb39991292d445339ba18ce3e5dbac35a is USD235 major unknown scope.",
+    "evidence.json components[observation_id=063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd].money: cash_fare,raw_amount440,raw_currencyUSD,unitmajor,scopeunknown.",
+    "selection-audit.json style_audit time=J17/null,premium=J49/null,cost=null/null; references.json maps witnesses to source members. Full source has258 journeys:11time,116premium,0cost,0time/premium overlap; three factored cost assessments are undetermined. All meaningful available styles remain visible; omitted pool J13/J20 need not be displayed.",
+    "Full source journey groups, all11time members, source category indexes/cost assessments and complete component research-direction inventory inspected; earliest/shortest claims were not interpreted as global source extrema."
+  ],
+  "verification": [
+    "Read answer.md,document.json,resolved.json,selection-audit.json,references.json and complete evidence.json.",
+    "Exact source equality checked for all three visible journey attachments, award/cash component attachments and cash benchmark.",
+    "Verified style-witness membership against source indexes; reviewed full source groups and alternatives beyond selected pool."
+  ],
+  "uncertainty": [
+    "This is a saved-source semantic review, not current availability or population reliability.",
+    "Inspected supplied card Markdown and structured attachments; browser visual layout was not tested.",
+    "The shortlist is not globally optimal by time: other full-source journeys are earlier or shorter, but no global optimum is claimed and no material category is omitted."
+  ],
+  "escalation": "not recommended"
+}

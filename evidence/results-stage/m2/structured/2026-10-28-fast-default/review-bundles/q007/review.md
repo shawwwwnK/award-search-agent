@@ -1,0 +1,8 @@
+# q007 blind Results M2 review
+
+- H: **fail**. The opening calls the other displayed award an “other late-departing option below,” but J19 departs SFO at 11:45 a.m. on January 15 (`evidence.json journeys[J19].departure.local_iso`). The displayed prices, seats, dates, arrival difference, elapsed-time difference, and separate cash baseline otherwise match the canonical records.
+- U: **fail**. The lead J1 is not adequately defended against eligible J14. J14 leaves SFO at the same 11:15 p.m. local time, asks the same 65,000 Aeroplan points and CAD 10,740 minor-unit fees, arrives Bangkok 45 minutes earlier, takes 45 fewer minutes, and reports nine rather than two seats. Its HKG connection is tighter at 70 rather than 105 minutes. The answer omits this meaningful countervailing transfer tradeoff.
+- M2: **pass**. The answer connects individually explained journey references, a supported J1/J19 comparison, separate cash context, and consolidated limitations.
+- C: **basic**. The shown timing choice is useful, but the more direct J1/J14 choice is unexamined; no sparse-source exception applies.
+
+The canonical request is for one traveler. Reported seats do not state a party size, and both award and cash quote scopes are unknown. Journey-level economy does not establish each leg's cabin. The USD 456 cash observation is a separate two-stop SFO–LAX–NRT–BKK baseline arriving January 16, not an award recommendation or a like-for-like award valuation. I found no unsupported total-price or per-traveler claim. The fee comparison is limited to observed raw CAD quotes. The answer's opening wording is internally odd because its other displayed Hong Kong option is explicitly the earlier-departing alternative.

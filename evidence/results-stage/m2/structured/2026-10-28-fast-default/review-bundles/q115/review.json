@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "The two partial leads are for January 1; check one first based on whether you prefer the United or Alaska program, but neither includes a schedule or confirms award support for your one traveler.",
+      "canonical_reference": "evidence.json request.departure_window and leads/award-summary observations cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044 and 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b",
+      "source_field": "request.departure_window; components[].departure_date, program, points, money.scope, seats, returned_travelers, departure/arrival; journeys",
+      "source_value": "Requested January 1–31; 0 complete journeys and 378 incomplete leads; both displayed leads are date-only January 1 economy summaries in different programs, with unknown quote scopes and absent returned-traveler and itinerary timing data.",
+      "explanation": "Program preference is a valid conditional next-check rule, but it is not itself a source-grounded gain or loss of either displayed lead. The answer adds a raw tax-quote difference and one-seat difference, both carefully scoped, yet cannot compare points across programs, full cost, schedule, or traveler support. It leaves the January window's other incomplete leads unexplored. Thus the comparison is basic, without a sparse-source exception; this is a depth limitation, not an H contradiction or a complete-itinerary claim."
+    }
+  ],
+  "reasoning": "The request spans January 1–31. Canonical evidence contains zero complete journeys, 378 leads, and partial provider coverage with omitted detail units. The United and Alaska observations support January 1, economy summary cabin, 60,500/42,500 points in different programs, USD 28.20/50.90 taxes as unknown-scope raw quotes, 9/8 observed seats, absent returned-traveler counts and itinerary schedule/route; their carrier lists differ. The USD 22.70 raw-tax difference is arithmetically correct without establishing total cost. Cash observation C1 supports a separate Cathay Pacific one-stop SFO–HKG–BKK baseline, January 1 22:55 departure and January 4 10:35 arrival, 2,680 minutes, USD 640 unknown-scope quote, and one returned traveler. The answer truthfully states that no complete award is available in the saved source, gives a conditional follow-up check, embeds the leads and cash reference, and consolidates limitations. Comparative depth remains basic because the stated program preference is not an actual lead advantage and the other differences do not establish a meaningful supported winner."
+}

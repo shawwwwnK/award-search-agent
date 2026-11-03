@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Choose it only if that later arrival and longer connection suit you better; it does not offer an earlier arrival than the recommendation.",
+      "canonical_reference": "evidence.json journeys 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 05047f23f37c857b4b9346e023632d880f246a6cbded49a29742793322df1945; comparison-registry.json T01-T03",
+      "source_field": "journeys[].departure.local_iso, arrival.local_iso, elapsed_minutes, connections[].wait_minutes, award_points, money, booking_obligation",
+      "source_value": "Both leave SFO at 08:40 with the same USD 59 positioning observation, 275000 Turkish points, unknown award taxes, and unverified separate-ticket join. The alternative arrives 08:50 versus 04:15 and lasts 1990 versus 1715 minutes; its Istanbul connection is 420 versus 140 minutes.",
+      "explanation": "The only distinct alternative feature is a longer Istanbul connection, but the answer does not explain what the traveler gains from it. Its stated tradeoff is a vague preference for a later arrival and longer wait, so comparative advice remains basic."
+    }
+  ],
+  "reasoning": "The exact recommended journey and alternative are grounded in the canonical journey and component records. T01-T03 support equal SFO departures and the 4-hour-35-minute arrival and elapsed differences. Component records support the carriers, 275000 Turkish points, business award-level cabin, unknown leg cabins, unknown seats and taxes, USD 59 positioning quote with unknown scope, and a separate USD 452 two-stop cash baseline. The LAX join is 149 minutes and unverified. The recommendation has a reason and downside, embedded references, cash context, and consolidated cautions. Comparative depth is basic because the longer Istanbul connection is not tied to an explained traveler benefit. The sentence that the program does not reliably provide award taxes exceeds what these two unknown-tax observations alone establish; I treat its generality as an uncertainty, not a contradicted material source fact."
+}

@@ -1,5 +1,10 @@
 # Results fast profile — next-session checkpoint
 
+**Historical V3 checkpoint; superseded for new-session navigation by the**
+[V30 closeout and October29 owner-direction handover](2026-10-29-results-m2-fast-profile-handover.md).
+The checkpoint below retains its original scope; subsequent iteration did not
+qualify a default or close the current M2 revision.
+
 The owner requested this commit and intends to make the fast profile the default
 after inspecting details and iterating in another session. The actual default
 switch is not part of this checkpoint. Preserve the established traveler-facing

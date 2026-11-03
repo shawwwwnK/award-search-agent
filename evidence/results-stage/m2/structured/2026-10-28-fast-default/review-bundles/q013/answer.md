@@ -1,0 +1,15 @@
+For the two shown award options, the earlier-arriving itinerary is the more useful one to investigate: it also has less elapsed travel time. The later option shares its reported award routing and point amount, so its main difference is schedule—not a cheaper points quote.
+
+This option is reported in business award cabin and reaches Bangkok 4 hours 35 minutes before the other shown itinerary, with 4 hours 31 minutes less elapsed time. The tradeoff is a separate-ticket SFO–LAX cash leg and a 150-minute LAX connection; protection and positioning permission are unknown. Its 275,000 Turkish points have unknown price scope, and award traveler support, fees, and seat availability are unknown. The reported award cabin does not establish every leg’s cabin.
+
+[Display: Earlier-arriving Turkish award; journey; 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]
+
+This is a useful fallback if its later Bangkok arrival suits you; it has the same reported Turkish award cabin, routing, and 275,000-point amount as the earlier option, but arrives later and takes longer. Its separate SFO–LAX cash access and the same booking, fee, seat, and traveler-support uncertainties also apply.
+
+[Display: Later Turkish award; journey; 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]
+
+The search returned a $452 USD SFO–BKK cash itinerary via SEA and ICN. Its price scope is unknown, so treat this only as origin-to-destination cash context—not a per-traveler or all-in comparison with either award. It is a two-stop itinerary, and the benchmark does not state cabin.
+
+[Display: Cash baseline; benchmark; f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2]
+
+The Turkish award records report unavailable reliable seat-count and taxes/fees evidence; the cash access quotes are each $59 USD with unknown price scope, and neither makes the award’s total cost known. The query was for one traveler, but the award records do not establish traveler support. Results may not be current: verify availability, award seats, fees, and ticketing details with the providers before making plans. Search coverage was partial, so these shown choices are not a complete market comparison.

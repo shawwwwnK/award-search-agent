@@ -1,0 +1,49 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "recorded_date": "2026-10-28",
+  "scope": "Independent narrow adjudication of the original traveler-count H finding; not a new complete answer review.",
+  "original_H": "fail",
+  "recommended_final_H": "disputed",
+  "disposition": "Preserve the original H-fail review and record unresolved scope ambiguity. Neither an established hard contradiction under every contextual reading nor an unqualified H pass is claimed.",
+  "answer_quote": "Award seats and taxes/fees are unknown, and the results do not establish the traveler count or whether the separate-ticket combination is bookable.",
+  "canonical_evidence": [
+    {
+      "canonical_reference": "evidence.json source.view.request",
+      "source_fields": {"travelers": 1}
+    },
+    {
+      "canonical_reference": "evidence.json components[observation_id=14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8]",
+      "source_fields": {"returned_travelers.state": "absent", "returned_travelers.value": null, "seats.state": "unknown", "seats.value": null}
+    },
+    {
+      "canonical_reference": "evidence.json components[observation_id=c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388]",
+      "source_fields": {"returned_travelers.state": "value", "returned_travelers.value": 1, "returned_travelers.source_field": "query.adults"}
+    },
+    {
+      "canonical_reference": "evidence.json journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]",
+      "source_fields": {
+        "award_observation_id": "14b3bb859ea1e228df21afeb9e3d11e5a5464c89b9df807499bb1c499647f0e8",
+        "cash_observation_id": "c68429d41d46aa1be531319ac4b6eedeefab61d4e4fc24149a0ec7a4c616b388",
+        "internal.reason_codes.includes": "award_travelers_unknown",
+        "corresponding internal.reason_details": "Requested traveler count is not confirmed by the award result."
+      }
+    }
+  ],
+  "rubric_grounds": [
+    "Evaluate a comparison target in the full surrounding passage.",
+    "Preserve genuine ambiguity for adjudication; neither automatically assume a global claim nor automatically give an ambiguous statement a clean factual pass.",
+    "H requires accurately stated traveler support and limitations.",
+    "Distinguish observed seats from travelers requested."
+  ],
+  "reasoning": "The clause starts with award seats and taxes/fees, permitting a local reading about the award result's unverified party applicability. The requested count and cash returned count do not establish award support, so those facts do not prove that narrower reading false. However, the broad wording results do not establish the traveler count can also erase the known request count or cash party echo. The sentence does not expressly restrict its unknown to award support. The fixed rubric requires preserving this genuine ambiguity, rather than automatically choosing the broadest reading or granting an unqualified pass.",
+  "uncertainty": {
+    "material_wording_ambiguity": true,
+    "supported_narrow_reading": "Award evidence does not confirm support for the requested party.",
+    "unsupported_broad_reading": "The requested party count or all returned traveler-count evidence is unknown.",
+    "gate_limit": "Disputed is not an unqualified H pass and does not satisfy a gate requiring every answer to pass H."
+  },
+  "suggested_clarity_revision_not_applied": "The request is for one traveler, but the award results do not verify support for that traveler. Current award availability and separate-ticket bookability remain unconfirmed.",
+  "other_dimensions": {"U": "pass", "M2": "pass", "C": "decision-rich", "sparse_source_exception": false, "disposition": "Original judgments retained; not re-adjudicated."},
+  "verification": "Read fixed rubric, assigned answer, original review and canonical request/component/journey fields before generation traces. Subsequent trace showed the ambiguous sentence unchanged from draft to final. No timing information informed the judgment. No runtime edits, live calls or new answer generation. Only separate adjudication files added; original review and answer preserved.",
+  "escalation_recommended": false
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.1-scope",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Compared with the earlier-arriving choice, this one leaves SFO 4 minutes later, arrives 4 hours 35 minutes later, and has 4 hours 31 minutes more elapsed journey time.",
+      "canonical_reference": "evidence.json journeys 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153 and 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee; evidence.json journey 178a2400a78dfe67c0c414e5ecd49bb05b6f9328eec0339ede5a74e42702e453; references.json comparison_pools.P1",
+      "source_field": "departure.local_iso, arrival.local_iso, elapsed_minutes, award_cabin, award_points.value, money.cash_fare.quoted_usd, connections[].wait_minutes",
+      "source_value": "The displayed later journey has the same listed business cabin, 275000 Turkish points, and USD 59 access quote, with a 7-hour Istanbul connection versus 2 hours 20 minutes; it supplies no material offsetting gain beyond leaving SFO four minutes later. The eligible pool also contains an economy-listed 110000-point journey (178a2400...) departing SFO at 08:51 and arriving BKK at 04:15, with the same USD 59 access quote; quote scope and per-leg cabin remain unknown.",
+      "explanation": "The displayed comparison supports the choice but gives little decision tradeoff beyond timing. A materially different cabin/points option exists in the local pool, so the source is not too sparse for a richer comparison. Its omission is a coverage/depth limitation, not a false claim of global superiority."
+    }
+  ],
+  "reasoning": "The selected and alternative journey schedules, connection waits, Turkish business itinerary listings, 275000-point observations, unknown award-seat counts and taxes, USD 59 access quotes, separate-ticket obligations, and T02/T03 differences match the canonical records. The USD 452 direct cash benchmark is a separate SFO-BKK two-stop itinerary via SEA and ICN, with 1635-minute duration and unknown price scope. The answer gives a specific conditional recommendation, embedded journey references, a supported local comparison, cash context, and consolidated limitations. Its comparison is basic because the shown alternative has no substantial gain over the recommendation while a distinct economy/points alternative exists. The wording 'earlier-arriving' is local to the displayed alternative and the answer explicitly disclaims full-inventory coverage. Exact bookability, seat availability, price scope, ticket protection, and per-leg cabins remain unverified in the source and are not presented as established."
+}

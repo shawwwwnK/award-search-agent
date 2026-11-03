@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Two other leads change the verification choice, but neither fills in the missing itinerary details.",
+      "canonical_reference": "evidence.json components for award observations A3 (0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b), A1 (0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c), and A26 (a8dad3774d9e11df4c6a4a282520a7b66bca6c5736c576e527b48257efdfe6ae); references.json awards",
+      "source_field": "departure_date; program.value; seats.value; points.value; money.raw_amount.value; money.raw_currency.value; money.scope; missing_information",
+      "source_value": "Alaska: January 1, 8 seats, 42,500 Alaska points, USD 50.90 tax quote of unknown scope. Aeroplan: January 1, 2 seats, 65,000 Aeroplan points, CAD 116.50 tax quote of unknown scope. United: January 9, 9 seats, 55,000 United miles, USD 16.20 tax quote of unknown scope. All three lack complete itinerary schedules.",
+      "explanation": "The answer names the other dates, programs, seats, and quotes, but does not explain what a traveler gains and gives up by checking Aeroplan or United instead of Alaska. The one-seat request means the displayed 8-versus-2-seat difference does not itself explain a useful preference, and cross-program point amounts cannot be ranked. United's later date and lower quoted USD tax figure could be discussed cautiously, with the unknown quote scope preserved. The displayed comparison remains basic; no strongest-option or option-count requirement is applied."
+    }
+  ],
+  "reasoning": "No complete journey exists in the evidence; the source view has provider_status=partial, zero retained/admitted/conditional journeys, and the selected award observations are schedule-incomplete summaries. The answer gives an exact Alaska verification lead with a reason and explicit downside, embeds all selected references, uses a separate one-stop cash timing baseline, and consolidates schedule, quote-scope, and availability limits. Checked the selected IDs, programs, dates, points, currencies and minor-unit taxes, observed seats versus one requested traveler, summary cabin versus unreported legs, carrier lists, benchmark stops, offset-aware endpoints and 2,680-minute duration, and unknown price scopes. No hard factual contradiction found. Comparative depth is basic because the alternatives are described without an authored gain/loss that would guide the verification choice."
+}

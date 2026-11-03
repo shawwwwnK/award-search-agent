@@ -1,0 +1,68 @@
+{
+  "bundle": "q029",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "familiarity": "Prior source/code/review familiarity disclosed. Current candidate mapping, metrics, checker verdicts and other current grades not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Temporal differences, quote units, program/cabin identities and selected date-only lead status match source. Lower points quote is literally42500 versus55000, not a claimed cross-program economic saving."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Useful shorter-business versus longer Istanbul buffer choice, plus conditional United/Alaska research directions."
+    },
+    "M2": {
+      "verdict": "fail",
+      "reason": "Shared date-only/missing-schedule information appears in the common paragraph and again in each lead caption; local captions partly repeat a common gap rather than only their useful reason/action."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Business alternatives trade271 minutes elapsed and275 minutes arrival for140 versus420 minutes at Istanbul. Program access supplies supported lead research reasons."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Both displayed business journeys are genuine time/premium overlaps; all meaningful source categories are represented, no cost style or lead style invented."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Two complete journey cards and two actual research cards exactly join source; one USD605 cash sentence with unknown scope appears inline."
+    }
+  },
+  "findings": [
+    {
+      "severity": "blocking",
+      "axis": "M2",
+      "claim": "The economy award leads are date-only, with no flight schedules; both subsequent lead captions repeat date-only status and ask whether there is a scheduled itinerary.",
+      "evidence": [
+        "document.json blocks[3].text",
+        "document.json blocks[4].text",
+        "document.json blocks[5].text",
+        "evidence.json leads[reference_id=bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594].missing_information=[itinerary_schedule_incomplete]",
+        "evidence.json leads[reference_id=42dd038be15aeed81be50301b92baa2b22ac2072d02c32e7f54c43089d34a7f4].missing_information=[itinerary_schedule_incomplete]"
+      ],
+      "assessment": "Conditional program access is useful and the schedule check is legitimate, but the same source gap/check is explained for the group and both cards. It is not a distinct action-changing local condition. Compact card facts are not counted as the failure."
+    }
+  ],
+  "evidence": [
+    "evidence.json journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee]: elapsed1719,arrival2027-01-10T04:15:00+07:00,departure08:36Jan8,LAX150min,IST140min,Turkish business275000,styles=[time,premium].",
+    "evidence.json journeys[candidate_id=018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]: elapsed1990,arrival2027-01-10T08:50:00+07:00,departure08:40Jan8,LAX149min,IST420min,Turkish business275000,styles=[time,premium].1990-1719=271min; arrival275min later. Both cash quotes59majorUSD unknownscope; booking_obligation=separate_tickets_unverified.",
+    "evidence.json components[observation_id=bfeb867fa30055e0997d865a57f66886565c05e1730b8f4a387ad7bec5229594]: SFO-BKK Jan8economy,United55000,9reportedseats,2180minorUSD taxes unknownscope; legs[0].reported=false and departure/arrival instant=null.",
+    "evidence.json components[observation_id=42dd038be15aeed81be50301b92baa2b22ac2072d02c32e7f54c43089d34a7f4]: SFO-BKK Jan8economy,Alaska42500,6reportedseats,5090minorUSD taxes unknownscope; legs[0].reported=false and departure/arrival instant=null.",
+    "evidence.json components[observation_id=5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed].money: cash_fare605majorUSD,scopeunknown. One cash_sentence block.",
+    "selection-audit.json raw style_audit time=J115/null,premium=J115/null,cost=null/null; references.json J115 maps to018b54daf\u2026 and is a true member of both. Full source232journeys,167leads,116time,116premium,58overlaps,0cost/possiblecost; factored cost assessments undetermined. Shared witness correctly selects one journey, not a forced duplicate.",
+    "Full source journey groups, category/cost assessments and research directions inspected. Full SFO-BKK Jan8economy summary observations include Aeroplan65000,United55000,Alaska42500; no mandatory program or economy-journey quota applied."
+  ],
+  "verification": [
+    "Read current rubric and complete assigned evidence,source request,full journey/lead inventory,source categories/cost assessments,selection audit,references,document,resolved and answer Markdown.",
+    "All displayed journeys and award/cash components, both lead objects/components and benchmark exactly equal canonical evidence.",
+    "Independently calculated271-minute elapsed and275-minute arrival deltas; verified140/420-minute Istanbul buffers, raw witness overlap and single cash block."
+  ],
+  "uncertainty": [
+    "Cross-program lower points quote is interpreted as a raw numeric observation, explicitly scoped to those two leads; it does not establish lower economic cost or better value.",
+    "Reported seats remain source evidence, not a current booking guarantee; wording about reliability is read with the availability disclaimer, not as a claim the source reports no seats.",
+    "Full source includes complete economy alternatives; category coverage does not impose a cabin quota when displayed business journeys carry actual time and premium memberships. No global-best or cheapest claim is made.",
+    "Saved-source semantic review does not establish current availability or population reliability. Supplied Markdown/structured cards inspected, not browser visual layout."
+  ],
+  "escalation": "not recommended"
+}

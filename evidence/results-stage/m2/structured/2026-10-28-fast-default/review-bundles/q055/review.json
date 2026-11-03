@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "The United lead is a meaningful alternative on January 2, but its points are in a different program and shouldn’t be treated as directly comparable.",
+      "canonical_reference": "evidence.json components 298e9fc3fa28627cc1ab28d956ab4682deece903365a89805c922c0c9eb502af and f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e",
+      "source_field": "departure_date, program.value, points.value, seats.value, money.quoted_usd, money.scope",
+      "source_value": "Alaska January 4: 42,500 Alaska points, 8 reported seats, USD 50.90 unknown-scope fees; United January 2: 55,000 United points, 9 reported seats, USD 24.50 unknown-scope fees",
+      "explanation": "The answer correctly avoids cross-program value arithmetic, but does not explain the earlier-date gain of the displayed United lead or what the Alaska lead gains beyond a conditional preference to investigate Alaska. The comparison remains mostly a pair of facts and caveats. This is a depth concern, not a factual contradiction or a requirement to display more options."
+    }
+  ],
+  "reasoning": "The two selected award-summary leads and separate cash benchmark match the canonical dates, route, programs, points, observed seats, carrier lists, fee/fare quotes, one-stop cash routing, times, and duration. There are zero complete journeys; all award leads lack itinerary schedules and provider status is partial. The answer gives a useful conditional next check and coherent limitations, but its displayed Alaska-versus-United alternative lacks an explicit gain/loss explanation beyond program preference and non-comparable points, so comparative depth is basic. No protection or transfer claim is made."
+}

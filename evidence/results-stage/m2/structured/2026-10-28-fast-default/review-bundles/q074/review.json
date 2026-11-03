@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "It shows one fewer seat than the Jan 2 United lead, but the point totals cannot be compared across programs.",
+      "canonical_reference": "evidence.json: leads 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b and f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e",
+      "source_field": "components[].departure_date, seats.value, program.value, money.scope; source.view.request.travelers",
+      "source_value": "Alaska Jan 1: 8 seats, 42,500 Alaska miles, USD 50.90 quote of unknown scope; United Jan 2: 9 seats, 55,000 United miles, USD 24.50 quote of unknown scope; one traveler requested",
+      "explanation": "The displayed comparison is accurate, but the extra seat does not change support for this one-traveler request. The answer notes the date and quote differences without explaining when either lead would be preferable; unknown quote scope and different programs limit the cost comparison. This leaves comparative depth basic, while still supplying useful leads."
+    }
+  ],
+  "reasoning": "No complete journey exists in the canonical projection (journeys and groups are empty). Both selected leads are date-only SFO-BKK economy award summaries with the stated programs, points, seats, carriers and USD tax quotes; each quote has unknown scope. USD 50.90 minus USD 24.50 is USD 26.40. The selected cash record is a separate direct-cash benchmark with one HKG stop, Cathay Pacific, the stated offset-aware local dates and times, 2,680 minutes (44 hours 40 minutes), and a USD 640 quote of unknown scope. Coverage groups include an omitted detail query and partial relationship/strategy searches. The answer gives a truthful next action, embeds its references and cash context, and consolidates limitations. It does not claim an inventory-wide optimum. Comparative depth is basic because the two displayed leads are not developed into a meaningful choice beyond date, seat count and cautiously compared quote amounts. The source contains many other award leads, so sparse-source exception does not apply."
+}

@@ -1,0 +1,27 @@
+{
+  "rubric": "fast-default-M2-v1.1-scope",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "If a midday departure matters more than reaching Bangkok on January 16, this option leaves earlier; it has one reported seat and a longer connection.",
+      "canonical_reference": "evidence.json journeys cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a, 46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3, and c559213003ec943dd700f59c7813a457b52988433ba469978634ffb2a6a72954; comparison-registry.json T10",
+      "source_field": "journeys[].departure.local_iso; journeys[].arrival.local_iso; facts[T10].difference_minutes/relation",
+      "source_value": "Recommended departure 2027-01-15T11:45:00-08:00; displayed Taipei departure 2027-01-15T12:00:00-08:00, 15 minutes later; another eligible noon Taipei journey c5592130 arrives BKK 2027-01-16T23:40:00+07:00.",
+      "explanation": "The sentence appears to compare the Taipei choice with the recommendation's January 16 arrival, but the displayed Taipei option departs later, not earlier. It also frames midday departure against January 16 arrival as a sacrifice, although a noon departure with January 16 arrival exists in the eligible evidence. If 'earlier' means earlier than the immediately preceding late-night option, the comparison target is unstated and the January 16 tradeoff remains misleading."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "For a cash baseline, the selected direct cash itinerary is also worth checking.",
+      "canonical_reference": "evidence.json components ccc7379a32c4f818d72f0236429fc74bcd63fc2dd4af1ee5cd150f8db6b1bc4e; evidence.json direct_cash_benchmark_ids",
+      "source_field": "components[].stops.value; components[].airport_sequence; direct_cash_benchmark_ids",
+      "source_value": "Selected cash benchmark is listed in direct_cash_benchmark_ids but has stops.value=2 and airport_sequence=[SFO,LAX,NRT,BKK].",
+      "explanation": "For a traveler, 'direct cash itinerary' can mean a nonstop flight, contrary to this two-stop itinerary. The answer states the two stops in the next card, so the error is a conflicting description rather than a concealed stop count; 'direct' may instead reflect the source's direct-cash benchmark category."
+    }
+  ],
+  "reasoning": "The selected Aeroplan journey is a complete SFO-HKG-BKK award and is the earliest arrival among 258 eligible journeys in this bundle. Its January 15 11:45 departure, January 16 22:25 arrival, 65,000 quoted points, CAD 107.40 quoted taxes with unknown scope, nine observed seats and 70-minute HKG connection match the journey and component records. The late-night Hong Kong comparison is accurate: T17 shows arrival 685 minutes later and T18 shows duration five minutes shorter; both show nine seats and the same quoted amounts. The Taipei card's amounts, one seat and 270-minute connection and the other Hong Kong card's two seats, 105-minute connection and 45-minute later arrival match their records. The separate cash benchmark has USD 456 with unknown price scope, two stops via LAX and NRT, and 1,379 minutes elapsed. The answer handles unknown leg cabins, incomplete cost comparability, partial provider coverage and non-real-time availability. The recommendation remains actionable, and the embedded references, comparison, cash context and limits form a coherent answer. Comparative depth is basic: the main 11-hour-25-minute arrival versus five-minute duration tradeoff is useful, but the Taipei option's asserted sacrifice is not supported by the broader eligible pool and the last Hong Kong option gives no evident gain over the other late-night choice. No sparse-source exception applies. 'Closest alternative' has no stated metric; another eligible journey arrives only 75 minutes after the recommendation, so that label is ambiguous, but it does not alone establish a factual contradiction."
+}

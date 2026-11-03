@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "This economy award via HKG is reported with 9 seats and arrives 3 hours before the TPE option, with the same reported 65,000 Aeroplan points and CAD fee amount.",
+      "canonical_reference": "evidence.json journeys[candidate_id=cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a] and journeys[candidate_id=c559213003ec943dd700f59c7813a457b52988433ba469978634ffb2a6a72954]",
+      "source_field": "arrival.local_iso; connections[].airport",
+      "source_value": "Recommended HKG arrival 2027-01-16T22:25:00+07:00; earliest admitted TPE arrival 2027-01-16T23:40:00+07:00, 75 minutes later",
+      "explanation": "The unqualified singular 'the TPE option' gives a misleading material timing comparison. The earliest admitted TPE journey arrives 1 hour 15 minutes after the recommended HKG journey, not 3 hours. Two other admitted TPE journeys arrive at 2027-01-17T01:25:00+07:00, exactly 3 hours later, so the intended TPE comparator is unresolved because the answer gives no TPE reference."
+    }
+  ],
+  "reasoning": "The named HKG journeys, 9 observed seats, Aeroplan economy journey cabin, 65,000 reported points, equal CAD minor-unit fee quotes with unknown scope, 11h30 departure and 11h25 arrival tradeoff, and separate $456 USD two-stop cash baseline otherwise match the canonical records. The answer distinguishes requested/returned traveler count from quote scope, treats leg cabins as unknown, and gives a defensible first journey with a useful later-departure alternative and booking verification. The TPE comparison prevents an H pass. Residual uncertainty: an unreferenced TPE journey does support the stated 3-hour interval, but the answer never identifies it and the earliest TPE journey contradicts the natural broad reading."
+}

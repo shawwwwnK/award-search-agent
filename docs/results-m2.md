@@ -1,8 +1,82 @@
 # Results M2 local API and CLI
 
-**Current channel, 2026-10-24:** [ADR 0029](adr/0029-structured-results-and-local-workspace.md) and the [current plan](plans/2026-10-23-2334-feat-results-workspace-plan.md) govern the new structured backend, implemented for Results M2 U1–U3. Frontend rendering/integration and Results M3 retain separate milestones. Historical V1–V5 Markdown generation remains the CLI default, with its original schemas, checks and replay routing. The new channel replaces mandatory prose slots/status/checklists with source-resolved facts. Ranking policy and upstream trust remain unchanged; owner presentation acceptance remains open.
+**2026-10-29 final category-led disposition:** Stopped at the authorized c20
+ceiling without qualification. All three c20 scouts meet timing, but q064 fails
+M2 composition for repeating a local separate-ticket condition; q065/q066 pass
+all six source-review axes. No c20 confirmation or controlled repair followed.
+All66 artifacts verify against129 generation/count pairs. Final focused offline
+verification passes112 category tests plus Ruff/mypy(64 files); the broad baseline
+retains two historical gfly environment failures and is not a current full-suite
+pass. Details and limits are in the [build log](build-log/2026-10-29-results-category-led.md).
+Latest explicit opt-in is `category-c20`; public V27 is unchanged and unqualified.
+No c21 or unused-budget extension, default adoption, M2 acceptance or M3 closeout
+follows. The card/explorer backend does not establish frontend integration.
 
-## 2026-10-27 experimental interactive channel
+The [final architect review](reviews/2026-10-29-results-category-led-c20-architect-review.md)
+recommends a future offline condition-ownership author-contract prototype rather
+than further prompt iteration. It is not implemented or accepted, and declared
+ownership would not verify untagged prose or numerical truth.
+
+**Category-led implementation status:** The isolated `results/category.py` API
+and explicit CLI `--category-profile` (available versions listed by CLI help) are implemented,
+including source-resolved journey/lead cards, inline cash context and category
+artifact replay. No category-led version has qualified; see the [active campaign](../evidence/results-stage/m2/structured/2026-10-29-category-led/README.md) for current versions and gates.
+Public V27 wiring is unchanged and unqualified. See the new campaign log above.
+
+**2026-10-29 new category-led invocation:** The owner approved flexible natural
+explanation of Ranking's meaningful time/cost/premium perspectives and overlaps,
+with flight facts displayed in source-resolved cards, common uncertainties stated
+once, useful incomplete leads and a single full-cash comparison sentence.
+Implementation/review and a new live Luna campaign of up to twenty iterations are
+authorized; architect reviews occur every fifth iteration. Historical fast-profile
+evidence and the stopped V30 ledger remain intact. The provisional V27 runtime is
+not promoted by this authorization. See the [maintained campaign plan](plans/2026-10-29-results-category-led-campaign.md)
+and [session evidence](build-log/2026-10-29-results-category-led.md).
+
+**Earlier October 29 handover (superseded for this new campaign):** The owner
+requested a documentation-only stop. See the
+[current handover and main V3–V30 cycle summary](handoffs/2026-10-29-results-m2-fast-profile-handover.md).
+That stopped campaign remains intact; the later invocation above authorizes the
+separate category-led implementation and evaluation.
+
+**Accepted owner direction, 2026-10-29; category-led qualification pending:** Keep Luna-authored
+wording, preserve Ranking's time/cost/premium recommendation categories and
+multi-style overlap, and reduce the full-cash benchmark to one brief source-faithful
+comparison sentence. No new inline comparison-binding contract. Ranking memberships
+remain authoritative, including possible/undetermined states; incomplete leads do
+not acquire categories. The current provisional V27 runtime below does not yet
+implement this correction. See [ADR0029](adr/0029-structured-results-and-local-workspace.md).
+
+
+**Current public API/CLI default candidate, 2026-10-28:** `focused-v27` remains provisionally wired through `run_default_results` and CLI `measure` or live `author` when no channel/profile is specified. Its owned shared client closes on exit, uses explicit timeout and zero retries, and injected writer and measurer components remain available for offline execution. V27's fixed six-run cohort took 10.21–22.14 seconds (median11.5758); all passed U/M2, three passed H, and five were decision-rich. q108/q110/q112 contain material errors. Its controlled correction diagnostic passed H/U/M2/C in26.23 seconds, beyond the allowed overage. V23 remains the best earlier full cohort on facts and latency but q095 was basic. Final V30 was opt-in only: across its three scouts, q119 (admitted) was decision-rich, q120 (conditional) and q121 (incomplete) passed H/U/M2 but were basic without sparse-source exceptions; no frozen cohort or correction diagnostic followed. No profile qualifies and this work does not close M2. Live calls use Luna. The Streamlit harness retains its historical route; frontend integration, owner presentation acceptance and M3 remain separate.
+
+## Provisional default and final V30 experiment
+
+The provisional V27 path selects up to four exact authoring references from the complete eligible inventory, including any cash benchmark. V30 tested a maximum of two non-benchmark references (journeys or leads) plus one benchmark, three total. Only its incomplete branch received the lossless program-grouped view of all 378 leads across 13 programs; the complete branch kept its original source view. Neither cap requires a particular mix; code does not rank or filter source records, and the complete canonical explorer remains independent.
+
+Code supplies self-contained selected source records, exact pairwise comparison dossiers and canonical traveler evidence. Requested party size, award support and seats, and component returned-traveler echoes remain distinct. Missing echo does not erase upstream seat-based support; known party size never determines unknown price scope. Free-text selector purposes are retained in source evidence but excluded from downstream authoring. Exact selected identities and comparison targets remain available.
+
+The provisionally wired V27 profile keeps the complete branch on V23 `roles-v21`/`complete-v19` with no-reasoning selection and low-reasoning authoring, both Fast. Its incomplete branch uses `roles-v25`/`complete-v23` with medium-reasoning selection and authoring, both Fast. V30 was a separate opt-in: complete cases used LOW selection/MEDIUM authoring (`roles-v28`/`complete-v26`), incomplete cases MEDIUM selection/LOW authoring (`roles-v30`/`complete-v28`), both Fast; only the V30 incomplete branch used the grouped source view. A recoverable draft with actual failed mechanical checks permits one low/Fast full-document correction. Clean drafts stop after two generations. Unrecoverable failures do not receive another generation; there is no fourth call or SDK retry. Correction receives the frozen selected facts, references, registry and recomputed findings. Fewer mechanical failures wins, with correction preferred on ties; failed correction retains the recoverable draft and its explicit failure trace. Neither a clean draft nor successful correction proves ordinary prose truth. Neither profile qualifies. V30 scout runs took16.38/12.29/11.06 seconds and passed H/U/M2, but only q119 was decision-rich; q120 (conditional) and q121 (incomplete) were basic without sparse-source exceptions. The unchanged scout gate therefore stopped V30 before frozen confirmation or an actual correction diagnostic. V30 correction latency is unmeasured.
+
+Luna controls the complete connected traveler answer: individual reasons and downsides, useful alternatives and local tradeoffs, relevant cash context and consolidated limitations. Optional temporal cards carry code-resolved exact endpoints, metrics and differences. Ordinary numerical and comparative prose remains model-authored and is not exhaustively checked.
+
+The provisional API/CLI default uses `results-artifact-v11`: V27 complete uses `roles-v21`/`complete-v19`, and incomplete uses `roles-v25`/`complete-v23`. V30 opt-in used the same Artifact V11 conditional-correction boundary with branch markers `roles-v28`/`complete-v26` and `roles-v30`/`complete-v28`. V22's V12 records unconditional editorial patches. Both retain their own settings and phase-policy replay. Earlier contracts remain historical routes. The profile owns effort/tier settings and rejects CLI overrides.
+
+```bash
+.venv/bin/python -m award_agent.cli.results measure --projection projection.json --config data/results/fast-default.json --output measurement.json
+.venv/bin/python -m award_agent.cli.results author --projection projection.json --config data/results/fast-default.json --output artifact.json --live
+.venv/bin/python -m award_agent.cli.results replay --artifact artifact.json --output resolved.json
+```
+
+`measure` prepares the selector without API calls; it does not qualify context fit. `author --live` makes bounded model and exact input-count calls. Output paths must be new. `replay` reconstructs the saved answer offline. Python callers use `run_default_results(projection, config, writer=None, input_measurer=None)`; the current default returns `FocusedResultsArtifactV11`, and injected writers support offline tests. Historical routes remain explicit through `--legacy`, `--structured`, `--interactive --packet-profile ...`, and `--draft`.
+
+V23 source evidence derives from the separately reviewed V22 initial drafts; byte/delivery proof and all original outcomes remain in the campaign. V23's six-run cohort took7.62–17.68 seconds (median11.22), passed H/U/M2 6/6 and C-rich 5/6; q095 was basic. Its controlled conditional-correction diagnostic passed in18.73 seconds. V27's frozen cohort took10.21–22.14 seconds (median11.5758), U/M2 6/6, H3/6, C-rich5/6; q108/q110/q112 contain material errors. Its separate correction passed H/U/M2/C but took26.23 seconds. V30 scouts took16.38/12.29/11.06 seconds, all H/U/M2 pass, but C-rich1/3; q120 (conditional) and q121 (incomplete) were basic without sparse-source exceptions. No V30 six-run confirmation or correction diagnostic was run. The public default remains provisional V27; the V30 opt-in failed its scout gate. V28 was implemented and scouted: its conditional NONE-selector phase reached44.78 seconds and ended with an API incomplete response. V29 and V30 were also implemented and scouted afterward. Campaign reservations are254/278, with24 unused; no V31 or further paid calls. All 109 summarized artifacts replay identically; strict archive verification exited 1 with seven flags classified as four verifier-assumption bugs, not demonstrated artifact corruption. The434-test Results baseline passed before V24 and later profiles had bounded tests; this does not establish a full-repository pass. Timing measures source parsing through the checked/resolved artifact, not an application SLA. See [campaign evidence](../evidence/results-stage/m2/structured/2026-10-28-fast-default/README.md) and [build log](build-log/2026-10-28-results-fast-default.md).
+
+## October 24 structured channel (historical)
+
+The structured backend implemented Results M2 U1–U3 with source-resolved facts and replaced mandatory prose slots/status/checklists. Its original schemas, checks and replay routing remain available. Ranking policy and upstream trust remain unchanged.
+
+## October 27 interactive experiment (historical)
 
 The separate interactive path uses `results-prepared-v6` and
 `results-artifact-v7`. It gives Luna a decision packet containing every eligible
@@ -18,15 +92,15 @@ independent reconstruction and tamper checks are available through V7 replay,
 which makes no model or provider calls. This allocates replay work outside the
 interactive return path.
 
-**Status: experimental and under evaluation.** In particular,
+**Status at the October 27 evaluation: experimental.** In particular,
 `--packet-profile joined-v3` with low effort and Fast service has not yet earned a
 speed or quality qualification. Fast is premium processing; the artifact records
-the service tier returned by the API. No model default or broad latency guarantee
-follows from this channel.
+the service tier returned by the API. That experiment established no model default
+or broad latency guarantee.
 
-## Experimental focused channel, V8
+## October 26 focused V8 experiment (historical)
 
-The current candidate, `--packet-profile focused-v3`, runs two sequential Luna
+The candidate `--packet-profile focused-v3` ran two sequential Luna
 tasks: a selector sees the
 full eligible inventory at no reasoning effort, then a composer uses explicit low
 reasoning. Both use Fast service. The selector chooses at most eight exact source
@@ -35,7 +109,7 @@ those records. The composer receives facts only for the selected records, so its
 comparisons and conclusions must stay within the choices it can see. The complete
 canonical evidence and eligible explorer remain available in the artifact. This
 selection boundary can leave useful alternatives outside the composed answer; the
-focused profile remains under evaluation. Its selector has one typed list capped
+focused profile did not qualify as the default. Its selector has one typed list capped
 at eight total references. Code supplies exact elapsed/departure/arrival
 comparisons within the selected journey pool; Luna still owns the prose and can
 misstate other facts. Older focused-v1/v2 requests retain exact replay routing.
@@ -53,7 +127,7 @@ qualification fails. See the [final decision report](../evidence/results-stage/m
 For V7 interactive profiles, the CLI requires an explicit reasoning effort. The
 focused profile owns both efforts and tiers internally; passing
 `--reasoning-effort` or `--service-tier` with it is rejected. Set
-`config.json` to `gpt-6-luna` when reproducing the current evaluation; the command
+`config.json` to `gpt-6-luna` when reproducing that evaluation; the command
 does not override the configured model. For example:
 
 ```bash
@@ -88,8 +162,8 @@ acceptance. The [October 25 investigation](plans/2026-10-25-results-m2-latency-i
 proposed input reduction, lower reasoning and first-usable-result measurement. The
 separately versioned October 27 interactive work above now implements and evaluates
 those input/effort choices while recording first-event, first-text and full-response
-timings. Its diagnostic evidence does not rewrite the October 25 measurements; the
-interactive section above governs current status and evaluation.
+timings. Its diagnostic evidence does not rewrite the October 25 measurements;
+the current focused-default section governs the October 28 local choice.
 
 ## October 25 composition correction
 
@@ -196,8 +270,8 @@ non-USD amounts. Ordinary resolution/replay never refreshes FX.
 Verification and diagnostic results are in the
 [implementation log](build-log/2026-10-24-results-m2-structured-implementation.md)
 and [evidence record](../evidence/results-stage/m2/structured/2026-10-24-luna/README.md).
-The evidence includes an explicit evaluated configuration, not an adopted default
-or general model-context qualification. This API guide does not establish frontend/M3 acceptance.
+That October 24 evidence used an explicit evaluated configuration; it did not
+qualify a default or general model context fit. It does not establish frontend/M3 acceptance.
 
 Results M2's [October 8 engineering closeout](handoffs/2026-10-08-results-m2-closeout.md)
 is historical. On October 9 the owner reopened presentation acceptance after
@@ -210,7 +284,7 @@ API spending. On October 20 the owner authorized a bounded Luna evaluation of th
 compact input; its three-case diagnostic is recorded. Presentation acceptance remains
 pending. See the [session log](build-log/2026-10-09-results-m2-presentation.md)
 for the original cost review and the [compact-input build log](build-log/2026-10-20-results-m2-compact-input.md)
-for current verification and evaluation status.
+for that evaluation's verification status.
 
 ## 2026-10-20 compact writer input
 
@@ -249,9 +323,11 @@ markdown = replay_results(artifact)  # no writer or network access
 ```
 
 `ResultsConfig` requires `model`, `max_output_tokens`, `timeout_seconds`,
-`context_limit_tokens`, and `prompt_overhead_tokens`. There is no adopted default model or live
-campaign configuration. The adapter disables SDK retries, request storage, and automatic input
-truncation. Each invocation has the configured timeout; this is not a composed end-to-end deadline.
+`context_limit_tokens`, and `prompt_overhead_tokens`. This historical API has no
+implicit model or campaign configuration; the current focused default and its
+explicit config are described above. The adapter disables SDK retries, request
+storage, and automatic input truncation. Each invocation has the configured
+timeout; this is not a composed end-to-end deadline.
 Caller interruption propagates; authoring does not start background tasks.
 
 Optional `max_input_tokens` supplies a separate model input ceiling. `authoring_guidance` adds
@@ -263,15 +339,16 @@ Use the CLI through `python -m award_agent.cli.results` (or the installed `award
 point). Every output path must be new, and inputs are checked again before atomic publication.
 
 ```sh
-python -m award_agent.cli.results measure --projection solutions.json --config config.json --output measurement.json
-python -m award_agent.cli.results author --projection solutions.json --config config.json --draft initial.json --correction corrected.json --output artifact.json
+python -m award_agent.cli.results measure --legacy --projection solutions.json --config config.json --output measurement.json
+python -m award_agent.cli.results author --legacy --projection solutions.json --config config.json --draft initial.json --correction corrected.json --output artifact.json
 python -m award_agent.cli.results replay --artifact artifact.json --output answer.md
 ```
 
 Offline authoring reads `ResultsDocument` JSON. Without `--correction`, the same frozen draft is
 returned if correction is needed. Live authoring requires replacing `--draft` with the explicit
-`--live` flag and supplying API credentials through the ordinary SDK environment. No live calls
-were made to implement this interface. A non-delivered authoring outcome writes its failure
+`--live` flag, retaining `--legacy`, and supplying API credentials through the
+ordinary SDK environment. No live calls were made during the original October 7
+implementation of this interface. A non-delivered authoring outcome writes its failure
 artifact and exits with status 1. The [October 8 diagnostic](build-log/2026-10-08-results-m2-luna-live.md)
 records subsequent live authoring. Invalid source or CLI configuration raises before authoring.
 

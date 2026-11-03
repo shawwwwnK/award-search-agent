@@ -1,0 +1,51 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "fail",
+  "M2": "fail",
+  "C": "insufficient",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "For an Aeroplan award, I’d investigate the Hong Kong connection first: it gives the earliest Bangkok arrival among these late-departure options, with a shorter elapsed trip than the Taiwan alternatives.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82] and evidence.json#journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669]",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.award_taxes.raw_amount.value; components[award_observation_id].seats.value",
+      "source_value": "Selected HKG: SFO Jan 15 23:15, BKK Jan 17 10:35, 1220 minutes, 65000 points, 10740 CAD minor fee units, 2 seats. Other eligible HKG: same Jan 15 23:15 departure, BKK Jan 17 09:50, 1175 minutes, same returned points and fees, 9 seats.",
+      "explanation": "The selected HKG journey is not the earliest-arriving late-departure option. Another admitted journey with the same departure time arrives 45 minutes earlier, takes 45 minutes less, and reports more seats at the same returned points and fee amounts. The claim about being shorter than Taiwan alternatives is separately supported, but does not rescue the earliest-arrival assertion."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "This economy award via HKG arrives 35 minutes before the later Taiwan option and has a 105-minute award connection.",
+      "canonical_reference": "document.json#blocks[2].reference_id and evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82] and evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]",
+      "source_field": "arrival.instant; connections[0].wait_minutes",
+      "source_value": "HKG arrives 2027-01-17T03:35:00Z (10:35 local); the displayed Taiwan option arrives 2027-01-16T18:25:00Z (01:25 local), 9 hours 10 minutes earlier. HKG connection wait is 105 minutes.",
+      "explanation": "Against the only displayed Taiwan journey, the arrival direction and difference are wrong; the Taiwan journey arrives 9 hours 10 minutes before HKG. A different, unreferenced Taiwan journey in this same bundle arrives at 11:10 local, 35 minutes after HKG, so 'later Taiwan option' is ambiguous. The answer gives no reference to that different journey and subsequently describes the displayed Taiwan journey as arriving 9 hours 10 minutes earlier."
+    },
+    {
+      "dimension": "U",
+      "answer_quote": "For an Aeroplan award, I’d investigate the Hong Kong connection first: it gives the earliest Bangkok arrival among these late-departure options, with a shorter elapsed trip than the Taiwan alternatives.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=eba1b0800784ea3ca14afa1a89a4c140e5004a8b1e3b83831ef7e155c17f1669] and evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82]",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.award_taxes.raw_amount.value; components[award_observation_id].seats.value",
+      "source_value": "Other eligible HKG: same 23:15 departure, 09:50 arrival versus 10:35, 1175 versus 1220 elapsed minutes, 9 versus 2 reported seats, same 65000-point and 10740-CAD-minor-unit observations.",
+      "explanation": "The answer's exact first lead is not defensible on its stated schedule rationale when another eligible HKG journey improves arrival, elapsed time, and observed seats without a worse stated departure or quote."
+    },
+    {
+      "dimension": "M2",
+      "answer_quote": "For an Aeroplan award, I’d investigate the Hong Kong connection first: it gives the earliest Bangkok arrival among these late-departure options, with a shorter elapsed trip than the Taiwan alternatives.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82] and evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3]",
+      "source_field": "arrival.local_iso",
+      "source_value": "Displayed HKG arrives Jan 17 10:35; displayed TPE arrives Jan 17 01:25, 9 hours 10 minutes earlier.",
+      "explanation": "The opening makes earliest arrival the lead reason, while the following displayed Taiwan explanation says to choose Taiwan to reach Bangkok 9 hours 10 minutes earlier. This unresolved contradiction breaks the answer's central traveler comparison despite embedded references, cash context, and consolidated limits."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "Choose this if reaching Bangkok earlier is the priority: it arrives 9 hours 10 minutes before the Hong Kong award above.",
+      "canonical_reference": "evidence.json#journeys[candidate_id=46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3] and evidence.json#journeys[candidate_id=c559213003ec943dd700f59c7813a457b52988433ba469978634ffb2a6a72954]",
+      "source_field": "departure.local_iso; arrival.local_iso; elapsed_minutes; award_points.value; money.award_taxes.raw_amount.value; components[award_observation_id].seats.value",
+      "source_value": "Displayed TPE: noon departure, Jan 17 01:25 arrival, 1345 minutes, 1 seat, 65000 points, 11650 CAD minor units. Other eligible TPE: same noon departure, Jan 16 23:40 arrival, 1240 minutes, 2 seats, same returned points and fee amounts.",
+      "explanation": "The 9-hour-10-minute comparison to the displayed HKG is true, but the answer recommends a second journey that is weaker on arrival, duration, and seats than another eligible TPE at the same departure and returned amounts. Combined with the false HKG earliest-arrival claim, the answer does not give a reliable decision comparison."
+    }
+  ],
+  "reasoning": "H fails on the selected HKG journey's claimed earliest late-departure arrival and the 35-minute Taiwan comparison as presented against the only displayed Taiwan reference. An unreferenced TPE journey does arrive 35 minutes after the selected HKG, so that phrase may have been intended to refer to it; this ambiguity is recorded rather than silently resolved. The selected HKG and TPE journeys are both dominated on relevant schedule, reported seats, and equal returned quote amounts by other eligible same-routing alternatives. The answer includes accurate reported fees, points, cabin-level caution, a separate USD 440 one-stop SIN cash baseline of unknown scope, and consolidated availability limitations, but the central recommendation and comparison are not trustworthy. Thus U and M2 fail and comparative depth is insufficient. Current availability and all-in prices remain unknown."
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "The later option is a useful timing alternative if its Alaska-operated access leg suits you: it has the same reported Turkish points amount and award route, but arrives later.",
+      "canonical_reference": "evidence.json journeys[candidate_id=0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee] and journeys[candidate_id=018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]",
+      "source_field": "connections[airport=IST].wait_minutes; arrival.local_iso; elapsed_minutes; cash_observation_id",
+      "source_value": "Earlier J63: IST wait 140 minutes, BKK arrival 2027-01-10T04:15:00+07:00, elapsed 1719 minutes, American-operated SFO-LAX cash component. Later displayed journey: IST wait 420 minutes, BKK arrival 2027-01-10T08:50:00+07:00, elapsed 1990 minutes, Alaska-operated SFO-LAX cash component.",
+      "explanation": "The answer accurately compares arrival and total duration, but it does not explain the large Istanbul connection difference or give a concrete advantage for the later itinerary beyond a hypothetical preference for Alaska's access leg. The later choice's benefit is underdetermined, so comparative depth is basic."
+    }
+  ],
+  "reasoning": "Both displayed journeys are conditional SFO-LAX cash-access plus Turkish LAX-IST-BKK award journeys. They show 275,000 Turkish points with unknown quote scope, unknown award fees and seats, and unknown award traveler support. The earlier journey arrives 4 hours 35 minutes earlier and lasts 4 hours 31 minutes less, as stated. LAX separate-ticket waits are 150 and 149 minutes; connection protection and repositioning permission are unresolved. Both cash access quotes are USD 59 with unknown scope. The separate SFO-SEA-ICN-BKK cash baseline is USD 452, two stops, unknown quote scope. The answer correctly limits business to the award itinerary rather than each leg. H, U, and M2 pass: the tentative investigation recommendation has a reason and downside, embedded individual explanations, relevant cash context, and consolidated limitations. C is basic because the later alternative's meaningful tradeoff is thinly explained despite source evidence of a 140-versus-420-minute IST wait."
+}

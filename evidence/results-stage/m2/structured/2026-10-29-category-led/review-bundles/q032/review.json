@@ -1,0 +1,54 @@
+{
+  "bundle": "q032",
+  "reviewer": "independent_review",
+  "overall": "pass",
+  "familiarity": "Prior source/code/review familiarity disclosed. Current candidate mapping, metrics, checker verdicts and other current grades were not inspected.",
+  "axes": {
+    "H": {
+      "verdict": "pass",
+      "reason": "Same arrival time is correct; economy has187minutes shorter elapsed duration. Program/cabin/points, quote units, unknown support/taxes and separate-ticket conditions match source."
+    },
+    "U": {
+      "verdict": "pass",
+      "reason": "Useful cabin-versus-elapsed-time choice with the shared conditions required before choosing either."
+    },
+    "M2": {
+      "verdict": "pass",
+      "reason": "Concise connected card-led answer. Each card has a reason, and shared support/tax/scope/separate-ticket limitations appear in one common paragraph without being repeated in both captions."
+    },
+    "C": {
+      "verdict": "pass",
+      "reason": "Explains premium cabin versus shorter elapsed journey despite identical arrival, a supported decision distinction; no numerical comparison is mandatory."
+    },
+    "K": {
+      "verdict": "pass",
+      "reason": "Time and premium perspectives and business overlap remain visible. No cost winner is invented; no requirement to display every research direction applies."
+    },
+    "P": {
+      "verdict": "pass",
+      "reason": "Both actual joined journey cards carry flight/component facts and source-resolved unknown-tax indicators; one USD452 cash context sentence appears inline."
+    }
+  },
+  "findings": [],
+  "evidence": [
+    "evidence.json journeys[candidate_id=018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]: Turkish business275000;elapsed1990;departure2027-01-08T08:40:00-08:00;arrival2027-01-10T08:50:00+07:00;LAX149/IST420min;cash59majorUSD unknownscope;styles=[time,premium].",
+    "evidence.json journeys[candidate_id=010ec2caa13dc729a813d55f4e5761340e533c25779d178524fe0bd6af2e6669]: Turkish economy110000;elapsed1803;departure2027-01-08T11:47:00-08:00;same arrival2027-01-10T08:50:00+07:00;LAX301/IST60min;cash109majorUSD unknownscope;styles=[time].1990-1803=187min; arrival difference0.",
+    "Both source journeys money.award_taxes.raw_amount.state=unknown,award_taxes.scope=unknown,points_scope=unknown; internal.reason_codes include award_travelers_unknown,positioning_permission_unknown,separate_ticket_obligation. Compact tax indicators match explicit source unknown, not absent or zero.",
+    "evidence.json components[observation_id=f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2].money: cash_fare452majorUSD,scopeunknown. Exactly one cash_sentence block.",
+    "selection-audit.json style_audit time=J18/null,premium=J115/null,cost=null/null; both witnesses are actual source members and visible cards. Full232journeys/167leads,116time,116premium,58overlaps,0cost/possiblecost; factored cost assessments undetermined. Full source groups and research routes/cabins inspected.",
+    "condition-applicability.json: all eight condition rows and alias-member component mappings match canonical source. Seven journey condition codes apply to both J18/J115; benchmark scope applies only to C1. Delivered shared paragraph addresses both shown journeys once; cash scope stays with cash sentence.",
+    "document.selection.journey_ids lists only primary business while document.blocks and resolved.blocks include the economy alternative. Coverage was assessed from actual visible cards, not primary-only selection metadata."
+  ],
+  "verification": [
+    "Read current rubric,answer.md,document.json,resolved.json,selection-audit.json,references.json,complete evidence.json and source-only condition-applicability.json.",
+    "All displayed journey,award,cash and benchmark attachments exactly match canonical source; checked temporal equality/difference, style witnesses, full source overlap and cost states.",
+    "Verified every condition-sidecar row and member/component alias from canonical evidence; graded prose separately rather than inferring a pass from the table."
+  ],
+  "uncertainty": [
+    "Saved-source review does not establish live availability, population reliability or global optimality.",
+    "Supplied Markdown and structured cards inspected; browser visual layout not tested.",
+    "Primary selected_journey_ids does not enumerate every visible alternative; both visible cards were source-checked.",
+    "No research leads are shown; they are optional when these complete conditional choices provide a useful answer, and no material source category is omitted."
+  ],
+  "escalation": "not recommended"
+}

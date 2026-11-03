@@ -68,7 +68,8 @@ def selection_schema(prepared: StructuredPreparedInput,
 
 
 def selection_schema_v2(prepared: StructuredPreparedInput,
-                        source: SolutionProjection) -> dict[str, object]:
+                        source: SolutionProjection, *, max_references: int = MAX_TOTAL_REFERENCES
+                        ) -> dict[str, object]:
     """Bound the entire selection with one array, independent of role mix."""
     journeys, cash, leads = _roles(prepared, source)
     roles = (("j", journeys), ("b", cash), ("l", leads))
@@ -89,7 +90,7 @@ def selection_schema_v2(prepared: StructuredPreparedInput,
     return {"type": "object", "additionalProperties": False,
             "properties": {"choices": {"type": "array", "items": item_schema,
                                        "minItems": 1 if branches else 0,
-                                       "maxItems": MAX_TOTAL_REFERENCES if branches else 0}},
+                                       "maxItems": max_references if branches else 0}},
             "required": ["choices"]}
 
 
@@ -123,15 +124,101 @@ def selection_instructions_v2(prepared: StructuredPreparedInput,
     return text
 
 
+def selection_instructions_v3(prepared: StructuredPreparedInput,
+                              source: SolutionProjection) -> str:
+    """The same bounded role schema, with an editorially useful selection brief."""
+    basis = selection_instructions_v2(prepared, source).replace(
+        "Prefer a small useful set, typically 2–3 meaningfully different complete journeys plus one cash benchmark when available. ",
+        "Choose a small useful set and a direct cash benchmark when available. ")
+    return basis + (
+        " Ranking highlights in the packet are a starting point for a traveler answer, "
+        "not a required or exhaustive selection. Choose the exact eligible journey "
+        "that offers the clearest supported reason to take the next step, then add "
+        "an alternative only when it changes a material decision dimension: route "
+        "or schedule, reported cabin, program, known cash component, or limitation. "
+        "Several near-identical variants, including a few minutes of timing, do not "
+        "by themselves create useful alternatives. One journey is enough if the "
+        "others add no material value. Do not fill a quota. Consider each option's "
+        "own downside and the supported tradeoff; preserve conditional status, "
+        "unknown totals and separate-ticket risk. Select an incomplete lead only "
+        "when it changes the next useful action. The composer will see your selected "
+        "facts, not the other eligible records, so choose deliberately.")
+
+
+def selection_instructions_v4(prepared: StructuredPreparedInput,
+                              source: SolutionProjection) -> str:
+    """Start with Ranking's meaningful choices; preserve model selection ownership."""
+    return selection_instructions_v3(prepared, source) + (
+        " Begin with the Ranking highlights in the complete packet and compare "
+        "eligible same-program alternatives before choosing. For two awards in "
+        "the same program and reported cabin, examine their exact route, arrival, "
+        "elapsed time, observed points and fee scope, seat evidence and connection "
+        "or transfer buffer. If you prefer a cousin with a later arrival, longer "
+        "travel or higher reported same-program amount, preserve the concrete "
+        "traveler benefit that justifies it; otherwise choose the stronger source "
+        "option. A materially longer connection may justify an alternative when "
+        "its protection and feasibility remain explicitly unknown. Avoid filling "
+        "the bundle with near-identical siblings. Include genuinely different "
+        "tradeoffs that let the writer compare route simplicity, cabin, schedule "
+        "and separate cash access without ranking points across programs.")
+
+
+def selection_instructions_v5(prepared: StructuredPreparedInput,
+                              source: SolutionProjection) -> str:
+    """Choose evidence for a decision-rich answer, including useful comparators."""
+    basis = selection_instructions_v2(prepared, source).replace(
+        "Prefer a small useful set, typically 2–3 meaningfully different complete journeys plus one cash benchmark when available. ",
+        "Choose a small useful comparison pool and a direct cash benchmark when available. ")
+    return basis + (
+        " The selected set is evidence for the final writer, not the final list "
+        "of recommendations. It may contain a comparator that the writer discusses "
+        "as an alternative. Ranking highlight/index arrays indicate membership, "
+        "not an order of preference; compare their facts rather than assuming "
+        "the first listed is best. Begin with Ranking highlights, then examine "
+        "the full eligible inventory for material same-program timing, fee and "
+        "connection-buffer alternatives, plus different cabin, route or "
+        "separate-ticket risk. A later arrival with the same program, cabin "
+        "and observed amount needs a concrete traveler benefit before it becomes "
+        "the lead. Include an earlier-arriving same-program journey when its "
+        "schedule is a meaningful comparison, even if another variant departs "
+        "at a different time. Do not fill a count or cabin quota, and avoid "
+        "near-identical siblings that teach no new tradeoff. One complete journey "
+        "can suffice only when no other eligible choice supplies a useful "
+        "comparator. For an incomplete-only answer, choose leads whose reported "
+        "date, seats, fees or program show a useful next-check contrast; these "
+        "remain leads, never complete itineraries. Preserve unknown price scope, "
+        "traveler support and separate-ticket protection. The writer sees only "
+        "the selected source facts, so retain material comparison evidence.")
+
+
+def selection_instructions_v8(prepared: StructuredPreparedInput,
+                              source: SolutionProjection) -> str:
+    return selection_instructions_v5(prepared, source) + (
+        " The exact_details index supplies source-bound journey_components, "
+        "per-journey separate-booking waits, factored award-itinerary "
+        "connections, and component original-currency quotes in major units. "
+        "Use these exact references to distinguish within-award layovers "
+        "from separate-ticket connection waits; they have different "
+        "risk meanings. Compare reported fee and cash amounts using the "
+        "display value and currency, never mental division of raw minor units. "
+        "A quote with unknown price_scope is neither per traveler nor a "
+        "party total, even if returned traveler evidence is known. Unknown "
+        "wait_minutes is not zero. Keep a comparator when its exact buffer, "
+        "schedule, cabin or quote changes the decision; no fixed count applies.")
+
+
 def decode_selection_v2(raw: str | dict[str, Any], prepared: StructuredPreparedInput,
-                        source: SolutionProjection) -> StructuredSelection:
+                        source: SolutionProjection, *,
+                        max_references: int = MAX_TOTAL_REFERENCES) -> StructuredSelection:
     """Validate exact role membership and preserve the model's chosen order."""
     value = json.loads(raw) if isinstance(raw, str) else raw
     if not isinstance(value, dict) or set(value) != {"choices"}:
         raise ValueError("selection must have exactly a choices array")
     choices = value["choices"]
-    if not isinstance(choices, list) or len(choices) > MAX_TOTAL_REFERENCES:
-        raise ValueError("selection choices exceed the eight-reference bundle")
+    if not isinstance(choices, list) or len(choices) > max_references:
+        if max_references == MAX_TOTAL_REFERENCES:
+            raise ValueError("selection choices exceed the eight-reference bundle")
+        raise ValueError(f"selection choices exceed the {max_references}-reference bundle")
     selected: dict[str, list[str]] = {"j": [], "b": [], "l": []}
     for index, item in enumerate(choices):
         if not isinstance(item, dict) or set(item) != {"k", "r"} or \
@@ -334,8 +421,8 @@ def selected_comparisons(journeys: list[dict[str, Any]]) -> dict[str, list[dict[
 
 def build_packet(selection: StructuredSelection, prepared: StructuredPreparedInput,
                  source: SolutionProjection, evidence: WorkspaceEvidence, *,
-                 selection_format: Literal["roles-v1", "roles-v2"] = "roles-v1",
-                 composition_format: Literal["source-v1", "comparisons-v1"] = "source-v1",
+                 selection_format: Literal["roles-v1", "roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"] = "roles-v1",
+                 composition_format: Literal["source-v1", "comparisons-v1", "complete-v1", "complete-v2", "complete-v3", "complete-v4", "complete-v5", "complete-v6", "complete-v7", "complete-v8", "complete-v9", "complete-v10", "complete-v11", "complete-v12", "complete-v13", "complete-v14", "complete-v15", "complete-v16", "complete-v17", "complete-v18", "complete-v19", "complete-v20", "complete-v21", "complete-v22", "complete-v23", "complete-v24", "complete-v25", "complete-v26", "complete-v27", "complete-v28"] = "source-v1",
                  ) -> dict[str, Any]:
     """Expose only the model-selected exact source facts to the composer."""
     _roles(prepared, source)
@@ -349,6 +436,12 @@ def build_packet(selection: StructuredSelection, prepared: StructuredPreparedInp
             raise ValueError("selected benchmark has no exact source reference")
         selected_b = reverse[selection.benchmark_observation_id]
     selected_l = [reverse[item] for item in selection.incomplete_observation_ids]
+    if selection_format in {"roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"} and (
+            len(selected_j) + len(selected_l) + int(selected_b is not None) > 3 or
+            len(selected_j) + len(selected_l) > 2):
+        raise ValueError("focused selection exceeds the V28 authoring reference ceilings")
+    if selection_format in {"roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25"} and len(selected_j) + len(selected_l) + int(selected_b is not None) > 4:
+        raise ValueError("focused selection exceeds the four-reference authoring bundle")
     # Reapply exact role/count validation without silently fixing malformed input.
     decode_selection({"journeys": selected_j, "benchmark": selected_b,
                       "leads": selected_l}, prepared, source)
@@ -406,8 +499,8 @@ def build_packet(selection: StructuredSelection, prepared: StructuredPreparedInp
     packet["format"] = "focused-v1"
     packet["outcome_mode"] = "complete_choices" if selected_j else "no_complete_journey"
     packet["wire_reference_grammar"] = reference_grammar_mode(packet)
-    if selection_format == "roles-v2":
-        packet["selection_format"] = "roles-v2"
+    if selection_format in {"roles-v2", "roles-v3", "roles-v4", "roles-v5", "roles-v6", "roles-v7", "roles-v8", "roles-v9", "roles-v10", "roles-v11", "roles-v12", "roles-v13", "roles-v14", "roles-v15", "roles-v16", "roles-v17", "roles-v18", "roles-v19", "roles-v20", "roles-v21", "roles-v22", "roles-v23", "roles-v24", "roles-v25", "roles-v26", "roles-v27", "roles-v28", "roles-v29", "roles-v30"}:
+        packet["selection_format"] = selection_format
         packet["legend"]["observed_airport_path"] = (
             "Ordered airport sequence joined only at an equal cash/award boundary "
             "when both source component sequences exist; null means the full "
@@ -425,7 +518,7 @@ def build_packet(selection: StructuredSelection, prepared: StructuredPreparedInp
         "benchmark_selected": selected_b is not None,
         "meaning": "These are the model-selected facts only; comparisons and superlatives "
                    "must be limited to shown choices, not the unseen eligible pool."}
-    if composition_format == "comparisons-v1":
+    if composition_format in {"comparisons-v1", "complete-v1", "complete-v2", "complete-v3", "complete-v4", "complete-v5", "complete-v6", "complete-v7", "complete-v8", "complete-v9", "complete-v10", "complete-v11", "complete-v12", "complete-v13", "complete-v14", "complete-v15", "complete-v16", "complete-v17", "complete-v18", "complete-v19", "complete-v20", "complete-v21", "complete-v22", "complete-v23", "complete-v24", "complete-v25", "complete-v26", "complete-v27", "complete-v28"}:
         packet["composition_format"] = composition_format
         packet["selected_comparisons"] = selected_comparisons(packet["journeys"])
     elif composition_format != "source-v1":

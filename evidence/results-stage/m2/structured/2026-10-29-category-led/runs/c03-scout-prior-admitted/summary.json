@@ -1,0 +1,80 @@
+{
+  "case": "prior-admitted",
+  "candidate": "category-c03",
+  "mode": "live",
+  "recovery_diagnostic": false,
+  "outer_results_completion_seconds": 15.43614091631025,
+  "timing_scope": "Saved source parse through checked/resolved Results artifact before disk persistence and offline replay.",
+  "artifact_runtime_seconds": 14.795906832907349,
+  "count_calls": 3,
+  "generation_calls": 3,
+  "passes": [
+    {
+      "phase": "selection",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 83222,
+      "usage": {
+        "input_tokens": 83222,
+        "input_tokens_details": {
+          "cached_tokens": 83219,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 519,
+        "output_tokens_details": {
+          "reasoning_tokens": 473
+        },
+        "total_tokens": 83741
+      }
+    },
+    {
+      "phase": "composition",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 4042,
+      "usage": {
+        "input_tokens": 4042,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 4039
+        },
+        "output_tokens": 630,
+        "output_tokens_details": {
+          "reasoning_tokens": 363
+        },
+        "total_tokens": 4672
+      }
+    },
+    {
+      "phase": "correction",
+      "outcome": "recoverable",
+      "writer_called": true,
+      "returned_service_tier": "fast",
+      "input_tokens": 4363,
+      "usage": {
+        "input_tokens": 4363,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 4360
+        },
+        "output_tokens": 502,
+        "output_tokens_details": {
+          "reasoning_tokens": 208
+        },
+        "total_tokens": 4865
+      }
+    }
+  ],
+  "generation_outcome": "success",
+  "validation_outcome": "clean",
+  "delivery_outcome": "delivered",
+  "selection_failed_findings": [],
+  "selected_pass_index": 2,
+  "failed_findings": [],
+  "diagnostic_fault_observed": false,
+  "source_sha256": "d11d8a550093b26313ee07170c98c9bbfc24eb00a73e6bec232c05f6f0c911e0",
+  "snapshot_drift": false,
+  "live_calls": 6
+}

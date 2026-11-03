@@ -1,0 +1,19 @@
+No complete award itinerary appears among these selected search results, so I can’t recommend a bookable award journey. If January 2 works, check that United lead first: compared with the January 1 United lead, it reports 5,500 fewer miles, the same reported seat count (9), and an award-tax quote USD 3.70 lower; both quote scopes are unknown. Its schedule is date-only, so routing and flight times remain unconfirmed, and the award results do not confirm availability for your traveler.
+
+This is the lower-points of the two shown United leads: 55,000 miles versus 60,500 on January 1. The reported seat counts are 9 for each. Its USD 24.50 tax quote is USD 3.70 lower than the January 1 lead’s USD 28.20 quote, but both quote scopes are unknown, so that is only a comparison of reported amounts—not a per-person or total-trip saving. Economy is reported for the award, but cabin by leg is not specified; the schedule is date-only. Confirm the itinerary, seats, current price and booking details.
+
+[Display: January 2 — United lead; lead; f3fbd99e899fb14814669bb76116f1982f7423dd264f4a41a8d1a3479027014e]
+
+If January 1 matters more, this lead reports 60,500 United miles, 9 seats and a USD 28.20 award-tax quote. Compared with the January 2 United lead, it requires 5,500 more United miles and has a reported quote USD 3.70 higher; neither quote has a known scope. Economy is reported for the award, but individual leg cabins and the schedule are not shown.
+
+[Display: January 1 — United lead; lead; cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]
+
+This is a different program option if you prefer to investigate Alaska awards: 42,500 Alaska miles, 8 seats reported, and a USD 50.90 award-tax quote. The mileage amount cannot be compared directly with the United leads. Its reported quote is higher than either shown United quote, but quote scopes are unknown, so this is not a like-for-like cost comparison. Economy is reported for the award; the schedule is date-only and leg cabins are unspecified.
+
+[Display: January 1 — Alaska lead; lead; 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]
+
+The cash benchmark is a one-stop Cathay Pacific itinerary from SFO via HKG to BKK, departing January 1 at 10:55 p.m. local time and arriving January 4 at 10:35 a.m. Bangkok time. The source quote is USD 640.00, with unknown scope, and the record reports one traveler. It is a cash comparison—not an award itinerary or a confirmed party-total fare.
+
+[Display: Cash baseline — January 1; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]
+
+These are partial leads, not complete itineraries. The selected results report dates, programs, award mileage, seat counts and quote amounts, but not award schedules. The award leads do not show traveler-level confirmation for your one traveler. Search coverage is partial, and availability and prices may change; verify itinerary details and current availability with the booking program before deciding.

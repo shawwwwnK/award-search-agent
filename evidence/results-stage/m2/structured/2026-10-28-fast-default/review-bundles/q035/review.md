@@ -1,0 +1,10 @@
+# q035 blind Results review
+
+Rubric: `fast-default-M2-v1.2-calibrated`. **H fail; U pass; M2 pass; C decision-rich.** Sparse source exception: no.
+
+- **H, points comparison.** “I’d choose the Aeroplan award departing late on January 15: among the award choices shown, it has the shortest elapsed time and requires fewer points than the other two.” Canonical `evidence.json` `journeys[].award_points.value` and `money.points_raw.value`: recommended J14 (`eba1b080…`) is 65,000 Aeroplan points; midday J7 (`46ff8814…`) is also 65,000; afternoon J12 (`b8d4f8e3…`) is 92,144. The shortest elapsed claim holds, but “fewer points than the other two” is false.
+- **H, arrival difference.** “Departs SFO at noon January 15 and arrives in Bangkok at 1:25 a.m. January 17 local time—5h 5m earlier than the recommended option.” Canonical `journeys[].arrival.local_iso`: J7 is `2027-01-17T01:25:00+07:00`; J14 is `2027-01-17T09:50:00+07:00`. `comparison-registry.json` T05 gives 505 minutes, or **8h 25m**, consistent with the displayed comparison. The 5h 5m difference is between J7 and the afternoon J12.
+
+The J14 recommendation remains actionable because its 19h 35m journey is shorter than both shown alternatives and the answer states its later-arrival downside. J7 offers earlier arrival for longer elapsed time and higher quoted fees; J12 offers lower quoted fees for more points and longer elapsed time. These are supported local tradeoffs, so C is decision-rich. The award cabin is correctly kept separate from unknown leg cabins, observed seats are not treated as requested traveler count, the cash reference is separate and accurately scoped, and coverage and booking limitations are consolidated. The two H errors prevent a factual pass despite U and M2 passing.
+
+Scope and uncertainty: reviewed only q035 answer, document, evidence, references, comparison registry and the parent reviewer instructions. No global inventory optimum is inferred. No unresolved source uncertainty or escalation is needed.

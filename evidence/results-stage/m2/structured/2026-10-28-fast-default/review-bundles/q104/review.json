@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "The Alaska-program lead is a distinct alternative if you prefer to investigate that program or its carriers.",
+      "canonical_reference": "A3 compared with A2",
+      "source_field": "components[*].program.value; components[*].carriers; components[*].money.quoted_usd; components[*].seats.value",
+      "source_value": "A3: Alaska, AS/JX, USD 50.90, 8 reported seats; A2: United, CA/UA/ZH, USD 28.20, 9 reported seats; both award-tax quote scopes unknown",
+      "explanation": "A different program/carrier set is a conditional preference, not an established gain for this traveler. Within the authored comparison, Alaska has a higher raw USD tax quote and one fewer reported seat; cross-program points cannot establish an advantage. The comparison is basic."
+    }
+  ],
+  "reasoning": "The canonical source has zero complete journeys and provider_status partial. A2 and A3 substantiate the January 1 date-only United and Alaska economy award summaries, program-specific points, raw USD award-tax quotes, reported seats, AS/JX carriers for Alaska, unknown quote scopes, and absent returned-traveler and schedule details. C1 substantiates the separate Cathay Pacific one-stop SFO–HKG–BKK cash baseline: USD 640 of unknown scope, one returned traveler, 2,680 minutes elapsed, and the stated offset-aware local departure and arrival. The answer offers a defensible conditional first check and accurately warns that seats do not establish traveler support or bookability. Its narrative, references, cash context, and limitations form a coherent recommendation. The full January 1–31 window contains other leads; omission alone is not an H failure, while the displayed alternative lacks a supported offsetting gain for decision-rich C."
+}

@@ -1,0 +1,26 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "decision-rich",
+  "sparse_source_exception": false,
+  "findings": [],
+  "uncertainties": [
+    {
+      "answer_quote": "among the shown choices, it reaches Bangkok at the earliest listed time and has the shortest elapsed journey",
+      "canonical_reference": "journeys 05047f23f37c857b4b9346e023632d880f246a6cbded49a29742793322df1945, 0286e918614a7b41ec9aa8f5d5ec9042bf1bd5234d22fba3e9d968b1511b0bee, 299f7923a11e5856cf808a31144ecaf3f268db818f911574f6702a689dfb21db; cash benchmark f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+      "source_field": "journeys[].arrival.local_iso; journeys[].elapsed_minutes; benchmark legs[0].arrival.local_iso; benchmark.duration_minutes.value",
+      "source_value": "The recommended award and American-positioning award both arrive 04:15 BKK; the recommended award is 1715 minutes versus 1719 and 1895 for the other shown awards. The separately labeled cash benchmark arrives 00:20 BKK and lasts 1635 minutes.",
+      "explanation": "The local passage uses 'choices' for the three award journeys and separately labels cash as a baseline, supporting the award-only reading. If 'shown choices' includes the displayed cash baseline, both superlatives are false. This scope ambiguity merits adjudication or an explicit 'award choices' qualifier."
+    },
+    {
+      "answer_quote": "[Display: Direct cash-fare baseline; benchmark; f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2]",
+      "canonical_reference": "cash benchmark f1fcd665fa6b8830a4b21650190a913c55a55fab792ed144b143d14c6b0b5cf2",
+      "source_field": "stops.value",
+      "source_value": 2,
+      "explanation": "'Direct' in the label can suggest nonstop, but the immediately preceding benchmark text explicitly says two stops via Seattle and Seoul. In context it appears to mean a direct SFO–BKK cash-search baseline; treat as a clarity concern, not a second source error."
+    }
+  ],
+  "reasoning": "The three award references match their canonical SFO departures, BKK arrivals, elapsed times, LAX waits, Turkish business award quote, USD 59 positioning quotes, and unknown protection/tax/seat/price scopes. Registry T10–T12 confirms the selected Alaska journey ties the American journey on arrival while taking four minutes less; T16–T18 confirms the United journey's 95-minute later SFO departure and 275-minute later BKK arrival. The later departure supplies a meaningful gain/loss choice. The two-stop USD 452 cash itinerary is clearly a separate baseline in its prose. The two wording ambiguities are recorded for parent adjudication."
+}

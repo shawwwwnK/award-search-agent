@@ -1,0 +1,249 @@
+{
+  "id": "resp_01e842f6a2a0dce6016ae2138f544087d09f6f97ba7b4907c2",
+  "created_at": 1793201039.0,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "Repair factual errors and answer coherence against the SAME frozen source records and comparison_pairs. The editorial_plan contains identities and comparison targets only, never source facts or a mandate to recommend every selected record. Recheck each sentence against the exact referenced option, including program, cabin, carriers, connection wait, time metric and original quote scope. A temporal card supports only its exact pair and metric, not surrounding prose. Remove unsupported claims and contradictions; keep useful supported tradeoffs and applicable limits. You may delete a weak or redundant option, but also repair or delete dependent comparison cards. Do not invent a benefit for every alternative. The previous_wire.blocks entries each carry an original index and one original block. Return ONLY {edits:[{start,end,blocks}]}: each edit must have end=start+1 and blocks containing zero or one complete replacement block. No insertion, multi-block replacement or multi-block range is allowed. Use original positions in sorted order. Empty edits mean no change, not factual approval. Keep internal J/A/C/T/JP/CP aliases out of traveler prose and labels; keep them only in wire reference fields. Feedback lists actual failed mechanical findings and may be empty.\nWrite for the traveler. Call the supplied material search results, not a packet or an internal validation workflow. Report amounts as source quotes and preserve unknown scope. Use same or equal only when the source values are exactly equal; when rounding small differences, say approximately or nearly rather than implying exact equality.",
+  "metadata": {},
+  "model": "gpt-6-luna",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_01e842f6a2a0dce6016ae21390616087d096bc833c64205abe",
+      "summary": [],
+      "type": "reasoning",
+      "content": [],
+      "encrypted_content": "gAAAAABq4hOU56F3hfEYb8xOCczCJPTKHUWH4xb1NyN9Ap2EGGdQrfSN794i1dBJJHTOzTtlZdrBzgaVy3EeB1iNPU_eqP_fEKkNGIahJHqhMIrTM2fi0L1p7daDXHF_uM2BsC1RAuvUMYwNgmACCKeIwGUIHaYocpWkvwEhSC447hLBwYon9MHES0EQmzZWwSzuZaGZ62c_XUtY1FLJ7XjnNASNnmW2P7YJoBGvgtLNd4P8tm4QBQVO_ej5t1TTTn4cUDwlsKpfLTJRgRqSX0UbPoqpy3qKLERiF9GHsg2foItFQWRUU42wIyQmR4QUzbehJhpkM8a18fRY46juFxCyblN_h_QZt37oIGVyl4ukNq0vehsD39R3nMtu0hO_mGxZGK3Kfp5jtyECF4W9ff8Q2qqAd9zzgLdPXWvOHBOwcD78SEKp_cTiDa7KR5rKPZ-1w5GvrucFPOja5XJT0ByaPJWoDqrNP3Cqbsaj74tic31BK2tBzQXwSHhpdg3MMvo66CcIYhGEb23PPm6q9irLDG4S6MS6VybdV24AJ65CcIpQ_HmEH2JAKBd5Rqduqrw-6NT8i3Tp_a-X5bqOY3aL-peNyeBcn-KzD0jwqEKCUM4Xu7bKKTVyJa5gHMxG_S1r4zPt5_6Pz4gp10_dTL3nrpxvjBuWeXII9hh7J1wSlIMbOg3hh03O1fa9NQUfFgiCu8ZglXUhWiiHX2c7aLSrflriqVxvRzqYmeuUNgSj7joRMfxCAkmKHpATnAtaLHFhwP0LChg4-wabv0FDslNXbZRp9yApMOCYvdXDXnXNQEG7DHRHgwL5Q5wfD6sGF1h-bcScTqv7LH7tefJwiD6ot4R8WgXUuMyHjsSMtJXIteYwTFckRjXU8qhIOxj3BA-9x702Ax0K-aSelfQfLNU_GAF4wjlDH7jYx7jzV7-ZERdJwf3-_Vr7jgaIQig8NtXL26G8JWkHBKiacDCM5qH7Aw_d_WX2Jt2uhZN9SiJSwCMrqVwO6JYTKBlCFktwSesG4Mdnl0U1C-4_MpbWXQjiQ91wuKc_xHD3Z2gx3y_kdo7OWR0DMdpx8ZkVK4EgpyXtrwFjJ5UaLe6TVlUB3wkj7vFDwyBPt29Rj26l4Nl6IEnAwArezaV37we0fdvQyaK46eIQudhhGdHtFU0ILQ0XSdWZH56xrMWJExIZW1m9R5_I9H0XKSxEYI9nZACUPWtn5oSewTQgyXroFrVHcB3FaPQ12K7l8po40aEACNCrWPNtfIG01e8JzDzKmMOtSTTwB7EFFWfB_A1WXIyxiACP2rDiieftHGMC8Eg0xyUwj9bD_hyUrfiCcy7OkGkWcs0zectUGTyjq0uYchr_hlAnUHlmal_Ge5WjEVnt83CjDtIm-NMsWSZz7IwVtkJ7fyfmcxwQ66cAsdNgqQnVZ2ehnlKlmeo-YrygI7fo3L3-2I2AslsEdUVWv_vNQC6bFk1gxWKakqNqa4oYIbsUUV92uw2mQDK4vW2t3Y8nBLudI3Y473l4KglPvFVY6JDWM9CiND-tVkXsiqeW_xC7MQTuqevRtLZqfAeY4VdN_1kBVZXu3dCi0v1sXhOjoCjv_ZEVgOMCZZHzrfTVKSUDkNGpLaDuc3pk3jaK2fcej5V89d5Sc9NujmWLoBJU_ieU0x3qeHcAqkoxGmAzs5FOSeFHWC557Irv_HCU3FWKU1W9-8RAH6LedF4HxNftveR8w9GP8dTd13paVTNGrBruqXjbq7Nckpets1MxYuUk-i5HRk66Gac3gCi0eFxXPAzU7mf1Kmy1x0dx_J5tYlPt0l6YYDFSvqQ2PxeZQVDDFWke5oASKkJMhoFTEQJ_amqyx4HSb9NIRL1jA91TCxhP8MKbuCwA1rPssgzhu_IKPy0W7St3Dm9y_L5P_BCPs3iffC9qlcMajinOa_bjFqWs-7ED3BfWDBmlkGiKFqvFPZQakBlanzNpZQutCUvFFK36caVC3r3JhxqF0aNQ6eYPIlqB-JO9bI5hmW8jZZBY9PCHa1w1B5MSiNLoLo7Jx-blpGn4pHUqhBJeCf-S7jy_9r5KkLi6NbN-hfJciCnq602CEOd8RN3Y4pDS9dGTJIScqRhP2DrjDC-mqvw1y2yZ5lQaDL3GVWD3rg698IuNU8dpkpMtyoLWvWjwAfEZOqvBEj5uHvGUVi1QK9tuMRTkPcmqhTqA2AENmq5ntxClSLurtzdS6I_YWN_yUEvi7YKesWf6MoCYjw4i-86BGV_99AWD3M3cBFn0t2c-IyFcCzpGcQuDCZBmlXMWrblJ_yYBbaxW7yezQ3EY84NprSRLfaSPXd8zDIznbUiTqCx5dCN87Taj-Hh42mEoysVDJnI4G38UKx4AkIi7CGq9IikrO03csmcj0smFHbDwZE7_4nk1MYVqQH4hrrEBmxyybSZD4dhOPjj1Y914QM4D6KfbDSbWiLRLn8vP727WBw-T1vHyX-YQbhSQrNR8_tYXMrJ_cGjd_m7DSo9VY1fbgP-D6vrhoRitV_AdUE2nn1O06PQq5llFHHNfdz-t83JRx8PDcDbKEXSSNfUMEb7NsrYTiCA7W8xEESxcSEn9WMaM7uaHZL5KHTQi8Av4n78SlKYR_dRoIWuddK4jv_sg291VAlgC5SmzCAAUtKS0nw1CV6u0dxkHQaCOKGV7KCcC1IW_GWI3GChmhpZm3eVfyr9Jjk34rSzRHRvXVxPOa4rW4MvRTc2ZqpK9_5CK9ScWyv8RwjF1bzXE8GnH0CtSDKxqNoo9JEnFjn93VRd5GGkgdmLy5q_v9C4oCRO5wXUNHPqg05WaucDzzjYvmd2b6Fu0-YDMeb-BKgeIVcxF1Ywn9NDIGrjG1g0UMjOTuHBeHHDbOUgvBhALoHf11bfFFgUc4Yrv-WtG7gW9SNECLQ9NunxFGv1HCvhQkbZ6pghBr3Y-6Zr-hP8cvOTmKYfU7_C6ZIwFHa59frZHADlXKHUusONFbUFqZOrsFmrib3y-Enx3d9fko8Nc3HxjwYkpgjCKYfJtKFkUB3GGdjIvsM5jV-QfKuxTtwgV00Z3dWuh_fHCjd7S9W2FpMwD-NBmfjwk5mXZGuDKtEW9BuqRgQuBB3KppPBgvjWUQjBJ83OTnipy3_N8RwmKgQEnJmg0zIvl7hTfhtkHuMntR07tWqQhd8OMLxqsLmkyDpeTfkYaRULpDew1FOr7HvqRDnRrU-DB440i86Hy9uRpZOuX86n5oN5GjMn2iCZeX3A66JqevJp2nC477h713Z8loU7lnfrqEymZJJZO9YQDrV0S5FTz7DurauFZ3NVidTiK8-U5cRpymJUaXCeM6fGAZuU8W8hxAg_lyolQaZu2nArpCf0T5apF8ObdWOSnWZ3qE1tM0zOY-17z2ldmwL-j2EuHy8V47r5rHQJb3Iqr-tokBjbblp078fy1Go4rCHJ9qWkzXyhacLw8wyAX8_CDVD-xmDF_7pF3OYhqlpht-FJCYVv15viy6Ndz2c71c0xoJRnmHCeuAIX7v0UI-1Bja7AcV5xvDw16ckauN8DDIj8HW3N10XT3AQQGqadlQZ6X-nxLF3VAFn2HiU37AN-zXO2nL3cmPgpz35a8nZmxLhKScZyAeGd2A_KzlFKKgIla5yzwy3GDnzU-emDHFn_RUWegHYCy8JKf_Re169oNmcBXXGAvxRh6aB7E5LlnHzO4HLQMzSDN9cKby_znpDEyb6yh5ObYnqGrZ8_a6mhy_-v2Ps5MwS0M4aDo1yDyzD7qjyH1uygwAlnaOzU7O2LtH18OvML234CNGX6TgRq85KiNjnA1w1FNArWHfGJhx61MF1N9BmSQ2TJFeZQ9zLnoE87KMYEVJPClz3udIIo4o82LUyVekJMUxfzJ_4nck30sSmG2QG4d82JYBBpEgB8nqm7vY16OvUuJx8vgj8ESH5YMXj4A9IN4a0WqqMWVwQiqcI_vdAWQrMwxG1RH2fTTVsKPafmrkJRLYQqpqi2Gnzv9iluW449cb5CIEVLeHM_FVlt85-L2ST63-vYTl01adIikvByVHP0mp3DjclngUlrc__GBuQTxig-npA5R8mdL54rxI5dveSdIhOUijlOWsgFEmL5Gnm61i0NVYoHg8AfdgtatOUzvHqspEC8L8XZBOOs6cLIGA-cIC5dtwqgsFrEdsbMuPxbzeRZgyiT8CUmvvfbcJvTmasYy3O6lSFD_IMyWf2A-ifWT68L86JN2VkKIDjCAJIMGMU4SoYz1juRFuQZ5c82GRx_1WksOiYeomwKq8ovjKXQq-GNV1zk_AMo-ag9OWYJd3Evu_0iqbdjWr0ozUVFsvlOygp9rx9vU_fg4UfcTWdWaoYMfL__yjvym2hGAJudhVG5BqVg6utZUDR_9eC_5KvdBJCOyfWX8Sx2ybPhF628flB0C3b8sv_iBNbeKlLdwFZc4OrfJq9XHyebjdL5-dtvXP3MQa82ye-IlAJZscTrJuphoDWmWF69LAL4mR6jMcuEXcZ6WFrdxaEuE7QRIsOPf4YOMLsmVP5B809ZTK8L3JaWr0LY7eQJ862tqMNeFOE7hKh4jifcMhKiphlsuG4N4kIUp4_j9wlRe-IuYxV5xWnVK36UkHjoxHeMRW9C_uoaiiR3SCsyIT6bZvlmNp8umwakWYu13344LuOBI1k8ku3oVR9uMs4IrUXBUpLm_0JcWTYoLr5xojXp8Q3eGjdO8vJTMVkOpRCbZUBi-Dy6H6FAu6GheGEEF7fC-EgHNlcZXVgvxvx1Fiw0Jp3CEahwjRF1PbP-jcdCdfBw9gFhD5IP2Z7IkArxv6zXNGf1juPe4yf_pPpxff7vVNt3dFajZHG0XT5pdiUx1w97XLjNwvJzbtDnZLqIc9KCtWLJPwtj9jKzKcWohPswNDWZk6XqhCZTiNZePy5tQe4_RhFlVpD0Ag_YKqGbXxJmdfKUbgLv6GZ5QKEJbwQPzHdq7AH0V-hHM9dgl7q7E4Jd2aTe7261shu_H1C7HoqNVZ8D_qwnBjTA8ZAYdm_0tSvO806bfsUE6ubQh5JNXcSJPbYHyTDvg3_mMm3PIb8PabJ2F-mE1IOq78HBxZy9vKjz0INZvbKYuIJAb-eSnvxb6iKOX4YrTGbBmskhkKr6sbQcDFT8VW5kvfl8a9ZAXTN0N2YMYVmDsbies-neKuXH2mAU4Pp0XgJ3JWLyh_sfYGDjez3t-fzNtXr22a9xQyM1WRp3n81G62KxqmoSvyHcFSUq__qH9idykB3xczdzCXRCLkrFZ6Yek38wRP1boyVnW5916reGLTdiSzZWaruNpMHVoTyQJRCUHw3GxKNAccKCjVN86PHTyxn7O_UFWwCN__GlcVnDMpO_MlP6kurkHKMLOfd0KD8kygAOVT62UrqdNBk0ygR61CAYmjbCepaOcMhHA5Rv-BbeCiMBrVv1cfYV2OOgg5lC9XyS4wwaWt6RHqodi6Gj2Q_grPH8TK6jc9JDy2WmPWlzze1UhqKUA0Ep1NTbbC8PC",
+      "status": null
+    },
+    {
+      "id": "msg_01e842f6a2a0dce6016ae21392865887d0af538575506cfda2",
+      "content": [
+        {
+          "annotations": [],
+          "text": "{\"edits\":[{\"start\":1,\"end\":2,\"blocks\":[{\"k\":\"p\",\"r\":\"J63@2027-01-08T08:36-08:00/SFO>BKK/B>2027-01-10T04:15\",\"n\":\"Earlier-arriving business-class award\",\"v\":\"For January 8, this itinerary departs SFO at 8:36 a.m. and arrives in Bangkok at 4:15 a.m. on January 10, with a reported 1,719-minute elapsed time. The LAX–BKK portion is a Turkish Airlines business-class award quote of 275,000 points; the reported award cabin does not establish the cabin on every leg. It connects at Istanbul with a reported 140-minute wait. The required SFO–LAX positioning flight is a separate American cash itinerary, quoted at USD 59.00 with unknown price scope; its 150-minute LAX wait does not establish ticket protection. Award seats and taxes/fees are unknown, and the results do not establish the traveler count or whether the separate-ticket combination is bookable.\"}]},{\"start\":2,\"end\":3,\"blocks\":[{\"k\":\"a\",\"r\":\"J43@2027-01-08T08:36-08:00/SFO>BKK/E>2027-01-10T08:50\",\"n\":\"Lower-points economy alternative\",\"v\":\"This option shares the 8:36 a.m. SFO departure and the separate American SFO–LAX flight quoted at USD 59.00, with unknown price scope. Its Turkish Airlines LAX–BKK economy award quote is 110,000 points, but it arrives at 8:50 a.m. on January 10—4 hours 35 minutes later than the business option—and has a longer, 420-minute Istanbul connection. Award seats and taxes/fees are unknown; the separate-ticket protection and bookability are also unconfirmed.\"}]}]}",
+          "type": "output_text",
+          "logprobs": [],
+          "parsed": null
+        }
+      ],
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+      "phase": "final_answer"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "temperature": 1.0,
+  "tool_choice": "auto",
+  "tools": [],
+  "top_p": 0.98,
+  "background": false,
+  "conversation": null,
+  "max_output_tokens": 8192,
+  "max_tool_calls": null,
+  "previous_response_id": null,
+  "prompt": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": "low",
+    "generate_summary": null,
+    "summary": null,
+    "context": "all_turns",
+    "mode": "standard"
+  },
+  "safety_identifier": null,
+  "service_tier": "fast",
+  "status": "completed",
+  "text": {
+    "format": {
+      "name": "FocusedResultsEditorialPatch",
+      "schema_": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "integer"
+                },
+                "end": {
+                  "type": "integer"
+                },
+                "blocks": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "t"
+                            ]
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "p",
+                              "a"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "J43@2027-01-08T08:36-08:00/SFO>BKK/E>2027-01-10T08:50",
+                              "J63@2027-01-08T08:36-08:00/SFO>BKK/B>2027-01-10T04:15"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "b"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "C1@2027-01-08T06:05-08:00/SFO>BKK"
+                            ]
+                          },
+                          "n": {
+                            "type": "string"
+                          },
+                          "v": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r",
+                          "n",
+                          "v"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "k": {
+                            "type": "string",
+                            "enum": [
+                              "x"
+                            ]
+                          },
+                          "r": {
+                            "type": "string",
+                            "enum": [
+                              "T01",
+                              "T02",
+                              "T03"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "k",
+                          "r"
+                        ]
+                      }
+                    ]
+                  },
+                  "maxItems": 1
+                }
+              },
+              "required": [
+                "start",
+                "end",
+                "blocks"
+              ]
+            }
+          }
+        },
+        "required": [
+          "edits"
+        ]
+      },
+      "type": "json_schema",
+      "description": null,
+      "strict": true
+    },
+    "verbosity": "medium"
+  },
+  "top_logprobs": 0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 6038,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 6035
+    },
+    "output_tokens": 730,
+    "output_tokens_details": {
+      "reasoning_tokens": 309
+    },
+    "total_tokens": 6768
+  },
+  "user": null,
+  "access_programs": null,
+  "completed_at": 1793201043,
+  "frequency_penalty": 0.0,
+  "moderation": null,
+  "presence_penalty": 0.0,
+  "prompt_cache_retention": "24h",
+  "store": false,
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Consider checking this instead if you prefer to investigate the Alaska program; its points cannot be compared numerically with the United miles.",
+      "canonical_reference": "award observations 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b and cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044",
+      "source_field": "program, points, taxes_fees, tax_currency, price_scope, seats, departure, arrival, legs",
+      "source_value": "Alaska: 42,500 miles, USD 50.90 reported taxes, 8 seats; United: 60,500 miles, USD 28.20 reported taxes, 9 seats. Both have unknown quote scope and no schedule or legs.",
+      "explanation": "The conditional program preference is allowed and grounded in the source, and the USD 22.70 difference is a correct raw quote comparison. The answer does not explain an offsetting Alaska gain beyond a hypothetical preference; its points figure cannot be valued against United miles, while both lack schedule details. The displayed comparison is useful but basic rather than decision-rich."
+    }
+  ],
+  "reasoning": "The source has no complete award journey. The cited United and Alaska date-only economy summaries match the answer's programs, points, USD tax quotes, observed seats, unknown quote scope, missing returned traveler count, and absent leg details. USD 50.90 minus USD 28.20 is USD 22.70. The separate cash baseline has one SFO-HKG-BKK stop, January 1 22:55 -08:00 departure, January 4 10:35 +07:00 arrival, 2,680 minutes elapsed, USD 640 unknown-scope quote, and one returned traveler. Coverage shows an omitted SFO-BKK detail query and partial related search groups. The answer gives a defensible conditional first check, contextualizes both leads, and consolidates limits. Its alternative remains a program-preference check without a developed supported gain, so comparative depth is basic."
+}

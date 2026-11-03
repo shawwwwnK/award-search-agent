@@ -1,0 +1,35 @@
+{
+  "rubric": "fast-default-M2-v1",
+  "H": "fail",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "H",
+      "answer_quote": "This Aeroplan economy award via HKG arrives 40 minutes earlier than the other HKG choice and has a 40-minute shorter elapsed journey.",
+      "canonical_reference": "evidence.json journeys candidate_ids cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a and 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "source_field": "arrival.instant; arrival.local_iso; elapsed_minutes",
+      "source_value": "The selected journey arrives January 16 at 22:25 BKK local (2027-01-16T15:25:00Z), and the alternative arrives January 17 at 10:35 BKK local (2027-01-17T03:35:00Z): a 12-hour-10-minute arrival gap. Their elapsed times are 1,180 and 1,220 minutes: a separate, correct 40-minute duration gap.",
+      "explanation": "The answer incorrectly reuses the 40-minute elapsed-time difference as the arrival-time difference, understating the arrival advantage by 11 hours 30 minutes."
+    },
+    {
+      "dimension": "H",
+      "answer_quote": "The search returned support for 1 traveler, which does not establish the quote’s price scope.",
+      "canonical_reference": "evidence.json components observation_id 063df2b37ecbf5a3ef75c229f78f56edf82bbf4b69f36675ee52725a744064dd and source.view.request",
+      "source_field": "returned_travelers.source_field; returned_travelers.value; seats.state; money.scope; request.travelers",
+      "source_value": "returned_travelers is 1 from query.adults, echoing request.travelers = 1; seats is absent and money.scope is unknown.",
+      "explanation": "The source establishes the search request's traveler count, not returned seat or traveler support. The second clause correctly limits price scope, but 'returned support' overstates what the query echo proves."
+    },
+    {
+      "dimension": "C",
+      "answer_quote": "This Aeroplan economy award via HKG arrives 40 minutes earlier than the other HKG choice and has a 40-minute shorter elapsed journey.",
+      "canonical_reference": "evidence.json journeys candidate_ids cc11925bdbf1b454bd01da92f122569d8f1caab2a21cc915493675159f29111a and 28b5a832f590e31794a56935985a19ac2add1203a766c16aa9bb5edbcf8a1a82",
+      "source_field": "arrival.instant; elapsed_minutes; connections.wait_minutes; components.seats.value",
+      "source_value": "Selected award arrives 12 hours 10 minutes earlier and travels 40 minutes less elapsed, with a 70-minute HKG connection and 9 observed seats; alternative has a 105-minute HKG connection and 2 observed seats.",
+      "explanation": "The answer names the connection-buffer tradeoff, but its false arrival gap hides the main magnitude of the choice. It does not give the reader a sound, decision-rich comparison."
+    }
+  ],
+  "reasoning": "The selected and alternative complete SFO-HKG-BKK Aeroplan economy awards have correct airport association, one-stop topology, 70/105-minute within-award connections, 9/2 observed seats, 65,000 returned points each, and CAD 107.40 observed fees each from 10,740 minor CAD units. Both quote scopes are unknown and leg cabins are absent. Their elapsed times differ by 40 minutes, but their offset-aware Bangkok arrival times differ by 12 hours 10 minutes, not 40 minutes. The separate Singapore Airlines cash benchmark is SFO-SIN-BKK, one stop, USD 440 with unknown quote scope; its returned one-traveler field is a query.adults echo, not evidence of support or quote scope. The earliest-arrival recommendation remains defensible and names the shorter-connection downside, so U passes; the answer is otherwise coherent with embedded references, cash context and consolidated limitations, so M2 passes. C is basic because the major time tradeoff is misstated. Uncertainty: the cash 'support' wording may have intended only to describe the echoed request, but literally asserts more than the source establishes."
+}

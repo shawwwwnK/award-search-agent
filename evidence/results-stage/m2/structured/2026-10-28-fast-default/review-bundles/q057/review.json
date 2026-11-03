@@ -1,0 +1,19 @@
+{
+  "rubric": "fast-default-M2-v1.2-calibrated",
+  "H": "pass",
+  "U": "pass",
+  "M2": "pass",
+  "C": "basic",
+  "sparse_source_exception": false,
+  "findings": [
+    {
+      "dimension": "C",
+      "answer_quote": "Compared with the recommendation, it arrives 4 hours 35 minutes later and has a 420-minute wait at IST within the award itinerary, as well as a 149-minute separate-ticket wait at LAX.",
+      "canonical_reference": "evidence.json journeys[114] (J115, 018b54da…), journeys[74] (J75, 05047f23…); comparison-registry.json T11",
+      "source_field": "journeys[].departure.local_iso, arrival.local_iso, connections[].wait_minutes, award_cabin, award_points.value, cash_observation_id, money.cash_fare.quoted_usd",
+      "source_value": "J115 and J75 both depart 2027-01-08T08:40:00-08:00 with reported business cabin, 275000 Turkish points, the same USD 59 Alaska positioning observation and 149-minute LAX wait; J115 arrives 2027-01-10T08:50:00+07:00 with 420-minute IST wait, versus J75 at 04:15 with 140-minute IST wait.",
+      "explanation": "The later business alternative has no authored offsetting gain despite being worse in the material displayed dimensions. This weakens comparative depth; its stated facts are accurate."
+    }
+  ],
+  "reasoning": "Source checks found no hard factual contradiction. The answer recommends exact journey J63 with reason and downside, embeds individual journey references, compares alternatives, supplies the separate one-stop USD 457 cash baseline, and consolidates coverage, ticketing, seat, cabin, and price limits. J18 gives a meaningful 110000 versus 275000 quoted Turkish-point and economy versus business/arrival tradeoff; J75 gains only four elapsed minutes over J63, while J115 is worse than J75 without an explained benefit. Comparative depth is basic, without a sparse-source exception. The 150-minute LAX buffer is a subjective judgment, explicitly accompanied by unverified protection and bookability."
+}

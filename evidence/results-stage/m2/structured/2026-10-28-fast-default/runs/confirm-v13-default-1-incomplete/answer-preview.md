@@ -1,0 +1,19 @@
+There isn’t a complete award itinerary in these search results, so I can’t recommend a bookable award. For the next check, I’d start with the United lead: it reports the most seats among the three shown and the lowest listed fee, but requires more program points than the Alaska lead. The results are partial, so this is a lead to verify—not a claim that it is the best available option.
+
+This economy award summary is for SFO–BKK and reports 60,500 United miles, 9 seats, and USD 28.20 in fees. The fee’s quote scope is unknown, so it is not established as a per-person or total amount. The summary gives only a date, not a schedule or connection details.
+
+[Display: United award lead — January 1; lead; cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]
+
+This economy award summary reports 42,500 Alaska points, 8 seats, and USD 50.90 in fees; its quote scope is unknown. It uses fewer program points than the United lead, but the points are in a different program and shouldn’t be treated as directly comparable in value. The summary gives only a date, not a schedule or connection details.
+
+[Display: Alaska award lead — January 1; lead; 0c1f9d6448293b124e2917fb659277096ae49aba446a59bfd57274af3d0ad07b]
+
+This economy award summary reports 65,000 Aeroplan points, 2 seats, and CAD 116.50 in fees; its quote scope is unknown. It reports fewer seats and a higher listed fee than the other two shown leads, but those fees are in different currencies. The summary gives only a date, not a schedule or connection details.
+
+[Display: Aeroplan award lead — January 1; lead; 0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]
+
+The cash itinerary departs SFO on January 1 at 10:55 p.m. local time and arrives in BKK on January 4 at 10:35 a.m. local time, with one stop at HKG and a reported duration of 44 hours 40 minutes. The quoted fare is USD 640.00, but its scope is unknown; it is not established as a per-person or all-in amount.
+
+[Display: Cash comparison — Cathay Pacific via Hong Kong; benchmark; 456ce00d08b184d171728f7e51cce2dd7feff2cc201cc031c778ec907b04b630]
+
+The search results show no complete selectable journey, and coverage is partial: a direct-route detail query was omitted and related queries were only partially covered. Confirm current award availability, schedules, fees, and booking terms with the relevant programs before making plans.

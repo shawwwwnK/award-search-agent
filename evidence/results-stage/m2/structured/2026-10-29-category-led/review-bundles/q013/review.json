@@ -1,0 +1,169 @@
+{
+  "review_contract": "category-led-independent-source-review-v1",
+  "bundle": "q013",
+  "reviewer": "independent_review",
+  "overall": "fail",
+  "axes": {
+    "H": "pass",
+    "U": "pass",
+    "M2": "fail",
+    "C": "pass",
+    "K": "pass",
+    "P": "pass"
+  },
+  "reasons": {
+    "H": "Selected-scope earlier/shorter comparisons, equal Turkish arrivals, connection-buffer comparison, quote equality and card facts agree with source.",
+    "U": "The earlier/shorter Aeroplan economy option and business alternative still support a defensible choice, despite excess options without useful individual rationale.",
+    "M2": "Shared quote/seat/tax limitations are repeated beside several cards and in shared prose. Two added choices mainly repeat card facts or disadvantages rather than explain a distinct reason to choose them.",
+    "C": "Supported arrival/duration/cabin and transfer-buffer distinctions exist. This axis does not require every useful reason to be numerical; missing individual rationale is recorded under M2.",
+    "K": "The time and premium perspectives survive; no source overlap exists here. Extra unstyled eligible journeys are not falsely assigned categories, and cost remains uncertain.",
+    "P": "All five actual cards exactly join source journeys/components, with correct schedules and known positioning facts. One correctly attributed USD440 unknown-scope cash sentence appears."
+  },
+  "findings": [
+    {
+      "id": "q013-F1",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Repeated source seat/quote limitations beside options, followed by another shared quote-scope explanation.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[1], blocks[3], blocks[4]",
+          "fields": {
+            "repetition": "Aeroplan one-seat reports repeated in prose; unknown price scope in blocks1/3 and shared block7."
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[2], blocks[5]",
+          "fields": {
+            "repetition": "award-seat support and taxes are unknown repeated for both Turkish options."
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[7]",
+          "fields": {
+            "shared": "Across the award choices, points and fees may not represent the full price, and unknown quote scope means they cannot be compared as total costs."
+          }
+        }
+      ],
+      "explanation": "The same program-group limitations are authored repeatedly rather than consolidated once. Source-card indicators may repeat compactly; these findings concern explanatory prose and copied seat facts."
+    },
+    {
+      "id": "q013-F2",
+      "severity": "material",
+      "axes": [
+        "M2"
+      ],
+      "claim": "Worth comparing within Aeroplan: same points and fee, one seat, later arrival.",
+      "evidence": [
+        {
+          "file": "document.json",
+          "identity": "blocks[4].text",
+          "fields": {
+            "reason": "Same points/fee and one seat; arrives later."
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "e1f3831953dd0bad5d6017daff4edb0a62a28acb6270fb18a3e6e9950ac7ae54",
+          "fields": {
+            "departure.local_iso": "2027-01-15T23:30:00-08:00",
+            "arrival.local_iso": "2027-01-17T23:40:00+07:00",
+            "elapsed_minutes": "1990",
+            "award_points.value": 65000,
+            "money.award_taxes.raw_amount.value": 11650
+          }
+        },
+        {
+          "file": "evidence.json",
+          "identity": "3f06b08add0a22c407bc34198035c7c613d0ea6114d099872c0d310e6ed9fda9",
+          "fields": {
+            "departure.local_iso": "2027-01-15T23:30:00-08:00",
+            "arrival.local_iso": "2027-01-17T16:50:00+07:00",
+            "elapsed_minutes": "1580",
+            "award_points.value": 65000,
+            "money.award_taxes.raw_amount.value": 11650
+          }
+        },
+        {
+          "file": "document.json",
+          "identity": "blocks[5].text",
+          "fields": {
+            "reason": "Turkish economy has equal arrival, shorter connection buffer, and unknown support/taxes."
+          }
+        }
+      ],
+      "explanation": "The late Aeroplan card receives no explained incremental benefit over the selected same-departure/quote earlier option. The final economy card likewise supplies equal arrival and a shorter buffer but no reason that makes it worth choosing. This does not assert either source itinerary is universally dominated or require a numeric tradeoff; it asks for a supported individual reason or a tighter selection."
+    }
+  ],
+  "supporting_evidence": [
+    {
+      "file": "evidence.json",
+      "identity": "46ff88141207d0e57a27197f6ea281b2f5c2206a27151cbe79bc6f1764c48fd3",
+      "fields": {
+        "arrival.local_iso": "2027-01-17T01:25:00+07:00",
+        "elapsed_minutes": "1345",
+        "styles": [
+          "time"
+        ]
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "e175113d74a221d8a83f5f4fc8a9ccf9b27716f3506737752d7407d66d32e7b4",
+      "fields": {
+        "arrival.local_iso": "2027-01-17T08:50:00+07:00",
+        "elapsed_minutes": "2132",
+        "connections[0].wait_minutes": 644,
+        "styles": [
+          "premium"
+        ]
+      }
+    },
+    {
+      "file": "evidence.json",
+      "identity": "f039002bf7b91a36dfd9b7df527f3eb5a0c1394de40c270d4a90e88b386f03cd",
+      "fields": {
+        "arrival.local_iso": "2027-01-17T08:50:00+07:00",
+        "elapsed_minutes": "2132",
+        "connections[0].wait_minutes": 299,
+        "styles": []
+      }
+    }
+  ],
+  "full_source_review": {
+    "eligible_journeys": 258,
+    "category_counts": {
+      "time": 11,
+      "premium": 116,
+      "cost": 0
+    },
+    "time_premium_overlap": 0,
+    "possible_cost_members": 0,
+    "cost_assessments": "Three factored cost assessments are undetermined.",
+    "omission_audit": "Read empty omitted_reasons and entire source journey family/membership landscape. No omitted meaningful category perspective found; no quota imposed."
+  },
+  "independence": {
+    "prior_source_and_code_familiarity": true,
+    "current_metrics_profile_checker_verdicts_read": false,
+    "current_other_reviews_read": false,
+    "qualification": "Independent current-answer source review with prior source/code familiarity; not fresh blind-source review."
+  },
+  "uncertainty": [
+    "General wording strongest choices is read as editorial guidance, not a claim of global fastest or lowest cost; explicit comparisons are scoped to selected journeys.",
+    "U/C pass on the useful core choice; this does not erase missing individual rationale and repeated caveats under M2.",
+    "Saved partial coverage does not establish current availability or population reliability.",
+    "Card content and structured joins inspected, not browser layout."
+  ],
+  "verification": [
+    "Read latest rubric, full source family/category landscape, audit, answer, document and resolved objects.",
+    "Cross-checked all five selected journeys, award/positioning legs, dates, cabins, points/tax units, seats, quote scopes and benchmark.",
+    "Programmatic exact journey/component/benchmark joins passed.",
+    "No live calls/product edits/current metrics or q015 inspection."
+  ],
+  "escalation_recommended": false
+}

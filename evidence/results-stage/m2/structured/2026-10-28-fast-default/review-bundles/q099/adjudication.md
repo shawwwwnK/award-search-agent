@@ -1,0 +1,68 @@
+# q099 source-and-rubric adjudication
+
+Rubric: `fast-default-M2-v1.2-calibrated`. Original `review.md` / `review.json` remain unchanged.
+
+| H | U | M2 | C | Sparse-source exception |
+| --- | --- | --- | --- | --- |
+| fail | pass | pass | decision-rich | No |
+
+Retain U pass: no complete journey exists in the canonical view, and checking the exact United lead is a defensible next action with schedule/quote downsides. Retain H non-pass conservatively for unresolved party-support wording, not proven numerical error. The original carrier-specific cabin diagnosis is stronger than the prose warrants. Change M2 to pass because shared caveats already exist and a single exhaustive caveat block is not required. Change C to decision-rich for the actual Alaska-versus-United local cabin/date/observed-tax-quote argument; this does not require a stronger representative or additional cabin/style coverage.
+
+Withhold a clean factual pass for material traveler-support wording ambiguity; this is not a demonstrated false seat count or proof that the requested traveler cannot travel.
+
+## 1. H — material_scope_ambiguity
+
+> If you’re looking on January 1, check the United lead first: it reports 9 seats for one traveler, versus 2 on the Aeroplan lead, and a lower USD award-tax quote.
+
+Source: `evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]; source.view.components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]; source.view.request`. Fields: `seats.value; returned_travelers.state; requested_travelers; request.travelers`. Values: 9; absent; 1; 1.
+
+The source separates observed seats from the requested party. “For one traveler” may merely restate the request, but attached to “reports 9 seats” it can convey verified party support. The surrounding date-only and unknown-quote caveats do not explicitly resolve that linkage. Retain a non-pass under the rubric’s ambiguity rule, while downgrading the original categorical unsupported-linkage diagnosis to unresolved wording ambiguity. Absent returned-traveler evidence does not itself prove no traveler support.
+
+## 2. H — original_finding_overstated
+
+> The result reports economy on CA, UA, and ZH, 60,500 United miles, 9 seats, and USD 28.20 in award taxes.
+
+Source: `evidence.json components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]; source.view.components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]`. Fields: `kind; cabin.value; carriers; source legs; projected legs[0].reported`. Values: award_summary; economy; [CA, UA, ZH]; []; false.
+
+The original review reads this as economy on every individual carrier leg. The whole paragraph expressly says date-only with no flight times or connections. “The result reports” can fairly summarize the source’s award-level cabin and carrier list; it does not explicitly claim all legs are economy. There is no established source contradiction here. Preserve the scope concern, but do not count a second categorical H failure. The data also do not establish confirmed operating-carrier assignments for individual flights.
+
+## 3. M2 — original_failure_not_supported
+
+> The tradeoff is that neither result includes a schedule, and the quotes’ scope is unknown. Confirm current availability and details with the program before booking.
+
+Source: `evidence.json leads[reference_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]; leads[reference_id=0184149657a160229362310b296ec0257a3277c777b852c7b943f3dfb59ac53c]; components; source.view.provider_status`. Fields: `missing_information; money.scope; provider_status`. Values: itinerary_schedule_incomplete; unknown; partial.
+
+The opening already consolidates the two January 1 leads’ shared schedule/quote limits; Alaska receives matching contextual limits, and cash/coverage limits are grouped later. The answer is coherent prose with individual embedded references, a verification action, alternatives and relevant cash context. Repetition is an editorial weakness, not absence of consolidation. The fixed rubric does not require schedule, party, per-leg cabin, quote scope and coverage in one all-inclusive paragraph. Traveler wording remains an H issue; it need not erase otherwise adequate composition. Recommend M2 pass.
+
+## 4. C — original_depth_underweighted
+
+> If January 12 and premium economy suit your plans, this lead reports JX, 140,000 Alaska miles, 9 seats, and USD 50.90 in award taxes. It is also date-only, with no schedule or connections shown. Its points are not comparable with the United lead’s; the same-currency tax quotes are USD 28.20 and USD 50.90, but both have unknown scope and are not confirmed trip totals.
+
+Source: `evidence.json components[observation_id=42cf9bfb3736f994c20d673468c06a45363d8653a202b2ee733f0db7d2ec0f97]; components[observation_id=cc7d8d9eb93023cfdd2dc89a9db92fe94154a32100978836c3db10ed4c4a8044]; source.view.request.departure_window`. Fields: `departure_date; cabin.value; seats.value; money.quoted_usd; money.scope; program.value`. Values: Alaska Jan 12/premium_economy/9/USD 50.90; United Jan 1/economy/9/USD 28.20; both scope unknown; different programs; request permits all January.
+
+Read with the United economy recommendation, this is a local decision: investigate a premium-economy report if Jan 12 suits, rather than Jan 1 economy, while seeing the explicitly juxtaposed higher observed USD tax quote and losing direct points comparability. This develops a conditional cabin/date/quote choice beyond mere existence or feasibility without claiming a USD 22.70 trip-cost premium. The Aeroplan paragraph is thin, but a thin extra lead does not cancel this supported displayed comparison or impose an all-options-depth quota. Recommend decision-rich, narrowly for prioritizing incomplete leads.
+
+## Other factual checks
+
+- The “lower USD award-tax quote” direction is supported by the frozen CAD conversion, with unknown scope stated immediately. It is not an explicit cross-program total-value comparison; omitting the converted Aeroplan number is a clarity weakness.
+- United, Aeroplan and Alaska are used as program leads, not claimed operating airlines; the distinct CA/UA/ZH, BR and JX carrier reports are preserved.
+- Neither an exact transfer join nor a protected connection is claimed for the award leads. The cash baseline is correctly separate, one-stop and of unknown quote scope.
+
+## Unresolved disagreement
+
+- The literal-request reading of “for one traveler” would support H pass; the verified-support reading would not. The fixed rubric forbids automatically resolving this material ambiguity toward pass. H fail here is an acceptance disposition, not a claim of a proven false source fact.
+- M2 consolidation is a qualitative judgment: a reviewer may prefer one closing limits section, but the fixed rubric does not mandate that placement or an exhaustive checklist.
+- C is close to the basic/decision-rich boundary. The premium-cabin/date/explicit tax-quote juxtaposition is sufficient in this adjudication; it remains narrow lead-prioritization advice, not developed bookable-itinerary analysis. Original basic verdict is retained in review files.
+
+## Verification
+
+- Parsed both assigned documents, canonical evidence, references, comparison registries and original reviews; read both complete answer.md files under the fixed rubric.
+- Confirmed embedded selections map to A2 (United), A1 (Aeroplan), A37 (Alaska), and C1 (cash); all document block text appears in answer.md.
+- Confirmed zero complete journeys, 378 incomplete leads, five cash benchmarks and partial provider coverage in each bundle.
+- Checked selected program/carrier/cabin/seat/traveler/money fields against source.view.components as well as projected components. Original award source legs are empty; projected unreported legs do not establish per-leg cabin.
+- Decimal arithmetic: CAD 116.50 × frozen CAD/USD rate = USD 82.11164364251480124048491683; selected USD quotes differ by USD 22.70. These are quote arithmetic, not trip-cost differences.
+- Offset-aware cash elapsed time is 2680 minutes = 44h40; SFO Jan 1 22:55 -08:00 to BKK Jan 4 10:35 +07:00, airport sequence SFO/HKG/BKK, stops=1.
+- Inspected compact same-program economy observations to rule out a sparse-source exception; omission of these observations is not itself a failure.
+- No live calls, runtime tests, external source reads, source edits or rubric edits. Original review files preserved.
+
+No deeper escalation recommended. Parent integration should preserve the stated disagreement. This adjudication makes no model/default qualification claim.

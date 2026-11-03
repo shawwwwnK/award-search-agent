@@ -1,0 +1,15 @@
+I’d favor the later-departing award option for its shorter overall elapsed time while keeping the same Bangkok arrival. The tradeoff is a higher reported cash quote for the separate SFO–LAX segment; its quote scope is unknown, so this is not a comparison of total trip costs.
+
+For January 8, this option departs SFO at 2:05 p.m. and arrives in Bangkok at 8:50 a.m. on January 10. Its reported elapsed time is 27 hours 45 minutes—5 hours 25 minutes shorter than the earlier-departing award choice—while both arrive at the same time. The award itinerary is reported as business class and costs 275,000 Turkish points; the separate SFO–LAX cash segment has a USD 139 source quote, with unknown scope. The award itinerary has a 60-minute connection in Istanbul, but the LAX connection involves separate bookings and is not verified as protected or bookable as a connection.
+
+[Display: Later departure, shorter elapsed time; journey; c5bd37d7dfca6a01666233de39e69813d8e5043f0ebb7ed2210978b28abd58ff]
+
+This option departs SFO at 8:40 a.m. on January 8 and arrives at the same 8:50 a.m. time in Bangkok on January 10. Its reported elapsed time is 33 hours 10 minutes. Like the later option, its award itinerary is reported as business class for 275,000 Turkish points, with award taxes and fees unavailable and a 420-minute Istanbul connection. The separate SFO–LAX segment has a USD 59 source quote—USD 80 less than the other option’s reported quote, but both scopes are unknown, so that is only a raw quote contrast, not total or like-for-like savings. Its separate-booking LAX connection is 149 minutes.
+
+[Display: Earlier departure, lower reported access quote; journey; 018b54daf2f1619248319c7f13f9107aba62b5deee4200e1d9f54f45759e8153]
+
+The search also shows an EVA Air cash itinerary from SFO via TPE to BKK, departing at 11:50 p.m. January 8 and arriving at 11:10 a.m. January 10, with one stop and a reported duration of 20 hours 20 minutes. Its source quote is USD 605, with unknown scope. This is a cash reference, not a total-cost comparison with either points option.
+
+[Display: Cash-fare reference; benchmark; 5436f6892bc314630a4d33086ede20fd08197aa93b8dfbbf21f0fa8bbeaf07ed]
+
+For both award choices, the search reports one requested traveler, but does not verify award support for that traveler or provide reliable award-seat counts. It also does not provide reliable award taxes and fees. Business class is reported for each award itinerary, but cabin details for individual legs are absent. Both options combine a cash positioning flight with a separate award booking, so check the connection, booking arrangements, current availability, and prices with the providers before relying on either itinerary.
